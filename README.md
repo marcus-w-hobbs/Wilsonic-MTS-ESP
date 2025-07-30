@@ -55,6 +55,8 @@ Wilsonic MTS-ESP is an advanced audio plugin and standalone application for crea
 
 5. The built standalone application and plugins will be in the "Builds" directory.
 
+For more detailed build commands and platform-specific instructions, see [CLAUDE.md](./CLAUDE.md#build-commands).
+
 ## Running Tests
 
 Compile and execute the unit tests with:
@@ -74,11 +76,15 @@ Wilsonic MTS-ESP is designed to enable professional music production with microt
 
 The source of truth for all state is therefore JUCE's AudioProcessorValueTreeState.  The Processor owns the APVTS and all Models.  The Model objects own the Tuning objects, and bind them to APVTS, and provide an interface for the UI objects.  The Tuning objects are responsible for generating the MTS-ESP data.  Tuning objects know how to draw themselves.  Components delegate drawing to the Model objects, which pass the drawing on to the Tuning objects.  
 
-The Editor is only responsible for rendering the UI, which is implemented as a LookAndFeel and Component hierarchy.  The Editor is not guaranteed to ever be created. 
+The Editor is only responsible for rendering the UI, which is implemented as a LookAndFeel and Component hierarchy.  The Editor is not guaranteed to ever be created.
+
+For a detailed technical overview of the architecture and development guidelines, see [CLAUDE.md](./CLAUDE.md#architecture-overview). 
 
 ## Contributing
 
 We welcome contributions to Wilsonic! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and suggest improvements.
+
+For developers: See [CLAUDE.md](./CLAUDE.md) for detailed technical documentation about the codebase architecture, build system, and especially important guidance on adding new scale designs.
 
 ## License
 
