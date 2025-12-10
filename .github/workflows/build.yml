@@ -2,14 +2,8 @@ name: build
 run-name: build
 on: [push]
 jobs:
-  build:
-    name: build ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-22.04
+  build_linux:
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -61,5 +55,29 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-            name: Wilsonic_${{ matrix.os }}_${{ github.sha }}
+            name: Wilsonic_Linux_${{ github.sha }}
             path: upload
+  build_mac:
+    runs-on: macos-15
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+            # Build Projucer
+            git clone --depth=1 -b 7.0.11 https://github.com/juce-framework/JUCE.git ~/JUCE
+            cd ~/JUCE/extras/Projucer/Builds/MacOSX
+            xcodebuild -project Projucer.xcodeproj
+            cd -
+
+            # Build Wilsonic
+            ~/JUCE/extras/Projucer/Builds/MacOSX/build/Debug/Projucer.app/Contents/MacOS/Projucer --resave Wilsonic.jucer
+            cd Builds/MacOSX
+            xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
+            cd -
+
+            # Build WilsonicController
+            rm -r Builds
+            ~/JUCE/extras/Projucer/Builds/MacOSX/build/Debug/Projucer.app/Contents/MacOS/Projucer --resave WilsonicController.jucer
+            cd Builds/MacOSX
+            xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
