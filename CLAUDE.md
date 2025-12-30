@@ -187,3 +187,121 @@ Every new scale design requires changes to these files (search for "ADD NEW SCAL
 - `Source/AppTuningModel.cpp` - Main tuning orchestrator
 - `Source/Tuning_Include.h` - Common tuning headers
 - `all_tunings.json` - Tuning preset definitions
+
+---
+
+## Conceptual Framework: Erv Wilson's Scale Design Philosophy
+
+This section captures the theoretical foundations underlying Wilsonic. Understanding these concepts is essential for meaningful contributions to the codebase.
+
+### The Melody/Harmony Problem
+
+Scale design faces a fundamental tension:
+
+- **Melodic resources** require stepwise patterns, voice leading, scalar continuity—the *horizontal* dimension of music
+- **Harmonic resources** require chord relationships, consonance, reinforcing overtones—the *vertical* dimension
+
+Most scale systems optimize for one at the expense of the other. Wilson's genius was finding structures that solve both simultaneously.
+
+### MOS (Moment of Symmetry) Scales
+
+Implemented in `Brun.cpp`, `Brun.h`, and related files.
+
+**Core algorithm**: Iterate a generator interval, fold into a period (typically octave), producing a two-interval pattern (Large, small). The Brun algorithm (`brunArray()`) computes this via continued fraction approximation.
+
+**Key insight**: MOS scales have a nested recursive structure. Each "level" contains the previous level's pitches plus new ones. This creates natural hierarchies of stability—lower-level pitches feel more "anchored."
+
+**Why MOS solves melody**: The two-interval constraint guarantees stepwise motion is always available. The nested structure provides voice-leading paths. Murchana (mode rotation) gives you modal variety for free.
+
+### The Proportional Triad Discovery
+
+Implemented in `TuningImp::_analyzeProportionalTriads()`.
+
+**The problem**: MOS is constructed in *logarithmic* pitch space (generator iteration), but harmonic reinforcement happens in *linear* frequency space (sum/difference tones). These spaces don't naturally align.
+
+**Wilson's solution**: Find generators where the arithmetic and geometric structures *accidentally* coincide. For such generators, the MOS scale contains triads where:
+
+- **Proportional (major)**: The middle note ≈ arithmetic mean of outer notes: `(a + b) / 2`
+- **Subcontrary (minor)**: The middle note ≈ harmonic mean of outer notes: `2ab / (a + b)`
+
+When these conditions are met, sum and difference tones land *on other scale degrees*, creating harmonic reinforcement rather than interference.
+
+**The code**: `_analyzeProportionalTriads()` iterates all pitch pairs, computes both means, and searches for scale degrees within tolerance (currently 0.0005 in unit pitch space). Results populate `_proportionalTriads` and `_subcontraryTriads` vectors.
+
+### The Optimization Landscape
+
+Not all generators are equal. The space of generators (0 to 1) contains:
+
+- **Dead zones**: Most generators produce scales with zero or few proportional triads
+- **Hot spots**: Certain generators (often related to noble numbers, metallic means) produce anomalously many triads
+- **Level dependence**: Triad count varies with MOS depth; humans can meaningfully perceive ~9 levels max
+
+**Research opportunity**: Plotting triad *quality* (not just count) as a function of generator and level would reveal Wilson's generators as peaks in this landscape. Quality could be defined as sum of `1/error` for all near-coincidences, giving a continuous rather than discrete measure.
+
+### CPS (Combination Product Sets)
+
+Implemented in `CPS.cpp`, `CPS_*.cpp` files.
+
+**Different architecture**: While MOS iterates one generator, CPS derives from Pascal's triangle. Given N harmonic factors, take all k-combinations, multiply each combination, octave-reduce.
+
+**Example**: The Eikosany uses 6 factors (1, 3, 5, 7, 9, 11), taking all 2-combinations and 4-combinations, yielding 20 notes.
+
+**Trade-off**: CPS guarantees harmonic relationships by construction but lacks MOS's melodic continuity. Scales can have "gaps" that feel unscalar.
+
+### The Gral Keyboard
+
+Implemented in `Brun+Gral.cpp`.
+
+**Wilson's isomorphic keyboard design**: Maps MOS structure to a 2D hexagonal grid where:
+- One axis = generator stacking
+- Other axis = period offset
+- Co-prime factors ensure playability for human hands
+
+**Key function**: `_mapGralToBrunMicrotones()` transforms abstract generator/period relationships into physical keyboard coordinates.
+
+### Human Auditory Cognition
+
+**Pitch perception**: Approximately logarithmic (hence log-frequency = pitch)
+
+**Combination tones**: When two pitches sound simultaneously, humans perceive sum and difference frequencies. These are *linear* operations on frequency, not pitch.
+
+**The bridge**: Wilson's optimized generators find points where log-space structures (MOS) produce linear-space coincidences (proportional triads). This is why the code works in both spaces—`Microtone` stores both `pitchValue01` (log) and `frequencyValue` (linear).
+
+### Tolerance and Perception
+
+The magic number `0.0005` in `_analyzeProportionalTriads()` represents a perceptual threshold. Human pitch discrimination is roughly 5-10 cents in musically relevant registers. The tolerance allows "near misses" that are perceptually equivalent to exact coincidences.
+
+**Note**: This could be parameterized. Lower tolerance = stricter matching, fewer triads. Higher tolerance = more triads but weaker reinforcement.
+
+### Key Mathematical Relationships
+
+```
+Arithmetic mean (proportional/major):  (a + b) / 2
+Geometric mean (neutral):              sqrt(a * b)
+Harmonic mean (subcontrary/minor):     2ab / (a + b)
+
+Relationship: harmonic < geometric < arithmetic (for a ≠ b)
+```
+
+The geometric mean falls between arithmetic and harmonic, so "neutral" triads come "for free" if you have good major and minor triads.
+
+### Research Directions
+
+1. **Generator landscape visualization**: Plot triad quality vs. generator vs. level as a heatmap
+2. **Tolerance sensitivity**: How does triad count change with tolerance? Is there a phase transition?
+3. **Cross-system bridges**: Can CPS harmonic richness be combined with MOS melodic continuity?
+4. **Continued fraction properties**: What properties of a generator's CF expansion predict triad density?
+
+### Historical Context
+
+Erv Wilson (1928-2016) developed these theories largely without computational tools. Marcus Hobbs worked directly with Wilson from 1995-2005, implementing his designs in software during real-time sessions. Much of Wilson's work exists only in hand-drawn diagrams; this codebase represents the most complete computational implementation of his theories.
+
+### For AI Collaborators
+
+When working on this codebase:
+
+1. **Understand both spaces**: Many bugs come from confusing log-pitch and linear-frequency operations
+2. **Respect the tolerance**: The 0.0005 threshold is empirically tuned; changes have cascading effects
+3. **Test with extreme generators**: Edge cases near 0, 0.5, and 1 reveal algorithmic assumptions
+4. **Visualize everything**: Wilson thought visually; the `paint()` methods are as important as the math
+5. **Remember the goal**: Scales that serve both melody AND harmony—this is the Wilson criterion
