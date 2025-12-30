@@ -283,7 +283,7 @@ _log += (_seedSpace == SeedSpace::Frequency) ? ", Frequency Seeds]" : ", Period 
 ## Reference Document
 
 For full theoretical background, see:
-`/Research/Wilson_MOS_CPS_Bridge_Research.md` — particularly Part 9: "The Arithmetic/Harmonic Duality in Recurrence Relations"
+`/prompts/Wilson_MOS_CPS_Bridge_Research.md` — particularly Part 9: "The Arithmetic/Harmonic Duality in Recurrence Relations"
 
 ---
 
