@@ -294,6 +294,22 @@ unique_ptr<AudioProcessorParameterGroup> RecurrenceRelationModel::createParams()
       RecurrenceRelation::getNumberOfTermsMin(),
       RecurrenceRelation::getNumberOfTermsMax(),
       RecurrenceRelation::getNumberOfTermsDefault()
+      ),
+
+     // Sum Type
+     make_unique<AudioParameterChoice>
+     (getRecurrenceRelationSumTypeParameterID(),
+      getRecurrenceRelationSumTypeParameterName(),
+      RecurrenceRelation::getSumTypeDescription(),
+      RecurrenceRelation::getSumTypeDefault()
+      ),
+
+     // Seed Space
+     make_unique<AudioParameterChoice>
+     (getRecurrenceRelationSeedSpaceParameterID(),
+      getRecurrenceRelationSeedSpaceParameterName(),
+      RecurrenceRelation::getSeedSpaceDescription(),
+      RecurrenceRelation::getSeedSpaceDefault()
       )
 
      );
@@ -341,7 +357,9 @@ StringArray RecurrenceRelationModel::getFavoritesParameterIDs() {
                        getRecurrenceRelationCn9ParameterID().getParamID(),
                        getRecurrenceRelationIndexParameterID().getParamID(),
                        getRecurrenceRelationOffsetParameterID().getParamID(),
-                       getRecurrenceRelationNumTermsParameterID().getParamID()
+                       getRecurrenceRelationNumTermsParameterID().getParamID(),
+                       getRecurrenceRelationSumTypeParameterID().getParamID(),
+                       getRecurrenceRelationSeedSpaceParameterID().getParamID()
                        );
 }
 
@@ -378,7 +396,19 @@ void RecurrenceRelationModel::parameterChanged(const String& parameterID, float 
     // offset
     else if(parameterID == getRecurrenceRelationOffsetParameterID().getParamID()) {
         _recurrenceRelation->setOffset(static_cast<unsigned long>(newValue));
-        
+
+        return;
+    }
+
+    // Sum Type
+    else if(parameterID == getRecurrenceRelationSumTypeParameterID().getParamID()) {
+        _recurrenceRelation->setSumTypeByIndex(static_cast<unsigned long>(newValue));
+        return;
+    }
+
+    // Seed Space
+    else if(parameterID == getRecurrenceRelationSeedSpaceParameterID().getParamID()) {
+        _recurrenceRelation->setSeedSpaceByIndex(static_cast<unsigned long>(newValue));
         return;
     }
 
@@ -511,4 +541,36 @@ unsigned long RecurrenceRelationModel::uiGetOffset() {
 
 const string RecurrenceRelationModel::getLog() {
     return _recurrenceRelation->getLog();
+}
+
+#pragma mark - Sum Type UI
+
+void RecurrenceRelationModel::uiSetSumType(unsigned long value) {
+    jassert(value < 2);
+    auto key = getRecurrenceRelationSumTypeParameterID().getParamID();
+    auto param = _apvts->getParameter(key);
+    auto range = _apvts->getParameterRange(key);
+    auto const value01 = range.convertTo0to1(static_cast<float>(value));
+    param->setValueNotifyingHost(value01);
+}
+
+unsigned long RecurrenceRelationModel::uiGetSumType() {
+    auto& param = *_apvts->getRawParameterValue(getRecurrenceRelationSumTypeParameterID().getParamID());
+    return static_cast<unsigned long>(param.load());
+}
+
+#pragma mark - Seed Space UI
+
+void RecurrenceRelationModel::uiSetSeedSpace(unsigned long value) {
+    jassert(value < 2);
+    auto key = getRecurrenceRelationSeedSpaceParameterID().getParamID();
+    auto param = _apvts->getParameter(key);
+    auto range = _apvts->getParameterRange(key);
+    auto const value01 = range.convertTo0to1(static_cast<float>(value));
+    param->setValueNotifyingHost(value01);
+}
+
+unsigned long RecurrenceRelationModel::uiGetSeedSpace() {
+    auto& param = *_apvts->getRawParameterValue(getRecurrenceRelationSeedSpaceParameterID().getParamID());
+    return static_cast<unsigned long>(param.load());
 }

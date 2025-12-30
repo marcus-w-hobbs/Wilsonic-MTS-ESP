@@ -157,6 +157,9 @@ struct TuningTests
     // Recurrence Relation
 
     static void testRecurrenceRelation();
+    static void testRecurrenceRelationHarmonicFibonacci();
+    static void testRecurrenceRelationPeriodSeeds();
+    static void testRecurrenceRelationBackwardCompatibility();
 
     static void recurrenceRelationCodeGen();
 

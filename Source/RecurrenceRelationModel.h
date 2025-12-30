@@ -90,6 +90,22 @@ public:
     static const ParameterID getRecurrenceRelationNumTermsParameterID() { return ParameterID("RECURRENCERELATIONNUMTERMS", AppVersion::getVersionHint()); }
     static const String getRecurrenceRelationNumTermsParameterName() { return "Recurrence Relation|Terms"; }
 
+    // Sum Type parameter
+    static const ParameterID getRecurrenceRelationSumTypeParameterID() {
+        return ParameterID("RECURRENCERELATIONSUMTYPE", AppVersion::getVersionHint());
+    }
+    static const String getRecurrenceRelationSumTypeParameterName() {
+        return "Recurrence Relation|Sum Type";
+    }
+
+    // Seed Space parameter
+    static const ParameterID getRecurrenceRelationSeedSpaceParameterID() {
+        return ParameterID("RECURRENCERELATIONSEEDSPACE", AppVersion::getVersionHint());
+    }
+    static const String getRecurrenceRelationSeedSpaceParameterName() {
+        return "Recurrence Relation|Seed Space";
+    }
+
     // lifecycle
 public:
     RecurrenceRelationModel();
@@ -124,7 +140,15 @@ public:
     void uiSetOffset(unsigned long offset);
     unsigned long uiGetOffset();
     const string getLog();
-    
+
+    // Sum Type UI methods
+    void uiSetSumType(unsigned long index);
+    unsigned long uiGetSumType();
+
+    // Seed Space UI methods
+    void uiSetSeedSpace(unsigned long index);
+    unsigned long uiGetSeedSpace();
+
 protected:
     void detachParameterListeners() override;
 

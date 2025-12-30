@@ -135,6 +135,16 @@ unordered_map<RecurrenceRelation::Coefficient, string> RecurrenceRelation::__coe
     {RecurrenceRelation::Coefficient::_8  , "8"    }
 };
 
+StringArray RecurrenceRelation::__sumTypeDescription = {
+    "Arithmetic",
+    "Harmonic"
+};
+
+StringArray RecurrenceRelation::__seedSpaceDescription = {
+    "Frequency",
+    "Period"
+};
+
 #pragma mark - lifecycle
 
 RecurrenceRelation::RecurrenceRelation()
@@ -411,6 +421,60 @@ void RecurrenceRelation::setOnDivergence(function<void()> completionBlock)
     _divergenceCompletionBlock = completionBlock;
 }
 
+#pragma mark - Sum Type
+
+void RecurrenceRelation::setSumType(SumType sumType)
+{
+    const ScopedLock sl(_lock);
+    _sumType = sumType;
+    _updateRecurrenceRelation();
+}
+
+RecurrenceRelation::SumType RecurrenceRelation::getSumType()
+{
+    return _sumType;
+}
+
+void RecurrenceRelation::setSumTypeByIndex(unsigned long index)
+{
+    jassert(index < 2);
+    const ScopedLock sl(_lock);
+    _sumType = static_cast<SumType>(index);
+    _updateRecurrenceRelation();
+}
+
+unsigned long RecurrenceRelation::getSumTypeIndex()
+{
+    return static_cast<unsigned long>(_sumType);
+}
+
+#pragma mark - Seed Space
+
+void RecurrenceRelation::setSeedSpace(SeedSpace seedSpace)
+{
+    const ScopedLock sl(_lock);
+    _seedSpace = seedSpace;
+    _updateRecurrenceRelation();
+}
+
+RecurrenceRelation::SeedSpace RecurrenceRelation::getSeedSpace()
+{
+    return _seedSpace;
+}
+
+void RecurrenceRelation::setSeedSpaceByIndex(unsigned long index)
+{
+    jassert(index < 2);
+    const ScopedLock sl(_lock);
+    _seedSpace = static_cast<SeedSpace>(index);
+    _updateRecurrenceRelation();
+}
+
+unsigned long RecurrenceRelation::getSeedSpaceIndex()
+{
+    return static_cast<unsigned long>(_seedSpace);
+}
+
 // note the _log doubles as the scalaComments, so preprend "! " to each newline
 void RecurrenceRelation::_updateRecurrenceRelation()
 {
@@ -449,7 +513,8 @@ void RecurrenceRelation::_updateRecurrenceRelation()
         _log += "\n! ";
     };
 
-    // init _log
+    // init _log with sum type indicator
+    string sumOp = (_sumType == SumType::Arithmetic) ? " + " : " @ ";  // @ = harmonic sum
     _log = "! H[n] = ";
     if(_coefficients[_i - 1] == Coefficient::_1)
     {
@@ -462,7 +527,8 @@ void RecurrenceRelation::_updateRecurrenceRelation()
         _log += " * H[n-";
     }
     _log += to_string(_i);
-    _log += "] + ";
+    _log += "]";
+    _log += sumOp;
     if(_coefficients[_j - 1] == Coefficient::_1)
     {
         _log += "H[n-";
@@ -474,14 +540,30 @@ void RecurrenceRelation::_updateRecurrenceRelation()
         _log += " * H[n-";
     }
     _log += to_string(_j);
-    _log += "]\n! \n! Integer Sequence, including seeds:\n!  ";
+    _log += "]";
 
-    // plant seeds(seeds are the initial conditions so don't use coefficients)
+    // Add mode info
+    _log += (_sumType == SumType::Arithmetic) ? " [Arithmetic" : " [Harmonic";
+    _log += (_seedSpace == SeedSpace::Frequency) ? ", Freq Seeds]" : ", Period Seeds]";
+    _log += "\n! \n! Integer Sequence, including seeds:\n!  ";
+
+    // plant seeds (seeds are the initial conditions so don't use coefficients)
+    // Apply seed space transformation if needed
     for(auto j = _j; j > 0; j--) // _j > _i > 0
     {
         auto seed = _seeds.microtoneAtIndex(j - 1);
-        raw_ma.addMicrotone(seed);
-        _log += seed->getFrequencyValueDescription();
+        auto seedValue = seed->getFrequencyValue();
+
+        // Transform seed if in Period space (invert)
+        if (_seedSpace == SeedSpace::Period && seedValue > 0.f)
+        {
+            seedValue = 1.f / seedValue;
+        }
+
+        // Create transformed seed for the working array
+        auto transformedSeed = make_shared<Microtone>(seedValue);
+        raw_ma.addMicrotone(transformedSeed);
+        _log += transformedSeed->getFrequencyValueDescription();
 
         // filtering initial seeds lets you do cool things
         filtered_ma = reap(raw_ma);
@@ -520,7 +602,22 @@ void RecurrenceRelation::_updateRecurrenceRelation()
         auto const cj  = getValueForCoefficient(_coefficients[_j - 1]);
         auto const mti = raw_ma.microtoneAtIndex(i);
         auto const mtj = raw_ma.microtoneAtIndex(j);
-        auto const f   = ci * mti->getFrequencyValue() + cj * mtj->getFrequencyValue();
+
+        // Calculate next term based on sum type
+        auto const a = ci * mti->getFrequencyValue();
+        auto const b = cj * mtj->getFrequencyValue();
+        float f;
+        if (_sumType == SumType::Arithmetic)
+        {
+            // Standard arithmetic sum: a + b
+            f = a + b;
+        }
+        else // SumType::Harmonic
+        {
+            // Harmonic sum: ab/(a+b) — the parallel resistance formula
+            auto const sum = a + b;
+            f = (sum > 1e-10f) ? (a * b) / sum : 0.f;
+        }
         if(std::isnan(f) || std::isinf(f) || f < 0)
         {
             _log += "\n! \n! Sequence did not converge.\n";
@@ -581,9 +678,13 @@ void RecurrenceRelation::_updateRecurrenceRelation()
             auto const f2 = mt2->getFrequencyValue();
             auto const f =(f1 > f2) ? f1/f2 : f2/f1;
             auto const p = log2f(f);
-            _log += "\n! \n! Sequence converges to: \n!  F = ";
+            _log += "\n! \n! Sequence converges to: \n!  Ratio = ";
             _log += to_string(f);
-            _log += "\n!  P = ";
+            if (_sumType == SumType::Harmonic)
+            {
+                _log += " (1/phi for Fibonacci)";
+            }
+            _log += "\n!  Generator = ";
             _log += to_string(p);
         }
     }

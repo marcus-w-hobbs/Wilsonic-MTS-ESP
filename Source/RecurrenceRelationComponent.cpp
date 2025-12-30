@@ -19,6 +19,8 @@ RecurrenceRelationComponent::RecurrenceRelationComponent(WilsonicProcessor& proc
 , _indexBubble(BubblePlacement::right, "I", "Index: The recurrence relations from H[n-1]+H[n-2] to H[n-8]+H[n-9]")
 , _offsetBubble(BubblePlacement::left, "O", "Skip this number of terms to start the scale")
 , _numTermsBubble(BubblePlacement::left, "T", "The number of terms in the final scale, i.e., the number of notes per octave")
+, _sumTypeBubble(BubblePlacement::left, "A/H", "Sum Type: Arithmetic (a+b) or Harmonic (ab/(a+b))")
+, _seedSpaceBubble(BubblePlacement::left, "F/P", "Seed Space: Frequency (as-is) or Period (inverted)")
 {
     // model
     auto const rrm = _processor.getRecurrenceRelationModel();
@@ -66,6 +68,36 @@ RecurrenceRelationComponent::RecurrenceRelationComponent(WilsonicProcessor& proc
     // Offset
     _offsetSlider = make_unique<SeedSlider>(_processor, "Offset", RecurrenceRelation::getOffsetMin(), rrm->uiGetOffset(), RecurrenceRelation::getOffsetMax(), 1, [rrm] (float o) {rrm->uiSetOffset(static_cast<unsigned long>(o));});
     addAndMakeVisible(*_offsetSlider);
+
+    // Bubble: Sum Type
+    addAndMakeVisible(_sumTypeBubble);
+
+    // Sum Type ComboBox
+    _sumTypeComboBox = make_unique<DeltaComboBox>(_processor, false);
+    _sumTypeComboBox->addItemList(RecurrenceRelation::getSumTypeDescription(), 1);
+    _sumTypeComboBox->setToolTip("Sum Type: Arithmetic or Harmonic");
+    _sumTypeComboBox->setSelectedItemIndex(static_cast<int>(rrm->uiGetSumType()), NotificationType::dontSendNotification);
+    auto onSumTypeChange = [rrm, this]() {
+        auto const selectedItemIndex = static_cast<unsigned long>(_sumTypeComboBox->getSelectedItemIndex());
+        rrm->uiSetSumType(selectedItemIndex);
+    };
+    _sumTypeComboBox->setOnChange(onSumTypeChange);
+    addAndMakeVisible(*_sumTypeComboBox);
+
+    // Bubble: Seed Space
+    addAndMakeVisible(_seedSpaceBubble);
+
+    // Seed Space ComboBox
+    _seedSpaceComboBox = make_unique<DeltaComboBox>(_processor, false);
+    _seedSpaceComboBox->addItemList(RecurrenceRelation::getSeedSpaceDescription(), 1);
+    _seedSpaceComboBox->setToolTip("Seed Space: Frequency or Period");
+    _seedSpaceComboBox->setSelectedItemIndex(static_cast<int>(rrm->uiGetSeedSpace()), NotificationType::dontSendNotification);
+    auto onSeedSpaceChange = [rrm, this]() {
+        auto const selectedItemIndex = static_cast<unsigned long>(_seedSpaceComboBox->getSelectedItemIndex());
+        rrm->uiSetSeedSpace(selectedItemIndex);
+    };
+    _seedSpaceComboBox->setOnChange(onSeedSpaceChange);
+    addAndMakeVisible(*_seedSpaceComboBox);
 
     // Pitch Wheel
     _pitchWheelComponent = make_unique<WilsonicPitchWheelComponent>(_processor, AppExperiments::tuningRendererPlayingNotes);
@@ -156,6 +188,26 @@ void RecurrenceRelationComponent::resized() {
     _offsetBubble.setBounds(oba);
     _offsetSlider->setBounds(ra);
 
+    // y margin
+    area.removeFromTop(margin);
+
+    // Sum Type and Seed Space row
+    auto mode_area = area.removeFromTop(static_cast<int>(WilsonicAppSkin::comboBoxHeight));
+    auto mode_left_area = mode_area.withTrimmedRight(static_cast<int>(0.5f * mode_area.getWidth()));
+    auto mode_right_area = mode_area.withTrimmedLeft(static_cast<int>(0.5f * mode_area.getWidth()));
+
+    // Sum Type (left)
+    auto stba = mode_left_area.removeFromLeft(bubble_width);
+    _sumTypeBubble.setBounds(stba);
+    mode_left_area.removeFromRight(margin);
+    _sumTypeComboBox->setBounds(mode_left_area);
+
+    // Seed Space (right)
+    auto ssba = mode_right_area.removeFromLeft(bubble_width);
+    _seedSpaceBubble.setBounds(ssba);
+    mode_right_area.removeFromRight(margin);
+    _seedSpaceComboBox->setBounds(mode_right_area);
+
     // y margin, top
     area.removeFromTop(static_cast<int>(margin));
 
@@ -224,6 +276,14 @@ void RecurrenceRelationComponent::_tuningChangedUpdateUI() {
                                    rrm->uiGetSeed(8),
                                    rrm->uiGetSeed(9),
                                    dontSendNotification);
+
+    // Update Sum Type and Seed Space combo boxes
+    _sumTypeComboBox->setSelectedItemIndex(
+        static_cast<int>(rrm->uiGetSumType()),
+        NotificationType::dontSendNotification);
+    _seedSpaceComboBox->setSelectedItemIndex(
+        static_cast<int>(rrm->uiGetSeedSpace()),
+        NotificationType::dontSendNotification);
 
     // draw
     resized();

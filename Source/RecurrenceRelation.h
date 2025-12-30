@@ -37,6 +37,20 @@ public:
         _8   = 6
     };
 
+    // Sum type for recurrence calculation
+    enum class SumType
+    {
+        Arithmetic = 0,  // H[n] = a + b      (proportional triads)
+        Harmonic   = 1   // H[n] = ab/(a+b)   (subcontrary triads)
+    };
+
+    // Seed space transformation
+    enum class SeedSpace
+    {
+        Frequency = 0,  // Seeds used as-is: s
+        Period    = 1   // Seeds inverted: 1/s
+    };
+
     // 1/8, 1/4, 1/2, 1, 2, 4, 8
     static float constexpr getCoefficientMin() { return 1/8.f; }
     static float constexpr getCoefficientMax() { return 8; }
@@ -51,6 +65,14 @@ public:
 
     // pre-determined H[n] = C[n-i] * H[n-i] + C[n-j] * H[n-j]
     static StringArray getIndicesDescription() { return __indicesDescription; }
+
+    // Sum Type: Arithmetic or Harmonic
+    static StringArray getSumTypeDescription() { return __sumTypeDescription; }
+    static constexpr int getSumTypeDefault() { return 0; } // Arithmetic
+
+    // Seed Space: Frequency or Period
+    static StringArray getSeedSpaceDescription() { return __seedSpaceDescription; }
+    static constexpr int getSeedSpaceDefault() { return 0; } // Frequency
 
     // 0 <= offset <= 127 // magic, not based on midi nn
     static int constexpr getOffsetMin() { return 0; }
@@ -72,6 +94,8 @@ private:
     static StringArray __coefficientsDescription; // for combo box
     static int constexpr __maxNumUpdateIterations {500};
     static unordered_map<Coefficient, string> __coefficientsDescriptionMap; // for log
+    static StringArray __sumTypeDescription;
+    static StringArray __seedSpaceDescription;
 
 public:
     // lifecycle
@@ -101,6 +125,18 @@ public:
     // block will be called if the series diverges...can be used to update UI
     void setOnDivergence (function<void()> completionBlock);
 
+    // Sum Type
+    void setSumType(SumType sumType);
+    SumType getSumType();
+    void setSumTypeByIndex(unsigned long index);
+    unsigned long getSumTypeIndex();
+
+    // Seed Space
+    void setSeedSpace(SeedSpace seedSpace);
+    SeedSpace getSeedSpace();
+    void setSeedSpaceByIndex(unsigned long index);
+    unsigned long getSeedSpaceIndex();
+
     // drawing
     bool canPaintTuning() override;
     void paint (WilsonicProcessor& processor, Graphics& g, Rectangle<int> bounds) override;
@@ -122,4 +158,6 @@ private:
     unsigned long _offset {0}; // automatable
     string _log;
     function<void()> _divergenceCompletionBlock;
+    SumType _sumType = SumType::Arithmetic;
+    SeedSpace _seedSpace = SeedSpace::Frequency;
 };

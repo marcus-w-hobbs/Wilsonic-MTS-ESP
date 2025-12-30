@@ -56,6 +56,10 @@ private:
     unique_ptr<SeedSlider> _offsetSlider;
     BubbleDrawable _numTermsBubble;
     unique_ptr<SeedSlider> _numTermsSlider;
+    BubbleDrawable _sumTypeBubble;
+    unique_ptr<DeltaComboBox> _sumTypeComboBox;
+    BubbleDrawable _seedSpaceBubble;
+    unique_ptr<DeltaComboBox> _seedSpaceComboBox;
     unique_ptr<WilsonicPitchWheelComponent> _pitchWheelComponent;
     unique_ptr<TextEditor> _textEditor;
 
