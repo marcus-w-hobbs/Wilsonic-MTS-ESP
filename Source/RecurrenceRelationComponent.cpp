@@ -19,8 +19,8 @@ RecurrenceRelationComponent::RecurrenceRelationComponent(WilsonicProcessor& proc
 , _indexBubble(BubblePlacement::right, "I", "Index: The recurrence relations from H[n-1]+H[n-2] to H[n-8]+H[n-9]")
 , _offsetBubble(BubblePlacement::left, "O", "Skip this number of terms to start the scale")
 , _numTermsBubble(BubblePlacement::left, "T", "The number of terms in the final scale, i.e., the number of notes per octave")
-, _sumTypeBubble(BubblePlacement::left, "A/H", "Sum Type: Arithmetic (a+b) or Harmonic (ab/(a+b))")
-, _seedSpaceBubble(BubblePlacement::left, "F/P", "Seed Space: Frequency (as-is) or Period (inverted)")
+, _sumTypeBubble(BubblePlacement::left, "+", "Sum Type: Arithmetic (a+b) or Harmonic (ab/(a+b))")
+, _seedSpaceBubble(BubblePlacement::left, "~", "Seed Space: Frequency (as-is) or Period (inverted)")
 {
     // model
     auto const rrm = _processor.getRecurrenceRelationModel();
