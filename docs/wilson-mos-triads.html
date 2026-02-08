@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wilson MOS Triads</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a1a;color:#d0d0e0;height:100vh;overflow:hidden}
+#app{display:grid;grid-template-columns:310px 1fr;height:100vh}
+#sidebar{background:#0f0f24;padding:16px;overflow-y:auto;border-right:1px solid #1a1a3a;display:flex;flex-direction:column;gap:14px}
+#sidebar h1{font-size:15px;color:#c8b8ff;letter-spacing:0.5px;line-height:1.3}
+#sidebar h1 span{font-size:11px;color:#666;display:block;margin-top:4px;font-weight:normal}
+.cg{background:#12122a;border-radius:6px;padding:10px 12px}
+.cg label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:6px}
+.cg .val{float:right;color:#aac;font-family:monospace;font-size:11px}
+input[type=range]{width:100%;height:6px;-webkit-appearance:none;background:#1a1a3a;border-radius:3px;outline:none;margin:4px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#7b68ee;cursor:pointer}
+.triad-row{display:flex;align-items:center;gap:8px;margin:4px 0}
+.triad-row .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.triad-row input[type=checkbox]{accent-color:#7b68ee}
+.triad-row input[type=range]{flex:1;height:4px}
+.triad-row .lbl{font-size:11px;width:80px;flex-shrink:0}
+.triad-row .wval{font-size:10px;color:#777;width:28px;text-align:right;font-family:monospace}
+.opt-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.opt-row input[type=checkbox]{accent-color:#7b68ee}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.preset-btn{background:#1a1a3a;border:1px solid #2a2a4a;color:#aaa;font-size:10px;padding:5px 4px;border-radius:4px;cursor:pointer;text-align:center;transition:all 0.15s}
+.preset-btn:hover{background:#252550;color:#ddd;border-color:#4a4a7a}
+.preset-btn.active{background:#2a2060;color:#c8b8ff;border-color:#7b68ee}
+#main{display:flex;flex-direction:column;overflow:hidden}
+#heatmap-wrap{flex:1;min-height:200px;position:relative;padding:8px 12px 4px 12px}
+#heatmap{display:block;cursor:crosshair}
+#detail-wrap{height:300px;border-top:1px solid #1a1a3a;display:flex;flex-direction:column;overflow:hidden}
+#detail-bar{display:flex;gap:12px;padding:6px 12px;background:#0c0c20;font-size:11px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #1a1a3a}
+#detail-bar .di{color:#888}
+#detail-bar .di b{color:#c8b8ff;font-weight:600}
+#detail-content{flex:1;display:grid;grid-template-columns:3fr 1fr;overflow:hidden;min-height:0}
+#ribbon-wrap{padding:4px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:0}
+#ribbon-canvas{display:block;width:100%}
+#scale-summary{font-family:monospace;font-size:10px;color:#999;line-height:1.4;white-space:pre-wrap;padding:6px 0 4px 0}
+#triad-wrap{border-left:1px solid #1a1a3a;overflow-y:auto;padding:4px 6px}
+#triad-wrap table{width:100%;border-collapse:collapse;font-size:10px;font-family:monospace}
+#triad-wrap th{color:#666;text-transform:uppercase;letter-spacing:0.5px;padding:3px 5px;text-align:left;font-size:9px;position:sticky;top:0;background:#0f0f24;z-index:1}
+#triad-wrap td{padding:2px 5px;border-top:1px solid #111}
+.t-prop{color:#f0a050}
+.t-sub{color:#50a0f0}
+.t-neut{color:#50d080}
+#scale-summary-wrap{display:flex;align-items:flex-start;gap:4px}
+#scale-summary-copy{background:none;border:1px solid #2a2a4a;color:#555;font-size:10px;padding:2px 6px;border-radius:3px;cursor:pointer;flex-shrink:0;transition:all 0.12s;margin-top:1px}
+#scale-summary-copy:hover{background:#1a1a3a;color:#aaa;border-color:#4a4a7a}
+#tooltip{position:fixed;background:#1a1a30;border:1px solid #3a3a6a;border-radius:4px;padding:6px 8px;font-size:11px;font-family:monospace;pointer-events:none;display:none;z-index:99;max-width:260px;line-height:1.4}
+#progress-bar{position:absolute;bottom:8px;left:12px;right:12px;height:3px;background:#1a1a3a;border-radius:2px;display:none;z-index:10}
+#progress-fill{height:100%;background:#7b68ee;border-radius:2px;width:0%;transition:width 0.1s}
+.empty-detail{color:#555;font-size:12px;text-align:center;padding:40px;grid-column:1/-1}
+#level-murch-bar{display:flex;gap:12px;padding:6px 12px;background:#0a0a1c;border-bottom:1px solid #1a1a3a;align-items:center;flex-wrap:wrap;min-height:32px}
+#level-murch-bar .lm-label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.6px;flex-shrink:0}
+.level-pills{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.level-pill{background:#1a1a3a;border:1px solid #2a2a4a;color:#777;font-size:10px;font-family:monospace;padding:2px 7px;border-radius:3px;cursor:pointer;transition:all 0.12s;line-height:1.3}
+.level-pill:hover{background:#252550;color:#ddd;border-color:#4a4a7a}
+.level-pill.active{background:#2a2060;color:#c8b8ff;border-color:#7b68ee;font-weight:700}
+.level-pill.is-mos{border-color:#3a6a3a}
+.murch-ctrl{display:flex;align-items:center;gap:4px;margin-left:8px;flex-shrink:0}
+.murch-ctrl button{background:#1a1a3a;border:1px solid #2a2a4a;color:#888;font-size:12px;width:22px;height:22px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.12s;padding:0;line-height:1}
+.murch-ctrl button:hover{background:#252550;color:#ddd;border-color:#4a4a7a}
+.murch-info{font-size:10px;font-family:monospace;color:#999;min-width:60px;text-align:center}
+.murch-pattern{font-size:10px;font-family:monospace;color:#c8b8ff;margin-left:4px;letter-spacing:0.5px}
+.mos-dot{position:absolute;left:0;width:6px;height:6px;border-radius:50%;background:#7b68ee}
+.scl-btn{background:#1a3a2a;border:1px solid #2a5a3a;color:#6bcb77;font-size:10px;padding:3px 10px;border-radius:3px;cursor:pointer;transition:all 0.12s;margin-left:auto;flex-shrink:0;font-family:monospace}
+.scl-btn:hover{background:#2a5a3a;color:#8feb97;border-color:#4a8a5a}
+.scl-btn.downloaded{background:#2a5a3a;color:#8feb97}
+</style>
+</head>
+<body>
+<div id="app">
+<aside id="sidebar">
+  <h1>Wilson MOS Triads<span>Interactive triad quality explorer for Erv Wilson's Moments of Symmetry (MOS) scale design</span></h1>
+  <div class="cg">
+    <label>Tolerance <span class="val" id="tol-val">0.0020</span></label>
+    <input type="range" id="tol-slider" min="0" max="100" value="50">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#555"><span>tight</span><span>wide</span></div>
+  </div>
+  <div class="cg">
+    <label>Triad Weights</label>
+    <div class="triad-row"><input type="checkbox" id="prop-on" checked><div class="dot" style="background:#f0a050"></div><span class="lbl">Proportional</span><input type="range" id="prop-w" min="0" max="100" value="100"><span class="wval" id="prop-wv">100</span></div>
+    <div class="triad-row"><input type="checkbox" id="sub-on" checked><div class="dot" style="background:#50a0f0"></div><span class="lbl">Subcontrary</span><input type="range" id="sub-w" min="0" max="100" value="100"><span class="wval" id="sub-wv">100</span></div>
+    <div class="triad-row"><input type="checkbox" id="neut-on" checked><div class="dot" style="background:#50d080"></div><span class="lbl">Neutral</span><input type="range" id="neut-w" min="0" max="100" value="100"><span class="wval" id="neut-wv">100</span></div>
+  </div>
+  <div class="cg">
+    <label>Options</label>
+    <div class="opt-row"><input type="checkbox" id="norm-row" checked> Normalize per row</div>
+    <div class="opt-row"><input type="checkbox" id="show-landmarks" checked> Show Wilson landmarks</div>
+    <div class="opt-row"><input type="checkbox" id="freq-space"> Frequency space error <span style="font-size:9px;color:#555">(matches Wilsonic)</span></div>
+  </div>
+  <div class="cg">
+    <label>Presets</label>
+    <div class="preset-grid">
+      <button class="preset-btn" data-preset="proportional">Proportional</button>
+      <button class="preset-btn" data-preset="subcontrary">Subcontrary</button>
+      <button class="preset-btn active" data-preset="full">Full Spectrum</button>
+      <button class="preset-btn" data-preset="tight">Tight Focus</button>
+      <button class="preset-btn" data-preset="wide">Wide Scan</button>
+    </div>
+  </div>
+  <div class="cg" style="font-size:10px;color:#555;line-height:1.7">
+    <b style="color:#777">How to read</b>
+    <div style="margin-top:4px"><b style="color:#888">X</b> = generator (0 → 1)</div>
+    <div><b style="color:#888">Y</b> = scale size (3 → 53 notes)</div>
+    <div><b style="color:#888">Bright</b> = more/better triads</div>
+    <div style="margin-top:4px"><b style="color:#888">Click</b> any cell to see MOS pattern and triad details</div>
+    <div><b style="color:#888">Vertical lines</b> = Wilson generators</div>
+    <div><b style="color:#888">Purple dots</b> on Y-axis = MOS levels (continued fraction convergents)</div>
+    <div style="margin-top:4px"><b style="color:#c8b8ff">Level</b> pills jump between MOS cardinalities</div>
+    <div><b style="color:#c8b8ff">Murchana</b> rotates modes</div>
+  </div>
+</aside>
+<div id="main">
+  <div id="heatmap-wrap">
+    <canvas id="heatmap"></canvas>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+  </div>
+  <div id="detail-wrap">
+    <div id="detail-bar"><span class="di">Click a point on the heatmap to explore</span></div>
+    <div id="detail-content"><div class="empty-detail">Select a generator × scale size combination above</div></div>
+  </div>
+</div>
+</div>
+<div id="tooltip"></div>
+
+<script>
+// ─── Constants ───
+const G_STEPS = 120;
+const N_MIN = 3;
+const N_MAX = 53;
+const N_STEPS = N_MAX - N_MIN + 1;
+const LANDMARKS = [
+  {g:0.238186, label:'Cubic Root', color:'#ff6b6b'},
+  {g:0.306, label:'Harm. Fib', color:'#ffd93d'},
+  {g:0.418934, label:'Fourth Root', color:'#6bcb77'},
+  {g:0.585, label:'Pyth. 5th', color:'#aa88ff'},
+  {g:0.694, label:'log₂φ (Fib)', color:'#4fc3f7'},
+];
+const PRESETS = {
+  proportional: {tol:50, prop:100, sub:0, neut:0, propOn:true, subOn:false, neutOn:false},
+  subcontrary:  {tol:50, prop:0, sub:100, neut:0, propOn:false, subOn:true, neutOn:false},
+  full:         {tol:50, prop:100, sub:100, neut:100, propOn:true, subOn:true, neutOn:true},
+  tight:        {tol:20, prop:100, sub:100, neut:100, propOn:true, subOn:true, neutOn:true},
+  wide:         {tol:80, prop:100, sub:100, neut:100, propOn:true, subOn:true, neutOn:true},
+};
+
+// ─── State ───
+const state = {
+  tolerance: 0.002,
+  weights: {prop:1, sub:1, neut:1},
+  enabled: {prop:true, sub:true, neut:true},
+  normalizeRow: true,
+  showLandmarks: true,
+  freqSpace: false,
+  selectedGi: -1,
+  selectedNi: -1,
+  murchana: 0,
+  mosLevels: [],
+  activePreset: 'full',
+};
+
+// Quality matrices (cached per tolerance)
+const matrices = {
+  prop: new Float32Array(G_STEPS * N_STEPS),
+  sub: new Float32Array(G_STEPS * N_STEPS),
+  neut: new Float32Array(G_STEPS * N_STEPS),
+};
+
+let computeGen = 0; // cancellation token
+
+// ─── DOM refs ───
+const heatmapCanvas = document.getElementById('heatmap');
+const hctx = heatmapCanvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+const progressBar = document.getElementById('progress-bar');
+const progressFill = document.getElementById('progress-fill');
+
+// ─── Math: Scale Generation ───
+function generateScale(g, N) {
+  const pitches = new Float64Array(N);
+  for (let k = 0; k < N; k++) {
+    pitches[k] = ((k * g) % 1 + 1) % 1;
+  }
+  pitches.sort();
+  return pitches;
+}
+
+function pitchesToFreqs(pitches) {
+  const f = new Float64Array(pitches.length);
+  for (let i = 0; i < pitches.length; i++) f[i] = Math.pow(2, pitches[i]);
+  return f;
+}
+
+// ─── Math: Triad Analysis ───
+// Computes error between a triad mean and a candidate scale degree.
+// In frequency space (Wilsonic-compatible): compare raw frequencies.
+// In pitch space (log2, perceptually uniform): compare log2 values.
+function triadError(meanFreq, candidateFreq, meanPitch, candidatePitch) {
+  if (state.freqSpace) {
+    return Math.abs(meanFreq - candidateFreq);
+  }
+  return Math.abs(meanPitch - candidatePitch);
+}
+
+function analyzeCell(g, N, tol) {
+  const pitches = generateScale(g, N);
+  const freqs = pitchesToFreqs(pitches);
+  let pQ = 0, sQ = 0, nQ = 0;
+  let triples = 0;
+
+  for (let i = 0; i < N - 2; i++) {
+    for (let j = i + 2; j < N; j++) {
+      const fi = freqs[i], fj = freqs[j];
+      const arithF = (fi + fj) / 2;
+      const harmF = 2 * fi * fj / (fi + fj);
+      const geoF = Math.sqrt(fi * fj);
+      const arithP = Math.log2(arithF);
+      const harmP = Math.log2(harmF);
+      const geoP = (pitches[i] + pitches[j]) / 2;
+
+      for (let k = i + 1; k < j; k++) {
+        const fk = freqs[k], pk = pitches[k];
+        pQ += tol / (triadError(arithF, fk, arithP, pk) + tol);
+        sQ += tol / (triadError(harmF, fk, harmP, pk) + tol);
+        nQ += tol / (triadError(geoF, fk, geoP, pk) + tol);
+        triples++;
+      }
+    }
+  }
+
+  const norm = triples > 0 ? triples : 1;
+  return {prop: pQ / norm, sub: sQ / norm, neut: nQ / norm};
+}
+
+// Detailed analysis returning individual triads
+function analyzeDetailedTriads(g, N, tol) {
+  const pitches = generateScale(g, N);
+  const freqs = pitchesToFreqs(pitches);
+  const triads = [];
+  const THRESH = tol * 5;
+
+  for (let i = 0; i < N - 2; i++) {
+    for (let j = i + 2; j < N; j++) {
+      const fi = freqs[i], fj = freqs[j];
+      const arithF = (fi + fj) / 2;
+      const harmF = 2 * fi * fj / (fi + fj);
+      const geoF = Math.sqrt(fi * fj);
+      const arithP = Math.log2(arithF);
+      const harmP = Math.log2(harmF);
+      const geoP = (pitches[i] + pitches[j]) / 2;
+
+      for (let k = i + 1; k < j; k++) {
+        const fk = freqs[k], pk = pitches[k];
+        const pErr = triadError(arithF, fk, arithP, pk);
+        const sErr = triadError(harmF, fk, harmP, pk);
+        const nErr = triadError(geoF, fk, geoP, pk);
+
+        // Store pitch-space error for cents display regardless of mode
+        const pErrCents = Math.abs(arithP - pk);
+        const sErrCents = Math.abs(harmP - pk);
+        const nErrCents = Math.abs(geoP - pk);
+
+        if (pErr < THRESH) {
+          triads.push({type:'prop', i, k, j, pitches:[pitches[i],pk,pitches[j]], freqs:[fi,fk,fj], error:pErr, errorCents:pErrCents, quality:tol/(pErr+tol)});
+        }
+        if (sErr < THRESH) {
+          triads.push({type:'sub', i, k, j, pitches:[pitches[i],pk,pitches[j]], freqs:[fi,fk,fj], error:sErr, errorCents:sErrCents, quality:tol/(sErr+tol)});
+        }
+        if (nErr < THRESH) {
+          triads.push({type:'neut', i, k, j, pitches:[pitches[i],pk,pitches[j]], freqs:[fi,fk,fj], error:nErr, errorCents:nErrCents, quality:tol/(nErr+tol)});
+        }
+      }
+    }
+  }
+
+  triads.sort((a, b) => b.quality - a.quality);
+  return {pitches, freqs, triads};
+}
+
+// ─── Math: MOS Pattern ───
+function getMOSInfo(pitches) {
+  const N = pitches.length;
+  const steps = [];
+  for (let i = 0; i < N; i++) {
+    const next = i + 1 < N ? pitches[i + 1] : 1 + pitches[0];
+    steps.push(next - pitches[i]);
+  }
+
+  // Find distinct step sizes (tolerance for float)
+  const sorted = [...steps].sort((a, b) => b - a);
+  const unique = [sorted[0]];
+  for (let i = 1; i < sorted.length; i++) {
+    if (Math.abs(sorted[i] - unique[unique.length - 1]) > 0.0001) {
+      unique.push(sorted[i]);
+    }
+  }
+
+  const L = unique[0];
+  const s = unique[unique.length - 1];
+  const thresh = (L + s) / 2;
+  const pattern = steps.map(st => st > thresh ? 'L' : 's').join('');
+  const Lcount = steps.filter(st => st > thresh).length;
+  const scount = N - Lcount;
+
+  return {steps, pattern, isMOS: unique.length === 2, numStepSizes: unique.length, L, s, Lcount, scount};
+}
+
+// ─── Math: Continued Fractions & MOS Levels ───
+function continuedFraction(g, maxTerms = 15) {
+  const terms = [];
+  let x = g;
+  for (let i = 0; i < maxTerms; i++) {
+    const a = Math.floor(x);
+    terms.push(a);
+    const frac = x - a;
+    if (frac < 1e-10) break;
+    x = 1 / frac;
+    if (x > 1e10) break;
+  }
+  return terms;
+}
+
+function getMOSLevels(g, maxN = N_MAX) {
+  const cf = continuedFraction(g);
+  const levels = [];
+  let q_prev = 0, q_curr = 1;
+
+  // q_0 = 1 is trivial (1 note), skip it
+  for (let i = 1; i < cf.length; i++) {
+    const a = cf[i];
+    // For each CF term a_i, there are semi-convergents too
+    // But canonical MOS levels are at the full convergents
+    const q_next = a * q_curr + q_prev;
+    if (q_next > maxN) {
+      // Check semi-convergents up to maxN
+      for (let k = 1; k < a; k++) {
+        const q_semi = k * q_curr + q_prev;
+        if (q_semi > maxN) break;
+        if (q_semi >= N_MIN) {
+          levels.push({level: levels.length + 1, n: q_semi, isMOS: true, cfTerm: k, isConvergent: false});
+        }
+      }
+      break;
+    }
+    if (q_next >= N_MIN) {
+      levels.push({level: levels.length + 1, n: q_next, isMOS: true, cfTerm: a, isConvergent: true});
+    }
+    q_prev = q_curr;
+    q_curr = q_next;
+  }
+  return levels;
+}
+
+function rotateMOS(steps, murchana) {
+  const N = steps.length;
+  const m = ((murchana % N) + N) % N;
+  return [...steps.slice(m), ...steps.slice(0, m)];
+}
+
+// ─── Color Palette ───
+const PALETTE = [
+  [0.00, 4, 4, 20],
+  [0.12, 30, 12, 70],
+  [0.25, 80, 20, 110],
+  [0.38, 140, 40, 90],
+  [0.50, 200, 70, 50],
+  [0.62, 230, 120, 20],
+  [0.75, 245, 180, 10],
+  [0.88, 250, 220, 80],
+  [1.00, 255, 255, 220],
+];
+
+function qualityToRGB(t) {
+  t = Math.max(0, Math.min(1, t));
+  for (let i = 0; i < PALETTE.length - 1; i++) {
+    if (t <= PALETTE[i + 1][0]) {
+      const f = (t - PALETTE[i][0]) / (PALETTE[i + 1][0] - PALETTE[i][0]);
+      return [
+        Math.round(PALETTE[i][1] + f * (PALETTE[i + 1][1] - PALETTE[i][1])),
+        Math.round(PALETTE[i][2] + f * (PALETTE[i + 1][2] - PALETTE[i][2])),
+        Math.round(PALETTE[i][3] + f * (PALETTE[i + 1][3] - PALETTE[i][3])),
+      ];
+    }
+  }
+  return [255, 255, 220];
+}
+
+// ─── Heatmap Computation (async, cancellable) ───
+function tolFromSlider(v) {
+  // Log scale: slider 0→100 maps to 0.0001→0.01
+  return Math.pow(10, -4 + v * 2 / 100);
+}
+
+async function computeHeatmap() {
+  const gen = ++computeGen;
+  const tol = state.tolerance;
+  progressBar.style.display = 'block';
+
+  for (let gi = 0; gi < G_STEPS; gi++) {
+    if (computeGen !== gen) return;
+    const g = (gi + 0.5) / G_STEPS;
+
+    for (let ni = 0; ni < N_STEPS; ni++) {
+      const N = N_MIN + ni;
+      const result = analyzeCell(g, N, tol);
+      const idx = ni * G_STEPS + gi;
+      matrices.prop[idx] = result.prop;
+      matrices.sub[idx] = result.sub;
+      matrices.neut[idx] = result.neut;
+    }
+
+    if (gi % 4 === 0) {
+      progressFill.style.width = ((gi + 1) / G_STEPS * 100) + '%';
+      renderHeatmap();
+      await new Promise(r => requestAnimationFrame(r));
+    }
+  }
+
+  if (computeGen === gen) {
+    progressBar.style.display = 'none';
+    renderHeatmap();
+  }
+}
+
+// ─── Heatmap Rendering ───
+function getCombinedQ(gi, ni) {
+  const idx = ni * G_STEPS + gi;
+  let q = 0;
+  if (state.enabled.prop) q += state.weights.prop * matrices.prop[idx];
+  if (state.enabled.sub) q += state.weights.sub * matrices.sub[idx];
+  if (state.enabled.neut) q += state.weights.neut * matrices.neut[idx];
+  return q;
+}
+
+function renderHeatmap() {
+  const wrap = document.getElementById('heatmap-wrap');
+  const W = wrap.clientWidth - 24;
+  const H = wrap.clientHeight - 12;
+  heatmapCanvas.width = W;
+  heatmapCanvas.height = H;
+
+  const ML = 48, MR = 12, MT = 22, MB = 32;
+  const plotW = W - ML - MR;
+  const plotH = H - MT - MB;
+  if (plotW < 10 || plotH < 10) return;
+
+  // Compute row min/max for normalization
+  const rowMin = new Float32Array(N_STEPS);
+  const rowMax = new Float32Array(N_STEPS);
+  let globalMax = 0;
+  rowMin.fill(Infinity);
+  rowMax.fill(-Infinity);
+
+  for (let ni = 0; ni < N_STEPS; ni++) {
+    for (let gi = 0; gi < G_STEPS; gi++) {
+      const q = getCombinedQ(gi, ni);
+      if (q < rowMin[ni]) rowMin[ni] = q;
+      if (q > rowMax[ni]) rowMax[ni] = q;
+      if (q > globalMax) globalMax = q;
+    }
+  }
+
+  // Draw heatmap pixels
+  const imgData = hctx.createImageData(plotW, plotH);
+  const px = imgData.data;
+
+  for (let gi = 0; gi < G_STEPS; gi++) {
+    const x0 = Math.floor(gi * plotW / G_STEPS);
+    const x1 = Math.floor((gi + 1) * plotW / G_STEPS);
+
+    for (let ni = 0; ni < N_STEPS; ni++) {
+      const y0 = Math.floor((N_STEPS - 1 - ni) * plotH / N_STEPS);
+      const y1 = Math.floor((N_STEPS - ni) * plotH / N_STEPS);
+
+      const q = getCombinedQ(gi, ni);
+      let t;
+      if (state.normalizeRow) {
+        const range = rowMax[ni] - rowMin[ni];
+        t = range > 0 ? (q - rowMin[ni]) / range : 0;
+      } else {
+        t = globalMax > 0 ? q / globalMax : 0;
+      }
+      t = Math.sqrt(t); // gamma 0.5
+
+      const [r, g, b] = qualityToRGB(t);
+      for (let y = y0; y < y1; y++) {
+        for (let x = x0; x < x1; x++) {
+          const idx = (y * plotW + x) * 4;
+          px[idx] = r; px[idx+1] = g; px[idx+2] = b; px[idx+3] = 255;
+        }
+      }
+    }
+  }
+
+  hctx.fillStyle = '#0a0a1a';
+  hctx.fillRect(0, 0, W, H);
+  hctx.putImageData(imgData, ML, MT);
+
+  // Axes
+  hctx.strokeStyle = '#2a2a4a';
+  hctx.lineWidth = 1;
+  hctx.strokeRect(ML, MT, plotW, plotH);
+
+  // X-axis labels
+  hctx.fillStyle = '#666';
+  hctx.font = '10px monospace';
+  hctx.textAlign = 'center';
+  for (let v = 0; v <= 10; v++) {
+    const gv = v / 10;
+    const x = ML + gv * plotW;
+    hctx.fillText(gv.toFixed(1), x, H - MB + 14);
+    if (v > 0 && v < 10) {
+      hctx.strokeStyle = '#151530';
+      hctx.beginPath(); hctx.moveTo(x, MT); hctx.lineTo(x, MT + plotH); hctx.stroke();
+    }
+  }
+  hctx.fillStyle = '#555';
+  hctx.font = '10px system-ui';
+  hctx.fillText('Generator', ML + plotW / 2, H - 2);
+
+  // Y-axis labels
+  hctx.textAlign = 'right';
+  hctx.fillStyle = '#666';
+  hctx.font = '10px monospace';
+  const yTicks = [3, 5, 7, 10, 12, 15, 19, 22, 26, 31, 41, 53];
+  for (const n of yTicks) {
+    if (n < N_MIN || n > N_MAX) continue;
+    const ni = n - N_MIN;
+    const y = MT + (N_STEPS - 1 - ni) * plotH / N_STEPS + plotH / N_STEPS / 2;
+    hctx.fillText(n.toString(), ML - 4, y + 3);
+  }
+  hctx.save();
+  hctx.translate(10, MT + plotH / 2);
+  hctx.rotate(-Math.PI / 2);
+  hctx.fillStyle = '#555';
+  hctx.font = '10px system-ui';
+  hctx.textAlign = 'center';
+  hctx.fillText('Scale Size (N)', 0, 0);
+  hctx.restore();
+
+  // Wilson landmarks
+  if (state.showLandmarks) {
+    for (const lm of LANDMARKS) {
+      const x = ML + lm.g * plotW;
+      hctx.strokeStyle = lm.color + '55';
+      hctx.lineWidth = 1;
+      hctx.setLineDash([4, 3]);
+      hctx.beginPath(); hctx.moveTo(x, MT); hctx.lineTo(x, MT + plotH); hctx.stroke();
+      hctx.setLineDash([]);
+      hctx.fillStyle = lm.color;
+      hctx.font = '8px system-ui';
+      hctx.textAlign = 'center';
+      hctx.fillText(lm.label, x, MT - 4);
+      hctx.fillText(lm.g.toFixed(3), x, MT - 13);
+    }
+  }
+
+  // MOS level markers on Y-axis for selected generator
+  if (state.selectedGi >= 0 && state.mosLevels.length > 0) {
+    for (const lv of state.mosLevels) {
+      if (lv.n < N_MIN || lv.n > N_MAX) continue;
+      const ni = lv.n - N_MIN;
+      const y = MT + (N_STEPS - 1 - ni) * plotH / N_STEPS + plotH / N_STEPS / 2;
+      // Purple dot on Y-axis
+      hctx.fillStyle = lv.isConvergent ? '#9b7bff' : '#5b4b99';
+      hctx.beginPath();
+      hctx.arc(ML - 8, y, lv.isConvergent ? 3 : 2, 0, Math.PI * 2);
+      hctx.fill();
+      // Horizontal guide line across heatmap
+      hctx.strokeStyle = lv.isConvergent ? '#9b7bff22' : '#5b4b9911';
+      hctx.lineWidth = 1;
+      hctx.setLineDash([2, 4]);
+      hctx.beginPath(); hctx.moveTo(ML, y); hctx.lineTo(ML + plotW, y); hctx.stroke();
+      hctx.setLineDash([]);
+    }
+  }
+
+  // Selection highlight
+  if (state.selectedGi >= 0 && state.selectedNi >= 0) {
+    const x0 = ML + Math.floor(state.selectedGi * plotW / G_STEPS);
+    const x1 = ML + Math.floor((state.selectedGi + 1) * plotW / G_STEPS);
+    const y0 = MT + Math.floor((N_STEPS - 1 - state.selectedNi) * plotH / N_STEPS);
+    const y1 = MT + Math.floor((N_STEPS - state.selectedNi) * plotH / N_STEPS);
+    hctx.strokeStyle = '#fff';
+    hctx.lineWidth = 2;
+    hctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+  }
+}
+
+// ─── Heatmap Interaction ───
+function heatmapCoords(e) {
+  const rect = heatmapCanvas.getBoundingClientRect();
+  const W = heatmapCanvas.width;
+  const H = heatmapCanvas.height;
+  const ML = 48, MR = 12, MT = 22, MB = 32;
+  const plotW = W - ML - MR;
+  const plotH = H - MT - MB;
+
+  const cx = (e.clientX - rect.left) * (W / rect.width);
+  const cy = (e.clientY - rect.top) * (H / rect.height);
+
+  const gx = (cx - ML) / plotW;
+  const ny = 1 - (cy - MT) / plotH;
+
+  if (gx < 0 || gx > 1 || ny < 0 || ny > 1) return null;
+
+  const gi = Math.floor(gx * G_STEPS);
+  const ni = Math.floor(ny * N_STEPS);
+  return {gi: Math.min(gi, G_STEPS-1), ni: Math.min(ni, N_STEPS-1)};
+}
+
+heatmapCanvas.addEventListener('mousemove', (e) => {
+  const c = heatmapCoords(e);
+  if (!c) { tooltip.style.display = 'none'; return; }
+  const g = (c.gi + 0.5) / G_STEPS;
+  const N = N_MIN + c.ni;
+  const pQ = matrices.prop[c.ni * G_STEPS + c.gi];
+  const sQ = matrices.sub[c.ni * G_STEPS + c.gi];
+  const nQ = matrices.neut[c.ni * G_STEPS + c.gi];
+
+  tooltip.innerHTML = `<b>g=${g.toFixed(4)}</b> N=<b>${N}</b> (${(128/N).toFixed(1)} oct)<br>`
+    + `<span class="t-prop">P:${pQ.toFixed(3)}</span> `
+    + `<span class="t-sub">S:${sQ.toFixed(3)}</span> `
+    + `<span class="t-neut">N:${nQ.toFixed(3)}</span>`;
+  tooltip.style.display = 'block';
+  tooltip.style.left = (e.clientX + 14) + 'px';
+  tooltip.style.top = (e.clientY - 10) + 'px';
+
+  // Keep tooltip in viewport
+  const tr = tooltip.getBoundingClientRect();
+  if (tr.right > window.innerWidth) tooltip.style.left = (e.clientX - tr.width - 10) + 'px';
+  if (tr.bottom > window.innerHeight) tooltip.style.top = (e.clientY - tr.height - 10) + 'px';
+});
+
+heatmapCanvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+heatmapCanvas.addEventListener('click', (e) => {
+  const c = heatmapCoords(e);
+  if (!c) return;
+  state.selectedGi = c.gi;
+  state.selectedNi = c.ni;
+  state.murchana = 0;
+  const g = (c.gi + 0.5) / G_STEPS;
+  state.mosLevels = getMOSLevels(g);
+  renderHeatmap();
+  renderDetail();
+
+});
+
+// ─── Detail Panel ───
+function renderDetail() {
+  const gi = state.selectedGi;
+  const ni = state.selectedNi;
+  if (gi < 0 || ni < 0) return;
+
+  const g = (gi + 0.5) / G_STEPS;
+  const N = N_MIN + ni;
+  const gMirror = 1 - g;
+  const midiOct = (128 / N).toFixed(1);
+
+  // Analyze both g and mirror
+  const info = analyzeDetailedTriads(g, N, state.tolerance);
+  const mos = getMOSInfo(info.pitches);
+  const mirrorPitches = generateScale(gMirror, N);
+  const mosMirror = getMOSInfo(mirrorPitches);
+
+  // Apply murchana rotation
+  const murch = state.murchana % N;
+  const rotatedSteps = rotateMOS(mos.steps, murch);
+  const rotatedMirrorSteps = rotateMOS(mosMirror.steps, murch);
+  const rotatedMOS = getMOSInfoFromSteps(rotatedSteps);
+  const rotatedMirrorMOS = getMOSInfoFromSteps(rotatedMirrorSteps);
+
+  // Nearest landmark
+  let nearestLM = null, nearestDist = Infinity;
+  for (const lm of LANDMARKS) {
+    const d = Math.abs(g - lm.g);
+    if (d < nearestDist) { nearestDist = d; nearestLM = lm; }
+  }
+  const lmStr = nearestDist < 0.01
+    ? `Near <b style="color:${nearestLM.color}">${nearestLM.label}</b> (${nearestLM.g.toFixed(4)})`
+    : '';
+
+  // Count triads by type
+  const counts = {prop:0, sub:0, neut:0};
+  for (const t of info.triads) counts[t.type]++;
+
+  // Is current N a MOS level?
+  const currentLevel = state.mosLevels.find(lv => lv.n === N);
+  const mosTag = mos.isMOS ? ' (MOS)' : ` (${mos.numStepSizes} steps)`;
+  const levelTag = currentLevel ? ` Level ${currentLevel.level}` : '';
+
+  // Detail bar
+  document.getElementById('detail-bar').innerHTML =
+    `<span class="di">Generator: <b>${g.toFixed(4)}</b></span>`
+    + `<span class="di">Scale: <b>${N}</b> notes${levelTag}</span>`
+    + `<span class="di">MIDI: <b>${midiOct}</b> oct</span>`
+    + `<span class="di">${mos.Lcount}L+${mos.scount}s${mosTag}</span>`
+    + (lmStr ? `<span class="di">${lmStr}</span>` : '')
+    + `<span class="di"><span class="t-prop">P:${counts.prop}</span> <span class="t-sub">S:${counts.sub}</span> <span class="t-neut">N:${counts.neut}</span></span>`;
+
+  // Level/Murchana bar
+  let lmBar = document.getElementById('level-murch-bar');
+  if (!lmBar) {
+    lmBar = document.createElement('div');
+    lmBar.id = 'level-murch-bar';
+    const detailBar = document.getElementById('detail-bar');
+    detailBar.parentNode.insertBefore(lmBar, detailBar.nextSibling);
+  }
+
+  // Build level pills
+  let pillsHTML = '<span class="lm-label">Level</span><div class="level-pills">';
+  for (const lv of state.mosLevels) {
+    const isActive = lv.n === N;
+    const cls = 'level-pill' + (isActive ? ' active' : '') + (lv.isConvergent ? ' is-mos' : '');
+    pillsHTML += `<button class="${cls}" data-level-n="${lv.n}" title="Level ${lv.level}: ${lv.n} notes${lv.isConvergent ? ' (convergent)' : ' (semi)'}">${lv.n}</button>`;
+  }
+  pillsHTML += '</div>';
+
+  // Murchana controls
+  const murchHTML = `<div class="murch-ctrl">`
+    + `<span class="lm-label">Murchana</span>`
+    + `<button id="murch-prev" title="Previous mode">&#9664;</button>`
+    + `<span class="murch-info">${murch + 1} / ${N}</span>`
+    + `<button id="murch-next" title="Next mode">&#9654;</button>`
+    + `<span class="murch-pattern">${rotatedMOS.pattern}</span>`
+    + `</div>`;
+
+  const sclHTML = `<button class="scl-btn" id="scl-download-btn" onclick="downloadScala()" title="Download Scala tuning file for this scale + murchana">Download .scl</button>`;
+
+  lmBar.innerHTML = pillsHTML + murchHTML + sclHTML;
+
+  // Bind level pill clicks
+  lmBar.querySelectorAll('.level-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const newN = parseInt(pill.dataset.levelN);
+      state.selectedNi = newN - N_MIN;
+      state.murchana = 0;
+      renderHeatmap();
+      renderDetail();
+    
+    });
+  });
+
+  // Bind murchana buttons
+  const murchPrev = document.getElementById('murch-prev');
+  const murchNext = document.getElementById('murch-next');
+  if (murchPrev) murchPrev.addEventListener('click', () => {
+    state.murchana = ((state.murchana - 1) % N + N) % N;
+    renderDetail();
+  
+  });
+  if (murchNext) murchNext.addEventListener('click', () => {
+    state.murchana = (state.murchana + 1) % N;
+    renderDetail();
+  
+  });
+
+  // Detail content
+  const dc = document.getElementById('detail-content');
+  dc.innerHTML = `<div id="ribbon-wrap"><canvas id="ribbon-canvas"></canvas><div id="scale-summary-wrap"><div id="scale-summary"></div><button id="scale-summary-copy" title="Copy to clipboard">Copy</button></div></div><div id="triad-wrap"></div>`;
+  document.getElementById('scale-summary-copy').addEventListener('click', () => {
+    const text = document.getElementById('scale-summary').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('scale-summary-copy');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  });
+
+  // Draw ribbons — compact fixed height
+  requestAnimationFrame(() => {
+    const rc = document.getElementById('ribbon-canvas');
+    const rw = document.getElementById('ribbon-wrap');
+    const rcW = rw.clientWidth - 24;
+    const ribbonH = 28;
+    const labelH = 14;
+    const gap = 6;
+    const rcH = labelH + ribbonH + gap + labelH + ribbonH + 4;
+    rc.width = rcW;
+    rc.height = rcH;
+    const rctx = rc.getContext('2d');
+
+    const mLabel = murch > 0 ? ` murch ${murch + 1}/${N}` : '';
+
+    drawRibbon(rctx, 0, labelH, rcW, ribbonH, rotatedSteps,
+      `g = ${g.toFixed(4)}${mLabel}  ${rotatedMOS.pattern}`, 3, false);
+
+    const mirrorY = labelH + ribbonH + gap;
+    rctx.strokeStyle = '#1a1a3a';
+    rctx.beginPath(); rctx.moveTo(0, mirrorY - 2); rctx.lineTo(rcW, mirrorY - 2); rctx.stroke();
+
+    drawRibbon(rctx, 0, mirrorY + labelH, rcW, ribbonH, rotatedMirrorSteps,
+      `1−g = ${gMirror.toFixed(4)}${mLabel}  ${rotatedMirrorMOS.pattern}`, 3, true);
+
+    // Populate Scale Summary below ribbons
+    const ss = document.getElementById('scale-summary');
+    if (ss) {
+      const currentLevel = state.mosLevels.find(lv => lv.n === N);
+      const levelStr = currentLevel ? `, MOS level ${currentLevel.level}` : '';
+      const murchStr = murch > 0 ? `\nMurchana: mode ${murch + 1}/${N} — ${rotatedMOS.pattern}` : '';
+      const mosLevelList = state.mosLevels.length > 0
+        ? `\nMOS levels: ${state.mosLevels.map(l => l.n).join(', ')}`
+        : '';
+      const pQ = matrices.prop[ni * G_STEPS + gi];
+      const sQ = matrices.sub[ni * G_STEPS + gi];
+      const nQ = matrices.neut[ni * G_STEPS + gi];
+      let nearest = '';
+      for (const lm of LANDMARKS) {
+        if (Math.abs(g - lm.g) < 0.01) nearest = `\nNearest Wilson landmark: ${lm.label} (${lm.g})`;
+      }
+      ss.textContent = `Generator g = ${g.toFixed(4)}, scale size N = ${N}${levelStr} (${(128/N).toFixed(1)} octaves MIDI range)
+MOS pattern: ${rotatedMOS.pattern} ${rotatedMOS.isMOS ? '(proper MOS)' : `(${rotatedMOS.numStepSizes} step sizes)`} — ${rotatedMOS.Lcount}L + ${rotatedMOS.scount}s${murchStr}
+Mirror (1−g = ${gMirror.toFixed(4)}): ${rotatedMirrorMOS.pattern}
+Triad quality (tol ${state.tolerance.toFixed(4)}): P=${pQ.toFixed(3)} S=${sQ.toFixed(3)} N=${nQ.toFixed(3)}${nearest}${mosLevelList}`;
+    }
+  
+  });
+
+  // Triad table
+  const tw = document.getElementById('triad-wrap');
+  const topTriads = info.triads.slice(0, 80);
+  let html = '<table><tr><th>Type</th><th>Low</th><th>Mid</th><th>High</th><th>Err</th><th>Qual</th></tr>';
+  for (const t of topTriads) {
+    const cls = t.type === 'prop' ? 't-prop' : t.type === 'sub' ? 't-sub' : 't-neut';
+    const lbl = t.type === 'prop' ? 'P' : t.type === 'sub' ? 'S' : 'N';
+    html += `<tr class="${cls}"><td>${lbl}</td>`
+      + `<td>${t.freqs[0].toFixed(4)}</td>`
+      + `<td>${t.freqs[1].toFixed(4)}</td>`
+      + `<td>${t.freqs[2].toFixed(4)}</td>`
+      + `<td>${((t.errorCents !== undefined ? t.errorCents : t.error) * 1200).toFixed(1)}¢</td>`
+      + `<td>${t.quality.toFixed(3)}</td></tr>`;
+  }
+  html += '</table>';
+  if (info.triads.length > 80) html += `<div style="color:#555;font-size:10px;padding:4px">Showing top 80 of ${info.triads.length} triads</div>`;
+  tw.innerHTML = html;
+}
+
+// Helper: get MOS info from pre-computed steps (for rotated patterns)
+function getMOSInfoFromSteps(steps) {
+  const sorted = [...steps].sort((a, b) => b - a);
+  const unique = [sorted[0]];
+  for (let i = 1; i < sorted.length; i++) {
+    if (Math.abs(sorted[i] - unique[unique.length - 1]) > 0.0001) unique.push(sorted[i]);
+  }
+  const L = unique[0];
+  const s = unique[unique.length - 1];
+  const thresh = (L + s) / 2;
+  const pattern = steps.map(st => st > thresh ? 'L' : 's').join('');
+  const Lcount = steps.filter(st => st > thresh).length;
+  return {steps, pattern, isMOS: unique.length === 2, numStepSizes: unique.length, L, s, Lcount, scount: steps.length - Lcount};
+}
+
+function drawRibbon(ctx, x, y, width, height, steps, label, periods, isMirror) {
+  const total = steps.reduce((a, b) => a + b, 0);
+  const maxStep = Math.max(...steps);
+  const minStep = Math.min(...steps);
+  const thresh = (maxStep + minStep) / 2;
+  const periodW = width / periods;
+
+  // Label
+  ctx.fillStyle = isMirror ? '#607090' : '#908060';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(label, x + 2, y - 1);
+
+  const lColor = isMirror ? '#2868a8' : '#c88030';
+  const sColor = isMirror ? '#183858' : '#604020';
+
+  for (let p = 0; p < periods; p++) {
+    let xPos = x + p * periodW;
+    for (const step of steps) {
+      const w = (step / total) * periodW;
+      ctx.fillStyle = step > thresh ? lColor : sColor;
+      ctx.fillRect(xPos, y + 12, Math.max(w - 0.5, 0.5), height - 12);
+      xPos += w;
+    }
+    // Period separator
+    if (p < periods - 1) {
+      ctx.strokeStyle = '#333';
+      ctx.beginPath();
+      ctx.moveTo(x + (p + 1) * periodW, y + 12);
+      ctx.lineTo(x + (p + 1) * periodW, y + height);
+      ctx.stroke();
+    }
+  }
+}
+
+// ─── Scala File Export ───
+function generateScalaContent(g, N, murchana) {
+  const pitches = generateScale(g, N);
+  const mosInfo = getMOSInfo(pitches);
+  const murch = murchana % N;
+  const rotatedSteps = rotateMOS(mosInfo.steps, murch);
+  const rotatedMOS = getMOSInfoFromSteps(rotatedSteps);
+
+  // Build cumulative intervals from rotated steps (in cents)
+  const intervals = [];
+  let cum = 0;
+  for (let i = 0; i < N; i++) {
+    cum += rotatedSteps[i];
+    intervals.push(cum * 1200);
+  }
+  // Force last interval to exactly 1200.0 (octave)
+  intervals[N - 1] = 1200.0;
+
+  const gMirror = 1 - g;
+  const murchStr = murch > 0 ? ` murchana ${murch + 1}/${N}` : '';
+  const currentLevel = state.mosLevels.find(lv => lv.n === N);
+  const levelStr = currentLevel ? ` level ${currentLevel.level}` : '';
+
+  // Nearest landmark
+  let nearestStr = '';
+  for (const lm of LANDMARKS) {
+    if (Math.abs(g - lm.g) < 0.01) nearestStr = ` near ${lm.label}`;
+  }
+
+  const description = `Wilson MOS g=${g.toFixed(6)} ${N}n${levelStr}${murchStr}${nearestStr} ${rotatedMOS.pattern}`;
+  const safeName = `wilson_g${g.toFixed(4)}_${N}n${murch > 0 ? '_m' + (murch + 1) : ''}`;
+  const filename = safeName.replace(/\./g, 'p') + '.scl';
+
+  let scl = `! ${filename}\n`;
+  scl += `! Generated by Wilson Generator Landscape Explorer\n`;
+  scl += `! Generator: ${g.toFixed(8)} Mirror: ${gMirror.toFixed(8)}\n`;
+  scl += `! Pattern: ${rotatedMOS.pattern} (${rotatedMOS.Lcount}L+${rotatedMOS.scount}s)\n`;
+  if (murch > 0) scl += `! Murchana: mode ${murch + 1} of ${N}\n`;
+  scl += `${description}\n`;
+  scl += ` ${N}\n`;
+  for (const cents of intervals) {
+    scl += ` ${cents.toFixed(6)}\n`;
+  }
+
+  return {content: scl, filename, description};
+}
+
+function downloadScala() {
+  const gi = state.selectedGi;
+  const ni = state.selectedNi;
+  if (gi < 0 || ni < 0) return;
+
+  const g = (gi + 0.5) / G_STEPS;
+  const N = N_MIN + ni;
+  const {content, filename} = generateScalaContent(g, N, state.murchana);
+
+  const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Visual feedback
+  const btn = document.getElementById('scl-download-btn');
+  if (btn) {
+    btn.textContent = 'Saved!';
+    btn.classList.add('downloaded');
+    setTimeout(() => { btn.textContent = 'Download .scl'; btn.classList.remove('downloaded'); }, 2000);
+  }
+}
+
+
+// ─── Controls Binding ───
+function bindControls() {
+  const tolSlider = document.getElementById('tol-slider');
+  const tolVal = document.getElementById('tol-val');
+
+  function updateTolDisplay() {
+    state.tolerance = tolFromSlider(parseFloat(tolSlider.value));
+    tolVal.textContent = state.tolerance.toFixed(4);
+  }
+
+  tolSlider.addEventListener('input', updateTolDisplay);
+  tolSlider.addEventListener('change', () => { updateTolDisplay(); computeHeatmap(); });
+
+  // Triad weight sliders
+  function bindTriad(prefix, key) {
+    const cb = document.getElementById(prefix + '-on');
+    const sl = document.getElementById(prefix + '-w');
+    const vl = document.getElementById(prefix + '-wv');
+
+    cb.addEventListener('change', () => {
+      state.enabled[key] = cb.checked;
+      renderHeatmap();
+      if (state.selectedGi >= 0) { renderDetail(); }
+    });
+    sl.addEventListener('input', () => {
+      state.weights[key] = parseFloat(sl.value) / 100;
+      vl.textContent = sl.value;
+      renderHeatmap();
+    });
+  }
+
+  bindTriad('prop', 'prop');
+  bindTriad('sub', 'sub');
+  bindTriad('neut', 'neut');
+
+  // Options
+  document.getElementById('norm-row').addEventListener('change', function() {
+    state.normalizeRow = this.checked;
+    renderHeatmap();
+  });
+  document.getElementById('show-landmarks').addEventListener('change', function() {
+    state.showLandmarks = this.checked;
+    renderHeatmap();
+  });
+  document.getElementById('freq-space').addEventListener('change', function() {
+    state.freqSpace = this.checked;
+    computeHeatmap();
+  });
+
+  // Presets
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.preset;
+      const p = PRESETS[name];
+      if (!p) return;
+
+      tolSlider.value = p.tol;
+      document.getElementById('prop-w').value = p.prop;
+      document.getElementById('sub-w').value = p.sub;
+      document.getElementById('neut-w').value = p.neut;
+      document.getElementById('prop-on').checked = p.propOn;
+      document.getElementById('sub-on').checked = p.subOn;
+      document.getElementById('neut-on').checked = p.neutOn;
+      document.getElementById('prop-wv').textContent = p.prop;
+      document.getElementById('sub-wv').textContent = p.sub;
+      document.getElementById('neut-wv').textContent = p.neut;
+
+      state.weights = {prop: p.prop/100, sub: p.sub/100, neut: p.neut/100};
+      state.enabled = {prop: p.propOn, sub: p.subOn, neut: p.neutOn};
+      state.tolerance = tolFromSlider(p.tol);
+      tolVal.textContent = state.tolerance.toFixed(4);
+
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.activePreset = name;
+
+      computeHeatmap();
+    });
+  });
+}
+
+// ─── Window resize ───
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    renderHeatmap();
+    if (state.selectedGi >= 0) renderDetail();
+  }, 150);
+});
+
+// ─── Init ───
+function init() {
+  bindControls();
+  computeHeatmap();
+}
+
+init();
+</script>
+</body>
+</html>

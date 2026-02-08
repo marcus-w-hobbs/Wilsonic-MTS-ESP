@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wilsonic Research Playgrounds</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+  color: #d0d0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.container { max-width: 600px; text-align: center; }
+h1 {
+  font-size: 2.5rem;
+  color: #c8b8ff;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+.subtitle {
+  color: #888;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  line-height: 1.5;
+}
+.subtitle a { color: #7b68ee; text-decoration: none; }
+.subtitle a:hover { text-decoration: underline; }
+.playgrounds {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.playground-card {
+  background: #12122a;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+.playground-card:hover {
+  background: #1a1a3a;
+  border-color: #7b68ee;
+  transform: translateY(-2px);
+}
+.playground-card h2 {
+  color: #c8b8ff;
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+.playground-card p {
+  color: #888;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.tag {
+  display: inline-block;
+  background: #2a2060;
+  color: #a89cdb;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+footer {
+  margin-top: 4rem;
+  color: #555;
+  font-size: 0.85rem;
+}
+footer a { color: #666; }
+footer a:hover { color: #888; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Wilsonic Playgrounds</h1>
+  <p class="subtitle">
+    Interactive research tools for <a href="https://en.xen.wiki/w/Erv_Wilson" target="_blank">Erv Wilson's</a> microtonal scale designs.<br>
+    Companion explorations for <a href="https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP" target="_blank">Wilsonic-MTS-ESP</a>.
+  </p>
+  
+  <div class="playgrounds">
+    <a href="wilson-mos-triads.html" class="playground-card">
+      <h2>MOS Triad Explorer</h2>
+      <p>Heatmap visualization of proportional, subcontrary, and neutral triads across generator space and MOS levels. Identify optimal generators for triad-rich scales.</p>
+      <span class="tag">Interactive</span>
+    </a>
+    
+    <!-- Future playgrounds go here -->
+    <!--
+    <a href="cps-explorer.html" class="playground-card">
+      <h2>CPS Explorer</h2>
+      <p>Combination Product Sets visualization and analysis.</p>
+      <span class="tag">Coming Soon</span>
+    </a>
+    -->
+  </div>
+  
+  <footer>
+    <a href="https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP" target="_blank">GitHub</a> · 
+    Built with 🎹 by Marcus Hobbs
+  </footer>
+</div>
+</body>
+</html>
