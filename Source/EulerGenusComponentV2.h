@@ -50,6 +50,8 @@ public:
 private:
     CriticalSection _lock;
     unique_ptr<SeedSliderComponent> _seedSliderComponent;
+    ToggleButton _genusSpaceToggle; // keep drill-path root as global tuning/MIDI mapping
+    unique_ptr<AudioProcessorValueTreeState::ButtonAttachment> _genusSpaceAttachment;
     BubbleDrawable _mainElementBubble;
     shared_ptr<CPSElementComponentV2> _mainElement {nullptr};
     static String const __mainElementBubbleText;

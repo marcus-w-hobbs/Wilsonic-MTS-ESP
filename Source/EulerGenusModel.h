@@ -52,6 +52,11 @@ public:
     static const String getEulerGenus6EParameterName() { return "Euler Genus 6|E"; }
     static const ParameterID getEulerGenus6FParameterID() { return ParameterID("EULERGENUS6F", AppVersion::getVersionHint()); }
     static const String getEulerGenus6FParameterName() { return "Euler Genus 6|F"; }
+    // Genus Space: when enabled the drill-path root CPS(6,k) remains the global
+    // tuning table/MIDI mapping while subset selection windows the keyboard.
+    // IMPORTANT: appended after F to preserve DAW automation of existing params.
+    static const ParameterID getEulerGenus6GenusSpaceParameterID() { return ParameterID("EULERGENUS6GENUSSPACE", AppVersion::getVersionHint()); }
+    static const String getEulerGenus6GenusSpaceParameterName() { return "Euler Genus 6|Genus Space"; }
 
     // creates static code for 13+ files
     static void eulerGenusCodeGen();
@@ -119,6 +124,13 @@ public:
     void uiControlReturnPressed();
     void uiCommandReturnPressed();
 
+    // Genus Space
+    bool uiGetGenusSpace();
+    void uiSetGenusSpace(bool shouldEnable);
+    // formal product identities ("ABF", etc.) of the selected subset's tones,
+    // for the keyboard's subset-of-root display; empty when inactive
+    const vector<string> getGenusSpaceSubsetDescriptions();
+
 private:
     void _EGUILeftRightKeyPressedHelper(int x_delta); // i.e., -1 or +1 for left, right
     void _CPSArrowKeyPressedHelper(int x_delta, int y_delta); //(-1,0), (1,0), (0,-1), (0,1)
@@ -136,6 +148,7 @@ private:
     void _tuningChangedUpdateUI() override; // sends notification to UI Component to query current ViewModel
     void _selectDAWKey(DAWKey); // heavy lifter...called in host callback
     void _setTuning(shared_ptr<Tuning>); // helper called by _selectDAWKey
+    shared_ptr<CPSTuningBase> _genusSpaceRootTuning(); // drill-path root CPS(6,k) of the current view model
     void _updateCurrentViewModelTuning(); // update current view model's parent tuning when the host changes ABCDEF
     void _updateCurrentViewModelTuningSelectionState(); // update current view model's tuning's selection state
 
@@ -160,6 +173,10 @@ private:
     unique_ptr<TuningConstructorMap> _tuningConstructorMap = nullptr; // called once on construction
     unique_ptr<TuningUpdateFunctionMap> _tuningUpdateMap = nullptr; // called once on construction
     unique_ptr<TuningSelectionFunctionMap> _tuningSelectionMap = nullptr; // called once on construction
+
+    // Genus Space state: derived from the automatable params, never persisted directly
+    bool _genusSpace {false};
+    vector<string> _genusSpaceSubsetDescriptions {};
 
     // stores of automation state of master set...all tunings are updated based on these
     Microtone_p _A = nullptr;

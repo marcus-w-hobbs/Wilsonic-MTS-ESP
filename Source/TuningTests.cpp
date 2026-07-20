@@ -82,6 +82,9 @@ void TuningTests::runTests(WilsonicProcessor& processor)
     //    TuningTests::testCPS_6_6_DAW_Automation();
     
     //    TuningTests::testEulerGenus6_DAW_Automation();
+
+    // Genus Space
+    TuningTests::testGenusSpace(processor);
     
     
     //    TuningTests::testEulerGenus6CodeGen();

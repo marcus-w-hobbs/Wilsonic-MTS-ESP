@@ -638,6 +638,7 @@ private:
     int _remappedXYToNote(Point<float>, float& mousePositionVelocity) const; ///< Remap x,y coordinates to note
     int _remappedXYToNoteLinear(Point<float> pos, float& mousePositionVelocity) const; ///< Remap x,y coordinates to note in linear mode
     int _remappedXYToNoteMicrotonal(Point<float> pos, float& mousePositionVelocity) const; ///< Remap x,y coordinates to note in microtonal mode
+    int _slotToMidiNote(int slot) const; ///< Genus Space: map a drawn key slot to its MIDI note number (identity when no keyboard subset is active)
     void _resetAnyKeysInUse(); ///< Reset any keys in use
     void _updateNoteUnderMouse(Point<float>, bool isDown, int fingerNum); ///< Update note under mouse
     void _updateNoteUnderMouse(const MouseEvent&, bool isDown); ///< Update note under mouse
