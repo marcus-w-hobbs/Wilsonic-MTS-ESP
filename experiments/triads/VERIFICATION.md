@@ -23,36 +23,36 @@ Grades, weakest to strongest:
 | CPS multiplies tones in shortDescriptionText string-sort order (irrelevant for k=2, order-sensitive for k≥3) | READ | CPSTuningBase.h:100–104, CPSTuningBase.cpp:104 |
 | CPS never uniquifies (duplicates kept); pipeline is octaveReduce → sort → uniquify | READ | CPSTuningBase.cpp:18; TuningImp.cpp:507–518 |
 | uniquify() dedups on exact float via map; last-in-array wins ties | READ | MicrotoneArray.cpp:434–455 |
-| Brun level→cardinality = scale-tree zigzag denominators (fifth: 1,2,3,5,7,12,17,29,41,53, levels 0–9) | SIMULATED | zigzag re-derived from Brun.cpp:269–299, run in Python (plan §2.2); C++ never executed |
-| MOS degrees built in log space, p = degree·g mod 1, murchana-centered | READ | Brun.cpp:308–357 |
-| Plugin triad analyzer semantics (absolute 0.0005 linear tolerance, 9/8–4/3 filter, one-octave+wrap domain, pitch-class-set dedup) | READ → mirror | TuningImp.cpp:782–857; mirror in cpp_mirror.analyze_proportional_triads. **The mirror's float ops are bit-faithful by construction, but the analyzer itself has never been executed** (TuningImp.cpp is not compilable standalone). |
-| Plugin analyzer massively undercounts vs exact scorer: hexany 1-3-5-7 (2,2) vs exact (8,8) anchored; attribution: interval filter (2,2)→(4,2), remainder = restricted domain + pitch-class dedup | EXECUTED (mirror) | results/crossval001.json link2, all 70 hexanies + segment |
+| Brun level→cardinality = scale-tree zigzag denominators (fifth: 1,2,3,5,7,12,17,29,41,53, levels 0–9) | **EXECUTED** | tests/test_tuning testBrunZigzag runs the real Brun::brun/brunArray; crossval002 float32-faithful re-derivation agrees |
+| MOS degrees built in log space, p = degree·g mod 1, murchana 0 default | **EXECUTED (1 ulp)** | real Brun instances via tests/research_cli vs float32 simulation: 15 scales, every degree within 1 ulp (libm pow is the only slack); results/crossval002.json |
+| Plugin triad analyzer semantics: search loop (absolute 0.0005 linear tolerance, 9/8–4/3 filter, one-octave+wrap domain, wrapped-index dedup) PLUS post-loop NPO-map filter that DROPS every octave-wrapping triad from the reported lists | **EXECUTED** | real analyzer runs in tests/test_tuning (46 checks); mirror models both stages and was corrected by first execution — see FINDINGS.md 2026-07-21. Corrected mirror predicted hexany 1-3-5-9 = (1,2) before the C++ ran; confirmed |
+| Mirror ↔ real analyzer agreement at corpus scale | **EXECUTED** | crossval002: 70 hexanies bit-exact scales + equal counts, 15 MOS scales ≤1 ulp + equal counts, 0 mismatches |
+| MicrotoneArray octaveReduce → sort → uniquify pipeline (incl. dup-keeping before uniquify) | **EXECUTED** | tests/test_tuning testMicrotoneArrayPipeline runs the real MicrotoneArray.cpp |
+| Plugin analyzer massively undercounts vs exact scorer: hexany 1-3-5-7 reports (1,2) vs exact (8,8) anchored; attribution: wrap-drop (1,2)→loop (2,2)→no interval filter (4,2)→domain/dedup → exact | EXECUTED | results/crossval001.json link2 (plugin/loop/no-filter columns), all 70 hexanies + segment |
 | Analyzer tolerance is register-dependent in cents: 0.865¢ at f=1 vs 0.433¢ at f≈2 | EXECUTED (arithmetic) | crossval001 tolerance_register_table |
-| Scorer conventions (duality, transposition variance/invariance) | EXECUTED | tests/test_scorer.py 29 goldens; TRIAD-004a/b/c |
+| Scorer conventions (duality, transposition variance/invariance) | EXECUTED | tests/test_scorer.py goldens; TRIAD-004a/b/c |
 
 ## Known gaps (do not treat these as grounded)
 
-1. **The real _analyzeProportionalTriads has never executed under test.**
-   The mirror is a line-by-line transcription with bit-faithful float ops,
-   but transcription error is possible. Closing this requires either a
-   heavier stub harness (TuningImp pulls JUCE/MTS/processor) or adding a
-   TuningTests+Analyzer.cpp to the plugin's test suite — the latter
-   touches the Xcode project, so it is Marcus's call.
-2. **Brun zigzag never executed in C++.** Brun.cpp is not compilable
-   standalone (TuningImp dependency). The Python zigzag is SIMULATED
-   grade. Same remedy options as (1).
-3. **MicrotoneArray::uniquify/sort never executed** (MicrotoneArray.cpp
-   includes Tuning.h). READ grade; low risk (std::map semantics) but not
-   receipts.
-4. **libm-dependent paths (powf, log2f, exp2f) cannot be mirrored
-   bit-exactly** — cents↔frequency conversions in the MOS path will need
-   epsilon comparisons, never bit equality.
-5. **Repo CLAUDE.md misstates the analyzer tolerance space** ("0.0005 in
-   unit pitch space" — it is absolute linear frequency, TuningImp.cpp:809).
-   Correction proposed to Marcus; not yet applied since it is a tracked
-   repo doc.
-6. **Stub caveat:** cpp_receipts compiles the real Microtone.cpp/
-   Fraction.cpp against stub JuceHeader/WilsonicAppSkin headers (inert
-   scaffolding: assertions, one string formatter, UI geometry types).
-   Numerics under test never touch the stubs; the Makefile `cmp` proves
-   the compiled source is byte-identical to the repo's.
+1. **libm-dependent paths (pow, log2f, exp2f) cannot be mirrored
+   bit-exactly** — cents↔frequency conversions compare within 1 ulp /
+   epsilon, never bit equality (observed max deviation in crossval002:
+   1 ulp).
+2. **Repo CLAUDE.md misstates the analyzer tolerance space** ("0.0005 in
+   unit pitch space" — it is absolute linear frequency, TuningImp.cpp:793
+   post-split). Correction proposed to Marcus; not yet applied since it
+   is a tracked repo doc.
+3. **Stub caveat:** the test binaries compile real Source files against
+   stub headers (tests/JuceHeader.h, tests/WilsonicAppSkin.h — inert
+   scaffolding: assertions, locks, string formatting, UI geometry).
+   AffineTransform is identity under stub, so Gral DISPLAY coordinates
+   computed in tests are meaningless and never asserted. Makefile `cmp`
+   proves copied sources are byte-identical; paint bodies are tests-only
+   no-ops (tests/paint_stubs.cpp) since the real ones live in
+   TuningImp+paint.cpp / Brun+Paint.cpp and need JUCE Graphics.
+4. **CPS classes (CPSTuningBase, CPS_4_2, …) still not compiled under
+   test** — the CPS product chain is replicated (two-seed float product,
+   validated bit-exact vs Microtone path) but CPSTuningBase.cpp itself
+   has UI/subset dependencies. Next candidate for the same treatment.
+5. **uniquify float-key tie-breaking (last-in-array wins)** exercised
+   only implicitly; no dedicated golden yet.

@@ -96,3 +96,39 @@ analyzer and Brun zigzag have never executed under test — closing those
 requires touching the plugin test target, Marcus's call).
 
 **Kept.** Runs: `make -C cpp_receipts run`, `python3.12 crossval001.py`.
+
+## 2026-07-21 — Real C++ under test + CROSSVAL-002 (entry before run)
+
+**Context:** Marcus approved touching the plugin for test coverage ("the
+high/long road"). Plugin refactor: TuningImp::paint/_paintHelper moved to
+new TuningImp+paint.cpp (pure code motion, repo's existing +paint idiom),
+dead WilsonicProcessor include removed from Brun+Gral.cpp; full Xcode
+Shared Code build SUCCEEDED. New tests/test_tuning compiles the REAL
+TuningImp/Brun/MicrotoneArray/Microtone/Fraction and runs them; CI now
+runs it (build.yml).
+
+**First execution of the real analyzer FALSIFIED the mirror:** real
+hexany 1-3-5-7 reports (1,2), not the loop-level (2,2) the mirror
+predicted. Root cause read from source and confirmed: the analyzer's
+octave-wrap machinery finds cross-octave triads, but the post-loop
+NPO-map filter (TuningImp.cpp:849-858) looks up UNWRAPPED indices in a
+map keyed 0..npo-1 — every wrapped triad is silently dropped from the
+reported lists. Mirror now models both stages (npo_map_filter toggle);
+corrected mirror PREDICTED hexany 1-3-5-9 = (1,2) before the C++ test
+ran, and the C++ test confirmed. test_tuning: 46/46. Python suite: 43/43.
+
+**Hypothesis (CROSSVAL-002):** across all 70 hexanies and a 15-scale MOS
+sweep, the real CLI's scales match the mirror bit-for-bit (hexany) /
+within 1 ulp (MOS, libm pow), and its reported counts equal the mirror's
+plugin-exact counts.
+
+**Result:** CONFIRMED, 0 mismatches (results/crossval002.json). 70
+hexany scales bit-exact; 15 MOS scales cardinality-exact and within 1 ulp
+on every degree; all 85 analyzer count pairs equal. The mirror is now
+corpus-validated against the executing plugin code, and the research
+harness can use tests/research_cli (real C++) as a generation oracle.
+Side observation for later: the fifth-generator MOS scales report (0,0)
+triads under the plugin's 0.0005 absolute tolerance — the Pythagorean
+thirds miss the arithmetic-mean coincidences, consistent with theory.
+
+**Kept.** Runs: `make -C tests run`, `python3.12 crossval002.py`.

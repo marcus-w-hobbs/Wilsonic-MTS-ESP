@@ -117,8 +117,11 @@ def analyze_proportional_triads(
     octave: float = 2.0,
     tolerance: float = F32_TOLERANCE,
     interval_filter: bool = True,
+    npo_map_filter: bool = True,
 ) -> AnalyzerCounts:
-    """Mirror of TuningImp::_analyzeProportionalTriads (TuningImp.cpp:782-857).
+    """Mirror of TuningImp::_analyzeProportionalTriads (TuningImp.cpp:767-890
+    post paint-split; validated against the REAL compiled analyzer by
+    tests/test_tuning on 2026-07-20).
 
     frequencies: the _processedArray — octave-reduced float frequencies,
     sorted ascending (the analyzer assumes sorted input).
@@ -130,19 +133,26 @@ def analyze_proportional_triads(
     - major = (imf + jmf) / 2; minor = 2*(imf*jmf)/(imf+jmf), all float32.
     - interval filter: mean/root strictly between 9/8 and 4/3 (float32).
     - |mean - kmf| < 0.0005 (absolute, linear frequency, double compare).
-    - dedup by unordered index set {i, k%npo, j%npo}, P and S separately.
+    - dedup by unordered WRAPPED index set {i, k%npo, j%npo}, but the
+      stored triad keeps the UNWRAPPED (i, k, j) of its FIRST discovery.
+    - npo-map filter (TuningImp.cpp:849-858 + MicrotoneArray::npoOverride):
+      the final triad lists keep only triads whose stored UNWRAPPED
+      indices are all < npo — i.e. EVERY octave-wrapping triad the loop's
+      wrap machinery finds is silently dropped. Discovered by executing
+      the real analyzer: it reports (1,2) for the 1-3-5-7 hexany where
+      the loop itself finds (2,2).
 
-    interval_filter=False disables the 9/8..4/3 gate (for divergence
-    attribution); everything else stays plugin-exact.
+    interval_filter=False disables the 9/8..4/3 gate; npo_map_filter=False
+    reports the loop-level counts before the wrap-drop. Both toggles exist
+    for divergence attribution; defaults are plugin-exact.
     """
     npo = len(frequencies)
     if npo < 3:
         return AnalyzerCounts(0, 0)
     freqs = [f32(f) for f in frequencies]
     octave = f32(octave)
-    pmt: set[frozenset] = set()
-    smt: set[frozenset] = set()
-    p = s = 0
+    pmt: dict[frozenset, tuple[int, int]] = {}
+    smt: dict[frozenset, tuple[int, int]] = {}
     for i in range(npo):
         imf = freqs[i]
         for j in range(i + 2, npo + 2):
@@ -162,11 +172,15 @@ def analyze_proportional_triads(
                 if major_in and abs(f32(major - kmf)) < tolerance:
                     key = frozenset({i, ki, ji})
                     if key not in pmt:
-                        pmt.add(key)
-                        p += 1
+                        pmt[key] = (k, j)
                 if minor_in and abs(f32(minor - kmf)) < tolerance:
                     key = frozenset({i, ki, ji})
                     if key not in smt:
-                        smt.add(key)
-                        s += 1
-    return AnalyzerCounts(p, s)
+                        smt[key] = (k, j)
+
+    def _count(found: dict) -> int:
+        if not npo_map_filter:
+            return len(found)
+        return sum(1 for (k, j) in found.values() if k < npo and j < npo)
+
+    return AnalyzerCounts(_count(pmt), _count(smt))

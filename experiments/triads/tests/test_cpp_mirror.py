@@ -76,24 +76,42 @@ class TestCpsProducts(unittest.TestCase):
 
 
 class TestAnalyzerMirror(unittest.TestCase):
-    """Golden counts from the 2026-07-20 crossval run (results/
-    crossval001.json). NOTE: analyzer-mirror fidelity to TuningImp.cpp is
-    established by line-by-line reading, not yet by execution — see
-    VERIFICATION.md."""
+    """Analyzer-mirror fidelity is established by EXECUTION: the real
+    compiled analyzer (tests/test_tuning at the repo root) reports exactly
+    these counts, and the 1-3-5-9 golden was predicted by this mirror
+    before the C++ test ever ran (2026-07-20). The plugin-exact default
+    includes the npo-map wrap-drop: octave-wrapping triads found by the
+    analyzer's search loop are dropped from its reported lists."""
 
     def test_hexany_1357_plugin_counts(self):
         freqs = cm.hexany_frequencies_f32([1.0, 3.0, 5.0, 7.0])
         counts = cm.analyze_proportional_triads(freqs)
+        self.assertEqual((counts.proportional, counts.subcontrary), (1, 2))
+
+    def test_hexany_1357_loop_level_counts(self):
+        freqs = cm.hexany_frequencies_f32([1.0, 3.0, 5.0, 7.0])
+        counts = cm.analyze_proportional_triads(freqs, npo_map_filter=False)
         self.assertEqual((counts.proportional, counts.subcontrary), (2, 2))
 
     def test_hexany_1357_without_interval_filter(self):
         freqs = cm.hexany_frequencies_f32([1.0, 3.0, 5.0, 7.0])
-        counts = cm.analyze_proportional_triads(freqs, interval_filter=False)
+        counts = cm.analyze_proportional_triads(
+            freqs, interval_filter=False, npo_map_filter=False)
         self.assertEqual((counts.proportional, counts.subcontrary), (4, 2))
+
+    def test_hexany_1359_plugin_counts(self):
+        freqs = cm.hexany_frequencies_f32([1.0, 3.0, 5.0, 9.0])
+        counts = cm.analyze_proportional_triads(freqs)
+        self.assertEqual((counts.proportional, counts.subcontrary), (1, 2))
 
     def test_segment_plugin_counts(self):
         seg = sorted(cm.f32(h / 8.0) for h in range(8, 16))  # canonical, no dup 2
         counts = cm.analyze_proportional_triads(seg)
+        self.assertEqual((counts.proportional, counts.subcontrary), (4, 1))
+
+    def test_segment_loop_level_counts(self):
+        seg = sorted(cm.f32(h / 8.0) for h in range(8, 16))
+        counts = cm.analyze_proportional_triads(seg, npo_map_filter=False)
         self.assertEqual((counts.proportional, counts.subcontrary), (8, 1))
 
     def test_fewer_than_three_tones(self):

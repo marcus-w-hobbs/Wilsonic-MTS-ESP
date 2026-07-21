@@ -145,12 +145,15 @@ def analyzer_vs_exact() -> dict:
     rows = []
     for name, (freqs, exact_ratios) in corpus.items():
         plugin = cm.analyze_proportional_triads(freqs)
-        no_filter = cm.analyze_proportional_triads(freqs, interval_filter=False)
+        loop = cm.analyze_proportional_triads(freqs, npo_map_filter=False)
+        no_filter = cm.analyze_proportional_triads(
+            freqs, interval_filter=False, npo_map_filter=False)
         exact_win = scorer.score_rational(exact_ratios)
         exact_anc = scorer.score_rational_anchored(exact_ratios)
         rows.append({
             "scale": name,
             "plugin_P": plugin.proportional, "plugin_S": plugin.subcontrary,
+            "loop_P": loop.proportional, "loop_S": loop.subcontrary,
             "nofilter_P": no_filter.proportional, "nofilter_S": no_filter.subcontrary,
             "window_P": exact_win.proportional, "window_S": exact_win.subcontrary,
             "anchored_P": exact_anc.proportional, "anchored_S": exact_anc.subcontrary,
@@ -186,10 +189,11 @@ def main() -> None:
         if (r["plugin_P"], r["plugin_S"]) == (r["window_P"], r["window_S"]))
     print(f"\nlink 2: hexanies where plugin-mirror == exact window counts: "
           f"{agree_plugin_window}/{len(hex_rows)}")
-    print("sample rows (plugin | no-filter | exact-window | exact-anchored):")
+    print("sample rows (plugin | loop | no-filter | exact-window | exact-anchored):")
     for r in rows[:6] + [r for r in rows if r["scale"] == "segment 8..16"]:
         print(f"  {r['scale']:24s} "
               f"({r['plugin_P']:3d},{r['plugin_S']:3d}) | "
+              f"({r['loop_P']:3d},{r['loop_S']:3d}) | "
               f"({r['nofilter_P']:3d},{r['nofilter_S']:3d}) | "
               f"({r['window_P']:3d},{r['window_S']:3d}) | "
               f"({r['anchored_P']:3d},{r['anchored_S']:3d})")

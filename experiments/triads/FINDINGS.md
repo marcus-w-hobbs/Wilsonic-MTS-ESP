@@ -1,5 +1,23 @@
 # Findings — dated, one paragraph each, linked to artifacts
 
+**2026-07-21 — The analyzer silently discards every octave-wrapping triad
+it finds.** First execution of the real `_analyzeProportionalTriads`
+under test (tests/test_tuning) reported (1,2) for the 1-3-5-7 hexany
+where the search loop provably finds (2,2). Cause, read and then
+confirmed by prediction: the loop's wrap machinery (octave factors, j up
+to npo+1) deliberately catches triads spanning the octave boundary, but
+stored triads keep UNWRAPPED indices, and the post-loop NPO-map filter
+(TuningImp.cpp:849–858) looks those up in a map keyed 0..npo-1 — so
+every wrapped triad is dropped before reaching the UI lists. Half of the
+hexany's reported majors and half the harmonic segment's (8→4)
+disappear this way. The corrected mirror predicted hexany 1-3-5-9 =
+(1,2) before the C++ test ran; confirmed, and then corpus-confirmed on
+all 70 hexanies + 15 MOS scales with 0 mismatches
+(results/crossval002.json). Wilson's proportional-triad concept has no
+reason to exclude wrap triads, so this looks like a bug rather than a
+choice; fixing it is a UI-visible behavior change and is Marcus's call —
+the receipts here are the regression baseline either way.
+
 **2026-07-20 — Every hexany sits exactly on the P = S diagonal (anchored
 convention).** All 68 six-note hexanies from odd seeds ≤ 15 score P = S
 *exactly* under middle-anchored scoring (results/hex001.jsonl, scorer
