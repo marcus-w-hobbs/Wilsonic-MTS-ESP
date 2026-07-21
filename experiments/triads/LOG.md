@@ -132,3 +132,42 @@ triads under the plugin's 0.0005 absolute tolerance — the Pythagorean
 thirds miss the arithmetic-mean coincidences, consistent with theory.
 
 **Kept.** Runs: `make -C tests run`, `python3.12 crossval002.py`.
+
+## 2026-07-21 — overnight: HEX-003 + EIK-001 (entry before run)
+
+**Hypothesis (HEX-003):** the period-space dual of every hexany swaps P
+and S exactly under both conventions (pipeline duality holds: odd-seed
+CPS never contains 1/1), so dual rankings are identical and hexanies are
+self-dual as a family.
+
+**Hypothesis (EIK-001):** CPS(6,3) is self-inverse, so every eikosany —
+including Marcus's calibration set {1,45,135,225,19,377} — sits exactly
+on P = S under the anchored convention, extending the hexany diagonal
+theorem to 20 tones.
+
+**Result:** BOTH CONFIRMED (results/hex003_eik001.json). HEX-003: 0 swap
+failures across 70 duals × 2 conventions. EIK-001: all 29 eikosanies sit
+exactly on P = S (anchored) — the diagonal theorem holds at 20 tones,
+even for the calibration set, and even the window convention stays
+within ±2 of the diagonal at this size. Ranking: the classic
+1-3-5-7-9-11 eikosany tops the field at P=S=77 (G=12); Marcus's
+{1,45,135,225,19,377} scores P=S=22, G=0 — rank 29/29 by min(P,S).
+That last fact is the sharpest felt-sense-vs-metric probe yet: if the
+calibration set sounds richer to Marcus than its bottom rank suggests,
+min(P,S) is missing something his ear hears (candidates: prime-limit
+color, difference-tone structure, or triad QUALITY weighting vs raw
+count). Playable: results/scl/eik_1-3-5-7-9-11.scl and
+eik_1-45-135-225-19-377.scl. Ear-check queued for Marcus (HEX-002/EIK).
+
+**Kept.** Run: `python3.12 hex003_eik001.py`.
+
+## 2026-07-21 — overnight: MOS-001/002 generator sweep (entry before run)
+
+**Hypothesis:** the generator landscape for anchored min(P,S) at ε=2¢ is
+mostly dead (score 0) with isolated hot generators; simple-ratio regions
+(fifth complement ~498¢, meantone ~504¢) score above noble/EDO
+landmarks at matched cardinality, and score varies smoothly enough with
+ε (0.5/1/2/5 logged per point) that ε=2 is not a phase-transition edge.
+
+**Result:** (pending — coarse 1¢ pass first, then 0.1¢ fine sweep in
+background overnight)

@@ -1,0 +1,44 @@
+scored 30009 (generator, cardinality) pairs at step 0.1 cents -> results/mos001_fine.jsonl
+per-cardinality best by anchored min(P,S) at eps=2.0:
+  N= 5: min= 10 PSG=[10, 10, 20] at g=0.1c
+  N= 6: min= 20 PSG=[20, 20, 40] at g=0.1c
+  N= 7: min= 35 PSG=[35, 35, 70] at g=0.1c
+  N= 8: min= 56 PSG=[56, 56, 112] at g=0.1c
+  N= 9: min= 84 PSG=[84, 84, 168] at g=0.1c
+  N=10: min=120 PSG=[120, 120, 240] at g=0.1c
+  N=11: min= 30 PSG=[30, 30, 50] at g=571.6c
+  N=12: min= 25 PSG=[25, 25, 60] at g=498.2c
+  N=13: min= 55 PSG=[55, 55, 300] at g=599.6c
+  N=14: min= 39 PSG=[39, 39, 84] at g=265.6c
+  N=15: min= 91 PSG=[91, 91, 546] at g=599.7c
+  N=16: min= 51 PSG=[51, 51, 112] at g=376.8c
+  N=17: min=140 PSG=[140, 140, 732] at g=599.7c
+  N=18: min= 68 PSG=[68, 68, 144] at g=473.0c
+  N=19: min= 90 PSG=[90, 90, 162] at g=300.9c
+  N=20: min=103 PSG=[103, 103, 180] at g=416.2c
+  N=21: min=119 PSG=[119, 119, 200] at g=299.3c
+  N=22: min=126 PSG=[126, 126, 1316] at g=399.8c
+landmarks (anchored PSG at eps=2, nearest grid point):
+  fifth_702_complement_498 N= 5: (4,4,8)
+  fifth_702_complement_498 N= 7: (6,6,18)
+  fifth_702_complement_498 N=12: (19,19,60)
+  fifth_702_complement_498 N=17: (42,42,128)
+  meantone_696_complement_504 N= 5: (0,0,8)
+  meantone_696_complement_504 N= 7: (0,0,18)
+  meantone_696_complement_504 N=12: (2,2,60)
+  meantone_696_complement_504 N=19: (18,18,162)
+  noble_phi_moslike_466 N= 5: (0,0,8)
+  noble_phi_moslike_466 N= 8: (0,0,24)
+  noble_phi_moslike_466 N=13: (11,11,72)
+  noble_phi_moslike_466 N=18: (37,37,144)
+  twelve_edo_500 N= 5: (4,4,8)
+  twelve_edo_500 N= 7: (6,6,20)
+  twelve_edo_500 N=12: (12,12,132)
+  twelve_edo_500 N=19: (12,12,132)
+  bohlen_pierce_ish_585 N= 5: (1,1,8)
+  bohlen_pierce_ish_585 N= 7: (3,3,18)
+  bohlen_pierce_ish_585 N= 9: (6,6,32)
+  bohlen_pierce_ish_585 N=11: (10,10,50)
+  bohlen_pierce_ish_585 N=13: (15,15,72)
+  bohlen_pierce_ish_585 N=15: (21,21,98)
+  bohlen_pierce_ish_585 N=17: (30,30,128)

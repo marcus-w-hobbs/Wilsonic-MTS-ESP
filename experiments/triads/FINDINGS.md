@@ -1,5 +1,33 @@
 # Findings — dated, one paragraph each, linked to artifacts
 
+**2026-07-21 — The P = S diagonal is structural for every
+single-generator scale, and for CPS(n, k) with k = n/2.** All 29
+eikosanies (including the {1,45,135,225,19,377} calibration set) and
+every MOS at every generator/cardinality in the sweeps score P = S
+exactly under the anchored convention (results/hex003_eik001.json,
+results/mos001_coarse.jsonl). Reason: both families are inversionally
+symmetric as pitch-class sets (a generator chain reversed is the same
+set; CPS(n, n−k) is the inverted CPS(n, k) up to transposition), and the
+anchored scorer commutes exactly with inversion. Consequence for the
+research program: min(P, S) cannot DIFFERENTIATE within these families —
+it equals P — so the interesting axes there are P itself, G, and triad
+quality; P ≠ S can only distinguish asymmetric constructions (harmonic
+segments, stellations, recurrence relations, arbitrary scales). This
+sharpens plan §1.3's balance hypothesis into a theorem-shaped statement
+worth proving formally.
+
+**2026-07-21 — Tempered-path ε-degeneracy: near-equal-step scales
+multi-count.** In the MOS sweep at ε = 2¢, a 1¢ generator tops
+cardinalities 5–10 and ~599¢ (near 600 = 2-EDO multiple) tops N=15/17:
+when adjacent steps are within a few ε, AM, GM, and HM of a triple
+coincide inside ε, so the same triple counts as P, S, AND G, and
+min(P,S) explodes for micro-cluster and near-equal-step scales
+(mos001_coarse.jsonl: N=10 at g=1¢ scores 100 with G=117). Raw counts
+stay honest in the archive; mos_report.py adds a REPORT-layer guard
+(exclude scales whose min step ≤ 4ε, factor printed). Whether the guard
+belongs in the scorer itself (e.g. discount triples that are also
+geometric within ε) is a scorer-spec decision for Marcus before freeze.
+
 **2026-07-21 — The analyzer silently discards every octave-wrapping triad
 it finds.** First execution of the real `_analyzeProportionalTriads`
 under test (tests/test_tuning) reported (1,2) for the 1-3-5-7 hexany
