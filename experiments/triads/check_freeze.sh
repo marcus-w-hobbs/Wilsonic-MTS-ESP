@@ -8,10 +8,14 @@
 #   A. HASH PIN. scorer.sha256 pins the file's SHA-256. Any edit fails
 #      until a human updates the pin. Fails closed on every path — commit
 #      message, author and branch are irrelevant.
-#   B. AGENT-LOOP MARKER. Commits marked as agent-loop work (subject or
-#      trailer containing "[agent-loop]" or "Agent-Loop: true") fail if
-#      their diff touches scorer.py. Cheap, and gives a clearer error than
-#      A does for the honest case.
+#   B. AGENT-LOOP MARKER. Commits marked as agent-loop work fail if their
+#      diff touches scorer.py. Cheap, and gives a clearer error than A does
+#      for the honest case. A commit is marked when EITHER
+#        - its SUBJECT (first line) contains the bracketed marker, or
+#        - it carries a standalone git trailer line "Agent-Loop: true".
+#      Both forms are deliberately narrow: an earlier version matched the
+#      marker anywhere in the message, so the commit that DOCUMENTED this
+#      mechanism flagged itself. Prose about the guard must not trip it.
 #
 # Neither check can stop an agent that also rewrites the pin. What they
 # buy is that a scorer change can never be SILENT: the pin diff is one
@@ -31,7 +35,8 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCORER="$HERE/scorer.py"
 PIN="$HERE/scorer.sha256"
-MARKER_RE='\[agent-loop\]|Agent-Loop:[[:space:]]*true'
+SUBJECT_MARKER_RE='\[agent-loop\]'                 # first line only
+TRAILER_MARKER_RE='^Agent-Loop:[[:space:]]*true[[:space:]]*$'   # standalone line
 
 fail() { echo "FREEZE VIOLATION: $*" >&2; exit 1; }
 
@@ -62,7 +67,10 @@ if [ $# -eq 2 ] && [ -n "$1" ] && [ "$1" != "00000000000000000000000000000000000
     while read -r sha; do
         [ -n "$sha" ] || continue
         scanned=$((scanned + 1))
-        if git log -1 --format='%B' "$sha" | grep -Eqi "$MARKER_RE"; then
+        marked=0
+        git log -1 --format='%s' "$sha" | grep -Eqi "$SUBJECT_MARKER_RE" && marked=1
+        git log -1 --format='%B' "$sha" | grep -Eqi "$TRAILER_MARKER_RE" && marked=1
+        if [ "$marked" -eq 1 ]; then
             if git diff-tree --no-commit-id --name-only -r "$sha" \
                 | grep -q '^experiments/triads/scorer\.py$'; then
                 fail "agent-loop commit $sha modifies scorer.py.

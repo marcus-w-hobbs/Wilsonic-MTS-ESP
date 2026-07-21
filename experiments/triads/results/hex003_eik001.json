@@ -645,7 +645,7 @@
    }
   ]
  },
- "scorer_version": "0.1.0",
- "commit": "6281ca5c9ef59f959a760dba759ecaa0a1f374d1",
- "timestamp": "2026-07-21T16:04:29+00:00"
+ "scorer_version": "1.0.0",
+ "commit": "b575c38e7fd21664e98e8f465283c5a02e61f777",
+ "timestamp": "2026-07-21T23:00:16+00:00"
 }

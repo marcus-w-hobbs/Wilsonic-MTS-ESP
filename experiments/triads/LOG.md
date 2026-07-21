@@ -343,3 +343,22 @@ deliberate test edit. Suite 62 → 64/64.
 
 **From here on:** any scorer change I want goes to Marcus as a proposal
 first, whatever the ear checks turn up.
+
+**Follow-up, same day — the guard bit its own documentation.** Running
+check B over the freeze commit failed: the commit message *describes* the
+marker strings, and the first implementation matched them anywhere in the
+message. Fixed to git-trailer semantics — bracketed marker in the SUBJECT
+line only, or a standalone `Agent-Loop: true` trailer line — so prose
+about the mechanism cannot trip it. Both marked forms re-verified as still
+caught in a throwaway clone, and the freeze commit now passes. Cheap
+receipt that check B actually runs rather than silently passing.
+
+**Provenance re-run under 1.0.0.** Every experiment regenerated so its
+records carry the frozen version instead of 0.1.0: hex001 (70 hexanies),
+hex003_eik001 (duals + 29 eikosanies), crossval001, crossval002, both MOS
+sweeps, all three report artifacts. **Every number is identical ignoring
+the provenance fields** — verified by diffing against the committed
+versions (hex001 70/70, eikosany file, crossval001, fine sweep
+30,009/30,009). This is the receipt that decision 1 changed nothing but
+names and decision 2's guard is a genuine no-op on the exact path. C++
+test_tuning 46/46, crossval002 0 mismatches, Python 64/64.
