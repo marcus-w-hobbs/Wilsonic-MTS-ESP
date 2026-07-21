@@ -48,9 +48,9 @@ jobs:
             cp -r Builds/LinuxMakefile/build/WilsonicController.vst3 upload
             cp Builds/LinuxMakefile/build/WilsonicController upload
 
-            # build and run unit tests
-            make -C tests
-            ./tests/test_wilsonicmath
+            # build and run unit tests (test_wilsonicmath + test_tuning,
+            # which compile real Source/ tuning code against stub headers)
+            make -C tests run
 
 
       - uses: actions/upload-artifact@v4
