@@ -100,6 +100,13 @@ unique_ptr<AudioProcessorParameterGroup> EulerGenusModel::createParams()
       AudioProcessorParameter::genericParameter,
 [](float value, int maxLength) { return String (value).substring (0, maxLength); },
 [](const String& text) { return text.getFloatValue(); })
+     ,
+
+     // Genus Space: MUST remain appended after F to preserve DAW automation
+     make_unique<AudioParameterBool>
+     (getEulerGenus6GenusSpaceParameterID(),
+      getEulerGenus6GenusSpaceParameterName(),
+      false)
 
 
      );
@@ -137,6 +144,7 @@ StringArray EulerGenusModel::getFavoritesParameterIDs()
                         getEulerGenus6CParameterID().getParamID(),
                         getEulerGenus6DParameterID().getParamID(),
                         getEulerGenus6EParameterID().getParamID(),
-                        getEulerGenus6FParameterID().getParamID()
+                        getEulerGenus6FParameterID().getParamID(),
+                        getEulerGenus6GenusSpaceParameterID().getParamID()
                         );
 }

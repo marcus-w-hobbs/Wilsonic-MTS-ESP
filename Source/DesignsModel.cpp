@@ -130,7 +130,11 @@ DesignsModel::DesignsModel(WilsonicProcessor& processor)
     _tuningDesignKeys.push_back(_eulerGenusModel->getDesignParameterID().getParamID());
     _functionNames.push_back([this](){showEulerGenusV2Tuning();});
     _tuningChangedActionMessage.add(getEulerGenusTuningChangedActionMessage());
-    _tuningChangedFunctionNames.push_back([this]() {_appTuningModel->setTuning(_eulerGenusModel->getTuning());});
+    _tuningChangedFunctionNames.push_back([this]() {
+        _appTuningModel->setTuning(_eulerGenusModel->getTuning());
+        // Genus Space: window the keyboard to the selected subset of the root
+        _appTuningModel->setKeyboardSubset(_eulerGenusModel->getGenusSpaceSubsetDescriptions());
+    });
     _tuningParamIDsForFavorites.push_back([this]() {return _eulerGenusModel->getFavoritesParameterIDs();});
     _eulerGenusModel->addActionListener(this);
     _eulerGenusModel->setDesignIndex(designIndex);

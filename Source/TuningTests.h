@@ -104,6 +104,9 @@ struct TuningTests
 
     static void testCPS_6_3();
 
+    // Genus Space: keep drill-path root tuning while navigating subsets
+    static void testGenusSpace(WilsonicProcessor& processor);
+
     static void testEulerGenus6_DAW_Automation();
 
     static void testCPS_6_1_DAW_Automation();

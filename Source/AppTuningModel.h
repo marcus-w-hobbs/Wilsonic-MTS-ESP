@@ -76,6 +76,18 @@ public:
     // NPO
     unsigned long getTuningTableNPO();
 
+    // Genus Space keyboard mapping: display a subset of the tuning table's
+    // notes as a compact keyboard where every drawn slot triggers its note
+    // number in the full table ("root space").  The subset is expressed as
+    // formal product identities (Microtone shortDescriptionText).  An empty
+    // subset, an NPO override, or a full subset all yield the identity map.
+    void setKeyboardSubset(const vector<string>& subsetDescriptions);
+    bool keyboardSubsetActive();
+    unsigned long getKeyboardNPO(); // keys drawn per octave
+    unsigned long getKeyboardNumSlots(); // number of drawable keyboard slots
+    int keyboardSlotToNoteNumber(int slot); // -1 when slot is out of range
+    int noteNumberToKeyboardSlot(int noteNumber); // -1 when nn is not a subset member
+
     // Color
 
     // input frequency is in Hz
@@ -137,6 +149,15 @@ private:
     static constexpr int _interpolationTimerHz = 80; // 48000 samples per second / 512 sample per render block
     TuningTableImp _interpolatedTable {};
     void _updateTuning();
+
+    // Genus Space keyboard mapping
+    vector<string> _keyboardSubsetDescriptions {};
+    array<int, WilsonicProcessorConstants::numMidiNotes> _keyboardSlotToNoteNumber {};
+    array<int, WilsonicProcessorConstants::numMidiNotes> _keyboardNoteNumberToSlot {};
+    unsigned long _keyboardNumSlots = 0;
+    unsigned long _keyboardNPO = 0;
+    bool _keyboardSubsetActive = false;
+    void _rebuildKeyboardSubsetMap();
 
     // Colour
     void _setTuningTableColor(Colour c, unsigned long index);

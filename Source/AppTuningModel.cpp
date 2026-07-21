@@ -192,6 +192,10 @@ void AppTuningModel::setTuning(shared_ptr<Tuning> inputTuning) {
     }
 #endif
     
+    // every design change resets the keyboard subset; the Euler Genus design
+    // re-applies it via setKeyboardSubset immediately after setTuning
+    _keyboardSubsetDescriptions.clear();
+
     // don't change
     if (inputTuning == _targetTuning) {// call _updateTuning every time the _targetTuning is updated
         // NOP, but need to fall through
@@ -282,6 +286,95 @@ void AppTuningModel::_updateTuning() {
     }
 #endif
 
+    // the tuning table changed, so re-derive the keyboard subset mapping
+    _rebuildKeyboardSubsetMap();
+}
+
+#pragma mark - Genus Space keyboard mapping
+
+// empty subset clears; the keyboard reverts to the identity map
+void AppTuningModel::setKeyboardSubset(const vector<string>& subsetDescriptions) {
+    const ScopedLock sl(_lock);
+    _keyboardSubsetDescriptions = subsetDescriptions;
+    _rebuildKeyboardSubsetMap();
+}
+
+void AppTuningModel::_rebuildKeyboardSubsetMap() {
+    const ScopedLock sl(_lock);
+    _keyboardSlotToNoteNumber.fill(-1);
+    _keyboardNoteNumberToSlot.fill(-1);
+    _keyboardNumSlots = 0;
+    _keyboardNPO = 0;
+    _keyboardSubsetActive = false;
+    if (_keyboardSubsetDescriptions.empty() || _targetTuning == nullptr) {
+        return;
+    }
+
+    // NPO override wins: the override resamples the tuning table, so the
+    // subset view is bypassed rather than mismapped
+    if (uiGetNPOOverrideEnable()) {
+        return;
+    }
+
+    // a subset as large as the table is the identity: keep the legacy display
+    set<string> members(_keyboardSubsetDescriptions.begin(), _keyboardSubsetDescriptions.end());
+    if (members.size() >= _targetTuning->getProcessedArrayNPOCount()) {
+        return;
+    }
+
+    // compact ascending note numbers whose tone is a subset member into slots
+    for (unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
+        auto microtone = _targetTuning->microtoneAtNoteNumber(nn);
+        if (microtone == nullptr) {
+            continue;
+        }
+        if (members.count(microtone->getShortDescriptionText()) == 1) {
+            _keyboardSlotToNoteNumber[_keyboardNumSlots] = static_cast<int>(nn);
+            _keyboardNoteNumberToSlot[nn] = static_cast<int>(_keyboardNumSlots);
+            _keyboardNumSlots++;
+        }
+    }
+    _keyboardNPO = members.size();
+    _keyboardSubsetActive = _keyboardNumSlots > 0;
+}
+
+bool AppTuningModel::keyboardSubsetActive() {
+    const ScopedLock sl(_lock);
+    return _keyboardSubsetActive;
+}
+
+unsigned long AppTuningModel::getKeyboardNPO() {
+    const ScopedLock sl(_lock);
+    return _keyboardSubsetActive ? _keyboardNPO : getTuningTableNPO();
+}
+
+unsigned long AppTuningModel::getKeyboardNumSlots() {
+    const ScopedLock sl(_lock);
+    return _keyboardSubsetActive ? _keyboardNumSlots : WilsonicProcessorConstants::numMidiNotes;
+}
+
+int AppTuningModel::keyboardSlotToNoteNumber(int slot) {
+    const ScopedLock sl(_lock);
+    if (slot < 0 || slot >= static_cast<int>(WilsonicProcessorConstants::numMidiNotes)) {
+        return -1;
+    }
+    if (!_keyboardSubsetActive) {
+        return slot;
+    }
+
+    return _keyboardSlotToNoteNumber[static_cast<unsigned long>(slot)];
+}
+
+int AppTuningModel::noteNumberToKeyboardSlot(int noteNumber) {
+    const ScopedLock sl(_lock);
+    if (noteNumber < 0 || noteNumber >= static_cast<int>(WilsonicProcessorConstants::numMidiNotes)) {
+        return -1;
+    }
+    if (!_keyboardSubsetActive) {
+        return noteNumber;
+    }
+
+    return _keyboardNoteNumberToSlot[static_cast<unsigned long>(noteNumber)];
 }
 
 #pragma mark - Frequency

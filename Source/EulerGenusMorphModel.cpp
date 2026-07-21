@@ -86,12 +86,28 @@ void EulerGenusMorphModel::parameterChanged(const String& parameterID, float new
     _npoOverride = static_cast<int>(newValue);
     } else if(parameterID == AppTuningModel::getAppTuningNPOOverrideEnableParameterID().getParamID()) {
         _npoOverrideEnable = static_cast<bool>(newValue);
+    } else if(parameterID == EulerGenusModel::getEulerGenus6GenusSpaceParameterID().getParamID()) {
+        _genusSpace = newValue > 0.5f;
+        if(_currentViewModel != nullptr) {
+            _selectDAWKey(_currentViewModel->dawKey); // re-resolve sounding tuning under the new mode
+        }
+
+        return;
     } else {
         jassertfalse;
     }
     
     // update
     _updateCurrentViewModelTuning();
+
+    // Genus Space: the sounding tuning is the drill-path root, which may not be
+    // the current page's parent, so refresh it with the new seeds too
+    if(_genusSpace && _currentViewModel != nullptr) {
+        auto const root = _genusSpaceRootTuning();
+        if(root != nullptr) {
+            _setTuning(root);
+        }
+    }
 }
 
 shared_ptr<Tuning> EulerGenusMorphModel::getTuning() {
@@ -137,6 +153,51 @@ void EulerGenusMorphModel::_selectDAWKey(DAWKey daw_key) {
             }
         }
     }
+
+    // Genus Space: the drill-path root CPS(6,k) remains the sounding tuning
+    if(_genusSpace) {
+        auto const root = _genusSpaceRootTuning();
+        if(root != nullptr) {
+            _setTuning(root);
+        }
+    }
+}
+
+// resolves the drill-path root CPS(6,k) page master for the current view model,
+// refreshing it with the current seeds when it isn't the current page's parent
+shared_ptr<CPSTuningBase> EulerGenusMorphModel::_genusSpaceRootTuning() {
+    jassert(_currentViewModel != nullptr);
+    auto isRank6 = [](CPS_Class type) {
+        return type == CPS_Class::CPS_6_1 || type == CPS_Class::CPS_6_2 ||
+               type == CPS_Class::CPS_6_3 || type == CPS_Class::CPS_6_4 ||
+               type == CPS_Class::CPS_6_5 || type == CPS_Class::CPS_6_6;
+    };
+    auto vm = _currentViewModel;
+
+    // at the Euler Genus page the drill target page's master is the root
+    if(vm->parentTuning->isEulerGenusTuningType()) {
+        vm = _getViewModel(vm->dawDrillKey);
+    }
+
+    // walk "back" until the page master is a rank-level CPS(6,k)
+    auto guard = 0;
+    while(vm != nullptr && !isRank6(vm->parentTuning->getTuningType()) && guard++ < 8) {
+        vm = _getViewModel(vm->dawBackKey);
+    }
+    if(vm == nullptr || !isRank6(vm->parentTuning->getTuningType())) {
+        jassertfalse; // every drill path descends from a CPS(6,k) page
+
+        return nullptr;
+    }
+
+    // refresh the root with the current seeds when it isn't the current page's parent
+    if(vm != _currentViewModel) {
+        auto updateRoot = (*_tuningUpdateMap)[vm->parentTuningKey];
+        jassert(updateRoot != nullptr);
+        updateRoot();
+    }
+
+    return vm->parentTuning;
 }
 
 // CODEGEN
