@@ -13,7 +13,6 @@
 #include "MicrotoneArray.h"
 #include "TuningImp.h"
 #include "WilsonicAppSkin.h"
-#include "WilsonicProcessor.h"
 #include "WilsonicProcessorConstants.h"
 #include <memory>
 

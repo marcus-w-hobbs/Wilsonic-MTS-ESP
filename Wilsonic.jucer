@@ -25,6 +25,8 @@
           <FILE id="Rhhwns" name="Tuning.h" compile="0" resource="0" file="Source/Tuning.h"/>
           <FILE id="Pl2Dyl" name="TuningImp.h" compile="0" resource="0" file="Source/TuningImp.h"/>
           <FILE id="hBCfIR" name="TuningImp.cpp" compile="1" resource="0" file="Source/TuningImp.cpp"/>
+          <FILE id="TIpnt0" name="TuningImp+paint.cpp" compile="1" resource="0"
+                file="Source/TuningImp+paint.cpp"/>
           <FILE id="WESUyz" name="PythagoreanMeans.h" compile="0" resource="0"
                 file="Source/PythagoreanMeans.h"/>
           <FILE id="hiO3An" name="PythagoreanMeans.cpp" compile="1" resource="0"
