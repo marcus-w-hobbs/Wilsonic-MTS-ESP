@@ -274,5 +274,36 @@ class TestProvenanceFields(unittest.TestCase):
         self.assertEqual(r.convention, "middle-anchored")
 
 
+class TestPrimaryConvention(unittest.TestCase):
+    """The anchored convention is primary (Marcus, 2026-07-21). These pin the
+    dispatch so a future edit cannot silently repoint it."""
+
+    def test_primary_is_anchored(self):
+        self.assertEqual(sc.PRIMARY_CONVENTION, sc.ANCHORED_CONVENTION)
+        self.assertEqual(sc.PRIMARY_CONVENTION, "middle-anchored")
+
+    def test_score_dispatches_to_anchored(self):
+        r = sc.score(HEXANY_1357)
+        self.assertEqual(r.convention, sc.PRIMARY_CONVENTION)
+        self.assertEqual(_psg(r), _psg(sc.score_rational_anchored(HEXANY_1357)))
+
+    def test_score_tempered_dispatches_to_anchored(self):
+        r = sc.score_tempered(TWELVE_EDO, 3.5)
+        self.assertEqual(r.convention, sc.PRIMARY_CONVENTION)
+        self.assertEqual(r.epsilon_cents, 3.5)
+        self.assertEqual(
+            _psg(r), _psg(sc.score_cents_anchored(TWELVE_EDO, 3.5))
+        )
+
+    def test_legacy_names_still_mean_window(self):
+        # Pre-2026-07-21 scripts and result files depend on these.
+        self.assertIs(sc.score_rational, sc.score_rational_window)
+        self.assertIs(sc.score_cents, sc.score_cents_window)
+        self.assertEqual(
+            sc.score_rational_window(HEXANY_1357).convention,
+            sc.WINDOW_CONVENTION,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

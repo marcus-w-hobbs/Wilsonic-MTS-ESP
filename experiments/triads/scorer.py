@@ -27,27 +27,49 @@ Triad definitions, for frequencies a < b < c (plan §1.2):
 For exact rationals the three conditions are mutually exclusive when
 a < b < c (any two together force a = c).
 
-TWO SAMPLING CONVENTIONS (decision pending before freeze — see LOG.md):
+TWO SAMPLING CONVENTIONS. **"middle-anchored" is PRIMARY** (decided by
+Marcus, 2026-07-21). Use the convention-neutral entry points `score()`
+(rational path) and `score_tempered()` (cents path) for all new work;
+they dispatch to the anchored implementations.
 
-1. "two-octave-window" (score_rational / score_cents): the sample is
-   T = S U 2S, all C(|T|, 3) triples classified. This is the convention
-   written in plan §1.1. Verified caveats, discovered 2026-07-20:
+1. "middle-anchored" — PRIMARY (score / score_tempered, implemented by
+   score_rational_anchored / score_cents_anchored): for every scale degree
+   b (the triad middle) in the canonical octave, the outer tones are the
+   unique octave-shifted representatives of scale pitch classes inside the
+   open windows a in (b/2, b), c in (b, 2b). Verified 2026-07-20 to be
+   BOTH exactly self-dual for every scale (including those containing 1/1)
+   AND exactly transposition-invariant.
+
+   Rationale for primacy: it is the only one of the two that satisfies
+   plan §4 TRIAD-004 ("this MUST pass exactly") for every scale. The plan
+   §1.1 text specified a sampling procedure; the invariant is the thing
+   worth preserving when the two conflict.
+
+   Known structural consequence (FINDINGS.md, 2026-07-21): every MOS and
+   every CPS(n, n/2) sits EXACTLY on P = S under this convention, because
+   both families are inversionally symmetric as pitch-class sets and the
+   anchored scorer commutes exactly with inversion. So min(P, S) equals P
+   inside those families and differentiates only asymmetric constructions.
+   That is a statement about the LOSS, not the convention.
+
+2. "two-octave-window" — RETAINED FOR COMPARISON ONLY
+   (score_rational_window / score_cents_window; the legacy names
+   score_rational / score_cents remain as back-compat aliases so existing
+   result files and scripts keep working). The sample is T = S U 2S, all
+   C(|T|, 3) triples classified. This is the convention written in plan
+   §1.1. Verified caveats, discovered 2026-07-20:
    - The pipeline duality swap (invert scale -> re-reduce -> rescore) is
      exact ONLY for scales not containing 1/1. When 1/1 is a degree, the
      inverted sample is the reflection 4/T with the boundary element 4
-     replaced by 1, and counts through the boundary differ. The underlying
+     replaced by 1, and counts through the boundary differ (segment 8..16
+     scores (46,8) but its dual scores (7,42), not (8,46)). The underlying
      AM<->HM theorem is exact for every scale: classifying the reflected
      multiset 4/T always swaps P and S exactly.
    - NOT transposition-invariant: multiplying every degree by a constant
      and re-canonicalizing rotates the pitch circle and changes which
-     cross-boundary triads land inside the [1, 4) window.
-
-2. "middle-anchored" (score_rational_anchored / score_cents_anchored):
-   for every scale degree b (the triad middle) in the canonical octave,
-   the outer tones are the unique octave-shifted representatives of scale
-   pitch classes inside the open windows a in (b/2, b), c in (b, 2b).
-   Verified 2026-07-20 to be BOTH exactly self-dual for every scale
-   (including those containing 1/1) AND exactly transposition-invariant.
+     cross-boundary triads land inside the [1, 4) window (hexany 1-3-5-7
+     scores (11,11), the same hexany times 3 scores (10,9)).
+   Both counterexamples are pinned as goldens in tests/test_scorer.py.
 """
 
 from __future__ import annotations
@@ -60,6 +82,12 @@ from typing import Iterable, Optional, Union
 
 SCORER_VERSION = "0.1.0"
 DEFAULT_EPSILON_CENTS = 2.0
+
+WINDOW_CONVENTION = "two-octave-window"
+ANCHORED_CONVENTION = "middle-anchored"
+#: The convention `score()` / `score_tempered()` dispatch to. Marcus's call,
+#: 2026-07-21; see the module docstring for the evidence.
+PRIMARY_CONVENTION = ANCHORED_CONVENTION
 
 PROPORTIONAL = "proportional"
 SUBCONTRARY = "subcontrary"
@@ -232,11 +260,12 @@ def _result(p: int, s: int, g: int, *, path: str, convention: str,
 
 
 # ---------------------------------------------------------------------------
-# convention 1: two-octave window (plan §1.1 as written)
+# secondary convention: two-octave window (plan §1.1 as written)
+# retained for comparison only — NOT self-dual, NOT transposition-invariant
 # ---------------------------------------------------------------------------
 
 
-def score_rational(ratios: Iterable[RationalLike]) -> ScoreResult:
+def score_rational_window(ratios: Iterable[RationalLike]) -> ScoreResult:
     """Score a JI scale with exact arithmetic over its two-octave sample."""
     scale = canonical_rational_scale(ratios)
     sample = two_octave_sample_rational(scale)
@@ -249,11 +278,11 @@ def score_rational(ratios: Iterable[RationalLike]) -> ScoreResult:
             s += 1
         elif label == GEOMETRIC:
             g += 1
-    return _result(p, s, g, path="rational", convention="two-octave-window",
+    return _result(p, s, g, path="rational", convention=WINDOW_CONVENTION,
                    epsilon_cents=None, scale=scale, sample_size=len(sample))
 
 
-def score_cents(
+def score_cents_window(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
 ) -> ScoreResult:
@@ -269,14 +298,21 @@ def score_cents(
             s += 1
         if GEOMETRIC in labels:
             g += 1
-    return _result(p, s, g, path="cents", convention="two-octave-window",
+    return _result(p, s, g, path="cents", convention=WINDOW_CONVENTION,
                    epsilon_cents=epsilon_cents, scale=scale,
                    sample_size=len(sample))
 
 
+#: Back-compat aliases. Pre-2026-07-21 scripts and result files were written
+#: against these names; they still mean the WINDOW convention, never the
+#: primary one. New code calls score() / score_tempered() instead.
+score_rational = score_rational_window
+score_cents = score_cents_window
+
+
 # ---------------------------------------------------------------------------
-# convention 2: middle-anchored octave windows
-# (exactly self-dual and transposition-invariant; candidate primary)
+# PRIMARY convention: middle-anchored octave windows
+# (exactly self-dual and transposition-invariant)
 # ---------------------------------------------------------------------------
 
 
@@ -316,7 +352,7 @@ def score_rational_anchored(ratios: Iterable[RationalLike]) -> ScoreResult:
                     s += 1
                 elif label == GEOMETRIC:
                     g += 1
-    return _result(p, s, g, path="rational", convention="middle-anchored",
+    return _result(p, s, g, path="rational", convention=ANCHORED_CONVENTION,
                    epsilon_cents=None, scale=scale,
                    sample_size=len(scale))
 
@@ -356,6 +392,28 @@ def score_cents_anchored(
                     s += 1
                 if GEOMETRIC in labels:
                     g += 1
-    return _result(p, s, g, path="cents", convention="middle-anchored",
+    return _result(p, s, g, path="cents", convention=ANCHORED_CONVENTION,
                    epsilon_cents=epsilon_cents, scale=scale,
                    sample_size=len(scale))
+
+
+# ---------------------------------------------------------------------------
+# canonical entry points — call these, not the convention-specific functions
+# ---------------------------------------------------------------------------
+
+
+def score(ratios: Iterable[RationalLike]) -> ScoreResult:
+    """Score a JI scale under the PRIMARY convention (middle-anchored).
+
+    This is the entry point all new work should use; the result records
+    `convention` so archives stay unambiguous if the primary ever changes.
+    """
+    return score_rational_anchored(ratios)
+
+
+def score_tempered(
+    cents: Iterable[float],
+    epsilon_cents: float = DEFAULT_EPSILON_CENTS,
+) -> ScoreResult:
+    """Score a tempered scale (cents) under the PRIMARY convention."""
+    return score_cents_anchored(cents, epsilon_cents)

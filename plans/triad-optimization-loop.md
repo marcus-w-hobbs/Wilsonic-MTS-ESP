@@ -28,6 +28,21 @@ Rationale: proportional/subcontrary relationships routinely span the octave
 boundary; a single octave systematically undercounts. This matches the
 "reduce → sort → octave-repeat → two-octave sample" procedure Marcus specified.
 
+`[SUPERSEDED 2026-07-21 — Marcus's call: the PRIMARY convention is
+**middle-anchored**, not this two-octave window. The window as written here
+fails §4 TRIAD-004 (segment 8..16 scores (46,8), its dual (7,42) not (8,46))
+and is not transposition-invariant (hexany 1-3-5-7 = (10,9), ×3 = (11,11));
+both counterexamples are frozen in tests/test_scorer.py. Anchored convention:
+for each degree b (triad middle) in the canonical octave, the outer tones are
+the unique octave-shifted representatives of scale pitch classes in the open
+windows a ∈ (b/2, b) and c ∈ (b, 2b) — exactly self-dual for every scale and
+exactly transposition-invariant. The window scorer is retained for comparison
+(scorer.score_rational_window / score_cents_window); new work calls
+scorer.score() / scorer.score_tempered(). Structural consequence recorded in
+FINDINGS.md: all MOS and all CPS(n, n/2) sit exactly on P = S under anchored,
+so min(P,S) ≡ P inside those families — a statement about the loss in §1.3,
+not about the sampling convention.]`
+
 ### 1.2 Triad definitions (frequency space)
 
 For pitches `a < b < c` drawn from `T`:

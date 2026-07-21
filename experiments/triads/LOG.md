@@ -192,3 +192,31 @@ future guard re-ranks for free.
 
 **Kept.** Runs: `python3.12 mos001.py --step 0.1 ...`,
 `python3.12 mos_report.py results/mos001_fine.jsonl`.
+
+## 2026-07-21 — DECISION 1: anchored is the primary convention (Marcus)
+
+**Decision:** middle-anchored is PRIMARY; two-octave-window retained for
+comparison only. Marcus's call, presented with the frozen counterexamples.
+
+**Grounds:** anchored is exactly self-dual for every scale (incl.
+1/1-bearing) and exactly transposition-invariant; window is neither
+(segment 8..16 → (46,8) vs dual (7,42); hexany ×3 → (11,11) vs (10,9),
+both pinned in tests/test_scorer.py). The plan §1.1 text specified a
+sampling procedure while §4 TRIAD-004 specified an invariant that "MUST
+pass exactly"; where they conflict the invariant wins. The window's P≠S
+scatter for CPS is boundary noise, not signal.
+
+**Applied, purely additively:** scorer.py gains `score()` /
+`score_tempered()` as the canonical entry points (dispatch to anchored),
+`PRIMARY_CONVENTION`/`ANCHORED_CONVENTION`/`WINDOW_CONVENTION` constants,
+and `score_rational_window` / `score_cents_window` names — the legacy
+`score_rational` / `score_cents` remain as aliases to the WINDOW pair, so
+every existing script (hex001, mos001, crossval001, hex003_eik001) and
+every archived record keeps its exact meaning. Module docstring now states
+the decision, its rationale, and the P=S diagonal consequence. Plan §1.1
+annotated `[SUPERSEDED 2026-07-21]`. Four new goldens pin the dispatch so
+a later edit cannot silently repoint `score()`.
+
+**Not changed:** no scoring arithmetic, no result files. Suite 52 → 56/56.
+
+**Kept.** Run: `python3.12 -m unittest discover -s tests`.
