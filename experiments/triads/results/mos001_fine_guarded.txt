@@ -1,0 +1,127 @@
+epsilon=2.0c, degeneracy guard: min step > 8.0c (= 4.0 * epsilon, report-layer choice)
+
+N=5: 5000 generators, 166 epsilon-degenerate excluded
+  g=  538.5c  P=  5 S=  5 G=  8  min=  5
+  g=  538.6c  P=  5 S=  5 G=  8  min=  5
+  g=  538.7c  P=  5 S=  5 G=  8  min=  5
+  g=  538.8c  P=  5 S=  5 G=  8  min=  5
+  g=  538.9c  P=  5 S=  5 G=  8  min=  5
+
+N=6: 2400 generators, 96 epsilon-degenerate excluded
+  g=    8.1c  P=  6 S=  6 G= 12  min=  6
+  g=    8.2c  P=  6 S=  6 G= 12  min=  6
+  g=    8.3c  P=  6 S=  6 G= 12  min=  6
+  g=    8.4c  P=  6 S=  6 G= 12  min=  6
+  g=    8.5c  P=  6 S=  6 G= 12  min=  6
+
+N=7: 4201 generators, 195 epsilon-degenerate excluded
+  g=  571.6c  P= 11 S= 11 G= 18  min= 11
+  g=  571.7c  P= 11 S= 11 G= 18  min= 11
+  g=  571.8c  P= 11 S= 11 G= 18  min= 11
+  g=  571.9c  P= 11 S= 11 G= 18  min= 11
+  g=  572.0c  P= 11 S= 11 G= 18  min= 11
+
+N=8: 2513 generators, 134 epsilon-degenerate excluded
+  g=    8.1c  P= 12 S= 12 G= 24  min= 12
+  g=    8.2c  P= 12 S= 12 G= 24  min= 12
+  g=    8.3c  P= 12 S= 12 G= 24  min= 12
+  g=    8.4c  P= 12 S= 12 G= 24  min= 12
+  g=    8.5c  P= 12 S= 12 G= 24  min= 12
+
+N=9: 2958 generators, 178 epsilon-degenerate excluded
+  g=  571.6c  P= 19 S= 19 G= 32  min= 19
+  g=  571.7c  P= 19 S= 19 G= 32  min= 19
+  g=  571.8c  P= 19 S= 19 G= 32  min= 19
+  g=  571.9c  P= 19 S= 19 G= 32  min= 19
+  g=  572.0c  P= 19 S= 19 G= 32  min= 19
+
+N=10: 1905 generators, 127 epsilon-degenerate excluded
+  g=  367.6c  P= 23 S= 23 G= 40  min= 23
+  g=  367.7c  P= 23 S= 23 G= 40  min= 23
+  g=  367.8c  P= 23 S= 23 G= 40  min= 23
+  g=  367.9c  P= 23 S= 23 G= 40  min= 23
+  g=  368.0c  P= 23 S= 23 G= 40  min= 23
+
+N=11: 1995 generators, 145 epsilon-degenerate excluded
+  g=  571.6c  P= 30 S= 30 G= 50  min= 30
+  g=  571.7c  P= 29 S= 29 G= 50  min= 29
+  g=  571.8c  P= 29 S= 29 G= 50  min= 29
+  g=  571.9c  P= 27 S= 27 G= 50  min= 27
+  g=  572.0c  P= 27 S= 27 G= 50  min= 27
+
+N=12: 343 generators, 27 epsilon-degenerate excluded
+  g=  498.2c  P= 25 S= 25 G= 60  min= 25
+  g=  498.3c  P= 25 S= 25 G= 60  min= 25
+  g=  498.4c  P= 25 S= 25 G= 60  min= 25
+  g=  498.5c  P= 25 S= 25 G= 60  min= 25
+  g=  486.0c  P= 22 S= 22 G= 60  min= 22
+
+N=13: 1866 generators, 160 epsilon-degenerate excluded
+  g=  571.6c  P= 43 S= 43 G= 72  min= 43
+  g=  285.8c  P= 42 S= 42 G= 84  min= 42
+  g=  285.9c  P= 42 S= 42 G= 72  min= 42
+  g=  286.0c  P= 42 S= 42 G= 72  min= 42
+  g=  286.1c  P= 42 S= 42 G= 72  min= 42
+
+N=14: 629 generators, 58 epsilon-degenerate excluded
+  g=  265.6c  P= 39 S= 39 G= 84  min= 39
+  g=  427.5c  P= 39 S= 39 G= 84  min= 39
+  g=  427.6c  P= 39 S= 39 G= 84  min= 39
+  g=  416.2c  P= 38 S= 38 G= 84  min= 38
+  g=  265.5c  P= 36 S= 36 G= 84  min= 36
+
+N=15: 948 generators, 95 epsilon-degenerate excluded
+  g=  571.6c  P= 60 S= 60 G= 98  min= 60
+  g=  582.1c  P= 55 S= 55 G= 98  min= 55
+  g=  586.6c  P= 54 S= 54 G= 98  min= 54
+  g=  586.7c  P= 54 S= 54 G= 98  min= 54
+  g=  586.8c  P= 54 S= 54 G= 98  min= 54
+
+N=16: 718 generators, 77 epsilon-degenerate excluded
+  g=  376.8c  P= 51 S= 51 G=112  min= 51
+  g=  376.9c  P= 51 S= 51 G=112  min= 51
+  g=  377.0c  P= 50 S= 50 G=112  min= 50
+  g=  386.2c  P= 50 S= 50 G=112  min= 50
+  g=  375.7c  P= 49 S= 49 G=112  min= 49
+
+N=17: 1636 generators, 184 epsilon-degenerate excluded
+  g=  571.6c  P= 78 S= 78 G=128  min= 78
+  g=  285.9c  P= 74 S= 74 G=128  min= 74
+  g=  286.0c  P= 74 S= 74 G=128  min= 74
+  g=  286.1c  P= 74 S= 74 G=128  min= 74
+  g=  286.2c  P= 74 S= 74 G=128  min= 74
+
+N=18: 340 generators, 41 epsilon-degenerate excluded
+  g=  473.0c  P= 68 S= 68 G=144  min= 68
+  g=  472.9c  P= 67 S= 67 G=144  min= 67
+  g=  472.8c  P= 63 S= 63 G=144  min= 63
+  g=  473.1c  P= 62 S= 62 G=144  min= 62
+  g=  472.0c  P= 60 S= 60 G=144  min= 60
+
+N=19: 1056 generators, 131 epsilon-degenerate excluded
+  g=  311.9c  P= 87 S= 87 G=162  min= 87
+  g=  386.2c  P= 80 S= 80 G=162  min= 80
+  g=  311.6c  P= 79 S= 79 G=162  min= 79
+  g=  311.7c  P= 79 S= 79 G=162  min= 79
+  g=  311.8c  P= 77 S= 77 G=162  min= 77
+
+N=20: 488 generators, 65 epsilon-degenerate excluded
+  g=  416.2c  P=103 S=103 G=180  min=103
+  g=  416.0c  P= 94 S= 94 G=180  min= 94
+  g=  416.1c  P= 90 S= 90 G=180  min= 90
+  g=  416.3c  P= 86 S= 86 G=180  min= 86
+  g=  416.4c  P= 86 S= 86 G=180  min= 86
+
+N=21: 443 generators, 62 epsilon-degenerate excluded
+  g=  285.9c  P=115 S=115 G=200  min=115
+  g=  285.8c  P=114 S=114 G=420  min=114
+  g=  286.0c  P=110 S=110 G=200  min=110
+  g=  286.2c  P=108 S=108 G=200  min=108
+  g=  286.1c  P=106 S=106 G=200  min=106
+
+N=22: 570 generators, 83 epsilon-degenerate excluded
+  g=  386.2c  P=120 S=120 G=220  min=120
+  g=  387.6c  P=105 S=105 G=220  min=105
+  g=  387.7c  P=105 S=105 G=220  min=105
+  g=  387.8c  P=105 S=105 G=220  min=105
+  g=  386.3c  P=102 S=102 G=220  min=102

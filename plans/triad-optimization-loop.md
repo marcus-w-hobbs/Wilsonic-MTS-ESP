@@ -250,6 +250,10 @@ Requirements:
   consistent with the §1.3 CPS symmetry hypothesis.]
 
 ### Phase 1 — Exhaustive hexany calibration (½ day)
+**[STATUS 2026-07-21: HEX-001 done; HEX-003 done (exact swap, 0 failures);
+HEX-002 ear check awaiting Marcus — top .scl files in
+experiments/triads/results/scl/. Bonus: EIK-001 eikosany calibration done;
+all CPS(6,3) sit exactly on P=S; calibration set ranks 29/29 by min(P,S).]**
 - **HEX-001:** enumerate all C(8,4) = 70 seed sets from odds {1,3,...,15};
   score all; rank by min(P,S) and by P·S within the 6-note bin.
 - **HEX-002:** report where 1-3-5-7 ranks. Ear-check against Marcus's
@@ -261,6 +265,15 @@ Requirements:
   prediction empirically.
 
 ### Phase 2 — MOS generator sweep (1 day)
+**[STATUS 2026-07-21: MOS-001 done (0.1¢ fine sweep, 30k records);
+MOS-002 done (ε ∈ {0.5,1,2,5} recorded per point; sensitivity table in
+results/). MOS-003 partial: landmark table in sweep reports; hot
+generators found at ~571.6¢ (odd N), 498¢ (N=12, the pure fourth), 416¢
+(N=20). Open scorer-spec issue: ε-degeneracy of near-equal-step scales —
+see FINDINGS.md; treatment decision is Marcus's before scorer freeze.
+Note: all MOS and all CPS(n, n/2) sit exactly on P=S under anchored
+scoring (structural inversion symmetry) — min(P,S) only differentiates
+asymmetric families; see FINDINGS.md diagonal-theorem entry.]**
 - **MOS-001:** grid sweep g ∈ (0, 600] at 0.1¢, cardinalities from
   convergents up to N = 22, score at ε = 2¢; plot score vs generator per
   cardinality bin.

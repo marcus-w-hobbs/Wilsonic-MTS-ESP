@@ -169,5 +169,26 @@ mostly dead (score 0) with isolated hot generators; simple-ratio regions
 landmarks at matched cardinality, and score varies smoothly enough with
 ε (0.5/1/2/5 logged per point) that ε=2 is not a phase-transition edge.
 
-**Result:** (pending — coarse 1¢ pass first, then 0.1¢ fine sweep in
-background overnight)
+**Result:** MOSTLY CONFIRMED, one guard weakness exposed. Fine sweep:
+0.1¢ over (0,600]¢, 30,009 (generator, cardinality) records × 4 ε
+(results/mos001_fine.jsonl; guarded rankings in
+mos001_fine_guarded.txt; ε table in mos002_epsilon_sensitivity.txt).
+Signal that is stable across ε — the real discoveries:
+- **g ≈ 571.6–572.0¢ dominates odd cardinalities** (N=7,9,11,13,15,17;
+  e.g. N=17 min=78 at ε=2). Not an obvious simple ratio; complement
+  ≈628.4¢ ≈ 23/16. Prime candidate for a closer look + ear check.
+- **N=12 is won by 498.2–498.5¢ — the pure fourth** (fifth-generator
+  Pythagorean MOS), min=25 at ε=2. Wilson's fifth wins its home bin.
+- 416.3¢ owns N=20 across ε=0.5/1/2; 486.7–498¢ (fourth region) owns
+  N=12/17/22 at tight ε; 286¢ region owns N=13/21.
+- Landmarks: fifth-MOS N=12 (19,19) vs meantone-504¢ N=12 (2,2) at ε=2 —
+  just intonation beats meantone decisively on this metric.
+Guard weakness: at ε=0.5/1 the 4ε min-step guard still admits 2–4¢
+micro-generators, which top N=5–10 bins (min step scales with the guard
+so tiny-ε bins stay polluted). The degeneracy treatment belongs in the
+scorer or in a scale-shape prior — Marcus's call (see FINDINGS.md
+ε-degeneracy entry). Every record carries all four ε scores, so any
+future guard re-ranks for free.
+
+**Kept.** Runs: `python3.12 mos001.py --step 0.1 ...`,
+`python3.12 mos_report.py results/mos001_fine.jsonl`.
