@@ -23,10 +23,31 @@ when adjacent steps are within a few ε, AM, GM, and HM of a triple
 coincide inside ε, so the same triple counts as P, S, AND G, and
 min(P,S) explodes for micro-cluster and near-equal-step scales
 (mos001_coarse.jsonl: N=10 at g=1¢ scores 100 with G=117). Raw counts
-stay honest in the archive; mos_report.py adds a REPORT-layer guard
-(exclude scales whose min step ≤ 4ε, factor printed). Whether the guard
-belongs in the scorer itself (e.g. discount triples that are also
-geometric within ε) is a scorer-spec decision for Marcus before freeze.
+stay honest in the archive; mos_report.py added a REPORT-layer guard
+(exclude scales whose min step ≤ 4ε, factor printed).
+
+**RESOLVED 2026-07-21 — the guard belongs in the scorer, and the right
+invariant is per-triple, not per-scale.** Marcus's decision: a tempered
+triple contributes to no count unless its own arithmetic and harmonic
+means are distinguishable at ε, `|1200·log2(AM/HM)| ≥ ε`. Below that the
+two mean conditions are one condition, so "proportional" asserts nothing
+— the identical triple is equally "subcontrary". Equivalently a span
+cutoff (58.8¢ at ε=0.5, 117.7¢ at ε=2, 186.1¢ at ε=5). Three weaker rules
+were measured and rejected over the coarse sweep × 4 ε: discounting
+also-geometric triples fails (narrow triples match P and S but not G
+unless the middle happens to sit near the cents-midpoint); discounting
+triples labelled both P and S fails at ε=0.5 on a knife edge (triple
+0-2-3¢ has AM and HM 0.0013¢ apart, so one condition lands inside ε and
+the other outside and it scores as a *pure* proportional); a min-step
+guard is a scale-shape prior and under-filters. The stake was concrete:
+unguarded, a 1¢ generator is the global optimum of min(P,S) at every
+cardinality N=5–10 at every ε — the reward hack the frozen verifier
+exists to prevent. The guard is a no-op on the exact rational path, so
+every hexany/eikosany result stands unchanged. Re-ranked fine sweep:
+LOG.md MOS-003. Residual honest limitation: cluster scales whose triples
+DO resolve (six notes inside 150¢) still score; excluding those is a
+scale-shape prior and belongs in the search/archive layer, not the
+verifier.
 
 **2026-07-21 — The analyzer silently discards every octave-wrapping triad
 it finds.** First execution of the real `_analyzeProportionalTriads`

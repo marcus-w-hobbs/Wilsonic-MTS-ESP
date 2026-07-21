@@ -274,6 +274,72 @@ class TestProvenanceFields(unittest.TestCase):
         self.assertEqual(r.convention, "middle-anchored")
 
 
+class TestDegeneracyGuard(unittest.TestCase):
+    """Tempered-path degeneracy guard (Marcus, 2026-07-21): a triple counts
+    only when its AM and HM are distinguishable at epsilon."""
+
+    def test_separation_depends_only_on_outer_interval(self):
+        # The middle tone plays no part; separation grows with the span.
+        s_small = sc.mean_separation_cents(0.0, 10.0)
+        s_large = sc.mean_separation_cents(0.0, 700.0)
+        self.assertLess(s_small, s_large)
+        self.assertAlmostEqual(
+            sc.mean_separation_cents(300.0, 1000.0), s_large, places=9
+        )
+
+    def test_span_thresholds_frozen(self):
+        # Below these spans no middle tone can be resolved as arithmetic
+        # rather than harmonic. Values quoted in the module docstring.
+        for eps, span in ((0.5, 58.8), (1.0, 83.2), (2.0, 117.7), (5.0, 186.1)):
+            with self.subTest(eps=eps):
+                self.assertFalse(sc.is_informative_triple(0.0, span - 1.0, eps))
+                self.assertTrue(sc.is_informative_triple(0.0, span + 1.0, eps))
+
+    def test_micro_generator_no_longer_scores(self):
+        # The reward hack: 10 degrees at 1c spacing scored (100, 100) raw,
+        # the global optimum of min(P,S) in the N=10 bin at every epsilon.
+        cluster = [float(k) for k in range(10)]
+        r = sc.score_tempered(cluster, 2.0)
+        self.assertEqual((r.proportional_raw, r.subcontrary_raw), (100, 100))
+        self.assertEqual((r.proportional, r.subcontrary), (0, 0))
+        self.assertGreater(r.degenerate_dropped, 0)
+
+    def test_real_triads_survive_the_guard(self):
+        # 12-EDO at the working epsilon: its narrowest anchored triple spans
+        # 200c, above the 117.7c threshold, so nothing is dropped.
+        r = sc.score_tempered(TWELVE_EDO, 2.0)
+        self.assertEqual(r.degenerate_dropped, 0)
+        self.assertEqual(
+            (r.proportional, r.subcontrary),
+            (r.proportional_raw, r.subcontrary_raw),
+        )
+        # The TRIAD-003 major triad (700c span) stays informative even at the
+        # coarse epsilon where 12-EDO thirds first register as proportional:
+        # its AM and HM are 70.2c apart.
+        self.assertTrue(sc.is_informative_triple(0.0, 700.0, 15.0))
+        self.assertAlmostEqual(sc.mean_separation_cents(0.0, 700.0), 70.282, places=3)
+
+    def test_coarse_epsilon_drops_narrow_triples(self):
+        # At eps=15 a 200c-wide triple has AM and HM only 5.8c apart, so it
+        # cannot be resolved and the guard fires. Coarse epsilon buys triad
+        # matches but loses the ability to tell the two means apart — the
+        # trade the guard makes explicit rather than silent.
+        self.assertAlmostEqual(sc.mean_separation_cents(0.0, 200.0), 5.77, places=2)
+        self.assertFalse(sc.is_informative_triple(0.0, 200.0, 15.0))
+        self.assertGreater(sc.score_tempered(TWELVE_EDO, 15.0).degenerate_dropped, 0)
+
+    def test_guard_is_noop_on_rational_path(self):
+        # Exact rationals: the three conditions are mutually exclusive and
+        # there is no epsilon, so raw == guarded, always.
+        for name, ratios in (("hexany", HEXANY_1357), ("segment", SEGMENT_8_16)):
+            with self.subTest(scale=name):
+                r = sc.score(ratios)
+                self.assertEqual(r.degenerate_dropped, 0)
+                self.assertEqual(r.proportional, r.proportional_raw)
+                self.assertEqual(r.subcontrary, r.subcontrary_raw)
+                self.assertEqual(r.geometric, r.geometric_raw)
+
+
 class TestPrimaryConvention(unittest.TestCase):
     """The anchored convention is primary (Marcus, 2026-07-21). These pin the
     dispatch so a future edit cannot silently repoint it."""

@@ -102,6 +102,19 @@ should sit near the P = S diagonal. The scorer makes this falsifiable.
   (`f = 2^(cents/1200)`). ε is the **single honest hyperparameter** of the
   system. Default ε = 2.0 cents; every result records the ε it was scored
   under; sensitivity sweep ε ∈ {0.5, 1, 2, 5} is a required Phase 2 report.
+- `[ADDED 2026-07-21 — Marcus's call: **ε-degeneracy guard**, tempered path
+  only.` A triple contributes to no count (P, S, or G) unless its own
+  arithmetic and harmonic means are distinguishable at ε, i.e.
+  `|1200·log2(AM/HM)| ≥ ε` — below that threshold the two mean conditions
+  are the same condition, so classifying the middle tone asserts nothing.
+  Equivalent to a span cutoff: 58.8¢ (ε=0.5), 83.2¢ (ε=1), 117.7¢ (ε=2),
+  186.1¢ (ε=5). Introduces NO new hyperparameter — it is derived from ε.
+  No-op on the rational path (conditions already mutually exclusive).
+  Motivation: unguarded, a 1¢ generator is the global optimum of min(P,S)
+  at every cardinality N=5–10 at every ε; §3.2's reward-hacking firewall is
+  worthless if the metric itself is hackable. Unguarded counts are still
+  recorded (`*_raw`, `degenerate_dropped`). Rejected alternatives and their
+  measured failures: FINDINGS.md ε-degeneracy entry.`]`
 
 ---
 

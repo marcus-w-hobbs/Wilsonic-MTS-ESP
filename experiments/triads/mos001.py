@@ -69,13 +69,19 @@ def sweep(step_cents: float, out_path: Path,
                     "commit": commit, "timestamp": stamp,
                 }
                 for eps in epsilons:
-                    anc = scorer.score_cents_anchored(scale, eps)
-                    win = scorer.score_cents(scale, eps)
+                    anc = scorer.score_tempered(scale, eps)
+                    win = scorer.score_cents_window(scale, eps)
                     rec["scores"][str(eps)] = {
+                        # guarded counts (degeneracy guard on, the loss)
                         "anchored": [anc.proportional, anc.subcontrary,
                                      anc.geometric],
                         "window": [win.proportional, win.subcontrary,
                                    win.geometric],
+                        # unguarded counts, so any future re-filter is free
+                        "anchored_raw": [anc.proportional_raw,
+                                         anc.subcontrary_raw,
+                                         anc.geometric_raw],
+                        "dropped": anc.degenerate_dropped,
                     }
                 fh.write(json.dumps(rec) + "\n")
                 count += 1

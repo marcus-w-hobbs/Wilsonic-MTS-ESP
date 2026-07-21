@@ -220,3 +220,90 @@ a later edit cannot silently repoint `score()`.
 **Not changed:** no scoring arithmetic, no result files. Suite 52 → 56/56.
 
 **Kept.** Run: `python3.12 -m unittest discover -s tests`.
+
+## 2026-07-21 — DECISION 2: ε-degeneracy guard lives in the scorer (Marcus)
+
+**Decision:** option (d) — a tempered triple contributes to NO count unless
+its own arithmetic and harmonic means are distinguishable at ε, i.e.
+`|1200·log2(AM/HM)| ≥ ε`. Tempered path only; raw unguarded counts kept.
+
+**Why not the three options as originally framed** (all measured over the
+3,006-record coarse sweep × 4 ε before adopting anything):
+- (a) *discount triples that are also geometric*: FAILS. 1–3¢ generators
+  still won N=6–10 at ε=2 and ε=5. Narrow triples match P and S but
+  usually not G — G fires only when the middle tone happens to land near
+  the cents-midpoint.
+- (a′) *discount triples labelled both P and S* (sharper variant found
+  mid-probe): clears ε=2 and ε=5, FAILS at ε=0.5, where near-misses split
+  on a knife edge — triple (0,2,3)¢ has AM and HM **0.0013¢** apart, both
+  ≈0.5¢ from the middle, so one condition lands inside ε and the other
+  outside and it scores as a PURE proportional.
+- (b) *scorer-level min-step guard*: a scale-shape prior inside the frozen
+  verifier, and min-step is the wrong invariant — it is exactly what
+  under-filters today.
+- (c) *raw scorer + report-layer guard*: the agent loop rewards on scorer
+  output (plan §3.2), so a report-only guard means the agent optimizes the
+  polluted metric. The reward hack is concrete: an unguarded 1¢ generator
+  is the **global optimum of min(P,S) at every cardinality N=5–10 at every
+  ε** (N=10 scores 100 raw).
+
+**Why (d):** if a triple's AM and HM are closer together than the
+resolution you are measuring at, calling it "proportional" asserts nothing
+— the identical triple is equally "subcontrary". Not an opinion about
+scale shape, a statement about what the measurement resolves. Equivalent
+to a span cutoff (AM/HM separation is monotone in c/a): 58.8¢ at ε=0.5,
+83.2¢ at ε=1, 117.7¢ at ε=2, 186.1¢ at ε=5. No-op on the exact rational
+path (the three conditions are already mutually exclusive, no ε), so every
+hexany/eikosany/duality result stands unchanged.
+
+**Applied:** `mean_separation_cents` + `is_informative_triple` in
+scorer.py, applied in both tempered scorers; ScoreResult gains
+`proportional_raw`/`subcontrary_raw`/`geometric_raw`/`degenerate_dropped`;
+mos001.py records guarded AND raw per ε; mos_report.py's min-step guard
+defaults off (retained behind `--guard-factor` for pre-decision runs).
+Suite 56 → 62/62.
+
+## 2026-07-21 — MOS-003: re-rank the sweep under the guard (entry before run)
+
+**Hypothesis:** re-running the 0.1¢ fine sweep with the guard on (1) kills
+both named artifacts — the 1¢ micro-generator and the ~599¢ near-2-EDO
+that owned N=15/17 — at every ε without a report-layer filter, and (2)
+leaves the g ≈ 571.6–572.0¢ odd-cardinality story standing at tight ε
+while weakening it at ε=2. Coarse-sweep prediction from the probe: at ε=2
+the N=7/9/15/17 winners move off 572¢ (to ≈539/286/317/286¢) while 572¢
+holds N=11; at ε=1 572¢ still takes N=7/9/11/15.
+
+**Result:** (1) CONFIRMED — both artifacts gone at every ε with no report
+filter. The 1¢ generator scores 0 everywhere; N=15/17 at ε=2 moved off
+599¢ (near-2-EDO) to 565.5¢. (2) PARTLY CONFIRMED, and the coarse-sweep
+prediction was too pessimistic: at 0.1¢ resolution the odd-cardinality
+region survives as **565.5–572.2¢**, with the exact peak ε-dependent —
+572.0¢ owns N=7/9/11 and 572.2¢ owns N=15 at ε=1, while 565.5¢ owns
+N=11/15/17 at ε=2. So the headline restates as "the 565–572¢ region
+dominates odd cardinalities", not a single generator.
+
+New signal the guard exposed: **the fourth/fifth region wins far more
+bins than before**, because it was previously buried under degenerate
+scores — 497.6¢ (N=5), 498.5¢ (N=7), 498.4/498.2¢ (N=12), 486.8¢
+(N=12/17/22) at tight ε. Wilson's fifth was always there; the degeneracy
+was hiding it. Landmarks at ε=2, N=12: fifth-MOS (19,19) vs meantone-504¢
+(2,2) — the just-intonation-beats-meantone result is unchanged.
+
+**Honest residue:** small-N bins at extreme ε still admit cluster scales
+whose triples are individually informative — 29.5¢/41.7¢ at N=6 (tight ε),
+123.3¢ at N=8 and 220.5¢ at N=16 (ε=5). These are NOT resolution
+artifacts: their anchored triples span ~1200¢ and genuinely resolve. What
+makes them unmusical is scale *shape* (six notes inside 150¢), which we
+deliberately kept out of the verifier. If those bins matter, the fix is a
+declared scale-shape prior in the search/archive layer, not in the scorer.
+
+Artifacts regenerated: results/mos001_fine.jsonl (30,009 records, now
+carrying guarded AND raw counts + dropped per ε),
+mos002_epsilon_sensitivity.txt, mos001_fine_report.txt,
+mos001_fine_guarded.txt (legacy min-step guard, comparison only). The ε
+table is now reproducible via `mos_report.py --epsilon-table` instead of
+ad hoc.
+
+**Kept.** Runs: `python3.12 mos001.py --step 0.1 --out
+results/mos001_fine.jsonl` (3m47s), `python3.12 mos_report.py
+results/mos001_fine.jsonl [--epsilon-table]`.

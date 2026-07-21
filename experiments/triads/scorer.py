@@ -18,6 +18,14 @@ Design rules (see plan §1):
 - Loss: score_min = min(P, S) primary; score_product = P * S secondary;
   raw (P, S, G) always recorded. Geometric triads are counted but NEVER
   contribute to either loss (plan §1.3, §6).
+- TEMPERED PATH ONLY: a degeneracy guard (is_informative_triple, Marcus's
+  decision 2026-07-21) suppresses triples whose arithmetic and harmonic
+  means are closer together than epsilon — at that resolution such a triple
+  cannot be shown to be proportional rather than subcontrary, so it counts
+  as neither. Without it a 1-cent generator is the global optimum of
+  min(P, S) at every cardinality N=5..10 and at every epsilon: the reward
+  hack the frozen verifier exists to prevent. Unguarded counts survive in
+  the *_raw fields; the guard is a no-op on the exact rational path.
 
 Triad definitions, for frequencies a < b < c (plan §1.2):
 - proportional (arithmetic mean, major prototype 4:5:6):  2b = a + c
@@ -190,6 +198,65 @@ def two_octave_sample_cents(scale: tuple[float, ...]) -> tuple[float, ...]:
     return scale + tuple(c + 1200.0 for c in scale)
 
 
+def mean_separation_cents(a_cents: float, c_cents: float) -> float:
+    """Distance in cents between the arithmetic and harmonic means of the
+    outer tones: |1200*log2(AM/HM)|. Depends only on the OUTER interval, not
+    on the middle tone, and grows monotonically with the span c - a.
+
+    This is the resolving power available to a triple: if it is smaller than
+    epsilon, no middle tone can be shown to be arithmetic rather than
+    harmonic. See is_informative_triple.
+    """
+    fa = 2.0 ** (a_cents / 1200.0)
+    fc = 2.0 ** (c_cents / 1200.0)
+    am = (fa + fc) / 2.0
+    hm = 2.0 * fa * fc / (fa + fc)
+    return abs(1200.0 * log2(am / hm))
+
+
+def is_informative_triple(
+    a_cents: float,
+    c_cents: float,
+    epsilon_cents: float = DEFAULT_EPSILON_CENTS,
+) -> bool:
+    """DEGENERACY GUARD (Marcus's decision, 2026-07-21; plan §1.4).
+
+    A tempered triple is informative only when its arithmetic and harmonic
+    means are themselves distinguishable at the scoring resolution:
+
+        |1200*log2(AM/HM)| >= epsilon
+
+    Below that threshold the two mean conditions are the same condition, so
+    labelling the triple "proportional" asserts nothing about proportionality
+    — the identical triple is equally "subcontrary". Uninformative triples
+    contribute to NO count (P, S, or G); raw unguarded counts are recorded
+    alongside so the archive loses nothing.
+
+    Equivalent framing: a span cutoff. Triples spanning less than ~58.8c
+    (eps=0.5), ~83.2c (eps=1), ~117.7c (eps=2) or ~186.1c (eps=5) are
+    uninformative, whatever the scale.
+
+    Why this rule and not the alternatives (all measured over the coarse MOS
+    sweep, 3006 records x 4 epsilon, before adoption):
+    - "discount triples that are also geometric": FAILS. Narrow triples match
+      P and S but usually not G — G fires only when the middle tone happens
+      to sit near the cents-midpoint. 1-3c generators still won N=5..10.
+    - "discount triples labelled both P and S": clears eps=2 and 5 but FAILS
+      at eps=0.5, where near-misses split on a knife edge (triple 0-2-3c has
+      AM and HM 0.0013c apart, both ~0.5c from the middle, so one lands
+      inside epsilon and one outside and it counts as a PURE proportional).
+    - "minimum-step guard on the scale": a scale-shape prior inside the
+      verifier, and demonstrably under-filters (the report-layer version
+      admits 2.1/4.1/8.1c generators).
+
+    NOT applied on the rational path: for exact rationals with a < b < c the
+    three conditions are already mutually exclusive and there is no epsilon,
+    so the guard is a no-op there by construction. Every exact-path result
+    (hexanies, eikosanies, duality goldens) is unaffected.
+    """
+    return mean_separation_cents(a_cents, c_cents) >= epsilon_cents
+
+
 def classify_cents_triple(
     a_cents: float,
     b_cents: float,
@@ -239,11 +306,21 @@ class ScoreResult:
     scorer_version: str
     scale: tuple
     sample_size: int
+    # Unguarded counts: what the scorer would report with the degeneracy
+    # guard disabled. On the rational path the guard is a no-op, so these
+    # always equal the guarded counts and degenerate_dropped is 0.
+    proportional_raw: int
+    subcontrary_raw: int
+    geometric_raw: int
+    degenerate_dropped: int  # label-hits suppressed by the guard
 
 
 def _result(p: int, s: int, g: int, *, path: str, convention: str,
             epsilon_cents: Optional[float], scale: tuple,
-            sample_size: int) -> ScoreResult:
+            sample_size: int,
+            p_raw: Optional[int] = None, s_raw: Optional[int] = None,
+            g_raw: Optional[int] = None,
+            degenerate_dropped: int = 0) -> ScoreResult:
     return ScoreResult(
         proportional=p,
         subcontrary=s,
@@ -256,6 +333,10 @@ def _result(p: int, s: int, g: int, *, path: str, convention: str,
         scorer_version=SCORER_VERSION,
         scale=scale,
         sample_size=sample_size,
+        proportional_raw=p if p_raw is None else p_raw,
+        subcontrary_raw=s if s_raw is None else s_raw,
+        geometric_raw=g if g_raw is None else g_raw,
+        degenerate_dropped=degenerate_dropped,
     )
 
 
@@ -286,21 +367,34 @@ def score_cents_window(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
 ) -> ScoreResult:
-    """Score a tempered scale (degrees in cents) over its two-octave sample."""
+    """Score a tempered scale (degrees in cents) over its two-octave sample.
+
+    The degeneracy guard (is_informative_triple) applies, as on every
+    tempered path."""
     scale = canonical_cents_scale(cents)
     sample = two_octave_sample_cents(scale)
-    p = s = g = 0
+    p = s = g = p_raw = s_raw = g_raw = dropped = 0
     for a, b, c in combinations(sample, 3):
         labels = classify_cents_triple(a, b, c, epsilon_cents)
+        if not labels:
+            continue
+        informative = is_informative_triple(a, c, epsilon_cents)
         if PROPORTIONAL in labels:
-            p += 1
+            p_raw += 1
+            p += informative
         if SUBCONTRARY in labels:
-            s += 1
+            s_raw += 1
+            s += informative
         if GEOMETRIC in labels:
-            g += 1
+            g_raw += 1
+            g += informative
+        if not informative:
+            dropped += len(labels)
     return _result(p, s, g, path="cents", convention=WINDOW_CONVENTION,
                    epsilon_cents=epsilon_cents, scale=scale,
-                   sample_size=len(sample))
+                   sample_size=len(sample),
+                   p_raw=p_raw, s_raw=s_raw, g_raw=g_raw,
+                   degenerate_dropped=dropped)
 
 
 #: Back-compat aliases. Pre-2026-07-21 scripts and result files were written
@@ -377,24 +471,38 @@ def score_cents_anchored(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
 ) -> ScoreResult:
-    """Middle-anchored tempered scoring; see score_rational_anchored."""
+    """Middle-anchored tempered scoring; see score_rational_anchored.
+
+    The degeneracy guard (is_informative_triple) applies: triples whose AM
+    and HM are closer than epsilon contribute to no count. Unguarded counts
+    are recorded in the *_raw fields."""
     scale = canonical_cents_scale(cents)
-    p = s = g = 0
+    p = s = g = p_raw = s_raw = g_raw = dropped = 0
     for b in scale:
         lows = [r for pc in scale if (r := _cents_rep_below(pc, b)) is not None]
         highs = [r for pc in scale if (r := _cents_rep_above(pc, b)) is not None]
         for a in lows:
             for c in highs:
                 labels = classify_cents_triple(a, b, c, epsilon_cents)
+                if not labels:
+                    continue
+                informative = is_informative_triple(a, c, epsilon_cents)
                 if PROPORTIONAL in labels:
-                    p += 1
+                    p_raw += 1
+                    p += informative
                 if SUBCONTRARY in labels:
-                    s += 1
+                    s_raw += 1
+                    s += informative
                 if GEOMETRIC in labels:
-                    g += 1
+                    g_raw += 1
+                    g += informative
+                if not informative:
+                    dropped += len(labels)
     return _result(p, s, g, path="cents", convention=ANCHORED_CONVENTION,
                    epsilon_cents=epsilon_cents, scale=scale,
-                   sample_size=len(scale))
+                   sample_size=len(scale),
+                   p_raw=p_raw, s_raw=s_raw, g_raw=g_raw,
+                   degenerate_dropped=dropped)
 
 
 # ---------------------------------------------------------------------------
