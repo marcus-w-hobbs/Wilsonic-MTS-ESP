@@ -70,3 +70,29 @@ transposition and not the dual — an unexplained exact tie worth a look). Artif
 the top 10 — ready for the HEX-002 ear check in Wilsonic.
 
 **Kept.** Run: `python3.12 hex001.py`, deterministic, re-runnable.
+
+## 2026-07-20 — CROSSVAL-001: executable receipts for the C++ (entry before run)
+
+**Hypothesis:** (1) the real compiled Microtone/Fraction code agrees
+bit-for-bit with a pure-Python float32 mirror on octave reduction and CPS
+products, including the predicted boundary anomaly where the rational
+(2^25−1)/2^24 reduces OUTSIDE [1,2); (2) the plugin triad analyzer's
+counts diverge from the exact scorer in ways fully attributable to its
+three known deviations (absolute linear tolerance — register-dependent in
+cents, 9/8..4/3 interval filter, one-octave+wrap domain).
+
+**Result:** (1) CONFIRMED, 27/27 cases bit-exact (results/crossval001.json),
+including the boundary anomaly — the real plugin code reduces
+(2^25−1)/2^24 to 33554431/33554432 < 1, an exact-rational violation of
+[1,2) masked by float rounding. (2) CONFIRMED with a stronger headline
+than expected: the plugin analyzer finds only (2,2) of the 1-3-5-7
+hexany's (8,8) triad classes — 0/70 hexanies agree with exact counts.
+Attribution: interval filter accounts for (2,2)→(4,2); the rest is the
+restricted domain + pitch-class dedup. Tolerance is 0.865¢ at f=1 vs
+0.433¢ at f≈2 (register-dependent by 2×). Mirror pinned by hermetic
+goldens (tests/test_cpp_mirror.py); full suite now 40/40. Gaps that
+remain ungrounded are enumerated in VERIFICATION.md (chief: the real
+analyzer and Brun zigzag have never executed under test — closing those
+requires touching the plugin test target, Marcus's call).
+
+**Kept.** Runs: `make -C cpp_receipts run`, `python3.12 crossval001.py`.

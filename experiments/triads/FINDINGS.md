@@ -15,6 +15,21 @@ scatter for CPS is measurement noise, not signal. Worth proving formally;
 also predicts eikosany (CPS(6,3), self-inverse) lands exactly on the
 diagonal, testable in Phase 3.
 
+**2026-07-20 — The plugin's triad badges understate scales' triad content
+by ~4×, with a register-dependent tolerance.** Bit-exact mirroring of
+`_analyzeProportionalTriads` (TuningImp.cpp:782–857) against the exact
+scorer shows the analyzer reports (2,2) for the 1-3-5-7 hexany where the
+true class counts are (8,8); zero of 70 hexanies agree
+(results/crossval001.json, link2). Three causes, each now quantified: the
+9/8–4/3 interval filter (by design — only compact triads get UI badges),
+the one-octave+wrap search domain, and a tolerance of 0.0005 in absolute
+linear frequency, which is 0.865¢ for triads rooted at 1/1 but only
+0.433¢ near the octave — the plugin is twice as strict at the top of the
+octave as the bottom, which nothing in the music theory motivates. None
+of this affects the plugin's sound; it affects which triads get drawn.
+If the C++ ever gets revised toward the exact scorer's semantics, the
+receipt chain here is the regression baseline.
+
 **2026-07-20 — 9-bearing seed sets outrank 1-3-5-7, via geometric
 freebies.** The hexany sweep's top scorers are 1-3-5-9 and 1-3-9-15
 (P=S=9, and G=4 each) vs 1-3-5-7's P=S=8, G=0. Seeds containing {1,3,9}
