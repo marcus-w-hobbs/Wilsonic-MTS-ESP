@@ -31,6 +31,9 @@ Grades, weakest to strongest:
 | Plugin analyzer massively undercounts vs exact scorer: hexany 1-3-5-7 reports (1,2) vs exact (8,8) anchored; attribution: wrap-drop (1,2)→loop (2,2)→no interval filter (4,2)→domain/dedup → exact | EXECUTED | results/crossval001.json link2 (plugin/loop/no-filter columns), all 70 hexanies + segment |
 | Analyzer tolerance is register-dependent in cents: 0.865¢ at f=1 vs 0.433¢ at f≈2 | EXECUTED (arithmetic) | crossval001 tolerance_register_table |
 | Scorer conventions (duality, transposition variance/invariance) | EXECUTED | tests/test_scorer.py goldens; TRIAD-004a/b/c |
+| Anchored is exactly self-dual and transposition-invariant; window is neither | **EXECUTED** | tests/test_scorer.py; both window counterexamples frozen as goldens (segment 8..16, hexany×3). Decision 1, 2026-07-21 |
+| ε-degeneracy guard: below the AM/HM separation threshold a tempered triple cannot be resolved as proportional vs subcontrary; unguarded, a 1¢ generator is the global optimum of min(P,S) for N=5–10 at every ε | **EXECUTED** | probe over mos001_coarse.jsonl × 4 ε (3 rejected alternatives measured, LOG.md decision 2); span thresholds + micro-generator collapse frozen in tests/test_scorer.py; re-ranked results/mos001_fine.jsonl |
+| Scorer freeze enforcement actually fires | **EXECUTED** | check_freeze.sh verified in BOTH directions: A passes clean / fails tampered; B passes 3 real commits / catches a marked commit touching scorer.py in a throwaway clone (LOG.md decision 3) |
 
 ## Known gaps (do not treat these as grounded)
 

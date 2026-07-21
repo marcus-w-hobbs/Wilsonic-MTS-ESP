@@ -216,6 +216,23 @@ strategy*, not on parameters:
   version is tagged; archive records the scorer version that produced each
   entry.
 
+`[IMPLEMENTED 2026-07-21 — scorer FROZEN at v1.0.0, tag scorer-v1.0.0.`
+Enforcement is A + B (Marcus's call), in `experiments/triads/check_freeze.sh`,
+run by the `scorer_freeze` CI job (which also runs the 64-test Python suite —
+the repo had no Python CI job before this):
+**A. hash pin** — `scorer.sha256` pins the file's SHA-256; any edit fails CI
+until a human refreshes the pin. Fails closed regardless of commit message,
+author, or branch. This is stronger than the check specified above, which
+keys on the commit being *marked* as agent-loop work.
+**B. agent-loop marker** — the check as originally specified: commits carrying
+`[agent-loop]` or `Agent-Loop: true` fail if they touch scorer.py. Retained
+because it catches the history even when the working tree has been restored,
+which A alone would pass.
+Verified in both directions before adoption (LOG.md, decision 3). Known limit,
+stated at decision time: neither check stops an agent that also rewrites the
+pin. The guarantee is that a scorer change can never be *silent*; branch
+protection on main is the only harder backstop.`]`
+
 ### 3.3 Repo layout (new, additive — touches no existing plugin code)
 
 ```

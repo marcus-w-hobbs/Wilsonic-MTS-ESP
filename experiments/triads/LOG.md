@@ -1,7 +1,9 @@
 # Experiment log — triad optimization harness
 
 Format: hypothesis → result → kept/reverted. Entry written BEFORE each run.
-Scorer freeze status: **v0.1.0 DRAFT — not yet approved by Marcus.**
+Scorer freeze status: **v1.0.0 FROZEN 2026-07-21 by Marcus.** Changes to
+scorer.py now require his explicit approval, enforced by the `scorer_freeze`
+CI job (hash pin + agent-loop marker; see check_freeze.sh).
 
 ## 2026-07-20 — §5 repo verification (pre-Phase-0)
 
@@ -307,3 +309,37 @@ ad hoc.
 **Kept.** Runs: `python3.12 mos001.py --step 0.1 --out
 results/mos001_fine.jsonl` (3m47s), `python3.12 mos_report.py
 results/mos001_fine.jsonl [--epsilon-table]`.
+
+## 2026-07-21 — DECISION 3: scorer FROZEN at v1.0.0 (Marcus)
+
+**Decision:** freeze scorer.py at 1.0.0, embodying decisions 1 and 2.
+Enforcement mechanism: **A + B** (Marcus's call).
+
+- **A — hash pin.** `scorer.sha256` pins the file's SHA-256; CI fails on
+  any edit until a human refreshes the pin. Fails closed regardless of
+  commit message, author or branch.
+- **B — agent-loop marker.** Commits whose message carries `[agent-loop]`
+  or `Agent-Loop: true` fail if their diff touches scorer.py.
+
+Both directions verified, not just asserted: A passes clean and fails on a
+tampered file; B passes over real unmarked history (3 commits scanned) and,
+in a throwaway clone, caught a marked commit that touched scorer.py **even
+after the working tree had been restored** — the case A alone would pass.
+That is the complementarity: A catches the state, B catches the history.
+
+**Honest limit, stated at decision time:** neither check stops an agent
+that also rewrites the pin file. The guarantee is that a scorer change can
+never be SILENT — the pin diff is one loud line in review. Branch
+protection on main is the only harder backstop, and that is Marcus's to
+enable.
+
+**Applied:** SCORER_VERSION 0.1.0 → 1.0.0 with a version-history block in
+the docstring; `check_freeze.sh` (runnable locally: `./check_freeze.sh` for
+A alone, `./check_freeze.sh <base> <head>` for both); `scorer.sha256`;
+new `scorer_freeze` CI job — the repo had **no Python job at all** before,
+so the 64-test suite was never running in CI. Tag `scorer-v1.0.0`.
+Two goldens pin SCORER_VERSION so a bump cannot happen without a
+deliberate test edit. Suite 62 → 64/64.
+
+**From here on:** any scorer change I want goes to Marcus as a proposal
+first, whatever the ear checks turn up.

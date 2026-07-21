@@ -340,6 +340,21 @@ class TestDegeneracyGuard(unittest.TestCase):
                 self.assertEqual(r.geometric, r.geometric_raw)
 
 
+class TestFrozenVersion(unittest.TestCase):
+    """scorer.py is FROZEN at 1.0.0 (Marcus, 2026-07-21). This test exists so
+    a version bump cannot happen without a deliberate edit here — pair it with
+    refreshing scorer.sha256 and tagging scorer-vX.Y.Z."""
+
+    def test_scorer_version_is_pinned(self):
+        self.assertEqual(sc.SCORER_VERSION, "1.0.0")
+
+    def test_results_carry_the_frozen_version(self):
+        self.assertEqual(sc.score(HEXANY_1357).scorer_version, "1.0.0")
+        self.assertEqual(
+            sc.score_tempered(TWELVE_EDO, 2.0).scorer_version, "1.0.0"
+        )
+
+
 class TestPrimaryConvention(unittest.TestCase):
     """The anchored convention is primary (Marcus, 2026-07-21). These pin the
     dispatch so a future edit cannot silently repoint it."""

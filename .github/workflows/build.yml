@@ -2,6 +2,28 @@ name: build
 run-name: build
 on: [push]
 jobs:
+  # The triad-optimization harness (experiments/triads) verifies itself here:
+  # its Python suite, plus the scorer freeze checks from plan §3.2. scorer.py
+  # is the frozen verifier of the agent loop — an optimizer that can edit its
+  # own verifier is not being verified. See experiments/triads/check_freeze.sh.
+  scorer_freeze:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # check B scans the pushed commit range
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scorer freeze checks (hash pin + agent-loop marker)
+        run: ./check_freeze.sh "${{ github.event.before }}" "${{ github.sha }}"
+        working-directory: experiments/triads
+      - name: Triad harness test suite
+        run: python -m unittest discover -s tests -v
+        working-directory: experiments/triads
+
   build_linux:
     runs-on: ubuntu-22.04
     steps:

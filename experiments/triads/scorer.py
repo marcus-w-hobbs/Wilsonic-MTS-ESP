@@ -1,10 +1,30 @@
 """Frozen triad scorer for the Wilson triad-optimization harness.
 
+*** FROZEN at v1.0.0 on 2026-07-21 by Marcus. ***
+
 This module is the FROZEN VERIFIER of the experiment loop described in
-plans/triad-optimization-loop.md. After human approval of its initial
-version, agent-loop commits must never modify this file; desired changes
-are flagged to Marcus instead. Every archived result records
-SCORER_VERSION and (for the tempered path) the epsilon it was scored under.
+plans/triad-optimization-loop.md §3.2. Agent-loop commits must never
+modify this file. Desired changes are flagged to Marcus and wait for his
+explicit approval — there is no exception for "obvious" fixes, because a
+verifier the optimizer can edit is not a verifier.
+
+Enforcement (see check_freeze.sh, run by the scorer-freeze CI job):
+  A. scorer.sha256 pins this file's SHA-256; any edit fails CI until a
+     human updates the pin. Fails closed regardless of commit message.
+  B. commits marked as agent-loop work fail if they touch this file.
+Neither can stop an agent that also rewrites the pin; what they buy is
+that a scorer change can never be SILENT. The pin diff is one loud line
+in review.
+
+Every archived result records SCORER_VERSION and (for the tempered path)
+the epsilon it was scored under, so entries from different scorer
+versions never get compared by accident.
+
+Version history:
+  0.1.0  draft; two sampling conventions, no primary chosen
+  1.0.0  FROZEN. Anchored convention primary (decision 1); tempered-path
+         epsilon-degeneracy guard (decision 2); score()/score_tempered()
+         entry points; raw counts recorded alongside guarded ones.
 
 Design rules (see plan §1):
 - All triad math happens in FREQUENCY-RATIO space. An arithmetic mean of
@@ -88,7 +108,7 @@ from itertools import combinations
 from math import log2
 from typing import Iterable, Optional, Union
 
-SCORER_VERSION = "0.1.0"
+SCORER_VERSION = "1.0.0"
 DEFAULT_EPSILON_CENTS = 2.0
 
 WINDOW_CONVENTION = "two-octave-window"
