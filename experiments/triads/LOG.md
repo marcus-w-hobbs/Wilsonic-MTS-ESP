@@ -49,3 +49,24 @@ Tests: 29/29 pass (`python3.12 -m unittest discover -s tests`), covering
 TRIAD-001..004 plus transposition invariance and provenance fields.
 
 **Kept.**
+
+## 2026-07-20 — HEX-001: exhaustive hexany sweep (entry written before run)
+
+**Hypothesis:** among all 70 hexanies from odd seeds ≤ 15, the classic
+1-3-5-7 ranks at or near the top of the 6-note bin on min(P,S); CPS
+inversion symmetry keeps all hexanies near the P = S diagonal under the
+anchored convention.
+
+**Result:** CONFIRMED and sharpened. 70 hexanies scored (68 six-note, 2
+five-note from product collisions). Under the anchored convention every
+hexany sits EXACTLY on P = S — not near the diagonal, on it (see
+FINDINGS.md). 1-3-5-7 ranks 3/68 (anchored, P=S=8) and 4/68 (window).
+The winners are 9-bearing seed sets: 1-3-5-9 (P=S=9, G=4) and 1-3-9-15
+(P=S=9, G=4) — the 3² inside the seeds buys extra arithmetic chains plus
+four geometric triads. 3-5-7-15 ties 1-3-5-7 on every count under both
+conventions, yet is a genuinely different scale (checked: not a
+transposition and not the dual — an unexplained exact tie worth a look). Artifacts: results/hex001.jsonl (full provenance: scorer
+0.1.0, commit 277eb519, exact products per entry), results/scl/*.scl for
+the top 10 — ready for the HEX-002 ear check in Wilsonic.
+
+**Kept.** Run: `python3.12 hex001.py`, deterministic, re-runnable.
