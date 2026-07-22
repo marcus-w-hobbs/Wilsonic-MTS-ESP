@@ -218,9 +218,19 @@ Range<float> WilsonicMidiKeyboardComponent::getKeyPosition(int midiNoteNumber, f
     return { 0, 1 };
 }
 
+// Genus Space: the keyboard operates in "slot" space; when a keyboard subset is
+// active a slot maps to its note number in the full table, otherwise identity
+int WilsonicMidiKeyboardComponent::_slotToMidiNote(int slot) const {
+    if (slot < 0) {
+        return slot;
+    }
+
+    return _processor.getAppTuningModel()->keyboardSlotToNoteNumber(slot);
+}
+
 Range<float> WilsonicMidiKeyboardComponent::_getKeyPositionMicrotonal(int midiNoteNumber, float targetKeyWidth) const {
     jassert(midiNoteNumber >= 0 && midiNoteNumber < static_cast<int>(WilsonicProcessorConstants::numMidiNotes));
-    auto npo = static_cast<int>(_processor.getAppTuningModel()->getTuningTableNPO());
+    auto npo = static_cast<int>(_processor.getAppTuningModel()->getKeyboardNPO());
     jassert(npo > 0);
     auto const octave = midiNoteNumber / npo;
     auto const note   = midiNoteNumber % npo;
@@ -341,11 +351,11 @@ int WilsonicMidiKeyboardComponent::_remappedXYToNote(Point<float> pos, float& mo
 }
 
 int WilsonicMidiKeyboardComponent::_remappedXYToNoteMicrotonal(Point<float> pos, float& mousePositionVelocity) const {
-    auto const npo = static_cast<int>(_processor.getAppTuningModel()->getTuningTableNPO());
+    auto const npo = static_cast<int>(_processor.getAppTuningModel()->getKeyboardNPO());
     for (int octaveStart = npo * (_rangeStart / npo); octaveStart <= _rangeEnd; octaveStart += npo) {
         for (int i = 0; i < npo; ++i) {
             auto const note = octaveStart + i;
-            if (note >= _rangeStart && note <= _rangeEnd) {
+            if (note >= _rangeStart && note <= _rangeEnd && _slotToMidiNote(note) >= 0) {
                 if (_getKeyPos(note).contains(pos.x - _xOffset)) {
                     auto const whiteNoteLength = (_orientation == horizontalKeyboard) ? getHeight() : getWidth();
                     mousePositionVelocity = jmax(0.f, pos.y / (float) whiteNoteLength);
@@ -595,7 +605,7 @@ void WilsonicMidiKeyboardComponent::_resetAnyKeysInUse() {
     for (int i = _mouseDownNotes.size(); --i >= 0;) {
         auto noteDown = _mouseDownNotes.getUnchecked(i);
         if (noteDown >= 0) {
-            _processor.getKeyboardState()->noteOff(_midiChannel, noteDown, 0.0f);
+            _processor.getKeyboardState()->noteOff(_midiChannel, _slotToMidiNote(noteDown), 0.0f);
             _mouseDownNotes.set(i, -1);
         }
         _mouseOverNotes.set(i, -1);
@@ -624,18 +634,18 @@ void WilsonicMidiKeyboardComponent::_updateNoteUnderMouse(Point<float> pos, bool
             if (oldNoteDown >= 0) {
                 _mouseDownNotes.set(fingerNum, -1);
                 if (!_mouseDownNotes.contains(oldNoteDown))
-                    _processor.getKeyboardState()->noteOff(_midiChannel, oldNoteDown, eventVelocity);
+                    _processor.getKeyboardState()->noteOff(_midiChannel, _slotToMidiNote(oldNoteDown), eventVelocity);
             }
 
-            if (newNote >= 0 && !_mouseDownNotes.contains(newNote)) {
-                _processor.getKeyboardState()->noteOn(_midiChannel, newNote, eventVelocity);
+            if (newNote >= 0 && !_mouseDownNotes.contains(newNote) && _slotToMidiNote(newNote) >= 0) {
+                _processor.getKeyboardState()->noteOn(_midiChannel, _slotToMidiNote(newNote), eventVelocity);
                 _mouseDownNotes.set(fingerNum, newNote);
             }
         }
     } else if (oldNoteDown >= 0) {
         _mouseDownNotes.set(fingerNum, -1);
         if (!_mouseDownNotes.contains(oldNoteDown))
-            _processor.getKeyboardState()->noteOff(_midiChannel, oldNoteDown, eventVelocity);
+            _processor.getKeyboardState()->noteOff(_midiChannel, _slotToMidiNote(oldNoteDown), eventVelocity);
     }
 }
 
@@ -702,7 +712,8 @@ void WilsonicMidiKeyboardComponent::timerCallback() {
     if (_shouldCheckState) {
         _shouldCheckState = false;
         for (int i = _rangeStart; i <= _rangeEnd; ++i) {
-            bool const isOn = _processor.getKeyboardState()->isNoteOnForChannels(_midiInChannelMask, i);
+            auto const midiNote = _slotToMidiNote(i);
+            bool const isOn = midiNote >= 0 && _processor.getKeyboardState()->isNoteOnForChannels(_midiInChannelMask, midiNote);
             if (_keysCurrentlyDrawnDown[i] != isOn) {
                 _keysCurrentlyDrawnDown.setBit(i, isOn);
                 _repaintNote(i);

@@ -41,6 +41,16 @@ EulerGenusComponentV2::EulerGenusComponentV2(WilsonicProcessor& processor)
     _seedSliderComponent->setSliderAtIndex(6, "G", 1.f, [] (float) {;});
     _seedSliderComponent->setSliderAtIndex(7, "H", 1.f, [] (float) {;});
 
+    // Genus Space toggle: automatable; when on, the drill-path root CPS(6,k)
+    // remains the global tuning table/MIDI mapping while drilling into subsets
+    _genusSpaceToggle.setButtonText("Genus Space");
+    _genusSpaceToggle.setTooltip("Keep the master set as the global tuning table and MIDI mapping while exploring subsets.\nThe keyboard shows the selected subset mapped into the master's MIDI space.");
+    addAndMakeVisible(_genusSpaceToggle);
+    _genusSpaceAttachment = make_unique<AudioProcessorValueTreeState::ButtonAttachment>
+    (*_processor.getApvts(),
+     EulerGenusModel::getEulerGenus6GenusSpaceParameterID().getParamID(),
+     _genusSpaceToggle);
+
     // parent and subsets
     _mainElement = make_shared<CPSElementComponentV2>(_processor);
     addAndMakeVisible(*_mainElement);
@@ -135,8 +145,10 @@ void EulerGenusComponentV2::resized()
     auto const margin = WilsonicAppSkin::tuningComponentInteriorMargin;
     auto area = getLocalBounds().reduced(static_cast<int>(margin));
 
-    // Seeds
+    // Seeds, with the Genus Space toggle on the right
     auto seedsArea = area.removeFromTop(static_cast<int>(WilsonicAppSkin::seedSliderHeight));
+    auto const genusSpaceToggleWidth = 140;
+    _genusSpaceToggle.setBounds(seedsArea.removeFromRight(genusSpaceToggleWidth));
     _seedSliderComponent->setBounds(seedsArea);
 
     // y margin between combo box and seeds

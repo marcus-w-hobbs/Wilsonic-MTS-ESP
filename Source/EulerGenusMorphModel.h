@@ -49,6 +49,7 @@ private:
     void _tuningChangedUpdateUI(); // sends notification to UI Component to query current ViewModel
     void _selectDAWKey(DAWKey); // heavy lifter...called in host callback
     void _setTuning(shared_ptr<Tuning>); // helper called by _selectDAWKey
+    shared_ptr<CPSTuningBase> _genusSpaceRootTuning(); // mirrors EulerGenusModel::_genusSpaceRootTuning
     void _updateCurrentViewModelTuning(); // update current view model's parent tuning when the host changes ABCDEF
     void _updateCurrentViewModelTuningSelectionState(); // update current view model's tuning's selection state
 
@@ -88,6 +89,9 @@ private:
     int _octaveMiddleC = 0.f;
     int _npoOverride = 12;
     bool _npoOverrideEnable = false;
+
+    // Genus Space (mirrors EulerGenusModel so favorites morph what was heard)
+    bool _genusSpace = false;
 
     // codegen
 

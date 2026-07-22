@@ -81,14 +81,16 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
     auto lineColour = findColour(keySeparatorLineColourId); // Colour for the lines
     auto textColour = findColour(textLabelColourId); // Colour for the text
 
-    // Iterate over all the notes
+    // Iterate over all the keyboard slots (slot == note number unless a Genus
+    // Space keyboard subset maps slots into the full table's note numbers)
     for (int noteNum = 0; noteNum < static_cast<int>(WilsonicProcessorConstants::numMidiNotes); noteNum++) {
-        // If the note is within the range, draw the microtonal note
-        if (noteNum >= _rangeStart && noteNum <= _rangeEnd) {
+        // If the slot is within the range and maps to a note, draw the microtonal note
+        auto const midiNote = _slotToMidiNote(noteNum);
+        if (noteNum >= _rangeStart && noteNum <= _rangeEnd && midiNote >= 0) {
             drawMicrotonalNote(noteNum,
                                 g,
                                 getRectangleForKey(noteNum),
-                                _processor.getKeyboardState()->isNoteOnForChannels(_midiInChannelMask, noteNum),
+                                _processor.getKeyboardState()->isNoteOnForChannels(_midiInChannelMask, midiNote),
                                 _mouseOverNotes.contains(noteNum),
                                 lineColour,
                                 textColour);
@@ -133,7 +135,9 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
     }
 
     // If the proportional triads are to be shown, draw the dots and lines of all triads on the keyboard
-    if (_processor.restoreShowProportionalTriads()) {
+    // (skipped while a Genus Space keyboard subset is active: triad positions
+    // are computed in full-table note numbers, not compacted slots)
+    if (_processor.restoreShowProportionalTriads() && !_processor.getAppTuningModel()->keyboardSubsetActive()) {
         auto const atm = _processor.getAppTuningModel();
         
         // Assume numProportional + numSubcontrary = numAllTriads.  i.e., no geometric triads
@@ -446,6 +450,14 @@ void WilsonicMidiKeyboardComponent::drawMicrotonalNote
   Colour textColor
   )
 {
+    // Genus Space: the incoming value is a keyboard slot; all tuning-table
+    // lookups below use its mapped note number (identity when no subset)
+    auto const mappedNoteNumber = _slotToMidiNote(midiNoteNumber);
+    if (mappedNoteNumber < 0) {
+        return;
+    }
+    midiNoteNumber = mappedNoteNumber;
+
     // Define layout parameters
     auto const horizontalScale = 1.f; // Scale factor for horizontal dimension
     auto const globalMargin = 2.f; // Global margin for all elements

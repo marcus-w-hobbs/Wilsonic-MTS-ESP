@@ -94,13 +94,30 @@ void EulerGenusModel::parameterChanged(const String& parameterID, float newValue
         _F->setFrequencyValue(newValue);
         _F->setShortDescriptionText2(Microtone::getFrequencyValueDescription(newValue));
         _F->setShortDescriptionText3(Microtone::getFrequencyValueDescription(newValue));
+    } else if(parameterID == getEulerGenus6GenusSpaceParameterID().getParamID()) {
+        _genusSpace = newValue > 0.5f;
+        if(_currentViewModel != nullptr) {
+            _selectDAWKey(_currentViewModel->dawKey); // re-resolve sounding tuning under the new mode
+        }
+
+        // _selectDAWKey() calls _updateCurrentViewModelTuning() and uiNeedsUpdate() so return
+        return;
     } else {
         jassertfalse;
     }
 
     // lazily update the right tuning
     _updateCurrentViewModelTuning();
-    
+
+    // Genus Space: the sounding tuning is the drill-path root, which may not be
+    // the current page's parent, so refresh it with the new seeds too
+    if(_genusSpace && _currentViewModel != nullptr) {
+        auto const root = _genusSpaceRootTuning();
+        if(root != nullptr) {
+            _setTuning(root);
+        }
+    }
+
     // mark UI needs updating
     uiNeedsUpdate();
 }
@@ -171,6 +188,24 @@ void EulerGenusModel::_selectDAWKey(DAWKey daw_key) {
                 _setTuning(s1);
                 break;
             }
+        }
+    }
+
+    // Genus Space: the drill-path root CPS(6,k) remains the sounding tuning;
+    // the selection above becomes a keyboard view into the root's MIDI space
+    _genusSpaceSubsetDescriptions.clear();
+    if(_genusSpace) {
+        auto const root = _genusSpaceRootTuning();
+        if(root != nullptr) {
+            auto const selected = _currentTuning;
+            if(selected != nullptr && selected != root &&
+               selected->getProcessedArrayCount() < root->getProcessedArrayCount()) {
+                auto selectedArray = selected->getProcessedArray();
+                for(unsigned long i = 0; i < selectedArray.count(); i++) {
+                    _genusSpaceSubsetDescriptions.push_back(selectedArray.microtoneAtIndex(i)->getShortDescriptionText());
+                }
+            }
+            _setTuning(root);
         }
     }
 
@@ -319,6 +354,25 @@ float EulerGenusModel::uiGetF()
 {
     auto& param = *_apvts->getRawParameterValue(getEulerGenus6FParameterID().getParamID());
     return param.load();
+}
+
+bool EulerGenusModel::uiGetGenusSpace()
+{
+    auto& param = *_apvts->getRawParameterValue(getEulerGenus6GenusSpaceParameterID().getParamID());
+    return param.load() > 0.5f;
+}
+
+void EulerGenusModel::uiSetGenusSpace(bool shouldEnable)
+{
+    auto key = getEulerGenus6GenusSpaceParameterID().getParamID();
+    auto param = _apvts->getParameter(key);
+    param->setValueNotifyingHost(shouldEnable ? 1.f : 0.f);
+}
+
+const vector<string> EulerGenusModel::getGenusSpaceSubsetDescriptions()
+{
+    const ScopedLock sl(_lock);
+    return _genusSpaceSubsetDescriptions;
 }
 
 // "select"
@@ -599,6 +653,43 @@ void EulerGenusModel::_tuningChangedUpdateUI() {
 // trivial helper
 void EulerGenusModel::_setTuning(shared_ptr<Tuning> tuning) {
     _currentTuning = tuning;
+}
+
+// resolves the drill-path root CPS(6,k) page master for the current view model,
+// refreshing it with the current seeds when it isn't the current page's parent
+shared_ptr<CPSTuningBase> EulerGenusModel::_genusSpaceRootTuning() {
+    jassert(_currentViewModel != nullptr);
+    auto isRank6 = [](CPS_Class type) {
+        return type == CPS_Class::CPS_6_1 || type == CPS_Class::CPS_6_2 ||
+               type == CPS_Class::CPS_6_3 || type == CPS_Class::CPS_6_4 ||
+               type == CPS_Class::CPS_6_5 || type == CPS_Class::CPS_6_6;
+    };
+    auto vm = _currentViewModel;
+
+    // at the Euler Genus page the drill target page's master is the root
+    if(vm->parentTuning->isEulerGenusTuningType()) {
+        vm = _getViewModel(vm->dawDrillKey);
+    }
+
+    // walk "back" until the page master is a rank-level CPS(6,k)
+    auto guard = 0;
+    while(vm != nullptr && !isRank6(vm->parentTuning->getTuningType()) && guard++ < 8) {
+        vm = _getViewModel(vm->dawBackKey);
+    }
+    if(vm == nullptr || !isRank6(vm->parentTuning->getTuningType())) {
+        jassertfalse; // every drill path descends from a CPS(6,k) page
+
+        return nullptr;
+    }
+
+    // refresh the root with the current seeds when it isn't the current page's parent
+    if(vm != _currentViewModel) {
+        auto updateRoot = (*_tuningUpdateMap)[vm->parentTuningKey];
+        jassert(updateRoot != nullptr);
+        updateRoot();
+    }
+
+    return vm->parentTuning;
 }
 
 // CODEGEN
