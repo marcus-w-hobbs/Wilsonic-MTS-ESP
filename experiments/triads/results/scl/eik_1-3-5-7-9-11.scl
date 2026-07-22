@@ -1,4 +1,4 @@
-! eikosany 1-3-5-7-9-11  anchored P=77 S=77 (scorer 1.0.0, 8e8a3386)
+! eikosany 1-3-5-7-9-11  anchored P=57 S=57 (scorer 1.1.0, 16a79137)
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -11,10 +11,10 @@
 !   F = 11
 !   APVTS: CPSCALE=6_3, CPSA=1, CPSB=3, CPSC=5, CPSD=7, CPSE=9, CPSF=11
 !   Notation: canonical CPS(6,3) = 6 seeds choose 3; Erv writes this 3)6.
-! SCORE: P=77 S=77 G=12  [anchored convention]
-! PROVENANCE: scorer 1.0.0, commit 8e8a3386, EIK-001 eikosany ranking
+! SCORE: P=57 S=57 G=6  [anchored convention]
+! PROVENANCE: scorer 1.1.0, commit 16a79137, EIK-001 eikosany ranking
 !
-eikosany 1-3-5-7-9-11  anchored P=77 S=77 (scorer 1.0.0, 8e8a3386)
+eikosany 1-3-5-7-9-11  anchored P=57 S=57 (scorer 1.1.0, 16a79137)
  20
 !
  45/44

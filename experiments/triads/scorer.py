@@ -1,6 +1,6 @@
 """Frozen triad scorer for the Wilson triad-optimization harness.
 
-*** FROZEN at v1.0.0 on 2026-07-21 by Marcus. ***
+*** FROZEN at v1.1.0 on 2026-07-21 by Marcus. ***
 
 This module is the FROZEN VERIFIER of the experiment loop described in
 plans/triad-optimization-loop.md §3.2. Agent-loop commits must never
@@ -25,6 +25,22 @@ Version history:
   1.0.0  FROZEN. Anchored convention primary (decision 1); tempered-path
          epsilon-degeneracy guard (decision 2); score()/score_tempered()
          entry points; raw counts recorded alongside guarded ones.
+  1.1.0  FROZEN. Deliberate unfreeze, approved by Marcus after the ear
+         check validated the classifier. Triads must fit WITHIN AN OCTAVE
+         (DEFAULT_MAX_SPAN); pass max_span=None to reproduce 1.0.0. Counts
+         drop ~25-30% and rankings move materially (only 2/68 hexany
+         positions keep their order), so 1.0.0 and 1.1.0 results must
+         never be compared -- which is why every record carries the
+         version and now also max_span.
+
+EAR-CHECK STATUS (2026-07-21, Marcus, decades of listening): the
+CLASSIFIER is validated -- proportional and subcontrary triads audibly
+lock in, and the CPS sets this harness surfaced are the intended
+aesthetic. The AGGREGATOR is not: Marcus wants P-heavy AND S-heavy AND
+G-heavy scales equally, so min(P, S) is NOT the ranking to optimize. It
+remains recorded as score_min for continuity, but the archive's balance
+buckets plus per-bucket lenses are the reporting contract. Do not treat
+score_min as "the" answer.
 
 Design rules (see plan §1):
 - All triad math happens in FREQUENCY-RATIO space. An arithmetic mean of
@@ -108,8 +124,25 @@ from itertools import combinations
 from math import log2
 from typing import Iterable, Optional, Union
 
-SCORER_VERSION = "1.0.0"
+SCORER_VERSION = "1.1.0"
 DEFAULT_EPSILON_CENTS = 2.0
+
+#: Widest admissible triad, as the outer ratio c/a. Marcus's call 2026-07-21:
+#: a triad must fit WITHIN AN OCTAVE. 1:2:3 is arithmetically proportional but
+#: spans an octave and a fifth, and is not the sonority the plugin's analyzer
+#: (or the ear check that validated this metric) is about.
+#:
+#: Chosen over the plugin's OTHER restriction -- the 9/8..4/3 band on the
+#: third -- because a span limit commutes with inversion (the outer ratio is
+#: unchanged by it) while the third band does not: it constrains only the
+#: LOWER interval. Measured consequence of the band: the self-inverse eikosany
+#: scores (20,29) under it, breaking the P=S diagonal that is structurally
+#: exact. The band is a UI voicing rule, not a structural criterion.
+#:
+#: Verified for the span limit: exact self-duality (0 failures / 40 hexanies)
+#: and exact transposition invariance are both preserved.
+DEFAULT_MAX_SPAN = Fraction(2)          # rational path: c/a <= 2/1
+DEFAULT_MAX_SPAN_CENTS = 1200.0         # tempered path: c - a <= 1200c
 
 WINDOW_CONVENTION = "two-octave-window"
 ANCHORED_CONVENTION = "middle-anchored"
@@ -333,6 +366,9 @@ class ScoreResult:
     subcontrary_raw: int
     geometric_raw: int
     degenerate_dropped: int  # label-hits suppressed by the guard
+    #: Widest admissible outer ratio c/a (rational path) or span in cents
+    #: (tempered path); None when no limit was applied.
+    max_span: object
 
 
 def _result(p: int, s: int, g: int, *, path: str, convention: str,
@@ -340,7 +376,8 @@ def _result(p: int, s: int, g: int, *, path: str, convention: str,
             sample_size: int,
             p_raw: Optional[int] = None, s_raw: Optional[int] = None,
             g_raw: Optional[int] = None,
-            degenerate_dropped: int = 0) -> ScoreResult:
+            degenerate_dropped: int = 0,
+            max_span: object = None) -> ScoreResult:
     return ScoreResult(
         proportional=p,
         subcontrary=s,
@@ -357,6 +394,7 @@ def _result(p: int, s: int, g: int, *, path: str, convention: str,
         subcontrary_raw=s if s_raw is None else s_raw,
         geometric_raw=g if g_raw is None else g_raw,
         degenerate_dropped=degenerate_dropped,
+        max_span=max_span,
     )
 
 
@@ -366,12 +404,17 @@ def _result(p: int, s: int, g: int, *, path: str, convention: str,
 # ---------------------------------------------------------------------------
 
 
-def score_rational_window(ratios: Iterable[RationalLike]) -> ScoreResult:
+def score_rational_window(
+    ratios: Iterable[RationalLike],
+    max_span: Optional[Fraction] = DEFAULT_MAX_SPAN,
+) -> ScoreResult:
     """Score a JI scale with exact arithmetic over its two-octave sample."""
     scale = canonical_rational_scale(ratios)
     sample = two_octave_sample_rational(scale)
     p = s = g = 0
     for a, b, c in combinations(sample, 3):
+        if max_span is not None and c / a > max_span:
+            continue
         label = classify_rational_triple(a, b, c)
         if label == PROPORTIONAL:
             p += 1
@@ -380,12 +423,14 @@ def score_rational_window(ratios: Iterable[RationalLike]) -> ScoreResult:
         elif label == GEOMETRIC:
             g += 1
     return _result(p, s, g, path="rational", convention=WINDOW_CONVENTION,
-                   epsilon_cents=None, scale=scale, sample_size=len(sample))
+                   epsilon_cents=None, scale=scale, sample_size=len(sample),
+                   max_span=max_span)
 
 
 def score_cents_window(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
+    max_span_cents: Optional[float] = DEFAULT_MAX_SPAN_CENTS,
 ) -> ScoreResult:
     """Score a tempered scale (degrees in cents) over its two-octave sample.
 
@@ -395,6 +440,8 @@ def score_cents_window(
     sample = two_octave_sample_cents(scale)
     p = s = g = p_raw = s_raw = g_raw = dropped = 0
     for a, b, c in combinations(sample, 3):
+        if max_span_cents is not None and c - a > max_span_cents:
+            continue
         labels = classify_cents_triple(a, b, c, epsilon_cents)
         if not labels:
             continue
@@ -414,7 +461,7 @@ def score_cents_window(
                    epsilon_cents=epsilon_cents, scale=scale,
                    sample_size=len(sample),
                    p_raw=p_raw, s_raw=s_raw, g_raw=g_raw,
-                   degenerate_dropped=dropped)
+                   degenerate_dropped=dropped, max_span=max_span_cents)
 
 
 #: Back-compat aliases. Pre-2026-07-21 scripts and result files were written
@@ -444,10 +491,16 @@ def _shift_rational_into_open(x: Fraction, lo: Fraction, hi: Fraction) -> Option
     return r if lo < r < hi else None
 
 
-def score_rational_anchored(ratios: Iterable[RationalLike]) -> ScoreResult:
+def score_rational_anchored(
+    ratios: Iterable[RationalLike],
+    max_span: Optional[Fraction] = DEFAULT_MAX_SPAN,
+) -> ScoreResult:
     """Middle-anchored exact scoring: for each degree b in the canonical
     octave, classify (a, b, c) where a and c are the unique representatives
-    of every scale pitch class in (b/2, b) and (b, 2b) respectively."""
+    of every scale pitch class in (b/2, b) and (b, 2b) respectively.
+
+    Triads wider than max_span (outer ratio c/a) are not counted; pass None
+    to disable the limit and recover v1.0.0 behaviour."""
     scale = canonical_rational_scale(ratios)
     p = s = g = 0
     for b in scale:
@@ -459,6 +512,8 @@ def score_rational_anchored(ratios: Iterable[RationalLike]) -> ScoreResult:
                  if (r := _shift_rational_into_open(pc, b, two_b)) is not None]
         for a in lows:
             for c in highs:
+                if max_span is not None and c / a > max_span:
+                    continue
                 label = classify_rational_triple(a, b, c)
                 if label == PROPORTIONAL:
                     p += 1
@@ -468,7 +523,7 @@ def score_rational_anchored(ratios: Iterable[RationalLike]) -> ScoreResult:
                     g += 1
     return _result(p, s, g, path="rational", convention=ANCHORED_CONVENTION,
                    epsilon_cents=None, scale=scale,
-                   sample_size=len(scale))
+                   sample_size=len(scale), max_span=max_span)
 
 
 def _cents_rep_below(pitch_class: float, b: float) -> Optional[float]:
@@ -490,6 +545,7 @@ def _cents_rep_above(pitch_class: float, b: float) -> Optional[float]:
 def score_cents_anchored(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
+    max_span_cents: Optional[float] = DEFAULT_MAX_SPAN_CENTS,
 ) -> ScoreResult:
     """Middle-anchored tempered scoring; see score_rational_anchored.
 
@@ -503,6 +559,8 @@ def score_cents_anchored(
         highs = [r for pc in scale if (r := _cents_rep_above(pc, b)) is not None]
         for a in lows:
             for c in highs:
+                if max_span_cents is not None and c - a > max_span_cents:
+                    continue
                 labels = classify_cents_triple(a, b, c, epsilon_cents)
                 if not labels:
                     continue
@@ -522,7 +580,7 @@ def score_cents_anchored(
                    epsilon_cents=epsilon_cents, scale=scale,
                    sample_size=len(scale),
                    p_raw=p_raw, s_raw=s_raw, g_raw=g_raw,
-                   degenerate_dropped=dropped)
+                   degenerate_dropped=dropped, max_span=max_span_cents)
 
 
 # ---------------------------------------------------------------------------
@@ -530,18 +588,20 @@ def score_cents_anchored(
 # ---------------------------------------------------------------------------
 
 
-def score(ratios: Iterable[RationalLike]) -> ScoreResult:
+def score(ratios: Iterable[RationalLike],
+          max_span: Optional[Fraction] = DEFAULT_MAX_SPAN) -> ScoreResult:
     """Score a JI scale under the PRIMARY convention (middle-anchored).
 
     This is the entry point all new work should use; the result records
     `convention` so archives stay unambiguous if the primary ever changes.
     """
-    return score_rational_anchored(ratios)
+    return score_rational_anchored(ratios, max_span)
 
 
 def score_tempered(
     cents: Iterable[float],
     epsilon_cents: float = DEFAULT_EPSILON_CENTS,
+    max_span_cents: Optional[float] = DEFAULT_MAX_SPAN_CENTS,
 ) -> ScoreResult:
     """Score a tempered scale (cents) under the PRIMARY convention."""
-    return score_cents_anchored(cents, epsilon_cents)
+    return score_cents_anchored(cents, epsilon_cents, max_span_cents)

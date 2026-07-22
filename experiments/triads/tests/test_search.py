@@ -100,7 +100,7 @@ class TestEvaluate(unittest.TestCase):
         rec = search.evaluate(search.Candidate((1, 3, 5, 7), 2))
         self.assertEqual(rec["family"], "CPS(4,2)")
         self.assertEqual(rec["cardinality"], 6)
-        self.assertEqual((rec["P"], rec["S"]), (8, 8))
+        self.assertEqual((rec["P"], rec["S"]), (6, 6))  # v1.1.0 octave limit
         self.assertEqual(rec["balance"], "diagonal")
         self.assertEqual(rec["scorer_version"], sc.SCORER_VERSION)
         self.assertEqual(rec["convention"], sc.PRIMARY_CONVENTION)
@@ -112,3 +112,27 @@ class TestEvaluate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestGeometricAxis(unittest.TestCase):
+    """G is a diversity axis, not just a reported number (2026-07-21).
+
+    Without it, a G-heavy scale shares a cell with a P/S-heavier one and is
+    evicted by the min(P,S)-first elite rule before any report can see it.
+    """
+
+    def test_buckets(self):
+        self.assertEqual(search.geometric_bucket(9, 9, 0), "G0")
+        self.assertEqual(search.geometric_bucket(9, 9, 2), "G_low")
+        self.assertEqual(search.geometric_bucket(5, 5, 3), "G_mid")
+        self.assertEqual(search.geometric_bucket(5, 5, 4), "G_high")  # 0.4 is the edge
+        self.assertEqual(search.geometric_bucket(5, 5, 6), "G_high")
+        self.assertEqual(search.geometric_bucket(0, 0, 3), "G_only")
+
+    def test_g_heavy_scale_gets_its_own_cell(self):
+        rich = search.evaluate(search.Candidate((1, 3, 5, 9), 2))     # G-light
+        geo = search.evaluate(search.Candidate((1, 3, 9, 81), 2))     # G-heavy
+        self.assertGreater(geo["G"], rich["G"])
+        self.assertNotEqual(search.bin_key(rich), search.bin_key(geo),
+                            "G-heavy scales must not share a cell with "
+                            "P/S-heavy ones, or they get evicted unseen")

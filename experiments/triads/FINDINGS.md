@@ -127,3 +127,43 @@ felt-sense evidence about whether geometric-chain scales overcount as
 "proportional-rich" — exactly the loss-function alignment question
 Phase 1 exists to answer. Playable files: results/scl/hex_1-3-5-9.scl,
 hex_1-3-9-15.scl, hex_1-3-5-7.scl.
+
+**2026-07-21 — EAR CHECK PASSED: the classifier is validated, the
+aggregator is not.** Marcus, on decades of listening: proportional and
+subcontrary triads audibly "lock in", and the CPS sets this harness
+surfaced are exactly the aesthetic he listens for. That validates the
+things the scorer *measures* — the triad definitions, frequency-space
+means, and the tolerance regime — which is the gate plan §HEX-002 set
+before any agent loop was allowed to matter. It does NOT validate
+min(P, S): asked directly, he wants P-heavy AND S-heavy AND G-heavy
+scales equally, and a balance loss actively penalizes the first two. The
+classic pentadekany at (70,27) scores 27 under min(P,S) and would lose to
+a mediocre balanced scale at (30,30). Consequence: min(P,S) is demoted
+from "the loss" to one lens among several; the MAP-Elites balance axis
+(strong_P / skew_P / near_P / diagonal / near_S / …) becomes the
+reporting contract, with per-bucket winners under min(P,S), P+S+G, P, S,
+and G. Marcus's own eikosany {1,45,135,225,19,377} remains a puzzle: he
+still loves it at 22 against the classic's 77, and has no alternative
+axis to propose for it yet — the honest position is that both can be
+true and the metric is incomplete rather than wrong. Counterweight worth
+recording: he reports that MOS scales he likes have rarely scored badly
+here, so the metric does track something real.
+
+**2026-07-21 — Triads must fit within an octave (scorer v1.1.0).** Marcus:
+1:2:3 is arithmetically proportional but spans an octave and a fifth, and
+is not the sonority in question. The scorer now counts only triads whose
+outer ratio c/a ≤ 2/1. Chosen over the plugin's other restriction — the
+9/8..4/3 band on the third — because the span limit commutes with
+inversion (c/a is untouched by it) while the band constrains only the
+LOWER interval and therefore does not: measured, the self-inverse
+eikosany scores (20,29) under the band, breaking a diagonal that is
+structurally exact. That asymmetry is a third distinct defect in the
+plugin analyzer, alongside the wrap-drop and the register-dependent
+tolerance (issue #12). Verified for the span limit: exact self-duality (0
+failures / 40 hexanies) and exact transposition invariance both survive.
+Costs ~25-30% of counted triads and re-ranks materially — only 2/68
+hexany positions keep their order, and 1-3-5-7 slips from 3rd to 4th
+behind 1-3-7-9. Unexpected bonus: the span limit repairs the window
+convention's duality failure for P and S (segment 8..16 now swaps exactly,
+(36,6) → (6,36)); G still does not swap, and the window remains
+non-transposition-invariant, so anchored stays primary.

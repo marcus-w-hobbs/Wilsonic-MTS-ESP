@@ -1,4 +1,4 @@
-! hexany 3-5-11-15  P=7 S=7 min=7 (anchored, scorer 1.0.0, 8e8a3386)
+! hexany 3-5-11-15  P=5 S=5 min=5 (anchored, scorer 1.1.0, 16a79137)
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -10,10 +10,10 @@
 !   (E, F unused at this scale selection)
 !   APVTS: CPSCALE=4_2, CPSA=3, CPSB=5, CPSC=11, CPSD=15
 !   Notation: canonical CPS(4,2) = 4 seeds choose 2; Erv writes this 2)4.
-! SCORE: P=7 S=7 G=0 min(P,S)=7  [anchored convention]
-! PROVENANCE: scorer 1.0.0, commit 8e8a3386, HEX-001 exhaustive hexany sweep
+! SCORE: P=5 S=5 G=0 min(P,S)=5  [anchored convention]
+! PROVENANCE: scorer 1.1.0, commit 16a79137, HEX-001 exhaustive hexany sweep
 !
-hexany 3-5-11-15  P=7 S=7 min=7 (anchored, scorer 1.0.0, 8e8a3386)
+hexany 3-5-11-15  P=5 S=5 min=5 (anchored, scorer 1.1.0, 16a79137)
  6
 !
  25/22

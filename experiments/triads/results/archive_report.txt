@@ -1,151 +1,394 @@
-LOOP-001 archive — scorer 1.0.0 (middle-anchored), rng_seed=2, 37434 candidates evaluated this run, 3417 cells filled (2888 carried in from earlier runs — the archive accumulates, plan §3.1)
+LOOP-001 archive — scorer 1.1.0 (middle-anchored), rng_seed=1, 65400 candidates evaluated this run, 5252 cells filled (0 carried in from earlier runs — the archive accumulates, plan §3.1)
 
 === WINNERS per family and cardinality (by min(P,S), then P*S) ===
 
 CPS(4,2):
   N=6:
-    min=   9  (P,S,G)=(9,9,4)    5-limit  seeds 1-3-5-9  [hexany_1-3-5-9]
-    min=   9  (P,S,G)=(9,9,0)    7-limit  seeds 3-7-15-21
-    min=   7  (P,S,G)=(7,7,0)   11-limit  seeds 1-3-5-11
+    min=   9  (P,S,G)=(9,9,2)    5-limit  seeds 1-3-5-9  [hexany_1-3-5-9]
+    min=   7  (P,S,G)=(7,7,0)    7-limit  seeds 3-7-15-21
+    min=   7  (P,S,G)=(7,7,2)    7-limit  seeds 1-3-7-9
   N=5:
-    min=   5  (P,S,G)=(5,5,4)    5-limit  seeds 3-5-9-15
-    min=   4  (P,S,G)=(4,4,8)    3-limit  seeds 1-3-9-27
-    min=   4  (P,S,G)=(4,4,4)    7-limit  seeds 3-7-9-21
+    min=   5  (P,S,G)=(5,5,2)    5-limit  seeds 3-5-9-15
+    min=   4  (P,S,G)=(4,4,2)    7-limit  seeds 3-7-9-21
+    min=   2  (P,S,G)=(2,2,2)    7-limit  seeds 5-7-15-21
 
 CPS(5,2):
   N=10:
-    min=  20  (P,S,G)=(24,20,6)    7-limit  seeds 3-5-15-21-45
-    min=  19  (P,S,G)=(21,19,6)   11-limit  seeds 5-9-15-33-45
-    min=  18  (P,S,G)=(31,18,6)    7-limit  seeds 1-3-5-7-9  [dekany_1-3-5-7-9_k2]
+    min=  16  (P,S,G)=(25,16,3)    7-limit  seeds 1-3-5-7-9  [dekany_1-3-5-7-9_k2]
+    min=  16  (P,S,G)=(23,16,3)    7-limit  seeds 1-3-7-9-15
+    min=  15  (P,S,G)=(16,15,9)    5-limit  seeds 3-5-15-45-81
   N=9:
-    min=  18  (P,S,G)=(20,18,4)    7-limit  seeds 3-7-9-15-21
-    min=  17  (P,S,G)=(17,20,4)    7-limit  seeds 3-5-7-15-21
-    min=  17  (P,S,G)=(17,17,14)    5-limit  seeds 3-5-15-25-45
+    min=  15  (P,S,G)=(16,15,2)    7-limit  seeds 3-7-9-15-21
+    min=  15  (P,S,G)=(15,15,6)    5-limit  seeds 3-5-15-45-135
+    min=  13  (P,S,G)=(13,16,2)    7-limit  seeds 3-5-7-15-21
   N=8:
-    min=  13  (P,S,G)=(14,13,10)    5-limit  seeds 1-3-5-9-15
-    min=  13  (P,S,G)=(13,14,10)    5-limit  seeds 3-5-9-15-45
-    min=  11  (P,S,G)=(13,11,10)    5-limit  seeds 3-5-9-15-27
+    min=  13  (P,S,G)=(14,13,5)    5-limit  seeds 1-3-5-9-15
+    min=  10  (P,S,G)=(10,12,5)    5-limit  seeds 1-3-5-15-45
+    min=  10  (P,S,G)=(10,10,5)    7-limit  seeds 1-3-7-9-21
+  N=7:
+    min=   6  (P,S,G)=(6,6,9)    3-limit  seeds 1-3-9-27-81
 
 CPS(5,3):
   N=10:
-    min=  20  (P,S,G)=(20,24,6)    7-limit  seeds 3-5-15-21-45
-    min=  19  (P,S,G)=(19,21,6)   11-limit  seeds 5-9-15-33-45
-    min=  18  (P,S,G)=(18,31,6)    7-limit  seeds 1-3-5-7-9  [dekany_1-3-5-7-9_k3]
+    min=  16  (P,S,G)=(16,25,3)    7-limit  seeds 1-3-5-7-9  [dekany_1-3-5-7-9_k3]
+    min=  16  (P,S,G)=(16,23,3)    7-limit  seeds 1-3-7-9-15
+    min=  15  (P,S,G)=(15,16,9)    5-limit  seeds 3-5-15-45-81
   N=9:
-    min=  18  (P,S,G)=(18,20,4)    7-limit  seeds 3-7-9-15-21
-    min=  17  (P,S,G)=(20,17,4)    7-limit  seeds 3-5-7-15-21
-    min=  17  (P,S,G)=(17,17,14)    5-limit  seeds 3-5-15-25-45
+    min=  15  (P,S,G)=(15,16,2)    7-limit  seeds 3-7-9-15-21
+    min=  15  (P,S,G)=(15,15,6)    5-limit  seeds 3-5-15-45-135
+    min=  13  (P,S,G)=(16,13,2)    7-limit  seeds 3-5-7-15-21
   N=8:
-    min=  13  (P,S,G)=(14,13,10)    5-limit  seeds 3-5-9-15-45
-    min=  13  (P,S,G)=(13,14,10)    5-limit  seeds 1-3-5-9-15
-    min=  11  (P,S,G)=(11,13,10)    5-limit  seeds 3-5-9-15-27
+    min=  13  (P,S,G)=(13,14,5)    5-limit  seeds 1-3-5-9-15
+    min=  10  (P,S,G)=(12,10,5)    5-limit  seeds 1-3-5-15-45
+    min=  10  (P,S,G)=(10,10,5)    7-limit  seeds 1-3-7-9-21
+  N=7:
+    min=   6  (P,S,G)=(6,6,9)    3-limit  seeds 1-3-9-27-81
 
 CPS(6,2):
   N=15:
-    min=  33  (P,S,G)=(35,33,14)    7-limit  seeds 3-5-7-21-63-315
-    min=  29  (P,S,G)=(42,29,8)   19-limit  seeds 5-9-15-19-21-45
-    min=  29  (P,S,G)=(32,29,18)    7-limit  seeds 3-5-7-15-45-175
+    min=  32  (P,S,G)=(34,32,7)    7-limit  seeds 1-7-15-21-35-63
+    min=  26  (P,S,G)=(29,26,4)   13-limit  seeds 5-15-21-39-45-105
+    min=  23  (P,S,G)=(30,23,4)   11-limit  seeds 5-7-9-21-33-63
   N=14:
-    min=  41  (P,S,G)=(41,44,16)    7-limit  seeds 3-5-15-21-35-45
-    min=  35  (P,S,G)=(42,35,12)    7-limit  seeds 1-5-7-9-15-21
-    min=  33  (P,S,G)=(35,33,16)    7-limit  seeds 3-5-7-9-15-105
+    min=  33  (P,S,G)=(35,33,8)    7-limit  seeds 3-7-15-21-35-63
+    min=  32  (P,S,G)=(32,33,6)    7-limit  seeds 3-5-15-21-45-105
+    min=  29  (P,S,G)=(33,29,6)    7-limit  seeds 1-3-9-15-21-105
   N=13:
-    min=  34  (P,S,G)=(34,35,12)    7-limit  seeds 5-7-15-21-35-45
-    min=  32  (P,S,G)=(34,32,12)    7-limit  seeds 3-5-7-9-15-35
-    min=  32  (P,S,G)=(32,32,12)    7-limit  seeds 5-7-9-15-21-35
+    min=  26  (P,S,G)=(39,26,6)    7-limit  seeds 1-3-5-7-9-15
+    min=  26  (P,S,G)=(35,26,6)    7-limit  seeds 1-3-5-9-15-21
+    min=  26  (P,S,G)=(26,29,6)    7-limit  seeds 3-5-9-15-45-63
   N=12:
-    min=  31  (P,S,G)=(33,31,12)    7-limit  seeds 3-5-7-9-15-21
-    min=  25  (P,S,G)=(29,25,12)    7-limit  seeds 3-7-9-15-21-35
-    min=  16  (P,S,G)=(16,18,12)    7-limit  seeds 3-5-9-15-63-189
+    min=  25  (P,S,G)=(26,25,6)    7-limit  seeds 3-5-7-9-15-21
+    min=  20  (P,S,G)=(22,20,6)    7-limit  seeds 3-7-9-15-21-35
+    min=  15  (P,S,G)=(15,16,6)   13-limit  seeds 3-7-9-13-21-39
+  N=11:
+    min=  22  (P,S,G)=(22,22,11)    5-limit  seeds 1-3-5-9-15-45
 
 CPS(6,3):
   N=20:
-    min=  77  (P,S,G)=(77,77,12)   11-limit  seeds 1-3-5-7-9-11  [eikosany_1-3-5-7-9-11]
-    min=  74  (P,S,G)=(74,74,36)    7-limit  seeds 1-3-5-7-9-25
-    min=  72  (P,S,G)=(72,72,12)   13-limit  seeds 1-3-5-7-9-13
+    min=  57  (P,S,G)=(57,57,6)   11-limit  seeds 1-3-5-7-9-11  [eikosany_1-3-5-7-9-11]
+    min=  55  (P,S,G)=(55,55,6)   13-limit  seeds 1-3-5-7-9-13
+    min=  51  (P,S,G)=(51,51,6)   17-limit  seeds 1-3-5-7-9-17
   N=19:
-    min=  57  (P,S,G)=(57,57,38)    7-limit  seeds 1-3-5-7-9-105
-    min=  49  (P,S,G)=(49,49,38)   11-limit  seeds 1-3-5-9-11-165
-    min=  30  (P,S,G)=(30,30,18)   41-limit  seeds 7-9-15-21-41-205
+    min=  48  (P,S,G)=(48,48,19)    7-limit  seeds 1-3-5-7-9-105
+    min=  21  (P,S,G)=(21,21,9)   41-limit  seeds 3-5-7-15-287-369
+    min=  19  (P,S,G)=(19,19,9)   11-limit  seeds 5-7-9-11-45-77
   N=18:
-    min=  62  (P,S,G)=(62,62,24)    7-limit  seeds 1-3-5-7-9-27
-    min=  59  (P,S,G)=(59,59,8)   11-limit  seeds 1-3-5-7-11-15
-    min=  54  (P,S,G)=(54,54,8)   13-limit  seeds 3-7-9-15-21-39
+    min=  52  (P,S,G)=(52,52,12)    7-limit  seeds 1-3-5-7-9-27
+    min=  47  (P,S,G)=(47,47,32)    5-limit  seeds 1-3-5-9-25-27
+    min=  45  (P,S,G)=(45,45,14)    7-limit  seeds 1-3-9-15-21-35
   N=17:
-    min=  44  (P,S,G)=(44,44,24)    7-limit  seeds 1-5-7-9-15-21
-    min=  38  (P,S,G)=(38,38,32)   11-limit  seeds 1-3-9-11-15-55
-    min=  31  (P,S,G)=(31,31,32)   13-limit  seeds 1-3-9-13-15-65
+    min=  37  (P,S,G)=(37,37,16)    7-limit  seeds 1-3-9-15-21-105
+    min=  29  (P,S,G)=(29,29,16)   17-limit  seeds 1-3-9-15-17-85
+    min=  27  (P,S,G)=(27,27,16)   11-limit  seeds 1-3-9-11-15-55
   N=16:
-    min=  54  (P,S,G)=(54,54,20)    7-limit  seeds 1-3-5-7-9-15
-    min=  47  (P,S,G)=(47,47,20)   11-limit  seeds 1-3-5-9-11-15
-    min=  40  (P,S,G)=(40,40,20)   13-limit  seeds 1-3-5-9-13-15
-  N=15:
-    min=  30  (P,S,G)=(30,30,46)    5-limit  seeds 1-3-5-9-15-81
-    min=  25  (P,S,G)=(25,25,42)    7-limit  seeds 1-3-7-9-27-63
+    min=  44  (P,S,G)=(44,44,10)    7-limit  seeds 1-3-5-7-9-15
+    min=  35  (P,S,G)=(35,35,10)   11-limit  seeds 1-3-5-9-11-15
+    min=  35  (P,S,G)=(35,35,26)    5-limit  seeds 1-3-5-9-25-75
   N=14:
-    min=  33  (P,S,G)=(33,33,36)    5-limit  seeds 1-3-5-9-15-27
-    min=  24  (P,S,G)=(24,24,36)    7-limit  seeds 1-3-7-9-21-27
+    min=  33  (P,S,G)=(33,33,18)    5-limit  seeds 1-3-5-9-15-27
   N=13:
-    min=  27  (P,S,G)=(27,27,36)    5-limit  seeds 1-3-5-9-15-25
-  N=12:
-    min=  19  (P,S,G)=(19,19,28)    5-limit  seeds 1-3-5-15-25-75
+    min=  27  (P,S,G)=(27,27,18)    5-limit  seeds 1-3-5-9-15-25
 
 CPS(6,4):
   N=15:
-    min=  33  (P,S,G)=(33,35,14)    7-limit  seeds 3-5-7-21-63-315
-    min=  29  (P,S,G)=(29,42,8)   19-limit  seeds 5-9-15-19-21-45
-    min=  29  (P,S,G)=(29,32,18)    7-limit  seeds 3-5-7-15-45-175
+    min=  32  (P,S,G)=(32,34,7)    7-limit  seeds 1-7-15-21-35-63
+    min=  26  (P,S,G)=(26,29,4)   13-limit  seeds 5-15-21-39-45-105
+    min=  23  (P,S,G)=(23,30,4)   11-limit  seeds 5-7-9-21-33-63
   N=14:
-    min=  41  (P,S,G)=(44,41,16)    7-limit  seeds 3-5-15-21-35-45
-    min=  35  (P,S,G)=(35,42,12)    7-limit  seeds 1-5-7-9-15-21
-    min=  33  (P,S,G)=(33,35,16)    7-limit  seeds 3-5-7-9-15-105
+    min=  33  (P,S,G)=(33,35,8)    7-limit  seeds 3-7-15-21-35-63
+    min=  32  (P,S,G)=(33,32,6)    7-limit  seeds 3-5-15-21-45-105
+    min=  29  (P,S,G)=(29,33,6)    7-limit  seeds 1-3-9-15-21-105
   N=13:
-    min=  34  (P,S,G)=(35,34,12)    7-limit  seeds 5-7-15-21-35-45
-    min=  32  (P,S,G)=(32,34,12)    7-limit  seeds 3-5-7-9-15-35
-    min=  32  (P,S,G)=(32,32,12)    7-limit  seeds 5-7-9-15-21-35
+    min=  26  (P,S,G)=(26,39,6)    7-limit  seeds 1-3-5-7-9-15
+    min=  26  (P,S,G)=(26,35,6)    7-limit  seeds 1-3-5-9-15-21
+    min=  26  (P,S,G)=(29,26,6)    7-limit  seeds 3-5-9-15-45-63
   N=12:
-    min=  31  (P,S,G)=(31,33,12)    7-limit  seeds 3-5-7-9-15-21
-    min=  25  (P,S,G)=(25,29,12)    7-limit  seeds 3-7-9-15-21-35
-    min=  16  (P,S,G)=(18,16,12)    7-limit  seeds 3-5-9-15-63-189
+    min=  25  (P,S,G)=(25,26,6)    7-limit  seeds 3-5-7-9-15-21
+    min=  20  (P,S,G)=(20,22,6)    7-limit  seeds 3-7-9-15-21-35
+    min=  15  (P,S,G)=(16,15,6)   13-limit  seeds 3-7-9-13-21-39
+  N=11:
+    min=  22  (P,S,G)=(22,22,11)    5-limit  seeds 1-3-5-9-15-45
 
-=== OFF-DIAGONAL entries (P != S): 2480 ===
+=== PER-BUCKET WINNERS (balance character x lens) ===
+min(P,S) is NOT the ranking, just one lens: an ear that wants
+P-heavy and S-heavy scales equally is not served by a balance loss.
+
+CPS(4,2)  (N=6, the family's full cardinality)
+  diagonal:
+    best by min(P,S)  (P,S,G)=(9,9,2)    5-limit  1-3-5-9
+    best by P+S+G     (P,S,G)=(9,9,2)    5-limit  1-3-5-9   (as above)
+    best by P         (P,S,G)=(9,9,2)    5-limit  1-3-5-9   (as above)
+    best by S         (P,S,G)=(9,9,2)    5-limit  1-3-5-9   (as above)
+    best by G         (P,S,G)=(5,5,6)    3-limit  1-3-9-81
+
+CPS(5,2)  (N=10, the family's full cardinality)
+  strong_P:
+    best by min(P,S)  (P,S,G)=(25,16,3)    7-limit  1-3-5-7-9
+    best by P+S+G     (P,S,G)=(25,16,3)    7-limit  1-3-5-7-9   (as above)
+    best by P         (P,S,G)=(25,16,3)    7-limit  1-3-5-7-9   (as above)
+    best by S         (P,S,G)=(25,16,3)    7-limit  1-3-5-7-9   (as above)
+    best by G         (P,S,G)=(25,16,3)    7-limit  1-3-5-7-9   (as above)
+  skew_P:
+    best by min(P,S)  (P,S,G)=(23,16,3)    7-limit  1-3-7-9-15
+    best by P+S+G     (P,S,G)=(23,16,3)    7-limit  1-3-7-9-15   (as above)
+    best by P         (P,S,G)=(23,16,3)    7-limit  1-3-7-9-15   (as above)
+    best by S         (P,S,G)=(23,16,3)    7-limit  1-3-7-9-15   (as above)
+    best by G         (P,S,G)=(14,12,9)    7-limit  1-3-7-9-49
+  near_P:
+    best by min(P,S)  (P,S,G)=(16,15,9)    5-limit  3-5-15-45-81
+    best by P+S+G     (P,S,G)=(16,15,9)    5-limit  3-5-15-45-81   (as above)
+    best by P         (P,S,G)=(16,15,9)    5-limit  3-5-15-45-81   (as above)
+    best by S         (P,S,G)=(16,15,9)    5-limit  3-5-15-45-81   (as above)
+    best by G         (P,S,G)=(16,15,9)    5-limit  3-5-15-45-81   (as above)
+  diagonal:
+    best by min(P,S)  (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105
+    best by P+S+G     (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by P         (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by S         (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by G         (P,S,G)=(7,7,8)  131-limit  1-3-9-81-131
+  near_S:
+    best by min(P,S)  (P,S,G)=(13,14,3)   23-limit  3-5-15-23-45
+    best by P+S+G     (P,S,G)=(13,14,3)   23-limit  3-5-15-23-45   (as above)
+    best by P         (P,S,G)=(13,14,3)   23-limit  3-5-15-23-45   (as above)
+    best by S         (P,S,G)=(13,14,3)   23-limit  3-5-15-23-45   (as above)
+    best by G         (P,S,G)=(13,14,3)   23-limit  3-5-15-23-45   (as above)
+  skew_S:
+    best by min(P,S)  (P,S,G)=(12,14,2)    7-limit  3-5-7-21-45
+    best by P+S+G     (P,S,G)=(12,14,2)    7-limit  3-5-7-21-45   (as above)
+    best by P         (P,S,G)=(12,14,2)    7-limit  3-5-7-21-45   (as above)
+    best by S         (P,S,G)=(12,14,2)    7-limit  3-5-7-21-45   (as above)
+    best by G         (P,S,G)=(11,14,3)   37-limit  15-27-37-45-135
+  strong_S:
+    best by min(P,S)  (P,S,G)=(7,11,0)   31-limit  15-21-35-93-105
+    best by P+S+G     (P,S,G)=(7,11,0)   31-limit  15-21-35-93-105   (as above)
+    best by P         (P,S,G)=(7,11,0)   31-limit  15-21-35-93-105   (as above)
+    best by S         (P,S,G)=(7,11,0)   31-limit  15-21-35-93-105   (as above)
+    best by G         (P,S,G)=(1,2,3)    7-limit  5-9-21-49-105
+  degenerate_P:
+    best by min(P,S)  (P,S,G)=(1,0,0)  223-limit  15-81-87-223-675
+    best by P+S+G     (P,S,G)=(1,0,3)  101-limit  9-21-49-101-105
+    best by P         (P,S,G)=(1,0,0)  223-limit  15-81-87-223-675   (as above)
+    best by S         (P,S,G)=(1,0,0)  223-limit  15-81-87-223-675   (as above)
+    best by G         (P,S,G)=(1,0,3)  101-limit  9-21-49-101-105   (as above)
+  degenerate_S:
+    best by min(P,S)  (P,S,G)=(0,1,0)   11-limit  1-9-21-35-165
+    best by P+S+G     (P,S,G)=(0,1,2)    7-limit  3-7-15-49-175
+    best by P         (P,S,G)=(0,1,0)   11-limit  1-9-21-35-165   (as above)
+    best by S         (P,S,G)=(0,1,0)   11-limit  1-9-21-35-165   (as above)
+    best by G         (P,S,G)=(0,1,2)    7-limit  3-7-15-49-175   (as above)
+
+CPS(5,3)  (N=10, the family's full cardinality)
+  strong_P:
+    best by min(P,S)  (P,S,G)=(11,7,0)   31-limit  15-21-35-93-105
+    best by P+S+G     (P,S,G)=(11,7,0)   31-limit  15-21-35-93-105   (as above)
+    best by P         (P,S,G)=(11,7,0)   31-limit  15-21-35-93-105   (as above)
+    best by S         (P,S,G)=(11,7,0)   31-limit  15-21-35-93-105   (as above)
+    best by G         (P,S,G)=(2,1,3)    7-limit  5-9-21-49-105
+  skew_P:
+    best by min(P,S)  (P,S,G)=(14,12,2)    7-limit  3-5-7-21-45
+    best by P+S+G     (P,S,G)=(14,12,2)    7-limit  3-5-7-21-45   (as above)
+    best by P         (P,S,G)=(14,12,2)    7-limit  3-5-7-21-45   (as above)
+    best by S         (P,S,G)=(14,12,2)    7-limit  3-5-7-21-45   (as above)
+    best by G         (P,S,G)=(14,11,3)   37-limit  15-27-37-45-135
+  near_P:
+    best by min(P,S)  (P,S,G)=(14,13,3)   23-limit  3-5-15-23-45
+    best by P+S+G     (P,S,G)=(14,13,3)   23-limit  3-5-15-23-45   (as above)
+    best by P         (P,S,G)=(14,13,3)   23-limit  3-5-15-23-45   (as above)
+    best by S         (P,S,G)=(14,13,3)   23-limit  3-5-15-23-45   (as above)
+    best by G         (P,S,G)=(14,13,3)   23-limit  3-5-15-23-45   (as above)
+  diagonal:
+    best by min(P,S)  (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105
+    best by P+S+G     (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by P         (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by S         (P,S,G)=(13,13,3)    7-limit  3-5-7-21-105   (as above)
+    best by G         (P,S,G)=(7,7,8)  131-limit  1-3-9-81-131
+  near_S:
+    best by min(P,S)  (P,S,G)=(15,16,9)    5-limit  3-5-15-45-81
+    best by P+S+G     (P,S,G)=(15,16,9)    5-limit  3-5-15-45-81   (as above)
+    best by P         (P,S,G)=(15,16,9)    5-limit  3-5-15-45-81   (as above)
+    best by S         (P,S,G)=(15,16,9)    5-limit  3-5-15-45-81   (as above)
+    best by G         (P,S,G)=(15,16,9)    5-limit  3-5-15-45-81   (as above)
+  skew_S:
+    best by min(P,S)  (P,S,G)=(16,23,3)    7-limit  1-3-7-9-15
+    best by P+S+G     (P,S,G)=(16,23,3)    7-limit  1-3-7-9-15   (as above)
+    best by P         (P,S,G)=(16,23,3)    7-limit  1-3-7-9-15   (as above)
+    best by S         (P,S,G)=(16,23,3)    7-limit  1-3-7-9-15   (as above)
+    best by G         (P,S,G)=(12,14,9)    7-limit  1-3-7-9-49
+  strong_S:
+    best by min(P,S)  (P,S,G)=(16,25,3)    7-limit  1-3-5-7-9
+    best by P+S+G     (P,S,G)=(16,25,3)    7-limit  1-3-5-7-9   (as above)
+    best by P         (P,S,G)=(16,25,3)    7-limit  1-3-5-7-9   (as above)
+    best by S         (P,S,G)=(16,25,3)    7-limit  1-3-5-7-9   (as above)
+    best by G         (P,S,G)=(16,25,3)    7-limit  1-3-5-7-9   (as above)
+  degenerate_P:
+    best by min(P,S)  (P,S,G)=(1,0,0)   11-limit  1-9-21-35-165
+    best by P+S+G     (P,S,G)=(1,0,2)    7-limit  3-7-15-49-175
+    best by P         (P,S,G)=(1,0,0)   11-limit  1-9-21-35-165   (as above)
+    best by S         (P,S,G)=(1,0,0)   11-limit  1-9-21-35-165   (as above)
+    best by G         (P,S,G)=(1,0,2)    7-limit  3-7-15-49-175   (as above)
+  degenerate_S:
+    best by min(P,S)  (P,S,G)=(0,1,0)  223-limit  15-81-87-223-675
+    best by P+S+G     (P,S,G)=(0,1,3)  101-limit  9-21-49-101-105
+    best by P         (P,S,G)=(0,1,0)  223-limit  15-81-87-223-675   (as above)
+    best by S         (P,S,G)=(0,1,0)  223-limit  15-81-87-223-675   (as above)
+    best by G         (P,S,G)=(0,1,3)  101-limit  9-21-49-101-105   (as above)
+
+CPS(6,2)  (N=15, the family's full cardinality)
+  strong_P:
+    best by min(P,S)  (P,S,G)=(51,22,4)   11-limit  1-3-5-7-9-11
+    best by P+S+G     (P,S,G)=(51,22,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by P         (P,S,G)=(51,22,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by S         (P,S,G)=(51,22,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by G         (P,S,G)=(31,18,10)   11-limit  1-3-5-9-11-81
+  skew_P:
+    best by min(P,S)  (P,S,G)=(29,26,4)   13-limit  5-15-21-39-45-105
+    best by P+S+G     (P,S,G)=(29,26,4)   13-limit  5-15-21-39-45-105   (as above)
+    best by P         (P,S,G)=(30,23,4)   11-limit  5-7-9-21-33-63
+    best by S         (P,S,G)=(29,26,4)   13-limit  5-15-21-39-45-105   (as above)
+    best by G         (P,S,G)=(28,19,11)   31-limit  1-5-9-15-25-155
+  near_P:
+    best by min(P,S)  (P,S,G)=(34,32,7)    7-limit  1-7-15-21-35-63
+    best by P+S+G     (P,S,G)=(34,32,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by P         (P,S,G)=(34,32,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by S         (P,S,G)=(34,32,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by G         (P,S,G)=(34,32,7)    7-limit  1-7-15-21-35-63   (as above)
+  diagonal:
+    best by min(P,S)  (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315
+    best by P+S+G     (P,S,G)=(21,21,7)   43-limit  3-5-9-27-43-215
+    best by P         (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315   (as above)
+    best by S         (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315   (as above)
+    best by G         (P,S,G)=(5,5,11)   11-limit  1-5-11-15-121-225
+  near_S:
+    best by min(P,S)  (P,S,G)=(22,23,4)   11-limit  3-5-15-45-105-385
+    best by P+S+G     (P,S,G)=(22,23,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by P         (P,S,G)=(22,23,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by S         (P,S,G)=(22,23,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by G         (P,S,G)=(18,19,10)   13-limit  3-5-15-45-81-143
+  skew_S:
+    best by min(P,S)  (P,S,G)=(20,22,4)   17-limit  3-5-15-17-45-63
+    best by P+S+G     (P,S,G)=(20,22,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by P         (P,S,G)=(20,22,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by S         (P,S,G)=(20,22,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by G         (P,S,G)=(20,22,4)   17-limit  3-5-15-17-45-63   (as above)
+  strong_S:
+    best by min(P,S)  (P,S,G)=(12,18,2)   43-limit  3-5-7-15-63-129
+    best by P+S+G     (P,S,G)=(12,18,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by P         (P,S,G)=(12,18,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by S         (P,S,G)=(12,18,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by G         (P,S,G)=(10,16,3)   17-limit  3-5-15-17-63-255
+  degenerate_P:
+    best by min(P,S)  (P,S,G)=(3,0,0)   73-limit  1-5-7-37-39-365
+    best by P+S+G     (P,S,G)=(2,0,4)  127-limit  5-35-127-245-275-339
+    best by P         (P,S,G)=(3,0,0)   73-limit  1-5-7-37-39-365   (as above)
+    best by S         (P,S,G)=(3,0,0)   73-limit  1-5-7-37-39-365   (as above)
+    best by G         (P,S,G)=(2,0,4)  127-limit  5-35-127-245-275-339   (as above)
+  degenerate_S:
+    best by min(P,S)  (P,S,G)=(0,1,0)  127-limit  3-5-21-175-205-381
+    best by P+S+G     (P,S,G)=(0,1,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by P         (P,S,G)=(0,1,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by S         (P,S,G)=(0,1,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by G         (P,S,G)=(0,1,0)  127-limit  3-5-21-175-205-381   (as above)
+
+CPS(6,3)  (N=20, the family's full cardinality)
+  diagonal:
+    best by min(P,S)  (P,S,G)=(57,57,6)   11-limit  1-3-5-7-9-11
+    best by P+S+G     (P,S,G)=(48,48,38)    5-limit  1-5-9-25-27-81
+    best by P         (P,S,G)=(57,57,6)   11-limit  1-3-5-7-9-11   (as above)
+    best by S         (P,S,G)=(57,57,6)   11-limit  1-3-5-7-9-11   (as above)
+    best by G         (P,S,G)=(48,48,38)    5-limit  1-5-9-25-27-81   (as above)
+
+CPS(6,4)  (N=15, the family's full cardinality)
+  strong_P:
+    best by min(P,S)  (P,S,G)=(18,12,2)   43-limit  3-5-7-15-63-129
+    best by P+S+G     (P,S,G)=(18,12,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by P         (P,S,G)=(18,12,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by S         (P,S,G)=(18,12,2)   43-limit  3-5-7-15-63-129   (as above)
+    best by G         (P,S,G)=(16,10,3)   17-limit  3-5-15-17-63-255
+  skew_P:
+    best by min(P,S)  (P,S,G)=(22,20,4)   17-limit  3-5-15-17-45-63
+    best by P+S+G     (P,S,G)=(22,20,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by P         (P,S,G)=(22,20,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by S         (P,S,G)=(22,20,4)   17-limit  3-5-15-17-45-63   (as above)
+    best by G         (P,S,G)=(22,20,4)   17-limit  3-5-15-17-45-63   (as above)
+  near_P:
+    best by min(P,S)  (P,S,G)=(23,22,4)   11-limit  3-5-15-45-105-385
+    best by P+S+G     (P,S,G)=(23,22,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by P         (P,S,G)=(23,22,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by S         (P,S,G)=(23,22,4)   11-limit  3-5-15-45-105-385   (as above)
+    best by G         (P,S,G)=(19,18,10)   13-limit  3-5-15-45-81-143
+  diagonal:
+    best by min(P,S)  (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315
+    best by P+S+G     (P,S,G)=(21,21,7)   43-limit  3-5-9-27-43-215
+    best by P         (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315   (as above)
+    best by S         (P,S,G)=(21,21,4)    7-limit  3-5-15-21-135-315   (as above)
+    best by G         (P,S,G)=(5,5,11)   11-limit  1-5-11-15-121-225
+  near_S:
+    best by min(P,S)  (P,S,G)=(32,34,7)    7-limit  1-7-15-21-35-63
+    best by P+S+G     (P,S,G)=(32,34,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by P         (P,S,G)=(32,34,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by S         (P,S,G)=(32,34,7)    7-limit  1-7-15-21-35-63   (as above)
+    best by G         (P,S,G)=(32,34,7)    7-limit  1-7-15-21-35-63   (as above)
+  skew_S:
+    best by min(P,S)  (P,S,G)=(26,29,4)   13-limit  5-15-21-39-45-105
+    best by P+S+G     (P,S,G)=(26,29,4)   13-limit  5-15-21-39-45-105   (as above)
+    best by P         (P,S,G)=(26,29,4)   13-limit  5-15-21-39-45-105   (as above)
+    best by S         (P,S,G)=(23,30,4)   11-limit  5-7-9-21-33-63
+    best by G         (P,S,G)=(19,28,11)   31-limit  1-5-9-15-25-155
+  strong_S:
+    best by min(P,S)  (P,S,G)=(22,51,4)   11-limit  1-3-5-7-9-11
+    best by P+S+G     (P,S,G)=(22,51,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by P         (P,S,G)=(22,51,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by S         (P,S,G)=(22,51,4)   11-limit  1-3-5-7-9-11   (as above)
+    best by G         (P,S,G)=(18,31,10)   11-limit  1-3-5-9-11-81
+  degenerate_P:
+    best by min(P,S)  (P,S,G)=(1,0,0)  127-limit  3-5-21-175-205-381
+    best by P+S+G     (P,S,G)=(1,0,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by P         (P,S,G)=(1,0,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by S         (P,S,G)=(1,0,0)  127-limit  3-5-21-175-205-381   (as above)
+    best by G         (P,S,G)=(1,0,0)  127-limit  3-5-21-175-205-381   (as above)
+  degenerate_S:
+    best by min(P,S)  (P,S,G)=(0,3,0)   73-limit  1-5-7-37-39-365
+    best by P+S+G     (P,S,G)=(0,2,4)  127-limit  5-35-127-245-275-339
+    best by P         (P,S,G)=(0,3,0)   73-limit  1-5-7-37-39-365   (as above)
+    best by S         (P,S,G)=(0,3,0)   73-limit  1-5-7-37-39-365   (as above)
+    best by G         (P,S,G)=(0,2,4)  127-limit  5-35-127-245-275-339   (as above)
+
+=== OFF-DIAGONAL entries (P != S): 3128 ===
 These are the only ones where min(P,S) does work the raw P count
 does not — the diagonal theorem makes P == S structural elsewhere.
-  CPS(6,2) min=  41 (P,S)=(41,44)       near_S  seeds 3-5-15-21-35-45
-  CPS(6,4) min=  41 (P,S)=(44,41)       near_P  seeds 3-5-15-21-35-45
-  CPS(6,2) min=  35 (P,S)=(42,35)       skew_P  seeds 1-5-7-9-15-21
-  CPS(6,4) min=  35 (P,S)=(35,42)       skew_S  seeds 1-5-7-9-15-21
-  CPS(6,2) min=  34 (P,S)=(34,35)       near_S  seeds 5-7-15-21-35-45
-  CPS(6,4) min=  34 (P,S)=(35,34)       near_P  seeds 5-7-15-21-35-45
-  CPS(6,2) min=  33 (P,S)=(35,33)       near_P  seeds 3-5-7-9-15-105
-  CPS(6,2) min=  33 (P,S)=(35,33)       near_P  seeds 3-5-7-21-63-315
-  CPS(6,4) min=  33 (P,S)=(33,35)       near_S  seeds 3-5-7-9-15-105
+  CPS(6,4) min=  33 (P,S)=(33,35)       near_S  seeds 3-7-15-21-35-63
+  CPS(6,2) min=  33 (P,S)=(35,33)       near_P  seeds 3-7-15-21-35-63
+  CPS(6,2) min=  32 (P,S)=(32,33)       near_S  seeds 3-5-15-21-45-105
+  CPS(6,4) min=  32 (P,S)=(33,32)       near_P  seeds 3-5-15-21-45-105
+  CPS(6,2) min=  32 (P,S)=(34,32)       near_P  seeds 1-7-15-21-35-63
+  CPS(6,4) min=  32 (P,S)=(32,34)       near_S  seeds 1-7-15-21-35-63
+  CPS(6,2) min=  29 (P,S)=(33,29)       skew_P  seeds 1-3-9-15-21-105
+  CPS(6,4) min=  29 (P,S)=(29,33)       skew_S  seeds 1-3-9-15-21-105
+  CPS(6,2) min=  26 (P,S)=(39,26)     strong_P  seeds 1-3-5-7-9-15
 
 === LANDMARK comparison (within its own cardinality bin) ===
-  dekany_1-3-5-7-9_k2            N=10 min=  18 (P,S,G)=(31,18,6)  2 beat it   seeds 1-3-5-7-9
-      beaten by min=  20 (P,S)=(24,20)   7-limit seeds 3-5-15-21-45
-      beaten by min=  19 (P,S)=(21,19)  11-limit seeds 5-9-15-33-45
-  dekany_1-3-5-7-9_k3            N=10 min=  18 (P,S,G)=(18,31,6)  2 beat it   seeds 1-3-5-7-9
-      beaten by min=  20 (P,S)=(20,24)   7-limit seeds 3-5-15-21-45
-      beaten by min=  19 (P,S)=(19,21)  11-limit seeds 5-9-15-33-45
-  eikosany_1-3-5-7-9-11          N=20 min=  77 (P,S,G)=(77,77,12)  UNBEATEN   seeds 1-3-5-7-9-11
-  eikosany_marcus_calibration    N=20 min=  22 (P,S,G)=(22,22,0)  75 beat it   seeds 1-45-135-225-19-377
-      beaten by min=  77 (P,S)=(77,77)  11-limit seeds 1-3-5-7-9-11
-      beaten by min=  74 (P,S)=(74,74)   7-limit seeds 1-3-5-7-9-25
-      beaten by min=  72 (P,S)=(72,72)  13-limit seeds 1-3-5-7-9-13
-  hexany_1-3-5-7                 N= 6 min=   8 (P,S,G)=(8,8,0)  2 beat it   seeds 1-3-5-7
+  dekany_1-3-5-7-9_k2            N=10 min=  16 (P,S,G)=(25,16,3)  UNBEATEN   seeds 1-3-5-7-9
+  dekany_1-3-5-7-9_k3            N=10 min=  16 (P,S,G)=(16,25,3)  UNBEATEN   seeds 1-3-5-7-9
+  eikosany_1-3-5-7-9-11          N=20 min=  57 (P,S,G)=(57,57,6)  UNBEATEN   seeds 1-3-5-7-9-11
+  eikosany_marcus_calibration    N=20 min=  15 (P,S,G)=(15,15,0)  185 beat it   seeds 1-45-135-225-19-377
+      beaten by min=  57 (P,S)=(57,57)  11-limit seeds 1-3-5-7-9-11
+      beaten by min=  55 (P,S)=(55,55)  13-limit seeds 1-3-5-7-9-13
+      beaten by min=  51 (P,S)=(51,51)  17-limit seeds 1-3-5-7-9-17
+  hexany_1-3-5-7                 N= 6 min=   6 (P,S,G)=(6,6,0)  3 beat it   seeds 1-3-5-7
       beaten by min=   9 (P,S)=(9,9)   5-limit seeds 1-3-5-9
-      beaten by min=   9 (P,S)=(9,9)   7-limit seeds 3-7-15-21
-  hexany_1-3-5-9                 N= 6 min=   9 (P,S,G)=(9,9,4)  UNBEATEN   seeds 1-3-5-9
-  pentadekany_1-3-5-7-9-11_k2    N=15 min=  27 (P,S,G)=(70,27,8)  6 beat it   seeds 1-3-5-7-9-11
-      beaten by min=  33 (P,S)=(35,33)   7-limit seeds 3-5-7-21-63-315
-      beaten by min=  29 (P,S)=(32,29)   7-limit seeds 3-5-7-15-45-175
-      beaten by min=  29 (P,S)=(42,29)  19-limit seeds 5-9-15-19-21-45
-  pentadekany_1-3-5-7-9-11_k4    N=15 min=  27 (P,S,G)=(27,70,8)  6 beat it   seeds 1-3-5-7-9-11
-      beaten by min=  33 (P,S)=(33,35)   7-limit seeds 3-5-7-21-63-315
-      beaten by min=  29 (P,S)=(29,32)   7-limit seeds 3-5-7-15-45-175
-      beaten by min=  29 (P,S)=(29,42)  19-limit seeds 5-9-15-19-21-45
+      beaten by min=   7 (P,S)=(7,7)   7-limit seeds 3-7-15-21
+      beaten by min=   7 (P,S)=(7,7)   7-limit seeds 1-3-7-9
+  hexany_1-3-5-9                 N= 6 min=   9 (P,S,G)=(9,9,2)  UNBEATEN   seeds 1-3-5-9
+  pentadekany_1-3-5-7-9-11_k2    N=15 min=  22 (P,S,G)=(51,22,4)  4 beat it   seeds 1-3-5-7-9-11
+      beaten by min=  32 (P,S)=(34,32)   7-limit seeds 1-7-15-21-35-63
+      beaten by min=  26 (P,S)=(29,26)  13-limit seeds 5-15-21-39-45-105
+      beaten by min=  23 (P,S)=(30,23)  11-limit seeds 5-7-9-21-33-63
+  pentadekany_1-3-5-7-9-11_k4    N=15 min=  22 (P,S,G)=(22,51,4)  4 beat it   seeds 1-3-5-7-9-11
+      beaten by min=  32 (P,S)=(32,34)   7-limit seeds 1-7-15-21-35-63
+      beaten by min=  26 (P,S)=(26,29)  13-limit seeds 5-15-21-39-45-105
+      beaten by min=  23 (P,S)=(23,30)  11-limit seeds 5-7-9-21-33-63
 
 archive -> results/archive.jsonl
-wrote 27 .scl files to /Users/marcushobbs/Documents/GitHub/Wilsonic-MTS-ESP/.claude/worktrees/practical-franklin/experiments/triads/results/scl
-archive: 37434 candidates, 3417 cells, scorer 1.0.0
+wrote 31 .scl files to /Users/marcushobbs/Documents/GitHub/Wilsonic-MTS-ESP/.claude/worktrees/practical-franklin/experiments/triads/results/scl
+archive: 65400 candidates, 5252 cells, scorer 1.1.0

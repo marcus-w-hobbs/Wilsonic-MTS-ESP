@@ -1,4 +1,4 @@
-! CPS(6,3) seeds 1-3-5-7-9-105 N=19 P=57 S=57 G=38 min=57 7-limit [scorer 1.0.0 middle-anchored]
+! CPS(6,3) seeds 1-3-5-7-9-105 N=19 P=48 S=48 G=19 min=48 7-limit [scorer 1.1.0 middle-anchored]
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -11,10 +11,10 @@
 !   F = 105
 !   APVTS: CPSCALE=6_3, CPSA=1, CPSB=3, CPSC=5, CPSD=7, CPSE=9, CPSF=105
 !   Notation: canonical CPS(6,3) = 6 seeds choose 3; Erv writes this 3)6.
-! SCORE: P=57 S=57 G=38 min(P,S)=57  N=19  7-limit  [middle-anchored]
-! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'mutation'
+! SCORE: P=48 S=48 G=19 min(P,S)=48  N=19  7-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'mutation'
 !
-CPS(6,3) seeds 1-3-5-7-9-105 N=19 P=57 S=57 G=38 min=57 7-limit [scorer 1.0.0 middle-anchored]
+CPS(6,3) seeds 1-3-5-7-9-105 N=19 P=48 S=48 G=19 min=48 7-limit [scorer 1.1.0 middle-anchored]
  19
 !
  36/35
