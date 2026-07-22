@@ -1,0 +1,34 @@
+! CPS(6,4) seeds 5-9-15-19-21-45 N=15 P=29 S=42 G=8 min=29 19-limit [scorer 1.0.0 middle-anchored]
+!
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 6_4   [Pentadekany (15 tones)]
+!   A = 5
+!   B = 9
+!   C = 15
+!   D = 19
+!   E = 21
+!   F = 45
+!   APVTS: CPSCALE=6_4, CPSA=5, CPSB=9, CPSC=15, CPSD=19, CPSE=21, CPSF=45
+!   Notation: canonical CPS(6,4) = 6 seeds choose 4; Erv writes this 4)6.
+! SCORE: P=29 S=42 G=8 min(P,S)=29  N=15  19-limit  [middle-anchored]
+! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'mutation_dual'
+!
+CPS(6,4) seeds 5-9-15-19-21-45 N=15 P=29 S=42 G=8 min=29 19-limit [scorer 1.0.0 middle-anchored]
+ 15
+!
+ 20/19
+ 16/15
+ 8/7
+ 6/5
+ 24/19
+ 4/3
+ 32/21
+ 8/5
+ 32/19
+ 12/7
+ 16/9
+ 240/133
+ 36/19
+ 40/21
+ 2/1

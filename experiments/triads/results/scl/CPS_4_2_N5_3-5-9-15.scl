@@ -1,0 +1,23 @@
+! CPS(4,2) seeds 3-5-9-15 N=5 P=5 S=5 G=4 min=5 5-limit [scorer 1.0.0 middle-anchored]
+!
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 4_2   [Hexany (6 tones)]
+!   A = 3
+!   B = 5
+!   C = 9
+!   D = 15
+!   (E, F unused at this scale selection)
+!   APVTS: CPSCALE=4_2, CPSA=3, CPSB=5, CPSC=9, CPSD=15
+!   Notation: canonical CPS(4,2) = 4 seeds choose 2; Erv writes this 2)4.
+! SCORE: P=5 S=5 G=4 min(P,S)=5  N=5  5-limit  [middle-anchored]
+! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'exhaustive'
+!
+CPS(4,2) seeds 3-5-9-15 N=5 P=5 S=5 G=4 min=5 5-limit [scorer 1.0.0 middle-anchored]
+ 5
+!
+ 10/9
+ 4/3
+ 8/5
+ 16/9
+ 2/1

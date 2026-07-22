@@ -1,0 +1,127 @@
+epsilon=2.0c, LEGACY report-layer guard: min step > 8.0c (= 4.0 * epsilon)
+
+N=5: 5000 generators, 166 excluded by the legacy report guard
+  g=  538.5c  P=  5 S=  5 G=  8  min=  5
+  g=  538.6c  P=  5 S=  5 G=  8  min=  5
+  g=  538.7c  P=  5 S=  5 G=  8  min=  5
+  g=  538.8c  P=  5 S=  5 G=  8  min=  5
+  g=  538.9c  P=  5 S=  5 G=  8  min=  5
+
+N=6: 2400 generators, 96 excluded by the legacy report guard
+  g=  211.4c  P=  5 S=  5 G= 12  min=  5
+  g=  211.5c  P=  5 S=  5 G= 12  min=  5
+  g=  211.6c  P=  5 S=  5 G= 12  min=  5
+  g=  211.7c  P=  5 S=  5 G= 12  min=  5
+  g=  211.8c  P=  5 S=  5 G= 12  min=  5
+
+N=7: 4201 generators, 195 excluded by the legacy report guard
+  g=  539.4c  P= 10 S= 10 G= 18  min= 10
+  g=  538.5c  P=  9 S=  9 G= 18  min=  9
+  g=  538.6c  P=  9 S=  9 G= 18  min=  9
+  g=  538.7c  P=  9 S=  9 G= 18  min=  9
+  g=  538.8c  P=  9 S=  9 G= 18  min=  9
+
+N=8: 2513 generators, 134 excluded by the legacy report guard
+  g=  451.9c  P= 10 S= 10 G= 24  min= 10
+  g=  452.0c  P= 10 S= 10 G= 24  min= 10
+  g=  427.5c  P=  9 S=  9 G= 24  min=  9
+  g=  427.6c  P=  9 S=  9 G= 24  min=  9
+  g=  427.7c  P=  9 S=  9 G= 24  min=  9
+
+N=9: 2958 generators, 178 excluded by the legacy report guard
+  g=  539.4c  P= 16 S= 16 G= 32  min= 16
+  g=  565.4c  P= 16 S= 16 G= 32  min= 16
+  g=  565.5c  P= 16 S= 16 G= 32  min= 16
+  g=  565.6c  P= 16 S= 16 G= 32  min= 16
+  g=  565.7c  P= 16 S= 16 G= 32  min= 16
+
+N=10: 1905 generators, 127 excluded by the legacy report guard
+  g=  367.6c  P= 23 S= 23 G= 40  min= 23
+  g=  367.7c  P= 23 S= 23 G= 40  min= 23
+  g=  367.8c  P= 23 S= 23 G= 40  min= 23
+  g=  367.9c  P= 23 S= 23 G= 40  min= 23
+  g=  368.0c  P= 23 S= 23 G= 40  min= 23
+
+N=11: 1995 generators, 145 excluded by the legacy report guard
+  g=  565.5c  P= 26 S= 26 G= 50  min= 26
+  g=  565.4c  P= 25 S= 25 G= 50  min= 25
+  g=  565.6c  P= 25 S= 25 G= 50  min= 25
+  g=  565.7c  P= 25 S= 25 G= 50  min= 25
+  g=  571.6c  P= 23 S= 23 G= 43  min= 23
+
+N=12: 343 generators, 27 excluded by the legacy report guard
+  g=  498.2c  P= 25 S= 25 G= 60  min= 25
+  g=  498.3c  P= 25 S= 25 G= 60  min= 25
+  g=  498.4c  P= 25 S= 25 G= 60  min= 25
+  g=  498.5c  P= 25 S= 25 G= 60  min= 25
+  g=  486.0c  P= 20 S= 20 G= 58  min= 20
+
+N=13: 1866 generators, 160 excluded by the legacy report guard
+  g=  367.6c  P= 38 S= 38 G= 72  min= 38
+  g=  367.7c  P= 38 S= 38 G= 72  min= 38
+  g=  367.8c  P= 38 S= 38 G= 72  min= 38
+  g=  367.9c  P= 38 S= 38 G= 72  min= 38
+  g=  368.0c  P= 38 S= 38 G= 72  min= 38
+
+N=14: 629 generators, 58 excluded by the legacy report guard
+  g=  265.6c  P= 39 S= 39 G= 84  min= 39
+  g=  427.5c  P= 39 S= 39 G= 84  min= 39
+  g=  427.6c  P= 39 S= 39 G= 84  min= 39
+  g=  265.5c  P= 36 S= 36 G= 84  min= 36
+  g=  265.1c  P= 34 S= 34 G= 84  min= 34
+
+N=15: 948 generators, 95 excluded by the legacy report guard
+  g=  565.5c  P= 52 S= 52 G= 98  min= 52
+  g=  571.6c  P= 49 S= 49 G= 87  min= 49
+  g=  565.4c  P= 47 S= 47 G= 98  min= 47
+  g=  565.6c  P= 47 S= 47 G= 98  min= 47
+  g=  565.7c  P= 45 S= 45 G= 98  min= 45
+
+N=16: 718 generators, 77 excluded by the legacy report guard
+  g=  376.8c  P= 51 S= 51 G=112  min= 51
+  g=  376.9c  P= 51 S= 51 G=112  min= 51
+  g=  377.0c  P= 50 S= 50 G=112  min= 50
+  g=  375.7c  P= 49 S= 49 G=112  min= 49
+  g=  375.8c  P= 49 S= 49 G=112  min= 49
+
+N=17: 1636 generators, 184 excluded by the legacy report guard
+  g=  565.5c  P= 67 S= 67 G=128  min= 67
+  g=  142.6c  P= 66 S= 66 G=128  min= 66
+  g=  285.9c  P= 65 S= 65 G=119  min= 65
+  g=  286.0c  P= 65 S= 65 G=119  min= 65
+  g=  286.1c  P= 65 S= 65 G=119  min= 65
+
+N=18: 340 generators, 41 excluded by the legacy report guard
+  g=  473.0c  P= 60 S= 60 G=136  min= 60
+  g=  472.9c  P= 59 S= 59 G=136  min= 59
+  g=  467.2c  P= 56 S= 56 G=144  min= 56
+  g=  467.3c  P= 56 S= 56 G=144  min= 56
+  g=  472.8c  P= 55 S= 55 G=136  min= 55
+
+N=19: 1056 generators, 131 excluded by the legacy report guard
+  g=  376.8c  P= 77 S= 77 G=162  min= 77
+  g=  311.9c  P= 76 S= 76 G=151  min= 76
+  g=  376.9c  P= 76 S= 76 G=162  min= 76
+  g=  377.0c  P= 75 S= 75 G=162  min= 75
+  g=  375.7c  P= 73 S= 73 G=162  min= 73
+
+N=20: 488 generators, 65 excluded by the legacy report guard
+  g=  416.2c  P= 89 S= 89 G=166  min= 89
+  g=  416.0c  P= 80 S= 80 G=166  min= 80
+  g=  538.9c  P= 79 S= 79 G=178  min= 79
+  g=  539.0c  P= 78 S= 78 G=178  min= 78
+  g=  542.8c  P= 77 S= 77 G=180  min= 77
+
+N=21: 443 generators, 62 excluded by the legacy report guard
+  g=  285.9c  P= 98 S= 98 G=187  min= 98
+  g=  286.0c  P= 97 S= 97 G=187  min= 97
+  g=  226.5c  P= 95 S= 95 G=200  min= 95
+  g=  286.2c  P= 95 S= 95 G=187  min= 95
+  g=  227.8c  P= 93 S= 93 G=200  min= 93
+
+N=22: 570 generators, 83 excluded by the legacy report guard
+  g=  386.2c  P=104 S=104 G=204  min=104
+  g=  387.6c  P= 89 S= 89 G=204  min= 89
+  g=  387.7c  P= 89 S= 89 G=204  min= 89
+  g=  387.8c  P= 89 S= 89 G=204  min= 89
+  g=  486.8c  P= 89 S= 89 G=208  min= 89

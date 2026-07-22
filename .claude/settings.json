@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vt title *)",
+      "Bash(xcrun devicectl device info *)",
+      "Bash(xcrun devicectl device list *)",
+      "Bash(xcrun xctrace list *)",
+      "Bash(security cms -D *)",
+      "Bash(vercel inspect *)",
+      "Bash(vercel ls *)",
+      "mcp__Claude_in_Chrome__list_connected_browsers",
+      "mcp__Claude_Preview__preview_screenshot",
+      "mcp__Claude_Preview__preview_logs"
+    ]
+  }
+}

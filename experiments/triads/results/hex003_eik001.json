@@ -1,0 +1,651 @@
+{
+ "hex003": {
+  "scales": 70,
+  "swap_failures": []
+ },
+ "eik001": {
+  "rows": [
+   {
+    "seeds": [
+     1,
+     45,
+     135,
+     225,
+     19,
+     377
+    ],
+    "cardinality": 20,
+    "anchored": [
+     22,
+     22,
+     0
+    ],
+    "window": [
+     26,
+     25,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     9,
+     11
+    ],
+    "cardinality": 20,
+    "anchored": [
+     77,
+     77,
+     12
+    ],
+    "window": [
+     101,
+     102,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     9,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     72,
+     72,
+     12
+    ],
+    "window": [
+     91,
+     95,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     9,
+     15
+    ],
+    "cardinality": 16,
+    "anchored": [
+     54,
+     54,
+     20
+    ],
+    "window": [
+     72,
+     73,
+     20
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     11,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     57,
+     57,
+     0
+    ],
+    "window": [
+     75,
+     75,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     11,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     59,
+     59,
+     8
+    ],
+    "window": [
+     73,
+     71,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     7,
+     13,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     50,
+     50,
+     8
+    ],
+    "window": [
+     68,
+     69,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     9,
+     11,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     62,
+     62,
+     12
+    ],
+    "window": [
+     82,
+     80,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     9,
+     11,
+     15
+    ],
+    "cardinality": 16,
+    "anchored": [
+     47,
+     47,
+     20
+    ],
+    "window": [
+     61,
+     62,
+     20
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     9,
+     13,
+     15
+    ],
+    "cardinality": 16,
+    "anchored": [
+     40,
+     40,
+     20
+    ],
+    "window": [
+     53,
+     53,
+     20
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     5,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     45,
+     45,
+     8
+    ],
+    "window": [
+     56,
+     56,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     7,
+     9,
+     11,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     50,
+     50,
+     12
+    ],
+    "window": [
+     69,
+     72,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     7,
+     9,
+     11,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     72,
+     72,
+     12
+    ],
+    "window": [
+     94,
+     93,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     7,
+     9,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     66,
+     66,
+     12
+    ],
+    "window": [
+     91,
+     91,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     7,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     45,
+     45,
+     0
+    ],
+    "window": [
+     60,
+     56,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     3,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     58,
+     58,
+     12
+    ],
+    "window": [
+     76,
+     77,
+     12
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     5,
+     7,
+     9,
+     11,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     41,
+     41,
+     0
+    ],
+    "window": [
+     50,
+     51,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     5,
+     7,
+     9,
+     11,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     61,
+     61,
+     8
+    ],
+    "window": [
+     80,
+     79,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     5,
+     7,
+     9,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     55,
+     55,
+     8
+    ],
+    "window": [
+     76,
+     75,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     5,
+     7,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     46,
+     46,
+     0
+    ],
+    "window": [
+     54,
+     56,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     5,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     48,
+     48,
+     8
+    ],
+    "window": [
+     56,
+     62,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     1,
+     7,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     30,
+     30,
+     0
+    ],
+    "window": [
+     38,
+     38,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     5,
+     7,
+     9,
+     11,
+     13
+    ],
+    "cardinality": 20,
+    "anchored": [
+     45,
+     45,
+     0
+    ],
+    "window": [
+     66,
+     66,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     5,
+     7,
+     9,
+     11,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     57,
+     57,
+     8
+    ],
+    "window": [
+     73,
+     76,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     5,
+     7,
+     9,
+     13,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     52,
+     52,
+     8
+    ],
+    "window": [
+     70,
+     74,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     5,
+     7,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     56,
+     56,
+     0
+    ],
+    "window": [
+     70,
+     73,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     5,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 18,
+    "anchored": [
+     46,
+     46,
+     8
+    ],
+    "window": [
+     63,
+     67,
+     8
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     3,
+     7,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     43,
+     43,
+     0
+    ],
+    "window": [
+     62,
+     59,
+     0
+    ],
+    "on_diagonal_anchored": true
+   },
+   {
+    "seeds": [
+     5,
+     7,
+     9,
+     11,
+     13,
+     15
+    ],
+    "cardinality": 20,
+    "anchored": [
+     43,
+     43,
+     0
+    ],
+    "window": [
+     53,
+     57,
+     0
+    ],
+    "on_diagonal_anchored": true
+   }
+  ]
+ },
+ "scorer_version": "1.0.0",
+ "commit": "8e8a33869b4be46f6430a37577a12d8fe4db62de",
+ "timestamp": "2026-07-22T04:35:57+00:00"
+}

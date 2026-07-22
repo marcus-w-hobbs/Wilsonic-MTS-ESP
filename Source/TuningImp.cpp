@@ -12,9 +12,7 @@
 #include "Microtone.h"
 #include "MicrotoneArray.h"
 #include "TuningImp.h"
-#include "WilsonicAppSkin.h"
 #include "WilsonicMath.h"
-#include "WilsonicProcessor.h"
 
 #pragma mark - Lifecycle 
 
@@ -444,26 +442,12 @@ String TuningImp::scalaComments() {
 
 #pragma mark - drawing
 
-// default is false because a tuning must implement a custom paint method (below)
+// default is false because a tuning must implement a custom paint method
+// paint() and _paintHelper() live in TuningImp+paint.cpp so that this
+// file's tuning numerics compile without WilsonicProcessor
 
 bool TuningImp::canPaintTuning() {
     return false;
-}
-
-// if one were to set canPaintTuning to true, but not provide a custom paint method, this default would be called
-void TuningImp::paint(WilsonicProcessor& processor, Graphics& g, Rectangle<int> bounds) {
-    g.fillAll(processor.getAppSkin().getBgColor());
-    g.setColour(Colours::grey);
-    g.drawText(getTuningName(), bounds, Justification::centred);
-}
-
-void TuningImp::_paintHelper(WilsonicProcessor& processor, Graphics& g, Rectangle<int> bounds) {
-    g.fillAll(processor.getAppSkin().getBgColor());
-    if (AppExperiments::showDebugBoundingBox) {
-        g.setColour(Colours::mediumpurple);
-        g.drawRect(bounds, 2);
-        g.drawText(String(_debug_paint_counter++), bounds, Justification::topRight);
-    }
 }
 
 #pragma mark - nnForDeviceSpace
