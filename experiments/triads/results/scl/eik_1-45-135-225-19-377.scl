@@ -1,6 +1,20 @@
-! eikosany 1-45-135-225-19-377  anchored P=22 S=22 (scorer 1.0.0, b575c38e)
+! eikosany 1-45-135-225-19-377  anchored P=22 S=22 (scorer 1.0.0, 8e8a3386)
 !
-eikosany 1-45-135-225-19-377  anchored P=22 S=22 (scorer 1.0.0, b575c38e)
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 6_3   [Eikosany (20 tones)]
+!   A = 1
+!   B = 19
+!   C = 45
+!   D = 135
+!   E = 225
+!   F = 377
+!   APVTS: CPSCALE=6_3, CPSA=1, CPSB=19, CPSC=45, CPSD=135, CPSE=225, CPSF=377
+!   Notation: canonical CPS(6,3) = 6 seeds choose 3; Erv writes this 3)6.
+! SCORE: P=22 S=22 G=0  [anchored convention]
+! PROVENANCE: scorer 1.0.0, commit 8e8a3386, EIK-001 eikosany ranking
+!
+eikosany 1-45-135-225-19-377  anchored P=22 S=22 (scorer 1.0.0, 8e8a3386)
  20
 !
  380/377

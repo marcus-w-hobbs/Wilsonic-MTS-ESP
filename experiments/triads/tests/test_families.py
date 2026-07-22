@@ -9,7 +9,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from families import cps  # noqa: E402
 from families.cps import cps_products, cps_scale, hexany, odd_seed_sets  # noqa: E402
+import scala  # noqa: E402
 from families.mos import mos_cardinalities, mos_cents, zigzag  # noqa: E402
 
 
@@ -64,3 +66,48 @@ class TestMos(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestWilsonicRecreationLines(unittest.TestCase):
+    """Every .scl this harness emits must carry enough to rebuild the tuning
+    in the Wilsonic UI. These pin the mapping against the plugin source:
+    CPSModel::__scaleNames (CPSModel.cpp:16) and the CPSA..CPSF parameter
+    IDs (CPSModel.h:73-84)."""
+
+    def test_eikosany_block(self):
+        lines = cps.wilsonic_recreation_lines((1, 3, 5, 7, 9, 11), 3)
+        text = "\n".join(lines)
+        self.assertIn("Design: Combination Product Sets", text)
+        self.assertIn("Scale: 6_3", text)
+        self.assertIn("Eikosany (20 tones)", text)
+        for letter, value in zip("ABCDEF", (1, 3, 5, 7, 9, 11)):
+            self.assertIn(f"  {letter} = {value}", text)
+        self.assertIn("CPSCALE=6_3", text)
+        self.assertIn("CPSF=11", text)
+
+    def test_erv_notation_is_reversed_and_stated(self):
+        # Canonical CPS(n,k); Erv writes k)n. Stating it prevents the
+        # convention confusion the repo memory warns about.
+        text = "\n".join(cps.wilsonic_recreation_lines((1, 3, 5, 9), 2))
+        self.assertIn("canonical CPS(4,2)", text)
+        self.assertIn("Erv writes this 2)4", text)
+
+    def test_unused_seed_letters_are_called_out(self):
+        text = "\n".join(cps.wilsonic_recreation_lines((1, 3, 5, 9), 2))
+        self.assertIn("(E, F unused", text)
+
+    def test_seeds_are_sorted_into_letters(self):
+        text = "\n".join(cps.wilsonic_recreation_lines((45, 1, 377), 2))
+        self.assertIn("  A = 1", text)
+        self.assertIn("  B = 45", text)
+        self.assertIn("  C = 377", text)
+
+    def test_scl_output_carries_the_block(self):
+        scl = scala.to_scala(
+            "test", cps.cps_products((1, 3, 5, 9), 2),
+            cps.wilsonic_recreation_lines((1, 3, 5, 9), 2))
+        self.assertIn("! RECREATE IN WILSONIC:", scl)
+        self.assertIn("!   Scale: 4_2", scl)
+        # comments must precede the note count, and ratios stay intact
+        self.assertLess(scl.index("RECREATE"), scl.index("\n 6\n"))
+        self.assertIn(" 5/4", scl)

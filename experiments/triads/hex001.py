@@ -26,6 +26,7 @@ sys.path.insert(0, str(HERE))
 import scorer  # noqa: E402
 from families.cps import cps_products, odd_seed_sets  # noqa: E402
 from scala import write_scl  # noqa: E402
+from families.cps import wilsonic_recreation_lines  # noqa: E402
 
 TOP_N_SCL = 10
 
@@ -137,7 +138,14 @@ def main() -> None:
         desc = (f"hexany {tag}  P={b['P']} S={b['S']} "
                 f"min={b['score_min']} (anchored, scorer "
                 f"{rec['scorer_version']}, {rec['commit'][:8]})")
-        path = write_scl(scl_dir / f"hex_{tag}.scl", desc, rec["products"])
+        prov = wilsonic_recreation_lines(rec["seeds"], 2) + [
+            f"SCORE: P={b['P']} S={b['S']} G={b['G']} "
+            f"min(P,S)={b['score_min']}  [anchored convention]",
+            f"PROVENANCE: scorer {rec['scorer_version']}, commit "
+            f"{rec['commit'][:8]}, HEX-001 exhaustive hexany sweep",
+        ]
+        path = write_scl(scl_dir / f"hex_{tag}.scl", desc,
+                         rec["products"], prov)
         print(f"wrote {path}")
 
 

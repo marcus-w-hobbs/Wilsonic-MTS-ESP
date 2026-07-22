@@ -226,7 +226,7 @@ Implemented in `TuningImp::_analyzeProportionalTriads()`.
 
 When these conditions are met, sum and difference tones land *on other scale degrees*, creating harmonic reinforcement rather than interference.
 
-**The code**: `_analyzeProportionalTriads()` iterates all pitch pairs, computes both means, and searches for scale degrees within tolerance (currently 0.0005 in unit pitch space). Results populate `_proportionalTriads` and `_subcontraryTriads` vectors.
+**The code**: `_analyzeProportionalTriads()` iterates all pitch pairs, computes both means, and searches for scale degrees within tolerance (currently 0.0005 as an absolute difference in **linear frequency**, not pitch space — see "Tolerance and Perception" below). Results populate `_proportionalTriads` and `_subcontraryTriads` vectors.
 
 ### The Optimization Landscape
 
@@ -269,9 +269,15 @@ Implemented in `Brun+Gral.cpp`.
 
 ### Tolerance and Perception
 
-The magic number `0.0005` in `_analyzeProportionalTriads()` represents a perceptual threshold. Human pitch discrimination is roughly 5-10 cents in musically relevant registers. The tolerance allows "near misses" that are perceptually equivalent to exact coincidences.
+The magic number `0.0005` in `_analyzeProportionalTriads()` is an absolute tolerance in **linear frequency** (`fabsf(major - kmf) < tolerance`, TuningImp.cpp), *not* in unit pitch space. This distinction matters, because pitch perception is logarithmic while the comparison is linear:
 
-**Note**: This could be parameterized. Lower tolerance = stricter matching, fewer triads. Higher tolerance = more triads but weaker reinforcement.
+- the same 0.0005 is **≈0.865¢** for triads rooted at 1/1, but only **≈0.433¢** near the octave;
+- so the analyzer is exactly **twice as strict at the top of the octave as at the bottom**, which nothing in the music theory motivates;
+- both figures are far tighter than human pitch discrimination (roughly 5–10¢ in musically relevant registers), so this is not a perceptual threshold — it is effectively an exactness test for just-intoned coincidences.
+
+Measured, not asserted: `experiments/triads/results/crossval001.json` (`tolerance_register_table`), against the real compiled analyzer.
+
+**Note**: This could be parameterized. Lower tolerance = stricter matching, fewer triads. Higher tolerance = more triads but weaker reinforcement. If it is ever revisited, expressing it in cents (or as a ratio) would remove the register dependence.
 
 ### Key Mathematical Relationships
 
@@ -301,7 +307,7 @@ Erv Wilson (1928-2016) developed these theories largely without computational to
 When working on this codebase:
 
 1. **Understand both spaces**: Many bugs come from confusing log-pitch and linear-frequency operations
-2. **Respect the tolerance**: The 0.0005 threshold is empirically tuned; changes have cascading effects
+2. **Respect the tolerance**: The 0.0005 threshold is empirically tuned and lives in *linear frequency*, so it is register-dependent in cents; changes have cascading effects
 3. **Test with extreme generators**: Edge cases near 0, 0.5, and 1 reveal algorithmic assumptions
 4. **Visualize everything**: Wilson thought visually; the `paint()` methods are as important as the math
 5. **Remember the goal**: Scales that serve both melody AND harmony—this is the Wilson criterion

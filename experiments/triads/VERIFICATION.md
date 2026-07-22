@@ -41,10 +41,12 @@ Grades, weakest to strongest:
    bit-exactly** — cents↔frequency conversions compare within 1 ulp /
    epsilon, never bit equality (observed max deviation in crossval002:
    1 ulp).
-2. **Repo CLAUDE.md misstates the analyzer tolerance space** ("0.0005 in
-   unit pitch space" — it is absolute linear frequency, TuningImp.cpp:793
-   post-split). Correction proposed to Marcus; not yet applied since it
-   is a tracked repo doc.
+2. ~~**Repo CLAUDE.md misstates the analyzer tolerance space**~~ —
+   **CLOSED 2026-07-21.** Marcus approved the correction; all three
+   mentions in CLAUDE.md now state that 0.0005 is an absolute difference
+   in linear frequency (not unit pitch space), with the register
+   dependence (0.865¢ at f=1 vs 0.433¢ near the octave) and a pointer to
+   the crossval001 tolerance_register_table that measured it.
 3. **Stub caveat:** the test binaries compile real Source files against
    stub headers (tests/JuceHeader.h, tests/WilsonicAppSkin.h — inert
    scaffolding: assertions, locks, string formatting, UI geometry).

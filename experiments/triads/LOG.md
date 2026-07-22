@@ -362,3 +362,130 @@ versions (hex001 70/70, eikosany file, crossval001, fine sweep
 30,009/30,009). This is the receipt that decision 1 changed nothing but
 names and decision 2's guard is a genuine no-op on the exact path. C++
 test_tuning 46/46, crossval002 0 mismatches, Python 64/64.
+
+## 2026-07-21 — DECISION 4: wrap-drop NOT fixed (Marcus)
+
+**Decision:** no UI changes to Wilsonic right now. Recorded in FINDINGS.md
+as a **known bug, deliberately deferred** — deliberately NOT as "intended
+behavior", because the analyzer's own wrap machinery (octave factors, j to
+npo+1) exists to find these triads and only the post-loop NPO-map lookup
+discards them. Calling it intended would make it harder to revisit.
+
+**Risk-reducing reading done at decision time** (so a future fix is
+cheaper): both UI consumers already handle unwrapped indices correctly,
+because both convert degree → MIDI note and go through the 128-note tuning
+table rather than indexing the npo array — keyboard
+(WilsonicMidiKeyboardComponent+paint.cpp:176, already range-checked) and
+pitch wheel (TuningRendererComponent.cpp:165, via microtoneAtNoteNumber →
+getPitchValue01). So the eventual fix is contained to the filter and
+touches no rendering. The 46 test_tuning checks now pin the buggy behavior
+deliberately rather than incidentally.
+
+**No code changed.** Plugin untouched.
+
+## 2026-07-21 — LOOP-001: batch CPS search (entry before run)
+
+**Context:** Marcus redirected to what the harness is for — offline/batch
+search reporting winning tuning parameters.
+
+**Search-space reasoning:** the diagonal theorem says min(P,S) ≡ P for
+every MOS and every CPS(n, n/2), so a search over eikosanies alone cannot
+exercise the balance criterion at all. This search therefore covers the
+ASYMMETRIC families too — CPS(5,2)/(5,3) and CPS(6,2)/(6,4), where
+CPS(n,k) inverts to CPS(n,n−k) rather than to itself and P ≠ S is
+possible. That is where min(P,S) does work the raw P count does not, and
+where plan §LOOP-003's "does any non-CPS-symmetric construction reach the
+diagonal at comparable scores" becomes answerable.
+
+**Two-phase inner loop** (plan §3.1, no LLM): phase 1 enumerates ALL seed
+sets from odds ≤ 21 for all six families, so winners in the musically
+interesting region are provably optimal there rather than whatever random
+search happened to hit; phase 2 is time-boxed MAP-Elites (70% mutate an
+elite, 30% random) over odds ≤ 399, which includes Marcus's calibration
+set values. Archive bins: (family, cardinality, P/S balance bucket, prime
+limit). RNG seed recorded; runs are exactly reproducible.
+
+**Hypothesis:** (1) the classic Wilson seed sets top their own cardinality
+bins; (2) the asymmetric families produce exact dual pairs — CPS(n,k) and
+CPS(n,n−k) on the same seeds swap P and S exactly; (3) high-prime-limit
+seed sets fill archive cells but do not beat the classics on min(P,S).
+
+**Result:** pending — run below.
+
+**Caught during smoke tests, before the real run:** the first report
+ranked across cardinalities within a family, violating plan §1.3's
+size-normalization rule. CPS(6,2) on 1-3-5-7-9-15 collapses to 13 tones
+(product collisions) and appeared to "beat" the 15-tone classic. Rankings
+are now per (family, cardinality).
+
+## 2026-07-21 — DECISION 5 applied: CLAUDE.md tolerance correction (Marcus)
+
+Approved and applied. All three mentions in the repo CLAUDE.md now state
+that the analyzer's 0.0005 is an absolute difference in **linear
+frequency**, not unit pitch space, with the consequence spelled out: the
+same constant is ≈0.865¢ at f=1 but ≈0.433¢ near the octave, so the
+analyzer is twice as strict at the top of the octave as the bottom. The
+old text also called it a perceptual threshold comparable to 5–10¢ pitch
+discrimination — corrected, since both figures are an order of magnitude
+tighter; it is effectively an exactness test for JI coincidences. Points
+at crossval001's tolerance_register_table, which measured it against the
+real compiled analyzer. VERIFICATION.md gap 2 CLOSED. Docs only.
+
+## 2026-07-21 — .scl artifacts must carry UI recreation params (Marcus)
+
+**Requirement:** every .scl this harness emits must say, in comments, the
+tuning design and parameters needed to rebuild it in the Wilsonic UI.
+
+**Applied:** `families.cps.wilsonic_recreation_lines()` emits a RECREATE
+IN WILSONIC block — design name ("Combination Product Sets"), the Scale
+selector value (`4_2`, `5_3`, `6_3`, …, from CPSModel::__scaleNames,
+CPSModel.cpp:16), every seed as its UI letter A–F, the APVTS parameter
+string (CPSCALE/CPSA…CPSF, CPSModel.h:73-84), which letters are unused at
+that scale selection, and the score + provenance. It also states BOTH
+notations — canonical CPS(n,k) and Erv's reversed k)n — so no future
+reader has to guess which convention a file used.
+
+scala.to_scala/write_scl take a `provenance` argument; hex001,
+hex003_eik001 and archive_scl all pass it. **All 37 .scl files on disk
+regenerated and verified to carry the block (37/37).** Five goldens pin
+the mapping against the plugin source so it cannot silently drift.
+
+## 2026-07-21 — LOOP-001 result + three flaws found in the search itself
+
+**Result vs hypothesis:** (1) CONFIRMED for the eikosany — 1-3-5-7-9-11 is
+UNBEATEN at N=20 (min=77) across ~58k candidates. (2) CONFIRMED — every
+asymmetric pair swaps exactly, e.g. CPS(5,2)/(5,3) on 1-3-5-7-9 give
+(31,18)/(18,31). (3) FALSIFIED in part — several classics ARE beaten
+within their own cardinality bin, always by more BALANCED sets rather
+than higher-P ones, which is exactly what min(P,S) is built to reward:
+- dekany 1-3-5-7-9 (min=18, (31,18)) beaten by 3-5-15-21-45 (min=20,
+  (24,20)); an earlier run also found 5-7-15-35-45 at min=21 ((23,21)).
+- pentadekany 1-3-5-7-9-11 (min=27, (70,27)) beaten by 3-5-7-21-63-315
+  (min=33, (35,33) — nearly on the diagonal), 3-5-7-15-45-175 (min=29)
+  and 5-9-15-19-21-45 (min=29).
+- hexany 1-3-5-7 (min=8) beaten by 1-3-5-9 and 3-7-15-21 (min=9), which
+  reproduces HEX-001 exactly — a good consistency check on the new code.
+- Marcus's calibration eikosany: 75 archive cells beat its min=22.
+
+Final consolidated archive: 3,417 cells over two independent random walks
+(rng_seed 1 and 2) plus the exhaustive odds≤21 pass, ~95k candidates.
+
+**Three flaws found in my own search before trusting its numbers:**
+1. Rankings compared across cardinalities, violating plan §1.3 size
+   normalization. CPS(6,2) on 1-3-5-7-9-15 collapses to 13 tones via
+   product collisions and appeared to beat the 15-tone classic. Fixed:
+   rankings are per (family, cardinality).
+2. The archive was DUAL-INCOMPLETE: it declared the classic dekany
+   UNBEATEN at CPS(5,2) while 5-7-15-35-45 scored min=21 there — that
+   seed set had only ever been tried at k=3. Fixed: every candidate is
+   evaluated together with its dual CPS(n,n−k).
+3. Landmarks were being EVICTED from their MAP-Elites cells, so 4 of 8
+   silently vanished from the comparison table — the very table the ear
+   checks depend on. Fixed: landmarks tracked separately from the archive.
+Plus: each run OVERWROTE the archive, losing prior discoveries (run 1's
+min=21 dekany was erased by run 2). Fixed: the archive now accumulates
+across runs per plan §3.1's append-only requirement, with carry-in
+reported.
+
+**Kept.** Runs: `python3.12 search.py --seconds 900 --rng-seed N`,
+`python3.12 archive_scl.py`, `python3.12 search.py --report-only`.

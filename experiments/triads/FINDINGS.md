@@ -67,6 +67,25 @@ reason to exclude wrap triads, so this looks like a bug rather than a
 choice; fixing it is a UI-visible behavior change and is Marcus's call —
 the receipts here are the regression baseline either way.
 
+**DECIDED 2026-07-21 — not fixing now (Marcus): no UI changes to Wilsonic
+at this time.** Recorded as a known bug that is deliberately deferred, NOT
+as intended behavior — the search loop's own wrap machinery (octave
+factors, j to npo+1) exists precisely to find these triads, so the
+original intent included them; only the post-loop NPO-map lookup discards
+them. Additional reading done at decision time, which reduces the eventual
+fix's risk: both UI consumers already handle unwrapped indices correctly,
+because both convert degree → MIDI note (`nn60 + degree`) and go through
+the 128-note tuning table rather than indexing the npo array — the
+keyboard (WilsonicMidiKeyboardComponent+paint.cpp:176, which already
+range-checks against numMidiNotes) and the pitch wheel
+(TuningRendererComponent.cpp:165, via microtoneAtNoteNumber →
+getPitchValue01, so an octave-up degree lands at the correct angle). So
+whenever this is revisited, the change is contained to the filter
+(map the pitch class `d % npo`, re-apply the octave offset) and touches no
+rendering code. The 46 characterization checks in tests/test_tuning stay
+as the regression baseline, and they now pin the buggy behavior
+deliberately rather than incidentally.
+
 **2026-07-20 — Every hexany sits exactly on the P = S diagonal (anchored
 convention).** All 68 six-note hexanies from odd seeds ≤ 15 score P = S
 *exactly* under middle-anchored scoring (results/hex001.jsonl, scorer

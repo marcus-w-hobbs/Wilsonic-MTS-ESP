@@ -25,6 +25,7 @@ sys.path.insert(0, str(HERE))
 import scorer  # noqa: E402
 from families.cps import cps_products, cps_scale, odd_seed_sets  # noqa: E402
 from scala import write_scl  # noqa: E402
+from families.cps import wilsonic_recreation_lines  # noqa: E402
 
 MARCUS_EIKOSANY = (1, 45, 135, 225, 19, 377)
 
@@ -103,8 +104,14 @@ def main() -> None:
         desc = (f"eikosany {tag}  anchored P={r['anchored'][0]} "
                 f"S={r['anchored'][1]} (scorer {scorer.SCORER_VERSION}, "
                 f"{_commit()[:8]})")
+        prov = wilsonic_recreation_lines(r["seeds"], 3) + [
+            f"SCORE: P={r['anchored'][0]} S={r['anchored'][1]} "
+            f"G={r['anchored'][2]}  [anchored convention]",
+            f"PROVENANCE: scorer {scorer.SCORER_VERSION}, commit "
+            f"{_commit()[:8]}, EIK-001 eikosany ranking",
+        ]
         write_scl(scl_dir / f"eik_{tag}.scl", desc,
-                  cps_products(tuple(r["seeds"]), 3))
+                  cps_products(tuple(r["seeds"]), 3), prov)
 
     out = HERE / "results" / "hex003_eik001.json"
     out.write_text(json.dumps({

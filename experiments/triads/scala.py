@@ -16,21 +16,40 @@ from typing import Iterable, Union
 from scorer import RationalLike, canonical_rational_scale
 
 
-def to_scala(description: str, ratios: Iterable[RationalLike]) -> str:
-    """Render a canonical JI scale as .scl text (exact ratios, no cents)."""
+def to_scala(
+    description: str,
+    ratios: Iterable[RationalLike],
+    provenance: Iterable[str] = (),
+) -> str:
+    """Render a canonical JI scale as .scl text (exact ratios, no cents).
+
+    `provenance` lines are written as Scala comments in the header block.
+    Every file this harness emits MUST carry enough there to rebuild the
+    tuning in the Wilsonic UI from scratch -- design name, the scale/subset
+    selection, and every seed parameter -- so a .scl found on disk months
+    later is never a dead end. See families.cps.wilsonic_recreation_lines.
+    """
     scale = canonical_rational_scale(ratios)
     root = scale[0]
     relative = [degree / root for degree in scale[1:]] + [Fraction(2)]
-    lines = [f"! {description}", "!", description, f" {len(relative)}", "!"]
+    lines = [f"! {description}", "!"]
+    for line in provenance:
+        lines.append(f"! {line}")
+    if provenance:
+        lines.append("!")
+    lines += [description, f" {len(relative)}", "!"]
     for r in relative:
         lines.append(f" {r.numerator}/{r.denominator}")
     return "\n".join(lines) + "\n"
 
 
 def write_scl(
-    path: Union[str, Path], description: str, ratios: Iterable[RationalLike]
+    path: Union[str, Path],
+    description: str,
+    ratios: Iterable[RationalLike],
+    provenance: Iterable[str] = (),
 ) -> Path:
     """Write a .scl file and return its path."""
     out = Path(path)
-    out.write_text(to_scala(description, ratios), encoding="ascii")
+    out.write_text(to_scala(description, ratios, provenance), encoding="ascii")
     return out

@@ -1,0 +1,27 @@
+! CPS(5,3) seeds 3-5-9-15-45 N=8 P=14 S=13 G=10 min=13 5-limit [scorer 1.0.0 middle-anchored]
+!
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 5_3   [Dekany (10 tones)]
+!   A = 3
+!   B = 5
+!   C = 9
+!   D = 15
+!   E = 45
+!   (F unused at this scale selection)
+!   APVTS: CPSCALE=5_3, CPSA=3, CPSB=5, CPSC=9, CPSD=15, CPSE=45
+!   Notation: canonical CPS(5,3) = 5 seeds choose 3; Erv writes this 3)5.
+! SCORE: P=14 S=13 G=10 min(P,S)=13  N=8  5-limit  [middle-anchored]
+! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'mutation'
+!
+CPS(5,3) seeds 3-5-9-15-45 N=8 P=14 S=13 G=10 min=13 5-limit [scorer 1.0.0 middle-anchored]
+ 8
+!
+ 9/8
+ 5/4
+ 45/32
+ 3/2
+ 25/16
+ 5/3
+ 15/8
+ 2/1
