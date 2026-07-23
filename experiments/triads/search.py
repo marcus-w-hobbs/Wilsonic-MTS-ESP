@@ -150,9 +150,33 @@ def evaluate(cand: Candidate) -> Optional[dict]:
     }
 
 
+def geometric_bucket(p: int, s: int, g: int) -> str:
+    """How G-heavy the scale is, relative to its P/S content.
+
+    A diversity axis in its own right, added 2026-07-21: Marcus wants
+    G-heavy scales too, and without this axis they never survive to be
+    reported. The elite rule (is_better) is still min(P,S)-first, so a
+    G-rich candidate sharing a cell with a P/S-richer one is evicted before
+    any lens can see it -- selection and reporting must agree on what
+    counts as a distinct kind of scale.
+    """
+    if g == 0:
+        return "G0"
+    total = p + s
+    if total == 0:
+        return "G_only"
+    ratio = g / total
+    if ratio < 0.15:
+        return "G_low"
+    if ratio < 0.4:
+        return "G_mid"
+    return "G_high"
+
+
 def bin_key(rec: dict) -> tuple:
     return (rec["family"], rec["cardinality"], rec["balance"],
-            rec["prime_limit"])
+            rec["prime_limit"],
+            geometric_bucket(rec["P"], rec["S"], rec["G"]))
 
 
 def is_better(new: dict, cur: dict) -> bool:
@@ -351,6 +375,48 @@ def report(archive: dict[tuple, dict], meta: dict, top: int = 3,
                 print(f"    min={r['score_min']:4d}  (P,S,G)=({r['P']},"
                       f"{r['S']},{r['G']})  {r['prime_limit']:3d}-limit  "
                       f"seeds {seeds}{tag}")
+
+    # Per-BUCKET winners. Marcus's call 2026-07-21, after the ear check:
+    # he wants P-heavy AND S-heavy AND G-heavy scales, so min(P,S) is not
+    # the thing to maximize -- it actively penalizes the P-heavy and S-heavy
+    # sets he likes. The archive's balance axis is the answer: report the
+    # best of EACH character, under several lenses, and let the ear choose.
+    LENSES = (
+        ("min(P,S)", lambda r: (r["score_min"], r["P"] + r["S"])),
+        ("P+S+G", lambda r: (r["P"] + r["S"] + r["G"], r["score_min"])),
+        ("P", lambda r: (r["P"], r["S"])),
+        ("S", lambda r: (r["S"], r["P"])),
+        ("G", lambda r: (r["G"], r["P"] + r["S"])),
+    )
+    BUCKET_ORDER = ("strong_P", "skew_P", "near_P", "diagonal",
+                    "near_S", "skew_S", "strong_S",
+                    "degenerate_P", "degenerate_S")
+
+    print("\n=== PER-BUCKET WINNERS (balance character x lens) ===")
+    print("min(P,S) is NOT the ranking, just one lens: an ear that wants")
+    print("P-heavy and S-heavy scales equally is not served by a balance loss.")
+    for family in sorted(by_family):
+        rows_all = by_family[family]
+        cards = sorted({r["cardinality"] for r in rows_all}, reverse=True)
+        if not cards:
+            continue
+        best_card = cards[0]
+        rows = [r for r in rows_all if r["cardinality"] == best_card]
+        print(f"\n{family}  (N={best_card}, the family's full cardinality)")
+        for bucket in BUCKET_ORDER:
+            in_bucket = [r for r in rows if r["balance"] == bucket]
+            if not in_bucket:
+                continue
+            print(f"  {bucket}:")
+            shown = set()
+            for lens_name, key in LENSES:
+                w = max(in_bucket, key=key)
+                sig = (tuple(w["seeds"]), w["k"])
+                mark = "" if sig not in shown else "   (as above)"
+                shown.add(sig)
+                seeds = "-".join(str(x) for x in w["seeds"])
+                print(f"    best by {lens_name:9} (P,S,G)=({w['P']},{w['S']},"
+                      f"{w['G']})  {w['prime_limit']:3d}-limit  {seeds}{mark}")
 
     off = [r for r in archive.values() if r["P"] != r["S"]]
     print(f"\n=== OFF-DIAGONAL entries (P != S): {len(off)} ===")

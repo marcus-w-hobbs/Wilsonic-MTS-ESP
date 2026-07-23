@@ -1,0 +1,39 @@
+! CPS(6,3) seeds 1-45-135-225-19-377 N=20 P=15 S=15 G=0 min=15 29-limit [scorer 1.1.0 middle-anchored]
+!
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 6_3   [Eikosany (20 tones)]
+!   A = 1
+!   B = 19
+!   C = 45
+!   D = 135
+!   E = 225
+!   F = 377
+!   APVTS: CPSCALE=6_3, CPSA=1, CPSB=19, CPSC=45, CPSD=135, CPSE=225, CPSF=377
+!   Notation: canonical CPS(6,3) = 6 seeds choose 3; Erv writes this 3)6.
+! SCORE: P=15 S=15 G=0 min(P,S)=15  N=20  29-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'unknown', landmark 'eikosany_marcus_calibration'
+!
+CPS(6,3) seeds 1-45-135-225-19-377 N=20 P=15 S=15 G=0 min=15 29-limit [scorer 1.1.0 middle-anchored]
+ 20
+!
+ 380/377
+ 135/128
+ 12825/12064
+ 19/16
+ 450/377
+ 456/377
+ 5/4
+ 30375/24128
+ 675/512
+ 4275/3016
+ 540/377
+ 95/64
+ 3/2
+ 608/377
+ 76/45
+ 2565/1508
+ 225/128
+ 57/32
+ 675/377
+ 2/1

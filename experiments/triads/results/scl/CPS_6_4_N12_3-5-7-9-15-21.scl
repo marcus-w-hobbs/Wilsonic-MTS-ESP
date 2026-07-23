@@ -1,4 +1,4 @@
-! CPS(6,4) seeds 3-5-7-9-15-21 N=12 P=31 S=33 G=12 min=31 7-limit [scorer 1.0.0 middle-anchored]
+! CPS(6,4) seeds 3-5-7-9-15-21 N=12 P=25 S=26 G=6 min=25 7-limit [scorer 1.1.0 middle-anchored]
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -11,10 +11,10 @@
 !   F = 21
 !   APVTS: CPSCALE=6_4, CPSA=3, CPSB=5, CPSC=7, CPSD=9, CPSE=15, CPSF=21
 !   Notation: canonical CPS(6,4) = 6 seeds choose 4; Erv writes this 4)6.
-! SCORE: P=31 S=33 G=12 min(P,S)=31  N=12  7-limit  [middle-anchored]
-! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'exhaustive_dual'
+! SCORE: P=25 S=26 G=6 min(P,S)=25  N=12  7-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'exhaustive_dual'
 !
-CPS(6,4) seeds 3-5-7-9-15-21 N=12 P=31 S=33 G=12 min=31 7-limit [scorer 1.0.0 middle-anchored]
+CPS(6,4) seeds 3-5-7-9-15-21 N=12 P=25 S=26 G=6 min=25 7-limit [scorer 1.1.0 middle-anchored]
  12
 !
  28/27
