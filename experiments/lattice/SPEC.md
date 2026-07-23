@@ -230,7 +230,36 @@ carries the eikosany with small error." Finite, enumerable search;
 organize candidates by hidden-lattice invariants per H-M1, not by raw
 generator value.
 
-**Two success regimes, both interesting:** (i) faithful — all 20 tones
+**BRIDGE-000 — ground truth: D'Alessandro (Wilson 1975/1980/1989).**
+Primary source: "D'Alessandro, Like a Hurricane" (scan:
+`~/Library/Mobile Documents/com~apple~CloudDocs/Documents/ERV/scans
+by Kraig/Marcus/anaphoria/dal.PDF`). Erv executed the bridge by hand:
+his "template" is exactly the 31-EDO patent val (3→deg 18, 5→10,
+7→25, 11→14; fifths-chain positions +1, +4, +10, +18; 9 = 3² treated
+linearly: +2, deg 5 = 2·18 mod 31), applied HOMOMORPHICALLY ("the
+final outcome is inevitable") to all 32 tones of the full
+(0,6)–(6,6) EG6, occupying 32 of 36 chain positions. Collisions at
+degrees {0,5,10,13,18,23,28} are val-kernel commas (385/384,
+2079/2048 — named by Wilson, Figs 24/26), resolved by keyboard
+geometry (distinct linear positions), NOT by tempering pitch.
+Task: encode the val, reproduce all 32 placements + 7 collision
+pairs against the scan, then run the frozen scorer on D'Alessandro —
+its first-ever harmonic fidelity measurement. This is the calibration
+standard every BRIDGE candidate must beat. Run before BRIDGE-001.
+Note: the template's 9 = 3² arithmetic takes the H-L4a (prime-rank)
+side while Wilson's 1965 letter takes H-L4b (odd-identity) — the
+fork is internal to Wilson's own corpus.
+
+**Three success regimes** (regime iii discovered in dal.PDF):
+- (iii) *pitch-just, address-tempered* (the D'Alessandro regime):
+  keep all pitches exactly just; temper only the degree bookkeeping.
+  Error budget = 0 by construction; every CPS triad survives exactly;
+  the cost appears as duplicate addresses (measure with M2) and is
+  paid by keyboard geometry or octave voicing. Also historical prior
+  art for LAT-MEL: Wilson 1968, "2 Eikosanies melodically compatible
+  with modulus 22."
+
+**Two tempering regimes, both interesting:** (i) faithful — all 20 tones
 distinct, subsets intact, errors < ε_bridge (sweep 1–15¢); (ii)
 tempered-merge — a comma identifies specific CPS tones; not failure
 but temperament-as-feature (a smaller eikosany image with reinforced
