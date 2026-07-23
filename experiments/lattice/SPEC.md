@@ -195,8 +195,23 @@ verification bit, window params, frozen scores, descriptors).
 ## BRIDGE-001 — CPS subset structure inside an MOS (the endgame)
 
 **Question (Marcus, 2026-07-22):** given an MOS whose hidden lattice
-approximates CPS(6,3), can the CPS subset structure (the 15 hexanies,
-dekanies, EulerGenus navigation) still be explored inside the MOS?
+approximates a CPS, can the CPS subset structure (component CPS(n,k),
+EulerGenus navigation) still be explored inside the MOS?
+
+**Scope decision (Marcus, 2026-07-22): EG4 FIRST.** Target the
+{1,3,5,7} Euler Genus — hexany CPS(4,2) (6 tones, octahedron, scorer
+receipt (8,8) = its 8 triadic faces) up to the full 16-tone tesseract
+— before EG6. Rationale: the EG4 lattice is rank 3 (primes 3,5,7), so
+an MOS embedding needs exactly ONE comma, not two — the kernel
+enumeration collapses to a short list of planar temperaments, and
+host MOS cardinalities drop to the playable 7–22 range (6 addresses
+for the hexany, 16 for the tesseract). Triad-survival becomes
+literal: count surviving octahedron faces. All machinery
+(val-assignment, monotonicity filter, filtered design BRIDGE-001b) is
+factor-set-agnostic, so EG6 (eikosany, 2-comma kernels, N ≥ 20)
+becomes **BRIDGE-002**, run only after EG4 validates the pipeline.
+The eikosany-specific text below reads as the BRIDGE-002 scale-up;
+method and design decisions apply to both.
 
 **Answer to be verified: yes, structurally guaranteed; fidelity is the
 measurable.** Subset containment is combinatorial (which factor
