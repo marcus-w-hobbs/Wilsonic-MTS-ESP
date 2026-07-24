@@ -1,0 +1,39 @@
+! CPS(6,3) seeds 1-5-7-9-15-25 N=20 P=60 S=60 G=18 min=60 7-limit [scorer 1.1.0 middle-anchored]
+!
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 6_3   [Eikosany (20 tones)]
+!   A = 1
+!   B = 5
+!   C = 7
+!   D = 9
+!   E = 15
+!   F = 25
+!   APVTS: CPSCALE=6_3, CPSA=1, CPSB=5, CPSC=7, CPSD=9, CPSE=15, CPSF=25
+!   Notation: canonical CPS(6,3) = 6 seeds choose 3; Erv writes this 3)6.
+! SCORE: P=60 S=60 G=18 min(P,S)=60  N=20  7-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'mutation'
+!
+CPS(6,3) seeds 1-5-7-9-15-25 N=20 P=60 S=60 G=18 min=60 7-limit [scorer 1.1.0 middle-anchored]
+ 20
+!
+ 36/35
+ 16/15
+ 15/14
+ 8/7
+ 6/5
+ 5/4
+ 9/7
+ 4/3
+ 48/35
+ 10/7
+ 3/2
+ 8/5
+ 45/28
+ 5/3
+ 12/7
+ 25/14
+ 9/5
+ 40/21
+ 48/25
+ 2/1

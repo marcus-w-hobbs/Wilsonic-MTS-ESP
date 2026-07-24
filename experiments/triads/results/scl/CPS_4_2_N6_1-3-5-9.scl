@@ -1,4 +1,4 @@
-! CPS(4,2) seeds 1-3-5-9 N=6 P=9 S=9 G=4 min=9 5-limit [scorer 1.0.0 middle-anchored]
+! CPS(4,2) seeds 1-3-5-9 N=6 P=9 S=9 G=2 min=9 5-limit [scorer 1.1.0 middle-anchored]
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -10,10 +10,10 @@
 !   (E, F unused at this scale selection)
 !   APVTS: CPSCALE=4_2, CPSA=1, CPSB=3, CPSC=5, CPSD=9
 !   Notation: canonical CPS(4,2) = 4 seeds choose 2; Erv writes this 2)4.
-! SCORE: P=9 S=9 G=4 min(P,S)=9  N=6  5-limit  [middle-anchored]
-! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'landmark', landmark 'hexany_1-3-5-9'
+! SCORE: P=9 S=9 G=2 min(P,S)=9  N=6  5-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'landmark', landmark 'hexany_1-3-5-9'
 !
-CPS(4,2) seeds 1-3-5-9 N=6 P=9 S=9 G=4 min=9 5-limit [scorer 1.0.0 middle-anchored]
+CPS(4,2) seeds 1-3-5-9 N=6 P=9 S=9 G=2 min=9 5-limit [scorer 1.1.0 middle-anchored]
  6
 !
  10/9

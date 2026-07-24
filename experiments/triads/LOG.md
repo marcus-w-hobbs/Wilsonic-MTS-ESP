@@ -1,9 +1,12 @@
 # Experiment log — triad optimization harness
 
 Format: hypothesis → result → kept/reverted. Entry written BEFORE each run.
-Scorer freeze status: **v1.0.0 FROZEN 2026-07-21 by Marcus.** Changes to
-scorer.py now require his explicit approval, enforced by the `scorer_freeze`
-CI job (hash pin + agent-loop marker; see check_freeze.sh).
+Scorer freeze status: **v1.1.0 FROZEN 2026-07-21 by Marcus.** Changes to
+scorer.py require his explicit approval, enforced by the `scorer_freeze`
+CI job (hash pin + agent-loop marker; see check_freeze.sh). v1.1.0 was a
+deliberate, approved unfreeze from v1.0.0 — the process working, not a
+bypass. Results scored under different versions must never be compared;
+every record carries `scorer_version` and `max_span`.
 
 ## 2026-07-20 — §5 repo verification (pre-Phase-0)
 
@@ -489,3 +492,60 @@ reported.
 
 **Kept.** Runs: `python3.12 search.py --seconds 900 --rng-seed N`,
 `python3.12 archive_scl.py`, `python3.12 search.py --report-only`.
+
+## 2026-07-21 — EAR CHECK (HEX-002/EIK): metric validated, loss is not
+
+**Marcus's verdict, decades of listening:** the proportional/subcontrary
+lock-in is real and the CPS sets the loop surfaced are the intended
+aesthetic. Detail in FINDINGS.md. The gate plan §HEX-002 set is PASSED
+for the classifier and FAILED for min(P,S) as a ranking — he wants
+P-heavy, S-heavy and G-heavy equally, which a balance loss penalizes.
+
+**Kept, with the loss demoted.** No scorer change needed for this: P, S
+and G were already recorded on every result and every archive record, so
+the fix is entirely in the reporting layer (per-bucket winners x 5
+lenses), exactly as the ε design intended.
+
+## 2026-07-21 — DECISION: scorer v1.1.0, triads within an octave (Marcus)
+
+**Deliberate unfreeze**, the first since the freeze, following the
+process it was built for: proposed with measurements, approved
+explicitly, applied, re-pinned, re-tagged.
+
+**Change:** count only triads with outer ratio c/a ≤ 2/1 (rational) or
+span ≤ 1200¢ (tempered). `max_span=None` reproduces v1.0.0 exactly, so
+the old numbers stay reachable and auditable rather than being redefined
+away. ScoreResult records `max_span`, so no record is ambiguous about
+which regime produced it.
+
+**Rejected in the same breath:** the plugin's 9/8..4/3 third band. It
+does not commute with inversion — measured, the self-inverse eikosany
+scores (20,29) under it — so adopting it would have destroyed the exact
+duality that TRIAD-004 exists to protect.
+
+**Goldens:** 11 failed on the bump, as they should. Each was re-derived,
+not just re-pinned; the major-triad window case was re-checked by hand
+from the triads listed in its own comment, and the two it drops are
+exactly (1,2,3) and (1,3/2,3) — the first being Marcus's own example.
+Suite 80 → 86/86, including a test that the v1.0.0 numbers are still
+reachable via max_span=None.
+
+**Also discovered by the bump:** the octave limit repairs the window
+convention's P↔S duality failure on the segment counterexample
+((36,6) → (6,36) exactly). G still fails to swap and the window is still
+not transposition-invariant, so anchored remains primary — but the test
+now records the improvement instead of asserting a stale failure.
+
+**Re-pinned** scorer.sha256, tag scorer-v1.1.0. All v1.0.0 archives are
+stale by construction and were regenerated.
+
+## 2026-07-21 — Issues filed for the two plugin-side changes
+
+- #12 analyzer tolerance is register-dependent (linear frequency, not
+  cents) — the research scorer already compares in cents; this is the
+  plugin only.
+- #13 geometric triads: `_geometricTriads` is declared, has a getter, and
+  is only ever `.clear()`ed — never computed. Enabling them in the UI is
+  real work (both analyzer copies, a third dot colour, and the
+  `numProportional + numSubcontrary == numAllTriads` assertion in
+  WilsonicMidiKeyboardComponent+paint.cpp must go).

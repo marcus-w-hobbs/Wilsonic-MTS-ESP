@@ -1,4 +1,4 @@
-! CPS(5,3) seeds 3-7-9-15-21 N=9 P=18 S=20 G=4 min=18 7-limit [scorer 1.0.0 middle-anchored]
+! CPS(5,3) seeds 3-7-9-15-21 N=9 P=15 S=16 G=2 min=15 7-limit [scorer 1.1.0 middle-anchored]
 !
 ! RECREATE IN WILSONIC:
 !   Design: Combination Product Sets
@@ -11,10 +11,10 @@
 !   (F unused at this scale selection)
 !   APVTS: CPSCALE=5_3, CPSA=3, CPSB=7, CPSC=9, CPSD=15, CPSE=21
 !   Notation: canonical CPS(5,3) = 5 seeds choose 3; Erv writes this 3)5.
-! SCORE: P=18 S=20 G=4 min(P,S)=18  N=9  7-limit  [middle-anchored]
-! PROVENANCE: scorer 1.0.0, LOOP-001 batch search, archive origin 'exhaustive_dual'
+! SCORE: P=15 S=16 G=2 min(P,S)=15  N=9  7-limit  [middle-anchored]
+! PROVENANCE: scorer 1.1.0, LOOP-001 batch search, archive origin 'exhaustive_dual'
 !
-CPS(5,3) seeds 3-7-9-15-21 N=9 P=18 S=20 G=4 min=18 7-limit [scorer 1.0.0 middle-anchored]
+CPS(5,3) seeds 3-7-9-15-21 N=9 P=15 S=16 G=2 min=15 7-limit [scorer 1.1.0 middle-anchored]
  9
 !
  36/35

@@ -93,17 +93,23 @@ class TestTriad001RationalMechanics(unittest.TestCase):
     def test_major_triad_scale_window_counts(self):
         # Hand-verified triads: P = {(1,5/4,3/2), (1,3/2,2), (1,2,3),
         # (3/2,2,5/2), (2,5/2,3)}; S = {(1,3/2,3), (3/2,2,3)}.
+        # v1.1.0 octave limit drops exactly the two spanning > 2/1 —
+        # (1,2,3) and (1,3/2,3) — re-derived by hand: (5,2) -> (4,1).
         r = sc.score_rational(MAJOR_TRIAD_SCALE)
-        self.assertEqual(_psg(r), (5, 2, 0))
-        self.assertEqual(r.score_min, 2)
-        self.assertEqual(r.score_product, 10)
+        self.assertEqual(_psg(r), (4, 1, 0))
+        self.assertEqual(r.score_min, 1)
+        self.assertEqual(r.score_product, 4)
         self.assertEqual(r.sample_size, 6)
+        # ...and the v1.0.0 numbers are still reachable, which is what makes
+        # the octave limit auditable rather than a silent redefinition.
+        self.assertEqual(_psg(sc.score_rational(MAJOR_TRIAD_SCALE,
+                                                max_span=None)), (5, 2, 0))
 
     def test_major_triad_scale_anchored_counts(self):
         # Hand-verified: P = {(3/4,1,5/4), (1,5/4,3/2), (1,3/2,2)};
         # S = {(3/4,1,3/2)}.
         r = sc.score_rational_anchored(MAJOR_TRIAD_SCALE)
-        self.assertEqual(_psg(r), (3, 1, 0))
+        self.assertEqual(_psg(r), (3, 1, 0))  # all within an octave already
 
 
 class TestTriad002GoldenTriads(unittest.TestCase):
@@ -128,17 +134,17 @@ class TestTriad002GoldenTriads(unittest.TestCase):
 
     def test_harmonic_segment_p_heavy(self):
         r = sc.score_rational(SEGMENT_8_16)
-        self.assertEqual(_psg(r), (46, 8, 2))
+        self.assertEqual(_psg(r), (36, 6, 1))   # v1.0.0: (46, 8, 2)
         self.assertGreater(r.proportional, 5 * r.subcontrary)
 
     def test_harmonic_segment_anchored_p_heavy(self):
         r = sc.score_rational_anchored(SEGMENT_8_16)
-        self.assertEqual(_psg(r), (32, 5, 2))
+        self.assertEqual(_psg(r), (24, 5, 1))   # v1.0.0: (32, 5, 2)
 
     def test_subharmonic_dual_s_heavy(self):
         dual = sc.invert_rational_scale(SEGMENT_8_16)
         r = sc.score_rational_anchored(dual)
-        self.assertEqual(_psg(r), (5, 32, 2))  # exact mirror, anchored
+        self.assertEqual(_psg(r), (5, 24, 1))  # exact mirror, anchored
 
 
 class TestTriad003TemperedPath(unittest.TestCase):
@@ -156,12 +162,12 @@ class TestTriad003TemperedPath(unittest.TestCase):
 
     def test_12edo_window_counts(self):
         r = sc.score_cents(TWELVE_EDO, 2.0)
-        self.assertEqual(_psg(r), (17, 17, 132))
+        self.assertEqual(_psg(r), (12, 12, 102))  # v1.0.0: (17, 17, 132)
         self.assertEqual(r.epsilon_cents, 2.0)
 
     def test_12edo_anchored_counts(self):
         r = sc.score_cents_anchored(TWELVE_EDO, 2.0)
-        self.assertEqual(_psg(r), (12, 12, 132))
+        self.assertEqual(_psg(r), (12, 12, 72))  # v1.0.0: (12, 12, 132)
 
     def test_12edo_p_equals_s_by_inversion_symmetry(self):
         # 12-EDO is inversionally symmetric, so P == S at any epsilon.
@@ -227,10 +233,28 @@ class TestTriad004Duality(unittest.TestCase):
     def test_004c_window_boundary_counterexample_frozen(self):
         # Known, documented behavior: with 1/1 in the scale the window
         # convention's pipeline swap is inexact (boundary of [1,4)).
+        #
+        # v1.1.0 UPDATE, worth stating precisely: the octave span limit
+        # removes exactly the triads that crossed the [1,4) boundary
+        # asymmetrically, so on this counterexample P and S now DO swap
+        # exactly, (36,6) -> (6,36). Under v1.0.0 it was (46,8) -> (7,42).
+        # The window is still not the primary convention: G does not swap
+        # (1 vs 2), and it remains non-transposition-invariant, which is the
+        # independent reason anchored won (see TestTranspositionInvariance).
         fwd = sc.score_rational(SEGMENT_8_16)
         dual = sc.score_rational(sc.invert_rational_scale(SEGMENT_8_16))
-        self.assertEqual(_psg(fwd), (46, 8, 2))
-        self.assertEqual(_psg(dual), (7, 42, 2))  # NOT (8, 46, 2)
+        self.assertEqual(_psg(fwd), (36, 6, 1))
+        self.assertEqual(_psg(dual), (6, 36, 2))
+        self.assertEqual((fwd.proportional, fwd.subcontrary),
+                         (dual.subcontrary, dual.proportional))
+        self.assertNotEqual(fwd.geometric, dual.geometric)
+
+        # And the v1.0.0 asymmetry is still reachable, unchanged:
+        f0 = sc.score_rational(SEGMENT_8_16, max_span=None)
+        d0 = sc.score_rational(sc.invert_rational_scale(SEGMENT_8_16),
+                               max_span=None)
+        self.assertEqual(_psg(f0), (46, 8, 2))
+        self.assertEqual(_psg(d0), (7, 42, 2))   # NOT (8, 46, 2)
 
 
 class TestTranspositionInvariance(unittest.TestCase):
@@ -249,14 +273,14 @@ class TestTranspositionInvariance(unittest.TestCase):
         # CPS inversion-symmetry hypothesis (plan §1.3): the 1-3-5-7 hexany
         # lands exactly on P == S under the anchored convention.
         r = sc.score_rational_anchored(HEXANY_1357)
-        self.assertEqual(_psg(r), (8, 8, 0))
+        self.assertEqual(_psg(r), (6, 6, 0))   # v1.0.0: (8, 8, 0)
 
     def test_window_transposition_caveat_frozen(self):
         # Documented limitation of the window convention.
         base = sc.score_rational(HEXANY_1357)
         moved = sc.score_rational([F(x) * 3 for x in map(F, HEXANY_1357)])
-        self.assertEqual(_psg(base), (10, 9, 0))
-        self.assertEqual(_psg(moved), (11, 11, 0))
+        self.assertEqual(_psg(base), (7, 8, 0))    # v1.0.0: (10, 9, 0)
+        self.assertEqual(_psg(moved), (8, 8, 0))  # v1.0.0: (11, 11, 0)
 
 
 class TestProvenanceFields(unittest.TestCase):
@@ -346,13 +370,66 @@ class TestFrozenVersion(unittest.TestCase):
     refreshing scorer.sha256 and tagging scorer-vX.Y.Z."""
 
     def test_scorer_version_is_pinned(self):
-        self.assertEqual(sc.SCORER_VERSION, "1.0.0")
+        self.assertEqual(sc.SCORER_VERSION, "1.1.0")
 
     def test_results_carry_the_frozen_version(self):
-        self.assertEqual(sc.score(HEXANY_1357).scorer_version, "1.0.0")
+        self.assertEqual(sc.score(HEXANY_1357).scorer_version, "1.1.0")
         self.assertEqual(
-            sc.score_tempered(TWELVE_EDO, 2.0).scorer_version, "1.0.0"
+            sc.score_tempered(TWELVE_EDO, 2.0).scorer_version, "1.1.0"
         )
+
+
+class TestOctaveSpanLimit(unittest.TestCase):
+    """v1.1.0 (Marcus, 2026-07-21): a triad must fit within an octave."""
+
+    def test_default_is_one_octave(self):
+        self.assertEqual(sc.DEFAULT_MAX_SPAN, F(2))
+        self.assertEqual(sc.DEFAULT_MAX_SPAN_CENTS, 1200.0)
+        self.assertEqual(sc.score(HEXANY_1357).max_span, F(2))
+
+    def test_limit_reduces_counts_and_is_recorded(self):
+        limited = sc.score(HEXANY_1357)
+        unlimited = sc.score(HEXANY_1357, max_span=None)
+        self.assertEqual(_psg(limited), (6, 6, 0))
+        self.assertEqual(_psg(unlimited), (8, 8, 0))   # the v1.0.0 numbers
+        self.assertIsNone(unlimited.max_span)
+
+    def test_1_2_3_is_proportional_but_too_wide(self):
+        # Marcus's example: 1:2:3 IS an arithmetic progression, and the
+        # classifier still says so — the span limit is a separate filter on
+        # WHICH proportional triads get counted, not a change to what
+        # "proportional" means.
+        self.assertEqual(sc.classify_rational_triple(1, 2, 3), sc.PROPORTIONAL)
+        self.assertGreater(F(3) / F(1), sc.DEFAULT_MAX_SPAN)
+        # It is exactly one of the two triads the limit removes from the
+        # major-triad scale (hand-derived in TestTriad001).
+        wide = sc.score_rational(MAJOR_TRIAD_SCALE, max_span=None)
+        narrow = sc.score_rational(MAJOR_TRIAD_SCALE)
+        self.assertEqual(wide.proportional - narrow.proportional, 1)
+
+    def test_limit_preserves_exact_self_duality(self):
+        # The span limit commutes with inversion (c/a is unchanged by it),
+        # unlike the plugin's 9/8..4/3 band on the third.
+        for ratios in (HEXANY_1357, SEGMENT_8_16):
+            with self.subTest(scale=ratios):
+                fwd = sc.score(ratios)
+                dual = sc.score(sc.invert_rational_scale(ratios))
+                self.assertEqual(
+                    (fwd.proportional, fwd.subcontrary),
+                    (dual.subcontrary, dual.proportional))
+
+    def test_limit_preserves_transposition_invariance(self):
+        base = _psg(sc.score(HEXANY_1357))
+        for k in (F(3), F(5, 4)):
+            with self.subTest(factor=k):
+                moved = sc.score([F(x) * k for x in map(F, HEXANY_1357)])
+                self.assertEqual(_psg(moved), base)
+
+    def test_tempered_span_limit(self):
+        wide = sc.score_tempered(TWELVE_EDO, 2.0, max_span_cents=None)
+        narrow = sc.score_tempered(TWELVE_EDO, 2.0)
+        self.assertLessEqual(narrow.proportional, wide.proportional)
+        self.assertEqual(narrow.max_span, 1200.0)
 
 
 class TestPrimaryConvention(unittest.TestCase):
