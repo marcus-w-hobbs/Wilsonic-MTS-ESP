@@ -16,11 +16,16 @@ set -euo pipefail
 
 fail() { echo "worktree.sh: $*" >&2; exit 1; }
 
-# Resolve the PRIMARY repo root even when run from inside another worktree.
-common_dir="$(git rev-parse --path-format=absolute --git-common-dir)" \
-    || fail "not inside a git repository"
+# Resolve the PRIMARY repo root even when run from inside another worktree —
+# and even when the caller's cwd no longer exists (e.g. a shell still sitting
+# in a worktree that `done` just removed). Anchor on the script's own path,
+# never on the cwd.
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+common_dir="$(git -C "$SELF_DIR" rev-parse --path-format=absolute --git-common-dir)" \
+    || fail "cannot resolve the repository from $SELF_DIR"
 ROOT="$(dirname "$common_dir")"
 WT_DIR="$ROOT/.claude/worktrees"
+cd "$ROOT"   # give every later git/fs call a live cwd
 
 cmd="${1:-}"
 
