@@ -1,0 +1,22 @@
+# Review routing (see CONTRIBUTING.md for the lane model).
+# All PRs get maintainer review; the entries below exist to make the
+# high-blast-radius surfaces explicit.
+
+* @marcus-w-hobbs
+
+# Plugin-lane choke points — order-sensitive / preset-breaking
+/Source/WilsonicProcessor+Params.cpp @marcus-w-hobbs
+/Source/DesignsModel.cpp @marcus-w-hobbs
+/Source/DesignsModel.h @marcus-w-hobbs
+/Source/DesignsProtocol.h @marcus-w-hobbs
+/Source/all_tunings.json @marcus-w-hobbs
+/*.jucer @marcus-w-hobbs
+
+# Research firewall — frozen scorer and its pin (maintainer-only by contract)
+/experiments/triads/scorer.py @marcus-w-hobbs
+/experiments/triads/scorer.sha256 @marcus-w-hobbs
+/experiments/triads/check_freeze.sh @marcus-w-hobbs
+
+# The plugin↔research seam
+/tests/research_cli.cpp @marcus-w-hobbs
+/tests/Makefile @marcus-w-hobbs

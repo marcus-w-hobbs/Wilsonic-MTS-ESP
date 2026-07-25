@@ -31,6 +31,22 @@ make -C tests
 Builds/VisualStudio2022/Wilsonic.sln
 ```
 
+## Parallel Development: Lanes and Worktrees
+
+Work flows in three lanes — full contract in [CONTRIBUTING.md](CONTRIBUTING.md):
+
+- **Plugin** (`plugin/*` branches): `Source/`, `tests/`, `*.jucer`. Gated by `.github/workflows/plugin.yml` (JUCE builds + C++ tests + research-seam CLI build).
+- **Research** (`research/*` branches): `experiments/`, `plans/`, `prompts/`, `docs/`. Gated by `.github/workflows/research.yml` (scorer freeze + Python suite). Research reads `Source/` but NEVER edits it — harness-found plugin bugs become GitHub issues.
+- **Chore** (`chore/*` branches): docs, CI, scripts.
+
+Non-negotiables for agents:
+
+1. **One lane per PR.** Never mix `Source/` and `experiments/` changes.
+2. **Never edit `experiments/triads/scorer.py` or its pin** — CI-enforced freeze; only Marcus changes the scorer.
+3. **Choke points are serialized**: before touching `WilsonicProcessor+Params.cpp`, `DesignsModel.*`, `*.jucer`, or `all_tunings.json`, check `gh pr list` for another open PR touching them. Append-only ordering rules apply (see "Adding New Scale Designs" below).
+4. **Worktrees**: `scripts/worktree.sh new <lane> <topic>` creates `.claude/worktrees/<lane>-<topic>` on branch `<lane>/<topic>`; `list` flags name/branch drift; `done <name>` is the only sanctioned teardown (stash-safe, refuses unmerged work). If a session auto-created a `claude/*` branch, rename to the lane prefix before opening the PR.
+5. **One running Wilsonic instance at a time** when testing tuning output — MTS-ESP allows one master per machine, and a second worktree's build silently loses the master slot.
+
 ## Architecture Overview
 
 This is a JUCE-based audio plugin implementing Erv Wilson's microtuning theories via MTS-ESP.
