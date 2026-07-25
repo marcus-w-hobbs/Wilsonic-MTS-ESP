@@ -1,0 +1,48 @@
+name: research
+run-name: research lane
+# Research-lane gate (see CONTRIBUTING.md): fast, no JUCE. Runs on PRs (fork
+# or same-repo) and on pushes to main. Path-filtered so plugin-only changes
+# don't trigger it.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/**'
+      - 'plans/**'
+      - 'prompts/**'
+      - 'docs/**'
+      - '.github/workflows/research.yml'
+  pull_request:
+    paths:
+      - 'experiments/**'
+      - 'plans/**'
+      - 'prompts/**'
+      - 'docs/**'
+      - '.github/workflows/research.yml'
+jobs:
+  # The triad-optimization harness (experiments/triads) verifies itself here:
+  # its Python suite, plus the scorer freeze checks from plan §3.2. scorer.py
+  # is the frozen verifier of the agent loop — an optimizer that can edit its
+  # own verifier is not being verified. See experiments/triads/check_freeze.sh.
+  scorer_freeze:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # check B scans the commit range
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scorer freeze checks (hash pin + agent-loop marker)
+        # On pull_request, github.event.before doesn't exist — scan the PR's
+        # commit range from its base instead. check_freeze.sh skips the range
+        # scan gracefully if the base SHA is empty.
+        run: ./check_freeze.sh "${BASE_SHA}" "${{ github.sha }}"
+        working-directory: experiments/triads
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      - name: Triad harness test suite
+        run: python -m unittest discover -s tests -v
+        working-directory: experiments/triads

@@ -1,29 +1,30 @@
-name: build
-run-name: build
-on: [push]
+name: plugin
+run-name: plugin lane
+# Plugin-lane gate (see CONTRIBUTING.md): full JUCE builds on Linux + macOS,
+# C++ unit tests, and the research-seam CLI build. Runs on PRs (fork or
+# same-repo) and on pushes to main. Path-filtered so research-only changes
+# don't pay for two JUCE builds.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Source/**'
+      - 'tests/**'
+      - 'Resources/**'
+      - 'Tunings/**'
+      - '*.jucer'
+      - 'version.h'
+      - '.github/workflows/plugin.yml'
+  pull_request:
+    paths:
+      - 'Source/**'
+      - 'tests/**'
+      - 'Resources/**'
+      - 'Tunings/**'
+      - '*.jucer'
+      - 'version.h'
+      - '.github/workflows/plugin.yml'
 jobs:
-  # The triad-optimization harness (experiments/triads) verifies itself here:
-  # its Python suite, plus the scorer freeze checks from plan §3.2. scorer.py
-  # is the frozen verifier of the agent loop — an optimizer that can edit its
-  # own verifier is not being verified. See experiments/triads/check_freeze.sh.
-  scorer_freeze:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # check B scans the pushed commit range
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Scorer freeze checks (hash pin + agent-loop marker)
-        run: ./check_freeze.sh "${{ github.event.before }}" "${{ github.sha }}"
-        working-directory: experiments/triads
-      - name: Triad harness test suite
-        run: python -m unittest discover -s tests -v
-        working-directory: experiments/triads
-
   build_linux:
     runs-on: ubuntu-22.04
     steps:
@@ -73,6 +74,12 @@ jobs:
             # build and run unit tests (test_wilsonicmath + test_tuning,
             # which compile real Source/ tuning code against stub headers)
             make -C tests run
+
+            # build the research-seam CLI (tests/research_cli.cpp compiles
+            # real Source/ tuning code for the Python harness). A Source/
+            # refactor that breaks this breaks the research lane — catch it
+            # here, in the plugin lane that caused it. See CONTRIBUTING.md.
+            make -C tests research_cli
 
 
       - uses: actions/upload-artifact@v4

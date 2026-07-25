@@ -1,6 +1,6 @@
 # Standalone unit tests: compile REAL Source/*.cpp files against the stub
 # JuceHeader.h (no JUCE framework needed). Run by CI (.github/workflows/
-# build.yml) and locally via `make -C tests run`.
+# plugin.yml) and locally via `make -C tests run`.
 #
 # Some Source files quote-include "WilsonicAppSkin.h" (JUCE-heavy). Quoted
 # includes search the includer's directory first, so those files are copied
