@@ -238,14 +238,26 @@ his "template" is exactly the 31-EDO patent val (3→deg 18, 5→10,
 7→25, 11→14; fifths-chain positions +1, +4, +10, +18; 9 = 3² treated
 linearly: +2, deg 5 = 2·18 mod 31), applied HOMOMORPHICALLY ("the
 final outcome is inevitable") to all 32 tones of the full
-(0,6)–(6,6) EG6, occupying 32 of 36 chain positions. Collisions at
-degrees {0,5,10,13,18,23,28} are val-kernel commas (385/384,
-2079/2048 — named by Wilson, Figs 24/26), resolved by keyboard
-geometry (distinct linear positions), NOT by tempering pitch.
-Task: encode the val, reproduce all 32 placements + 7 collision
-pairs against the scan, then run the frozen scorer on D'Alessandro —
-its first-ever harmonic fidelity measurement. This is the calibration
-standard every BRIDGE candidate must beat. Run before BRIDGE-001.
+(0,6)–(6,6) EG6 PLUS 6 "pigtails" (fig 24: −1 = 3·5·7·9/11,
++8 = 3⁴·5, +9 = 7/3, +26 = 3⁴·5·11, +27 = 7·11/3, +36 = 11²) — 38
+tones on 31 degrees, hence exactly 7 duplicated degrees
+{0,5,10,13,18,23,28}. Five pairs are genus-internal (chain n ↔ n+31,
+n = 0..4); two involve pigtails; together they realize exactly three
+kernel commas: 385/384 (deg 18, 5, 23), 2079/2048 (deg 0, 10),
+121/120 (deg 13, 28) — all resolved by keyboard geometry (distinct
+linear positions), NOT by tempering pitch. The inverted D'Alessandro
+(figs 26–27, Grady's marimba) keeps the same degree val but lifts 11
+to −13 (≡ 18 mod 31; huygens vs meanpop, the two standard 11-limit
+meantone extensions) — chain span shrinks to 31 and five collisions
+become physical unisons, voiced by comma size (385/384 shares a bar;
+2079/2048 split across octaves). So (val, integer LIFT) is a design
+pair, not just the val — the lift is a free parameter BRIDGE search
+should expose.
+Task: encode the val, reproduce all 38 placements + 7 collision
+pairs (both lifts) against the scan, then run the frozen scorer on
+D'Alessandro — its first-ever harmonic fidelity measurement. This is
+the calibration standard every BRIDGE candidate must beat. Run
+before BRIDGE-001.
 Note: the template's 9 = 3² arithmetic takes the H-L4a (prime-rank)
 side while Wilson's 1965 letter takes H-L4b (odd-identity) — the
 fork is internal to Wilson's own corpus.
