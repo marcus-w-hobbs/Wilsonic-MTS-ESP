@@ -23,6 +23,8 @@ Erv is gone. The search is not. Where Wilson worked with pencil and ear, we now 
 
 > **This is a first-class research program, not a folder of scripts.** The plugin ships; the harness explores. They are peers.
 
+**New here as a researcher?** Start with [The Tunings That Ring](docs/research-blog-001.md) — a living research note covering past/present/future experiments, the scoring function disclosed in full (including its measured limitations), and an open invitation to critique and extend it via [Discussions](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/discussions).
+
 ### Two systems, one search
 
 | | The Plugin (`Source/`, `Builds/`) | The Research Harness (`experiments/triads/`) |
