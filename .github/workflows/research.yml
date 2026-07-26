@@ -46,3 +46,14 @@ jobs:
       - name: Triad harness test suite
         run: python -m unittest discover -s tests -v
         working-directory: experiments/triads
+      - name: Lattice melodic test suite
+        # experiments/lattice/tests lands with melodic.py v0.1.0 (PR #19).
+        # Skip gracefully while it's absent so this gate stays green
+        # regardless of merge order; the guard is a no-op once it lands.
+        run: |
+          if [ -d tests ]; then
+            python -m unittest discover -s tests -v
+          else
+            echo "experiments/lattice/tests not present on this ref — skipping"
+          fi
+        working-directory: experiments/lattice
