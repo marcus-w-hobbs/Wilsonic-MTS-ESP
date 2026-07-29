@@ -91,6 +91,148 @@ suite re-run 88/88 OK; scorer freeze check A OK (pin 1a840af9…9b592
 unchanged). No receipts under results/ yet — this entry gates the first
 LAT-MEL-001 run.
 
+## 2026-07-25 — LAT-MEL-001: melodic scoring of the harmonic corpus (pre-registration)
+
+**Hypotheses under test (SPEC §LAT-MEL-001), predictions BEFORE the run:**
+- **H-L1:** the eikosany {1,3,5,7,9,11} is a constant structure at ε_CS = 0.5¢
+  (M2 violations = 0). Verifies the claim attributed to Wilson. Prediction:
+  PASS (CS), but either outcome is a finding.
+- **H-L2:** CPS scales are systematically improper/multi-gap vs MOS at matched
+  cardinality, BUT melodic rank varies within the CPS family. Predictions:
+  (a) ≥80% of hexanies/eikosanies classify improper while ≥80% of true MOS
+  controls classify proper-or-strict; (b) mean gap-class count of CPS exceeds
+  MOS at matched N by ≥2; (c) within-family spread: hexany gap entropy and
+  propriety-violation counts are NOT constant (the melodic axis discriminates
+  on the P = S diagonal where the harmonic axis cannot).
+- **H-L3** deferred (needs SHADOW-001 variants — none exist yet).
+- **H-L4** deferred to a designed lattice-region corpus (identity-set regions,
+  not whole CPS scales); this run only establishes the M1 baseline.
+
+**Corpus (deterministic):** 70 hexanies = odd_seed_sets(4,15); 29 eikosanies =
+odd_seed_sets(6,15) ∪ {1,45,135,225,19,377} (the hex003_eik001 set); dekanies
+SKIPPED this run (scope). Controls: true MOS (zigzag cardinalities 5–22) for
+generators g ∈ {701.955¢ fifth, 498.045¢ fourth, 571.6¢, 416.2¢, 741.638¢
+noble/φ} (hot spots from mos001 receipts + the classic pair + one noble);
+rank-1 chains at exactly N = 6 and N = 20 for the same generators
+(cardinality-matched controls); 20 random uniform scales each at N = 6 and
+N = 20, seed 20260725.
+
+**Scorers:** melodic.py v0.1.0 (M1/M2/M3 defaults: ε_dedup 0.01¢, ε_gap 0.5¢,
+ε_CS 0.5¢) + best-val Kendall tau on the JI corpus; frozen triad scorer
+v1.1.0 primary entry points (rational path for JI, tempered ε = 2.0¢ for
+cents-only controls). Every row records versions and epsilons.
+
+**Deliverable:** results/latmel001.jsonl (one row per scale) + Pareto scatter
+(melodic = gap entropy & propriety; harmonic = anchored P) for the G-006
+review. Runner: latmel001.py (deterministic, stdlib only).
+
+## 2026-07-25 — LAT-MEL-001: results and verdict
+
+**Run:** latmel001.py, 174 rows → results/latmel001.jsonl (70 hexanies, 29
+eikosanies incl. calibration set, 25 true MOS, 10 rank-1 chains, 40 random).
+Post-hoc diagnostics (labeled as such, exact-rational, zero floats) →
+results/latmel001_posthoc.json.
+
+**H-L1: REFUTED — decisively, at every tolerance including exact.** The
+eikosany {1,3,5,7,9,11} is NOT a constant structure: 32 interval-size classes
+occur at two adjacent spans, and the coincidences are EXACT rational
+identities, not ε-artifacts — 9/8 subtends both 3 and 4 steps; 22/21 and
+21/20 subtend 1 and 2; 12/11 and 11/10 subtend 2 and 3 (full list in the
+post-hoc receipts). Same verdict at ε_CS ∈ {0.5, 0.1, 0.01, 1e-6}¢.
+**Family-wide: 0/29 eikosanies are CS, while 66/70 hexanies ARE CS.**
+Mechanism found via the val lens: the best val ⟨20,32,46,56,70⟩ (a +1
+perturbation on the 11 coordinate beats the patent val) orders the eikosany
+with zero inversions but **13 tie pairs** — 13 pairs of tones share a val
+degree, so the degree map is weakly monotone, never epimorphic onto 20
+degrees, and a tied degree is exactly what lets one interval subtend two step
+counts. Interpretation (for G-007): Wilson's melodic-compatibility statements
+(e.g. "2 Eikosanies melodically compatible with modulus 22", 1968) likely
+refer to CPS *embedded in a larger modulus*, not the bare 20-tone
+octave-reduced scale — refuting H-L1 on the bare scale *strengthens* the
+BRIDGE program's premise that melodic viability comes from the embedding.
+
+**H-L2: CONFIRMED, with an instructive control-side surprise.**
+(a) Hexanies 81% improper, eikosanies 100% — prediction ≥80% met. BUT true
+MOS are only 8/25 proper-or-strict (prediction said ≥80%): propriety of an
+MOS is generator-dependent (noble φ 741.64¢: 4/4 strictly proper; 416.2¢ and
+571.6¢ — the triad hot spots! — 0/13 proper). The SPEC's "MOS saturate the
+melodic scores" holds for gaps and CS (every MOS: exactly 2 gap classes,
+25/25 CS) but NOT for propriety. Noted: the harmonic hot-spot generators
+produce IMPROPER MOS — a first hint the two axes genuinely trade off.
+(b) Gap classes at matched cardinality: hexany mean 3.94 vs MOS exactly 2;
+eikosany 9.86 vs 2 (random: 5.95 at N=6, 18.55 at N=20 — CPS sits between
+MOS and random, closer to random as k grows). Prediction (Δ ≥ 2) met.
+(c) Within-family discrimination: 13/70 hexanies are non-improper (11 of 13
+contain both 1 and 5), propriety violations spread 0..4, CS fails for
+exactly 4 hexanies — and all four contain 9 alongside 3 or 15, i.e. the
+composite 9 = 3² creates the exact interval duplications. M1 entropy is
+nearly degenerate within-family (66/70 hexanies share entropy 1.918) — gap
+COUNT and propriety discriminate; entropy mostly does not at fixed N.
+**The composite-9 CS fingerprint feeds H-L4b and H-S3 directly.**
+
+**H-L3, H-L4:** untouched this run (no SHADOW variants; no designed
+lattice-region corpus yet), as pre-registered.
+
+**Kept.** Receipts stand; melodic.py v0.1.0 unchanged by the run. G-006
+(does the melodic axis rank the way the ear does?) and G-007 (H-L1
+interpretation) are now PENDING on Marcus with these receipts as evidence.
+
+## 2026-07-25 — G-006 blind ear check: 8/8 agreement with M3 propriety
+
+**Protocol:** 8 sealed-key pairs (results/scl/g006/, seed 20260725), each one
+non-improper vs one improper scale at matched cardinality; Marcus listened
+blind in Wilsonic, same routine per scale; the key stayed sealed until all
+eight verdicts were written down. Pre-registered bar: ≥6/8 = PASS territory.
+
+**Result: 8/8.** Every pick matched the machine's propriety call — the six
+hexany pairs AND both MOS pairs (5- and 13-tone). Marcus's picks with
+confidence: p1 a (sure — "beautiful scale": the 1-3-5-7 hexany), p2 b (sure,
+"hard no" on the improper partner), p3 b (sure), p4 a (lean), p5 a (lean),
+p6 a, p7 b (sure — improper 571.6¢ MOS: "talk about a limp"), p8 b (clear).
+
+**Qualitative notes worth more than the score (verbatim substance):**
+1. On p4/p5 Marcus judged BOTH members melodically valid — the proper member
+   wins on *even distribution* ("easier for musicians/composers to pick up"),
+   while the improper member is "completely valid… spicy" melodically. His
+   instruction: "remember these two because this is a great challenge to our
+   melody scoring." → Propriety is predicting ACCESSIBILITY/evenness, not
+   validity; improper-but-valid is a real region, and a future aggregate
+   must not zero it out. Direct input to the melody+harmony aggregator
+   design (PARETO-001 / balance work).
+2. p7 is a clean perceptual confirmation of the LAT-MEL-001 trade-off
+   finding: the harmonic hot-spot generator 571.6¢ MOS was heard as lame
+   ("a limp") next to noble φ — harmony-optimal and melody-optimal
+   generators genuinely diverge, by ear, not just by metric.
+
+**Gate status:** evidence complete; decision is Marcus's alone (a session
+never passes its own gate). 8/8 ≥ pre-registered PASS bar. On G-006 PASS,
+melodic.py v0.1.0 freezes (hash-pin, scorer.py pattern).
+
+## 2026-07-25 — Gate decisions: G-006 PASS, G-007 PASS-with-amendment (Marcus)
+
+**G-006 PASS (Marcus, 2026-07-25, via chat):** melodic.py FROZEN at v0.1.0.
+Basis: 8/8 blind ear check (entry above). Enforcement: melodic.sha256 pin
+(a16f162b…7535) + experiments/lattice/check_freeze.sh (triads pattern,
+check A). CI wiring of the check is a chore-lane follow-up. From here,
+melodic.py is a frozen verifier: agent-loop commits must never modify it.
+
+**G-007 PASS with amendment (Marcus, 2026-07-25, via chat):** accepted that
+the eikosany is, in general, NOT a constant structure (LAT-MEL-001).
+Marcus's amendment, verbatim in substance: there may exist seedings
+{A,B,C,D,E,F} whose eikosany IS a constant structure — finding them would
+be "a very exciting area of research", deserving of its own high-value
+score, and CS-ness "might be more important than the triad scoring"
+(argument: 12-ET has bad triads, is a constant structure, and is very
+useful). Consequences queued: (1) a CS-eikosany existence search is a new
+experiment candidate (working name CS-EIK-001) — note the LAT-MEL-001
+mechanism gives a crisp machine formulation: exact-CS follows from
+epimorphy (a val v with v(2)=20 mapping the 20 tones monotonically onto
+degrees 0..19 with no ties — the {1,3,5,7,9,11} best val had 13 ties), so
+the search space reduces to seed sets admitting a tie-free monotone val;
+(2) CS weight relative to triad counts is a first-class question for the
+melody+harmony aggregator design. Ledger reconciliation (G-006/G-007 rows)
+deferred until PR #23 merges to avoid GATES.md conflicts.
+
 ## 2026-07-28 — SHADOW-001 pre-registration (entry written BEFORE any run)
 
 **Experiment:** comma perturbation of CPS factors, SPEC.md §SHADOW-001.

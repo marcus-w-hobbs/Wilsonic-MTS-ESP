@@ -1,0 +1,15 @@
+! g006 pair 6a
+!
+! hexany CPS(4,2) seeds [1, 5, 11, 13]
+! Wilsonic: CPS design, 4 factors, choose 2
+! G-006 blind ear check -- key sealed
+!
+g006 pair 6a
+ 6
+!
+ 11/10
+ 16/13
+ 88/65
+ 8/5
+ 22/13
+ 2/1
