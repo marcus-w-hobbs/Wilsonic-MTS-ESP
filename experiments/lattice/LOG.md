@@ -90,3 +90,84 @@ Marcus's LAT-MEL-001 review per SPEC.
 suite re-run 88/88 OK; scorer freeze check A OK (pin 1a840af9…9b592
 unchanged). No receipts under results/ yet — this entry gates the first
 LAT-MEL-001 run.
+
+## 2026-07-28 — SHADOW-001 pre-registration (entry written BEFORE any run)
+
+**Experiment:** comma perturbation of CPS factors, SPEC.md §SHADOW-001.
+Implementation `experiments/lattice/shadow001.py`; receipts to
+`experiments/lattice/results/shadow001.jsonl` (one row per variant) plus a
+verdict summary `results/shadow001_verdicts.json`.
+
+**Sweep definition (fixed before run):** bases hexany = CPS(4,2) of
+(1,3,5,7) and eikosany = CPS(6,3) of (1,3,5,7,9,11). For each factor
+position, for k ∈ 3..16, for sign ∈ {+, −}: replace factor n with
+m = 2^k·n ± 1, one perturbed factor at a time; skip a variant iff m
+collides with another factor of the set. Predicted skips: hexany
+(n=1, k=3, −) → m=7; eikosany (n=1, k=3, ±) → m ∈ {9, 7}. Expected rows:
+4·14·2 − 1 = 111 hexany + 6·14·2 − 2 = 166 eikosany variants + 2
+unperturbed baselines = 279.
+
+**Epsilons (all logged per row):** frozen scorer v1.1.0 on BOTH paths —
+`score()` exact-rational (control) and `score_tempered(cents,
+epsilon_cents=2.0)` (H-S1's recovery prediction lives here); both at the
+frozen default max_span (triads within an octave). Tone survival:
+`canonical_cents_scale` dedup at ε_dedup ∈ {0.01, 0.1, 0.5, 2}¢ on the
+exact-canonical scale's cents. Comma spectrum: all pairwise circular
+intervals < 20¢. Melodic M1–M3 via `melodic.score_melodic_rational`
+defaults (dedup 0.01¢, gap 0.5¢, CS 0.5¢, propriety 1e-9¢), melodic
+v0.1.0. Displacement recorded exactly as
+1200·|log2((2^k·n ± 1)/(2^k·n))| ≈ 1731.234/(2^k·n) cents.
+
+**H-S1 (quoted from SPEC):** "exact-coincidence triads DROP relative to
+the unperturbed CPS for small k (the comma breaks alignment with the
+1-products), and recover discontinuously when the displacement falls
+inside scorer ε (predicted threshold between k=8 and k=12 for n=1)."
+Numeric pre-registration: (a) exact path is the control — for every
+variant, exact score_min < the base's exact score_min at k = 3..7, and NO
+recovery at k = 16 (exact coincidences, once broken, stay broken; any
+exact recovery would have to come from new shared-factor coincidences,
+H-S3's territory, not from k growing). Hexany base exact predicted (8,8)
+per SPEC §BRIDGE-001; eikosany base measured at run time. (b) tempered
+path at ε = 2¢: recovery k* := min k with variant tempered score_min ≥
+base tempered score_min satisfies displacement(k*) < 2¢, i.e. predicted
+k* per perturbed factor n: n=1 → 10 (disp 1.691¢; k=9 is 3.380¢),
+n=3 → 9 (1.127¢), n=5 → 8 (1.353¢), n=7 → 7 (1.932¢), n=9 → 7 (1.503¢),
+n=11 → 7 (1.230¢). The n=1 prediction (k*=10) sits inside SPEC's
+"between k=8 and k=12".
+
+**H-S2 (quoted from SPEC):** "there is a sharp k* where dedup behavior
+snaps (tone count changes); k* shifts by exactly 1 per doubling of
+ε_dedup." Numeric pre-registration: IF the collapse mechanism exists
+(i.e. some surviving tone sits at the perturbed tone's unperturbed pitch
+class, distance ≈ displacement), then k*(n, ε) = min k with
+1731.234/(2^k·n) < ε: for n=1 that is k* = 10 (ε=2¢), 12 (0.5¢),
+15 (0.1¢), 18 (0.01¢ — outside the sweep, prediction: no collapse seen);
+ε 0.5→2¢ is two doublings ⇒ shift of exactly 2. Pre-registered mechanism
+caveat (falsifiable the other way): hand analysis finds NO zero-distance
+mixed pair in either base (the 20 eikosany products are 20 distinct odd
+numbers; no 2-subproduct is octave-equivalent to a surviving 3-product),
+so the strict mechanism may be absent ⇒ alternative outcome is tone
+count CONSTANT in k at every ε ≤ 2¢ (H-S2 refuted on these bases), with
+possible non-monotone collapse windows where a displaced tone transits a
+close neighbor (e.g. 385/384-type pairs, 4.503¢). Either outcome is a
+finding; the comma-spectrum receipts adjudicate.
+
+**H-S3 (quoted from SPEC):** "composite perturbations that share factors
+with the base set (e.g. 255 sharing 3, 5) yield higher triad counts than
+prime perturbations of comparable size (e.g. 257) — 'connectivity beats
+pure novelty.'" Numeric pre-registration: matched pairs = same (base,
+position, k), sign + vs −, where exactly one of the two m is a
+sharing composite (gcd of its odd part with the remaining factors'
+primes > 1) and the other is prime. Test on the exact path (the only
+path where "coincidence" is exact): sharing side wins (exact P strictly
+greater) in ≥ 2/3 of matched pairs. Report win/tie/loss counts and the
+same tally for tempered score_min at ε=2 as a secondary lens.
+
+**Auxiliary structural check (pre-registered):** P = S exactly for EVERY
+variant on both paths' guarded counts — CPS(n, n/2) inversional symmetry
+is seed-value-independent, and the anchored scorer commutes with
+inversion (triads/FINDINGS.md). Any P ≠ S row is a bug in the harness,
+not a finding.
+
+**Determinism:** stdlib only, fixed constants above, no randomness;
+timestamps and git commit recorded as provenance only.
