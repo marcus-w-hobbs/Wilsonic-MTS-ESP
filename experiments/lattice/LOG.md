@@ -176,3 +176,34 @@ lattice-region corpus yet), as pre-registered.
 **Kept.** Receipts stand; melodic.py v0.1.0 unchanged by the run. G-006
 (does the melodic axis rank the way the ear does?) and G-007 (H-L1
 interpretation) are now PENDING on Marcus with these receipts as evidence.
+
+## 2026-07-25 — G-006 blind ear check: 8/8 agreement with M3 propriety
+
+**Protocol:** 8 sealed-key pairs (results/scl/g006/, seed 20260725), each one
+non-improper vs one improper scale at matched cardinality; Marcus listened
+blind in Wilsonic, same routine per scale; the key stayed sealed until all
+eight verdicts were written down. Pre-registered bar: ≥6/8 = PASS territory.
+
+**Result: 8/8.** Every pick matched the machine's propriety call — the six
+hexany pairs AND both MOS pairs (5- and 13-tone). Marcus's picks with
+confidence: p1 a (sure — "beautiful scale": the 1-3-5-7 hexany), p2 b (sure,
+"hard no" on the improper partner), p3 b (sure), p4 a (lean), p5 a (lean),
+p6 a, p7 b (sure — improper 571.6¢ MOS: "talk about a limp"), p8 b (clear).
+
+**Qualitative notes worth more than the score (verbatim substance):**
+1. On p4/p5 Marcus judged BOTH members melodically valid — the proper member
+   wins on *even distribution* ("easier for musicians/composers to pick up"),
+   while the improper member is "completely valid… spicy" melodically. His
+   instruction: "remember these two because this is a great challenge to our
+   melody scoring." → Propriety is predicting ACCESSIBILITY/evenness, not
+   validity; improper-but-valid is a real region, and a future aggregate
+   must not zero it out. Direct input to the melody+harmony aggregator
+   design (PARETO-001 / balance work).
+2. p7 is a clean perceptual confirmation of the LAT-MEL-001 trade-off
+   finding: the harmonic hot-spot generator 571.6¢ MOS was heard as lame
+   ("a limp") next to noble φ — harmony-optimal and melody-optimal
+   generators genuinely diverge, by ear, not just by metric.
+
+**Gate status:** evidence complete; decision is Marcus's alone (a session
+never passes its own gate). 8/8 ≥ pre-registered PASS bar. On G-006 PASS,
+melodic.py v0.1.0 freezes (hash-pin, scorer.py pattern).
