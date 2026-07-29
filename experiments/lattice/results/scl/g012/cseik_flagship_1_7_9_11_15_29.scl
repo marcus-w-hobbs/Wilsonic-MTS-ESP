@@ -1,0 +1,29 @@
+! CS-EIK flagship: CS(7.63c margin) + strictly proper, P=21
+!
+! eikosany CPS(6,3) seeds [1,7,9,11,15,29]
+! Wilsonic: CPS design, 6 factors choose 3
+! G-012 ear check: compare against canonical eikosany
+!
+CS-EIK flagship: CS(7.63c margin) + strictly proper, P=21
+ 20
+!
+ 30/29
+ 77/72
+ 385/348
+ 55/48
+ 308/261
+ 11/9
+ 110/87
+ 77/58
+ 11/8
+ 165/116
+ 35/24
+ 44/29
+ 14/9
+ 140/87
+ 5/3
+ 7/4
+ 105/58
+ 15/8
+ 56/29
+ 2/1
