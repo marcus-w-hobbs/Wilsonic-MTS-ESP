@@ -399,30 +399,6 @@ follow-up, not claimed as a finding yet (single-config observation).
 **Run receipt:** 2026-07-28, python3.12 — lattice suite 37/37 OK
 (25 melodic + 12 new shadow001 helper tests), triads suite 88/88 OK,
 scorer freeze check A OK (pin 1a840af9…9b592 unchanged).
-## 2026-07-25 — Gate decisions: G-006 PASS, G-007 PASS-with-amendment (Marcus)
-
-**G-006 PASS (Marcus, 2026-07-25, via chat):** melodic.py FROZEN at v0.1.0.
-Basis: 8/8 blind ear check (entry above). Enforcement: melodic.sha256 pin
-(a16f162b…7535) + experiments/lattice/check_freeze.sh (triads pattern,
-check A). CI wiring of the check is a chore-lane follow-up. From here,
-melodic.py is a frozen verifier: agent-loop commits must never modify it.
-
-**G-007 PASS with amendment (Marcus, 2026-07-25, via chat):** accepted that
-the eikosany is, in general, NOT a constant structure (LAT-MEL-001).
-Marcus's amendment, verbatim in substance: there may exist seedings
-{A,B,C,D,E,F} whose eikosany IS a constant structure — finding them would
-be "a very exciting area of research", deserving of its own high-value
-score, and CS-ness "might be more important than the triad scoring"
-(argument: 12-ET has bad triads, is a constant structure, and is very
-useful). Consequences queued: (1) a CS-eikosany existence search is a new
-experiment candidate (working name CS-EIK-001) — note the LAT-MEL-001
-mechanism gives a crisp machine formulation: exact-CS follows from
-epimorphy (a val v with v(2)=20 mapping the 20 tones monotonically onto
-degrees 0..19 with no ties — the {1,3,5,7,9,11} best val had 13 ties), so
-the search space reduces to seed sets admitting a tie-free monotone val;
-(2) CS weight relative to triad counts is a first-class question for the
-melody+harmony aggregator design. Ledger reconciliation (G-006/G-007 rows)
-deferred until PR #23 merges to avoid GATES.md conflicts.
 ## 2026-07-28 — MOS-LAT-001 pre-registration (entry BEFORE any run)
 
 **Experiment (SPEC.md §MOS-LAT-001):** cut-and-project round trip for noble
