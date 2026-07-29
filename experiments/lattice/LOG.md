@@ -399,3 +399,159 @@ follow-up, not claimed as a finding yet (single-config observation).
 **Run receipt:** 2026-07-28, python3.12 — lattice suite 37/37 OK
 (25 melodic + 12 new shadow001 helper tests), triads suite 88/88 OK,
 scorer freeze check A OK (pin 1a840af9…9b592 unchanged).
+## 2026-07-28 — MOS-LAT-001 pre-registration (entry BEFORE any run)
+
+**Experiment (SPEC.md §MOS-LAT-001):** cut-and-project round trip for noble
+generators, then the H-M1 descriptor test. Runner: `moslat001.py`; receipts:
+`results/moslat001.json`. Frozen scorer v1.1.0 via `score_tempered`
+(ε = 2.0¢ default, max_span 1200¢ default, both recorded per row).
+
+**Construction (logged before implementation):** every generator here has CF
+tail all 1s, so the tail recurrence is Fibonacci, M = [[1,1],[1,0]],
+eigenvalues φ and −1/φ, and every generator lies in ℚ(√5). The preamble
+digits act as the GL(2,ℤ) Möbius mask (SPEC §Search parameterization note);
+conjugation by the preamble matrix preserves eigenvalues, so the SPEC's
+suggested descriptor |λ|/|λ′| = φ² is CONSTANT across the whole all-1s-tail
+corpus and carries zero information here. It is recorded once as a design
+note, and the varying arithmetic invariant that replaces it is the conjugate
+separation |g − g′| = 2√5/c (c = the denominator of g in lowest ℚ(√5) form).
+Eigen-embedding used, exact in ℚ(√5) (integer triple (a, b, c) for
+(a + b√5)/c; Galois conjugate = √5 → −√5): lattice point (octaves a,
+generator-steps b) ↦ physical x = a + b·g (log-pitch, octaves), internal
+ι = a + b·g′. Octave reduction x ∈ [0, 1) fixes a = −⌊b·g⌋, so admissible
+points are parametrized by b with ι(b) = b·g′ − ⌊b·g⌋. Exact integer/isqrt
+arithmetic end to end; floats only for receipts and for feeding
+`families/mos.py` (which is the ground truth for the Brun zigzag and stays
+untouched).
+
+**Step-1 verification prediction (the registered claim):** for each of the
+four nobles g1 = [0;1̄] = (−1+√5)/2 ≈ 0.618034 (741.64¢),
+g2 = [0;2,1̄] = (3−√5)/2 ≈ 0.381966 (458.36¢),
+g3 = [0;1,2,1̄] = (5+√5)/10 ≈ 0.723607 (868.33¢),
+g4 = [0;2,2,1̄] = (7+√5)/22 ≈ 0.419821 (503.79¢),
+and every Brun level 0–9 with zigzag fraction (p, q) from
+`families/mos.py::zigzag` (semiconvergent path, Brun.cpp:269 — SPEC known
+fact 4): the window-selected set {b : ι(b) ∈ W_L} equals {0,…,q−1} exactly,
+and its projection {(b·g01·1200) mod 1200} matches `mos_cents(g01, q)` at
+1e-6¢ elementwise. Two windows are checked per level: (a) the A-PRIORI
+window derived from the level's zigzag fraction, W_L = the half-open
+interval between 0 (closed) and ι(q) = q·g′ − ⌊q·g⌋ (open) — note
+ι(q) = w_L or w_L + 1 with w_L = q·g′ − p depending on the sign of the
+defect u_L = q·g − p, i.e. on the zigzag side; (b) the closed HULL window
+[min, max] of ι over b ∈ {0,…,q−1}, scanned against all b ∈ [−(5q+100),
+6q+100] (drift bound makes intruders outside that range impossible).
+Refined prediction: for g1, g2 the internal coordinate is strictly monotone
+in b (|step| = |(g′−g) + {g, g−1}| bounded away from 0 because |g′−g| =
+√5 > 1), so all 10 levels verify — this is a theorem, the run confirms the
+implementation. For g3, g4, |g′−g| = 2√5/10 ≈ 0.447 and 2√5/22 ≈ 0.203 are
+< 1, ι is NOT monotone, and single-interval window representability is
+genuinely at risk. Registered prediction: any failures are confined to
+levels whose zigzag fraction is a SEMICONVERGENT (not a best-approximation
+convergent) of g — the semiconvergent-vs-convergent subtlety the SPEC
+anticipates. A failure is a documented finding (which levels, which
+intruder/excluded b), not an error.
+
+**H-M1 (registered test):** corpus = all CF digit strings with digits ≤ 3
+and preamble length ≤ 3 before the all-1s tail, canonicalized by dropping
+preambles ending in 1 (…,1,1̄ ≡ …,1̄ — identical value), = 27 distinct noble
+generators, each exact in ℚ(√5). For each generator, every MOS cardinality
+N ∈ [5, 22] reachable at Brun levels 0–9; per (g, N) row: frozen
+score_tempered counts (P, S, G, score_min, raw fields, ε = 2¢) plus
+pre-registered descriptors of the conjugate embedding:
+  d1 conj_sep = |g − g′| (per generator);
+  d2 window_width = |q·g′ − p| at the row's level (per row);
+  d3 spread = max−min of ι(b) over b ∈ [0, N) (per row);
+  d4 norm_spread = d3 / (N·d1) (per row, dimensionless).
+Test: partial Spearman ρ(descriptor, P | N) — rank-transform, residualize
+descriptor ranks and P ranks on N ranks by least squares, Pearson on
+residuals. Null (SPEC: "no descriptor beats generator-value binning"):
+baseline = identical machinery with predictor g01 (rank-based, so this
+subsumes any monotone binning of generator value). Permutation test:
+descriptor values shuffled WITHIN cardinality strata (preserves the
+descriptor–N marginal), seed 20260725, 9999 permutations (≥999 per SPEC),
+two-sided p = fraction of permuted |ρ| ≥ observed |ρ| (add-one rule).
+Registered verdict rule: H-M1 is SUPPORTED iff some descriptor has
+permutation p < 0.05 AND |ρ| > |ρ_baseline(g01)|; otherwise null — and a
+null is a reportable finding. Known limitation, logged now: rows sharing a
+generator are not independent (pseudo-replication); the stratified
+permutation limits but does not eliminate this — interpret p-values as
+descriptive, not confirmatory.
+
+**Order:** implement moslat001.py + unit tests (Q5 arithmetic, generator
+values, monotone-case window theorem, stats determinism) → run → receipts →
+results entry below → FINDINGS.md promotion → full lattice + triads suites.
+
+## 2026-07-28 — MOS-LAT-001 results
+
+**Step 1 (verification table, receipt `results/moslat001.json` → step1):**
+cents bit 10/10 levels for all four generators (projection == mos_cents at
+≤ 1e-6¢). Window bits split exactly along the monotonicity line predicted:
+
+- `[0;(1)*]` (1/φ, 741.64¢) and `[0;2,(1)*]` (458.36¢), |g−g′| = √5 > 1:
+  **10/10 levels verified under BOTH windows** — the registered monotone
+  theorem, confirmed by the implementation.
+- `[0;1,2,(1)*]` (868.33¢), |g−g′| = √5/5 ≈ 0.447: hull window verifies at
+  levels {0,1,2,4,6,8}, **fails at {3,5,7,9}** (fractions 3/4, 8/11, 21/29,
+  55/76). `[0;2,2,(1)*]` (503.79¢), |g−g′| = √5/11 ≈ 0.203: hull verifies
+  at {0,1,2,3,5,7,9}, **fails at {4,6,8}** (3/7, 8/19, 21/50).
+
+**Registered semiconvergent prediction REFUTED.** Both semiconvergent
+levels in the corpus (g3's 1/2 at L1, g4's 1/3 at L2, `is_cf_convergent =
+false`) PASS the hull window; every hull failure is at a true CF
+convergent. The exact failure law (from the receipts, exact arithmetic):
+the hull window fails iff ι(q) — the internal coordinate of the NEXT chain
+point b = q — lands strictly INSIDE the hull of {ι(0..q−1)}; in this
+corpus that happens exactly at tail levels with defect u = q·g − p < 0
+(zigzag fraction above g), where the chain's q-th step moves into the
+window interior. Every failure has the SINGLE intruder b = q and zero
+excluded points: the smallest window containing the level's scale admits
+exactly one extra tone, frac(q·g). It is strictly interior (not on an
+edge), so no half-open edge convention rescues it.
+
+**The a-priori window "0-to-ι(q)" is the wrong closed form when ι is
+non-monotone** (ap bit fails from L1/L2 on for g3/g4): the hull then
+extends on both sides of 0 (for g3/g4 the conjugate is positive and small,
+so ι(1) = g′ > 0 is the persistent upper hull edge while the drift is
+negative). Hull extremes sit at parent-fraction indices (argmax at b = 1
+resp. 2, argmin at q−1 resp. q−2 — Stern–Brocot parents), so a correct
+closed form needs both parent vectors, not just the level vector. Not
+pursued further here.
+
+**Murchana rescue (investigation commissioned by the pre-registration):**
+at EVERY hull-failing level, most contiguous chain segments [b0, b0+q) of
+the same generator chain ARE window-representable — counts 5, 15, 41, 109
+of the 2q+1 shifts tested, identical across g3 and g4 at corresponding
+depths (structural, not generator-specific). So the cut-and-project
+picture holds for these MOS as scales-up-to-transposition; what fails at
+u < 0 convergent levels is specifically the murchana-0 (b = 0-anchored)
+segment the plugin's Brun construction uses.
+
+**Step 2 / H-M1 (receipt → step2):** 97 rows, 27 generators, cardinalities
+5–22, frozen scorer v1.1.0, ε = 2¢, max_span 1200¢. P = S on all 97 rows
+(inversional symmetry, consistent with triads/FINDINGS.md). Hot spots are
+real (P ranges 0–62; top: preamble [3,1,3] ≈ 317.17¢ at N = 19 with
+P = 62; the noble fifth [1,1,2] ≈ 696.21¢ and its octave complement [2,2]
+≈ 503.79¢ tie at P = 51, complement symmetry as expected). **H-M1 verdict:
+NULL.** Partial Spearman ρ(descriptor, P | N), stratified permutation
+(seed 20260725, 9999 perms): g01 baseline ρ = −0.162 (p = 0.350);
+conj_sep ρ = +0.027 (p = 0.773); window_width ρ = +0.015 (p = 0.874);
+spread ρ = −0.046 (p = 0.598); norm_spread ρ = −0.025 (p = 0.788). No
+descriptor beats generator-value binning; nothing is significant at all.
+Honest caveat, logged in the pre-registration and confirmed: on an
+all-1s-tail corpus the SPEC's spectral-gap descriptor is CONSTANT (φ²) and
+the remaining descriptors are near-functions of (N, conj_sep) — the
+corpus has too little conjugate-geometry variation to discriminate. The
+natural follow-up is a mixed-tail corpus (metallic tails of 2s and 3s),
+where the hidden lattice actually varies; reserved for a future run.
+
+**Kept.** moslat001.py as implemented (one post-first-run addition, logged:
+per-level investigation fields u_sign / iota_q_vs_hull / murchana_analysis
+were added to `verify_level` after the first run exposed the failure
+pattern — they change no verification bit, and the H-M1 statistics are
+bit-identical across both runs, same seed). Findings promoted to
+FINDINGS.md.
+
+**Run receipt:** 2026-07-28, python3.12, runtime ~7 s — receipt
+`results/moslat001.json` (scorer 1.1.0 recorded per row); lattice suite
+43/43 OK (25 melodic + 18 moslat001); triads suite 88/88 OK; freeze check
+A OK (pin 1a840af9…9b592 unchanged).
