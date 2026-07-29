@@ -31,14 +31,16 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-003 | 2026-07-21 | Scorer v1.1.0 unfreeze/refreeze: octave span limit | PASS 2026-07-21 — max_span = 2/1; hash re-pinned |
 | G-004 | 2026-07-22 | BRIDGE scope: EG4 before EG6 | PASS 2026-07-22 — EG4 first; eikosany becomes BRIDGE-002 |
 | G-005 | 2026-07-25 | Merge [PR #19](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/19): melodic.py v0.1.0 + tests, incl. two SPEC-parenthetical corrections (12-EDO diatonic not CS; Pythagorean 12 strictly proper / Pyth-7 is the improper fixture) | PASS 2026-07-25 — merged by Marcus (merge implies pass) |
-| G-006 | 2026-07-25 | LAT-MEL-001 review: do M1–M3 rank scales the way your ear does? PASS triggers melodic.py freeze (hash-pin at v0.1.x) | QUEUED (G-005 passed — becomes PENDING after the LAT-MEL-001 run) |
-| G-007 | 2026-07-25 | H-L1 verdict interpretation: eikosany CS or not — what it means for the claim attributed to Wilson | QUEUED (needs LAT-MEL-001 receipts) |
-| G-011 | 2026-07-25 | Merge [PR #22](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/22): scripts/status.sh — one-command research status (chore lane) | **PENDING** |
+| G-006 | 2026-07-25 | LAT-MEL-001 review: do M1–M3 rank scales the way your ear does? PASS triggers melodic.py freeze (hash-pin at v0.1.x) | PASS 2026-07-28 — blind ear check 8/8; melodic.py frozen v0.1.0, pin a16f162b |
+| G-007 | 2026-07-25 | H-L1 verdict interpretation: eikosany CS or not — what it means for the claim attributed to Wilson | PASS 2026-07-28 with amendment — generically not CS accepted; conjecture that special seedings could be CS spawned CS-EIK-001 (confirmed: 32 exist); CS elevated as first-class axis for aggregator design |
+| G-011 | 2026-07-25 | Merge [PR #22](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/22): scripts/status.sh — one-command research status (chore lane) | PASS 2026-07-28 — merged (with #23, #25, #26, #27) |
+| G-012 | 2026-07-28 | CS-EIK-001 review: 32 CS eikosanies found (P1 kept, P2 refined, P3 refuted — CS exceeds epimorphy); ear-check the flagship {1,7,9,11,15,29} (CS + strictly proper + P=21); merge its PR | **PENDING** |
 | G-008 | 2026-07-25 | Merge [PR #20](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/20): CI runs the lattice test suite (chore lane) | PASS 2026-07-25 — merged by Marcus |
 | G-009 | 2026-07-25 | Merge [PR #21](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/21): research blog post 001 "The Tunings That Ring" + README pointer — editorial pass is yours (first-person voice) | PASS 2026-07-25 — merged by Marcus |
 | G-010 | 2026-07-25 | Merge [PR #18](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/18): worktree.sh dead-cwd fix (chore lane, pre-existing) | PASS 2026-07-25 — merged by Marcus |
 
 ## Currently blocked by gates
 
-- Nothing. G-005 passed 2026-07-25: **LAT-MEL-001 is unblocked** and is the
-  next run per SPEC §Order of execution. Its receipts will open G-006/G-007.
+- Nothing blocked. LAT-MEL-001, SHADOW-001, MOS-LAT-001, CS-EIK-001 all ran;
+  BRIDGE-000 is next per SPEC order once G-012 clears. (Datestamp erratum:
+  entries above marked 2026-07-25 were written 2026-07-28 — see LOG.md.)
