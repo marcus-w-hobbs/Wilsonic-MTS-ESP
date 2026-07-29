@@ -555,3 +555,87 @@ FINDINGS.md.
 `results/moslat001.json` (scorer 1.1.0 recorded per row); lattice suite
 43/43 OK (25 melodic + 18 moslat001); triads suite 88/88 OK; freeze check
 A OK (pin 1a840af9…9b592 unchanged).
+
+## 2026-07-28 — CS-EIK-001 pre-registration (entry BEFORE any run)
+
+**Origin:** Marcus's G-007 amendment (2026-07-28, via chat): the eikosany is
+generically not CS, but "there might be seeding of A,B,C,D,E,F such that the
+resulting eikosany could be a constant structure… a very exciting area of
+research… might be more important than the triad scoring (consider 12et: bad
+triads, constant structure, very useful)."
+
+**Datestamp erratum, recorded here once:** LOG/FINDINGS/GATES entries this
+session dated 2026-07-25 (melodic.py v0.1.0 through the G-006/G-007 gate
+decisions) were written on **2026-07-28** — the assistant datestamped them
+wrong; the content and ordering are unaffected. Entries from SHADOW-001
+onward carry correct dates.
+
+**Design decisions (Marcus said "proceed"; defaults chosen and logged, his
+to overrule at review):**
+- Seed domain: 6 DISTINCT odd positive integers (octave-coprime convention),
+  composites explicitly welcome. Exhaustive sweep odds ≤ 31 (C(16,6) = 8008
+  seedings); pre-registered escalation: if zero CS found, extend exhaustively
+  to odds ≤ 45 (C(23,6) = 100 947).
+- A candidate counts as an eikosany only if its CPS(6,3) has 20 EXACTLY
+  distinct tones after octave reduction; seedings with exact collisions
+  (18-tone images etc.) are logged separately (tempered-merge regime), not
+  eligible for the headline verdict.
+- Criterion: EXACT constant structure (fractions.Fraction interval → span
+  map; a size class at ≥2 spans is a violation; zero floats). For CS winners,
+  a graded **CS margin**: the minimum cents distance between any two interval
+  sizes occurring at different spans — the ε up to which the scale stays CS
+  under the melodic scorer (12-ET's margin is ∞ in-family; bigger = more
+  robustly CS). Full panel for winners and near-misses (≤ 2 violating
+  classes): frozen harmonic (P,S,G) v1.1.0 exact path, frozen melodic v0.1.0
+  M1–M3, best-val tau/ties, and an exact epimorphy check (solve v·mᵢ = i over
+  ℚ for the pitch-ordered tones with v(2) = 20; epimorphic iff consistent and
+  integral).
+
+**Pre-registered predictions:**
+- P1 (Marcus's conjecture): at least one CS eikosany exists at odds ≤ 31.
+- P2 (connectivity thesis, extending H-S3): every CS winner's seed set
+  contains composite seeds sharing prime factors with other seeds; no
+  all-prime seeding ({1} ∪ 5 distinct odd primes) is CS.
+- P3 (mechanism): CS winners are exactly the epimorphic seedings — CS and
+  tie-free-val epimorphy coincide on this family. A CS-but-not-epimorphic
+  winner would be a notable finding either way.
+
+**Deliverable:** results/cseik001.jsonl (one row per seeding: seeds,
+distinct-tone count, violations, margin if CS; full panel where computed) +
+verdicts in the results entry. Runner: cseik001.py, stdlib, deterministic.
+
+## 2026-07-28 — CS-EIK-001 results + verdicts
+
+**Run:** cseik001.py, exhaustive odds ≤ 31 (8008 seedings, ~10 s): 7488 true
+20-tone eikosanies, 520 degenerate (exact product collisions, logged, out of
+scope). Receipts: results/cseik001.jsonl. Escalation clause unused.
+
+**P1 — KEPT. Marcus's conjecture confirmed: 32 CS eikosanies exist**
+(0.43% of true eikosanies). 20 of the 32 remain CS at the frozen melodic
+scorer's 0.5¢ default (margin > 0.5¢); best margin 9.22¢
+({13,17,21,23,25,27}). Cross-checked: exact-CS + margin agrees with frozen
+melodic constant_structure at 0.5¢ on all 32.
+
+**P2 — SPLIT, refined.** All-prime seedings are never CS (0 winners — kept),
+and **every winner contains at least one composite seed** (kept). But the
+factor-sharing half is REFUTED: 8/32 winners' composites share no prime with
+any other seed. Refined thesis: composites are NECESSARY for CS,
+factor-sharing is not.
+
+**P3 — REFUTED, and the refutation is the discovery.** Only 4/32 winners are
+epimorphic ({1,5,7,13,15,31}, {1,15,19,27,29,31}, {3,7,13,15,19,29},
+{7,15,19,25,29,31}). The other 28 are **constant structures with NO
+consistent val** (the linear system v·mᵢ = i is inconsistent or non-integer)
+— CS strictly exceeds epimorphy on this family. Epimorphy ⇒ CS stands as
+theorem; the converse fails 28 times in one sweep.
+
+**Flagship: {1, 7, 9, 11, 15, 29}** — the only STRICTLY PROPER winner: CS
+with margin 7.63¢, strictly proper, P = S = 21, 7 gap classes. Against
+LAT-MEL-001's baseline (0/29 eikosanies CS, 100% improper at odds ≤ 15) this
+is the first eikosany in the program that is simultaneously CS and proper.
+Harmonic cost is visible: P = 21 vs the canonical eikosany's 57 — the
+melody⇄harmony trade-off as a single pair of scales. Ear check queued as
+part of G-012.
+
+**Kept.** Both frozen scorers untouched (pins verified); melodic CS at 0.5¢
+and exact-CS agree on every winner.
