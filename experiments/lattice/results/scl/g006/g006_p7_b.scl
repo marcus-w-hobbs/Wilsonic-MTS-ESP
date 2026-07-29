@@ -1,0 +1,14 @@
+! g006 pair 7b
+!
+! MOS generator 741.6383c, cardinality 5, murchana 0
+! Wilsonic: MOS (Brun) design
+! G-006 blind ear check -- key sealed
+!
+g006 pair 7b
+ 5
+!
+ 283.27660
+ 566.55320
+ 741.63830
+ 1024.91490
+ 1200.00000
