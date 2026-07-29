@@ -171,3 +171,89 @@ not a finding.
 
 **Determinism:** stdlib only, fixed constants above, no randomness;
 timestamps and git commit recorded as provenance only.
+
+## 2026-07-28 — SHADOW-001 results + verdicts
+
+**Receipts:** `results/shadow001.jsonl` (279 rows: 2 baselines + 111
+hexany + 166 eikosany variants, exactly as pre-registered, including the
+three predicted collision skips) and `results/shadow001_verdicts.json`.
+Scorer v1.1.0 both paths, melodic v0.1.0, all epsilons as pre-registered.
+Two identical runs (deterministic); ~6 s wall clock.
+
+**Baselines (measured):** hexany exact (6,6) / tempered ε=2 (6,6);
+eikosany exact (57,57) / tempered (61,61). The SPEC §BRIDGE-001 "(8,8)"
+for the hexany is the v1.0.0 no-span number (verified:
+`score(s, max_span=None)` = (8,8)); under v1.1.0's within-octave rule two
+octahedron-face triads exceed the span, giving (6,6) — consistent with
+the anchored block of `triads/results/hex001.jsonl`. Neither base has any
+pairwise interval below 20¢ (both comma spectra empty).
+
+**H-S1 — CONFIRMED (both clauses), one pre-registered exception class.**
+Exact control: 38/39 hexany and 58/58 eikosany small-k (3..7) variants
+drop strictly below base; ZERO exact recoveries at k=16. The single
+non-drop is the sharing jackpot m=15=3·5 (n=1, k=4, −), which restores
+exact (6,6) at 111.7¢ displacement — H-S3's mechanism, exactly the
+carve-out pre-registered. Exact counts settle to k-independent floors:
+hexany 1/0/3/4 for perturbed n=1/3/5/7 (perturbing 3 kills EVERY exact
+triad of the hexany; see finding below), eikosany 22/18/27/32/25/41 for
+n=1/3/5/7/9/11. Tempered path: sustained recovery k*_sust (post-hoc lens
+added after first inspection, labeled in shadow001.py — the
+pre-registered first-crossing detector is jackpot-contaminated) matches
+the pre-registered k* in 16/20 configs and sits inside scorer ε in
+19/20; n=1 recovers at exactly k=10 on both bases and both signs, inside
+SPEC's "between k=8 and k=12". The four deviations are ±1-count jitter
+around base (60 vs 61) at sub-cent displacements plus ONE outside-ε
+early crossing: eikosany n=11 +, k=6, m=705=3·5·47 (sharing), disp
+2.457¢. Verdict: kept.
+
+**H-S1 surprise — tempered OVERSHOOT.** 52 eikosany variants score
+ABOVE base tempered (up to 69 and 67 vs 61; e.g. n=7 −, k=7, disp
+1.93¢), concentrated where displacement is ~0.2–2¢, decaying to exactly
+base by k≈12–14. Shadow tones just inside ε satisfy near-coincidences
+the unperturbed tone cannot — perturbation at the ε boundary is
+temporarily WORTH TEMPERED TRIADS. The hexany never overshoots (0/111).
+
+**H-S2 — REFUTED as pre-registered; the pre-registered mechanism caveat
+is what happened.** ε_dedup was inert across the ENTIRE sweep: in all
+279 rows the deduped tone count equals the exact tone count at every
+ε ∈ {0.01, 0.1, 0.5, 2}¢ — no near-merge anywhere, hence no k*, hence
+no shift-per-doubling. Root cause exactly as cautioned: no mixed pair
+sits near zero distance, and the smallest comma produced anywhere in the
+sweep is 2.912¢ (595/594, eikosany n=1 k=4 +) > the largest ε_dedup 2¢.
+Tone counts DO change — but only by EXACT rational collision,
+ε-independent and confined to small k on the eikosany: m=15 → 18 tones
+({15,3,7}={5,7,9}=315, {15,3,11}={5,9,11}=495), m=33 → 18
+({33,3,5}=495, {33,3,7}={7,9,11}=693), m=55 (n=7, k=3, −) → 18
+({55,1,3}={3,5,11}=165, {55,1,9}={5,9,11}=495). Dedup "snapping" on
+these bases is lattice arithmetic, not epsilon geometry. Verdict:
+reverted (hypothesis falsified; finding promoted).
+
+**H-S3 — CONFIRMED, unanimous direction.** 57 matched ±pairs (25 hexany,
+32 eikosany) with one sharing-composite and one prime side. Exact path:
+sharing wins 11, ties 46, prime wins 0 — the sharing side NEVER loses
+(one-sided sign test vs even odds: p = 2⁻¹¹ ≈ 0.0005). Hexany:
+15 vs 17 at k=4 gives exact P 6 vs 2. Eikosany wins cluster at small k
+(m small ⇒ heavy factor overlap); at large k both sides hit the same
+surviving-triad floor (ties). Jewel: the matched pair (n=3, k=7) is
+385 = 5·7·11 vs prime 383 — replacing 3 with 385/128 is literally a
+385/384 shift (4.503¢), one of BRIDGE-000's three D'Alessandro kernel
+commas — and it wins exact P 24 vs 18. The tempered lens at ε=2 does NOT
+track connectivity (13W/1T/18L, noise from the overshoot effect above);
+"connectivity beats pure novelty" is an EXACT-path statement. Verdict:
+kept.
+
+**Auxiliary check:** P = S in all 279 rows on both paths (guarded
+counts) — CPS(n, n/2) inversional symmetry survives arbitrary factor
+replacement, as pre-registered.
+
+**Exploratory (H-L3 preview, not pre-registered):** eikosany n=3 +
+sweep: M2 CS violations go base 32 → 18 in the 1–5¢ displacement region
+(BETTER than base) → back to 31–32 once displacement < ε_CS = 0.5¢
+(k ≥ 12). The restoration threshold tracks ε_CS as H-L4/H-L3 predict,
+and the mid-k IMPROVEMENT (a comma-sized perturbation melodically
+cleans up the eikosany) is unexpected — queued as a LAT-MEL-001/H-L3
+follow-up, not claimed as a finding yet (single-config observation).
+
+**Run receipt:** 2026-07-28, python3.12 — lattice suite 37/37 OK
+(25 melodic + 12 new shadow001 helper tests), triads suite 88/88 OK,
+scorer freeze check A OK (pin 1a840af9…9b592 unchanged).

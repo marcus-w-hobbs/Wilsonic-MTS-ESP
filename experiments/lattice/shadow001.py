@@ -336,11 +336,29 @@ def verdict_h_s1(rows: list[dict]) -> dict:
                      if r["tempered"]["score_min"] >= base_temp), None)
                 disp = next((r["displacement_cents"] for r in series
                              if r["k"] == k_star), None)
+                # POST-HOC lens (added after first inspection, see LOG
+                # 2026-07-28 results entry): first-crossing k_star is
+                # contaminated by shared-factor jackpots (H-S3 territory),
+                # so also report the SUSTAINED recovery — min k such that
+                # every k' >= k is recovered.
+                k_sust = None
+                for r in reversed(series):
+                    if r["tempered"]["score_min"] >= base_temp:
+                        k_sust = r["k"]
+                    else:
+                        break
+                disp_sust = next((r["displacement_cents"] for r in series
+                                  if r["k"] == k_sust), None)
                 recovery[f"pos{pos}_n{n}_{sign_tag}"] = {
                     "k_star": k_star,
                     "displacement_at_k_star": disp,
                     "displacement_inside_scorer_eps":
                         None if disp is None else disp < SCORER_EPSILON_CENTS,
+                    "k_star_sustained": k_sust,
+                    "displacement_at_k_star_sustained": disp_sust,
+                    "sustained_inside_scorer_eps":
+                        None if disp_sust is None
+                        else disp_sust < SCORER_EPSILON_CENTS,
                     "tempered_series": {
                         str(r["k"]): r["tempered"]["score_min"]
                         for r in series
