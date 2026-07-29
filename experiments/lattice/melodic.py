@@ -1,9 +1,20 @@
 """Melodic scorers M1-M3 for the lattice module (SPEC.md §"Melodic scorers").
 
-Version 0.1.0 — NOT yet frozen. Freeze (hash-pin pattern, mirroring
-triads/scorer.py) happens after Marcus reviews LAT-MEL-001. Until then this
-file may change, but every result record carries MELODIC_VERSION so receipts
-from different versions never get compared by accident.
+*** FROZEN at v0.1.0 on 2026-07-25 by Marcus (gate G-006). ***
+
+Freeze basis: LAT-MEL-001 receipts (results/latmel001.jsonl) plus a blind
+sealed-key ear check — 8/8 agreement between Marcus's melodic-coherence
+picks and M3 propriety across hexany and MOS pairs (LOG.md, 2026-07-25).
+Ear-check nuance ON RECORD: propriety predicts ACCESSIBILITY (even
+distribution), not validity — improper-but-valid "spice" scales are a real
+musical region and future aggregates must not zero them out.
+
+This file is now a frozen verifier, same contract as triads/scorer.py:
+agent-loop commits must never modify it. Enforcement: melodic.sha256 pins
+this file's SHA-256 (check_freeze.sh here, mirroring the triads pattern);
+changes require Marcus's explicit approval and a version bump. Every result
+records MELODIC_VERSION so receipts from different versions never get
+compared by accident.
 
 This module is a sibling of experiments/triads/ and imports the FROZEN triad
 scorer READ-ONLY (canonicalization helpers only) so the two axes share one
