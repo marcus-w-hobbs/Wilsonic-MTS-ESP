@@ -665,3 +665,44 @@ winners have dependent step sets — their CS-ness lives on comma relations,
 which is exactly the BRIDGE connection).
 
 **Kept**, with P3's magnitude corrected in place before external claims.
+
+## 2026-07-28 — G-012 ear check (discovery audition, not blind) + two Marcus insights
+
+**Protocol:** results/scl/g012/, three scales, known identities, same routine
+as G-006 (same patch/register, stepwise walks, transposed motives; subsets
+explored in Wilsonic as EG6 where noted).
+
+**Verdicts (Marcus):**
+1. Canonical {1,3,5,7,9,11}: "doesn't feel symmetric enough to be melodic."
+2. Flagship {1,7,9,11,15,29}: "feels the most melodic to me at the eikosany
+   level" — pitch-wheel evenness visibly matches strict propriety. Subset
+   walkthrough deferred to the subset session.
+3. Max-margin {13,17,21,23,25,27}: "comparable to scale 1" at the full-scale
+   level; played as EG6, "some melodic hexanies in there."
+
+**Retro-prediction check (receipts):** flagship & max-margin both 7 gap
+classes at N=20; canonical 10. Gap-class count alone ranks {flagship,
+max-margin} > canonical; propriety separates flagship (strictly proper) from
+max-margin (improper). The CONJUNCTION (few classes AND proper) reproduces
+Marcus's ranking exactly. Hexany nuance: all 12 strictly-proper hexanies
+have 4 gap classes; the only 3-class hexanies (4 of them) are improper —
+class-count and propriety are partially independent axes; both load.
+
+**Insight 1 (Marcus, for future research):** "we usually don't play the
+eikosany, we usually play the subsets of it (dekanies, hexanies are melodic
+sweet spots)." → The melodic score of a CPS should perhaps be the
+DISTRIBUTION of melodic scores over its embedded subset CPS, not the
+full-scale M1–M3. Direct dovetail with BRIDGE's hexany-as-addressable-region
+endgame and the EG6 root-mapping feature. Queued: subset-melodic experiment
+(working name SUBSET-MEL-001) + brainstorm session.
+
+**Insight 2 (Marcus, aesthetic principle):** MOS beauty = two-interval
+patterns (Fibonacci repetitions); three-interval scales can also be
+beautiful; "optimizing for fewer interval sizes relative to the notes per
+octave is key for melody… 6 notes with 6 different sizes can not [be
+melodic]." → Concrete functional form for the melodic aggregator:
+gap_classes/N as a primary penalty, conjoined with propriety. Random
+controls (≈N classes) sit at his "cannot be melodic" floor, as predicted.
+
+**G-012 status:** ear evidence complete and consistent with the corrected
+claims; decision (merge PR #29 correction + formal pass) remains Marcus's.
