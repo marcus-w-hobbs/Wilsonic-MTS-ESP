@@ -41,6 +41,18 @@ actually read.
 
 ---
 
+## Access & provenance
+
+This index cites **Marcus Hobbs's personal curation** of the Wilson archive
+(local path `~/Documents/scans by Kraig/`): Kraig Grady's scans plus
+Marcus's additions and reorganization, faithful to Kraig's public
+[anaphoria.com](https://anaphoria.com) archives. The local paths cited here
+resolve only on Marcus's machines — collaborators should look up the
+equivalent items on anaphoria.com. A complete machine-readable catalog
+(`catalog.jsonl`, one row per file) exists **locally only** (gitignored):
+it indexes a private organization and would not help anyone without the
+files. Sessions use it for the "what did Erv already know?" lookup.
+
 ## Meta-Hanson: **NOT FOUND**
 
 The session's unverified recall of the name "Meta-Hanson" is **refuted at
