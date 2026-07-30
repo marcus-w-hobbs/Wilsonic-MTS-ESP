@@ -121,4 +121,36 @@ reserved for a follow-up run.
 
 **2026-07-29 — H-B1: Wilson's template is the tie-optimal val (kept as pre-registered).** (EXECUTED.) Over the ±1 val neighborhood at N = 31, Wilson's ⟨31,49,72,87,107⟩ hits the pigeonhole floor of 7 tie-pairs with zero triple-occupied degrees; no neighbor does better and the single tying neighbor (3→19\31) is tuning-nonsensical. The 1975 keyboard template is, by machine check, the optimal 31-degree addressing of the 38-tone set — Wilson hand-solved a discrete optimization problem, and the val-tie quantity that failed the bare eikosany (LAT-MEL-001), delimited the CS winners (CS-EIK-001), is precisely what his template minimizes.
 
+**2026-07-29 — H-M1 is NULL again on a non-degenerate corpus: the
+conjugate-geometry descriptor program is dead; triad hot spots live on the
+generator value, not the hidden lattice.** (EXECUTED, exact ℚ(√d)
+arithmetic; `results/moslat002.json`; runner `moslat002.py`, statistics
+imported read-only from `moslat001.py` so the runs are comparable by
+construction; frozen scorer v1.1.0, ε = 2¢; seed 20260725, 9999 stratified
+permutations.) MOS-LAT-002 rebuilt the MOS-LAT-001 corpus with MIXED
+periodic CF tails — all period-1/2 digit strings over {1,2,3} except the
+all-1s tail; 216 distinct quadratic generators (exactly the predicted 27
+per tail), 788 (g, N) rows at N ∈ [5, 22] — so the spectral gap |λ/λ′|,
+CONSTANT (φ²) on the old corpus, now takes five values spanning 5.83–61.98,
+conj_sep spans 0.0021–4.58, and the fields range over ℚ(√d),
+d ∈ {2, 3, 5, 13, 15, 21}. The registered prediction (with genuine
+conjugate-geometry variation at least one descriptor beats generator-value
+binning) is REFUTED: no descriptor passes either prong of the verdict rule
+(best: spectral_gap ρ = −0.064, p = 0.0635 vs baseline |ρ| = 0.071;
+Holm-adjusted all ≥ 0.32; conj_sep/window_width/spread/norm_spread all
+|ρ| ≤ 0.035, p ≥ 0.34). P = S on all 788 rows, again. The receipt's
+post-hoc smoking gun (not registered): near-identical generator VALUES
+from unrelated fields score identically — 351.40¢ in ℚ(√15) (gap 61.98)
+vs 351.47¢ in ℚ(√2) (gap 5.83), both P = 45 at N = 17 — and the ~317¢
+noble-minor-third region is hot under four different tails across both
+corpora, while the corpus-max P = 64 sits at [0;1,3,2,(1,3)*] ≈ 924.66¢,
+N = 22. Mechanism consistent with both nulls: at scorer ε = 2¢ the triad
+count is a locally stable function of the generator's position on the
+circle, while every conjugate-embedding descriptor is discontinuous in
+that position — the descriptor cannot carry information the g01 rank
+doesn't. Program consequence, as pre-registered: stop searching embedding
+descriptors; organize the hot-spot landscape by generator arithmetic
+directly (CF digit statistics, cents-neighborhood structure, complement
+symmetry).
+
 **2026-07-29 — BRIDGE-001: the MOS window, not tuning accuracy, is what blocks a faithful EG4 bridge at N ≤ 22 — and the best hosts miss full triad survival by exactly one cent.** (EXECUTED; `results/bridge001.jsonl` + `bridge001_summary.json`; 63 pre-registered 7-limit commas × ±1-patent vals at N ∈ 7..22 = 2205 (comma, val) pairs, 590 monotonicity rejections, zero commas fully killed.) H-B2 is REFUTED as pre-registered: no candidate is simultaneously injective on the 8 distinct tesseract tones (16 formal vertices; seed 1 pairs them two-to-one — the BRIDGE-000 convention), contained in an N-note MOS window at any anchor, and full-hexany-surviving at the frozen scorer's ε = 2¢. The two halves exist separately: addressing-only passers reach 0.204¢ max tone error with full survival (ennealimmal, 2401/2400 ∩ 4375/4374) but their generator counts blow the chain span past every N ≤ 22 window, while contained candidates — a front owned entirely by 225/224, as predicted — top out at hexany (3,3) at 2¢. The post-hoc ε-sweep resolves the gap: **miracle/blackjack (⟨21,33,49,59⟩, secor 116.588¢) recovers the full (6,6) at ε = 3¢, orwell-22 (⟨22,35,51,62⟩, 271.385¢, max tone error 2.727¢) at ε = 4¢** — the bridge exists, at the price of one extra cent of triad tolerance. Three structural bonuses: (1) 1026 candidates show degree collisions that are NOT pitch merges — same address, different pitch — so D'Alessandro's pitch-just/address-tempered regime iii emerges spontaneously in a machine search (best at 0.492¢, address-commas 16/15 and 21/20); (2) per-tone EG4 error is not the prime minimax — orwell's mixed-sign prime errors cancel in compound tones while miracle's sign-coherent errors triple up on 105/64 (6.86¢ ≈ 3 × its 2.43¢ minimax), motivating a tone-set-minimax tuning lens; (3) no front row contains the genus at anchor 0 — the MOS-LAT-001 murchana-anchor corollary is load-bearing in every successful embedding. Against the BRIDGE-000 standard the design space is two opposite corners with nothing between: Wilson's pitch-just corner (0¢, 7 collisions, 100% survival) versus the tempered-faithful corner (0 collisions, 2.7–6.9¢, survival from ε = 3–4¢).
