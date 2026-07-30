@@ -347,3 +347,4 @@ symbolicate.command
 windows_installer_64.iss
 Wilsonic-MTS-ESP_installer/
 tests/test_wilsonicmath
+experiments/archive/catalog.jsonl
