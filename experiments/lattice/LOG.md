@@ -784,3 +784,231 @@ whole program: ties explain the eikosany's CS failure, their absence defines
 the CS winners, and their minimization is what Wilson's hand computed.
 
 **Kept.** Frozen scorers untouched; pins verified; G-014 opened.
+
+## 2026-07-29 — BRIDGE-001 pre-registration (entry BEFORE any implementation or run)
+
+**Contract:** SPEC §BRIDGE-001, scoped to EG4 per Marcus's 2026-07-22 scope
+decision, under his two binding design decisions (val-as-degree-assignment
+with NO nearest-degree rounding; monotonicity as the only structural filter,
+applied FIRST). Runner: `bridge001.py`; receipts:
+`results/bridge001.jsonl` (one row per candidate, rejections included) +
+`results/bridge001_summary.json` (Pareto front vs the BRIDGE-000 standard).
+Frozen scorers: triads v1.1.0 (`score`, `score_tempered` at ε = 2.0¢,
+default max_span) and melodic v0.1.0 (imported for provenance only this
+run; subset melodic panels wait for SUBSET-MEL-001 per G-012 insight 1).
+
+**Note for Marcus #1 — rank accounting (SPEC soft spot, resolved here).**
+SPEC §BRIDGE-001 says the EG4 lattice (odd primes 3,5,7; octave-equivalent
+rank 3) needs "exactly ONE comma" for an MOS embedding. Counting in the
+full 2.3.5.7 group (rank 4): a linear MOS host (period 2/1 + one generator)
+is rank 2, so the full kernel has rank 2 — TWO independent commas, not one.
+(Octave-equivalently: rank 3 → rank 1 generator chain, still two.) The
+practical resolution adopted: candidates are pairs (comma c, val v) with
+v = ⟨N, a3, a5, a7⟩ at host cardinality N and v(c) = 0 — the explicit comma
+names the planar temperament, the val supplies the rest of the kernel
+implicitly, and the val IS the degree assignment (design decision 1). The
+implicit second kernel generator is made concrete by the completion rule
+below; it is a convention, flagged for review.
+
+**Note for Marcus #2 — the "16-tone tesseract" counts formal vertices, not
+pitches.** The EG4 tesseract of {1,3,5,7} has 16 vertices (all subsets),
+but seed 1 pairs every subset S with S∪{1} at the SAME product, so the
+pitch-class set is the 8 divisors of 105, octave-reduced: 1/1, 35/32, 5/4,
+21/16, 3/2, 105/64, 7/4, 15/8. This is exactly the BRIDGE-000 convention
+(EG6's 64 subsets = 32 distinct tones). All 16 vertices are listed in the
+receipts; the 8 with/without-1 pairs are structural (comma 1/1, zero cost)
+and are EXCLUDED from collision counts. Injectivity (H-B2) is evaluated on
+the 8 distinct tones. Embedded subsets measured: hexany CPS(4,2) =
+{3,5,7,15,21,35} and both tetranies CPS(4,1) = {1,3,5,7}, CPS(4,3) =
+{15,21,35,105}.
+
+**Comma enumeration (locked):** primitive monzos over (2,3,5,7) with odd
+exponents |e3| ≤ 8, |e5| ≤ 5, |e7| ≤ 4, nonzero odd part, e2 = the unique
+integer putting the >1 octave representative at 0 < cents < 60, Tenney
+height n·d ≤ 2⁴⁰. The named list — 81/80, 64/63, 126/125, 225/224,
+245/243, 1029/1024, 2401/2400, 3125/3087, 4375/4374 — is verified to be a
+subset of the enumeration (all nine fit the box); the deduped final list is
+logged in the summary receipt with its count.
+
+**Vals (locked):** N ∈ 7..22; a_p ∈ patent ± 1 per odd coordinate (27 vals
+per N, patent = ⟨N, round(N·log₂3), round(N·log₂5), round(N·log₂7)⟩).
+Candidate = (c, v, N) iff v(c) = 0.
+
+**Monotonicity filter (Marcus's decision 1, applied FIRST, before any
+error-budget work):** unreduced degrees d(t) = v·monzo(octave-reduced t)
+over the 8 distinct tones in pitch order must satisfy d(1/1) = 0,
+d weakly increasing, d ≤ N. Any strict decrease ⇒ REJECT, logged with the
+violating comma, val, and adjacent tone pair. Ties (including d = N, a
+merge with the octave) are COLLISIONS — regime ii tempered-merge, a result,
+not a failure — logged with the merged pair's comma monzo (which the val
+provably kills).
+
+**Completion rule (the implicit second comma, locked):** k₂ := the
+primitive monzo in the val's kernel (same odd-exponent box; e2 =
+−(a3e3+a5e5+a7e7)/N required integral), linearly independent of c, that
+MINIMIZES the pre-registered tuning error of the rank-2 temperament with
+kernel sat⟨c, k₂⟩; ties broken by smaller Tenney height, then lex smaller
+(e3,e5,e7). Rationale, recorded before the run: the naive minimal-Tenney-
+height completion is wrong — at (225/224, ⟨21,33,49,59⟩) it picks 36/35
+(TH 1260, the august/augmented family, ~10¢ errors) over 1029/1024
+(miracle, ~2.4¢); min-error is "the best rank-2 temperament this val
+supports that tempers c", and is deterministic. Mapping matrix M (2×4) =
+saturated left-kernel of [c, k₂] via Smith reduction, row-Hermite
+normalized (period row first, M[0][0] = periods per octave x; x | N is
+automatic because v factors through the quotient — asserted, not filtered).
+
+**Tuning (locked, ONE choice):** pure-octave minimax over {3,5,7}: period
+exactly 1200/x ¢; generator G the unique minimizer of
+max_p |T(p) − 1200·log₂p|, T(p) = M₀ₚ·(1200/x) + M₁ₚ·G (piecewise-linear
+exact minimax over pairwise crossings and per-line zeros; tie → smaller G).
+Errors are reported per tone on the octave-reduced monzos.
+
+**Measured per surviving candidate:** degree table of all 16 vertices;
+collision count + comma monzos (8 distinct tones only); per-tone cents
+error (max, mean); frozen score_tempered ε=2 of the tempered 8-tone image;
+per-subset degree lists, addressing injectivity, and triad survival for
+hexany/tetrany-1/tetrany-3 (survival = image guarded counts ≥ the subset's
+own exact-path base counts, measured at run start; hexany base expected
+(6,6) per the SHADOW-001 v1.1.0 correction — NOT the SPEC's stale (8,8));
+MURCHANA/WINDOW-ANCHOR: generator-chain coordinates b(t) = M₁·monzo(t),
+chain span, containment at anchor 0, and the full admissible anchor
+interval when the span fits in N/x (MOS-LAT-001 corollary: anchoring is a
+free design parameter — sweep before rejecting); host step-class count
+(three-gap check on the anchored host at the optimal G) and a
+degrees-match-host-ranks consistency bit; ε_bridge ∈ 1..15¢ regime sweep
+(faithful iff injective ∧ max error < ε; tempered-merge iff collisions > 0
+∧ max error < ε; else over-budget).
+
+**Falsifiable predictions (registered before implementation):**
+- **H-B2 (primary, from SPEC/program):** at least one candidate carries the
+  full EG4 tesseract injectively (all 8 distinct tones, distinct degrees)
+  at N ≤ 22 with max per-tone error < 15¢ and every hexany triad surviving
+  score_tempered at ε = 2¢ (image (P,S) ≥ base (6,6)). Predicted PASS.
+- **P-COMMA (which commas win, named before running):** the low-error end
+  of the Pareto front is owned by 225/224 — flagship candidates predicted:
+  orwell at N = 22 (patent val, completion 1728/1715, minimax ≈ 2.3¢),
+  miracle at N = 21 (patent val, completion 1029/1024, ≈ 2.4¢), with
+  garibaldi at N = 17 (a5 = patent+1, completion 5120/5103) close; magic
+  (245/243 ∩ 225/224, N = 19/22, ≈ 5¢) and meantone (81/80 with 126/125
+  completion, N = 12/19, ≈ 4–6¢) on the front only at the simplicity end.
+  Predicted non-winners: 64/63 (error too large), 2401/2400 / 3125/3087 /
+  4375/4374 standalone (too accurate to bind at N ≤ 22 — their best vals
+  coincide with the winners above).
+- **P-KILL (monotonicity):** no full kill among the nine named commas;
+  full kills ≤ 25% of the enumerated list, concentrated where the val
+  inverts the 84.47¢ adjacency 5/4 < 21/16 — i.e. rejections are logged
+  overwhelmingly with v(21/20) < 0, at small N and off-patent vals.
+- **P-MERGE:** zero tempered-merges in the ≤ 15¢ regime: the minimal
+  EG4 tone-pair commas (21/20 = 84.47¢, 112/105 = 111.45¢, 16/15 =
+  111.73¢, 15/14 = 119.44¢) all exceed the 60¢ comma bound, and any val
+  killing one of them must spread ≥ 84¢ of comma over ≤ 22 degrees,
+  predicting max per-tone error > 15¢.
+
+**Determinism:** stdlib only, python3.12, no randomness; constants above;
+timestamps/commit as provenance only. Unit tests
+(tests/test_bridge001.py) are written and green BEFORE the first run.
+
+## 2026-07-29 — BRIDGE-001 results + verdicts
+
+**Run:** bridge001.py (~3 s, bit-identical across two runs), receipts
+`results/bridge001.jsonl` (2205 rows: 1615 scored + 590 monotonicity
+rejections) and `results/bridge001_summary.json`. 63 commas enumerated
+(all 9 named included); scorer v1.1.0, melodic v0.1.0, tests 22/22 green
+pre-run (including the hand-derived miracle minimax pin: G = 116.5878¢,
+err = 2.4284¢ — reproduced by the solver to 4 decimals).
+
+**H-B2 — REFUTED under the strict reading; the pre-registered PASS
+prediction fails.** No candidate at N ≤ 22 is simultaneously (a) injective
+on the 8 distinct tesseract tones, (b) CONTAINED in an N-note MOS window
+(any anchor), and (c) full hexany triad survival at ε = 2¢. The two halves
+exist separately and the gap between them is the finding:
+- *Contained* candidates top out at hexany image (3,3) at ε = 2
+  (miracle) — best contained errors 2.727¢ (orwell-22) / 6.858¢ (miracle).
+- *Addressing-only* passers exist (32 rows; best: ennealimmal
+  2401/2400 ∩ 4375/4374 at N = 18, max tone error 0.204¢, full hexany
+  survival) — but every one FAILS containment: accurate microtemperaments
+  need large generator counts, so the EG4 chain span (8 for ennealimmal's
+  2-per-period classes, up to 34 elsewhere) exceeds every N ≤ 22 window.
+  **The binding constraint on the bridge is the MOS window (chain span),
+  not tuning accuracy.** The pre-registered H-B2 sentence was ambiguous on
+  containment; the strict reading is the program's meaning of "carries"
+  and is the headline verdict. Both readings are in the summary receipt.
+
+**The one-cent resolution (post-hoc lens, labeled in bridge001.py, added
+after first inspection like moslat001's investigation fields):** sweeping
+the frozen scorer's ε on the contained flagships' hexany images —
+**miracle/blackjack recovers the FULL (6,6) at ε = 3¢**; orwell-22 at
+ε = 4¢. The bar the prediction set (2¢) was exactly one cent too strict
+for the best N ≤ 22 MOS host. "CPS structure inside an MOS" costs one
+cent of triad tolerance at these cardinalities.
+
+**Pareto front (contained, dedup by temperament × N × val), all rows
+alias 225/224 — P-COMMA's family call confirmed:**
+- **orwell-22** ⟨22,35,51,62⟩ (patent), completion 1715/1728, g =
+  271.385¢, minimax 2.257¢, max tone err 2.727¢, injective, TRUE 2-step
+  MOS, anchor −3 (interval [−6,−3]), faithful from ε = 3, hexany (2,2)@2¢
+  → (6,6)@4¢. The error flagship.
+- **miracle 19/20/21/22**, completion 1029/1024, secor g = 116.588¢, max
+  tone err 6.858¢, hexany (3,3)@2¢ → (6,6)@3¢, anchor ∈ [−14,−9] at
+  N = 21. N = 21 (blackjack) is the true 2-step host (19, 20 are 3-step
+  generated scales — kept on the front per the SPEC's BRIDGE-001b
+  "two-gap-ness is an objective, not an assumption"). The survival
+  flagship: earliest full-hexany recovery of any contained candidate.
+- Also contained but dominated: mothra (81/80 ∩ 1029/1024, N = 21,
+  5.678¢), meantone (N = 17/19, 7.672¢, hexany (1,1) — its EG4 span is 16
+  so N = 12 does NOT contain the genus; 35/32 needs 14 fifths).
+
+**P-COMMA — KEPT in family, corrected in detail.** 225/224 owns the
+entire contained front, orwell-22 and miracle-21 as named. But magic and
+garibaldi never materialize: the min-error completion rule, given
+(245/243, patent-19) etc., always finds a MORE accurate second comma than
+magic's (picks 3125/3136-family, err 2.47¢, uncontained) — the completion
+is greedy-accurate and skips mid-accuracy temperaments entirely. A
+BRIDGE-001b variant should sweep k₂ instead of argmin if the full
+temperament Pareto is wanted per val.
+
+**P-KILL — KEPT, mechanism clause refined.** ZERO commas fully killed
+(prediction: ≤ 25%, none named); 590/2205 pairs rejected. Violating-pair
+census: 5/4 < 21/16 is the plurality as predicted (292 of 856 violation
+records) but not "overwhelming" — 1/1–2/1 range violations 178, 7/4 <
+15/8 151, 105/64 < 7/4 121, boundary pairs 57 + 57.
+
+**P-MERGE — KEPT, with a bonus discovery.** Pitch merges: 9 rows, min max
+error 54.4¢ ≫ 15¢ — zero merges in the ≤ 15¢ regime, as predicted. But
+1026 scored rows have DEGREE collisions that are NOT pitch merges — same
+address, distinct pitch, resolved by chain position — i.e. **D'Alessandro's
+regime iii arises spontaneously in the machine search** (min max-err
+0.492¢: 2401/2400 at ⟨7,11,17,20⟩, address-commas 16/15 and 21/20). The
+1975 keyboard's pitch-just/address-tempered trick is not an idiosyncrasy;
+it is what the lattice offers whenever tones exceed degrees.
+
+**Structural surprise — sign cancellation:** per-tone EG4 error is NOT
+the prime minimax. Orwell's mixed-sign prime errors (−2.26, −0.47, +2.26)
+cancel in compound tones (max tone err 2.73 ≈ minimax 2.26); miracle's
+sign-coherent errors (−2.43, −2.43, −2.00) stack to −6.86 on 105/64
+(3× its 2.43 minimax). A tone-set minimax (optimize over the 8 images,
+not the 3 primes) is the obvious future tuning lens; not run here — the
+tuning was pre-registered.
+
+**Murchana corollary, confirmed in practice:** NO front row contains the
+EG4 at anchor 0 — every host needs the MOS-LAT-001 anchor sweep (miracle
+[−14,−9], orwell [−6,−3]). Anchoring-as-free-parameter is load-bearing
+for BRIDGE, exactly as the corollary predicted.
+
+**Vs the BRIDGE-000 standard:** D'Alessandro holds the pitch-just corner
+(0¢, 7 collisions = pigeonhole floor, 100% subset survival); the best
+EG4 bridges hold the opposite corner (0 collisions, 2.7–6.9¢, full
+hexany survival only at ε = 3–4¢). Nothing at N ≤ 22 matches Wilson's
+survival at zero collisions — the melody⇄harmony trade-off, now measured
+as a two-corner Pareto with nothing in between at EG4 scale.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+verified). Post-hoc additions logged above: per-row
+`posthoc_hexany_full_recovery_eps` (contained rows only) and the
+addressing-only H-B2 reading in the summary — neither changes any
+pre-registered field.
+
+**Run receipt:** 2026-07-29, python3.12 — lattice suite 77/77 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
+88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
+melodic a16f162b…7535). Receipts bit-identical across two runs.

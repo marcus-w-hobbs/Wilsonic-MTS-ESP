@@ -1,0 +1,1207 @@
+{
+ "experiment": "BRIDGE-001",
+ "date": "2026-07-29",
+ "scorer_version": "1.1.0",
+ "melodic_version": "0.1.0",
+ "epsilon_tempered": 2.0,
+ "comma_enumeration": {
+  "count": 63,
+  "named_included": [
+   "1029/1024",
+   "126/125",
+   "225/224",
+   "2401/2400",
+   "245/243",
+   "3125/3087",
+   "4375/4374",
+   "64/63",
+   "81/80"
+  ],
+  "list": [
+   {
+    "comma": "36/35",
+    "monzo": [
+     2,
+     2,
+     -1,
+     -1
+    ],
+    "cents": 48.7704
+   },
+   {
+    "comma": "49/48",
+    "monzo": [
+     -4,
+     -1,
+     0,
+     2
+    ],
+    "cents": 35.6968
+   },
+   {
+    "comma": "50/49",
+    "monzo": [
+     1,
+     0,
+     2,
+     -2
+    ],
+    "cents": 34.9756
+   },
+   {
+    "comma": "64/63",
+    "monzo": [
+     6,
+     -2,
+     0,
+     -1
+    ],
+    "cents": 27.2641
+   },
+   {
+    "comma": "81/80",
+    "monzo": [
+     -4,
+     4,
+     -1,
+     0
+    ],
+    "cents": 21.5063
+   },
+   {
+    "comma": "126/125",
+    "monzo": [
+     1,
+     2,
+     -3,
+     1
+    ],
+    "cents": 13.7948
+   },
+   {
+    "comma": "128/125",
+    "monzo": [
+     7,
+     0,
+     -3,
+     0
+    ],
+    "cents": 41.0589
+   },
+   {
+    "comma": "225/224",
+    "monzo": [
+     -5,
+     2,
+     2,
+     -1
+    ],
+    "cents": 7.7115
+   },
+   {
+    "comma": "245/243",
+    "monzo": [
+     0,
+     -5,
+     1,
+     2
+    ],
+    "cents": 14.1905
+   },
+   {
+    "comma": "250/243",
+    "monzo": [
+     1,
+     -5,
+     3,
+     0
+    ],
+    "cents": 49.1661
+   },
+   {
+    "comma": "405/392",
+    "monzo": [
+     -3,
+     4,
+     1,
+     -2
+    ],
+    "cents": 56.4819
+   },
+   {
+    "comma": "525/512",
+    "monzo": [
+     -9,
+     1,
+     2,
+     1
+    ],
+    "cents": 43.4083
+   },
+   {
+    "comma": "686/675",
+    "monzo": [
+     1,
+     -3,
+     -2,
+     3
+    ],
+    "cents": 27.9853
+   },
+   {
+    "comma": "875/864",
+    "monzo": [
+     -5,
+     -3,
+     3,
+     1
+    ],
+    "cents": 21.902
+   },
+   {
+    "comma": "1029/1000",
+    "monzo": [
+     -3,
+     1,
+     -3,
+     3
+    ],
+    "cents": 49.4916
+   },
+   {
+    "comma": "1029/1024",
+    "monzo": [
+     -10,
+     1,
+     0,
+     3
+    ],
+    "cents": 8.4327
+   },
+   {
+    "comma": "1323/1280",
+    "monzo": [
+     -8,
+     3,
+     -1,
+     2
+    ],
+    "cents": 57.2031
+   },
+   {
+    "comma": "1728/1715",
+    "monzo": [
+     6,
+     3,
+     -1,
+     -3
+    ],
+    "cents": 13.0736
+   },
+   {
+    "comma": "2048/2025",
+    "monzo": [
+     11,
+     -4,
+     -2,
+     0
+    ],
+    "cents": 19.5526
+   },
+   {
+    "comma": "2240/2187",
+    "monzo": [
+     6,
+     -7,
+     1,
+     1
+    ],
+    "cents": 41.4546
+   },
+   {
+    "comma": "2401/2400",
+    "monzo": [
+     -5,
+     -1,
+     -2,
+     4
+    ],
+    "cents": 0.7212
+   },
+   {
+    "comma": "2430/2401",
+    "monzo": [
+     1,
+     5,
+     1,
+     -4
+    ],
+    "cents": 20.7851
+   },
+   {
+    "comma": "3125/3024",
+    "monzo": [
+     -4,
+     -3,
+     5,
+     -1
+    ],
+    "cents": 56.8777
+   },
+   {
+    "comma": "3125/3072",
+    "monzo": [
+     -10,
+     -1,
+     5,
+     0
+    ],
+    "cents": 29.6136
+   },
+   {
+    "comma": "3125/3087",
+    "monzo": [
+     0,
+     -2,
+     5,
+     -3
+    ],
+    "cents": 21.1808
+   },
+   {
+    "comma": "3136/3125",
+    "monzo": [
+     6,
+     0,
+     -5,
+     2
+    ],
+    "cents": 6.0832
+   },
+   {
+    "comma": "3645/3584",
+    "monzo": [
+     -9,
+     6,
+     1,
+     -1
+    ],
+    "cents": 29.2178
+   },
+   {
+    "comma": "4000/3969",
+    "monzo": [
+     5,
+     -4,
+     3,
+     -2
+    ],
+    "cents": 13.4693
+   },
+   {
+    "comma": "4375/4374",
+    "monzo": [
+     -1,
+     -7,
+     4,
+     1
+    ],
+    "cents": 0.3958
+   },
+   {
+    "comma": "5103/5000",
+    "monzo": [
+     -3,
+     6,
+     -4,
+     1
+    ],
+    "cents": 35.3011
+   },
+   {
+    "comma": "5120/5103",
+    "monzo": [
+     10,
+     -6,
+     1,
+     -1
+    ],
+    "cents": 5.7578
+   },
+   {
+    "comma": "5625/5488",
+    "monzo": [
+     -4,
+     2,
+     4,
+     -3
+    ],
+    "cents": 42.6871
+   },
+   {
+    "comma": "6144/6125",
+    "monzo": [
+     11,
+     1,
+     -3,
+     -2
+    ],
+    "cents": 5.362
+   },
+   {
+    "comma": "6272/6075",
+    "monzo": [
+     7,
+     -5,
+     -2,
+     2
+    ],
+    "cents": 55.2494
+   },
+   {
+    "comma": "8748/8575",
+    "monzo": [
+     2,
+     7,
+     -2,
+     -3
+    ],
+    "cents": 34.5799
+   },
+   {
+    "comma": "9604/9375",
+    "monzo": [
+     2,
+     -1,
+     -5,
+     4
+    ],
+    "cents": 41.7801
+   },
+   {
+    "comma": "10976/10935",
+    "monzo": [
+     5,
+     -7,
+     -1,
+     3
+    ],
+    "cents": 6.479
+   },
+   {
+    "comma": "12005/11664",
+    "monzo": [
+     -4,
+     -6,
+     1,
+     4
+    ],
+    "cents": 49.8873
+   },
+   {
+    "comma": "12288/12005",
+    "monzo": [
+     12,
+     1,
+     -1,
+     -4
+    ],
+    "cents": 40.3377
+   },
+   {
+    "comma": "16875/16384",
+    "monzo": [
+     -14,
+     3,
+     4,
+     0
+    ],
+    "cents": 51.1199
+   },
+   {
+    "comma": "28672/28125",
+    "monzo": [
+     12,
+     -2,
+     -5,
+     1
+    ],
+    "cents": 33.3473
+   },
+   {
+    "comma": "31104/30625",
+    "monzo": [
+     7,
+     5,
+     -4,
+     -2
+    ],
+    "cents": 26.8683
+   },
+   {
+    "comma": "32805/32768",
+    "monzo": [
+     -15,
+     8,
+     1,
+     0
+    ],
+    "cents": 1.9537
+   },
+   {
+    "comma": "33075/32768",
+    "monzo": [
+     -15,
+     3,
+     2,
+     2
+    ],
+    "cents": 16.1442
+   },
+   {
+    "comma": "42875/41472",
+    "monzo": [
+     -9,
+     -4,
+     3,
+     3
+    ],
+    "cents": 57.5989
+   },
+   {
+    "comma": "64827/64000",
+    "monzo": [
+     -9,
+     3,
+     -3,
+     4
+    ],
+    "cents": 22.2275
+   },
+   {
+    "comma": "65536/64827",
+    "monzo": [
+     16,
+     -3,
+     0,
+     -4
+    ],
+    "cents": 18.8314
+   },
+   {
+    "comma": "65625/65536",
+    "monzo": [
+     -16,
+     1,
+     5,
+     1
+    ],
+    "cents": 2.3495
+   },
+   {
+    "comma": "83349/81920",
+    "monzo": [
+     -14,
+     5,
+     -1,
+     3
+    ],
+    "cents": 29.939
+   },
+   {
+    "comma": "131072/127575",
+    "monzo": [
+     17,
+     -6,
+     -2,
+     -1
+    ],
+    "cents": 46.8167
+   },
+   {
+    "comma": "131072/128625",
+    "monzo": [
+     17,
+     -1,
+     -3,
+     -3
+    ],
+    "cents": 32.6261
+   },
+   {
+    "comma": "153664/151875",
+    "monzo": [
+     6,
+     -5,
+     -4,
+     4
+    ],
+    "cents": 20.2738
+   },
+   {
+    "comma": "200000/194481",
+    "monzo": [
+     6,
+     -4,
+     5,
+     -4
+    ],
+    "cents": 48.4449
+   },
+   {
+    "comma": "214375/209952",
+    "monzo": [
+     -5,
+     -8,
+     4,
+     3
+    ],
+    "cents": 36.0926
+   },
+   {
+    "comma": "221184/214375",
+    "monzo": [
+     13,
+     3,
+     -4,
+     -3
+    ],
+    "cents": 54.1324
+   },
+   {
+    "comma": "256000/250047",
+    "monzo": [
+     11,
+     -6,
+     3,
+     -3
+    ],
+    "cents": 40.7334
+   },
+   {
+    "comma": "300125/294912",
+    "monzo": [
+     -15,
+     -2,
+     3,
+     4
+    ],
+    "cents": 30.3348
+   },
+   {
+    "comma": "321489/320000",
+    "monzo": [
+     -9,
+     8,
+     -4,
+     2
+    ],
+    "cents": 8.037
+   },
+   {
+    "comma": "327680/321489",
+    "monzo": [
+     16,
+     -8,
+     1,
+     -2
+    ],
+    "cents": 33.0219
+   },
+   {
+    "comma": "458752/455625",
+    "monzo": [
+     16,
+     -6,
+     -4,
+     1
+    ],
+    "cents": 11.841
+   },
+   {
+    "comma": "535815/524288",
+    "monzo": [
+     -19,
+     7,
+     1,
+     2
+    ],
+    "cents": 37.6505
+   },
+   {
+    "comma": "540225/524288",
+    "monzo": [
+     -19,
+     2,
+     2,
+     4
+    ],
+    "cents": 51.8411
+   },
+   {
+    "comma": "820125/802816",
+    "monzo": [
+     -14,
+     8,
+     3,
+     -2
+    ],
+    "cents": 36.9293
+   }
+  ]
+ },
+ "bases": {
+  "hexany": {
+   "P": 6,
+   "S": 6,
+   "G": 0
+  },
+  "tetrany_1": {
+   "P": 5,
+   "S": 1,
+   "G": 0
+  },
+  "tetrany_3": {
+   "P": 1,
+   "S": 5,
+   "G": 0
+  }
+ },
+ "full_eg4_base": {
+  "P": 12,
+  "S": 12,
+  "G": 0
+ },
+ "candidates": {
+  "pairs_total": 2205,
+  "rejected_monotonicity": 590,
+  "scored": 1615,
+  "contained_distinct_temperaments": 78
+ },
+ "monotonicity_kills": {
+  "fully_killed_commas": [],
+  "fully_killed_count": 0,
+  "named_killed": [],
+  "per_comma": {
+   "540225/524288": {
+    "pairs": 37,
+    "rejected": 14,
+    "scored": 23
+   },
+   "535815/524288": {
+    "pairs": 22,
+    "rejected": 4,
+    "scored": 18
+   },
+   "65625/65536": {
+    "pairs": 28,
+    "rejected": 5,
+    "scored": 23
+   },
+   "300125/294912": {
+    "pairs": 36,
+    "rejected": 16,
+    "scored": 20
+   },
+   "33075/32768": {
+    "pairs": 48,
+    "rejected": 18,
+    "scored": 30
+   },
+   "32805/32768": {
+    "pairs": 21,
+    "rejected": 6,
+    "scored": 15
+   },
+   "16875/16384": {
+    "pairs": 42,
+    "rejected": 10,
+    "scored": 32
+   },
+   "83349/81920": {
+    "pairs": 31,
+    "rejected": 6,
+    "scored": 25
+   },
+   "820125/802816": {
+    "pairs": 17,
+    "rejected": 4,
+    "scored": 13
+   },
+   "3125/3072": {
+    "pairs": 30,
+    "rejected": 6,
+    "scored": 24
+   },
+   "1029/1024": {
+    "pairs": 48,
+    "rejected": 13,
+    "scored": 35
+   },
+   "42875/41472": {
+    "pairs": 32,
+    "rejected": 11,
+    "scored": 21
+   },
+   "525/512": {
+    "pairs": 72,
+    "rejected": 23,
+    "scored": 49
+   },
+   "64827/64000": {
+    "pairs": 29,
+    "rejected": 7,
+    "scored": 22
+   },
+   "3645/3584": {
+    "pairs": 26,
+    "rejected": 4,
+    "scored": 22
+   },
+   "321489/320000": {
+    "pairs": 17,
+    "rejected": 3,
+    "scored": 14
+   },
+   "1323/1280": {
+    "pairs": 47,
+    "rejected": 12,
+    "scored": 35
+   },
+   "214375/209952": {
+    "pairs": 17,
+    "rejected": 5,
+    "scored": 12
+   },
+   "875/864": {
+    "pairs": 43,
+    "rejected": 14,
+    "scored": 29
+   },
+   "2401/2400": {
+    "pairs": 36,
+    "rejected": 8,
+    "scored": 28
+   },
+   "225/224": {
+    "pairs": 61,
+    "rejected": 16,
+    "scored": 45
+   },
+   "12005/11664": {
+    "pairs": 25,
+    "rejected": 7,
+    "scored": 18
+   },
+   "3125/3024": {
+    "pairs": 30,
+    "rejected": 7,
+    "scored": 23
+   },
+   "49/48": {
+    "pairs": 78,
+    "rejected": 27,
+    "scored": 51
+   },
+   "5625/5488": {
+    "pairs": 33,
+    "rejected": 6,
+    "scored": 27
+   },
+   "81/80": {
+    "pairs": 36,
+    "rejected": 9,
+    "scored": 27
+   },
+   "1029/1000": {
+    "pairs": 41,
+    "rejected": 7,
+    "scored": 34
+   },
+   "405/392": {
+    "pairs": 37,
+    "rejected": 12,
+    "scored": 25
+   },
+   "5103/5000": {
+    "pairs": 23,
+    "rejected": 6,
+    "scored": 17
+   },
+   "4375/4374": {
+    "pairs": 20,
+    "rejected": 5,
+    "scored": 15
+   },
+   "245/243": {
+    "pairs": 29,
+    "rejected": 8,
+    "scored": 21
+   },
+   "3125/3087": {
+    "pairs": 29,
+    "rejected": 6,
+    "scored": 23
+   },
+   "250/243": {
+    "pairs": 30,
+    "rejected": 8,
+    "scored": 22
+   },
+   "686/675": {
+    "pairs": 41,
+    "rejected": 11,
+    "scored": 30
+   },
+   "50/49": {
+    "pairs": 66,
+    "rejected": 7,
+    "scored": 59
+   },
+   "126/125": {
+    "pairs": 48,
+    "rejected": 12,
+    "scored": 36
+   },
+   "2430/2401": {
+    "pairs": 29,
+    "rejected": 9,
+    "scored": 20
+   },
+   "9604/9375": {
+    "pairs": 29,
+    "rejected": 5,
+    "scored": 24
+   },
+   "36/35": {
+    "pairs": 70,
+    "rejected": 30,
+    "scored": 40
+   },
+   "8748/8575": {
+    "pairs": 22,
+    "rejected": 6,
+    "scored": 16
+   },
+   "10976/10935": {
+    "pairs": 20,
+    "rejected": 5,
+    "scored": 15
+   },
+   "4000/3969": {
+    "pairs": 37,
+    "rejected": 13,
+    "scored": 24
+   },
+   "2240/2187": {
+    "pairs": 21,
+    "rejected": 4,
+    "scored": 17
+   },
+   "153664/151875": {
+    "pairs": 29,
+    "rejected": 8,
+    "scored": 21
+   },
+   "200000/194481": {
+    "pairs": 23,
+    "rejected": 6,
+    "scored": 17
+   },
+   "64/63": {
+    "pairs": 69,
+    "rejected": 10,
+    "scored": 59
+   },
+   "3136/3125": {
+    "pairs": 30,
+    "rejected": 6,
+    "scored": 24
+   },
+   "1728/1715": {
+    "pairs": 44,
+    "rejected": 12,
+    "scored": 32
+   },
+   "6272/6075": {
+    "pairs": 29,
+    "rejected": 7,
+    "scored": 22
+   },
+   "128/125": {
+    "pairs": 45,
+    "rejected": 8,
+    "scored": 37
+   },
+   "31104/30625": {
+    "pairs": 28,
+    "rejected": 8,
+    "scored": 20
+   },
+   "5120/5103": {
+    "pairs": 24,
+    "rejected": 6,
+    "scored": 18
+   },
+   "256000/250047": {
+    "pairs": 22,
+    "rejected": 5,
+    "scored": 17
+   },
+   "2048/2025": {
+    "pairs": 33,
+    "rejected": 7,
+    "scored": 26
+   },
+   "6144/6125": {
+    "pairs": 48,
+    "rejected": 21,
+    "scored": 27
+   },
+   "28672/28125": {
+    "pairs": 28,
+    "rejected": 4,
+    "scored": 24
+   },
+   "12288/12005": {
+    "pairs": 36,
+    "rejected": 9,
+    "scored": 27
+   },
+   "221184/214375": {
+    "pairs": 35,
+    "rejected": 16,
+    "scored": 19
+   },
+   "327680/321489": {
+    "pairs": 19,
+    "rejected": 5,
+    "scored": 14
+   },
+   "458752/455625": {
+    "pairs": 23,
+    "rejected": 5,
+    "scored": 18
+   },
+   "65536/64827": {
+    "pairs": 39,
+    "rejected": 12,
+    "scored": 27
+   },
+   "131072/127575": {
+    "pairs": 23,
+    "rejected": 5,
+    "scored": 18
+   },
+   "131072/128625": {
+    "pairs": 44,
+    "rejected": 15,
+    "scored": 29
+   }
+  }
+ },
+ "pareto_front": [
+  {
+   "val": [
+    22,
+    35,
+    51,
+    62
+   ],
+   "N": 22,
+   "k2": "1715/1728",
+   "mapping": [
+    [
+     1,
+     0,
+     3,
+     1
+    ],
+    [
+     0,
+     7,
+     -3,
+     8
+    ]
+   ],
+   "generator_cents": 271.38539382230084,
+   "max_error_cents": 2.727139,
+   "collision_count": 0,
+   "image_score_tempered_eps2": {
+    "P": 4,
+    "S": 4,
+    "G": 2
+   },
+   "h_b2_pass": false,
+   "posthoc_hexany_full_recovery_eps": 4,
+   "hexany_image_P": 2,
+   "hexany_survives": false,
+   "host_step_classes": 2,
+   "comma_aliases": [
+    "225/224",
+    "1728/1715",
+    "2430/2401"
+   ]
+  },
+  {
+   "val": [
+    19,
+    31,
+    43,
+    53
+   ],
+   "N": 19,
+   "k2": "1029/1024",
+   "mapping": [
+    [
+     1,
+     1,
+     3,
+     3
+    ],
+    [
+     0,
+     6,
+     -7,
+     -2
+    ]
+   ],
+   "generator_cents": 116.58779130773483,
+   "max_error_cents": 6.857995,
+   "collision_count": 0,
+   "image_score_tempered_eps2": {
+    "P": 5,
+    "S": 5,
+    "G": 2
+   },
+   "h_b2_pass": false,
+   "posthoc_hexany_full_recovery_eps": 3,
+   "hexany_image_P": 3,
+   "hexany_survives": false,
+   "host_step_classes": 3,
+   "comma_aliases": [
+    "225/224",
+    "1029/1024",
+    "2401/2400",
+    "33075/32768"
+   ]
+  },
+  {
+   "val": [
+    20,
+    32,
+    46,
+    56
+   ],
+   "N": 20,
+   "k2": "1029/1024",
+   "mapping": [
+    [
+     1,
+     1,
+     3,
+     3
+    ],
+    [
+     0,
+     6,
+     -7,
+     -2
+    ]
+   ],
+   "generator_cents": 116.58779130773483,
+   "max_error_cents": 6.857995,
+   "collision_count": 0,
+   "image_score_tempered_eps2": {
+    "P": 5,
+    "S": 5,
+    "G": 2
+   },
+   "h_b2_pass": false,
+   "posthoc_hexany_full_recovery_eps": 3,
+   "hexany_image_P": 3,
+   "hexany_survives": false,
+   "host_step_classes": 3,
+   "comma_aliases": [
+    "225/224",
+    "1029/1024",
+    "33075/32768"
+   ]
+  },
+  {
+   "val": [
+    21,
+    33,
+    49,
+    59
+   ],
+   "N": 21,
+   "k2": "1029/1024",
+   "mapping": [
+    [
+     1,
+     1,
+     3,
+     3
+    ],
+    [
+     0,
+     6,
+     -7,
+     -2
+    ]
+   ],
+   "generator_cents": 116.58779130773483,
+   "max_error_cents": 6.857995,
+   "collision_count": 0,
+   "image_score_tempered_eps2": {
+    "P": 5,
+    "S": 5,
+    "G": 2
+   },
+   "h_b2_pass": false,
+   "posthoc_hexany_full_recovery_eps": 3,
+   "hexany_image_P": 3,
+   "hexany_survives": false,
+   "host_step_classes": 2,
+   "comma_aliases": [
+    "225/224",
+    "1029/1024",
+    "2401/2400",
+    "33075/32768"
+   ]
+  }
+ ],
+ "h_b2": {
+  "passers": 0,
+  "verdict": "FAIL",
+  "flagship": null,
+  "posthoc_addressing_only_reading": {
+   "passers": 32,
+   "best": {
+    "comma": "2401/2400",
+    "k2": "4375/4374",
+    "val": [
+     18,
+     28,
+     41,
+     50
+    ],
+    "N": 18,
+    "max_error_cents": 0.204239,
+    "contained": false,
+    "chain_span": 8,
+    "notes_per_period_class": 2
+   }
+  }
+ },
+ "bridge000_standard": {
+  "hexany_survival": "15/15",
+  "collisions": 7,
+  "cents_error": 0.0
+ },
+ "notes_for_marcus": [
+  "Rank accounting: a linear MOS host is rank 2 in 2.3.5.7, so the kernel is rank 2 (two commas), not the SPEC's 'exactly ONE'; resolved as (comma, val) pairs with the pre-registered min-error completion rule for the implicit second comma.",
+  "The 16-tone tesseract has 16 formal vertices but 8 distinct pitch classes (divisors of 105) because seed 1 pairs each subset with its 1-augmented twin \u2014 the BRIDGE-000 convention (EG6: 64 subsets = 32 tones). Injectivity is on the 8."
+ ]
+}
