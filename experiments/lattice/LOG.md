@@ -706,3 +706,81 @@ controls (≈N classes) sit at his "cannot be melodic" floor, as predicted.
 
 **G-012 status:** ear evidence complete and consistent with the corrected
 claims; decision (merge PR #29 correction + formal pass) remains Marcus's.
+
+## 2026-07-29 — BRIDGE-000 pre-registration (entry BEFORE reading the scan or any run)
+
+**Contract:** SPEC §BRIDGE-000. Design decisions (Marcus, 2026-07-29, via
+structured Q&A):
+1. Scope: fig-24 D'Alessandro (32 EG6 tones + 6 pigtails = 38 tones on 31
+   degrees) with BOTH lifts — +18 (huygens) and −13 (meanpop, inverted
+   D'Alessandro, figs 26–27). The 1980 version (genus 3³·5·7·11², 8
+   pigtails) is deferred to BRIDGE-000b.
+2. Calibration standard = PARETO PAIR, no scalar: (harmonic wealth: frozen
+   v1.1.0 triad scores of the 38-tone JI pitch set + per-embedded-hexany
+   triad survival) × (addressing cost: collision count, comma identities,
+   degree-consistency of the val image). Every future BRIDGE candidate must
+   match or beat on both coordinates.
+3. Additional measurement: H-B1 only (Marcus declined raw-set melodic panel
+   and per-subset melodic panel for this run; subsets wait for
+   SUBSET-MEL-001).
+4. Verification: FULL transcription of fig 24 (+ figs 26–27 for the lift)
+   from dal.PDF, read in place (never vendored — [erv-scan-archive rule]),
+   committed as a derived table citing figure numbers; the encoded val must
+   reproduce every placement and every collision pair exactly.
+
+**H-B1 (pre-registered, before opening the scan or computing anything):**
+Wilson's 31-EDO patent val ⟨31, 49, 72, 87, 107⟩ (with 9 = 3² linear, lift
++18 for 11; and the −13-lift variant) MINIMIZES val-degree tie-pairs for the
+38-tone D'Alessandro set over the ±1-per-odd-coordinate val neighborhood at
+N = 31 — i.e., the template is the tie-optimal addressing, not merely an
+adequate one. Ties are forced (38 tones on 31 degrees ⇒ ≥ 7 collisions by
+pigeonhole, with equality iff no degree hosts 3+ tones); prediction: Wilson's
+val achieves EXACTLY the pigeonhole floor of 7, and no neighbor val does
+better (some may tie at 7; report the count). Either outcome is a finding —
+a neighbor val beating Wilson would be the surprise of the quarter.
+
+**Expected placements (from SPEC/memory, to be checked against the scan, not
+derived from it):** 3→18, 5→10, 7→25, 11→14 (+18 lift); 9 = 2·18 mod 31 = 5;
+pigtails at degrees −1≡30, +8, +9, +26, +27, +36≡5; duplicated degrees
+exactly {0, 5, 10, 13, 18, 23, 28}; kernel commas 385/384 (degs 18, 5, 23),
+2079/2048 (degs 0, 10), 121/120 (degs 13, 28).
+
+**Deliverables:** derived transcription table (figure-cited), bridge000.py,
+results/bridge000.json (placements, collisions, Pareto-pair standard, H-B1
+sweep), LOG verdict, FINDINGS promotion, PR. Gate G-014 opens on completion.
+
+## 2026-07-29 — BRIDGE-000 results + verdicts
+
+**Run:** bridge000.py (~1 s), receipts results/bridge000.json; scan anchors
+in BRIDGE000_TRANSCRIPTION.md (dal.PDF figs 24, 26–27 read in place).
+
+**Verification: EXACT, every pre-registered expectation reproduced.** 38
+tones (32 EG6 + 6 pigtails), huygens chain −1..+36 consecutive, 38 distinct
+pitch classes; collisions at exactly {0,5,10,13,18,23,28}; comma census
+exactly {385/384 ×3, 2079/2048 ×2, 121/120 ×2}; all fig-24 template anchors
+and pigtail identities reproduced. Meanpop lift: EG6 core span 31 slots
+(SPEC's "shrinks to 31"), full 38-tone span −26..+30, and exactly **5
+position-unisons** — matching SPEC's "five collisions become physical
+unisons" and fig 26's own +/✻ comma legend.
+
+**The calibration standard (Pareto pair) is now on record:**
+- Harmonic wealth: full 38-tone set P = S = 154, G = 28 (frozen v1.1.0,
+  exact path; the set is inversionally symmetric). **All 15 embedded
+  hexanies are injectively addressed** — Wilson's seven collisions never
+  land two tones of the same hexany on one key. Per-hexany (P,S) recorded.
+- Addressing cost: 7 collisions = the pigeonhole floor exactly (38 tones,
+  31 degrees), zero triple-occupied degrees, commas as above.
+- Cents error: 0 by construction (regime iii, pitch-just).
+
+**H-B1 — KEPT, verbatim as pre-registered.** Wilson's val ⟨31,49,72,87,107⟩
+achieves exactly the pigeonhole floor (7 tie-pairs, 0 triples); of the 80
+neighbor vals (±1 per odd coordinate), **none is better** and exactly one
+ties — ⟨31,50,71,87,107⟩, a mapping-inaccurate val (3→19\31, a ~735¢ fifth)
+that no one would tune. Worst neighbor: 52 tie-pairs. Wilson's template is
+the tie-optimal AND the only accurate val at the optimum: the 1975 keyboard
+is, by machine check, the best possible 31-degree addressing of these 38
+tones. The val-tie lens (LAT-MEL-001 → CS-EIK-001 → here) now spans the
+whole program: ties explain the eikosany's CS failure, their absence defines
+the CS winners, and their minimization is what Wilson's hand computed.
+
+**Kept.** Frozen scorers untouched; pins verified; G-014 opened.
