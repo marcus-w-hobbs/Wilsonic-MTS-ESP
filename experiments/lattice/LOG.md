@@ -784,3 +784,183 @@ whole program: ties explain the eikosany's CS failure, their absence defines
 the CS winners, and their minimization is what Wilson's hand computed.
 
 **Kept.** Frozen scorers untouched; pins verified; G-014 opened.
+
+## 2026-07-29 — MOS-LAT-002 pre-registration (entry BEFORE any run)
+
+**Experiment:** the registered follow-up to MOS-LAT-001 (LOG 2026-07-28: "the
+natural follow-up is a mixed-tail corpus (metallic tails of 2s and 3s), where
+the hidden lattice actually varies"). H-M1 retest on a quadratic-generator
+corpus with MIXED periodic CF tails, where the spectral gap |λ/λ′| is
+genuinely non-constant. Runner: `moslat002.py`; receipts:
+`results/moslat002.json`. Frozen scorer v1.1.0 via `score_tempered` (ε = 2.0¢
+default, max_span 1200¢ default, both recorded per row). `moslat001.py` is
+NOT modified; its rank-statistics machinery (`ranks`, `partial_spearman`,
+`stratified_permutation_p`) and `iota` are imported read-only so the two runs
+are statistically comparable by construction.
+
+**Corpus (SPEC §Search parameterization note, digit-string enumeration):**
+periodic tails = all digit strings of period length 1–2 over digits {1,2,3},
+EXCLUDING the pure all-1s tail (that is MOS-LAT-001's corpus): (2)*, (3)*,
+(1,2)*, (2,1)*, (1,3)*, (3,1)*, (2,3)*, (3,2)*. Note (1,1)*, (2,2)*, (3,3)*
+collapse to period-1 strings and are not separate. Preambles: all digit
+strings over {1,2,3} of length ≤ 3, including empty (40 per tail, 320 raw
+(preamble, tail) pairs). Deduplication by EXACT generator value — a quadratic
+irrational's CF digit sequence is unique, so (p₁..pₖ, (t₁t₂)*) duplicates
+arise exactly when the preamble's last digits absorb into a rotation of the
+tail; predicted distinct count 27 per tail = 216 generators (same
+canonical-preamble census as MOS-LAT-001's 27), comfortably above the
+registered floor of ≥ 40. All generators lie in (0,1) by construction
+(leading digit ≥ 1). Rows: per generator, every distinct MOS cardinality
+N ∈ [5, 22] reachable at Brun zigzag levels 0–9 (first level per
+denominator), exactly as in `moslat001.run_step2_rows`; generators with no
+cardinality in range contribute zero rows (count reported).
+
+**Construction (logged before implementation):** tail matrix
+M = Π [[0,1],[1,tᵢ]] (Möbius matrix of x ↦ 1/(tᵢ+x), composed in digit
+order); the purely periodic value x = [0;(t₁..tₘ)*] is the fixed point of M,
+i.e. the root in (0,1) of m₂₁x² + (m₂₂−m₁₁)x − m₁₂ = 0, with discriminant
+D = tr(M)² − 4·det(M), det(M) = (−1)^m. Standard reduced-CF theory: exactly
+one root lies in (0,1) (x = 1/θ with θ > 1 reduced purely periodic, whose
+conjugate lies in (−1, 0), so x′ = 1/θ′ < −1), asserted at construction. Preamble digits applied as g = F_{d₁}∘…∘F_{dₖ}(x),
+F_d(y) = 1/(d+y), exact. Arithmetic: exact ℚ(√d) throughout — integer triple
+(a, b, c) for (a + b√d)/c with d SQUAREFREE (square part of D folded into b),
+normalized c > 0, gcd = 1; Galois conjugate √d → −√d; exact sign/floor as in
+moslat001's Q5, generalized to arbitrary non-square d. For this tail set
+D ∈ {8, 13} (period 1, tr 2, 3, det −1: D = tr²+4) and D = tr²−4 with
+tr = 2 + t₁t₂ ∈ {4,5,7,8,11} (period 2, det +1) → squarefree
+d ∈ {2, 3, 5, 13, 15, 21} (tr = 11 gives D = 117 = 9·13 → d = 13 again) —
+recorded per generator; D is never a
+perfect square here (checked: tr²+4 and tr²−4 are non-square for these
+traces), so every generator is a genuine quadratic irrational. Floats only
+for receipts, mos_cents scoring (same as MOS-LAT-001), and the spectral gap.
+
+**Descriptors per row (d1–d4 identical to MOS-LAT-001, d5 new):**
+  d1 conj_sep = |g − g′| (per generator);
+  d2 window_width = |q·g′ − p| at the row's level;
+  d3 spread = max−min of ι(b) = b·g′ − ⌊b·g⌋ over b ∈ [0, N);
+  d4 norm_spread = d3 / (N·d1);
+  d5 spectral_gap = |λ/λ′| of the TAIL matrix = λ² (since |det M| = 1),
+     a tail-cycle invariant (conjugation-invariant, so rotations (1,2)/(2,1)
+     share it while their generator values differ). Registered prediction of
+     the achieved spread — the point of the corpus: five distinct values
+     {(1+√2)² ≈ 5.828, ((3+√13)/2)² ≈ 10.908, (2+√3)² ≈ 13.928,
+     ((5+√21)/2)² ≈ 22.956, (4+√15)² ≈ 61.984}, an order-of-magnitude range,
+     vs the CONSTANT φ² ≈ 2.618 of MOS-LAT-001's all-1s corpus. The achieved
+     min/max/#distinct of ALL five descriptors will be reported explicitly so
+     the contrast with the degenerate corpus is on the record.
+
+**H-M1 restated for the new corpus (the registered test):** outcome
+y = P (frozen proportional count), control z = N (cardinality). For each
+predictor x ∈ {g01_baseline, conj_sep, window_width, spread, norm_spread,
+spectral_gap} — FIXED order, one rng consumed in that order — compute
+partial Spearman ρ(x, P | N) (rank-transform, residualize x-ranks and
+P-ranks on N-ranks by least squares, Pearson on residuals; the imported
+moslat001 functions), then a stratified permutation test: shuffle x within
+cardinality strata, seed 20260725, 9999 permutations, two-sided
+p = fraction of permuted |ρ| ≥ observed |ρ|, add-one rule. NULL (as in
+MOS-LAT-001): no descriptor beats generator-value binning — the g01
+baseline run through the identical machinery. Registered verdict rule
+(unchanged): H-M1 SUPPORTED iff some descriptor has permutation p < 0.05
+AND |ρ| > |ρ_baseline(g01)|; otherwise NULL. Sensitivity report (secondary,
+non-verdict): Holm correction over the 5 descriptors, recorded in the
+receipt either way.
+
+**Registered prediction:** from MOS-LAT-001's own post-mortem — its null was
+attributed to the corpus (spectral gap constant, remaining descriptors
+near-functions of (N, conj_sep)), not to the hypothesis — we predict that
+with genuine conjugate-geometry variation AT LEAST ONE descriptor (most
+plausibly d5 spectral_gap or d1 conj_sep, now decoupled from it) beats the
+generator-value baseline under the verdict rule. A second null on THIS
+corpus kills the descriptor program: it would say triad hot spots are not a
+function of the hidden lattice's conjugate geometry at all, and refocus the
+search on generator arithmetic directly (CF digit statistics, field
+discriminants). Either outcome is a reportable finding. Secondary registered
+expectation: P = S on every row (anchored-scorer inversional symmetry on
+MOS, as in every run so far).
+
+**Known limitations, logged now (inherited from MOS-LAT-001):** rows sharing
+a generator are pseudo-replicated; the stratified permutation limits but
+does not eliminate this — p-values are descriptive, not confirmatory.
+spectral_gap takes only ~5 distinct values across ~216 generators, so its
+rank test is coarse (many ties); that is the honest granularity of a
+tail-cycle invariant on a period ≤ 2 corpus.
+
+**Order:** implement moslat002.py + unit tests (Quad exact arithmetic incl.
+squarefree reduction, tail fixed-point known values, preamble application,
+cross-tail dedup identities, spectral-gap values, corpus census, stats
+determinism) → run → receipts → results entry below → FINDINGS.md promotion
+→ full lattice + triads suites + both freeze checks.
+
+## 2026-07-29 — MOS-LAT-002 results + verdict
+
+**Run:** moslat002.py, python3.12, ~65 s; receipts `results/moslat002.json`
+(scorer 1.1.0, ε = 2¢, max_span 1200¢ recorded per row; seed 20260725,
+9999 stratified permutations, moslat001's own statistics code objects,
+asserted identical by the test suite).
+
+**Corpus census — exactly as pre-registered.** 320 raw (preamble, tail)
+pairs → **216 distinct generators** (the predicted 27 per tail; 104
+rotation-absorption duplicates dropped, every duplicate agreeing on its
+tail cycle), 788 (g, N) rows at N ∈ [5, 22]. Descriptor spread — the
+registered proof of non-degeneracy vs MOS-LAT-001:
+
+| descriptor    | achieved range        | #distinct | MOS-LAT-001    |
+|---------------|-----------------------|-----------|----------------|
+| g01           | [0.2638, 0.7913]      | 216       | 27 values      |
+| conj_sep      | [0.00210, 4.5826]     | 128       | 18 values      |
+| spectral_gap  | [5.8284, 61.9839]     | **5**     | **constant φ²**|
+| window_width  | [0.0174, 87.034]      | 594       | —              |
+| spread        | [0.7022, 82.243]      | 669       | —              |
+| norm_spread   | [0.6196, 62.079]      | 761       | —              |
+
+The five spectral-gap values are the registered set {(1+√2)², ((3+√13)/2)²,
+(2+√3)², ((5+√21)/2)², (4+√15)²} — an 10.6× range where MOS-LAT-001 had a
+single point. P = S on all 788 rows (registered expectation kept).
+
+**H-M1 verdict: NULL — the registered prediction is REFUTED.** Partial
+Spearman ρ(descriptor, P | N), stratified permutation: g01 baseline
+ρ = −0.0711 (p = 0.2531); conj_sep ρ = +0.0349 (p = 0.3387); window_width
+ρ = +0.0333 (p = 0.3835); spread ρ = +0.0235 (p = 0.5006); norm_spread
+ρ = −0.0296 (p = 0.4023); spectral_gap ρ = −0.0642 (p = 0.0635). The
+nearest miss, spectral_gap, fails BOTH prongs of the registered verdict
+rule: p ≥ 0.05 and |ρ| = 0.064 < |ρ_baseline| = 0.071. Holm-adjusted
+(secondary, registered): all descriptors ≥ 0.3175. With 8× the rows and
+genuine conjugate-geometry variation, no descriptor beats generator-value
+binning — the same verdict as the degenerate corpus, now without the
+corpus excuse. **Per the pre-registration this kills the descriptor
+program**: triad hot spots are not a function of the hidden lattice's
+conjugate geometry; future search should organize by generator arithmetic
+directly (CF digit statistics, value neighborhoods), not by embedding
+descriptors.
+
+**Post-hoc observation (NOT registered, mechanism candidate):** hot spots
+pin to generator-VALUE neighborhoods across arithmetically unrelated
+fields. Flagship pair: `[0;3,2,2,(2,3)*]` = 351.40¢ (ℚ(√15), gap 61.98)
+and `[0;3,(2)*]` = 351.47¢ (ℚ(√2), gap 5.83) — 0.07¢ apart in value,
+maximally apart in every lattice descriptor, identical P = 45 at N = 17.
+The ~317¢ noble-minor-third region is hot under FOUR different tails
+(316.73–318.01¢, P = 48/45/42 here, plus MOS-LAT-001's [0;3,1,3,(1)*]
+317.17¢, P = 62), and the complement pair 848.53¢/351.47¢ ties at P = 45
+(complement symmetry again). Consistent mechanism: with scorer ε = 2¢,
+P is a locally stable function of g01, while every conjugate-embedding
+descriptor is violently discontinuous in g01 (it depends on the arithmetic
+identity, not the location) — so no such descriptor can carry information
+the g01 rank doesn't already carry. This is the refocus target the
+pre-registration named: the hot-spot map lives on the circle, not on the
+lattice.
+
+**Hot spots (receipt → hot_spots):** top P = 64 at `[0;1,3,2,(1,3)*]`
+≈ 924.66¢, N = 22 — exceeds MOS-LAT-001's corpus max (62). Then
+`[0;2,1,1,(1,2)*]` ≈ 455.59¢ (P = 54, N = 21), `[0;1,3,(2)*]` ≈ 928.15¢
+(P = 50, N = 22), `[0;3,1,3,(1,2)*]` ≈ 316.73¢ (P = 48, N = 19),
+`[0;2,2,3,(2)*]` ≈ 492.58¢ (P = 46, N = 22), and the silver-tail pair
+`[0;1,(2)*]`/`[0;3,(2)*]` ≈ 848.53¢/351.47¢ (P = 45, N = 17).
+
+**Kept.** moslat002.py exactly as implemented before the run (no post-run
+changes); exact ℚ(√d) arithmetic (Quad) verified by 33 new unit tests
+written before the run, including the 216-generator census, tail
+fixed-point identities, rotation absorption, and the statistics-reuse
+contract (`partial_spearman`/`stratified_permutation_p`/`iota` ARE
+moslat001's code objects). Lattice suite 88/88 OK; triads suite 88/88 OK;
+freeze checks OK (scorer pin 1a840af9…9b592, melodic pin a16f162b…e7535
+unchanged). Findings promoted to FINDINGS.md.
