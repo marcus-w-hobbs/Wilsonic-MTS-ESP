@@ -1,0 +1,1348 @@
+{
+ "experiment": "BRIDGE-000",
+ "date": "2026-07-29",
+ "scorer_version": "1.1.0",
+ "source": "dal.PDF fig 24 (huygens) + figs 26-27 (meanpop); anchors in BRIDGE000_TRANSCRIPTION.md",
+ "verification": {
+  "chain_consecutive_-1..36": true,
+  "template_anchors": "all reproduced",
+  "duplicated_degrees": [
+   0,
+   5,
+   10,
+   13,
+   18,
+   23,
+   28
+  ],
+  "collisions": [
+   {
+    "degree": 0,
+    "positions": [
+     0,
+     31
+    ],
+    "tones": [
+     "1",
+     "2079"
+    ],
+    "comma": "2079/2048"
+   },
+   {
+    "degree": 5,
+    "positions": [
+     2,
+     33
+    ],
+    "tones": [
+     "9",
+     "1155"
+    ],
+    "comma": "385/384"
+   },
+   {
+    "degree": 10,
+    "positions": [
+     4,
+     35
+    ],
+    "tones": [
+     "5",
+     "10395"
+    ],
+    "comma": "2079/2048"
+   },
+   {
+    "degree": 13,
+    "positions": [
+     -1,
+     30
+    ],
+    "tones": [
+     "945/11",
+     "693"
+    ],
+    "comma": "121/120"
+   },
+   {
+    "degree": 18,
+    "positions": [
+     1,
+     32
+    ],
+    "tones": [
+     "3",
+     "385"
+    ],
+    "comma": "385/384"
+   },
+   {
+    "degree": 23,
+    "positions": [
+     3,
+     34
+    ],
+    "tones": [
+     "27",
+     "3465"
+    ],
+    "comma": "385/384"
+   },
+   {
+    "degree": 28,
+    "positions": [
+     5,
+     36
+    ],
+    "tones": [
+     "15",
+     "121"
+    ],
+    "comma": "121/120"
+   }
+  ],
+  "comma_census": {
+   "2079/2048": 2,
+   "385/384": 3,
+   "121/120": 2
+  },
+  "meanpop": {
+   "span": [
+    -26,
+    30
+   ],
+   "position_unisons": 5
+  }
+ },
+ "pareto_standard": {
+  "harmonic_wealth": {
+   "full_38_tone": {
+    "P": 154,
+    "S": 154,
+    "G": 28,
+    "cardinality": 38
+   },
+   "embedded_hexanies": [
+    {
+     "seeds": [
+      1,
+      3,
+      5,
+      7
+     ],
+     "P": 6,
+     "S": 6,
+     "G": 0,
+     "degrees": [
+      4,
+      10,
+      12,
+      18,
+      25,
+      28
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      3,
+      5,
+      9
+     ],
+     "P": 9,
+     "S": 9,
+     "G": 2,
+     "degrees": [
+      5,
+      10,
+      15,
+      18,
+      23,
+      28
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      3,
+      5,
+      11
+     ],
+     "P": 5,
+     "S": 5,
+     "G": 0,
+     "degrees": [
+      1,
+      10,
+      14,
+      18,
+      24,
+      28
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      3,
+      7,
+      9
+     ],
+     "P": 7,
+     "S": 7,
+     "G": 2,
+     "degrees": [
+      5,
+      12,
+      18,
+      23,
+      25,
+      30
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      3,
+      7,
+      11
+     ],
+     "P": 4,
+     "S": 4,
+     "G": 0,
+     "degrees": [
+      1,
+      8,
+      12,
+      14,
+      18,
+      25
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      3,
+      9,
+      11
+     ],
+     "P": 4,
+     "S": 4,
+     "G": 2,
+     "degrees": [
+      1,
+      5,
+      14,
+      18,
+      19,
+      23
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      5,
+      7,
+      9
+     ],
+     "P": 3,
+     "S": 3,
+     "G": 0,
+     "degrees": [
+      4,
+      5,
+      10,
+      15,
+      25,
+      30
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      5,
+      7,
+      11
+     ],
+     "P": 1,
+     "S": 1,
+     "G": 0,
+     "degrees": [
+      4,
+      8,
+      10,
+      14,
+      24,
+      25
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      5,
+      9,
+      11
+     ],
+     "P": 2,
+     "S": 2,
+     "G": 0,
+     "degrees": [
+      5,
+      10,
+      14,
+      15,
+      19,
+      24
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      1,
+      7,
+      9,
+      11
+     ],
+     "P": 3,
+     "S": 3,
+     "G": 0,
+     "degrees": [
+      5,
+      8,
+      14,
+      19,
+      25,
+      30
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      3,
+      5,
+      7,
+      9
+     ],
+     "P": 4,
+     "S": 4,
+     "G": 0,
+     "degrees": [
+      4,
+      12,
+      15,
+      23,
+      28,
+      30
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      3,
+      5,
+      7,
+      11
+     ],
+     "P": 2,
+     "S": 2,
+     "G": 0,
+     "degrees": [
+      1,
+      4,
+      8,
+      12,
+      24,
+      28
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      3,
+      5,
+      9,
+      11
+     ],
+     "P": 4,
+     "S": 4,
+     "G": 0,
+     "degrees": [
+      1,
+      15,
+      19,
+      23,
+      24,
+      28
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      3,
+      7,
+      9,
+      11
+     ],
+     "P": 3,
+     "S": 3,
+     "G": 0,
+     "degrees": [
+      1,
+      8,
+      12,
+      19,
+      23,
+      30
+     ],
+     "injective_addressing": true
+    },
+    {
+     "seeds": [
+      5,
+      7,
+      9,
+      11
+     ],
+     "P": 3,
+     "S": 3,
+     "G": 0,
+     "degrees": [
+      4,
+      8,
+      15,
+      19,
+      24,
+      30
+     ],
+     "injective_addressing": true
+    }
+   ],
+   "hexanies_injectively_addressed": "15/15"
+  },
+  "addressing_cost": {
+   "collision_count": 7,
+   "pigeonhole_floor": 7,
+   "at_floor": true,
+   "commas": {
+    "2079/2048": 2,
+    "385/384": 3,
+    "121/120": 2
+   }
+  },
+  "cents_error": 0.0
+ },
+ "h_b1": {
+  "wilson_val": [
+   31,
+   49,
+   72,
+   87,
+   107
+  ],
+  "wilson_tie_pairs": 7,
+  "wilson_degrees_with_3plus": 0,
+  "neighbors_strictly_better": 0,
+  "neighbors_equal": 1,
+  "neighborhood_size": 80,
+  "sweep": [
+   {
+    "val": [
+     31,
+     48,
+     71,
+     86,
+     106
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     86,
+     107
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     86,
+     108
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     87,
+     106
+    ],
+    "tie_pairs": 10,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     87,
+     107
+    ],
+    "tie_pairs": 28,
+    "degrees_with_3plus": 5
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     87,
+     108
+    ],
+    "tie_pairs": 12,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     88,
+     106
+    ],
+    "tie_pairs": 17,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     88,
+     107
+    ],
+    "tie_pairs": 32,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     48,
+     71,
+     88,
+     108
+    ],
+    "tie_pairs": 19,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     86,
+     106
+    ],
+    "tie_pairs": 24,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     86,
+     107
+    ],
+    "tie_pairs": 34,
+    "degrees_with_3plus": 7
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     86,
+     108
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     87,
+     106
+    ],
+    "tie_pairs": 13,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     87,
+     107
+    ],
+    "tie_pairs": 20,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     87,
+     108
+    ],
+    "tie_pairs": 9,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     88,
+     106
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     88,
+     107
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     72,
+     88,
+     108
+    ],
+    "tie_pairs": 13,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     86,
+     106
+    ],
+    "tie_pairs": 21,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     86,
+     107
+    ],
+    "tie_pairs": 34,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     86,
+     108
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     87,
+     106
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     87,
+     107
+    ],
+    "tie_pairs": 52,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     87,
+     108
+    ],
+    "tie_pairs": 15,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     88,
+     106
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     88,
+     107
+    ],
+    "tie_pairs": 35,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     48,
+     73,
+     88,
+     108
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     86,
+     106
+    ],
+    "tie_pairs": 15,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     86,
+     107
+    ],
+    "tie_pairs": 12,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     86,
+     108
+    ],
+    "tie_pairs": 9,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     87,
+     106
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     87,
+     107
+    ],
+    "tie_pairs": 12,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     87,
+     108
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     88,
+     106
+    ],
+    "tie_pairs": 34,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     88,
+     107
+    ],
+    "tie_pairs": 25,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     49,
+     71,
+     88,
+     108
+    ],
+    "tie_pairs": 10,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     86,
+     106
+    ],
+    "tie_pairs": 18,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     86,
+     107
+    ],
+    "tie_pairs": 9,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     86,
+     108
+    ],
+    "tie_pairs": 13,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     87,
+     106
+    ],
+    "tie_pairs": 17,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     87,
+     107
+    ],
+    "tie_pairs": 7,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     87,
+     108
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     88,
+     106
+    ],
+    "tie_pairs": 44,
+    "degrees_with_3plus": 9
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     88,
+     107
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     49,
+     72,
+     88,
+     108
+    ],
+    "tie_pairs": 26,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     86,
+     106
+    ],
+    "tie_pairs": 26,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     86,
+     107
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     86,
+     108
+    ],
+    "tie_pairs": 15,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     87,
+     106
+    ],
+    "tie_pairs": 22,
+    "degrees_with_3plus": 3
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     87,
+     107
+    ],
+    "tie_pairs": 13,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     87,
+     108
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     88,
+     106
+    ],
+    "tie_pairs": 35,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     88,
+     107
+    ],
+    "tie_pairs": 9,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     49,
+     73,
+     88,
+     108
+    ],
+    "tie_pairs": 20,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     86,
+     106
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     86,
+     107
+    ],
+    "tie_pairs": 25,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     86,
+     108
+    ],
+    "tie_pairs": 18,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     87,
+     106
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     87,
+     107
+    ],
+    "tie_pairs": 7,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     87,
+     108
+    ],
+    "tie_pairs": 13,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     88,
+     106
+    ],
+    "tie_pairs": 12,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     88,
+     107
+    ],
+    "tie_pairs": 26,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     50,
+     71,
+     88,
+     108
+    ],
+    "tie_pairs": 20,
+    "degrees_with_3plus": 3
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     86,
+     106
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     86,
+     107
+    ],
+    "tie_pairs": 30,
+    "degrees_with_3plus": 6
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     86,
+     108
+    ],
+    "tie_pairs": 17,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     87,
+     106
+    ],
+    "tie_pairs": 17,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     87,
+     107
+    ],
+    "tie_pairs": 8,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     87,
+     108
+    ],
+    "tie_pairs": 11,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     88,
+     106
+    ],
+    "tie_pairs": 14,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     88,
+     107
+    ],
+    "tie_pairs": 30,
+    "degrees_with_3plus": 7
+   },
+   {
+    "val": [
+     31,
+     50,
+     72,
+     88,
+     108
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     86,
+     106
+    ],
+    "tie_pairs": 23,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     86,
+     107
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     86,
+     108
+    ],
+    "tie_pairs": 17,
+    "degrees_with_3plus": 4
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     87,
+     106
+    ],
+    "tie_pairs": 28,
+    "degrees_with_3plus": 8
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     87,
+     107
+    ],
+    "tie_pairs": 15,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     87,
+     108
+    ],
+    "tie_pairs": 10,
+    "degrees_with_3plus": 0
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     88,
+     106
+    ],
+    "tie_pairs": 26,
+    "degrees_with_3plus": 3
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     88,
+     107
+    ],
+    "tie_pairs": 18,
+    "degrees_with_3plus": 2
+   },
+   {
+    "val": [
+     31,
+     50,
+     73,
+     88,
+     108
+    ],
+    "tie_pairs": 16,
+    "degrees_with_3plus": 2
+   }
+  ]
+ }
+}
