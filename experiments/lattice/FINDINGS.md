@@ -120,3 +120,35 @@ reserved for a follow-up run.
 **2026-07-29 — D'Alessandro reproduced exactly; the calibration standard exists.** (EXECUTED; construction and commas exact-rational; anchors eye-verified against dal.PDF figs 24/26–27 — `BRIDGE000_TRANSCRIPTION.md`.) Wilson's fig-24 D'Alessandro is reproduced in full from the template: 38 tones on a consecutive huygens chain −1..+36, seven collisions at degrees {0,5,10,13,18,23,28} realizing exactly {385/384 ×3, 2079/2048 ×2, 121/120 ×2}, meanpop lift giving 5 physical unisons (fig 26's own +/✻ legend). The Pareto calibration standard every BRIDGE candidate must beat: harmonic wealth P = S = 154, G = 28 with **all 15 embedded hexanies injectively addressed**, versus addressing cost of 7 collisions — the pigeonhole floor — at zero cents error. Receipts: `results/bridge000.json`.
 
 **2026-07-29 — H-B1: Wilson's template is the tie-optimal val (kept as pre-registered).** (EXECUTED.) Over the ±1 val neighborhood at N = 31, Wilson's ⟨31,49,72,87,107⟩ hits the pigeonhole floor of 7 tie-pairs with zero triple-occupied degrees; no neighbor does better and the single tying neighbor (3→19\31) is tuning-nonsensical. The 1975 keyboard template is, by machine check, the optimal 31-degree addressing of the 38-tone set — Wilson hand-solved a discrete optimization problem, and the val-tie quantity that failed the bare eikosany (LAT-MEL-001), delimited the CS winners (CS-EIK-001), is precisely what his template minimizes.
+
+**2026-07-29 — H-M1 is NULL again on a non-degenerate corpus: the
+conjugate-geometry descriptor program is dead; triad hot spots live on the
+generator value, not the hidden lattice.** (EXECUTED, exact ℚ(√d)
+arithmetic; `results/moslat002.json`; runner `moslat002.py`, statistics
+imported read-only from `moslat001.py` so the runs are comparable by
+construction; frozen scorer v1.1.0, ε = 2¢; seed 20260725, 9999 stratified
+permutations.) MOS-LAT-002 rebuilt the MOS-LAT-001 corpus with MIXED
+periodic CF tails — all period-1/2 digit strings over {1,2,3} except the
+all-1s tail; 216 distinct quadratic generators (exactly the predicted 27
+per tail), 788 (g, N) rows at N ∈ [5, 22] — so the spectral gap |λ/λ′|,
+CONSTANT (φ²) on the old corpus, now takes five values spanning 5.83–61.98,
+conj_sep spans 0.0021–4.58, and the fields range over ℚ(√d),
+d ∈ {2, 3, 5, 13, 15, 21}. The registered prediction (with genuine
+conjugate-geometry variation at least one descriptor beats generator-value
+binning) is REFUTED: no descriptor passes either prong of the verdict rule
+(best: spectral_gap ρ = −0.064, p = 0.0635 vs baseline |ρ| = 0.071;
+Holm-adjusted all ≥ 0.32; conj_sep/window_width/spread/norm_spread all
+|ρ| ≤ 0.035, p ≥ 0.34). P = S on all 788 rows, again. The receipt's
+post-hoc smoking gun (not registered): near-identical generator VALUES
+from unrelated fields score identically — 351.40¢ in ℚ(√15) (gap 61.98)
+vs 351.47¢ in ℚ(√2) (gap 5.83), both P = 45 at N = 17 — and the ~317¢
+noble-minor-third region is hot under four different tails across both
+corpora, while the corpus-max P = 64 sits at [0;1,3,2,(1,3)*] ≈ 924.66¢,
+N = 22. Mechanism consistent with both nulls: at scorer ε = 2¢ the triad
+count is a locally stable function of the generator's position on the
+circle, while every conjugate-embedding descriptor is discontinuous in
+that position — the descriptor cannot carry information the g01 rank
+doesn't. Program consequence, as pre-registered: stop searching embedding
+descriptors; organize the hot-spot landscape by generator arithmetic
+directly (CF digit statistics, cents-neighborhood structure, complement
+symmetry).
