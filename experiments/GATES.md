@@ -42,6 +42,7 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-008 | 2026-07-25 | Merge [PR #20](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/20): CI runs the lattice test suite (chore lane) | PASS 2026-07-25 — merged by Marcus |
 | G-009 | 2026-07-25 | Merge [PR #21](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/21): research blog post 001 "The Tunings That Ring" + README pointer — editorial pass is yours (first-person voice) | PASS 2026-07-25 — merged by Marcus |
 | G-010 | 2026-07-25 | Merge [PR #18](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/18): worktree.sh dead-cwd fix (chore lane, pre-existing) | PASS 2026-07-25 — merged by Marcus |
+| G-017 | 2026-08-09 | ET-001 review: (N, ε) phase diagram of equal temperaments under the frozen scorers | PENDING — cultural epsilon confirmed at 14.86¢ (12-EDO 4:5:6), power chords lock at the fifth error (1.955¢), naive champion ranking refuted by accidental AP-chord locks; [PR #38](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/38) |
 
 ## Currently blocked by gates
 
