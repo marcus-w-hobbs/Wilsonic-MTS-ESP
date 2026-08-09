@@ -1192,3 +1192,134 @@ pre-registered field.
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
+
+## 2026-08-09 — MUR-001 pre-registration (entry BEFORE any implementation or run)
+
+**Experiment:** census of murchana (window/anchor position) as a structural
+parameter, quantifying the MOS-LAT-001 "murchana rescue" at corpus scale.
+Runner: `mur001.py`; receipts: `results/mur001.jsonl` (one line per
+(generator, N) row with per-anchor arrays) + `results/mur001_summary.json`.
+Frozen verifiers, imported READ-ONLY: melodic v0.1.0 (`score_melodic`) and
+triads scorer v1.1.0 (`score_tempered` = the anchored convention).
+
+**Where anchor-dependence actually enters (the invariance argument, resolved
+FIRST as commissioned).** For a plain generated chain with one fixed
+generator g, the anchored window [b0, b0+N) octave-reduces to the anchor-0
+scale TRANSPOSED by b0·g mod 1. Every interval-structure property — M1 gap
+classes, M2 constant structure, M3 propriety, all functions of the circular
+interval spectrum — is transposition-invariant, hence anchor-INVARIANT: a
+naive census of those columns is trivially constant, and that null is a
+PREDICTION here (H-MU0), not a surprise. Anchor becomes a real degree of
+freedom in exactly three places, two of them in scope:
+1. **Cut-and-project window-representability** (moslat001.py
+   `verify_level`/`murchana_analysis`): whether the chain segment
+   [b0, b0+N) is EXACTLY the set selected by its own internal-coordinate
+   hull, ι(b) = b·g′ − ⌊b·g⌋. Decompose ι(b) = b·(g′−g) + frac(b·g): a
+   line of slope ±conj_sep plus a sawtooth determined by the Sturmian
+   floor word of g. The hull and the intruder census depend on the
+   length-~N factor of that word AT b0 — a genuinely anchor-dependent,
+   non-transposition-covariant property. This is where MOS-LAT-001's
+   intruder failures and murchana rescues live. THE census object.
+2. **The anchored triad scorer**: score_tempered scores octave-reduced
+   representatives, so transposition changes which tones wrap the octave
+   and hence (P, S). Anchor-dependent BY CONVENTION; recorded per anchor
+   as a descriptive lens only (no hypothesis).
+3. JI-embedding containment (BRIDGE-001's anchor intervals) — OUT OF
+   SCOPE here; but note for H-MU2 below that BRIDGE-001's contiguous
+   anchor intervals are containment-of-a-fixed-chain-set intervals,
+   contiguous BY CONSTRUCTION (span ⊆ [b0, b0+N) defines an interval in
+   b0), a categorically different property from murchana
+   representability.
+
+**Corpus (locked):** union of the MOS-LAT-001 noble corpus
+(`moslat001.canonical_preambles` → 27 generators, all-1s tail, exact ℚ(√5))
+and the MOS-LAT-002 mixed-tail quadratic corpus
+(`moslat002.enumerate_corpus` → 216 generators, exact ℚ(√d)); 243 distinct
+generators (disjoint by eventual-CF uniqueness — asserted). Rows: per
+generator, the FIRST zigzag level (levels 0–9, `families/mos.py`) attaining
+each distinct cardinality N ∈ [5, 22] — the exact `run_step2_rows`/
+`run_rows` recipe; expected 97 + 788 = 885 rows. Anchors: b0 ∈ [−N, N]
+(2N+1 per row; matches moslat001's murchana_analysis sweep).
+
+**Per (row, anchor), computed with exact quadratic arithmetic (iota
+imported from moslat001; works on Q5 and Quad):** hull of ι over the
+segment; representable bit = no intruder in the scan range; intruder count.
+Scan-pad justification, registered: with cs = |g − g′| and W = hull width
+≤ (N−1)·cs + 1, any b at distance m from the nearest segment endpoint has
+|ι(b) − ι(endpoint)| ≥ m·cs − 1, so m > (W+1)/cs ⇒ no intrusion; pad
+D = 2N + ceil(2/cs) + 8 strictly exceeds N + 2/cs. Float fast-path for the
+in-hull comparison with exact confirmation inside a 1e-9 ambiguity band
+(float error of ι is ≤ ~1e-12 at these magnitudes). Per anchor also: frozen
+melodic triple (propriety classification, CS violation count, gap-class
+count) of the projected scale, and frozen P at ε ∈ {2, 3}¢ (descriptive).
+Monotonicity, exact and registered: ι is strictly monotone in b iff
+g′ ∉ (0, 1) (steps are g′ and g′−1) — moslat001's conj_sep > 1 flag is
+sufficient but NOT necessary; the census uses the exact criterion.
+
+**Constants (locked):** anchors [−N, N]; N ∈ [5, 22]; levels 0–9; scan pad
+D as above; melodic defaults (dedup 0.01¢, gap/CS 0.5¢, propriety 1e-9¢);
+triad ε ∈ {2.0, 3.0}¢, max_span default 1200¢; seed 20260725; 9999
+permutations, add-one rule; python3.12, stdlib only, deterministic; run
+twice, receipts must be bit-identical (sha256 recorded in the results
+entry).
+
+**Pre-registered hypotheses and verdict criteria:**
+
+- **H-MU0 (invariance null rail):** for every row, the melodic triple
+  (propriety classification, CS violations, gap-class count) is IDENTICAL
+  across all 2N+1 anchors. Predicted violations: exactly 0 — the
+  transposition argument above is exact, and float noise (~1e-11¢) is
+  orders below every epsilon, with no exact spectral coincidences possible
+  for a quadratic irrational generator. ANY violation = implementation bug:
+  the runner writes receipts, reports the rows, and exits nonzero; the
+  experiment halts for investigation.
+- **H-MU1 (rescue genericity, from the MOS-LAT-001 receipts):** every row
+  with ≥ 1 non-representable anchor has ≥ 1 representable anchor.
+  Statistic: the number of ZERO-RESCUE rows (no representable anchor at
+  all); KEPT iff 0. Registered tension, stated before running: H-MU1
+  extrapolates MOS-LAT-001 (where every failing level had rescuing shifts,
+  counts 5/15/41/109), but the drift-budget derivation under H-MU4 predicts
+  zero-rescue rows on the mixed corpus's small-conj_sep tail. H-MU1 and
+  H-MU4(b) cannot both hold; the census adjudicates.
+- **H-MU2 (contiguity, as commissioned):** the representable-anchor set R
+  of each partially-representable row (some but not all anchors, |R| ≥ 2)
+  is a contiguous integer interval. Registered prediction: REFUTED — the
+  MOS-LAT-001 receipts ALREADY show non-contiguous R (murchana examples
+  [−4,−2,−1,2,3] at N=4; [−7,−4,−2,3,5] at N=7), and the BRIDGE-001
+  intervals that motivated the hypothesis are contiguous by construction
+  (see item 3 above). The census quantifies prevalence: fraction of
+  partially-representable rows with contiguous R.
+- **H-MU2b (registered replacement — three-distance structure):** because
+  representability at b0 is a function of a fixed-length factor of the
+  Sturmian floor word at b0, R should inherit rotation-orbit structure:
+  for every row with |R| ≥ 3, the interior gaps between consecutive
+  representable anchors take AT MOST 3 distinct values (prior data:
+  {2,3,5} and {1,2} patterns in the moslat001 examples). KEPT iff zero
+  rows violate; each violation reported with its gap multiset.
+- **H-MU3 (rescue fraction vs CF structure):** over NON-monotone rows,
+  with ρ = |R|/(2N+1) and rows labeled is_cf_convergent (exact convergents
+  of the digit string preamble+periodic tail, membership of (num, den) as
+  in moslat001): Δ = mean ρ(non-convergent) − mean ρ(convergent) > 0
+  (convergent levels are where anchor-0 failures concentrated in
+  MOS-LAT-001; predict they are harder across the whole anchor sweep, not
+  just at anchor 0). Test: one-sided permutation of the convergent labels
+  WITHIN generator strata, seed 20260725, 9999 permutations, add-one rule.
+  SUPPORTED iff Δ > 0 AND p < 0.05.
+- **H-MU4 (drift-budget law — own sharper question, derived before
+  running from ι = b·(g′−g) + frac(b·g)):** let T = N·cs (total internal
+  drift across the window). The sawtooth contributes O(1) spread while
+  selection density is ~width/cs, so representability needs the drift term
+  to dominate: (a) monotone rows (g′ ∉ (0,1)): ALL anchors representable —
+  theorem rail, violations = bug; (b) among non-monotone rows, zero-rescue
+  rows EXIST (refuting H-MU1) and T separates zero-rescue from
+  rescue-possible with AUC ≥ 0.95 (T as score for "has ≥ 1 representable
+  anchor"); (c) band predictions: every zero-rescue row has T < 2, and
+  every non-monotone row with T > 4 has ≥ 1 representable anchor. KEPT
+  iff (a) 0 violations, (b) both classes non-empty and AUC ≥ 0.95,
+  (c) both band claims hold; partial outcomes reported per clause.
+
+**Order:** commit this entry → tests/test_mur001.py (moslat001-receipt
+fixtures pinned: g3=(1,2) N=11 anchor-0 intruder [11], |R| = 15; g4=(2,2)
+N=7 R = {−7,−4,−2,3,5}, N=19 |R| = 15; golden monotone all-representable)
++ mur001.py, suite green BEFORE the first run → run twice, bit-identity
+check → results entry → FINDINGS.md → GATES row G-018 → PR.
