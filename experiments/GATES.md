@@ -37,14 +37,18 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-012 | 2026-07-28 | CS-EIK-001 review: 32 CS eikosanies found (P1 kept, P2 refined, P3 refuted at corrected 14/32); ear-check the flagship {1,7,9,11,15,29} (first strictly proper eikosany); merge its PRs | PASS 2026-07-29 — PRs #28/#29 merged; G-012 audition complete (flagship "most melodic at the eikosany level"); insights logged: subset-first doctrine + gap_classes/N ∧ propriety |
 | G-013 | 2026-07-29 | SUBSET-MEL-001 spec review (after the subset brainstorm session Marcus requested): melodic scoring over embedded subset CPS | QUEUED (needs brainstorm output) |
 | G-014 | 2026-07-29 | BRIDGE-000 review: D'Alessandro reproduced exactly (7 collisions, comma census matches fig 24); Pareto calibration standard on record; H-B1 KEPT — Wilson's val is tie-optimal. Merge its PR | PASS 2026-07-29 — Marcus, via chat + merge of PR #31; BRIDGE-001 (EG4) unblocked |
-| G-015 | 2026-07-29 | MOS-LAT-002 review (mixed-tail H-M1 retest, agent running) | QUEUED (needs the run's PR) |
-| G-016 | 2026-07-29 | BRIDGE-001 review (EG4 CPS-inside-MOS, agent running): candidates vs the D'Alessandro Pareto standard | QUEUED (needs the run's PR) |
+| G-015 | 2026-07-29 | MOS-LAT-002 review (mixed-tail H-M1 retest, agent running) | PASS 2026-07-30 — [PR #33](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/33) merged by Marcus (merge implies pass); H-M1 NULL again, conjugate-descriptor program closed |
+| G-016 | 2026-07-29 | BRIDGE-001 review (EG4 CPS-inside-MOS, agent running): candidates vs the D'Alessandro Pareto standard | PASS 2026-07-30 — [PR #34](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/34) merged by Marcus (merge implies pass); H-B2 refuted under strict containment, bridge exists at ε = 3¢ (blackjack) |
 | G-008 | 2026-07-25 | Merge [PR #20](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/20): CI runs the lattice test suite (chore lane) | PASS 2026-07-25 — merged by Marcus |
 | G-009 | 2026-07-25 | Merge [PR #21](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/21): research blog post 001 "The Tunings That Ring" + README pointer — editorial pass is yours (first-person voice) | PASS 2026-07-25 — merged by Marcus |
 | G-010 | 2026-07-25 | Merge [PR #18](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/18): worktree.sh dead-cwd fix (chore lane, pre-existing) | PASS 2026-07-25 — merged by Marcus |
 
 ## Currently blocked by gates
 
-- Nothing blocked. LAT-MEL-001, SHADOW-001, MOS-LAT-001, CS-EIK-001 all ran;
-  BRIDGE-000 is next per SPEC order once G-012 clears. (Datestamp erratum:
-  entries above marked 2026-07-25 were written 2026-07-28 — see LOG.md.)
+- The SPEC's original queue is fully run and fully gated (LAT-MEL-001,
+  SHADOW-001, MOS-LAT-001/002, CS-EIK-001, BRIDGE-000/001 — all PASS).
+  Only G-013 (SUBSET-MEL-001 spec review) remains open, and it waits on the
+  subset brainstorm session with Marcus, not on any run. Next experiments
+  come from the fork menu (ET, MUR, SUBSET-MEL, BRIDGE-001b/002, blog 002).
+  (Datestamp erratum: entries above marked 2026-07-25 were written
+  2026-07-28 — see LOG.md.)
