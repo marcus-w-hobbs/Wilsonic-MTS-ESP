@@ -1323,3 +1323,78 @@ fixtures pinned: g3=(1,2) N=11 anchor-0 intruder [11], |R| = 15; g4=(2,2)
 N=7 R = {−7,−4,−2,3,5}, N=19 |R| = 15; golden monotone all-representable)
 + mur001.py, suite green BEFORE the first run → run twice, bit-identity
 check → results entry → FINDINGS.md → GATES row G-018 → PR.
+
+## 2026-08-09 — MUR-001 results + verdicts
+
+**Run:** mur001.py, python3.12, ~40 s; run twice, receipts **bit-identical**
+(sha256 `mur001.jsonl` e3584d59…adda6d, `mur001_summary.json`
+2675ed55…feb839). 243 generators, 885 rows (97 noble + 788 mixed — exactly
+the MOS-LAT-001/002 row sets, asserted by tests), 20,019 anchor
+evaluations at b0 ∈ [−N, N]; exact ℚ(√d) arithmetic; frozen scorer v1.1.0
+and melodic v0.1.0 read-only; seed 20260725, 9999 permutations.
+
+**H-MU0 — KEPT (null rail), 0 violations.** The melodic triple (propriety
+class, CS violations, gap-class count) is identical across all 2N+1
+anchors on every row — the transposition-invariance argument confirmed
+exactly, at float noise orders below every epsilon.
+
+**H-MU1 — REFUTED, decisively; the registered H-MU4(b) tension resolves in
+H-MU4's favor.** 537/885 rows are ZERO-RESCUE (no representable anchor at
+all). Of the 709 rows that fail at anchor 0, only **172 (24.3%) have any
+rescuing anchor**. The refutation does not need the mixed corpus: the
+noble corpus alone has 69/97 zero-rescue rows. MOS-LAT-001's
+"every failure rescued" was an artifact of its 4-generator step-1 sample,
+whose failing rows all sat inside the rescue band (T = N·|g−g′| ≈ 1.4–5).
+Murchana rescue is a minority phenomenon, not a generic one.
+
+**H-MU2 — REFUTED, as registered.** Of 202 partially-representable rows
+with |R| ≥ 2, **200 are non-contiguous** (contiguous fraction 0.99%; the
+two contiguous cases are |R| = 2 rows). BRIDGE-001's contiguous anchor
+intervals were containment-by-construction; murchana representability is
+a different, non-interval object.
+
+**H-MU2b — KEPT on 295/299 rows, REFUTED as stated.** 4 rows exceed 3
+distinct interior anchor-gap values, and all four violate with the SAME
+gap set {1, 2, 4, 7} ([0;1,1,1,(3)*] N=14; [0;2,1,(2,3)*] N=19;
+[0;1,1,1,(2,3)*] N=11 and N=19). Post-hoc reading (labeled): 7 = 1+2+4,
+consistent with a skipped occurrence in a three-distance return
+structure — the sets look like unions of Sturmian-factor occurrence sets,
+as the registered heuristic argued, but the ≤3 bound is not exact.
+
+**H-MU3 — NULL under the registered rule, with the direction REVERSED.**
+Over the 761 non-monotone rows: mean ρ(convergent) = 0.116 >
+mean ρ(non-convergent) = 0.082, Δ = −0.0342, one-sided p = 1.0000 — the
+observed Δ sits at the opposite extreme of the within-generator
+permutation distribution. Post-hoc observation (labeled, not a verdict):
+CF-convergent levels are EASIER to rescue across the full anchor sweep —
+opposite of the anchor-0 intuition MOS-LAT-001 suggested (convergent
+levels are where anchor 0 fails, but they are also where OTHER anchors
+succeed most often).
+
+**H-MU4 — (a) KEPT, (b) KEPT, (c) REFUTED narrowly.**
+(a) All 124 monotone rows (exact criterion g′ ∉ (0,1)) are representable
+at every anchor, zero violations — and SHARPER than predicted: the
+fully-representable rows are EXACTLY the monotone rows (124 = 124), so on
+this corpus monotonicity ⇔ murchana-free; every non-monotone row fails at
+some anchor. (b) Zero-rescue (537) vs rescue-possible (224) non-monotone
+rows are separated by the drift budget T = N·|g−g′| at **AUC 0.9742**
+≥ the registered 0.95. (c) The band constants miss: 5 zero-rescue rows
+have T > 2 (max 2.362), refuting "zero-rescue ⇒ T < 2"; "T > 4 ⇒
+rescue-possible" held (0 violations). Empirical overlap band:
+T ∈ [0.753, 2.362].
+
+**Descriptive P lens (registered no-hypothesis):** the anchored frozen
+triad count P is **anchor-INVARIANT on all 885 rows at both ε ∈ {2, 3}¢**
+(0 rows vary). Under the frozen convention (max_span 1200¢), murchana
+never moves the harmonic count — the harmonic axis is a property of the
+scale up to transposition here, while window-representability is not.
+Practical consequence: murchana is harmonically FREE and structurally
+binding — choosing an anchor costs nothing in P and decides whether the
+scale is a true cut-and-project window set.
+
+**Kept.** mur001.py exactly as committed before the first run (no post-run
+changes); receipts `results/mur001.jsonl` + `results/mur001_summary.json`.
+Lattice suite 124/124 OK (incl. 14 new mur001 tests pinned to MOS-LAT-001
+receipts), triads suite 88/88 OK; freeze checks OK before AND after
+(scorer pin 1a840af9…9b592, melodic pin a16f162b…7535, both unchanged).
+Findings promoted to FINDINGS.md; gate row G-018 appended.
