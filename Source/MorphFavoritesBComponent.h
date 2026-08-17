@@ -110,13 +110,15 @@ private:
     };
 
     //
-    class FavoritesIcon : public DrawableImage
+    class FavoritesIcon : public ImageComponent  // JUCE 9: Drawable is no longer a Component
     {
     public:
         FavoritesIcon(MorphFavoritesBComponent& td)
         :_owner(td)
         {
             setInterceptsMouseClicks(false, false);
+            // match the old DrawableImage behaviour: native size, anchored top-left
+            setImagePlacement(RectanglePlacement::xLeft | RectanglePlacement::yTop | RectanglePlacement::doNotResize);
         }
 
         // don't need to override resized()

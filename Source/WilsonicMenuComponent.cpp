@@ -87,7 +87,7 @@ WilsonicMenuComponent::WilsonicMenuComponent(WilsonicProcessor& processor)
     _statusLabel.setTooltip(WilsonicMenuComponentMessageBus::getInstance().getMessages());    
     auto const labelFontSize = WilsonicAppSkin::messageBusFontSize;
     auto const font = Font::plain;
-    _statusLabel.setFont(Font(labelFontSize, font));
+    _statusLabel.setFont(Font(FontOptions(labelFontSize, font)));
         
     // MTS-ESP status indicator
     _mtsEspStatusIndicator = make_shared<ImageButton>("MTSESPINDICATOR");

@@ -89,14 +89,14 @@ void CPSElementComponentV2::resized() {
     auto const fH = static_cast<int>(jmax(18.f, 0.025f * area.getHeight()));
 
     // tuning name label
-    _tuningNameLabel->setFont(Font(fH).withHorizontalScale(0.9f));
+    _tuningNameLabel->setFont(Font(FontOptions(fH)).withHorizontalScale(0.9f));
     auto nameLabelArea = Rectangle<int>(area.getX() + (!_labelIsHidden ? 0 : area.getWidth()),
                                          area.getY(),
                                          area.getWidth(), fH);
     _tuningNameLabel->setBounds(nameLabelArea);
 
     // tuning NPO label
-    _tuningNPOLabel->setFont(Font(2.f * fH).withHorizontalScale(0.9f));
+    _tuningNPOLabel->setFont(Font(FontOptions(2.f * fH)).withHorizontalScale(0.9f));
     auto npoLabelArea = Rectangle<int>(area.getX() + (!_npoLabelIsHidden ? 0 : area.getWidth()),
                                         nameLabelArea.getY() + nameLabelArea.getHeight(),
                                         static_cast<int>(0.5f * area.getWidth()), static_cast<int>(2.f * fH));

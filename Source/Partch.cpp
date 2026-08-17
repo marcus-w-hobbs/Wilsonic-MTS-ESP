@@ -582,7 +582,7 @@ void Partch::_paintPartch(WilsonicProcessor& processor, Graphics& g, Rectangle<i
 
         // Draw the text labels for the scale degree, pitch value, and note number of the microtone
         auto const fontHeight = 10.f * _gralHexScale;
-        g.setFont(Font(fontHeight));
+        g.setFont(Font(FontOptions(fontHeight)));
         string labelStr0 = note_mt->getShortDescriptionText();
         auto const f = getTuningTableFrequency(i);
         auto labelStr1 = String(f, 2);
@@ -620,7 +620,7 @@ void Partch::_paintPartch(WilsonicProcessor& processor, Graphics& g, Rectangle<i
     // draw text
     g.setColour(Colours::white);
     auto const fontHeight = 16.f;
-    g.setFont(Font(fontHeight));
+    g.setFont(Font(FontOptions(fontHeight)));
     if(_scale == Scale::Partch43) {
         g.drawFittedText("Harry Partch set the 1/1 as G:\nScale will be tuned to 1.5 * Frequency Middle C value\nSet Frequency Middle C to 261.333333 for a G at 784Hz", bounds, Justification::bottomRight, 5);
     } else if(_scale == Scale::DiamondMarimba43) {
@@ -641,7 +641,7 @@ void Partch::_paintNPOOverride(WilsonicProcessor& processor, Graphics& g, Rectan
     _paintHelper(processor, g, bounds);
     g.setColour(Colours::white);
     auto const fontHeight = 16.f;
-    g.setFont(Font(fontHeight));
+    g.setFont(Font(FontOptions(fontHeight)));
     g.drawFittedText("Can't draw Partch because\nNPO Override is enabled.\n\nDisable NPO Override to resume drawing Gral.", bounds, Justification::centred, 5);
     g.restoreState();
 }

@@ -120,7 +120,7 @@ private:
     XmlElement* _dataList = nullptr; // unfiltered
     unique_ptr<XmlElement> _dataListA = nullptr; // filtered out Morph
     unique_ptr<XmlElement> _dataListB = nullptr; // filtered out Morph
-    Font _font {14.0f};
+    Font _font {FontOptions{14.0f}};
     int _favoriteRowNumber = 0; // source of truth for favoritesA,B are based on ID's from MorphModel
     int _favoriteID = -1; // set by model, throttled by updateUI
     int _favoriteIDHost = -1; // set by host in parameterChanged
