@@ -110,7 +110,7 @@ ScalaComponent::ScalaComponent(WilsonicProcessor& processor)
     _statusLabel.setTooltip(ScalaComponentMessageBus::getInstance().getMessages());
     auto const labelFontSize = WilsonicAppSkin::messageBusFontSize;
     auto const font = Font::plain;
-    _statusLabel.setFont(Font(labelFontSize, font));
+    _statusLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // file chooser
     _fileChooser = make_unique<FileChooser>("Select .scl file",

@@ -83,7 +83,7 @@ FavoritesComponent::FavoritesComponent(WilsonicProcessor& processor)
     _statusLabel.setTooltip(FavoritesComponentMessageBus::getInstance().getMessages());
     auto const labelFontSize = WilsonicAppSkin::messageBusFontSize;
     auto const font = Font::plain;
-    _statusLabel.setFont(Font(labelFontSize, font));
+    _statusLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // left to right
     

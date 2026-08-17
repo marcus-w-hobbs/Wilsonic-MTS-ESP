@@ -78,7 +78,7 @@ MorphComponent::MorphComponent(WilsonicProcessor& processor)
     _statusLabel.setTooltip(MorphComponentMessageBus::getInstance().getMessages());
     auto const labelFontSize = WilsonicAppSkin::messageBusFontSize;
     auto const font = Font::plain;
-    _statusLabel.setFont(Font(labelFontSize, font));
+    _statusLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // Register as the listener to the [only] MorphComponentMessageBus
     MorphComponentMessageBus::getInstance().setMenuMessageListener(this);

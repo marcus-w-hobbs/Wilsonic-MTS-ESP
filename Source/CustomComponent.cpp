@@ -23,7 +23,7 @@ SliderWithLabel::SliderWithLabel (String labelName, String paramId, shared_ptr<A
     slider.setTextBoxStyle (Slider::TextBoxBelow, true, textBoxWidth, textBoxHeight);
     addAndMakeVisible (slider);
     
-    label.setFont (fontHeight);
+    label.setFont (Font (FontOptions (fontHeight)));
     label.setText (labelName, dontSendNotification);
     label.setJustificationType (Justification::centred);
     addAndMakeVisible (label);

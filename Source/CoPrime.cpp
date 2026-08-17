@@ -359,7 +359,7 @@ void CoPrime::_commonDrawingForRect(WilsonicProcessor& processor,
         g.setColour(Colours::black);
         string labelStr = to_string(microtone->getNumerator()) + "/" + to_string(microtone->getDenominator());
         auto fontHeight = 1.5f * 14.f;
-        g.setFont(Font(fontHeight));
+        g.setFont(Font(FontOptions(fontHeight)));
         auto tr0 = Rectangle<int>(0, 0, 80, 50).withCentre(rhombusDevice.getMidpoint().roundToInt());
         g.drawText(labelStr, tr0, Justification::centred);
     }

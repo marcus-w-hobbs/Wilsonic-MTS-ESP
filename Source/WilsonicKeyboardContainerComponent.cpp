@@ -110,7 +110,7 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
 
     // Initialize the Label: Octave at Middle C
     addAndMakeVisible(_octaveMiddleCSliderLabel);
-    _octaveMiddleCSliderLabel.setFont(Font(labelFontSize, font));
+    _octaveMiddleCSliderLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // Initialize the Slider: Octave at Middle C
     addAndMakeVisible(_octaveMiddleCSlider);
@@ -127,7 +127,7 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
 
     // Initialize the Label: MIDI Note Number at Middle C
     addAndMakeVisible(_noteNumberMiddleCSliderLabel);
-    _noteNumberMiddleCSliderLabel.setFont(Font(labelFontSize, font));
+    _noteNumberMiddleCSliderLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // Initialize the Slider: MIDI Note Number at Middle C
     addAndMakeVisible(_noteNumberMiddleCSlider);
@@ -144,7 +144,7 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
 
     // Initialize the Label: Frequency at Middle C
     addAndMakeVisible(_frequencyMiddleCSliderLabel);
-    _frequencyMiddleCSliderLabel.setFont(Font(labelFontSize, font));
+    _frequencyMiddleCSliderLabel.setFont(Font(FontOptions(labelFontSize, font)));
 
     // Initialize the Slider: Frequency at Middle C(centered an octave about 12et def)
     addAndMakeVisible(_frequencyMiddleCSlider);

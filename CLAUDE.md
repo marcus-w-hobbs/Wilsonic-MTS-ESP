@@ -4,6 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build Commands
 
+**JUCE version: 9.0.1.** The `.jucer` files resolve modules through the Projucer's
+global module path (default `~/JUCE/modules`); CI clones the `9.0.1` tag there.
+Regenerate `Builds/` with `Projucer --resave Wilsonic.jucer` after pulling.
+
 ### macOS (Primary Development Platform)
 ```bash
 # Build standalone app and plugins using Xcode

@@ -159,7 +159,7 @@ void CPSTuningBase::paint(WilsonicProcessor& processor, Graphics& g, Rectangle<i
     // labels
     //TODO: hook up to ui
     auto const displayFactors = false;
-    g.setFont(Font(fontSize).withHorizontalScale(horizontalScale));
+    g.setFont(Font(FontOptions(fontSize)).withHorizontalScale(horizontalScale));
     auto center = Point<float>(_p0->pt); // copy
     center.applyTransform(tuningTransform);
     for(auto label : _labelArray) {
