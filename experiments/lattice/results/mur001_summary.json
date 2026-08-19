@@ -1,0 +1,179 @@
+{
+ "experiment": "MUR-001",
+ "date": "2026-08-09",
+ "scorer_version": "1.1.0",
+ "melodic_version": "0.1.0",
+ "max_level": 9,
+ "cardinality_range": [
+  5,
+  22
+ ],
+ "triad_epsilons": [
+  2.0,
+  3.0
+ ],
+ "anchor_range": "[-N, N]",
+ "corpus": {
+  "n_generators": 243,
+  "n_rows": 885,
+  "n_rows_noble": 97,
+  "n_rows_mixed": 788,
+  "n_rows_monotone": 124
+ },
+ "descriptive_p_lens": {
+  "note": "anchored triad P is anchor-dependent BY CONVENTION (octave wrap under transposition); no hypothesis",
+  "rows_with_varying_P_eps2": 0,
+  "fraction": 0.0
+ },
+ "verdicts": {
+  "h_mu0": {
+   "violations": 0,
+   "violating_rows": [],
+   "verdict": "KEPT (null rail): melodic triple anchor-invariant on every row"
+  },
+  "h_mu1": {
+   "failing_rows": 761,
+   "zero_rescue_rows": 537,
+   "zero_rescue_examples": [
+    [
+     "[0;2,3,(1)*]",
+     5,
+     0.3607
+    ],
+    [
+     "[0;2,3,(1)*]",
+     7,
+     0.5049
+    ],
+    [
+     "[0;2,3,(1)*]",
+     9,
+     0.6492
+    ],
+    [
+     "[0;2,3,(1)*]",
+     16,
+     1.1541
+    ],
+    [
+     "[0;3,2,(1)*]",
+     7,
+     0.8238
+    ],
+    [
+     "[0;3,2,(1)*]",
+     10,
+     1.1769
+    ],
+    [
+     "[0;3,3,(1)*]",
+     7,
+     0.2566
+    ],
+    [
+     "[0;3,3,(1)*]",
+     10,
+     0.3666
+    ],
+    [
+     "[0;3,3,(1)*]",
+     13,
+     0.4765
+    ],
+    [
+     "[0;1,1,3,(1)*]",
+     5,
+     0.3607
+    ],
+    [
+     "[0;1,1,3,(1)*]",
+     7,
+     0.5049
+    ],
+    [
+     "[0;1,1,3,(1)*]",
+     9,
+     0.6492
+    ]
+   ],
+   "verdict": "REFUTED: 537 zero-rescue rows (as the registered H-MU4(b) tension predicted)"
+  },
+  "h_mu2": {
+   "partial_rows_ge2": 202,
+   "non_contiguous": 200,
+   "contiguous_fraction": 0.009900990099009901,
+   "verdict": "REFUTED (as registered): representable-anchor sets are not generically contiguous"
+  },
+  "h_mu2b": {
+   "rows_ge3": 299,
+   "violations": 4,
+   "violating_examples": [
+    [
+     "[0;1,1,1,(3)*]",
+     14,
+     [
+      1,
+      2,
+      4,
+      7
+     ]
+    ],
+    [
+     "[0;2,1,(2,3)*]",
+     19,
+     [
+      1,
+      2,
+      4,
+      7
+     ]
+    ],
+    [
+     "[0;1,1,1,(2,3)*]",
+     11,
+     [
+      1,
+      2,
+      4,
+      7
+     ]
+    ],
+    [
+     "[0;1,1,1,(2,3)*]",
+     19,
+     [
+      1,
+      2,
+      4,
+      7
+     ]
+    ]
+   ],
+   "verdict": "REFUTED: 4 rows exceed 3 gap values"
+  },
+  "h_mu3": {
+   "n_rows": 761,
+   "n_convergent": 374,
+   "mean_rho_convergent": 0.11640522756850367,
+   "mean_rho_nonconvergent": 0.08215558597251561,
+   "delta": -0.03424964159598806,
+   "permutation_p_one_sided": 1.0,
+   "seed": 20260725,
+   "n_permutations": 9999,
+   "verdict": "NULL"
+  },
+  "h_mu4": {
+   "a_monotone_rail_violations": 0,
+   "b_zero_rescue_rows": 537,
+   "b_rescue_possible_rows": 224,
+   "b_auc_T": 0.9741869513168396,
+   "c_max_T_zero_rescue": 2.3622577322005447,
+   "c_min_T_rescue_possible_nonmono": 0.7530655685082075,
+   "c_zero_rescue_all_T_below_2": false,
+   "c_high_T_no_rescue_violations": 0,
+   "verdict_a": "KEPT",
+   "verdict_b": "KEPT",
+   "verdict_c": "REFUTED"
+  }
+ }
+}
