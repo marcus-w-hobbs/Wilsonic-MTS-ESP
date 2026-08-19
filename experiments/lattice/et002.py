@@ -55,7 +55,6 @@ from melodic import (  # noqa: E402  (frozen v0.1.0, read-only)
 from et001 import (  # noqa: E402  (ET-001 analytic mirror, reused read-only)
     EPS_GRID,
     ET001_VERSION,
-    mirror_type,
     triple_types,
 )
 
@@ -466,7 +465,7 @@ def _verdict_ht1(rows: dict) -> dict:
         counts_p_pos == expected_p_pos
         and counts_ps_eq == expected_eq
         and ic5_rule
-        and fifthfree_cluster == expected_cluster
+        and fifthfree_cluster == sorted(expected_cluster)
         and grid12 == [0, 12, 24, 24, 24, 48, 48]
         and grid12_s == grid12
         and nonmono == 105
