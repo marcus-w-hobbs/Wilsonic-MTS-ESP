@@ -42,7 +42,6 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-008 | 2026-07-25 | Merge [PR #20](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/20): CI runs the lattice test suite (chore lane) | PASS 2026-07-25 — merged by Marcus |
 | G-009 | 2026-07-25 | Merge [PR #21](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/21): research blog post 001 "The Tunings That Ring" + README pointer — editorial pass is yours (first-person voice) | PASS 2026-07-25 — merged by Marcus |
 | G-010 | 2026-07-25 | Merge [PR #18](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/18): worktree.sh dead-cwd fix (chore lane, pre-existing) | PASS 2026-07-25 — merged by Marcus |
-| G-018 | 2026-08-09 | MUR-001 review: murchana window-regularity census | PENDING — rescue is minority-rule (172/709 anchor-0 failures rescued; 537/885 zero-rescue rows), monotone ⇔ murchana-free, drift budget T = N·\|g−g′\| separates at AUC 0.974, murchana harmonically free (P anchor-invariant on all rows); [PR #39](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/39) |
 
 ## Currently blocked by gates
 
