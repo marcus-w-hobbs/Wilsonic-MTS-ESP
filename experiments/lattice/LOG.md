@@ -1192,3 +1192,203 @@ pre-registered field.
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
+
+## 2026-08-09 — ET-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question:** what do the frozen scorers say about equal temperaments as a
+family — the (N, ε) phase diagram. For every EDO N = 2..60, score the FULL
+N-EDO scale with the frozen triad scorer's tempered path and chart, as a
+function of ε, when proportional and subcontrary triads first appear
+("lock") and how counts grow; run the frozen melodic scorers as the melody
+axis so ETs join the program's melody⇄harmony Pareto tables. Runner:
+`et001.py`; receipts `results/et001.jsonl` (one row per N, 59 rows) +
+`results/et001_summary.json`. Tests `tests/test_et001.py` green before the
+first run. Frozen scorers: triads v1.1.0 (`score_tempered`, PRIMARY
+middle-anchored convention, default `max_span_cents = 1200`) and melodic
+v0.1.0 (`score_melodic`, defaults). Stdlib only, python3.12, fully
+deterministic; receipts carry no wall-clock fields; two runs must be
+bit-identical (diff recorded in the results entry).
+
+**What ε means operationally (read from the frozen code, not assumed).**
+`score_tempered` ε is NOT the plugin's historic absolute linear-frequency
+0.0005 (register-dependent, ≈0.43–0.87¢ across the octave —
+CLAUDE.md/crossval001). It is a CENTS deviation applied per mean-condition
+in the comparison layer: a triple a < b < c (cents) gets label P iff
+|1200·log₂((fa+fc)/(2·fb))| < ε (strict), S and G analogously (frequencies
+f = 2^(cents/1200)); labels are a set, so one triple can carry several.
+Two structural clauses shape every lock below: (i) the octave-span limit
+admits triples with c − a ≤ 1200 INCLUSIVE (`c - a > max_span_cents` skips),
+so span-exactly-1200 chords are scored; (ii) the degeneracy guard drops a
+triple from ALL counts unless its outer pair resolves the means:
+sep(a,c) = |1200·log₂(AM/HM)| ≥ ε. So a triple with deviation d and
+separation sep counts exactly on the half-open ε-interval (d, sep] — counts
+are NOT monotone in ε, and a class's lock threshold is
+ε* = min{d : d < sep}, with counts > 0 only strictly above ε*.
+
+**Analytic mirror (the algebra the run must check; the scorer is the
+referee, the mirror is not).** In N-EDO every anchor b is equivalent
+(transposition invariance, exact for the anchored convention), so the
+anchored sample factors: triple types (p, q) = steps below/above the middle,
+1 ≤ p, q ≤ N−1, p + q ≤ N, each contributing exactly N counted triples
+(one per anchor) when it qualifies. With s = 1200/N,
+d_P(p,q) = |1200·log₂((2^(−ps/1200) + 2^(qs/1200))/2)|, d_S(p,q) = d_P(q,p)
+(exact identity — same numerator over fa·fc), d_G = |q−p|·s, and sep
+depends only on p+q. Closed forms derived before the run: the power chord
+2:3:4-type (p = patent fifth steps F, q = N−F) has
+d_P = |1200·log₂3 − 1900-equivalent| = the patent fifth error EXACTLY
+(2^((N−p)s) = 2·2^(−ps) collapses the sum to 3·2^(−ps)); symmetric cluster
+types (p = p) have d_P = d_S = sep/2 exactly (AM/GM = GM/HM), hence ALWAYS
+qualify on (sep/2, sep], with sep/2 ∝ s²·ln2·const ≈ 2.89e−4·(2s)²/2 —
+a 1/N² family that no guard removes.
+
+**Corpus and constants (locked):** N ∈ 2..60 (59 scales), degrees
+k·1200/N, k = 0..N−1. ε grid for count tables:
+{1, 2, 3, 5, 10, 14.86, 20}¢ — 14.86 is Marcus's recalled cultural
+epsilon kept literal (analytically it sits just ABOVE the true 12-EDO
+major-triad threshold, so the patent major is included at that grid
+point). Rail epsilon ε_G0 = 1e−6¢. Lock verification delta δ = 1e−6¢:
+scorer must report class count 0 at ε*−δ and N·multiplicity at ε*+δ
+(multiplicity = analytic ties within 1e−9¢). Melodic scorers at frozen
+defaults. No other tunables.
+
+**Falsifiable predictions (numbers derived analytically before the run;
+scratch derivation with independent formulas only, no scorer calls):**
+- **H-E1 (cultural epsilon).** "Full major+minor" = the patent 4:5:6
+  proportional type (p, q) = (round(N·log₂(5/4)), round(N·log₂(6/5))) and
+  its 10:12:15 subcontrary dual (q, p). Predicted 12-EDO threshold:
+  **ε*_maj(12) = 14.8590¢** (= 1200·log₂((2^(−1/3)+2^(1/4))/2); Marcus's
+  recalled 14.86 is confirmed to 2 dp and is on the correct side: 14.859022
+  < 14.86). Verification: 12-EDO P count jumps 36 → 48 across
+  ε*_maj ± δ (below: types (7,5), (5,4), (2,2) qualify; (1,1) is
+  guard-dropped there since sep = 5.773 < ε). S mirrors exactly.
+  Per-N patent-major thresholds (the "cultural epsilon of N" column),
+  predicted: 19-EDO 3.0391, 22-EDO 8.7806, 31-EDO 3.8897, 34-EDO 0.4359,
+  41-EDO 6.1163, 53-EDO 1.3671, 60-EDO 5.1410¢ — meantone-family story:
+  19/31 support major+minor at ~3–4¢ where 12 needs ~14.9¢; 34 is the
+  culture-set champion at 0.44¢.
+- **H-E2 (power chords).** The frozen scorer DOES structurally count
+  2:3:4-type proportional chords: span exactly 1200 passes the inclusive
+  max_span test, and 3:4:6 (its subcontrary dual) likewise. Predicted:
+  12-EDO's FIRST proportional lock overall is the power chord (7,5) at
+  **ε* = 1.9550¢** (closed form 1200·log₂3 − 1900 = 1.955001¢ = the 12-EDO
+  fifth error; Marcus's ≈2¢ recall confirmed), verified by P: 0 → 12
+  across 1.9550 ± δ. Full predicted 12-EDO P lock spectrum head:
+  1.9550 (7,5) < 2.8865 (1,1) < 7.8374 (5,4) < 11.5268 (2,2) <
+  14.8590 (4,3) < 25.8640 (3,3).
+- **H-E3 (ranking).** The naive cultural hypothesis — first-lock ε ranks
+  by patent fifth error, top 5 = [53 (0.0682), 41 (0.4840), 29 (1.4933),
+  58 (1.4933), 12 (1.9550)] — is REGISTERED AND PREDICTED REFUTED. The
+  mirror says accidental near-AM coincidences beat famous fifths:
+  predicted measured top 5 by first P lock =
+  **[50 (0.008540¢, (9,8)), 41 (0.013540¢, (22,16)), 49 (0.047263¢,
+  (28,20)), 39 (0.049463¢, (8,7)), 53 (0.068208¢, power chord (31,22))]**.
+  "53 and 41 near the top" survives, but 41 gets there via an accidental
+  (22,16) coincidence unrelated to its fifth, and 53 is the ONLY top-5
+  entry whose lock is its fifth. The symmetric 1/N² cluster family enters
+  the top 10 only at N = 59, 60 (0.1195, 0.1155¢). Verdict rule: every
+  claimed lock confirmed by the scorer at ±δ; the cultural top-5 verdict
+  is REFUTED iff the measured top 5 differs from the naive list.
+- **H-E4 (melodic rails, sanity).** Every N-EDO under frozen melodic
+  v0.1.0: gap_class_count = 1, entropy exactly 0.0 bits, is_cs = True,
+  propriety = strictly_proper (adjacent-span margins are s > eps
+  everywhere; N = 2 vacuously strict), gap_classes/N = 1/N. Any deviation
+  at any N refutes.
+- **R-DUAL (rail).** P = S exactly at every (N, grid ε) and every lock
+  (EDO pitch-class sets are inversionally symmetric; the anchored scorer
+  commutes with inversion). lock_P = lock_S.
+- **R-G0 (rail).** At ε_G0 = 1e−6¢: P = S = 0 and G = N·⌊N/2⌋ for every N
+  (symmetric types are float-exact geometric; smallest analytic P
+  deviation in the whole sweep is 0.008540¢ ≫ 1e−6).
+- **12-EDO grid pin.** P = S = [0, 12, 24, 24, 24, 48, 48] at
+  ε = [1, 2, 3, 5, 10, 14.86, 20] — the 3-and-5¢ entries include the
+  guard-window (1,1) cluster (2.887 < ε ≤ 5.773), the 14.86/20 entries
+  include (2,2) but NOT (1,1); a sharp end-to-end pin of mirror vs scorer.
+
+**Scale expectation:** ~35k analytic triple types, ~900 scorer calls,
+59 receipt rows; minutes, not hours. If it grows past that the design is
+wrong.
+
+**Post-run obligations:** results entry here with per-hypothesis
+KEPT/REFUTED/NULL, FINDINGS.md paragraph, gate row G-017 appended to
+experiments/GATES.md (PENDING; sessions never self-approve), PR on
+research/et-001. Anything not predicted above lands in clearly labeled
+post-hoc fields.
+
+## 2026-08-09 — ET-001 results + verdicts
+
+**Run:** `et001.py` (~12 s, 798 scorer calls, receipts bit-identical across
+two runs by diff on both files), receipts `results/et001.jsonl` (59 rows,
+one per N) + `results/et001_summary.json`. Scorer v1.1.0, melodic v0.1.0,
+lattice suite 130/130 green pre-run (16 new et001 tests), freeze checks A
+OK on both pins before and after. Every analytic lock threshold in this
+entry was confirmed by the frozen scorer at ε* ± 1e−6¢ (count 0 below
+first locks, exact N·multiplicity jump above; zero verification failures
+across all 59 N).
+
+**H-E1 — KEPT. The cultural epsilon is 14.86¢, exactly as Marcus
+recalled.** The patent 4:5:6/10:12:15 pair in 12-EDO locks at
+**ε*_maj(12) = 14.859022¢** (2 dp: 14.86); scorer-verified P jump 36 → 48
+across the threshold, S mirroring exactly. Per-N cultural epsilons
+(patent-major threshold, all scorer-verified): 34-EDO **0.4359¢** (the
+culture-set champion — and its first asymmetric lock IS its major triad),
+53-EDO 1.3671, 19-EDO 3.0391, 31-EDO 3.8897, 41-EDO 6.1163, 22-EDO
+8.7806, 12-EDO 14.8590. The meantone story quantified: 19 and 31 buy
+full major+minor at 3–4¢ where 12 needs 14.9¢.
+
+**H-E2 — KEPT, on the structural path.** The frozen scorer DOES count
+2:3:4-type proportional chords: the octave-span limit is inclusive
+(`c − a > max_span_cents` skips, so span exactly 1200¢ is scored). 12-EDO's
+first proportional lock overall is the power chord (7,5) at
+**ε* = 1.955001¢** — the closed form 1200·log₂3 − 1900, i.e. exactly the
+patent fifth error, and that identity (power-chord deviation = fifth
+error) is exact for every N. Verified 0 → 12. Marcus's ≈2¢ recall
+confirmed at 1.955¢.
+
+**H-E3 — naive REFUTED, mirror KEPT: first-lock is numerology above
+~0.1¢, and the famous fifths mostly aren't first.** Measured top 5 by
+first P lock: **50 (0.008540¢, (9,8)), 41 (0.013540¢, (22,16)),
+49 (0.047263¢, (28,20)), 39 (0.049463¢, (8,7)), 53 (0.068208¢,
+power chord (31,22))** — exactly the analytic-mirror prediction; the
+naive fifth-error top 5 [53, 41, 29, 58, 12] is refuted. "53 and 41 near
+the top" survives, but for opposite reasons: 53 is the ONLY top-5 entry
+whose lock is its fifth; 41 gets rank 2 from an accidental (22,16)
+coincidence unrelated to its fifth. The pre-registered symmetric-cluster
+family (d = sep/2 exactly, ∝ 1/N², un-guardable by construction) enters
+at ranks 8–9 (N = 60: 0.1155¢, N = 59: 0.1195¢) — below ~0.1¢ the
+first-lock metric measures near-coincidence numerology, not triadic
+quality; the grid counts are the robust lens.
+
+**H-E4 — KEPT.** All 59 N-EDOs under frozen melodic v0.1.0: strictly
+proper, constant structure, 1 gap class, exactly 0.0 bits entropy;
+gap_classes/N = 1/N recorded per row for the program's Pareto axes.
+
+**Rails — all KEPT.** R-DUAL: P = S exactly at every (N, ε) measured and
+every lock (anchored self-duality on inversionally-symmetric scales,
+again). R-G0: at ε = 1e−6¢, P = S = 0 and G = N·⌊N/2⌋ for every N. The
+12-EDO grid pin P = S = [0, 12, 24, 24, 24, 48, 48] at
+ε = [1, 2, 3, 5, 10, 14.86, 20] measured exactly as registered — the
+3-and-5¢ entries are the guard-window (1,1) chromatic cluster, on record
+as scorer behavior: C♯–D–D♯ counts as a proportional AND subcontrary
+triad for ε ∈ (2.887, 5.773].
+
+**Post-hoc (not registered, labeled).** (1) The accidental early locks
+are near-exact arithmetic-progression chords in the teens limit:
+50-EDO's (9,8) ≈ **15:17:19** (0.0085¢ from exact AM), 39-EDO's (8,7) ≈
+13:15:17, 45-EDO's (25,18) ≈ 17:25:33 — ET numerology keeps landing on
+AP chords Wilson's exact path would classify at zero tolerance. (2)
+31-EDO's first asymmetric lock is the SEPTIMAL 6:7:8-type (7,6) at
+1.1345¢ — the huygens host announces its 7-limit before its 5-limit
+(4:5:6 at 3.89¢). (3) Raw grid counts at fixed ε grow superlinearly with
+N (53-EDO P@2¢ = 424 vs 12-EDO's 12; N = 58 tops P@2¢ at 696); per-N or
+per-type normalization is the right lens for cross-N comparison and is
+left to the ET-002 join, which has the per-row tables it needs.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+re-verified post-run). Gate G-017 appended to experiments/GATES.md
+(PENDING, Marcus's review).
+
+**Run receipt:** 2026-08-09, python3.12 — lattice suite 130/130 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001), freeze checks A OK on both pins (scorer 1a840af9…9b592,
+melodic a16f162b…7535) before and after. Receipts bit-identical across
+two runs (diff on et001.jsonl and et001_summary.json).

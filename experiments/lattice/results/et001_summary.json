@@ -1,0 +1,464 @@
+{
+  "constants": {
+    "eps_g0": 1e-06,
+    "eps_grid": [
+      1.0,
+      2.0,
+      3.0,
+      5.0,
+      10.0,
+      14.86,
+      20.0
+    ],
+    "max_span_cents": 1200.0,
+    "naive_top5": [
+      53,
+      41,
+      29,
+      58,
+      12
+    ],
+    "tie_tol": 1e-09,
+    "verify_delta": 1e-06
+  },
+  "corpus": {
+    "family": "full N-EDO scales",
+    "n_range": [
+      2,
+      60
+    ],
+    "rows": 59
+  },
+  "culture_set_major_eps": {
+    "12": 14.859021711645774,
+    "19": 3.0390626119066573,
+    "22": 8.7806055975353,
+    "31": 3.889683888336183,
+    "34": 0.43589994752096856,
+    "41": 6.1163393403643775,
+    "53": 1.367128762421826
+  },
+  "epsilon_semantics": "score_tempered eps is a per-mean-condition deviation in cents (strict <) with the degeneracy guard sep(a,c) >= eps; a triple counts on the half-open interval (dev, sep]. NOT the plugin's register-dependent linear-frequency 0.0005.",
+  "et001_version": "1.0.0",
+  "experiment": "ET-001",
+  "first_lock_ranking_full": [
+    {
+      "eps_star": 0.008539884516151168,
+      "n": 50
+    },
+    {
+      "eps_star": 0.013539550230909867,
+      "n": 41
+    },
+    {
+      "eps_star": 0.04726303730962645,
+      "n": 49
+    },
+    {
+      "eps_star": 0.04946329301291678,
+      "n": 39
+    },
+    {
+      "eps_star": 0.06820841255710623,
+      "n": 53
+    },
+    {
+      "eps_star": 0.08404405236755251,
+      "n": 45
+    },
+    {
+      "eps_star": 0.09524407838682736,
+      "n": 55
+    },
+    {
+      "eps_star": 0.11552196055015732,
+      "n": 60
+    },
+    {
+      "eps_star": 0.11947105480133108,
+      "n": 59
+    },
+    {
+      "eps_star": 0.1201505642444436,
+      "n": 29
+    },
+    {
+      "eps_star": 0.1201505642444436,
+      "n": 58
+    },
+    {
+      "eps_star": 0.12457900305220061,
+      "n": 22
+    },
+    {
+      "eps_star": 0.12457900305220061,
+      "n": 44
+    },
+    {
+      "eps_star": 0.12800186478119108,
+      "n": 57
+    },
+    {
+      "eps_star": 0.13261405910773766,
+      "n": 56
+    },
+    {
+      "eps_star": 0.14261896030169682,
+      "n": 54
+    },
+    {
+      "eps_star": 0.14504369043752693,
+      "n": 52
+    },
+    {
+      "eps_star": 0.15989062101145718,
+      "n": 51
+    },
+    {
+      "eps_star": 0.17749154495870129,
+      "n": 48
+    },
+    {
+      "eps_star": 0.17829432172674783,
+      "n": 47
+    },
+    {
+      "eps_star": 0.19653713179747112,
+      "n": 46
+    },
+    {
+      "eps_star": 0.19927226128833653,
+      "n": 21
+    },
+    {
+      "eps_star": 0.19927226128833653,
+      "n": 42
+    },
+    {
+      "eps_star": 0.22491633235023212,
+      "n": 43
+    },
+    {
+      "eps_star": 0.23993419084764844,
+      "n": 14
+    },
+    {
+      "eps_star": 0.23993419084764844,
+      "n": 28
+    },
+    {
+      "eps_star": 0.2599171849761075,
+      "n": 40
+    },
+    {
+      "eps_star": 0.28799532391491184,
+      "n": 38
+    },
+    {
+      "eps_star": 0.30377208508928055,
+      "n": 37
+    },
+    {
+      "eps_star": 0.32088164701354727,
+      "n": 36
+    },
+    {
+      "eps_star": 0.339478469790316,
+      "n": 35
+    },
+    {
+      "eps_star": 0.3492599091744068,
+      "n": 25
+    },
+    {
+      "eps_star": 0.3597400546433348,
+      "n": 34
+    },
+    {
+      "eps_star": 0.3818711948183915,
+      "n": 33
+    },
+    {
+      "eps_star": 0.4061091703766708,
+      "n": 32
+    },
+    {
+      "eps_star": 0.4066416563562776,
+      "n": 30
+    },
+    {
+      "eps_star": 0.43273013421969636,
+      "n": 31
+    },
+    {
+      "eps_star": 0.5704288531811494,
+      "n": 27
+    },
+    {
+      "eps_star": 0.6151465290963682,
+      "n": 26
+    },
+    {
+      "eps_star": 0.7219279590508346,
+      "n": 24
+    },
+    {
+      "eps_star": 0.7860593004884172,
+      "n": 23
+    },
+    {
+      "eps_star": 1.0113598669643158,
+      "n": 17
+    },
+    {
+      "eps_star": 1.0395126970759294,
+      "n": 20
+    },
+    {
+      "eps_star": 1.1517897242846293,
+      "n": 19
+    },
+    {
+      "eps_star": 1.2832887764694378,
+      "n": 18
+    },
+    {
+      "eps_star": 1.6240558033182464,
+      "n": 16
+    },
+    {
+      "eps_star": 1.8477350293608994,
+      "n": 15
+    },
+    {
+      "eps_star": 1.9550008653872297,
+      "n": 12
+    },
+    {
+      "eps_star": 2.459712435446265,
+      "n": 13
+    },
+    {
+      "eps_star": 3.412649726177757,
+      "n": 8
+    },
+    {
+      "eps_star": 3.4348212597025487,
+      "n": 11
+    },
+    {
+      "eps_star": 4.155557097364726,
+      "n": 10
+    },
+    {
+      "eps_star": 4.517227854037778,
+      "n": 9
+    },
+    {
+      "eps_star": 8.473682407827743,
+      "n": 7
+    },
+    {
+      "eps_star": 11.526847744831937,
+      "n": 6
+    },
+    {
+      "eps_star": 16.58251987713506,
+      "n": 5
+    },
+    {
+      "eps_star": 25.863963796334392,
+      "n": 4
+    },
+    {
+      "eps_star": 45.80443011901647,
+      "n": 3
+    },
+    {
+      "eps_star": 101.95500086538762,
+      "n": 2
+    }
+  ],
+  "first_lock_ranking_top10": [
+    {
+      "eps_star": 0.008539884516151168,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 50,
+      "rank": 1,
+      "witness_pq": [
+        9,
+        8
+      ]
+    },
+    {
+      "eps_star": 0.013539550230909867,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 41,
+      "rank": 2,
+      "witness_pq": [
+        22,
+        16
+      ]
+    },
+    {
+      "eps_star": 0.04726303730962645,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 49,
+      "rank": 3,
+      "witness_pq": [
+        28,
+        20
+      ]
+    },
+    {
+      "eps_star": 0.04946329301291678,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 39,
+      "rank": 4,
+      "witness_pq": [
+        8,
+        7
+      ]
+    },
+    {
+      "eps_star": 0.06820841255710623,
+      "is_power_chord": true,
+      "is_symmetric_cluster": false,
+      "n": 53,
+      "rank": 5,
+      "witness_pq": [
+        31,
+        22
+      ]
+    },
+    {
+      "eps_star": 0.08404405236755251,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 45,
+      "rank": 6,
+      "witness_pq": [
+        25,
+        18
+      ]
+    },
+    {
+      "eps_star": 0.09524407838682736,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 55,
+      "rank": 7,
+      "witness_pq": [
+        17,
+        14
+      ]
+    },
+    {
+      "eps_star": 0.11552196055015732,
+      "is_power_chord": false,
+      "is_symmetric_cluster": true,
+      "n": 60,
+      "rank": 8,
+      "witness_pq": [
+        1,
+        1
+      ]
+    },
+    {
+      "eps_star": 0.11947105480133108,
+      "is_power_chord": false,
+      "is_symmetric_cluster": true,
+      "n": 59,
+      "rank": 9,
+      "witness_pq": [
+        1,
+        1
+      ]
+    },
+    {
+      "eps_star": 0.1201505642444436,
+      "is_power_chord": false,
+      "is_symmetric_cluster": false,
+      "n": 29,
+      "rank": 10,
+      "witness_pq": [
+        7,
+        6
+      ]
+    }
+  ],
+  "melodic_version": "0.1.0",
+  "preregistration": "experiments/lattice/LOG.md 2026-08-09",
+  "python": "3.12",
+  "scorer_calls": 798,
+  "scorer_version": "1.1.0",
+  "verdicts": {
+    "ALL_LOCKS_VERIFIED": {
+      "failing_n": [],
+      "verdict": "KEPT"
+    },
+    "GRID12_PIN": {
+      "measured_P": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "verdict": "KEPT"
+    },
+    "H-E1": {
+      "hypothesis": "H-E1 cultural epsilon: 12-EDO full major+minor at ~14.86c (predicted 14.8590)",
+      "measured_eps": 14.859021711645774,
+      "measured_eps_2dp": 14.86,
+      "p_jump": [
+        36,
+        48
+      ],
+      "verdict": "KEPT"
+    },
+    "H-E2": {
+      "hypothesis": "H-E2 power chords: scorer counts 2:3:4 (span-1200 inclusive); 12-EDO first P lock = fifth error 1.9550c",
+      "measured_eps": 1.9550008653872297,
+      "structurally_counted": true,
+      "verdict": "KEPT",
+      "witness": [
+        7,
+        5
+      ]
+    },
+    "H-E3": {
+      "champions_53_41_in_top5": true,
+      "hypothesis": "H-E3 ranking: naive fifth-error top5 [53, 41, 29, 58, 12] predicted REFUTED; mirror top5 [50, 41, 49, 39, 53] predicted",
+      "measured_top5": [
+        50,
+        41,
+        49,
+        39,
+        53
+      ],
+      "mirror_top5_confirmed": true,
+      "naive_top5_refuted": true,
+      "verdict": "REFUTED (naive), mirror KEPT"
+    },
+    "H-E4": {
+      "failing_n": [],
+      "hypothesis": "H-E4 melodic rails: every N-EDO strictly proper, CS, 1 gap class, 0 bits",
+      "verdict": "KEPT"
+    },
+    "R_DUAL": {
+      "failing_n": [],
+      "verdict": "KEPT"
+    },
+    "R_G0": {
+      "failing_n": [],
+      "verdict": "KEPT"
+    }
+  }
+}
