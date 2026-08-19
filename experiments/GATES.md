@@ -42,13 +42,24 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-008 | 2026-07-25 | Merge [PR #20](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/20): CI runs the lattice test suite (chore lane) | PASS 2026-07-25 — merged by Marcus |
 | G-009 | 2026-07-25 | Merge [PR #21](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/21): research blog post 001 "The Tunings That Ring" + README pointer — editorial pass is yours (first-person voice) | PASS 2026-07-25 — merged by Marcus |
 | G-010 | 2026-07-25 | Merge [PR #18](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/18): worktree.sh dead-cwd fix (chore lane, pre-existing) | PASS 2026-07-25 — merged by Marcus |
+| G-017 | 2026-08-09 | ET-001 review: (N, ε) phase diagram of equal temperaments under the frozen scorers | PENDING — cultural epsilon confirmed at 14.86¢ (12-EDO 4:5:6 locks at 14.859¢), power chords lock at the fifth error (1.955¢), naive first-lock ranking refuted by accidental AP-chord locks; [PR #38](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/38) |
+| G-018 | 2026-08-09 | MUR-001 review: murchana window-regularity census | PENDING — rescue is minority-rule (172/709 anchor-0 failures rescued; 537/885 zero-rescue rows), monotone ⇔ murchana-free, drift budget T = N·|g−g′| separates at AUC 0.974, murchana harmonically free (triad P anchor-invariant on all rows); [PR #39](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/39) |
+| G-019 | 2026-08-18 | ET-002 review: the 351-class subset census of 12-EDO under the frozen scorers (stacked on ET-001) | QUEUED (agent running; needs the run's PR) |
+| G-020 | 2026-08-18 | MUR-002 review: grāma/mūrchanā calibration against Wilson's LatticingRagaScales (archive, read in place, page-cited) | QUEUED (agent running; needs the run's PR) |
+| G-021 | 2026-08-18 | BRIDGE-001b review: filtered EG4 bridge design (k₂ sweep, tone-set minimax, two-gap objective) | QUEUED (agent running; needs the run's PR) |
+| G-022 | 2026-08-18 | SUBSET-MEL-000 review: machine census of the 72 embedded CPS subsets of the eikosany — data for the G-013 brainstorm, not the spec | QUEUED (agent running; needs the run's PR) |
+| G-023 | 2026-08-18 | Blog post 002 editorial pass ("the machine keeps deriving Wilson") — first-person voice per the site writing-style rule | QUEUED (agent drafting; needs the draft's PR) |
 
 ## Currently blocked by gates
 
 - The SPEC's original queue is fully run and fully gated (LAT-MEL-001,
   SHADOW-001, MOS-LAT-001/002, CS-EIK-001, BRIDGE-000/001 — all PASS).
-  Only G-013 (SUBSET-MEL-001 spec review) remains open, and it waits on the
-  subset brainstorm session with Marcus, not on any run. Next experiments
-  come from the fork menu (ET, MUR, SUBSET-MEL, BRIDGE-001b/002, blog 002).
+- Fork-menu wave 1 (2026-08-09): ET-001 and MUR-001 ran; G-017/G-018 are
+  PENDING on Marcus (PRs #38/#39, CI green).
+- Fork-menu wave 2 (2026-08-18, "continue auto research"): ET-002, MUR-002,
+  BRIDGE-001b, SUBSET-MEL-000, blog post 002 launched in parallel worktrees;
+  G-019–G-023 QUEUED until their PRs exist.
+- G-013 (SUBSET-MEL-001 spec review) still waits on the subset brainstorm
+  with Marcus; SUBSET-MEL-000 supplies the ranked table for him to react to.
   (Datestamp erratum: entries above marked 2026-07-25 were written
   2026-07-28 — see LOG.md.)
