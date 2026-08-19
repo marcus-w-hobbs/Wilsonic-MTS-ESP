@@ -1,0 +1,29 @@
+! SUBSET-MEL-000 hexany of eikosany [13, 17, 21, 23, 25, 27]: strictly_proper, 4 gap classes/6, exact CS viol 0, P/S exact 0/0, 3c 1/1
+!
+! parent eikosany CPS(6,3) seeds [13, 17, 21, 23, 25, 27] (Erv: 3)6)
+! subset hexany[in=13,out=25]: fixed in [13], fixed out [25]
+! top under ordering(s): melodic2
+! step word bdadbc
+! 1/1 = the subset's lowest octave-reduced tone as it sits in the eikosany (a mode of the standalone CPS below)
+! standalone: CPS(4,2) of [17, 21, 23, 27] transposed by the fixed-in product
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 4_2   [Hexany (6 tones)]
+!   A = 17
+!   B = 21
+!   C = 23
+!   D = 27
+!   (E, F unused at this scale selection)
+!   APVTS: CPSCALE=4_2, CPSA=17, CPSB=21, CPSC=23, CPSD=27
+!   Notation: canonical CPS(4,2) = 4 seeds choose 2; Erv writes this 2)4.
+! or: EulerGenus 6 design with the parent seeds, select the subset keyboard
+!
+SUBSET-MEL-000 hexany of eikosany [13, 17, 21, 23, 25, 27]: strictly_proper, 4 gap classes/6, exact CS viol 0, P/S exact 0/0, 3c 1/1
+ 6
+!
+ 23/21
+ 9/7
+ 23/17
+ 27/17
+ 207/119
+ 2/1

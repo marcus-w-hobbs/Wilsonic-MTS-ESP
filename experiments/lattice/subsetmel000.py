@@ -200,6 +200,12 @@ def _harm_row(r: triad.ScoreResult, exact: triad.ScoreResult | None = None,
            "scorer_version": r.scorer_version, "path": r.path}
     if eps is not None:
         row["epsilon_cents"] = eps
+        # receipt fields (post-hoc addition after run 1, labelled in LOG):
+        # the frozen scorer's per-triple degeneracy guard can push tempered
+        # counts BELOW exact ones; raw counts and the dropped tally show it.
+        row["P_raw"] = r.proportional_raw
+        row["S_raw"] = r.subcontrary_raw
+        row["degenerate_dropped"] = r.degenerate_dropped
     if exact is not None:
         for lab, t, e in (("P", r.proportional, exact.proportional),
                           ("S", r.subcontrary, exact.subcontrary)):
@@ -304,6 +310,10 @@ def spearman(x: list[float], y: list[float]) -> float:
 def rank_disagreement(rows: list[dict]) -> dict:
     return {
         "n": len(rows),
+        # distinct non-name keys per ordering: 1 means the axis is DEGENERATE
+        # (all rows tie) and the Spearman below is 0.0 by convention.
+        "n_distinct_keys": {o: len({_KEYS[o](r)[:-1] for r in rows})
+                            for o in ORDERINGS},
         "spearman_melodic_vs_harmonic": round(spearman(
             _rank_positions(rows, "melodic"),
             _rank_positions(rows, "harmonic")), 6),
@@ -538,6 +548,66 @@ def seed_summary(seeds, rows, subs) -> tuple[dict, list[Path]]:
     }, scl_paths
 
 
+# ---------------------------------------------------------------------------
+# POST-HOC lenses (added after run 1; labelled as such in LOG.md — none of the
+# pre-registered verdict fields depend on them)
+# ---------------------------------------------------------------------------
+
+#: Coincidence-free control seedings for the "generic dekany fingerprint":
+#: does CPS(5,2) of arbitrary well-spread odd seeds reproduce the melodic
+#: values the CS-winner dekanies all share?
+POSTHOC_CONTROL_DEKANY_SEEDS = ((31, 37, 41, 43, 47), (101, 103, 107, 109, 113),
+                                (1, 3, 5, 7, 11), (17, 19, 23, 29, 31))
+
+
+def posthoc(all_rows: list[dict]) -> dict:
+    fingerprints: dict[str, int] = {}
+    for r in all_rows:
+        if r["kind"] != "dekany_in":
+            continue
+        fp = (f"gaps={r['m1_gap_classes']} entropy={r['m1_entropy_bits']} "
+              f"{r['m3_class']}({r['m3_violations']}) "
+              f"exactCS={r['exact_cs_violations']}")
+        fingerprints[fp] = fingerprints.get(fp, 0) + 1
+    controls = []
+    for seeds in POSTHOC_CONTROL_DEKANY_SEEDS:
+        sc = cps_scale(seeds, 2)
+        m = mel.score_melodic_rational(sc)
+        v, _ = cs_check(sc)
+        controls.append({"seeds": list(seeds),
+                         "gap_classes": m.gap_entropy.gap_class_count,
+                         "entropy_bits": round(m.gap_entropy.entropy_bits, 6),
+                         "m3": m.propriety.classification,
+                         "m3_violations": m.propriety.violating_span_pairs,
+                         "exact_cs_violations": v})
+    neg = []
+    for r in all_rows:
+        for eps in ("2.0", "3.0"):
+            h = r["harmonic_tempered"][eps]
+            if h["overshoot_P"] < 0 or h["overshoot_S"] < 0:
+                neg.append({"seed": r["seed_eikosany"], "name": r["name"],
+                            "eps": eps, "P_exact": r["harmonic_exact"]["P"],
+                            "S_exact": r["harmonic_exact"]["S"],
+                            "P": h["P"], "S": h["S"], "P_raw": h["P_raw"],
+                            "S_raw": h["S_raw"],
+                            "degenerate_dropped": h["degenerate_dropped"]})
+    dek_min_cs = min(r["exact_cs_violations"] for r in all_rows
+                     if r["kind"].startswith("dekany"))
+    return {
+        "label": "POST-HOC (after run 1)",
+        "dekany_class_melodic_fingerprints": fingerprints,
+        "control_dekanies": controls,
+        "dekany_min_exact_cs_violations_in_census": dek_min_cs,
+        "negative_overshoot_rows": len(neg),
+        "negative_overshoot_all_have_dropped_gt_0": all(
+            n["degenerate_dropped"] > 0 for n in neg),
+        "negative_overshoot_all_raw_ge_exact": all(
+            n["P_raw"] >= n["P_exact"] and n["S_raw"] >= n["S_exact"]
+            for n in neg),
+        "negative_overshoot_examples": neg[:8],
+    }
+
+
 def main() -> None:
     seeds_all = seed_sets()
     all_rows: list[dict] = []
@@ -583,6 +653,7 @@ def main() -> None:
             "identical_across_seeds": adj_identical,
         },
         "per_seed": summaries,
+        "posthoc": posthoc(all_rows),
     }
     SUMMARY.write_text(json.dumps(summary, indent=1))
 
@@ -624,6 +695,12 @@ def main() -> None:
             f"{x['name']}[PS3 {x['P3']}+{x['S3']}]" for x in s["spice"][:6]))
         print(f"  scl: {s['scl']}")
     print(f"\nH-SM5 pooled dekanies: {pooled}")
+    ph = summary["posthoc"]
+    print(f"POST-HOC dekany fingerprints: {ph['dekany_class_melodic_fingerprints']}")
+    print(f"POST-HOC controls: {ph['control_dekanies']}")
+    print(f"POST-HOC negative overshoot rows {ph['negative_overshoot_rows']}, "
+          f"all guard-explained: {ph['negative_overshoot_all_have_dropped_gt_0']} "
+          f"raw>=exact: {ph['negative_overshoot_all_raw_ge_exact']}")
     print(f"adjacency identical across seeds: {adj_identical}")
 
 
