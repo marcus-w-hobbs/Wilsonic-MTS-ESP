@@ -1392,3 +1392,282 @@ re-verified post-run). Gate G-017 appended to experiments/GATES.md
 + 16 et001), freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535) before and after. Receipts bit-identical across
 two runs (diff on et001.jsonl and et001_summary.json).
+
+## 2026-08-18 — ET-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question:** the subset census of 12-EDO under the frozen scorers. Enumerate
+every non-empty pitch-class set of Z12 up to TRANSPOSITION (Pólya:
+(1/12)·Σ_{d|12} φ(d)·2^{12/d} = 4224/12 = 352 classes incl. empty and full ⇒
+**351 non-empty**; per-size histogram 1, 6, 19, 43, 66, 80, 66, 43, 19, 6,
+1, 1 for N = 1..12 — pinned in a test) and score each class on the melodic
+side with frozen `melodic.py` v0.1.0 (`score_melodic`, defaults: propriety
+class + violations, CS + violations, gap classes, gap_classes/N, entropy;
+step-pattern word recorded alongside) and on the harmonic side with frozen
+`triads/scorer.py` v1.1.0 (`score_tempered`, PRIMARY anchored convention,
+default max_span 1200¢) at the ET-001 ε grid **{1, 2, 3, 5, 10, 14.86,
+20}¢** — P, S, G, raw counts, and the G-002 balance bucket (verbatim copy of
+`triads/search.py::balance_bucket`, cross-checked by a test) per (class, ε).
+NOT a min(P,S) ranking. Secondary keys per row: the T/I class (lexmin over
+transpositions of the set and its inversion, plus the Rahn prime form for
+readability; 223 non-empty T/I classes — pinned), `is_inversionally_symmetric`
+(predicted 95 of 351: 2·224 − 352 = 96 incl. empty), transposition period
+(limited-transposition flag; 16 non-empty classes with period < 12), interval
+vector, and tags for the well-known scales. Runner `et002.py`; receipts
+`results/et002.jsonl` (351 rows) + `results/et002_summary.json`; tests
+`tests/test_et002.py` green before the first run; stdlib only, python3.12,
+deterministic, no wall-clock fields; two runs bit-identical (diff recorded).
+
+**Canonical forms (locked).** T-class representative = lexicographically
+smallest sorted 12-tuple-transposition of the set (so the diatonic is
+(0,1,3,5,6,8,10) — Locrian at 0); cents = 100·pc. Step word = the
+lexicographically smallest rotation of the circular gap sequence (necklace
+representative; diatonic → "1221222"). Tags are by class membership, so
+"diatonic 2212221", pentatonic, whole-tone (Messiaen 1), octatonic
+(Messiaen 2), hexatonic/augmented scale, Messiaen 3–7 (all seven modes are
+tagged; the four modes 1–4 named in the brief are among them, and the
+limited-transposition FLAG covers the general concept), melodic and harmonic
+minor, harmonic major, chromatic, major/minor/augmented/diminished triads,
+sus (0,2,7) trichord, dominant and diminished sevenths, power chord (0,7),
+tritone (0,6), Guidonian hexachord — are looked up, not searched.
+
+**Analytic mirror (the algebra the run must check; the frozen scorer is the
+referee, the mirror is not; independent integer combinatorics in scratch, no
+frozen-scorer or melodic.py calls).** Every subset lives inside 12-EDO, so a
+triple at anchor b is a 12-EDO type (p, q) with b − p and b + q in the set;
+ET-001's 12-EDO type table therefore decides everything. Types with
+proportional deviation < 20¢: (7,5) 1.9550 [sep 203.9], (1,1) 2.8865
+[sep 5.7730], (5,4) 7.8374 [sep 115.7], (2,2) 11.5268 [sep 23.0537],
+(4,3) 14.8590 [sep 70.28]; nothing else below (3,3) at 25.86¢. A type counts
+on (dev, sep], so at the grid the qualifying P-types are: ε=1: none; ε=2:
+(7,5); ε=3, 5: (1,1), (7,5); ε=10: (5,4), (7,5); ε=14.86, 20: (2,2), (4,3),
+(5,4), (7,5); S-types are the transposes (q,p). Because p + q = 12 makes a
+and c the SAME pitch class, the (7,5) power chord counts one triple per
+ordered fourth (b, b+5): **P@2 = S@2 = ic5 (interval-vector entry 5) for
+every class**. Pattern identities: (1,1) counts chromatic-trichord middles
+c111 = #{b: b±1 ∈ S}; (4,3) counts each major-triad pc-set {r, r+4, r+7}
+once (anchor = its third) and (5,4) counts the SAME set again (anchor = its
+fifth; 3:4:5 voicing, deviation 7.84¢ < the root-position 14.86¢); (2,2)
+counts whole-tone trichords WT3 = #{x, x+2, x+4} ⊂ S; duals count minor
+triads {r, r+3, r+7} twice ((3,4) root, (4,5) first inversion 12:15:20).
+Hence for every class:
+  P@1 = 0; P@2 = ic5; P@3 = P@5 = ic5 + c111; P@10 = ic5 + Maj;
+  P@14.86 = P@20 = ic5 + 2·Maj + WT3;   S likewise with Min.
+So **Maj = P@10 − P@2 and Min = S@10 − S@2 are derivable from the frozen
+scorer's own grid** (recorded as derived fields). G-types are the symmetric
+(p,p) with dev_G = 0: G@1..5 = Σ_{p=1..6} m(p,p); G@10..20 drops p = 1
+(sep 5.77) — full 12: G = [72,72,72,72,60,60,60] (ET-001's N·⌊N/2⌋ at ε→0).
+The 12-EDO cluster floor of ET-001 (C♯–D–D♯ counted for ε ∈ (2.887, 5.773])
+is inherited: counts are NOT monotone in ε — the mirror predicts **105
+classes with P@10 < P@5** (guard exit of the (1,1) cluster).
+
+**Falsifiable predictions (numbers from the mirror, to be confirmed or
+refuted by the frozen scorers on all 351 classes):**
+- **H-T1 (cultural epsilon inherited).** At ε = 1¢ every class has
+  P = S = 0 (351/351). At ε = 2¢ exactly the classes with ic5 > 0 have
+  P > 0: **321 of 351** (the 30 fifth-free classes: 1/5/10/10/3/1 at
+  N = 1..6 — M5-images of the adjacent-semitone-free necklaces). At
+  ε = 3 and 5¢ **327** classes have P > 0: the 321 plus exactly the six
+  fifth-free classes containing a chromatic trichord — (0,1,2), (0,1,2,3),
+  (0,1,2,4), (0,1,2,10), (0,1,2,3,4), (0,1,2,4,10). At ε = 10¢: 321 again
+  (cluster dropped, no new fifth-free winners because a major triad
+  contains a fifth); at 14.86/20¢: **330** (whole-tone trichords admit
+  fifth-free classes such as (0,2,4)). P = S in all 351 classes for
+  ε ≤ 5 (ic5 and c111 are inversion-invariant) and in exactly **231**
+  classes at ε ∈ {10, 14.86, 20}; the census's N = 12 row must reproduce
+  ET-001's P = S = [0, 12, 24, 24, 24, 48, 48] EXACTLY (rail). Predicted
+  balance buckets at 14.86¢: diagonal 231, skew_P/S 31/31, strong_P/S
+  28/28, near_P/S 1/1.
+- **H-T2 (diatonic distinction).** (a) NOT CS (one violating class, the
+  600¢ tritone at 3 and 4 steps — the SPEC correction on record); (b)
+  proper but NOT strictly (span-3 max = span-4 min = 600¢); (c) at
+  ε = 14.86¢ the diatonic scores **P = S = 15** = 6 power chords + 3 major
+  triads × 2 voicings (root anchor (4,3) + second-inversion anchor (5,4)) +
+  3 whole-tone trichords (C-D-E, F-G-A, G-A-B); grid P = S =
+  [0, 6, 6, 6, 9, 15, 15]. Among the 66 seven-note classes the diatonic
+  is the UNIQUE maximum of P + S (30; runner-up 26 = the improper
+  (0,1,2,3,5,7,10)/(0,1,2,3,5,8,10) pair at (12,14)/(14,12)) and of P
+  alone and S alone (15): **zero 7-note classes tie or beat it** under the
+  scorer. HOWEVER, in the raw "number of major + minor triad pc-sets"
+  sense (Maj + Min derived as above) the literal claim is predicted
+  **REFUTED**: two hexatonic-plus-one classes, (0,1,2,5,6,9,10) and
+  (0,1,2,4,5,8,9), carry 7 triads (4+3 / 3+4) against the diatonic's 6 —
+  the diatonic wins the scorer's P + S only because it also carries the
+  most fifths (ic5 = 6, the 7-note maximum, uniquely) and 3 whole-tone
+  trichords. Both halves are registered; the receipts decide both.
+- **H-T3 (propriety census).** Predicted over the 351 classes: strictly
+  proper **23** (6.6%), proper **46** (13.1%), improper **282** (80.3%);
+  CS **51** (14.5%). Per N (sp/p/imp): 1: 1/0/0; 2: 6/0/0; 3: 4/5/10;
+  4: 7/6/30; 5: 1/9/56; 6: 2/11/67; 7: 0/5/61; 8: 1/4/38; 9: 0/3/16;
+  10: 0/2/4; 11: 0/1/0; 12: 1/0/0. The 23 strictly proper classes are
+  exactly: the 7 classes with N ≤ 2, (0,2,7), (0,3,7), (0,3,8), (0,4,8),
+  (0,1,5,8), (0,1,6,7), (0,2,5,8), (0,2,5,9), (0,2,6,8), (0,2,6,9),
+  (0,3,6,9), the pentatonic, the hexatonic, the whole-tone, the octatonic,
+  and the chromatic — the pentatonic is the ONLY strictly proper 5-note
+  class and NO 7-note class is strictly proper (Rothenberg: 12-EDO's 7-note
+  MOS is only proper, and every other heptad is improper or proper).
+  Max gap_classes/N = **1.0**, attained by all 32 classes with pairwise
+  distinct gaps (N ≤ 4: sums 1+11, …, 1+2+9, …, 1+2+3+6, 1+2+4+5); for
+  N ≥ 5 distinct gaps are impossible (1+2+3+4+5 > 12) so the max is 4/5.
+  Melodic-side rails: gap classes and CS/propriety at 100¢ multiples are
+  ε-independent (0.5¢ / 1e−9¢ guards inert), so the frozen results must
+  equal the integer mirror row for row.
+- **H-T4 (Pareto).** Frontier defined per cardinality N: classes not
+  dominated on (gap_class_count ↓, P + S at 14.86¢ ↑) among classes of
+  the same N (a global frontier is degenerate — the chromatic scale wins
+  both axes, ET-001's degenerate-melody corner). Predicted union: **24
+  classes**, including the diatonic (N=7, uniquely), the pentatonic
+  (N=5, gc 2, P+S 14), whole-tone + hexatonic + the Guidonian hexachord
+  (0,2,4,5,7,9) (N=6; the hexachord tops N=6 with P+S = 22), Messiaen 3
+  (tops N=9 at 48), the chromatic (N=12), the sus trichord and augmented
+  triad (N=3) — while the major and minor triads are NOT on it (P+S = 4
+  tied by (0,2,7) at fewer gap classes) and the **octatonic is NOT on it**
+  (P+S 32 < 38 at N=8, both gc 2). **Six improper classes ARE on the
+  frontier**: (0,1,2,7), (0,2,4,6), (0,2,4,7), (0,2,4,9) at N=4, the
+  bebop-dominant-type (0,1,2,3,5,7,8,10) at N=8 (P+S 38, the N=8 maximum),
+  and (0,1,2,3,4,5,6,8,9,10) at N=10 — improper-but-valid spice, reported
+  not zeroed. Proper-or-better frontier: 19 classes (post-hoc-free lens,
+  also registered).
+- **Rails.** R-DUAL: P = S at every ε for all 95 inversionally symmetric
+  classes, and P(S) = S(−S) for every asymmetric pair (anchored scorer
+  commutes with inversion). R-12: N = 12 row = ET-001 grid. R-G: G grid
+  matches the symmetric-type mirror for every class. R-MEL: melodic
+  results equal the integer mirror row for row (351/351).
+
+**Constants (locked):** ε grid {1, 2, 3, 5, 10, 14.86, 20}¢; scorer
+default max_span 1200¢; melodic defaults; frontier lens (gc, P+S@14.86)
+per N; no other tunables. Scale: 351 × 7 = 2457 scorer calls + 351 melodic
+calls; seconds. Anything not predicted above lands in clearly labeled
+post-hoc fields.
+
+**Archive context (read in place, cited by path+page):**
+`2010_02_24B/12&17/BasicPttnsGenus12&17.pdf` pp.1–3 — Wilson, "Some Basic
+Patterns Underlying Genus 12 & 17" (©1980, reprinted 1981/1983): the
+12-tone genus is the Pythagorean major (diatonic) modulated through the six
+keys E A D G C F, with 12-Equal drawn as one point of the meantone
+continuum (p.2), and the just diatonic modulated through the same keys
+yielding the 17-tone genus (p.3). Wilson's framing of 12 as the diatonic's
+transposition closure is exactly the object this census tests: which of the
+351 subsets the frozen scorers single out, and whether the diatonic is it.
+
+**Post-run obligations:** results entry here with per-hypothesis
+KEPT/REFUTED, FINDINGS.md paragraph, PR on research/et-002 stacked on #38;
+gate G-019 lives in the consolidated ledger PR #37 (GATES.md NOT edited
+here; proposed row text in the PR body).
+
+## 2026-08-18 — ET-002 results + verdicts
+
+**Run:** `et002.py` (~0.5 s, 2457 scorer calls + 351 melodic calls,
+receipts bit-identical across two runs by diff on both files),
+`results/et002.jsonl` (351 rows, one per T-class) +
+`results/et002_summary.json`. Scorer v1.1.0, melodic v0.1.0, lattice suite
+155/155 green pre-run (25 new et002 tests), freeze checks A OK on both
+pins before and after. One runner fix between the first and second
+invocation: the H-T1 verdict compared a sorted list of classes against an
+unsorted literal (a comparison bug in the verdict code, not a prediction
+change) — the receipts themselves were identical before and after the fix.
+Enumeration rails as pinned: 351 T-classes with size histogram
+1/6/19/43/66/80/66/43/19/6/1/1, 223 T/I classes, 95 inversionally
+symmetric classes, 16 limited-transposition classes.
+
+**Mirror rails — all KEPT, 351/351.** The pattern-count mirror (12-EDO
+type table × embedded-pattern counts) agrees with the frozen scorer on P,
+S AND G at every one of the 2457 (class, ε) points; the integer melodic
+mirror agrees with frozen melodic.py on propriety class, violation counts,
+CS and gap classes for every class. P = S at every ε for all 95 symmetric
+classes; P(S) = S(−S) for every asymmetric pair. The N = 12 row reproduces
+ET-001's P = S = [0, 12, 24, 24, 24, 48, 48] exactly.
+
+**H-T1 — KEPT. The cultural epsilon is inherited by every subset, and the
+whole harmonic side of 12-EDO at ε ≤ 20¢ is five patterns.** At ε = 1¢ all
+351 classes score P = S = 0. At ε = 2¢ P = S = ic5 (interval-vector entry 5)
+for every class — the 2:3:4 power chord is the ONLY triad type alive there —
+so exactly the 321 fifth-bearing classes have P > 0 and the 30 fifth-free
+classes (1/5/10/10/3/1 at N = 1..6) do not. At 3 and 5¢ the guard-window
+chromatic cluster (C♯–D–D♯, ET-001) enters and 327 classes are positive:
+the six new ones are precisely the fifth-free clusters (0,1,2), (0,1,2,3),
+(0,1,2,4), (0,1,2,10), (0,1,2,3,4), (0,1,2,4,10). At 10¢ the cluster is
+guard-dropped and the second-inversion major (3:4:5-type, 7.84¢) arrives:
+321 classes; **105 classes have P@10 < P@5** (counts are not monotone in
+ε — the ET-001 cluster floor, now census-wide). At 14.86/20¢ the root
+major (4:5:6, 14.859¢) and the whole-tone trichord (2,2) arrive: 330
+classes positive. P = S in all 351 classes for ε ≤ 5¢ and in exactly 231
+for ε ≥ 10¢; balance buckets at 14.86¢: diagonal 231, skew 31/31, strong
+28/28, near 1/1 — every number as pre-registered. Reporting identity: for
+every class P@14.86 = ic5 + 2·Maj + WT3 and S@14.86 = ic5 + 2·Min + WT3
+(each major triad is counted twice — root anchor and second-inversion
+anchor — never in first inversion), so **Maj = P@10 − P@2 and
+Min = S@10 − S@2 are readable straight off the frozen grid**.
+
+**H-T2 — KEPT in the scorer's sense; the literal raw-triad maximum
+REFUTED exactly as pre-registered.** The diatonic (0,1,3,5,6,8,10),
+step word 1221222: NOT CS (1 violating class, the tritone at 3 and 4
+steps), proper but not strictly (600¢ contact), grid P = S =
+[0, 6, 6, 6, 9, 15, 15], derived Maj = Min = 3, WT3 = 3, ic5 = 6. Among
+the 66 seven-note classes it is the UNIQUE maximum of P + S (30; runner-up
+26), of P alone and of S alone (15) — **zero classes tie or beat it** —
+and it is the only 7-note class on the (gc, P+S) frontier. But on raw
+Maj + Min it is NOT the maximum: the two hexatonic-plus-one classes
+(0,1,2,5,6,9,10) and (0,1,2,4,5,8,9) carry 7 triads (4+3 / 3+4) against
+the diatonic's 6, and lose to it under the scorer only because the
+diatonic also holds the 7-note maximum of fifths (ic5 = 6, unique) and
+three whole-tone trichords. The scorer's "diatonic distinction" is
+therefore a statement about triads + fifths + stepwise-thirds
+together, not about triad count alone — worth remembering when the
+aggregator is designed.
+
+**H-T3 — KEPT.** Over the 351 classes: strictly proper 23 (6.6%), proper
+46 (13.1%), improper 282 (80.3%); CS 51 (14.5%); the 23 strictly proper
+classes are exactly the pre-registered list (7 with N ≤ 2; (0,2,7),
+(0,3,7), (0,3,8), (0,4,8); seven tetrads incl. the diminished seventh;
+pentatonic; hexatonic; whole-tone; octatonic; chromatic). The pentatonic
+is the ONLY strictly proper 5-note class; NO 7-note class is strictly
+proper (5 proper, 61 improper); no 7-, 9-, 10- or 11-note class is CS.
+Max gap_classes/N = 1.0, attained by all 32 distinct-gap classes
+(N ≤ 4); for N ≥ 5 the maximum is 4/5.
+
+**H-T4 — KEPT.** The per-N frontier on (gap classes ↓, P + S at 14.86¢ ↑)
+has 24 members (19 proper-or-better): the diatonic (N=7), pentatonic
+(N=5), whole-tone + hexatonic + the Guidonian hexachord (N=6; the
+hexachord tops N=6 at 22), Messiaen mode 3 (tops N=9 at 48), the
+chromatic (N=12), the sus trichord and augmented triad (N=3), the
+diminished seventh, and neither the major nor the minor triad (P+S = 4,
+tied by (0,2,7) at fewer gap classes) nor the octatonic (32 < 38 at N=8,
+both gc 2). Six improper classes ARE on the frontier: (0,1,2,7),
+(0,2,4,6), (0,2,4,7), (0,2,4,9) at N=4, (0,1,2,3,5,7,8,10) at N=8 and
+(0,1,2,3,4,5,6,8,9,10) at N=10 — reported, not zeroed, per the
+improper-but-valid doctrine.
+
+**Post-hoc (not registered, labeled).** (1) The N = 8 frontier winner
+(0,1,2,3,5,7,8,10) [11122122] is the **bebop dominant** scale
+(C D E F G A B♭ B): P = S = 19 (7 fifths, 4 major, 4 minor, 4 whole-tone
+trichords), improper; the only PROPER 8-note superset of the diatonic is
+(0,1,2,4,5,7,9,10) [11212212] = the **bebop major** (C D E F G A♭ A B),
+P = S = 17, which tops the proper-only frontier at N = 8 and, at 4.25
+(P+S)/N, is second only to the diatonic (4.29) among proper 5–8-note
+classes — jazz practice's two chromatic-passing-tone scales are the
+census's top-8 objects. (2) Balance-bucket winners at 14.86¢ (G-002
+contract): strong_P is led by (0,1,3,5,8,9) [122313] = D♭–F–A♭ major
+triads chained by fourths plus one minor (P,S) = (10,6), proper; its
+inversion leads strong_S; the near_P/near_S singletons are the 9-note
+pair (0,1,2,3,5,6,8,9,10)/(0,1,2,3,5,6,7,9,10) at (23,21)/(21,23); the
+diagonal is 231 classes deep and its size-stratified tops ARE the frontier
+above. (3) The whole-tone scale scores P = S = 6 at 14.86¢ entirely from
+the symmetric (2,2) trichord in its guard window (11.53, 23.05] — a
+census-wide reminder that ε ≥ 11.53¢ admits augmented-flavoured
+"proportional" whole-tone trichords in any scale that has them, which is
+what makes the diatonic's 15 rather than 12. (4) The six 10-note classes are the
+chromatic minus one dyad, indexed by that dyad's interval class: deleting
+an ic5 (fourth) or ic6 (tritone) dyad leaves a PROPER class, deleting
+ic1–ic4 leaves an IMPROPER one; the two frontier members at N = 10 are the
+ic4- and ic5-deletions (both P = S = 29), one improper and one proper —
+near-chromatic propriety hinges on which dyad is removed.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+re-verified post-run). Gate G-019 is queued in the consolidated ledger
+(PR #37); GATES.md not edited here.
+
+**Run receipt:** 2026-08-18, python3.12 — lattice suite 155/155 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 25 et002), freeze checks A OK on both pins (scorer
+1a840af9…9b592, melodic a16f162b…7535) before and after. Receipts
+bit-identical across two runs (diff on et002.jsonl and et002_summary.json).
