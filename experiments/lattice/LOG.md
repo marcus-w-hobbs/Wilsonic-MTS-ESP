@@ -1374,3 +1374,168 @@ run (tone-set solver pins for miracle 5.82¢/δ −0.347 and orwell 2.570¢/δ
 +0.039 at 2 decimals; sweep dedup; melodic host scoring on a known MOS;
 rail equality on the miracle/orwell rows; label resolution). Frozen files
 untouched; freeze checks A run before and after.
+
+## 2026-08-18 — BRIDGE-001b results + verdicts
+
+**Run:** `bridge001b.py` (~95 s, bit-identical across two runs: jsonl
+sha256 fec91947…4f78, sidecar b8844db1…1894, summary 6043f29e…b8bd);
+receipts `results/bridge001b.jsonl` (2,903 FULL rows = every contained or
+rail (argmin) row), `results/bridge001b_uncontained.jsonl.gz` (30,808
+compact rows: uncontained non-rail — no bridge can live there; the full
+33,711-row dump was 77 MB), `results/bridge001b_summary.json`. Tests
+20/20 new (lattice suite 130/130) green before the first run, including
+the hand-derived tone-set pins; freeze checks A OK on both pins before and
+after (scorer 1a840af9…9b592, melodic a16f162b…7535); frozen files
+untouched. Enumeration: 63 commas, 2205 (c,v) pairs, 590 monotonicity
+rejections, 1615 monotone pairs → **33,711 distinct (mapping, N, val)
+rows exactly as the scale probe predicted**, 19,818 distinct rank-2
+mappings, 1,880 contained rows (791 distinct contained mappings), 1,101
+rail rows (78 contained rail rows = BRIDGE-001's 78 contained
+temperaments).
+
+**Rail — REPRODUCED bit-for-bit.** The prime-tuned rail front equals
+BRIDGE-001's summary front on every compared field (4 rows: orwell-22
+2.727139¢ P=2, miracle-19/20/21 6.857995¢ P=3; same k₂, mapping,
+generator, collisions, recovery ε, and comma_aliases == rail_commas);
+mothra-21 5.678412¢ and meantone-17/19 7.672444¢ reappear as dominated
+contained rail rows. `rail.bridge001_comparison.reproduced = true`.
+
+**The unpre-registered discovery that reframes H-B3/H-B4/H-B6 verdicts:
+the count-based survival criterion is unsound for grossly detuned
+images.** The pre-registered fronts (P at ε=2 ↑, collisions ↓, max tone
+error ↓, NO error cap) admitted rows the k₂ sweep surfaced with 64–155¢
+tone errors and P = 5–7: e.g. ⟨1 0 1 2],⟨0 4 3 2] (kernel comma 49/48
+only, g = 498.3¢, max tone error 119.2¢) at N = 12/17 with hexany
+"P = 5" (its 3/2 is 91¢ sharp; the image is a different scale whose
+ACCIDENTAL near-arithmetic triples out-count the hexany's eight faces),
+and two 155¢ rows with P = 7 and 2 collisions. BRIDGE-001 never met this
+because argmin picked accurate temperaments. Two POST-HOC lenses, labelled
+in the runner and summary, changing no pre-registered field: (a)
+**in-budget fronts** — restrict to max tone error < 15¢ (BRIDGE-001's own
+ε_bridge regime: over-budget rows are by definition not bridges); (b)
+**triad-identity lens** — `posthoc_identity_P/S`: how many of the hexany's
+OWN twelve labelled triads (enumerated on the exact rational path,
+`posthoc.hexany_base_triads`) keep their label in the image at ε (frozen
+`classify_cents_triple`, same octave placement). Count and identity lenses
+agree on FULL survival for every in-budget contained row (0 disagreements;
+10 over-budget ones disagree) and on the P/S counts themselves for every
+in-budget row below 13.7¢ (the only mismatches are seven unnamed rows at
+13.7–14.9¢ where count P = 1, identity 0 — accidental coincidences begin
+around there); the identity lens exposes the artifacts (the 119¢ "P = 5"
+rows have identity P = 0; the 155¢ "P = 7" rows identity 2; the 64¢
+schismatic-with-7=3-fifths rows keep identity 4 because their 5-limit
+faces are honestly accurate). Only
+16 (prime) / 45 (tone-set) of the 1,880 contained rows are in-budget:
+**the k₂ sweep is 98% junk temperaments — the argmin was hiding a
+population, not a front.** Verdicts below give the pre-registered letter
+first, then the in-budget/identity reading.
+
+**H-B3 (k₂ sweep) — letter FALSIFIED, substance KEPT.**
+- Letter: the prime front is NOT unchanged — the two 119¢ ⟨1 0 1 2],
+  ⟨0 4 3 2] rows (N = 12 ⟨12,20,27,34⟩, N = 17 ⟨17,28,38,48⟩; aliases
+  {49/48}) join it, so "225/224 owns every non-dominated contained row" is
+  falsified in letter — the first non-225/224 front row is named. Under
+  the in-budget lens (and under the identity lens, budget or not, at
+  ε = 2), the prime front is EXACTLY BRIDGE-001's four rows and 225/224
+  owns all of them. In-budget contained max hexany P = 3 (miracle), as
+  predicted; unrestricted max is 5 (artifact).
+- Named entrants, all as predicted: **magic** appears at N = 19 (patent,
+  anchor [0,0]) and N = 22 (patent, anchor [−3,0]), contained, prime
+  minimax 5.15¢, max tone error **9.017¢** (pred. 9.02; on 21/16), tone-set
+  **5.364¢** (pred. 5.36), hexany P = 1 (pred. ≤ 1), recovery ε = 8 —
+  dominated under both tunings; magic-16 (uncontained) turns out to be a
+  rail row already. **Garibaldi** appears at N = 7, 12, 17 (⟨17,27,39,47⟩,
+  a7 = patent−1 as predicted, plus N = 7 unpredicted), all UNCONTAINED
+  (chain span 24 as predicted) — and all three are rail rows: BRIDGE-001
+  had scored garibaldi (2.71¢, hexany P = 4 at 2¢, full at 3¢!) but its
+  window (24 > 22) hid it; garibaldi is the best-surviving mid-accuracy
+  temperament in the sweep and simply needs N ≥ 29. Also contained-but-
+  dominated as predicted: pajara (18.2¢, 9 vals), superpyth-15/17/22
+  (28.4¢), porcupine-15/16/21/22 (18.2¢), keemun (20.5¢), negri (31.6¢),
+  lemba (30.4¢), godzilla-14/15/19 (19.1¢); one unpredicted in-budget
+  contained newcomer: **doublewide-22** (50/49 ∩ 875/864, period 600¢,
+  ⟨22,35,51,62⟩, 10.2¢, hexany P = 3 = identity 3, 2-step STRICTLY PROPER,
+  CS) — dominated by miracle on error, but the only in-budget row besides
+  orwell that is simultaneously 2-step, proper and P ≥ 2 under prime
+  tuning.
+
+**H-B4 (tone-set minimax) — KEPT in every derived number; front flips as
+predicted; H-B2 NOT revived.**
+- miracle: max tone error 6.857995 → **5.817315¢** (pred. 5.82; δ =
+  −0.3469¢, secor 116.5878 → 116.2409¢; e5 goes to exactly 0.000, e3 =
+  e15 = −4.510, e21 = e105 = −5.817). NOT below 4¢ — the orchestrator's
+  guess is refuted, the derivation held.
+- orwell-22: 2.727139 → **2.570508¢** (pred. 2.570; δ = +0.0392¢, g
+  271.3854 → 271.4246¢; e3 = −1.983, e7 = +2.571, e105 = 0.000).
+- Named error ranking under tone-set: orwell 2.571 < meantone 4.815 <
+  magic 5.364 < mothra 5.482 < miracle 5.817 — exactly the predicted
+  order; miracle falls from second to last.
+- Hexany survival under retune (identity lens confirms every hand-checked
+  deviation): miracle P 3 → **2** (pred. 1: the 21:28:35 face survives at
+  −1.69¢, hand estimate was −2.7), full (6,6) recovery **3 → 5¢** (pred.
+  5; the two octave-spanned faces sit at exactly |e3| = 4.510¢);
+  orwell P 2 → **4** (pred. 4; the two e3-faces pass at 1.983¢ — the
+  0.017¢ margin held), recovery stays 4 (5:6:7 at 3.24¢, 30:35:40 at
+  −3.42¢). Doublewide 3 → 3; magic 1 → 1; mothra 2 → 2; meantone 1 → 1.
+- **Tone-set in-budget front = orwell-22 ALONE** (P = 4 = identity 4,
+  2.570¢, 0 collisions, 2-step, strictly proper, CS) — miracle is
+  dominated by orwell and exits; `front_flipped = true` in letter too
+  (the letter front adds the 64¢/155¢ artifacts, identity P 4/2). No
+  contained row reaches P ≥ 5 in budget or error < 2.570¢.
+- **H-B2 strict revival: ZERO rows** under either tuning
+  (`h_b2_revived_rows = []`; identity full (6,6) at ε = 2 among contained
+  rows: 0/0). BRIDGE-001's refutation is ROBUST to the tuning objective:
+  the one-cent gap is structural at N ≤ 22, and (H-B6) absolute-error
+  tuning is the wrong lens for survival. Addressing-only (uncontained)
+  best stays ennealimmal-18: 0.204¢ prime → 0.132¢ tone-set, span 8 > 2.
+
+**H-B5 (two-gap objective) — KEPT (one propriety miss).** Front rows:
+orwell-22 → 2 gap classes (42.47¢ ×13, 71.99¢ ×9; L/s 1.70), STRICTLY
+PROPER, CS ✓; blackjack (miracle-21) → 2 classes (34.12 ×11, 82.47 ×10;
+L/s 2.42), IMPROPER (10 violating span pairs), CS ✓; miracle-19 → 3
+classes (34.12, 82.47, 116.59), improper, NOT CS (18 violations) ✓;
+miracle-20 → 3 classes, NOT CS, but **PROPER** (0 violations; predicted
+improper — with a single 116.6¢ step among 10+9 the spectrum still nests).
+So exactly two of BRIDGE-001's four front rows are true 2-step MOS and the
+only strictly-proper bridge host is orwell-22, as predicted. 3-step vs
+2-step: in budget, prime 3-step max P = 3 (miracle-19/20/22) ties the
+2-step max 3 (blackjack); tone-set 2-step max 4 (orwell) beats 3-step max
+2 — no 3-step contained candidate beats a 2-step one on the harmonic side
+✓ (unrestricted table: 2-step and 3-step both max 5/7, the over-budget
+artifacts). Gap-class distribution over all 1,880 contained rows: 1-step
+11/26, 2-step 928/941, 3-step 941/913 (prime/tone-set) — 49% 2-step,
+inside the predicted 30–60%; in budget 11+5 / 26+19. Joint (2-step ∧
+non-improper ∧ P ≥ 2, in budget): prime {orwell-22, doublewide-22};
+tone-set adds ⟨1 2 2 3],⟨0 9 −7 4] at N = 21/22 (225/224 ∩ 12288/12005,
+10.9¢, P = 4, strictly proper). Interesting corollary for the design
+paradigm: retuning does not change gap-class counts on any front row
+(the melodic column is tuning-robust at these δ), so two-gap-ness and
+survival can be optimized independently.
+
+**H-B6 (objectives not aligned) — letter FALSIFIED by the same artifact,
+KEPT in budget.** Tone-set lowers max tone error on all 33,711 rows ✓
+(by construction). Contained max hexany P: unrestricted 5 → 7 (artifact
+rows; letter falsified), in budget 3 → 4 (orwell) ✓ not above 4. A
+BRIDGE-001 front row loses P ✓ (miracle 3 → 2, recovery 3 → 5).
+`hexany_interval_maxerr` (translation-invariant, the quantity the frozen
+test sees): miracle 2.855 → 5.817¢ (hand: 2.86 → 4.51 — I omitted the
+21/16-vs-5/4 pair, whose error becomes 5.817 once e5 = 0), orwell 4.984 →
+5.141¢. Reading: minimizing absolute error vs 1/1 can move the hexany's
+internal intervals either way; orwell gains survival, miracle loses it.
+The survival-aware tuning (interval or direct triad-deviation minimax) is
+named for BRIDGE-001c, unrun.
+
+**Vs the BRIDGE-000 standard:** unchanged corners — Wilson's pitch-just
+corner (0¢, 7 collisions, 100% survival) and the tempered-faithful corner,
+now sharpened to orwell-22 at 2.570¢ with 4/6 identity faces at 2¢ and all
+6 at 4¢, 0 collisions, strictly proper 2-step host. Nothing at N ≤ 22
+reaches full survival at 2¢ under any tuning; the sweep of 33,711
+temperaments finds no third corner.
+
+**Kept.** Runner, tests, receipts stand; frozen scorers untouched. Post-hoc
+additions (in-budget fronts, identity lens, `posthoc.*` in the summary,
+`posthoc_identity_*` per tuning) are labelled in code and here. Method
+note for BRIDGE-002 (EG6, 2-comma kernels): any Pareto front over a k₂
+sweep must be error-capped or identity-scored — the count-based P is not
+a survival measure once tone errors exceed ~10¢. Gate G-021 (ledger PR
+#37) proposed row in the PR body.
