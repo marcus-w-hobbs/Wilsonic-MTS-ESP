@@ -1398,3 +1398,182 @@ Lattice suite 124/124 OK (incl. 14 new mur001 tests pinned to MOS-LAT-001
 receipts), triads suite 88/88 OK; freeze checks OK before AND after
 (scorer pin 1a840af9…9b592, melodic pin a16f162b…7535, both unchanged).
 Findings promoted to FINDINGS.md; gate row G-018 appended.
+
+## 2026-08-18 — MUR-002 pre-registration (entry BEFORE any implementation or run)
+
+**Experiment:** calibrate the program's murchana machinery against the
+primary source of the concept — the Indian grāma/mūrchanā system — as
+Wilson actually lattices it. Runner: `mur002.py`; receipts:
+`results/mur002.jsonl` (one line per (scale, rotation) row) +
+`results/mur002_summary.json`; transcription: `MUR002_TRANSCRIPTION.md`
+(derived data only, page-cited; the scan stays in place per the archive
+rule). Frozen verifiers imported READ-ONLY: triads scorer v1.1.0
+(`score`, `score_tempered`) and melodic v0.1.0 (`score_melodic`,
+`best_val_kendall_tau`). Stacks on MUR-001 (research/mur-001, PR #39).
+
+**What Wilson actually drew (read 2026-08-18, in place; pages of
+`~/Documents/scans by Kraig/2010_02_24/Hanson/LatticingRagaScales.pdf`,
+37 pp; read pp. 1–26).** NOT a 22-śruti lattice: the constant background
+is Figure 1, "Major-Minor Triadic Lattice for 53 (redrawn from 1942
+original)" — L. A. Hanson's 5-limit hexagonal lattice, rows = chains of
+fifths, adjacent rows a 5/4 apart, every hex carrying a note name
+(/ = +81/80, \ = −81/80 relative to the 5-limit spelling), an exact
+ratio 3^a·5^b, and its 53-EDO degree (schisma 32805/32768 and kleisma
+tempered). p.1 is the bare figure; pp. 2–19 plot eighteen numbered ragas
+as red dots (18 Nat Bhairav, 17 Madhubanti, 16 Jogiya Todi, 15 Bhairav,
+14 Anand Bhairav, 13 "No Name", 12 Lalit, 11 Todi, 10 Lalit₂, 9 Purvi,
+8 Marwa, 7 Bhairavi, 6 Asawari, 5 Kafi, 4 **Old Kafi**, 3 Khamaj,
+2 Bilawal, 1 Kalyan). **p.20 is the 22-śruti object**: "Outlined in red
+is the theoretical scale of 22 steps, of modern India … E.W. 1997" —
+22 hexes with śruti numbers 0–21, i.e. exact ratios 1/1, 256/243, 16/15,
+10/9, 9/8, 32/27, 6/5, 5/4, 81/64, 4/3, 27/20, 45/32, 729/512, 3/2,
+128/81, 8/5, 5/3, 27/16, 16/9, 9/5, 15/8, 243/128 — twelve on the
+Pythagorean row (3^−5..3^6), five on the 5-row (5·3^k, k = −2..2), five
+on the 1/5-row (3^k/5, k = −1..3); with Wilson's own margin note that
+135/128 vs 256/243, 405/256 vs 128/81, 1215/1024 vs 32/27 "and so forth"
+are schismatically equivalent. pp. 21–23: Boomsliter & Creel "extended
+reference patterns" (major: two fifth-chains a 5/4 apart; minor; and a
+"blue" pattern to "compare with independently derived ratios for Marwa,
+Purvi, Lalit₂, Todi, Lalit"). pp. 24–26 and 36–37: Hanson keyboard
+geometry (19-tone sets, tubulongs), not raga material. Wilson does NOT
+draw a madhyama-grāma anywhere in pp. 1–26; the ṣaḍja-grāma appears
+under his label "Old Kafi" (p.16): {1/1, 10/9, 32/27, 4/3, 3/2, 5/3,
+16/9} = the classical 4-3-2-4-4-3-2 śruti pattern read on the 22-śruti
+set. The madhyama-grāma used below is DERIVED (Pa lowered one śruti,
+3/2 → 40/27) and is labeled derived, not transcribed, in every receipt.
+Every raga has C = 1/1 as its dot (Sa); Wilson's raga placements use the
+5-limit spellings /C# 135/128, /G# 405/256, /D# 1215/1024, //A#
+3645/2048 rather than their Pythagorean schisma-twins — the p.20 note is
+about exactly this. A second 22 at the archive root, `BilawalDiamond22.jpg`,
+is K. Grady's (dated 20-10-23), not Wilson's; noted in the transcription,
+descriptive only.
+
+**Corpus (locked; every ratio exact `Fraction`, every scale contains
+1/1):**
+- S22 — the p.20 22-śruti set (śruti index = sorted rank).
+- SA — ṣaḍja-grāma = Wilson's Old Kafi (p.16); MA — madhyama-grāma,
+  derived (SA with 3/2 → 40/27).
+- R1..R18 — the eighteen raga scales as drawn (pp. 2–19), exact spellings
+  as placed on the lattice; plus for each, its "śruti-spelled" twin
+  (each tone snapped to the S22 tone of the same 53-degree) and its
+  53-EDO image (degree = 31·e3 + 17·e5 mod 53, the figure's own numbers,
+  cross-checked against the transcribed degrees).
+- All 7 rotations (mūrchanās) of every 7-tone scale; the 22 rotations of
+  S22 for the invariance rail only.
+
+**Constants (locked):** melodic defaults (dedup 0.01¢, gap/CS 0.5¢,
+propriety 1e-9¢); CS ε-sweep for H-R5: {0.5, 1.0, 1.5, 1.9, 2.0, 2.5,
+3.0, 5.0}¢; triad ε ∈ {2, 3, 5, 15}¢ tempered + the exact rational path
+(`score`), max_span default (2/1 exact, 1200¢ tempered); "within-tolerance"
+for the chain/EDO fit tests = 5¢ (and 2¢ reported); coarse step word:
+T iff step > 150¢ else s; m4_proto = (tonic-relative step word as exact
+ratios; interval-from-tonic set as exact ratios + cents; tonic-consonance
+count = number of tones forming exactly one of {3/2, 4/3, 5/4, 6/5, 5/3,
+8/5} with the tonic) — computed in the runner, NOT added to melodic.py;
+python3.12 stdlib only; deterministic; run twice, receipts bit-identical
+(sha256 recorded in the results entry).
+
+**Mode-blindness, stated up front.** M1–M3 are functions of the circular
+interval spectrum, hence rotation-invariant (MUR-001 H-MU0 rail); and the
+frozen anchored triad scorer is EXACTLY transposition-invariant by
+construction (each triad is anchored at its middle tone b, with a and c
+the unique pitch-class representatives in (b/2, b) and (b, 2b) — the
+loop over b covers the pitch-class set, so a transposed set yields the
+same multiset of ratio triples; max_span c/a is likewise relative).
+Every frozen number in this experiment is therefore mūrchanā-blind by
+theorem; the experiment measures AROUND that with m4_proto and says so.
+
+**Pre-registered hypotheses, predictions derived by hand from the
+ratios BEFORE any code:**
+
+- **H-R1 (grāma structure).** SA and MA are both STRICTLY PROPER and CS
+  (hand check: SA steps (10/9, 16/15, 9/8, 9/8, 10/9, 16/15, 9/8): 1-step
+  max 203.9 < 2-step min 294.1; 2-step max 407.8 < 3-step min 498.0;
+  3-step max 590.2 < 4-step min 609.8; MA steps (10/9, 16/15, 9/8, 10/9,
+  9/8, 16/15, 9/8): 2-step max 386.3, 3-step [498.0, 590.2]; strict at
+  every span pair). Both have exactly 3 gap classes (9/8 ×3, 10/9 ×2,
+  16/15 ×2 → M1 = 1.557 bits) — so M1–M3 CANNOT distinguish SA from MA
+  at all. Rail: all 7 mūrchanās of each grāma have identical M1–M3
+  triples (0 violations, else bug). m4_proto: all 7 rotations of each
+  grāma have DISTINCT tonic step words (both words are primitive).
+  Mūrchanā matches to Wilson's own diatonic thaats — exact ratio-set
+  matches predicted: Bilawal (p.18: 1, 9/8, 5/4, 4/3, 3/2, 27/16, 15/8)
+  = SA rotated to Ni (16/9); Khamaj (p.17) = SA rotated to Ma (4/3);
+  neither is a rotation of MA (MA's Ni-rotation is Ptolemy's 5/3 major,
+  1 tone off Bilawal; MA's Ma-rotation is 1 tone off Khamaj). Coarse
+  T/s words match but exact ratios differ by comma shifts for: Kafi
+  (Dorian word = SA at Sa; 2 tones differ: 9/8, 27/16 vs 10/9, 5/3),
+  Kalyan (SA at Ga; 2 tones), Asawari (SA at Pa; 2 tones), Bhairavi (SA
+  at Ri; 5 tones). Verdict: KEPT iff propriety/CS as stated for SA and
+  MA AND the two exact matches (Bilawal@Ni, Khamaj@Ma) hold; each
+  coarse-match/comma-count claim reported separately.
+- **H-R2 (22 as housing).** (a) S22 under the frozen scorers: NOT a MOS
+  (three gap classes 256/243 ×7, 81/80 ×10, 25/24 ×5); IMPROPER (two
+  adjacent limmas 90.2+90.2 = 180.4 > 3-step min 21.5+70.7+21.5 =
+  113.7); CS at ε = 0.5¢ (predicted YES — mechanism in H-R5); exact
+  P = S = 45 (fifths 19 + 4:5:6 ×9 + 3:4:5 ×9 + 8:9:10 ×8, and the set
+  is inversionally symmetric under x → 3/x, so S = P); tempered counts
+  at 2/3/5/15¢ reported (no prediction: schisma near-coincidences and
+  the informative-guard pull in opposite directions). (b) Chain tests:
+  S22 is NOT an exact single-generator chain (rank-1 3-gap sets satisfy
+  L = M + S; here 90.2 ≠ 70.7 + 21.5 by exactly the schisma), but its
+  53-EDO image IS the chain of 22 fifths, positions −10..+11 (predicted
+  set equality: {31k mod 53 : k = −10..11} == S22 degrees), and a
+  Pythagorean chain of 22 fifths at the same anchor matches S22 22/22
+  within 5¢ (max deviation 1 schisma = 1.95¢). Against BRIDGE-001's
+  22-tone hosts: best-offset match counts within 5¢ predicted ≤ 10/22
+  for 22-EDO and ≤ 10/22 for orwell-22 (⟨22,35,51,62⟩, 271.385¢ chain),
+  vs 22/22 for 53-EDO (within 2¢). So Wilson's 22 is a DIFFERENT object
+  from the orwell/22-EDO window: a fifth-chain window (rank-1 modulo the
+  schisma), i.e. the schismatic-temperament fold of a 5-limit block.
+  (c) Housing: all 18 ragas are subsets of S22 modulo 53 (18/18), but
+  only the 7 with no schismatic spelling (Bhairavi, Asawari, Kafi, Old
+  Kafi, Khamaj, Bilawal, Kalyan) are exact-JI subsets (7/18). Verdict:
+  KEPT iff (a) MOS-no/improper/CS-yes/exact 45=45, (b) the three chain
+  claims and both ≤ 10/22 bounds, (c) 18/18 and 7/18 all hold; clauses
+  reported separately.
+- **H-R3 (rotation-invariance of P on lattice subsets).** By the
+  transposition argument above, exact and tempered (P, S) are identical
+  across all 7 rotations of every raga and both grāmas, at every ε
+  (tempered path: float noise ≪ ε). Predicted violations: 0 — a rail
+  now, but a rail worth writing down because it means "supersets good
+  for rotating" carry NO harmonic cost under the frozen convention.
+- **H-R4 (grāma shift = comma perturbation, not rotation).** SA → MA is
+  the one-śruti (81/80) lowering of Pa; MA is NOT a rotation of SA (nor
+  of its inversion) — checked by word: (m s L L m s L) vs (m s L m L s L).
+  Frozen scorers: melodic triple UNCHANGED (both strictly proper, CS,
+  1.557 bits); exact triads MOVE UP: SA (P, S) = (11, 7) → MA (13, 9)
+  (hand count under the anchored convention: SA fifths 5 + 3:4:5 ×2 +
+  4:5:6 ×2 + 8:9:10 ×2 = 11; fourths 5 + 12:15:20 ×1 + 10:12:15 ×1 +
+  36:40:45 ×0 = 7; MA fifths 5 + 3 + 3 + 2 = 13; fourths 5 + 1 + 2 + 1
+  = 9); tempered 2¢ and 3¢ equal the exact counts (no near-coincidence
+  inside 3¢ in either scale). Relation to SHADOW-001: this is a comma
+  perturbation that INCREASES exact coincidences — opposite in sign to
+  H-S1's "immediate and permanent" loss — because 40/27 lands ON the
+  5-limit lattice adjacent to 10/9 and 5/3 (the sharing/connectivity
+  effect of H-S3, in a rank-2 5-limit setting rather than a CPS one).
+  Verdict: KEPT iff (11,7) → (13,9) exact and the melodic triple is
+  identical; partial outcomes reported.
+- **H-R5 (own sharper question — the schisma as a CS phase
+  transition).** Because S22's exact spelling separates every 53-degree
+  collision by exactly one schisma (32805/32768 = 1.9537¢), and no other
+  sub-2¢ coincidence exists in the set (row span ≤ 2 in e5, so only
+  single schismas occur), the frozen CS check on exact S22 gives
+  violations = 0 for ε_CS ∈ {0.5, 1.0, 1.5, 1.9} and > 0 for
+  ε_CS ∈ {2.0, 2.5, 3.0, 5.0}; the 53-EDO image of S22 is NOT CS at
+  0.5¢, with the fifth (3/2 at 13 steps vs the schismatic 16384/10935 at
+  12 steps, both degree 31) among the violating classes. Verdict: KEPT
+  iff all four sub-2¢ epsilons give 0, all four ≥ 2¢ give > 0, and the
+  53-image is non-CS with degree-31 in the violation list.
+
+**Registered descriptive lenses (no hypothesis):** per-raga melodic
+triple and P/S; class prediction recorded for the record only — strictly
+proper: Old Kafi, Bilawal, Khamaj, Kalyan; improper: the other 14
+(Pythagorean tritone for Kafi/Asawari/Bhairavi; a 32/27 or 92¢ step
+adjacent to a large step for the Bhairav/Todi/Purvi/Marwa/Lalit family);
+Wilson-spelling vs śruti-spelling vs 53-EDO (P, S) at every ε.
+
+**Order:** commit this entry → tests/test_mur002.py + mur002.py, lattice
+suite green BEFORE the first run → run twice, bit-identity → results
+entry (incl. the ≤15-line M4 proposal) → FINDINGS.md → PR (gate G-020
+lives in the ledger PR #37; proposed row in the PR body).
