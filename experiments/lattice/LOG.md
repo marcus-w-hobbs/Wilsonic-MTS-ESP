@@ -1577,3 +1577,143 @@ Wilson-spelling vs śruti-spelling vs 53-EDO (P, S) at every ε.
 suite green BEFORE the first run → run twice, bit-identity → results
 entry (incl. the ≤15-line M4 proposal) → FINDINGS.md → PR (gate G-020
 lives in the ledger PR #37; proposed row in the PR body).
+
+## 2026-08-18 — MUR-002 results + verdicts
+
+**Run:** mur002.py, python3.12, ~2 s; run twice, receipts **bit-identical**
+(sha256 `mur002.jsonl` 5aa6daf2…5d2a29, `mur002_summary.json`
+f081ac00…578584). 199 rows: S22 × 22 rotations + its 53-EDO image, SA and
+MA × 7 mūrchanās, 18 ragas × (7 rotations as drawn + śruti-spelled +
+53-EDO image). Frozen scorer v1.1.0 (exact `score` + tempered at
+ε ∈ {2, 3, 5, 15}¢) and melodic v0.1.0 read-only; freeze checks OK before
+AND after (scorer pin 1a840af9…9b592, melodic pin a16f162b…7535). Corpus
+transcription with page citations: `MUR002_TRANSCRIPTION.md`; the scan
+was read in place (pp. 1–26), nothing copied.
+
+**H-R1 — KEPT.** ṣaḍja-grāma (Wilson's "Old Kafi", p.16) and the derived
+madhyama-grāma are both STRICTLY PROPER (0 violations, 0 equalities) and
+CS (0 violations), each with 3 gap classes (9/8 ×3, 10/9 ×2, 16/15 ×2;
+M1 = 1.5567 bits), best val ⟨7, 11, 15⟩ at τ = 0 with 2 tie pairs — the
+frozen melodic triple is IDENTICAL for SA and MA, as predicted. Rail:
+melodic triple identical across all 7 mūrchanās of each grāma (0
+violations). m4_proto separates what M1–M3 cannot: 7/7 distinct tonic
+step words per grāma; tonic-consonance counts across SA's mūrchanās
+3, 3, 1, 4, 1, 3, 3 (Sa, Ri, Ga, Ma, Pa, Dha, Ni), MA's 2, 4, 2, 4, 3, 3, 4.
+Thaat lookup, exactly as predicted: **Bilawal (p.18) = SA rotated to Ni
+(k = 6), Khamaj (p.17) = SA rotated to Ma (k = 3), both exact ratio-set
+matches; neither is a rotation of MA** (MA@6 is Ptolemy's 5/3 major,
+one tone off Bilawal; MA@3 one tone off Khamaj). Coarse T/s words match a
+SA mūrchanā with comma-shifted tones for Kafi (SA@0, 2 tones: 9/8, 27/16
+vs 10/9, 5/3), Kalyan (SA@2, 2 tones), Asawari (SA@4, 2 tones), Bhairavi
+(SA@1, 5 tones) — the modern thaats sit closer to the ṣaḍja-grāma than
+to the madhyama-grāma (post-hoc, labeled: MA's nearest rotations differ
+by 1, 1, 1, 3, 4, 5 tones for Bilawal, Khamaj, Kalyan, Kafi, Asawari,
+Bhairavi). MA's Ri-mūrchanā {1, 16/15, 6/5, 4/3, 3/2, 8/5, 9/5} is the
+5-limit Phrygian — the "just" Bhairavi Wilson did NOT draw (his Bhairavi
+is the Pythagorean chain).
+
+**H-R2 — REFUTED as stated on one number, KEPT on every structural
+clause.** (a) S22: 3 gap classes (81/80 ×10, 25/24 ×5, 256/243 ×7 —
+21.51 / 70.67 / 90.23¢; NOT a MOS), IMPROPER (10 violating span pairs),
+CS at 0.5¢ (0 violations), best val ⟨22, 35, 51⟩ at τ = 0 (the
+orwell/22-EDO patent val orders it perfectly), exact **P = S = 48**, not
+the predicted 45: the hand count omitted the fifth primitive 5-limit
+arithmetic progression with c/a ≤ 2, **18:25:32** (a, 25a/18, 16a/9),
+which S22 realizes 3× (e.g. 6/5 : 5/3 : 32/15), plus its harmonic-mean
+twin 225:288:400 3× — the enumeration in the receipt lists exactly
+2:3:4 ×19, 3:4:5 ×9, 4:5:6 ×9, 8:9:10 ×8, 18:25:32 ×3 (and mirrors).
+Tempered (P, S): 70/70 at 2¢, 79/79 at 3¢, 88/88 at 5¢, 218/218 at 15¢
+(G = 110/110/98/90); its 53-EDO image scores 59/88/98/220 — the
+schisma-twins that the exact set separates recombine into
+near-coincidences at 2¢ from the other side. (b) All chain claims KEPT:
+S22 is not an exact rank-1 chain (three-gap defect L − M − S = −1.9537¢
+= exactly one schisma), its 53-degrees are exactly {31k mod 53 :
+k = −10..11}, and the Pythagorean chain of 22 fifths anchored at −10
+matches it 22/22 within 2¢ WITHOUT any offset (max deviation 1.9537¢).
+Against BRIDGE-001's hosts: best-offset matches within 5¢ — 22-EDO 5/22
+(2/22 at 2¢), orwell-22 10/22 (6/22 at 2¢; at the registered ≤ 10 bound),
+53-EDO 22/22 (also at 2¢). Wilson's 22 is a fifth-chain window
+(schismatic fold of a 5-limit block), a different object from the orwell
+window. (c) Housing KEPT: all 18 ragas ⊆ S22 modulo 53 (18/18); exactly
+the 7 without schismatic spellings are exact-JI subsets (7/18: Bhairavi,
+Asawari, Kafi, Old Kafi, Khamaj, Bilawal, Kalyan).
+
+**H-R3 — KEPT, 0 violations on 21 scales** (S22's 22 rotations, SA, MA and
+the 18 ragas × 7): exact and tempered (P, S, G) identical across every
+rotation at every ε. As argued in the pre-registration this is a theorem
+of the anchored convention; on the record now for lattice subsets, not
+just chain windows (MUR-001): under the frozen scorers a mūrchanā costs
+nothing harmonically and changes nothing melodically — everything the
+grāma system cares about lives outside M1–M3 and P.
+
+**H-R4 — REFUTED as stated on one number, direction and mechanism KEPT.**
+MA is not a rotation of SA nor of its inversion (the SAME coarse word
+TsTTTsT, different exact words (m s L L m s L) vs (m s L m L s L)); the
+melodic triple is identical (predicted); exact triads SA (11, 7) →
+MA **(13, 10)** — predicted (13, 9); the hand count missed the 12:15:20
+at 16/9 : 10/9 : 40/27 (I wrote "80/27 ✗" — 80/27 octave-reduces to
+40/27, which MA contains). Both P and S rise; tempered 2/3/5¢ equal the
+exact counts on both scales (no sub-5¢ near-coincidence), and at 15¢ SA
+= (13, 11), MA = (13, 12). Reading (as pre-registered): the one-śruti
+comma shift is a comma perturbation that GAINS exact coincidences —
+opposite in sign to SHADOW-001 H-S1 — because 40/27 lands on lattice
+edges (fifth to 10/9, fourth to 5/3, 5/4 above 32/27), the H-S3
+connectivity effect in a rank-2 5-limit setting. The grāma system is a
+historical instance of "comma perturbation of a lattice subset", and the
+frozen harmonic axis registers it (+2 P, +3 S) while the melodic axis is
+blind to it.
+
+**H-R5 — KEPT, sharp.** CS violations of exact S22 by ε_CS: 0.5 → 0,
+1.0 → 0, 1.5 → 0, 1.9 → 0, **2.0 → 30**, 2.5 → 30, 3.0 → 30, 5.0 → 30 —
+a step function at the schisma (1.9537¢), constant on both sides. The
+53-EDO image is not CS at 0.5¢ (30 violations, the same 30 classes),
+and the fifth (degree 31, 701.9¢) is among them at 12 AND 13 steps
+(3/2 vs the schismatic 16384/10935), as predicted. Post-hoc, labeled: the
+same phase transition governs the ragas — at 0.5¢ the ragas as DRAWN
+are CS 7/18, the śruti-spelled twins 16/18, and the 53-EDO images 7/18;
+so 9 ragas are CS in exact JI only by the schisma, and every raga's CS
+status is a spelling-thin property of the same kind as S22's.
+
+**Descriptive lenses (registered, no hypothesis).** Propriety histogram
+exactly the registered class prediction: strictly proper 4 (Old Kafi,
+Bilawal, Khamaj, Kalyan), improper 14 (Kafi/Asawari/Bhairavi by the
+Pythagorean tritone; the Bhairav–Todi–Purvi–Marwa–Lalit family by an
+augmented second or 92¢ step). Exact (P, S) as drawn: Old Kafi = Bilawal
+= Khamaj = (11, 7) (they are one scale up to mūrchanā), Kalyan (10, 13),
+Anand Bhairav (9, 9), Nat Bhairav and Madhubanti (9, 6), Marwa (7, 10),
+Lalit₂ and Purvi (7, 7), Kafi/Asawari/Bhairavi/Bhairav (6, 6), Lalit,
+No Name, Todi (5, 5), Jogiya Todi (4, 4). Post-hoc, labeled: **Wilson's
+schismatic spellings never lose and six times gain exact triads over the
+śruti spelling** (Lalit 5 → 4, Lalit₂ 7 → 6, Marwa (7, 10) → (6, 9), No
+Name 5 → 4, Purvi 7 → 6, Todi 5 → 4; 12 ragas tie, 0 lose) — /C#
+135/128 makes an exact 3/2 with /F# 45/32 and 4:5:6 with 405/256, which
+256/243 cannot; the "Major-Minor Triadic Lattice" placement is
+triad-optimal on the exact path, by machine check.
+
+**M4 proposal (≤ 15 lines, INPUT to a future decision; not implemented).**
+M4 = tonic-anchored melodic score of a scale S given a tonic t ∈ S:
+inputs: the interval-from-tonic set I(S,t) = {s/t reduced}, the tonic
+step word w(S,t), a consonance set C (default the 5-limit {3/2, 4/3, 5/4,
+6/5, 5/3, 8/5}, later prime-limit-parametrized) and a tolerance ε.
+Compute (i) tonic anchoring A = |I ∩ C|/|I−{1}| (fraction of tones in
+exact/ε-consonance with the tonic — SA 3/6, Khamaj 4/6, the Lydian
+mūrchanā 1/6 in this run); (ii) tonic frame F = 1 if 3/2 ∈ I else 0.5 if
+4/3 ∈ I else 0 (the Sa–Pa / Sa–Ma frame; MA scores 0.5, SA 1); (iii)
+word primitivity/rotation class of w (which mūrchanā of which grāma the
+scale IS: MUR-002 shows Bilawal and Khamaj are SA@6, SA@3 exactly);
+(iv) comma distance to the nearest grāma mūrchanā (tones differing, as
+computed here: Kafi 2, Kalyan 2, Asawari 2, Bhairavi 5). Formula
+candidate: M4 = A · (1 + F)/2, tie-broken by (iv). What it ranks
+differently from M1–M3: the seven mūrchanās of one grāma (identical
+M1–M3, P) get seven M4 values; SA vs MA (identical M1–M3) separate by F;
+Wilson's Pythagorean Bhairavi (A = 2/6, F = 1) vs MA's just Phrygian
+(A = 4/6, F = 1) separate by A. Validation gate: a blind ear check on
+mūrchanā pairs of one grāma, like G-006 — the only test that can say
+whether tonic-anchoring is what the ear ranks.
+
+**Kept.** mur002.py exactly as committed before the first run; receipts
+`results/mur002.jsonl` + `results/mur002_summary.json`;
+`MUR002_TRANSCRIPTION.md`. Lattice suite 145/145 OK (21 new mur002 tests),
+triads suite unchanged; freeze checks OK before AND after. Findings
+promoted to FINDINGS.md; gate G-020 (ledger PR #37) — proposed row in
+the PR body.
