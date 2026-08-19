@@ -1192,3 +1192,135 @@ pre-registered field.
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
+
+## 2026-08-18 — SUBSET-MEL-000 pre-registration (entry BEFORE any run)
+
+**What this is.** A `-000`: a machine CENSUS of the 72 structurally embedded
+CPS subsets of a handful of eikosanies, producing ranked tables (several
+orderings, deliberately not one score) for Marcus to react to in the still-
+pending SUBSET-MEL-001 brainstorm (gate G-013). It claims NO aggregator.
+Doctrine on record it serves (G-012): "we usually don't play the eikosany, we
+play its subsets — dekanies, hexanies are the melodic sweet spots";
+melody ≈ low gap_classes/N ∧ propriety; CS is a first-class axis;
+improper-but-valid spice must never be zeroed out. Ledger: gate **G-022**
+(consolidated in PR #37; GATES.md not edited by this session).
+
+**Primary sources this censuses by machine** (archive/INDEX.md paths, cite
+don't vendor): `1-3-5-7-9-11dekanyCS.jpg` (Wilson's matrix of the twelve
+2)5/3)5 dekanies of {1,3,5,7,9,11} on one shared degree grid — exactly the
+12 dekanies enumerated here for the classic seed);
+`2010_02_24B/CPS B/Eikosany.pdf` p.1 (1967: "members of 3·5·7·11 hexany
+alternate or complementary set" — embedded-hexany addressing);
+`dekany_14_tone_constant_structure/` (Kraig→Marcus: the 1-3-7-9-15 dekany
+is NOT CS by itself and needs 4 added tones) and the Scala archive entry
+`Wilson-Grady_1-3-5-7-9 doubledekany` ("constant structure scale of the 2)5
+and 3)5 1-3-5-7-9 dekanies", 14 tones — so the bare 1-3-5-7-9 dekany is
+not CS either); `2010_02_24/CPS/DAlessandroFull.pdf` p.3 (the 2⁶ power set
+by Pascal level — the subset family in one picture). Notation: canonical
+CPS(n,k) = n choose k; Erv's "k)n" is the reverse — translated, not corrected.
+
+**Corpus (deterministic).** Seed eikosanies CPS(6,3): (1) classic
+{1,3,5,7,9,11}; (2) flagship {1,7,9,11,15,29} (CS-EIK-001, first strictly
+proper eikosany); (3–5) the top three CS winners by `cs_margin_cents`
+descending in `results/cseik001.jsonl`, EXCLUDING the flagship, ties broken
+by ascending seed tuple: {13,17,21,23,25,27} (9.22¢, G-012 max-margin),
+{1,3,13,21,23,25} (3.01¢), {1,3,11,13,25,27} (2.77¢). Five seeds × 72
+subsets = 360 rows. All five are true 20-tone eikosanies (no product
+collisions), asserted at run time.
+
+**The 72 subsets per seed** (index-structural, from the Johnson graph J(6,3)):
+6 dekanies "fix one factor IN" (3-products containing x; 10 tones = x·CPS(5,2)
+of S∖{x}); 6 dekanies "fix one factor OUT" (3-products avoiding x; 10 tones =
+CPS(5,3) of S∖{x}); 30 hexanies "x in, y out" (6 tones = x·CPS(4,2) of
+S∖{x,y}); 15 harmonic tetrads "x,y in" (4 tones = xy·(S∖{x,y})); 15
+subharmonic tetrads "x,y out" (4 tones = 3-products of S∖{x,y}).
+6+6+30+15+15 = 72 — pinned in tests. Johnson-graph adjacency = shared-tone
+counts between all subset pairs (exact tone identity), recorded so
+modulation paths are recoverable; the algebra says IN(x)∩OUT(x) = ∅,
+IN(x)∩IN(y) = tetrad_in(x,y), IN(x)∩OUT(y) = hexany(x in, y out) — pinned
+in tests, and the whole 72×72 matrix is seed-independent for collision-free
+seeds (stored once, checked identical per seed).
+
+**Per-subset measurements.** Frozen melodic v0.1.0 (M1 gap classes,
+gap_classes/N, entropy; M2 CS at 0.5¢; M3 propriety class + violations),
+exact-rational CS (cseik001.cs_check, read-only import) + CS margin, step
+word (gaps labelled a<b<c… by 0.5¢ cluster class), frozen triad scorer
+v1.1.0: exact path (P,S,G) and tempered path at ε ∈ {2, 3}¢ with G-002
+balance buckets (triads/search.balance_bucket), triad survival ratio =
+tempered P / exact P (and S/S) — "the subset's own theoretical count" is its
+exact-rational count.
+
+**Orderings reported per seed (dekanies and hexanies separately), none of
+them "the score":**
+- melodic-first: (gap_classes/N ↑, propriety rank ↑ [strict < proper <
+  improper], M3 violations ↑, exact CS violations ↑, name);
+- harmonic-first: (P+S at 3¢ ↓, exact P+S ↓, P at 3¢ ↓, name);
+- CS-first: (exact CS violations ↑, gap_classes/N ↑, propriety rank ↑,
+  M3 violations ↑, name).
+Spice list = improper subsets whose harmonic-first rank within (seed, type)
+is in the top third — listed explicitly so they are not lost.
+`.scl` exports (results/scl/subsetmel000/, to_scala convention: lowest
+canonical tone = 1/1, provenance names the parent eikosany, the subset, and
+the standalone CPS recreation in Wilsonic): per seed, the top dekany under
+each of the three orderings (deduplicated) and the top two distinct
+hexanies under melodic-first — for Marcus's ear check.
+
+**Pre-registered hypotheses and predictions:**
+
+- **H-SM1 (dekany IN/OUT asymmetry) — I predict EXACT SYMMETRY, derived.**
+  fix-IN(x) = x·CPS(5,2)(T) and fix-OUT(x) = CPS(5,3)(T) = Π(T)/CPS(5,2)(T)
+  with T = S∖{x}, so the two dekanies of the same x are an exact inversion
+  pair (checked symbolically for one case before this entry; no scoring
+  run). Inversion preserves the interval spectrum at every span ⇒ identical
+  M1/M2/M3 and exact CS/margin, step word reversed; the anchored scorer
+  swaps P↔S exactly (P+S equal). Same for the tetrads: tetrad_in(x,y) and
+  tetrad_out(x,y) are inversions (harmonic vs subharmonic). The 30 hexanies
+  are 15 transposition pairs (x·H vs y·H) ⇒ identical on every axis
+  including P=S. So the real between-dekany variation is WHICH factor is
+  dropped: 12 dekanies collapse to 6 melodic classes. Sub-prediction
+  (composite-9 fingerprint, LAT-MEL-001): for the classic seed the three
+  dekany classes that keep {1,3,9} intact (drop 5, 7, or 11) have MORE exact
+  CS violations than the three that break the 3² = 1·9 relation (drop 1, 3,
+  or 9). Any measured asymmetry within an IN/OUT pair is a bug or a
+  canonicalization artifact, not a finding.
+- **H-SM2 (hexany CS rail).** Classic seed: exactly 26/30 hexanies CS
+  (13/15 classes); the 4 failures are the two transpositions each of the
+  {1,3,5,9} and {1,3,7,9} hexanies (LAT-MEL-001 receipts: the only
+  composite-9 failures inside this seed) — i.e. hexany(7 in, 11 out),
+  hexany(11 in, 7 out), hexany(5 in, 11 out), hexany(11 in, 5 out).
+  Flagship: 30/30 CS — no pair-product or seed-ratio coincidence up to
+  powers of 2 exists among {1,7,9,11,15,29} (checked by hand: 3 ∉ S so
+  1·9 = 3² cannot fire), so no exact intra-hexany interval duplication.
+  Predict 30/30 for {13,17,21,23,25,27} as well; the two {1,3,…} winners
+  contain 1 and 3 but not 9, so predict 30/30 there too. Family rail:
+  ≥ 26/30 on every seed.
+- **H-SM3 (subset vs whole).** Flagship (strictly proper at N=20): NOT all
+  12 dekanies strictly proper — strict propriety of the 20-tone does not
+  descend to 10-tone subsets (subset spans mix parent spans); predict 2–4
+  of the 6 dekany classes non-improper (4–8 of 12). Classic (improper at
+  N=20): predict 0–2 of 6 classes non-improper (0–4 of 12), and the
+  primary-source rail: the drop-11 dekany (= the 1-3-5-7-9 dekany, 2)5 and
+  3)5) is NOT exact-CS (Wilson–Grady needed 14 tones to make it CS).
+- **H-SM4 (harmonic rails).** (a) survival ≥ 1.0 for every subset at both
+  ε (tempered ≥ exact for JI); (b) hexany survival EXACTLY 1.0 at 2¢ for
+  all 30 hexanies of the classic and the flagship (no overshoot; SHADOW-001
+  never saw a hexany overshoot), overshoot allowed only in the wide-seed
+  winners; (c) tetrads: two-in tetrads have P ≥ S (harmonic series segment
+  ⇒ arithmetic means), two-out have S ≥ P with the counts exactly swapped
+  (inversion); (d) dekanies: exact P ≠ S for a majority of the 12 (CPS(5,2)
+  is not self-inverse), classic mean exact P+S per dekany in [15, 35]
+  (against eikosany 57+57).
+- **H-SM5 (rankings disagree).** Spearman ρ (average ranks; scipy-free,
+  moslat001.ranks read-only) between the melodic-first order and the
+  harmonic-first order over a seed's 12 dekanies is < 0.5 for the classic
+  AND the flagship; pooled over all 60 dekanies also < 0.5; classic 30
+  hexanies < 0.5. This is the fact the SUBSET-MEL-001 aggregator must live
+  with. (n is small — the sign and magnitude are reported, not a p-value.)
+
+**Determinism:** python3.12 stdlib only, no randomness; runner
+`subsetmel000.py`; tests `tests/test_subsetmel000.py` written and green
+BEFORE the first run; receipts `results/subsetmel000.jsonl` (360 rows) +
+`results/subsetmel000_summary.json` (orderings, verdict numbers, adjacency
+matrix once) + `results/scl/subsetmel000/*.scl`. Both frozen pins verified
+before and after (scorer 1a840af9…9b592, melodic a16f162b…7535). Anything
+computed after this entry that is not listed here is labelled POST-HOC.
