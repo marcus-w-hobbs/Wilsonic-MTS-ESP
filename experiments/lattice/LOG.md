@@ -1192,3 +1192,185 @@ pre-registered field.
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
+
+## 2026-08-18 — BRIDGE-001b pre-registration (entry BEFORE any run)
+
+**Contract:** the three named BRIDGE-001 follow-ups (LOG 2026-07-29 results:
+"sweep k₂ instead of argmin", "tone-set minimax … the obvious future tuning
+lens", and SPEC §BRIDGE-001 design decision 2's "two-gap-ness becomes an
+OBJECTIVE, not an assumption"). Same object as BRIDGE-001 in every other
+respect: EG4 = tesseract on {1,3,5,7} (16 formal vertices, 8 distinct tones
+= divisors of 105), hexany CPS(4,2) + both tetranies as embedded subsets,
+hosts = rank-2 temperaments at N ∈ 7..22 (vals = patent ± 1 per odd
+coordinate), the 63-comma enumeration, Marcus's monotonicity filter FIRST,
+strict MOS-window containment with the MOS-LAT-001 anchor sweep, frozen
+triads v1.1.0 `score_tempered` (ε = 2¢, max_span 1200¢) for survival, frozen
+melodic v0.1.0 for the host window. Runner `bridge001b.py` IMPORTS
+`bridge001.py`'s enumeration, val/comma/nullspace/HNF machinery,
+monotonicity filter, host/anchor receipt and scoring conventions read-only
+(no re-derivation); receipts `results/bridge001b.jsonl` +
+`results/bridge001b_summary.json`; `bridge001.jsonl` is NOT rewritten.
+Note: SPEC's other BRIDGE-001b clause (filler-set enumeration on the
+generator chain — "CPS image indices + filler set") is NOT run here; it is
+a separate design and is deferred to BRIDGE-001c so this run stays a clean
+three-filter variant of BRIDGE-001. Both frozen pins verified before
+writing this entry (scorer 1a840af9…9b592, melodic a16f162b…7535).
+
+**Rail (must reproduce BRIDGE-001 bit-for-bit before anything else):** with
+k₂ = argmin (bridge001.choose_completion) and prime minimax
+(bridge001.minimax_generator), the rows tagged `rail` must yield exactly
+BRIDGE-001's contained Pareto front (`results/bridge001_summary.json`):
+orwell-22 ⟨22,35,51,62⟩ g = 271.3854¢, max tone err 2.727139¢, hexany P =
+2; miracle ⟨19,31,43,53⟩ / ⟨20,32,46,56⟩ / ⟨21,33,49,59⟩ g = 116.5878¢,
+max tone err 6.857995¢, hexany P = 3 — same numbers to the printed 6
+decimals, same k₂, same mapping, same aliases; also mothra 5.678¢ and
+meantone 7.672¢ as dominated contained rows. The summary carries a
+`rail_reproduced` boolean computed by direct comparison against the
+BRIDGE-001 summary file (front rows: N, val, k2, mapping, generator_cents,
+max_error_cents, collision_count, hexany_image_P,
+posthoc_hexany_full_recovery_eps).
+
+**H-B3 — k₂ sweep (completion is a design axis, not an argmin).** For every
+monotone (comma c, val v, N) pair, EVERY primitive kernel-box monzo k₂
+independent of c is admitted; rows are deduped by (mapping M = HNF of the
+saturated left-kernel of [c,k₂], N, v), with `comma_aliases` = every
+enumerated comma in ker M and `k2_witnesses` = every k₂ producing M for
+that (c,v). Scale probe (counts only, no scoring, run 2026-08-18 to size
+the sweep): 1615 monotone (c,v) pairs, **33,711 distinct (M, N, v) rows**
+(mean 124 temperaments per val, max 921), 1.6 s to enumerate — so NO
+pruning is applied; the row count is itself a prediction (reproduce
+33,711). Predictions, tuning = prime minimax (BRIDGE-001's), front =
+non-dominated contained rows in (hexany image P at ε=2 ↑, collision count ↓,
+max tone error ↓), dedup by (M, N, v):
+- Named mid-accuracy temperaments the argmin skipped now APPEAR as scored
+  rows: **magic** (225/224 ∩ 245/243, ⟨1 0 2 −1],⟨0 5 1 12]) at N = 19
+  (patent ⟨19,30,44,53⟩, anchor interval [0,0] — chain span exactly 19) and
+  N = 22 (patent, anchor ∈ [−3,0]), CONTAINED, prime minimax 5.15¢, max
+  tone error ≈ 9.0¢ (on 21/16: e3 + e7 = 3.87 + 5.15), hexany P ≤ 1;
+  **garibaldi** (32805/32768 ∩ 5120/5103) at N = 12 (patent) and N = 17
+  (⟨17,27,39,47⟩, a7 = patent −1), both UNCONTAINED (EG4 chain span 24: 7
+  needs 14 fifths, 35/32 needs 22 — no N ≤ 22 window holds it), so
+  garibaldi cannot enter the contained front at any tuning; also expected
+  as contained-but-dominated: pajara-22 (period 600¢, span 6, tone err ≈
+  18¢ on 21/16), superpyth-17/22, porcupine-15/22, keemun-19, negri-19,
+  lemba-16, godzilla-19 — all with max tone error > 9¢.
+- **The prime-minimax contained front is UNCHANGED**: exactly BRIDGE-001's
+  four rows (orwell-22 P=2 2.727¢; miracle 19/20/21 P=3 6.858¢). Reason: per
+  (c,v) the sweep only adds temperaments LESS accurate than the argmin one,
+  and entering the front needs P ≥ 4, or P = 3 with tone error < 6.858¢, or
+  tone error < 2.727¢ — none of the named entrants qualifies (magic P ≤ 1).
+  **P-COMMA family call holds: 225/224 owns every non-dominated contained
+  row.** Falsifier: any front row whose aliases exclude 225/224 — predicted
+  none; if one exists it is named in the results entry.
+- Max hexany P at ε=2 over ALL contained rows stays 3 (miracle) under prime
+  minimax.
+
+**H-B4 — tone-set minimax (tune to the 8 EG4 images, not the 3 primes).**
+Second tuning per (M, N, v): pure octaves, period exactly 1200/x, G = the
+exact piecewise-linear minimax of max over the 8 distinct EG4 tone monzos
+(octave-reduced; 1/1 contributes the zero line) of |T(t) − cents(t)|, same
+crossing solver as bridge001.minimax_generator generalized to an arbitrary
+monzo list, tie → smaller G. Both tunings are measured on every row (both
+sets of per-tone errors, score_tempered, subsets, host step classes, ε
+regimes, hexany full-recovery ε). Hand-derived predictions (pins, written
+before the solver exists; the linear-in-δ error model, δ = G − G_prime):
+- **miracle**: prime-minimax errors e3 = e5 = −2.428, e7 = −2.002 (sign-
+  coherent) give e21 = −4.430, e105 = −6.858; the tone-set optimum
+  balances e21 (slope +4) against e105 (slope −3) at δ = −0.347¢ →
+  **max tone error 5.82¢** (e21 = e105 = −5.82; e3 = e15 = −4.51, e5 =
+  0.00, e7 = e35 = −1.31). NOT below 4¢ — the orchestrator's guess is
+  refuted by derivation: 3/2 (slope +6) and 105/64 (slope −3) pull
+  opposite ways and 21/16 caps the gain. Drop 6.858 → 5.82 (−1.04¢).
+- **orwell-22**: mixed-sign e3 = −2.257, e5 = −0.470, e7 = +2.257 give
+  e15 = −2.727 (slope +4) vs e7 (slope +8): δ = +0.039¢ → **max tone
+  error 2.570¢** (Δ = −0.157¢, "within 0.3¢" as the orchestrator guessed);
+  e3 = −1.983, e5 = −0.588, e7 = +2.570, e21 = +0.588, e35 = +1.983,
+  e105 = 0.000.
+- Other named contained rows: meantone-17/19 7.672 → 4.81¢; magic-22
+  9.02 → 5.36¢; mothra-21 5.678 → 5.48¢. So under tone-set tuning the
+  ERROR ranking of named contained hosts becomes orwell 2.57 < meantone
+  4.81 < magic 5.36 < mothra 5.48 < miracle 5.82 — miracle falls from
+  second to last. Whether the FRONT flips is decided by hexany P (below).
+- **Hexany survival under retune (H-B2 strict revival test).** The frozen
+  scorer's tempered test is translation-invariant (middle vs mean of the
+  outer tones), so survival tracks INTERVAL errors inside the hexany, not
+  absolute tone errors vs 1/1. Hand-checked triads (base (6,6): 5:6:7,
+  30:35:40, 28:35:42, 21:28:35, and the two octave-spanned 5:15/2:10 and
+  7:21/2:14 whose deviation is exactly −e3):
+  · miracle prime: e3 = −2.43 fails the two e3-triads and 21:28:35 at 2¢
+    (dev ≈ 2.43) → P = 3, recovers at ε = 3 ✓ (matches BRIDGE-001);
+    miracle tone-set: e3 = −4.51, 6/5 = −4.51, 7/6 = −3.20 → only 30:35:40
+    survives → **P = 1, full (6,6) recovery moves 3 → 5¢**. H-B2 is NOT
+    revived by the retune; the deficit widens.
+  · orwell prime: e3 = −2.257 fails both e3-triads → P = 2 ✓ (matches);
+    orwell tone-set: e3 = −1.983 → both e3-triads pass with 0.017¢ margin
+    → **P = 4** (5:6:7 at 3.24¢ and 30:35:40 at −3.4¢ still fail); full
+    recovery stays at ε = 4. (Margin caveat: 1.983 vs 2.000 — a float
+    surprise here would give P = 2, and is recorded as such.)
+  · magic-22 tone-set: 5/3 = −8.2, 7/5 = +7.9 → P = 1; meantone tone-set
+    P = 0; mothra tone-set P ≤ 1.
+- **Predicted tone-set contained front: orwell-22 ALONE** (P = 4, 2.570¢,
+  0 collisions) — miracle (P = 1, 5.82¢) becomes DOMINATED by orwell and
+  drops off; no contained row reaches P ≥ 5 or error < 2.570¢. Verdict
+  criteria: "flip" = any change in front membership or order vs the prime
+  front — predicted YES (miracle exits), by domination, not by re-ranking.
+- **Both outcomes' meaning for H-B2, pre-registered:** if ANY contained
+  injective row reaches full hexany (6,6) at ε = 2¢ under the tone-set
+  tuning, H-B2 is REVIVED under the strict reading — the 2¢ bridge exists
+  and BRIDGE-001's refutation was an artifact of the pre-registered tuning
+  choice (report the row, and it becomes the flagship). If none does
+  (predicted), BRIDGE-001's refutation is ROBUST to the tuning objective:
+  the one-cent gap is structural at N ≤ 22, and absolute-error tuning is
+  the wrong lens for survival (H-B6).
+
+**H-B5 — two-gap-ness as an objective column.** For every CONTAINED row and
+BOTH tunings, the anchored N-note host window (host_receipt's `notes`:
+npp generator steps from the used anchor × x periods) is scored with the
+frozen melodic.py (score_melodic: gap_class_count at ε_gap 0.5¢, is_cs at
+ε_CS 0.5¢, propriety classification); `gap_classes` is a COLUMN in the
+front, never a filter. Predictions:
+- Front rows: orwell-22 → 2 gap classes (22 is an orwell MOS: L 72.0¢ ×9,
+  s 42.5¢ ×13, L/s 1.70 → STRICTLY PROPER, CS); miracle-21 (blackjack) →
+  2 classes (L 82.5¢ ×10, s 34.1¢ ×11, L/s 2.42 → IMPROPER, CS);
+  miracle-19 and -20 → 3 classes (34.1, 82.5, 116.6¢), improper. So of
+  the prime front's four rows exactly two are true 2-step MOS, and the
+  only strictly-proper bridge host is orwell-22.
+- No 3-step contained candidate strictly beats the best 2-step one on
+  hexany P at ε = 2 (prime: 3-step max = 3 = miracle-19/20 ties
+  blackjack; tone-set: 2-step orwell-22 holds P = 4 and no 3-step row
+  exceeds it). Reported either way as the (gap_classes × P) table.
+- Descriptive (no verdict): distribution of gap classes over all contained
+  rows, and the joint (2-step ∧ proper ∧ P ≥ 2) count.
+
+**H-B6 (own, sharper question): the absolute-error and survival objectives
+are NOT aligned.** For the BRIDGE-001 front rows, `hexany_interval_maxerr`
+(max |error| over the 15 pairwise hexany-image intervals, translation-
+invariant) is the quantity survival tracks: miracle prime 2.86¢ → tone-set
+4.51¢ (worse: recovery 3 → 5); orwell prime 4.51¢ → tone-set 4.55¢
+(unchanged: recovery 4 → 4, but P 2 → 4 because e3 crosses under the 2¢
+threshold). Prediction: over ALL contained rows, the tone-set retune lowers
+max tone error in every row (by construction, ≤ prime value) but does NOT
+raise the contained-set maximum hexany P at ε = 2 above 4, and lowers P on
+at least one BRIDGE-001 front row (miracle: 3 → 1). Kept iff both halves
+hold. Consequence if kept: a survival-aware tuning (interval-minimax over
+the hexany image, or a direct triad-deviation minimax) is the right next
+lens — NOT run here (not pre-registered), named for BRIDGE-001c.
+
+**Constants (locked):** N ∈ 7..22; vals patent ± 1; commas =
+bridge001.enumerate_commas() (63); kernel box |e3| ≤ 8, |e5| ≤ 5, |e7| ≤ 4;
+ε_tempered = 2.0¢; recovery/regime sweep ε ∈ 1..15; melodic ε_dedup 0.01¢,
+ε_gap 0.5¢, ε_CS 0.5¢, ε_prop 1e-9¢ (melodic.py defaults); dominance =
+(P ↑, collisions ↓, max tone error ↓); FLOAT_EPS 1e-6 for host step
+classes (bridge001's). Names for temperaments are labels only, resolved
+from comma pairs at load (miracle 225/224∩1029/1024, orwell ∩1728/1715,
+magic ∩245/243, garibaldi 32805/32768∩5120/5103, meantone 81/80∩126/125,
+mothra 81/80∩1029/1024, pajara 50/49∩64/63, …); an unnamed mapping is
+reported by its HNF.
+
+**Determinism:** python3.12 stdlib only, no randomness, sorted iteration
+everywhere; run twice, receipts must be byte-identical (sha256 recorded in
+the results entry). Tests `tests/test_bridge001b.py` green BEFORE the first
+run (tone-set solver pins for miracle 5.82¢/δ −0.347 and orwell 2.570¢/δ
++0.039 at 2 decimals; sweep dedup; melodic host scoring on a known MOS;
+rail equality on the miracle/orwell rows; label resolution). Frozen files
+untouched; freeze checks A run before and after.
