@@ -1,0 +1,2468 @@
+{
+ "H-R1": {
+  "ma_distinct_step_words": 7,
+  "ma_melodic": {
+   "cs_violations": 0,
+   "gap_class_count": 3,
+   "gap_classes": [
+    [
+     111.731,
+     111.731,
+     2
+    ],
+    [
+     182.404,
+     182.404,
+     2
+    ],
+    [
+     203.91,
+     203.91,
+     3
+    ]
+   ],
+   "gap_entropy_bits": 1.556657,
+   "is_cs": true,
+   "propriety": "strictly_proper",
+   "propriety_equalities": 0,
+   "propriety_violations": 0
+  },
+  "ma_rotations_melodic_invariant": true,
+  "predicted": {
+   "Bilawal": "SA@6",
+   "Khamaj": "SA@3",
+   "propriety": "strictly_proper x2, CS x2"
+  },
+  "sa_distinct_step_words": 7,
+  "sa_melodic": {
+   "cs_violations": 0,
+   "gap_class_count": 3,
+   "gap_classes": [
+    [
+     111.731,
+     111.731,
+     2
+    ],
+    [
+     182.404,
+     182.404,
+     2
+    ],
+    [
+     203.91,
+     203.91,
+     3
+    ]
+   ],
+   "gap_entropy_bits": 1.556657,
+   "is_cs": true,
+   "propriety": "strictly_proper",
+   "propriety_equalities": 0,
+   "propriety_violations": 0
+  },
+  "sa_rotation_words": {
+   "0": "TsTTTsT",
+   "1": "sTTTsTT",
+   "2": "TTTsTTs",
+   "3": "TTsTTsT",
+   "4": "TsTTsTT",
+   "5": "sTTsTTT",
+   "6": "TTsTTTs"
+  },
+  "sa_rotations_melodic_invariant": true,
+  "thaats": {
+   "Asawari": {
+    "coarse_match_sa_rotation": 4,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [],
+    "modern_word": "TsTTsTT",
+    "tones_differing_from_coarse_sa_match": 2,
+    "wilson_coarse_word": "TsTTsTT",
+    "wilson_ratios": [
+     "1",
+     "9/8",
+     "32/27",
+     "4/3",
+     "3/2",
+     "128/81",
+     "16/9"
+    ]
+   },
+   "Bhairavi": {
+    "coarse_match_sa_rotation": 1,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [],
+    "modern_word": "sTTTsTT",
+    "tones_differing_from_coarse_sa_match": 5,
+    "wilson_coarse_word": "sTTTsTT",
+    "wilson_ratios": [
+     "1",
+     "256/243",
+     "32/27",
+     "4/3",
+     "3/2",
+     "128/81",
+     "16/9"
+    ]
+   },
+   "Bilawal": {
+    "coarse_match_sa_rotation": 6,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [
+     6
+    ],
+    "modern_word": "TTsTTTs",
+    "tones_differing_from_coarse_sa_match": 0,
+    "wilson_coarse_word": "TTsTTTs",
+    "wilson_ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "4/3",
+     "3/2",
+     "27/16",
+     "15/8"
+    ]
+   },
+   "Kafi": {
+    "coarse_match_sa_rotation": 0,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [],
+    "modern_word": "TsTTTsT",
+    "tones_differing_from_coarse_sa_match": 2,
+    "wilson_coarse_word": "TsTTTsT",
+    "wilson_ratios": [
+     "1",
+     "9/8",
+     "32/27",
+     "4/3",
+     "3/2",
+     "27/16",
+     "16/9"
+    ]
+   },
+   "Kalyan": {
+    "coarse_match_sa_rotation": 2,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [],
+    "modern_word": "TTTsTTs",
+    "tones_differing_from_coarse_sa_match": 2,
+    "wilson_coarse_word": "TTTsTTs",
+    "wilson_ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "45/32",
+     "3/2",
+     "5/3",
+     "15/8"
+    ]
+   },
+   "Khamaj": {
+    "coarse_match_sa_rotation": 3,
+    "exact_match_ma_rotation": [],
+    "exact_match_sa_rotation": [
+     3
+    ],
+    "modern_word": "TTsTTsT",
+    "tones_differing_from_coarse_sa_match": 0,
+    "wilson_coarse_word": "TTsTTsT",
+    "wilson_ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "4/3",
+     "3/2",
+     "5/3",
+     "16/9"
+    ]
+   }
+  },
+  "verdict": "KEPT"
+ },
+ "H-R2": {
+  "clauses": {
+   "a": false,
+   "b": true,
+   "c": true
+  },
+  "degrees53": [
+   0,
+   4,
+   5,
+   8,
+   9,
+   13,
+   14,
+   17,
+   18,
+   22,
+   23,
+   26,
+   27,
+   31,
+   35,
+   36,
+   39,
+   40,
+   44,
+   45,
+   48,
+   49
+  ],
+  "degrees_equal_fifth_chain": true,
+  "fifth_chain_53_-10..11": [
+   0,
+   4,
+   5,
+   8,
+   9,
+   13,
+   14,
+   17,
+   18,
+   22,
+   23,
+   26,
+   27,
+   31,
+   35,
+   36,
+   39,
+   40,
+   44,
+   45,
+   48,
+   49
+  ],
+  "fits": {
+   "22edo": {
+    "2.0": 2,
+    "5.0": 5
+   },
+   "53edo": {
+    "2.0": 22,
+    "5.0": 22
+   },
+   "orwell22": {
+    "2.0": 6,
+    "5.0": 10
+   },
+   "pyth22_anchor-10": {
+    "2.0": 22,
+    "5.0": 22,
+    "aligned_2": 22,
+    "aligned_5": 22,
+    "max_dev_aligned": 1.9537
+   }
+  },
+  "gap_classes_cents": [
+   21.506,
+   70.672,
+   90.225
+  ],
+  "housing": {
+   "Anand Bhairav": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Asawari": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Bhairav": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Bhairavi": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Bilawal": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Jogiya Todi": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Kafi": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Kalyan": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Khamaj": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Lalit": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Lalit 2": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Madhubanti": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Marwa": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Nat Bhairav": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "No Name": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Old Kafi": {
+    "exact_subset": true,
+    "mod53_subset": true
+   },
+   "Purvi": {
+    "exact_subset": false,
+    "mod53_subset": true
+   },
+   "Todi": {
+    "exact_subset": false,
+    "mod53_subset": true
+   }
+  },
+  "housing_exact_count": 7,
+  "housing_mod53_count": 18,
+  "melodic": {
+   "cs_violations": 0,
+   "gap_class_count": 3,
+   "gap_classes": [
+    [
+     21.506,
+     21.506,
+     10
+    ],
+    [
+     70.672,
+     70.672,
+     5
+    ],
+    [
+     90.225,
+     90.225,
+     7
+    ]
+   ],
+   "gap_entropy_bits": 1.528504,
+   "is_cs": true,
+   "propriety": "improper",
+   "propriety_equalities": 0,
+   "propriety_violations": 10
+  },
+  "three_gap_defect_cents": -1.9537,
+  "three_gap_identity_0.01c": false,
+  "three_gap_identity_2c": true,
+  "triads_exact": [
+   48,
+   48,
+   50
+  ],
+  "triads_tempered": {
+   "15.0": [
+    218,
+    218,
+    90
+   ],
+   "2.0": [
+    70,
+    70,
+    110
+   ],
+   "3.0": [
+    79,
+    79,
+    110
+   ],
+   "5.0": [
+    88,
+    88,
+    98
+   ]
+  },
+  "verdict": "REFUTED"
+ },
+ "H-R3": {
+  "predicted_violations": 0,
+  "scales_checked": 21,
+  "verdict": "KEPT",
+  "violations": []
+ },
+ "H-R4": {
+  "ma_exact_PS": [
+   13,
+   10
+  ],
+  "ma_is_rotation_of_inverted_sa": false,
+  "ma_is_rotation_of_sa": false,
+  "ma_tempered": {
+   "15.0": [
+    13,
+    12,
+    3
+   ],
+   "2.0": [
+    13,
+    10,
+    3
+   ],
+   "3.0": [
+    13,
+    10,
+    3
+   ],
+   "5.0": [
+    13,
+    10,
+    3
+   ]
+  },
+  "ma_word": "TsTTTsT",
+  "predicted": {
+   "ma": [
+    13,
+    9
+   ],
+   "melodic": "identical",
+   "sa": [
+    11,
+    7
+   ]
+  },
+  "sa_exact_PS": [
+   11,
+   7
+  ],
+  "sa_tempered": {
+   "15.0": [
+    13,
+    11,
+    4
+   ],
+   "2.0": [
+    11,
+    7,
+    4
+   ],
+   "3.0": [
+    11,
+    7,
+    4
+   ],
+   "5.0": [
+    11,
+    7,
+    4
+   ]
+  },
+  "sa_word": "TsTTTsT",
+  "same_melodic_triple": true,
+  "verdict": "REFUTED"
+ },
+ "H-R5": {
+  "cs53_fifth_at_12_and_13_steps": true,
+  "cs53_violating_classes": [
+   [
+    90.566,
+    90.566,
+    [
+     1,
+     2
+    ]
+   ],
+   [
+    113.208,
+    113.208,
+    [
+     2,
+     3
+    ]
+   ],
+   [
+    181.132,
+    181.132,
+    [
+     2,
+     3
+    ]
+   ],
+   [
+    203.774,
+    203.774,
+    [
+     3,
+     4
+    ]
+   ],
+   [
+    226.415,
+    226.415,
+    [
+     4,
+     5
+    ]
+   ],
+   [
+    271.698,
+    271.698,
+    [
+     4,
+     5
+    ]
+   ],
+   [
+    294.34,
+    294.34,
+    [
+     5,
+     6
+    ]
+   ],
+   [
+    316.981,
+    316.981,
+    [
+     6,
+     7
+    ]
+   ],
+   [
+    384.906,
+    384.906,
+    [
+     6,
+     7
+    ]
+   ],
+   [
+    407.547,
+    407.547,
+    [
+     7,
+     8
+    ]
+   ],
+   [
+    430.189,
+    430.189,
+    [
+     8,
+     9
+    ]
+   ],
+   [
+    475.472,
+    475.472,
+    [
+     8,
+     9
+    ]
+   ],
+   [
+    498.113,
+    498.113,
+    [
+     9,
+     10
+    ]
+   ],
+   [
+    520.755,
+    520.755,
+    [
+     10,
+     11
+    ]
+   ],
+   [
+    588.679,
+    588.679,
+    [
+     10,
+     11
+    ]
+   ],
+   [
+    611.321,
+    611.321,
+    [
+     11,
+     12
+    ]
+   ],
+   [
+    679.245,
+    679.245,
+    [
+     11,
+     12
+    ]
+   ],
+   [
+    701.887,
+    701.887,
+    [
+     12,
+     13
+    ]
+   ],
+   [
+    724.528,
+    724.528,
+    [
+     13,
+     14
+    ]
+   ],
+   [
+    769.811,
+    769.811,
+    [
+     13,
+     14
+    ]
+   ],
+   [
+    792.453,
+    792.453,
+    [
+     14,
+     15
+    ]
+   ],
+   [
+    815.094,
+    815.094,
+    [
+     15,
+     16
+    ]
+   ],
+   [
+    883.019,
+    883.019,
+    [
+     15,
+     16
+    ]
+   ],
+   [
+    905.66,
+    905.66,
+    [
+     16,
+     17
+    ]
+   ],
+   [
+    928.302,
+    928.302,
+    [
+     17,
+     18
+    ]
+   ],
+   [
+    973.585,
+    973.585,
+    [
+     17,
+     18
+    ]
+   ],
+   [
+    996.226,
+    996.226,
+    [
+     18,
+     19
+    ]
+   ],
+   [
+    1018.868,
+    1018.868,
+    [
+     19,
+     20
+    ]
+   ],
+   [
+    1086.792,
+    1086.792,
+    [
+     19,
+     20
+    ]
+   ],
+   [
+    1109.434,
+    1109.434,
+    [
+     20,
+     21
+    ]
+   ]
+  ],
+  "cs53_violations": 30,
+  "cs_violations_by_epsilon": {
+   "0.5": 0,
+   "1.0": 0,
+   "1.5": 0,
+   "1.9": 0,
+   "2.0": 30,
+   "2.5": 30,
+   "3.0": 30,
+   "5.0": 30
+  },
+  "schisma_cents": 1.9537,
+  "verdict": "KEPT"
+ },
+ "constants": {
+  "coarse_T_threshold": 150.0,
+  "cs_sweep": [
+   0.5,
+   1.0,
+   1.5,
+   1.9,
+   2.0,
+   2.5,
+   3.0,
+   5.0
+  ],
+  "fit_tolerances": [
+   5.0,
+   2.0
+  ],
+  "orwell_generator": 271.385,
+  "triad_epsilons": [
+   2.0,
+   3.0,
+   5.0,
+   15.0
+  ]
+ },
+ "date": "2026-08-18",
+ "descriptive": {
+  "cs_counts": {
+   "53edo_0.5c": 7,
+   "drawn_0.5c": 7,
+   "sruti_0.5c": 16
+  },
+  "propriety_histogram": {
+   "improper": 14,
+   "strictly_proper": 4
+  },
+  "ragas": {
+   "Anand Bhairav": {
+    "coarse_word": "sTsTTTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     9,
+     9
+    ],
+    "exact_PS_sruti": [
+     9,
+     9
+    ],
+    "gap_classes": 5,
+    "num": 14,
+    "page": 6,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "4/3",
+     "3/2",
+     "5/3",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      11,
+      10,
+      4
+     ],
+     "2.0": [
+      9,
+      9,
+      4
+     ],
+     "3.0": [
+      9,
+      9,
+      4
+     ],
+     "5.0": [
+      9,
+      9,
+      4
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      11,
+      10,
+      4
+     ],
+     "2.0": [
+      9,
+      9,
+      4
+     ],
+     "3.0": [
+      9,
+      9,
+      4
+     ],
+     "5.0": [
+      9,
+      9,
+      4
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      11,
+      10,
+      4
+     ],
+     "2.0": [
+      9,
+      9,
+      4
+     ],
+     "3.0": [
+      9,
+      9,
+      4
+     ],
+     "5.0": [
+      9,
+      9,
+      4
+     ]
+    },
+    "tonic_consonances": 4
+   },
+   "Asawari": {
+    "coarse_word": "TsTTsTT",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     6,
+     6
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 2,
+    "num": 6,
+    "page": 14,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "9/8",
+     "32/27",
+     "4/3",
+     "3/2",
+     "128/81",
+     "16/9"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Bhairav": {
+    "coarse_word": "sTsTsTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     6,
+     6
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 4,
+    "num": 15,
+    "page": 5,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "4/3",
+     "3/2",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      8,
+      8,
+      3
+     ],
+     "2.0": [
+      6,
+      6,
+      3
+     ],
+     "3.0": [
+      6,
+      6,
+      3
+     ],
+     "5.0": [
+      6,
+      6,
+      3
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      8,
+      8,
+      3
+     ],
+     "2.0": [
+      6,
+      6,
+      3
+     ],
+     "3.0": [
+      6,
+      6,
+      3
+     ],
+     "5.0": [
+      6,
+      6,
+      3
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      8,
+      8,
+      3
+     ],
+     "2.0": [
+      6,
+      6,
+      3
+     ],
+     "3.0": [
+      6,
+      6,
+      3
+     ],
+     "5.0": [
+      6,
+      6,
+      3
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Bhairavi": {
+    "coarse_word": "sTTTsTT",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     6,
+     6
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 2,
+    "num": 7,
+    "page": 13,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "256/243",
+     "32/27",
+     "4/3",
+     "3/2",
+     "128/81",
+     "16/9"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Bilawal": {
+    "coarse_word": "TTsTTTs",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     11,
+     7
+    ],
+    "exact_PS_sruti": [
+     11,
+     7
+    ],
+    "gap_classes": 3,
+    "num": 2,
+    "page": 18,
+    "propriety": "strictly_proper",
+    "ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "4/3",
+     "3/2",
+     "27/16",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Jogiya Todi": {
+    "coarse_word": "sTTTsTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     4,
+     4
+    ],
+    "exact_PS_sruti": [
+     4,
+     4
+    ],
+    "gap_classes": 5,
+    "num": 16,
+    "page": 4,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "1215/1024",
+     "4/3",
+     "3/2",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      9,
+      10,
+      7
+     ],
+     "2.0": [
+      4,
+      4,
+      7
+     ],
+     "3.0": [
+      4,
+      4,
+      7
+     ],
+     "5.0": [
+      4,
+      4,
+      7
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      9,
+      10,
+      7
+     ],
+     "2.0": [
+      4,
+      4,
+      7
+     ],
+     "3.0": [
+      4,
+      4,
+      7
+     ],
+     "5.0": [
+      4,
+      4,
+      7
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      9,
+      10,
+      7
+     ],
+     "2.0": [
+      4,
+      4,
+      7
+     ],
+     "3.0": [
+      4,
+      4,
+      7
+     ],
+     "5.0": [
+      4,
+      4,
+      7
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Kafi": {
+    "coarse_word": "TsTTTsT",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     6,
+     6
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 2,
+    "num": 5,
+    "page": 15,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "9/8",
+     "32/27",
+     "4/3",
+     "3/2",
+     "27/16",
+     "16/9"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      12,
+      12,
+      9
+     ],
+     "2.0": [
+      6,
+      6,
+      9
+     ],
+     "3.0": [
+      6,
+      6,
+      9
+     ],
+     "5.0": [
+      6,
+      6,
+      9
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Kalyan": {
+    "coarse_word": "TTTsTTs",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     10,
+     13
+    ],
+    "exact_PS_sruti": [
+     10,
+     13
+    ],
+    "gap_classes": 3,
+    "num": 1,
+    "page": 19,
+    "propriety": "strictly_proper",
+    "ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "45/32",
+     "3/2",
+     "5/3",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      12,
+      13,
+      3
+     ],
+     "2.0": [
+      10,
+      13,
+      3
+     ],
+     "3.0": [
+      10,
+      13,
+      3
+     ],
+     "5.0": [
+      10,
+      13,
+      3
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      12,
+      13,
+      3
+     ],
+     "2.0": [
+      10,
+      13,
+      3
+     ],
+     "3.0": [
+      10,
+      13,
+      3
+     ],
+     "5.0": [
+      10,
+      13,
+      3
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      12,
+      13,
+      3
+     ],
+     "2.0": [
+      10,
+      13,
+      3
+     ],
+     "3.0": [
+      10,
+      13,
+      3
+     ],
+     "5.0": [
+      10,
+      13,
+      3
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Khamaj": {
+    "coarse_word": "TTsTTsT",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     11,
+     7
+    ],
+    "exact_PS_sruti": [
+     11,
+     7
+    ],
+    "gap_classes": 3,
+    "num": 3,
+    "page": 17,
+    "propriety": "strictly_proper",
+    "ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "4/3",
+     "3/2",
+     "5/3",
+     "16/9"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tonic_consonances": 4
+   },
+   "Lalit": {
+    "coarse_word": "sTssTTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": false,
+    "exact_PS_drawn": [
+     5,
+     5
+    ],
+    "exact_PS_sruti": [
+     4,
+     4
+    ],
+    "gap_classes": 4,
+    "num": 12,
+    "page": 8,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "4/3",
+     "45/32",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Lalit 2": {
+    "coarse_word": "sTssTTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": false,
+    "exact_PS_drawn": [
+     7,
+     7
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 4,
+    "num": 10,
+    "page": 10,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "4/3",
+     "45/32",
+     "5/3",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Madhubanti": {
+    "coarse_word": "TsTsTTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     9,
+     6
+    ],
+    "exact_PS_sruti": [
+     9,
+     6
+    ],
+    "gap_classes": 5,
+    "num": 17,
+    "page": 3,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "9/8",
+     "1215/1024",
+     "45/32",
+     "3/2",
+     "27/16",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tonic_consonances": 1
+   },
+   "Marwa": {
+    "coarse_word": "sTTsTTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     7,
+     10
+    ],
+    "exact_PS_sruti": [
+     6,
+     9
+    ],
+    "gap_classes": 5,
+    "num": 8,
+    "page": 12,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "45/32",
+     "3/2",
+     "5/3",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      9,
+      12,
+      4
+     ],
+     "2.0": [
+      7,
+      10,
+      4
+     ],
+     "3.0": [
+      7,
+      10,
+      4
+     ],
+     "5.0": [
+      7,
+      10,
+      4
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      9,
+      12,
+      4
+     ],
+     "2.0": [
+      7,
+      10,
+      4
+     ],
+     "3.0": [
+      7,
+      10,
+      4
+     ],
+     "5.0": [
+      7,
+      10,
+      4
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      9,
+      12,
+      4
+     ],
+     "2.0": [
+      7,
+      10,
+      4
+     ],
+     "3.0": [
+      7,
+      10,
+      4
+     ],
+     "5.0": [
+      7,
+      10,
+      4
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Nat Bhairav": {
+    "coarse_word": "TTsTsTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     9,
+     6
+    ],
+    "exact_PS_sruti": [
+     9,
+     6
+    ],
+    "gap_classes": 5,
+    "num": 18,
+    "page": 2,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "9/8",
+     "5/4",
+     "4/3",
+     "3/2",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      10,
+      7,
+      5
+     ],
+     "2.0": [
+      9,
+      6,
+      5
+     ],
+     "3.0": [
+      9,
+      6,
+      5
+     ],
+     "5.0": [
+      9,
+      6,
+      5
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "No Name": {
+    "coarse_word": "sTTssTT",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     5,
+     5
+    ],
+    "exact_PS_sruti": [
+     4,
+     4
+    ],
+    "gap_classes": 5,
+    "num": 13,
+    "page": 7,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "1215/1024",
+     "45/32",
+     "3/2",
+     "405/256",
+     "3645/2048"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      10,
+      9,
+      7
+     ],
+     "2.0": [
+      5,
+      5,
+      7
+     ],
+     "3.0": [
+      5,
+      5,
+      7
+     ],
+     "5.0": [
+      5,
+      5,
+      7
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      10,
+      9,
+      7
+     ],
+     "2.0": [
+      5,
+      5,
+      7
+     ],
+     "3.0": [
+      5,
+      5,
+      7
+     ],
+     "5.0": [
+      5,
+      5,
+      7
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      10,
+      9,
+      7
+     ],
+     "2.0": [
+      5,
+      5,
+      7
+     ],
+     "3.0": [
+      5,
+      5,
+      7
+     ],
+     "5.0": [
+      5,
+      5,
+      7
+     ]
+    },
+    "tonic_consonances": 1
+   },
+   "Old Kafi": {
+    "coarse_word": "TsTTTsT",
+    "cs_53edo": true,
+    "cs_drawn": true,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     11,
+     7
+    ],
+    "exact_PS_sruti": [
+     11,
+     7
+    ],
+    "gap_classes": 3,
+    "num": 4,
+    "page": 16,
+    "propriety": "strictly_proper",
+    "ratios": [
+     "1",
+     "10/9",
+     "32/27",
+     "4/3",
+     "3/2",
+     "5/3",
+     "16/9"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      13,
+      11,
+      4
+     ],
+     "2.0": [
+      11,
+      7,
+      4
+     ],
+     "3.0": [
+      11,
+      7,
+      4
+     ],
+     "5.0": [
+      11,
+      7,
+      4
+     ]
+    },
+    "tonic_consonances": 3
+   },
+   "Purvi": {
+    "coarse_word": "sTTssTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     7,
+     7
+    ],
+    "exact_PS_sruti": [
+     6,
+     6
+    ],
+    "gap_classes": 4,
+    "num": 9,
+    "page": 11,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "5/4",
+     "45/32",
+     "3/2",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      9,
+      9,
+      5
+     ],
+     "2.0": [
+      7,
+      7,
+      5
+     ],
+     "3.0": [
+      7,
+      7,
+      5
+     ],
+     "5.0": [
+      7,
+      7,
+      5
+     ]
+    },
+    "tonic_consonances": 2
+   },
+   "Todi": {
+    "coarse_word": "sTTssTs",
+    "cs_53edo": false,
+    "cs_drawn": false,
+    "cs_sruti": true,
+    "exact_PS_drawn": [
+     5,
+     5
+    ],
+    "exact_PS_sruti": [
+     4,
+     4
+    ],
+    "gap_classes": 4,
+    "num": 11,
+    "page": 9,
+    "propriety": "improper",
+    "ratios": [
+     "1",
+     "135/128",
+     "1215/1024",
+     "45/32",
+     "3/2",
+     "405/256",
+     "15/8"
+    ],
+    "tempered_53edo": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tempered_drawn": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tempered_sruti": {
+     "15.0": [
+      8,
+      8,
+      6
+     ],
+     "2.0": [
+      5,
+      5,
+      6
+     ],
+     "3.0": [
+      5,
+      5,
+      6
+     ],
+     "5.0": [
+      5,
+      5,
+      6
+     ]
+    },
+    "tonic_consonances": 1
+   }
+  }
+ },
+ "experiment": "MUR-002",
+ "melodic_version": "0.1.0",
+ "n_rows": 199,
+ "scorer_version": "1.1.0",
+ "source": "scans by Kraig/2010_02_24/Hanson/LatticingRagaScales.pdf"
+}
