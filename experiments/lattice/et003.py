@@ -575,6 +575,11 @@ def verdicts(stage_rows: dict[str, dict], census_rows: dict[str, dict]) -> dict:
                 " power chord; comma dev identities pinned in tests",
     }
     # H-K5
+    # comparison at 4dp with a half-ulp tolerance: receipt devs are stored
+    # at 6dp, so re-rounding to 4dp can double-round across a .5 boundary
+    # (3.9273497 -> 3.92735 -> 3.9274); tolerance 2e-4 compares values, not
+    # decimal-string artifacts (same class of fix as ET-002's H-T1 verdict
+    # comparison bug -- verdict layer only, receipts and predictions intact)
     werck_devs = sorted(
         round(min(vv["dev"] for vv in row["voicings"]), 4)
         for row in stage_rows["S3_werckmeister3"]["major_addresses"])
@@ -586,7 +591,9 @@ def verdicts(stage_rows: dict[str, dict], census_rows: dict[str, dict]) -> dict:
         "werck_key_color_measured": werck_devs,
         "werck_P_neq_S_at": [EPS_GRID[i] for i, (p, s) in enumerate(chirality)
                              if p != s],
-        "kept": werck_devs == PRED_WERCK_KEY_COLOR,
+        "kept": (len(werck_devs) == len(PRED_WERCK_KEY_COLOR)
+                 and all(abs(a - b) < 2e-4 for a, b in
+                         zip(werck_devs, PRED_WERCK_KEY_COLOR))),
         "note": "chirality prediction: P != S exactly at eps 1, 2, 5, 20",
     }
     return v

@@ -1889,3 +1889,116 @@ the well-temperament S3 as the off-continuum historical detour.
 KEPT/REFUTED, FINDINGS.md paragraph, PR on research/et-003 stacked on
 research/et-002; gate G-024 lives in the consolidated ledger PR #37
 (GATES.md NOT edited here; proposed row text in the PR body).
+
+## 2026-08-19 — ET-003 results + verdicts
+
+**Run:** `et003.py` (~0.35 s; 28 grid + 130 lock-verification frozen-scorer
+calls + 4 frozen-melodic calls + the 3-limit census; receipts bit-identical
+across two runs by diff on both files), receipts `results/et003.jsonl`
+(7 rows: 3 kernel-census + 4 stage) + `results/et003_summary.json`. Scorer
+v1.1.0, melodic v0.1.0, lattice suite 190/190 green pre-run (35 new et003
+tests), freeze checks A OK on both pins before and after. One
+verdict-comparison fix between the two invocation pairs: the H-K5 verdict
+re-rounded receipt devs (stored at 6 dp) to 4 dp, double-rounding
+3.9273497 → 3.92735 → 3.9274 against the pre-registered 4-dp literal
+3.9273; replaced string-style equality with a 2e−4 value tolerance — a
+comparison bug in the verdict code, not a prediction change (same class as
+ET-002's H-T1 fix); the jsonl receipt rows carry no verdicts and are
+unaffected. Mirror-vs-scorer: **zero failures at all 28 grid points and
+all 130 lock-threshold ± δ points across the four stages** (25 + 24 + 71 +
+10 ε points for S1/S2/S3/S4).
+
+**H-K1 — KEPT, every number.** Kernel census within the pre-registered box:
+5-limit exactly **5 members** — 81/80, 128/125, 2048/2025, 32805/32768,
+531441/524288 (and the five are exactly the (81/80)^a·(128/125)^b lattice:
+PC = (81/80)³/(128/125), diaschisma = (128/125)/(81/80), schisma =
+(81/80)²/(128/125), pinned in tests); 7-limit **29** (head by Tenney
+height: 36/35, 50/49, 64/63, 81/80, 126/125, 128/125, 225/224, 405/392,
+2048/2025, 3125/3087, 3136/3125, 3645/3584, …); 11-limit **122**. The
+cross-product rail held: monzo(81/80) × monzo(128/125) = −⟨12,19,28⟩ — the
+Grassmann product of the two commas IS the val, so sat⟨81/80, 128/125⟩ is
+the whole 5-limit kernel. As derived (against the naive reading list),
+**33/32 and 121/120 are NOT kernel members** — V12 maps both to one step —
+so the D'Alessandro commas do not transfer to 12.
+
+**H-K2 — KEPT, grids exact.** All four grid tables measured exactly as
+pre-registered, including the ET-001 rail row for S4 and the S3 chirality
+split P = [10,10,14,18,28,40,48] vs S = [9,9,14,18→19,28,40,46]: P ≠ S at
+ε ∈ {1, 2, 5, 20} exactly as predicted — **Werckmeister III is the only
+stage with a handedness** (its fifth word TTTPPTPPPPPP is chirally
+asymmetric; the sub-cent side shows it too: the 0.1021¢ accidental cluster
+exists on the P side only). (P,S)@2¢ = S1 (19,19), S2 (2,2), S3 (10,9),
+S4 (12,12); @14.86¢ = S1 (37,37), S2 (47,47), S3 (40,40), S4 (48,48). The
+P-ordering per ε ran as registered: Pythagorean first at ε ≤ 2 (11 pure
+fifths at dev 0; schismatic majors at exactly the schisma), meantone first
+at 5–10¢, **12-EDO first only at ε ≥ 14.86 — and by ONE triple over
+meantone (48 vs 47)**; the ε = 3 exception is 12-EDO's (1,1)
+chromatic-cluster guard-window artifact, on record since ET-001. First
+locks: S1 0.0¢ ×11; S2 **0.7394¢ ×2 — quarter-comma meantone's first lock
+is the SEPTIMAL 6:7:8** (A2 ≈ 7/6, d3 ≈ 8/7), locking below 1¢ where
+12-EDO has nothing; S3 0.0¢ ×8 then 0.1021, then **0.2516¢ — Werckmeister's
+C major in second inversion**; S4 1.9550¢ ×12 (rail). Wolf power chords
+never locked (S1 dev = PC exactly; S2 35.68¢).
+
+**H-K3 — KEPT; the monotone-uniformity story REFUTED exactly as
+registered.** Frozen melodic v0.1.0: all four stages strictly proper AND
+constant structures (0 violations everywhere); gap classes walk
+**2 → 2 → 4 → 1** with entropy 0.979869 → 0.979869 → 1.918296 → 0.0 bits
+(runner's monotone_uniformity flag: False). History did not trade melodic
+uniformity monotonically for 12-EDO's 1 gap class — the walk is a HUMP
+with its melodic-complexity maximum at the well-temperament (4 step
+sizes: 90.225×2, 96.090×4, 101.955×2, 107.820×4), and propriety was never
+traded at all. Step-size spread is likewise non-monotone (23.46 → 41.06 →
+17.60 → 0¢): meantone is the spread maximum (the untempered 128/125 IS
+its wolf gap).
+
+**H-K4 — KEPT.** Address censuses exact, minor ≡ major row for row.
+Major-triad coverage (@2, 3, 5, 10, 14.86, 20¢): S1 = 3,3,3,4,**12**,12;
+S2 = 0,8,8,8,**8**,9; S3 = 1,2,4,9,**12**,12; S4 = 0,0,0,12,**12**,12.
+The registered attributions all held: **81/80 alone does NOT buy all of
+12-EDO's triad addresses — a 12-note meantone chain covers exactly 8 of
+12** (the four wrapped roots' thirds are the dim4 = 32/25 exactly, off 5/4
+by exactly the untempered 128/125; test-pinned); **128/125 buys the
+enharmonic closure** — the 4 wrapped addresses plus the 12th power chord;
+the schisma bought S1 its 3 sub-2¢ major addresses centuries before
+meantone; and **the 7-limit kernel members buy nothing in 12-EDO at
+ε ≤ 20¢** — 12-EDO's locked types are exactly ET-001's five, while the
+sub-cent septimal 6:7:8 that 225/224 + 126/125 hand to meantone
+(Fraction identities (75/64)/(7/6) = 225/224, (144/125)/(8/7) = 126/125,
+test-pinned) is DESTROYED by the last step of the walk: P@1 runs
+2 → 0 from S2 to S4. Exact dev identities all verified to 1e−9: S1 root
+ditone major = 1200·log₂(81/80); schismatic major root = the schisma;
+dim5+ditone = the diaschisma; 2nd-inversion ditone = 1200·log₂(129/128);
+S1 wolf power chord = the Pythagorean comma; S2 power chord = exactly a
+quarter syntonic comma.
+
+**H-K5 — KEPT (after the verdict-layer rounding fix above).** Werckmeister
+key color measured as the predicted 12-value multiset: C 0.2516 < F 2.4456
+< D = G 3.9273 < B♭ 6.1166 < B 7.6077 < E♭ = E = A 9.7924 < C♯ = F♯ = G♯
+13.4727¢ (= 1200·log₂(129/128) exactly — pure fifth + full ditone, the S1
+second-inversion identity). Seven distinct values; every key under the
+cultural epsilon (hence coverage 12 at 14.86¢: "every key usable, no key
+identical" as a dev-table theorem); **W-III's C major is 31× closer to
+exact proportionality than any 12-EDO voicing** (0.2516 vs 7.8374¢). And
+at ε = 5¢ the coverage ordering S2 (8) > S3 (4) > S1 (3) > **S4 (0)**
+stands: at tight tolerance 12-EDO is the worst major-triad machine of the
+four stages, redeemed only at its own 14.86¢ epsilon — while meantone is
+the only stage that never closes the circle below 20¢ (8 < 12; its
+double-wolf G♯ major surfaces alone at 19.5614¢).
+
+**Post-hoc (labeled; nothing above depended on it).** The S3 receipts show
+the S-side sub-cent régime differs from P not only in count but in kind:
+the accidental 0.1021¢ P cluster (−101.96, +96.09 step pair) has no S
+twin, so a listener-facing "handedness" claim would rest on sub-cent
+proportional structure — flag for the EAR-ε program rather than for any
+grid conclusion here.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+re-verified post-run). Gate G-024 is queued in the consolidated ledger
+(PR #37); GATES.md not edited here.
+
+**Run receipt:** 2026-08-19, python3.12 — lattice suite 190/190 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 25 et002 + 35 et003), freeze checks A OK on both pins
+(scorer 1a840af9…9b592, melodic a16f162b…7535) before and after. Receipts
+bit-identical across two runs (diff on et003.jsonl and et003_summary.json).
