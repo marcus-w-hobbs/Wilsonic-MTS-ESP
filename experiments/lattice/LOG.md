@@ -1392,3 +1392,183 @@ re-verified post-run). Gate G-017 appended to experiments/GATES.md
 + 16 et001), freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535) before and after. Receipts bit-identical across
 two runs (diff on et001.jsonl and et001_summary.json).
+
+## 2026-08-19 — EAR-ε pre-registration (entry BEFORE any stimulus generation)
+
+**Question:** at what detuning does MARCUS's ear lose the "lock" — the
+fused, reinforcing quality of a proportional/subcontrary triad? ET-001
+fixed the machine side: 12-EDO first supports the full patent 4:5:6/10:12:15
+pair at ε = 14.859022¢ (the cultural epsilon) and locks its power chord at
+1.955001¢ (= its fifth error, exactly). The literature anchor
+(CLAUDE.md, "Tolerance and Perception") puts human pitch discrimination at
+roughly 5–10¢ in musically relevant registers. EAR-ε builds the detuning
+ladder that straddles both numbers and the blinded protocol for Marcus to
+locate his own thresholds in one sitting. This entry pre-registers design,
+stimuli, blinding, response protocol, analysis, and falsifiable
+predictions BEFORE any stimulus is generated; the listening results are a
+standing ear-check gate (G-025, QUEUED in ledger PR #37) and come back
+later, exactly as G-006's did. This is a human-subject-style
+pre-registration: nothing in the analysis may be chosen after Marcus has
+heard a note.
+
+**Stimulus form (decision + justification).** Each rung is a MINIMAL .scl
+tuning — root at 1/1 (degree 0, implicit), the triad's tones as the only
+other degrees, octave 2/1 — NOT a full 12-note tuning with one triad
+detuned. Justification: (i) control — the percept under test is the fused
+triad, and context tones would add uncontrolled beats and melodic
+distraction; (ii) portability — any MTS-ESP synth renders exactly the
+triad, three adjacent MIDI keys from the root sound it, no navigation
+skill required; (iii) precedent — G-002/G-006 both used small, decisive,
+single-percept stimuli. Root maps to MIDI 60 at Wilsonic's default
+reference frequency (~261.63 Hz), left untouched for every rung, so
+register is constant and beat rates are comparable across rungs.
+
+**Stimulus families and ladders (locked; cents exact to the shown
+precision, generated from 1200·log2 of the just ratios).** Just anchors:
+M3 = 386.313714¢ (5/4), m3 = 315.641287¢ (6/5), P5 = 701.955001¢ (3/2),
+δ_pc = 1200·log2(3) − 1900 = 1.955001¢ (the exact 12-EDO fifth error).
+- **Family A (major prototype 4:5:6, third detuned):** degrees
+  {0, M3 + δ, P5}; δ ∈ {0, ±2, ±5, ±8, ±11, ±14.86, ±18, ±22}¢ —
+  15 rungs. The ladder brackets the 5–10¢ literature band (rungs 2, 5, 8,
+  11) and includes the cultural epsilon literally (±14.86) plus
+  headroom above it (±18, ±22).
+- **Family B (power chord 2:3:4, fifth detuned):** degrees {0, P5 + δ}
+  (canonical 2-degree scale; keys 60-61-62 sound root–fifth–octave);
+  δ ∈ {0, ±1, ±1.955001, ±3, ±5, ±8}¢ — 11 rungs. δ = −1.955001 IS the
+  12-EDO fifth (700.000000¢); the ladder brackets ET-001's 1.955 lock.
+- **Family C (subcontrary/minor prototype 10:12:15, third detuned):**
+  degrees {0, m3 + δ, P5}; same 15-rung δ ladder as A. Included because
+  minor lock-loss may differ from major, and that asymmetry would be a
+  finding.
+- **Family D (12-EDO anchors, 3 rungs):** the literal 12-EDO major
+  (0, 400, 700), minor (0, 300, 700), and power chord (0, 700, 1200).
+  These are the actual sonorities ET-001's thresholds describe; they tie
+  the ladder to the phase diagram end-to-end.
+44 stimuli total.
+
+**Scorer rails (registered; the frozen scorer is the referee).** In
+families A/B/C the detuned tone is exactly the mean tone of its class, so
+the frozen classifier's deviation equals |δ| EXACTLY (the P condition
+|1200·log2((fa+fc)/(2·fb))| is fb-linear and fa+fc is held fixed; dually
+for S). Rails, verified by frozen `classify_cents_triple` per rung and
+recorded in the manifest: for δ ≠ 0 the target class (P for A/B-as-2:3:4,
+S for C and B-as-3:4:6 — the power chord carries BOTH labels at |δ|, its
+3:4:6 reading being the subcontrary dual ET-001 recorded) is ABSENT at
+ε = |δ| − 1e−6 and PRESENT at ε = |δ| + 1e−6; for δ = 0, present at
+ε = 1e−6. Family D deviations must equal ET-001's numbers:
+D-major P dev = D-minor S dev = 14.859022¢ (the (4,3)/(3,4) type pair),
+D-power P dev = 1.955001¢ — each verified by the same ±1e−6 flip. Guard
+separations (outer pairs 70.28–203.91¢) exceed every ε used, so no rung
+is degeneracy-dropped. Additionally each rung's FULL scale is scored by
+frozen `score_tempered` at the ET-001 grid ε ∈ {1, 2, 3, 5, 10, 14.86,
+20}¢ and the counts stored in the manifest (joinable with et001.jsonl);
+registered scale-level rail: crossing ε = |δ| the target class count
+jumps by exactly +1 (families A/C; +1 in BOTH P and S for B). Known and
+registered, NOT railed: (i) family A/C scales contain octave-inversion
+triples (e.g. A's 3:4:5 reading at deviation ≈ 0.6255·|δ|, C's
+15:20:24-ish at ≈ 43.8¢ + O(δ)) whose grid behavior is recorded as
+scorer fact; (ii) the ±14.86 rungs sit within float noise of the 14.86
+grid point under the strict-< comparison — their classification AT that
+single grid ε is knife-edge, is recorded as whatever the scorer returns,
+and carries no rail and no interpretive weight.
+
+**Blinding (registered).** Filenames are opaque rung ids in PRESENTATION
+order: eareps_B_01..11, eareps_A_01..15, eareps_C_01..15,
+eareps_D_01..03. Within each family the rung order is shuffled by
+`random.Random(20260819)` — seed 20260819, pre-registered here —
+consuming the rng in listening-block order B, A, C, D. The .scl headers
+carry NO provenance (unlike G-006): the δ value is the secret, and a
+cents line is unavoidable, so the protocol doc instructs Marcus never to
+open the files in a text editor. The δ assignment lives only in
+results/eareps_key.json; the technical record (deltas, deviations, grid
+classifications) lives in results/eareps_manifest.json. BOTH are sealed:
+Marcus must not open either, nor this experiment's PR diff of those two
+files, until his responses are written to results/eareps_responses.json.
+Family identity (major/minor/power) is audible anyway and is not treated
+as a secret; magnitude and sign of δ are.
+
+**Response protocol (registered; plain version in
+EAREPS_PROTOCOL.md).** One sitting, blocks in order B, A, C, D, files in
+numbered order within a block. Same synth patch throughout: sustained,
+harmonically rich, STEADY — no vibrato, chorus, unison detune, or delay
+(those mask or fake beats); same playback chain throughout (note which).
+Per rung: load the .scl (Wilsonic's Scala design via drag-and-drop, or
+any MTS-ESP-respecting Scala host; ONE running Wilsonic instance —
+MTS-ESP single-master rule), hold MIDI keys 60-61-62 together for at
+least 5 seconds, twice; then write ONE verdict before moving on:
+**locked** (fuses into a single reinforcing sonority) / **beating**
+(audible waver or roughness, but the chord still reads as in-tune-ish) /
+**broken** (the fusion is gone; it reads as mistuned). Optional per rung:
+fusion rating 1–5 (5 = perfectly fused) and free notes. Replaying the
+current rung is allowed; REVISING an earlier verdict after moving on is
+not (commit-as-you-go, the G-006 write-then-unseal discipline). Responses
+go in a copy of results/eareps_responses.template.json saved as
+results/eareps_responses.json. Only after that file is written may the
+key or manifest be opened.
+
+**Analysis plan (registered — decided before any listening).** Per
+family-direction (A-sharp, A-flat, B-sharp, B-flat, C-sharp, C-flat),
+order rungs by |δ|. Let L = max |δ| with verdict "locked" (L = 0 if
+none beyond the δ=0 rung... the δ=0 rung itself counts as locked
+territory) and K = min |δ| with verdict "broken". **Threshold
+T = (L + K) / 2** — the midpoint between the last "locked" and the first
+"broken"; "beating" verdicts between them are the transition band,
+reported descriptively. Censoring: if no rung is "broken", T is
+right-censored (report "T > max rung"); if even the smallest nonzero
+rung is "broken", T < that rung. Non-monotone verdicts (a "broken" below
+a "locked") do not change the rule — T is still computed from max-locked
+and min-broken — but are flagged. **Validity rule:** the δ = 0 rung of
+each of A, B, C is a catch trial; if any δ = 0 rung is judged "broken",
+that family's block is invalid and must be re-run on a fresh sitting
+(the file order stays fixed; no new stimuli are generated).
+
+**Falsifiable predictions (committed now):**
+- **P-E1 (the cultural epsilon is cultural, not perceptual).** Marcus's
+  major-third lock-loss lies BELOW 14.86¢ in both directions:
+  T_A(sharp) < 14.86 AND T_A(flat) < 14.86, with the committed band
+  **both T_A ∈ [6, 12]¢**. KEPT if both in band; WEAK-KEPT if both
+  < 14.86 but either outside [6, 12]; REFUTED if either ≥ 14.86 (which
+  would mean 12-EDO's major third is inside his lock tolerance and the
+  "cultural" epsilon is perceptual after all).
+- **P-E2 (fifths are far tighter).** T_B(sharp) ≤ 3¢ AND T_B(flat) ≤ 3¢.
+  REFUTED if either exceeds 3¢. Sub-prediction **P-E2b:** the ±1.955001
+  rungs (the 12-EDO fifth and its sharp mirror) are NOT "broken" (locked
+  or beating) — i.e. for fifths, culture sits just inside perception,
+  the opposite regime from thirds where culture (14.86) sits far above
+  the predicted perceptual band.
+- **P-E3 (sharp/flat asymmetry of the third, direction committed).**
+  First-order combination-tone reasoning predicts NO asymmetry: for
+  4 : 5·2^(±δ/1200) : 6 the two first-order difference tones split
+  symmetrically about the root's octave (5+x−4 = 1+x vs 6−5−x = 1−x)
+  and beat at rate ∝ |δ| regardless of sign. The committed asymmetry is
+  therefore CULTURAL: a lifetime of 12-EDO's +13.69¢-SHARP major thirds
+  should extend sharp tolerance. Prediction:
+  **T_A(sharp) − T_A(flat) ≥ +1.5¢** (half the local rung spacing).
+  REFUTED if the gap is < 1.5¢ (no asymmetry: the physics-symmetric null
+  wins) or reversed (flat-tolerant: also a finding, and a strike against
+  the acculturation account).
+- **Exploratory, no commitment:** T_C vs T_A (minor vs major lock-loss
+  asymmetry — either direction is a finding); family D consistency
+  checks (P-E1 implies D-major and D-minor are heard non-locked; P-E2b
+  implies D-power is not broken).
+
+**Machinery (locked).** Generator experiments/lattice/eareps.py —
+python3.12 stdlib only, deterministic (the one rng use is the
+pre-registered seed above), no wall-clock fields anywhere; outputs
+results/scl/eareps/*.scl (44 files), results/eareps_manifest.json
+(sealed technical record incl. all rails and grid classifications),
+results/eareps_key.json (sealed answer key),
+results/eareps_responses.template.json (unsealed — the one file Marcus
+copies). Two runs must be bit-identical on every output (diff recorded).
+Frozen inputs read-only: triads scorer v1.1.0 (`classify_cents_triple`,
+`score_tempered`, `mean_separation_cents`), melodic v0.1.0 untouched by
+this experiment. Tests tests/test_eareps.py green BEFORE the first
+generation run (ladder math, |δ|-deviation identity, per-rung scorer
+flips, guard margins, .scl syntax and no-provenance blinding, shuffle
+determinism, D-anchor deviations = ET-001's numbers). Freeze checks A on
+both pins before and after. NOT in scope: any listening result, any
+threshold — those are Marcus's, and land in a later results entry
+against gate G-025.
+
+**Scale expectation:** 44 tiny .scl files, one manifest, one key, one
+template; seconds to generate. If it grows past that the design is wrong.
