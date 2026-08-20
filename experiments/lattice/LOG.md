@@ -1572,3 +1572,49 @@ against gate G-025.
 
 **Scale expectation:** 44 tiny .scl files, one manifest, one key, one
 template; seconds to generate. If it grows past that the design is wrong.
+
+## 2026-08-19 — EAR-ε stimuli built (what was generated, NOT listening results)
+
+**Run:** `eareps.py` (seconds; outputs bit-identical across two runs by
+diff on all 44 .scl files, manifest, key, and template), stimuli
+`results/scl/eareps/` (44 files), sealed technical record
+`results/eareps_manifest.json`, sealed answer key
+`results/eareps_key.json`, unsealed
+`results/eareps_responses.template.json`, protocol
+`EAREPS_PROTOCOL.md`. Frozen triads scorer v1.1.0 used read-only as the
+referee; melodic v0.1.0 untouched. Lattice suite 159/159 green pre- and
+post-run (29 new eareps tests), freeze checks A OK on both pins before
+and after (scorer 1a840af9…9b592, melodic a16f162b…7535).
+
+**Rails — all held, zero failures across 44 rungs.** Every family-A/B/C
+rung's target class flips in frozen `classify_cents_triple` exactly at
+ε = |δ| ± 1e−6 (the |δ|-deviation identity confirmed by the referee, not
+just the mirror), including family B's BOTH readings — 2:3:4 proportional
+on the sounding triple and 3:4:6 subcontrary on the fifth-below voicing
+(P5+δ−1200, 0, P5+δ); build note: the S label lives on that octave-dual
+triple, not on the sounding (0, P5+δ, 1200), which is where the +1
+scale-count jump for S comes from. Full-scale `score_tempered` counts
+jump by exactly +1 per target class across each threshold. Family D
+anchors reproduce ET-001's numbers through an independent path:
+12-EDO major P and minor S deviations both 14.859022¢, power chord P
+1.955001¢, each scorer-verified at ±1e−6. Registered knife-edge behavior
+recorded: at grid ε = 14.86 the A ±14.86 rungs land just at/above
+(excluded, strict <) while the C ±14.86 rungs land just below
+(included) — float noise exactly where the pre-registration said it
+would be, no rail, no interpretive weight.
+
+**Blinding executed as registered:** presentation shuffles from seed
+20260819, rng consumed in block order B, A, C, D; filenames are
+presentation-order ids (eareps_B_01..11, A_01..15, C_01..15, D_01..03);
+.scl headers carry no provenance. The manifest and key are SEALED for
+Marcus (both carry a _warning field; the protocol doc repeats it) until
+results/eareps_responses.json exists.
+
+**Not in this entry, by design:** any threshold, any verdict, any
+listening note — those are Marcus's sitting, land in a later entry, and
+decide P-E1/P-E2/P-E3 against gate G-025 (QUEUED in ledger PR #37).
+
+**Run receipt:** 2026-08-19, python3.12 — lattice suite 159/159 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 29 eareps), freeze checks A OK on both pins before and
+after. Outputs bit-identical across two runs (diff on all 47 files).
