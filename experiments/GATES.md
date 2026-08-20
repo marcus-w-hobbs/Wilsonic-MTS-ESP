@@ -49,8 +49,8 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-021 | 2026-08-18 | BRIDGE-001b review: filtered EG4 bridge design (k₂ sweep, tone-set minimax, two-gap objective) | PENDING — rail reproduces BRIDGE-001 bit-for-bit; H-B2 NOT revived under any tuning (the one-cent gap is structural at N≤22); tone-set minimax: miracle 6.858→5.817¢, orwell 2.727→2.571¢ and 4/6 hexany faces at 2¢ — in-budget front = orwell-22 alone; magic/garibaldi appear exactly as predicted (dominated/uncontained); count-based survival unsound above ~13¢ → identity lens (post-hoc). Decide: in-budget/identity reading as the BRIDGE-002 front rule; [PR #46](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/46) |
 | G-022 | 2026-08-18 | SUBSET-MEL-000 review: machine census of the 72 embedded CPS subsets of the eikosany — data for the G-013 brainstorm, not the spec | PENDING — IN/OUT dekanies are exact inversion pairs (36 classes, not 72); 0/60 dekanies proper or CS across 5 seeds (even the strictly-proper flagship); frozen M1–M3 nearly blind at the dekany level (22/30 classes share one fingerprint); hexany propriety inverts vs eikosany level; rankings disagree where they discriminate (pooled ρ = −0.28). Ear-check the 21 .scl (results/scl/subsetmel000/, esp. the 1-3-5-7-9 dekany as named spice); [PR #43](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/43) |
 | G-023 | 2026-08-18 | Blog post 002 editorial pass ("the machine keeps deriving Wilson") — first-person voice per the site writing-style rule | PENDING — draft docs/research-blog-002.md, three receipt-backed episodes (BRIDGE-000 tie-optimal val, BRIDGE-001 blackjack@3¢ + spontaneous regime iii, MOS-LAT double null → GoldenGenerators #18); self-audit removed 6 punchline sentences, 0 em-dash snaps; GoldenGenerators attributed to Erv 1993 per INDEX.md (check); [PR #42](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/42) |
-| G-024 | 2026-08-19 | ET-003 review: the comma-kernel history of 12-EDO (which commas ⟨12,19,28⟩ kills, when they entered practice, and what the frozen scorers say about each historical stage) | QUEUED (agent running; needs the run's PR) |
-| G-025 | 2026-08-19 | EAR-ε protocol + detuning ladder for Marcus's lock-loss threshold vs the 14.859¢ cultural epsilon (the listen itself is a standing ear-check gate) | QUEUED (agent building; needs the PR) |
+| G-024 | 2026-08-19 | ET-003 review: the comma-kernel history of 12-EDO (Pythagorean → meantone → Werckmeister III → 12-EDO under one val) | PENDING — H-K1..K5 all kept: 5-limit kernel = the (81/80,128/125) lattice exactly (saturation rail); 81/80 alone buys only 8/12 major addresses, 128/125 buys enharmonic closure, 7-limit commas buy nothing in 12-EDO ≤20¢; 12-EDO wins only at ≥14.86¢ and by ONE triple (48 vs W-III's 47); melodic walk is a hump (gap classes 2→2→4→1), monotonicity refuted as pre-registered; W-III key color C 0.25¢…C♯ 13.47¢ exact; [PR #49](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/49) (stacked #38→#44) |
+| G-025 | 2026-08-19 | EAR-ε ear check: Marcus's lock-loss thresholds vs the cultural epsilon (44 blinded rungs, key sealed; decides P-E1/P-E2/P-E3) | PENDING — ladder + blinded protocol built ([PR #48](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/48), stacked on #38); YOUR ACTION: listen per EAREPS_PROTOCOL.md, save results/eareps_responses.json, then unseal the key; predictions committed: third lock-loss 6–12¢ < 14.86, fifth ≤3¢ (12-EDO fifth survives), sharp-tolerant ≥1.5¢ |
 
 ## Currently blocked by gates
 
@@ -61,9 +61,10 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 - Fork-menu wave 2 (2026-08-18, "continue auto research"): ET-002, MUR-002,
   BRIDGE-001b, SUBSET-MEL-000, blog post 002 all ran/drafted; G-019–G-023
   PENDING on Marcus (PRs #42–#46). #44 stacks on #38, #45 on #39.
-- Wave 3 (2026-08-19, "run them"): ET-003 (stacked on ET-002) and the EAR-ε
-  ladder (stacked on ET-001) launched; G-024/G-025 QUEUED. Chore PR #47
-  tracks the writing-style rule.
+- Wave 3 (2026-08-19, "run them"): ET-003 ran (PR #49, stacked #38→#44) and
+  the EAR-ε ladder is built (PR #48, stacked on #38); G-024/G-025 PENDING.
+  Chore PR #47 tracks the writing-style rule. Every gate G-017–G-025 now
+  waits on Marcus; nothing is running.
 - G-013 (SUBSET-MEL-001 spec review) still waits on the subset brainstorm
   with Marcus; SUBSET-MEL-000 supplies the ranked table for him to react to.
   (Datestamp erratum: entries above marked 2026-07-25 were written
