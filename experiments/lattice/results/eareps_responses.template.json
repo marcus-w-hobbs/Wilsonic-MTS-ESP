@@ -1,0 +1,228 @@
+{
+ "_instructions": "Copy this file to results/eareps_responses.json and fill it in while listening, block by block, in the order the rungs appear here. verdict: locked | beating | broken. Do not open eareps_key.json or eareps_manifest.json until this file is saved. See EAREPS_PROTOCOL.md.",
+ "sitting_date": "",
+ "synth_patch": "",
+ "playback_chain": "",
+ "responses": {
+  "eareps_B_01": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_02": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_03": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_04": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_05": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_06": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_07": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_08": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_09": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_10": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_B_11": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_01": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_02": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_03": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_04": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_05": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_06": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_07": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_08": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_09": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_10": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_11": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_12": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_13": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_14": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_A_15": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_01": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_02": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_03": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_04": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_05": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_06": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_07": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_08": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_09": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_10": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_11": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_12": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_13": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_14": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_C_15": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_D_01": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_D_02": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  },
+  "eareps_D_03": {
+   "verdict": "",
+   "fusion_1to5": null,
+   "notes": ""
+  }
+ }
+}
