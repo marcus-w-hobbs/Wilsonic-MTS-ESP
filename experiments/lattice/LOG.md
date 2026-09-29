@@ -1193,6 +1193,19 @@ pre-registered field.
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
 
+## 2026-08-09 — Gate back-fill: G-015 PASS, G-016 PASS (Marcus, via merge)
+
+Session-start reconciliation per GATES.md protocol (merge implies pass;
+next session back-fills). Marcus merged PR #33 (MOS-LAT-002) and PR #34
+(BRIDGE-001) on 2026-07-30, plus PR #36 (ARCHIVE-001 index, no gate
+attached). Ledger updated: G-015 PASS (H-M1 null on the mixed-tail
+corpus; conjugate-descriptor program closed), G-016 PASS (H-B2 refuted
+under strict containment; blackjack carries the full EG4 hexany at
+ε = 3¢). With these, every experiment in the SPEC's original queue is
+run and gated. Open: G-013 only (SUBSET-MEL-001 spec review), which
+waits on the subset brainstorm session — a conversation with Marcus,
+not a run.
+
 ## 2026-08-09 — ET-001 pre-registration (entry BEFORE any implementation or run)
 
 **Question:** what do the frozen scorers say about equal temperaments as a
@@ -1392,6 +1405,810 @@ re-verified post-run). Gate G-017 appended to experiments/GATES.md
 + 16 et001), freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535) before and after. Receipts bit-identical across
 two runs (diff on et001.jsonl and et001_summary.json).
+
+## 2026-08-09 — MUR-001 pre-registration (entry BEFORE any implementation or run)
+
+**Experiment:** census of murchana (window/anchor position) as a structural
+parameter, quantifying the MOS-LAT-001 "murchana rescue" at corpus scale.
+Runner: `mur001.py`; receipts: `results/mur001.jsonl` (one line per
+(generator, N) row with per-anchor arrays) + `results/mur001_summary.json`.
+Frozen verifiers, imported READ-ONLY: melodic v0.1.0 (`score_melodic`) and
+triads scorer v1.1.0 (`score_tempered` = the anchored convention).
+
+**Where anchor-dependence actually enters (the invariance argument, resolved
+FIRST as commissioned).** For a plain generated chain with one fixed
+generator g, the anchored window [b0, b0+N) octave-reduces to the anchor-0
+scale TRANSPOSED by b0·g mod 1. Every interval-structure property — M1 gap
+classes, M2 constant structure, M3 propriety, all functions of the circular
+interval spectrum — is transposition-invariant, hence anchor-INVARIANT: a
+naive census of those columns is trivially constant, and that null is a
+PREDICTION here (H-MU0), not a surprise. Anchor becomes a real degree of
+freedom in exactly three places, two of them in scope:
+1. **Cut-and-project window-representability** (moslat001.py
+   `verify_level`/`murchana_analysis`): whether the chain segment
+   [b0, b0+N) is EXACTLY the set selected by its own internal-coordinate
+   hull, ι(b) = b·g′ − ⌊b·g⌋. Decompose ι(b) = b·(g′−g) + frac(b·g): a
+   line of slope ±conj_sep plus a sawtooth determined by the Sturmian
+   floor word of g. The hull and the intruder census depend on the
+   length-~N factor of that word AT b0 — a genuinely anchor-dependent,
+   non-transposition-covariant property. This is where MOS-LAT-001's
+   intruder failures and murchana rescues live. THE census object.
+2. **The anchored triad scorer**: score_tempered scores octave-reduced
+   representatives, so transposition changes which tones wrap the octave
+   and hence (P, S). Anchor-dependent BY CONVENTION; recorded per anchor
+   as a descriptive lens only (no hypothesis).
+3. JI-embedding containment (BRIDGE-001's anchor intervals) — OUT OF
+   SCOPE here; but note for H-MU2 below that BRIDGE-001's contiguous
+   anchor intervals are containment-of-a-fixed-chain-set intervals,
+   contiguous BY CONSTRUCTION (span ⊆ [b0, b0+N) defines an interval in
+   b0), a categorically different property from murchana
+   representability.
+
+**Corpus (locked):** union of the MOS-LAT-001 noble corpus
+(`moslat001.canonical_preambles` → 27 generators, all-1s tail, exact ℚ(√5))
+and the MOS-LAT-002 mixed-tail quadratic corpus
+(`moslat002.enumerate_corpus` → 216 generators, exact ℚ(√d)); 243 distinct
+generators (disjoint by eventual-CF uniqueness — asserted). Rows: per
+generator, the FIRST zigzag level (levels 0–9, `families/mos.py`) attaining
+each distinct cardinality N ∈ [5, 22] — the exact `run_step2_rows`/
+`run_rows` recipe; expected 97 + 788 = 885 rows. Anchors: b0 ∈ [−N, N]
+(2N+1 per row; matches moslat001's murchana_analysis sweep).
+
+**Per (row, anchor), computed with exact quadratic arithmetic (iota
+imported from moslat001; works on Q5 and Quad):** hull of ι over the
+segment; representable bit = no intruder in the scan range; intruder count.
+Scan-pad justification, registered: with cs = |g − g′| and W = hull width
+≤ (N−1)·cs + 1, any b at distance m from the nearest segment endpoint has
+|ι(b) − ι(endpoint)| ≥ m·cs − 1, so m > (W+1)/cs ⇒ no intrusion; pad
+D = 2N + ceil(2/cs) + 8 strictly exceeds N + 2/cs. Float fast-path for the
+in-hull comparison with exact confirmation inside a 1e-9 ambiguity band
+(float error of ι is ≤ ~1e-12 at these magnitudes). Per anchor also: frozen
+melodic triple (propriety classification, CS violation count, gap-class
+count) of the projected scale, and frozen P at ε ∈ {2, 3}¢ (descriptive).
+Monotonicity, exact and registered: ι is strictly monotone in b iff
+g′ ∉ (0, 1) (steps are g′ and g′−1) — moslat001's conj_sep > 1 flag is
+sufficient but NOT necessary; the census uses the exact criterion.
+
+**Constants (locked):** anchors [−N, N]; N ∈ [5, 22]; levels 0–9; scan pad
+D as above; melodic defaults (dedup 0.01¢, gap/CS 0.5¢, propriety 1e-9¢);
+triad ε ∈ {2.0, 3.0}¢, max_span default 1200¢; seed 20260725; 9999
+permutations, add-one rule; python3.12, stdlib only, deterministic; run
+twice, receipts must be bit-identical (sha256 recorded in the results
+entry).
+
+**Pre-registered hypotheses and verdict criteria:**
+
+- **H-MU0 (invariance null rail):** for every row, the melodic triple
+  (propriety classification, CS violations, gap-class count) is IDENTICAL
+  across all 2N+1 anchors. Predicted violations: exactly 0 — the
+  transposition argument above is exact, and float noise (~1e-11¢) is
+  orders below every epsilon, with no exact spectral coincidences possible
+  for a quadratic irrational generator. ANY violation = implementation bug:
+  the runner writes receipts, reports the rows, and exits nonzero; the
+  experiment halts for investigation.
+- **H-MU1 (rescue genericity, from the MOS-LAT-001 receipts):** every row
+  with ≥ 1 non-representable anchor has ≥ 1 representable anchor.
+  Statistic: the number of ZERO-RESCUE rows (no representable anchor at
+  all); KEPT iff 0. Registered tension, stated before running: H-MU1
+  extrapolates MOS-LAT-001 (where every failing level had rescuing shifts,
+  counts 5/15/41/109), but the drift-budget derivation under H-MU4 predicts
+  zero-rescue rows on the mixed corpus's small-conj_sep tail. H-MU1 and
+  H-MU4(b) cannot both hold; the census adjudicates.
+- **H-MU2 (contiguity, as commissioned):** the representable-anchor set R
+  of each partially-representable row (some but not all anchors, |R| ≥ 2)
+  is a contiguous integer interval. Registered prediction: REFUTED — the
+  MOS-LAT-001 receipts ALREADY show non-contiguous R (murchana examples
+  [−4,−2,−1,2,3] at N=4; [−7,−4,−2,3,5] at N=7), and the BRIDGE-001
+  intervals that motivated the hypothesis are contiguous by construction
+  (see item 3 above). The census quantifies prevalence: fraction of
+  partially-representable rows with contiguous R.
+- **H-MU2b (registered replacement — three-distance structure):** because
+  representability at b0 is a function of a fixed-length factor of the
+  Sturmian floor word at b0, R should inherit rotation-orbit structure:
+  for every row with |R| ≥ 3, the interior gaps between consecutive
+  representable anchors take AT MOST 3 distinct values (prior data:
+  {2,3,5} and {1,2} patterns in the moslat001 examples). KEPT iff zero
+  rows violate; each violation reported with its gap multiset.
+- **H-MU3 (rescue fraction vs CF structure):** over NON-monotone rows,
+  with ρ = |R|/(2N+1) and rows labeled is_cf_convergent (exact convergents
+  of the digit string preamble+periodic tail, membership of (num, den) as
+  in moslat001): Δ = mean ρ(non-convergent) − mean ρ(convergent) > 0
+  (convergent levels are where anchor-0 failures concentrated in
+  MOS-LAT-001; predict they are harder across the whole anchor sweep, not
+  just at anchor 0). Test: one-sided permutation of the convergent labels
+  WITHIN generator strata, seed 20260725, 9999 permutations, add-one rule.
+  SUPPORTED iff Δ > 0 AND p < 0.05.
+- **H-MU4 (drift-budget law — own sharper question, derived before
+  running from ι = b·(g′−g) + frac(b·g)):** let T = N·cs (total internal
+  drift across the window). The sawtooth contributes O(1) spread while
+  selection density is ~width/cs, so representability needs the drift term
+  to dominate: (a) monotone rows (g′ ∉ (0,1)): ALL anchors representable —
+  theorem rail, violations = bug; (b) among non-monotone rows, zero-rescue
+  rows EXIST (refuting H-MU1) and T separates zero-rescue from
+  rescue-possible with AUC ≥ 0.95 (T as score for "has ≥ 1 representable
+  anchor"); (c) band predictions: every zero-rescue row has T < 2, and
+  every non-monotone row with T > 4 has ≥ 1 representable anchor. KEPT
+  iff (a) 0 violations, (b) both classes non-empty and AUC ≥ 0.95,
+  (c) both band claims hold; partial outcomes reported per clause.
+
+**Order:** commit this entry → tests/test_mur001.py (moslat001-receipt
+fixtures pinned: g3=(1,2) N=11 anchor-0 intruder [11], |R| = 15; g4=(2,2)
+N=7 R = {−7,−4,−2,3,5}, N=19 |R| = 15; golden monotone all-representable)
++ mur001.py, suite green BEFORE the first run → run twice, bit-identity
+check → results entry → FINDINGS.md → GATES row G-018 → PR.
+
+## 2026-08-09 — MUR-001 results + verdicts
+
+**Run:** mur001.py, python3.12, ~40 s; run twice, receipts **bit-identical**
+(sha256 `mur001.jsonl` e3584d59…adda6d, `mur001_summary.json`
+2675ed55…feb839). 243 generators, 885 rows (97 noble + 788 mixed — exactly
+the MOS-LAT-001/002 row sets, asserted by tests), 20,019 anchor
+evaluations at b0 ∈ [−N, N]; exact ℚ(√d) arithmetic; frozen scorer v1.1.0
+and melodic v0.1.0 read-only; seed 20260725, 9999 permutations.
+
+**H-MU0 — KEPT (null rail), 0 violations.** The melodic triple (propriety
+class, CS violations, gap-class count) is identical across all 2N+1
+anchors on every row — the transposition-invariance argument confirmed
+exactly, at float noise orders below every epsilon.
+
+**H-MU1 — REFUTED, decisively; the registered H-MU4(b) tension resolves in
+H-MU4's favor.** 537/885 rows are ZERO-RESCUE (no representable anchor at
+all). Of the 709 rows that fail at anchor 0, only **172 (24.3%) have any
+rescuing anchor**. The refutation does not need the mixed corpus: the
+noble corpus alone has 69/97 zero-rescue rows. MOS-LAT-001's
+"every failure rescued" was an artifact of its 4-generator step-1 sample,
+whose failing rows all sat inside the rescue band (T = N·|g−g′| ≈ 1.4–5).
+Murchana rescue is a minority phenomenon, not a generic one.
+
+**H-MU2 — REFUTED, as registered.** Of 202 partially-representable rows
+with |R| ≥ 2, **200 are non-contiguous** (contiguous fraction 0.99%; the
+two contiguous cases are |R| = 2 rows). BRIDGE-001's contiguous anchor
+intervals were containment-by-construction; murchana representability is
+a different, non-interval object.
+
+**H-MU2b — KEPT on 295/299 rows, REFUTED as stated.** 4 rows exceed 3
+distinct interior anchor-gap values, and all four violate with the SAME
+gap set {1, 2, 4, 7} ([0;1,1,1,(3)*] N=14; [0;2,1,(2,3)*] N=19;
+[0;1,1,1,(2,3)*] N=11 and N=19). Post-hoc reading (labeled): 7 = 1+2+4,
+consistent with a skipped occurrence in a three-distance return
+structure — the sets look like unions of Sturmian-factor occurrence sets,
+as the registered heuristic argued, but the ≤3 bound is not exact.
+
+**H-MU3 — NULL under the registered rule, with the direction REVERSED.**
+Over the 761 non-monotone rows: mean ρ(convergent) = 0.116 >
+mean ρ(non-convergent) = 0.082, Δ = −0.0342, one-sided p = 1.0000 — the
+observed Δ sits at the opposite extreme of the within-generator
+permutation distribution. Post-hoc observation (labeled, not a verdict):
+CF-convergent levels are EASIER to rescue across the full anchor sweep —
+opposite of the anchor-0 intuition MOS-LAT-001 suggested (convergent
+levels are where anchor 0 fails, but they are also where OTHER anchors
+succeed most often).
+
+**H-MU4 — (a) KEPT, (b) KEPT, (c) REFUTED narrowly.**
+(a) All 124 monotone rows (exact criterion g′ ∉ (0,1)) are representable
+at every anchor, zero violations — and SHARPER than predicted: the
+fully-representable rows are EXACTLY the monotone rows (124 = 124), so on
+this corpus monotonicity ⇔ murchana-free; every non-monotone row fails at
+some anchor. (b) Zero-rescue (537) vs rescue-possible (224) non-monotone
+rows are separated by the drift budget T = N·|g−g′| at **AUC 0.9742**
+≥ the registered 0.95. (c) The band constants miss: 5 zero-rescue rows
+have T > 2 (max 2.362), refuting "zero-rescue ⇒ T < 2"; "T > 4 ⇒
+rescue-possible" held (0 violations). Empirical overlap band:
+T ∈ [0.753, 2.362].
+
+**Descriptive P lens (registered no-hypothesis):** the anchored frozen
+triad count P is **anchor-INVARIANT on all 885 rows at both ε ∈ {2, 3}¢**
+(0 rows vary). Under the frozen convention (max_span 1200¢), murchana
+never moves the harmonic count — the harmonic axis is a property of the
+scale up to transposition here, while window-representability is not.
+Practical consequence: murchana is harmonically FREE and structurally
+binding — choosing an anchor costs nothing in P and decides whether the
+scale is a true cut-and-project window set.
+
+**Kept.** mur001.py exactly as committed before the first run (no post-run
+changes); receipts `results/mur001.jsonl` + `results/mur001_summary.json`.
+Lattice suite 124/124 OK (incl. 14 new mur001 tests pinned to MOS-LAT-001
+receipts), triads suite 88/88 OK; freeze checks OK before AND after
+(scorer pin 1a840af9…9b592, melodic pin a16f162b…7535, both unchanged).
+Findings promoted to FINDINGS.md; gate row G-018 appended.
+
+## 2026-08-18 — ET-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question:** the subset census of 12-EDO under the frozen scorers. Enumerate
+every non-empty pitch-class set of Z12 up to TRANSPOSITION (Pólya:
+(1/12)·Σ_{d|12} φ(d)·2^{12/d} = 4224/12 = 352 classes incl. empty and full ⇒
+**351 non-empty**; per-size histogram 1, 6, 19, 43, 66, 80, 66, 43, 19, 6,
+1, 1 for N = 1..12 — pinned in a test) and score each class on the melodic
+side with frozen `melodic.py` v0.1.0 (`score_melodic`, defaults: propriety
+class + violations, CS + violations, gap classes, gap_classes/N, entropy;
+step-pattern word recorded alongside) and on the harmonic side with frozen
+`triads/scorer.py` v1.1.0 (`score_tempered`, PRIMARY anchored convention,
+default max_span 1200¢) at the ET-001 ε grid **{1, 2, 3, 5, 10, 14.86,
+20}¢** — P, S, G, raw counts, and the G-002 balance bucket (verbatim copy of
+`triads/search.py::balance_bucket`, cross-checked by a test) per (class, ε).
+NOT a min(P,S) ranking. Secondary keys per row: the T/I class (lexmin over
+transpositions of the set and its inversion, plus the Rahn prime form for
+readability; 223 non-empty T/I classes — pinned), `is_inversionally_symmetric`
+(predicted 95 of 351: 2·224 − 352 = 96 incl. empty), transposition period
+(limited-transposition flag; 16 non-empty classes with period < 12), interval
+vector, and tags for the well-known scales. Runner `et002.py`; receipts
+`results/et002.jsonl` (351 rows) + `results/et002_summary.json`; tests
+`tests/test_et002.py` green before the first run; stdlib only, python3.12,
+deterministic, no wall-clock fields; two runs bit-identical (diff recorded).
+
+**Canonical forms (locked).** T-class representative = lexicographically
+smallest sorted 12-tuple-transposition of the set (so the diatonic is
+(0,1,3,5,6,8,10) — Locrian at 0); cents = 100·pc. Step word = the
+lexicographically smallest rotation of the circular gap sequence (necklace
+representative; diatonic → "1221222"). Tags are by class membership, so
+"diatonic 2212221", pentatonic, whole-tone (Messiaen 1), octatonic
+(Messiaen 2), hexatonic/augmented scale, Messiaen 3–7 (all seven modes are
+tagged; the four modes 1–4 named in the brief are among them, and the
+limited-transposition FLAG covers the general concept), melodic and harmonic
+minor, harmonic major, chromatic, major/minor/augmented/diminished triads,
+sus (0,2,7) trichord, dominant and diminished sevenths, power chord (0,7),
+tritone (0,6), Guidonian hexachord — are looked up, not searched.
+
+**Analytic mirror (the algebra the run must check; the frozen scorer is the
+referee, the mirror is not; independent integer combinatorics in scratch, no
+frozen-scorer or melodic.py calls).** Every subset lives inside 12-EDO, so a
+triple at anchor b is a 12-EDO type (p, q) with b − p and b + q in the set;
+ET-001's 12-EDO type table therefore decides everything. Types with
+proportional deviation < 20¢: (7,5) 1.9550 [sep 203.9], (1,1) 2.8865
+[sep 5.7730], (5,4) 7.8374 [sep 115.7], (2,2) 11.5268 [sep 23.0537],
+(4,3) 14.8590 [sep 70.28]; nothing else below (3,3) at 25.86¢. A type counts
+on (dev, sep], so at the grid the qualifying P-types are: ε=1: none; ε=2:
+(7,5); ε=3, 5: (1,1), (7,5); ε=10: (5,4), (7,5); ε=14.86, 20: (2,2), (4,3),
+(5,4), (7,5); S-types are the transposes (q,p). Because p + q = 12 makes a
+and c the SAME pitch class, the (7,5) power chord counts one triple per
+ordered fourth (b, b+5): **P@2 = S@2 = ic5 (interval-vector entry 5) for
+every class**. Pattern identities: (1,1) counts chromatic-trichord middles
+c111 = #{b: b±1 ∈ S}; (4,3) counts each major-triad pc-set {r, r+4, r+7}
+once (anchor = its third) and (5,4) counts the SAME set again (anchor = its
+fifth; 3:4:5 voicing, deviation 7.84¢ < the root-position 14.86¢); (2,2)
+counts whole-tone trichords WT3 = #{x, x+2, x+4} ⊂ S; duals count minor
+triads {r, r+3, r+7} twice ((3,4) root, (4,5) first inversion 12:15:20).
+Hence for every class:
+  P@1 = 0; P@2 = ic5; P@3 = P@5 = ic5 + c111; P@10 = ic5 + Maj;
+  P@14.86 = P@20 = ic5 + 2·Maj + WT3;   S likewise with Min.
+So **Maj = P@10 − P@2 and Min = S@10 − S@2 are derivable from the frozen
+scorer's own grid** (recorded as derived fields). G-types are the symmetric
+(p,p) with dev_G = 0: G@1..5 = Σ_{p=1..6} m(p,p); G@10..20 drops p = 1
+(sep 5.77) — full 12: G = [72,72,72,72,60,60,60] (ET-001's N·⌊N/2⌋ at ε→0).
+The 12-EDO cluster floor of ET-001 (C♯–D–D♯ counted for ε ∈ (2.887, 5.773])
+is inherited: counts are NOT monotone in ε — the mirror predicts **105
+classes with P@10 < P@5** (guard exit of the (1,1) cluster).
+
+**Falsifiable predictions (numbers from the mirror, to be confirmed or
+refuted by the frozen scorers on all 351 classes):**
+- **H-T1 (cultural epsilon inherited).** At ε = 1¢ every class has
+  P = S = 0 (351/351). At ε = 2¢ exactly the classes with ic5 > 0 have
+  P > 0: **321 of 351** (the 30 fifth-free classes: 1/5/10/10/3/1 at
+  N = 1..6 — M5-images of the adjacent-semitone-free necklaces). At
+  ε = 3 and 5¢ **327** classes have P > 0: the 321 plus exactly the six
+  fifth-free classes containing a chromatic trichord — (0,1,2), (0,1,2,3),
+  (0,1,2,4), (0,1,2,10), (0,1,2,3,4), (0,1,2,4,10). At ε = 10¢: 321 again
+  (cluster dropped, no new fifth-free winners because a major triad
+  contains a fifth); at 14.86/20¢: **330** (whole-tone trichords admit
+  fifth-free classes such as (0,2,4)). P = S in all 351 classes for
+  ε ≤ 5 (ic5 and c111 are inversion-invariant) and in exactly **231**
+  classes at ε ∈ {10, 14.86, 20}; the census's N = 12 row must reproduce
+  ET-001's P = S = [0, 12, 24, 24, 24, 48, 48] EXACTLY (rail). Predicted
+  balance buckets at 14.86¢: diagonal 231, skew_P/S 31/31, strong_P/S
+  28/28, near_P/S 1/1.
+- **H-T2 (diatonic distinction).** (a) NOT CS (one violating class, the
+  600¢ tritone at 3 and 4 steps — the SPEC correction on record); (b)
+  proper but NOT strictly (span-3 max = span-4 min = 600¢); (c) at
+  ε = 14.86¢ the diatonic scores **P = S = 15** = 6 power chords + 3 major
+  triads × 2 voicings (root anchor (4,3) + second-inversion anchor (5,4)) +
+  3 whole-tone trichords (C-D-E, F-G-A, G-A-B); grid P = S =
+  [0, 6, 6, 6, 9, 15, 15]. Among the 66 seven-note classes the diatonic
+  is the UNIQUE maximum of P + S (30; runner-up 26 = the improper
+  (0,1,2,3,5,7,10)/(0,1,2,3,5,8,10) pair at (12,14)/(14,12)) and of P
+  alone and S alone (15): **zero 7-note classes tie or beat it** under the
+  scorer. HOWEVER, in the raw "number of major + minor triad pc-sets"
+  sense (Maj + Min derived as above) the literal claim is predicted
+  **REFUTED**: two hexatonic-plus-one classes, (0,1,2,5,6,9,10) and
+  (0,1,2,4,5,8,9), carry 7 triads (4+3 / 3+4) against the diatonic's 6 —
+  the diatonic wins the scorer's P + S only because it also carries the
+  most fifths (ic5 = 6, the 7-note maximum, uniquely) and 3 whole-tone
+  trichords. Both halves are registered; the receipts decide both.
+- **H-T3 (propriety census).** Predicted over the 351 classes: strictly
+  proper **23** (6.6%), proper **46** (13.1%), improper **282** (80.3%);
+  CS **51** (14.5%). Per N (sp/p/imp): 1: 1/0/0; 2: 6/0/0; 3: 4/5/10;
+  4: 7/6/30; 5: 1/9/56; 6: 2/11/67; 7: 0/5/61; 8: 1/4/38; 9: 0/3/16;
+  10: 0/2/4; 11: 0/1/0; 12: 1/0/0. The 23 strictly proper classes are
+  exactly: the 7 classes with N ≤ 2, (0,2,7), (0,3,7), (0,3,8), (0,4,8),
+  (0,1,5,8), (0,1,6,7), (0,2,5,8), (0,2,5,9), (0,2,6,8), (0,2,6,9),
+  (0,3,6,9), the pentatonic, the hexatonic, the whole-tone, the octatonic,
+  and the chromatic — the pentatonic is the ONLY strictly proper 5-note
+  class and NO 7-note class is strictly proper (Rothenberg: 12-EDO's 7-note
+  MOS is only proper, and every other heptad is improper or proper).
+  Max gap_classes/N = **1.0**, attained by all 32 classes with pairwise
+  distinct gaps (N ≤ 4: sums 1+11, …, 1+2+9, …, 1+2+3+6, 1+2+4+5); for
+  N ≥ 5 distinct gaps are impossible (1+2+3+4+5 > 12) so the max is 4/5.
+  Melodic-side rails: gap classes and CS/propriety at 100¢ multiples are
+  ε-independent (0.5¢ / 1e−9¢ guards inert), so the frozen results must
+  equal the integer mirror row for row.
+- **H-T4 (Pareto).** Frontier defined per cardinality N: classes not
+  dominated on (gap_class_count ↓, P + S at 14.86¢ ↑) among classes of
+  the same N (a global frontier is degenerate — the chromatic scale wins
+  both axes, ET-001's degenerate-melody corner). Predicted union: **24
+  classes**, including the diatonic (N=7, uniquely), the pentatonic
+  (N=5, gc 2, P+S 14), whole-tone + hexatonic + the Guidonian hexachord
+  (0,2,4,5,7,9) (N=6; the hexachord tops N=6 with P+S = 22), Messiaen 3
+  (tops N=9 at 48), the chromatic (N=12), the sus trichord and augmented
+  triad (N=3) — while the major and minor triads are NOT on it (P+S = 4
+  tied by (0,2,7) at fewer gap classes) and the **octatonic is NOT on it**
+  (P+S 32 < 38 at N=8, both gc 2). **Six improper classes ARE on the
+  frontier**: (0,1,2,7), (0,2,4,6), (0,2,4,7), (0,2,4,9) at N=4, the
+  bebop-dominant-type (0,1,2,3,5,7,8,10) at N=8 (P+S 38, the N=8 maximum),
+  and (0,1,2,3,4,5,6,8,9,10) at N=10 — improper-but-valid spice, reported
+  not zeroed. Proper-or-better frontier: 19 classes (post-hoc-free lens,
+  also registered).
+- **Rails.** R-DUAL: P = S at every ε for all 95 inversionally symmetric
+  classes, and P(S) = S(−S) for every asymmetric pair (anchored scorer
+  commutes with inversion). R-12: N = 12 row = ET-001 grid. R-G: G grid
+  matches the symmetric-type mirror for every class. R-MEL: melodic
+  results equal the integer mirror row for row (351/351).
+
+**Constants (locked):** ε grid {1, 2, 3, 5, 10, 14.86, 20}¢; scorer
+default max_span 1200¢; melodic defaults; frontier lens (gc, P+S@14.86)
+per N; no other tunables. Scale: 351 × 7 = 2457 scorer calls + 351 melodic
+calls; seconds. Anything not predicted above lands in clearly labeled
+post-hoc fields.
+
+**Archive context (read in place, cited by path+page):**
+`2010_02_24B/12&17/BasicPttnsGenus12&17.pdf` pp.1–3 — Wilson, "Some Basic
+Patterns Underlying Genus 12 & 17" (©1980, reprinted 1981/1983): the
+12-tone genus is the Pythagorean major (diatonic) modulated through the six
+keys E A D G C F, with 12-Equal drawn as one point of the meantone
+continuum (p.2), and the just diatonic modulated through the same keys
+yielding the 17-tone genus (p.3). Wilson's framing of 12 as the diatonic's
+transposition closure is exactly the object this census tests: which of the
+351 subsets the frozen scorers single out, and whether the diatonic is it.
+
+**Post-run obligations:** results entry here with per-hypothesis
+KEPT/REFUTED, FINDINGS.md paragraph, PR on research/et-002 stacked on #38;
+gate G-019 lives in the consolidated ledger PR #37 (GATES.md NOT edited
+here; proposed row text in the PR body).
+
+## 2026-08-18 — ET-002 results + verdicts
+
+**Run:** `et002.py` (~0.5 s, 2457 scorer calls + 351 melodic calls,
+receipts bit-identical across two runs by diff on both files),
+`results/et002.jsonl` (351 rows, one per T-class) +
+`results/et002_summary.json`. Scorer v1.1.0, melodic v0.1.0, lattice suite
+155/155 green pre-run (25 new et002 tests), freeze checks A OK on both
+pins before and after. One runner fix between the first and second
+invocation: the H-T1 verdict compared a sorted list of classes against an
+unsorted literal (a comparison bug in the verdict code, not a prediction
+change) — the receipts themselves were identical before and after the fix.
+Enumeration rails as pinned: 351 T-classes with size histogram
+1/6/19/43/66/80/66/43/19/6/1/1, 223 T/I classes, 95 inversionally
+symmetric classes, 16 limited-transposition classes.
+
+**Mirror rails — all KEPT, 351/351.** The pattern-count mirror (12-EDO
+type table × embedded-pattern counts) agrees with the frozen scorer on P,
+S AND G at every one of the 2457 (class, ε) points; the integer melodic
+mirror agrees with frozen melodic.py on propriety class, violation counts,
+CS and gap classes for every class. P = S at every ε for all 95 symmetric
+classes; P(S) = S(−S) for every asymmetric pair. The N = 12 row reproduces
+ET-001's P = S = [0, 12, 24, 24, 24, 48, 48] exactly.
+
+**H-T1 — KEPT. The cultural epsilon is inherited by every subset, and the
+whole harmonic side of 12-EDO at ε ≤ 20¢ is five patterns.** At ε = 1¢ all
+351 classes score P = S = 0. At ε = 2¢ P = S = ic5 (interval-vector entry 5)
+for every class — the 2:3:4 power chord is the ONLY triad type alive there —
+so exactly the 321 fifth-bearing classes have P > 0 and the 30 fifth-free
+classes (1/5/10/10/3/1 at N = 1..6) do not. At 3 and 5¢ the guard-window
+chromatic cluster (C♯–D–D♯, ET-001) enters and 327 classes are positive:
+the six new ones are precisely the fifth-free clusters (0,1,2), (0,1,2,3),
+(0,1,2,4), (0,1,2,10), (0,1,2,3,4), (0,1,2,4,10). At 10¢ the cluster is
+guard-dropped and the second-inversion major (3:4:5-type, 7.84¢) arrives:
+321 classes; **105 classes have P@10 < P@5** (counts are not monotone in
+ε — the ET-001 cluster floor, now census-wide). At 14.86/20¢ the root
+major (4:5:6, 14.859¢) and the whole-tone trichord (2,2) arrive: 330
+classes positive. P = S in all 351 classes for ε ≤ 5¢ and in exactly 231
+for ε ≥ 10¢; balance buckets at 14.86¢: diagonal 231, skew 31/31, strong
+28/28, near 1/1 — every number as pre-registered. Reporting identity: for
+every class P@14.86 = ic5 + 2·Maj + WT3 and S@14.86 = ic5 + 2·Min + WT3
+(each major triad is counted twice — root anchor and second-inversion
+anchor — never in first inversion), so **Maj = P@10 − P@2 and
+Min = S@10 − S@2 are readable straight off the frozen grid**.
+
+**H-T2 — KEPT in the scorer's sense; the literal raw-triad maximum
+REFUTED exactly as pre-registered.** The diatonic (0,1,3,5,6,8,10),
+step word 1221222: NOT CS (1 violating class, the tritone at 3 and 4
+steps), proper but not strictly (600¢ contact), grid P = S =
+[0, 6, 6, 6, 9, 15, 15], derived Maj = Min = 3, WT3 = 3, ic5 = 6. Among
+the 66 seven-note classes it is the UNIQUE maximum of P + S (30; runner-up
+26), of P alone and of S alone (15) — **zero classes tie or beat it** —
+and it is the only 7-note class on the (gc, P+S) frontier. But on raw
+Maj + Min it is NOT the maximum: the two hexatonic-plus-one classes
+(0,1,2,5,6,9,10) and (0,1,2,4,5,8,9) carry 7 triads (4+3 / 3+4) against
+the diatonic's 6, and lose to it under the scorer only because the
+diatonic also holds the 7-note maximum of fifths (ic5 = 6, unique) and
+three whole-tone trichords. The scorer's "diatonic distinction" is
+therefore a statement about triads + fifths + stepwise-thirds
+together, not about triad count alone — worth remembering when the
+aggregator is designed.
+
+**H-T3 — KEPT.** Over the 351 classes: strictly proper 23 (6.6%), proper
+46 (13.1%), improper 282 (80.3%); CS 51 (14.5%); the 23 strictly proper
+classes are exactly the pre-registered list (7 with N ≤ 2; (0,2,7),
+(0,3,7), (0,3,8), (0,4,8); seven tetrads incl. the diminished seventh;
+pentatonic; hexatonic; whole-tone; octatonic; chromatic). The pentatonic
+is the ONLY strictly proper 5-note class; NO 7-note class is strictly
+proper (5 proper, 61 improper); no 7-, 9-, 10- or 11-note class is CS.
+Max gap_classes/N = 1.0, attained by all 32 distinct-gap classes
+(N ≤ 4); for N ≥ 5 the maximum is 4/5.
+
+**H-T4 — KEPT.** The per-N frontier on (gap classes ↓, P + S at 14.86¢ ↑)
+has 24 members (19 proper-or-better): the diatonic (N=7), pentatonic
+(N=5), whole-tone + hexatonic + the Guidonian hexachord (N=6; the
+hexachord tops N=6 at 22), Messiaen mode 3 (tops N=9 at 48), the
+chromatic (N=12), the sus trichord and augmented triad (N=3), the
+diminished seventh, and neither the major nor the minor triad (P+S = 4,
+tied by (0,2,7) at fewer gap classes) nor the octatonic (32 < 38 at N=8,
+both gc 2). Six improper classes ARE on the frontier: (0,1,2,7),
+(0,2,4,6), (0,2,4,7), (0,2,4,9) at N=4, (0,1,2,3,5,7,8,10) at N=8 and
+(0,1,2,3,4,5,6,8,9,10) at N=10 — reported, not zeroed, per the
+improper-but-valid doctrine.
+
+**Post-hoc (not registered, labeled).** (1) The N = 8 frontier winner
+(0,1,2,3,5,7,8,10) [11122122] is the **bebop dominant** scale
+(C D E F G A B♭ B): P = S = 19 (7 fifths, 4 major, 4 minor, 4 whole-tone
+trichords), improper; the only PROPER 8-note superset of the diatonic is
+(0,1,2,4,5,7,9,10) [11212212] = the **bebop major** (C D E F G A♭ A B),
+P = S = 17, which tops the proper-only frontier at N = 8 and, at 4.25
+(P+S)/N, is second only to the diatonic (4.29) among proper 5–8-note
+classes — jazz practice's two chromatic-passing-tone scales are the
+census's top-8 objects. (2) Balance-bucket winners at 14.86¢ (G-002
+contract): strong_P is led by (0,1,3,5,8,9) [122313] = D♭–F–A♭ major
+triads chained by fourths plus one minor (P,S) = (10,6), proper; its
+inversion leads strong_S; the near_P/near_S singletons are the 9-note
+pair (0,1,2,3,5,6,8,9,10)/(0,1,2,3,5,6,7,9,10) at (23,21)/(21,23); the
+diagonal is 231 classes deep and its size-stratified tops ARE the frontier
+above. (3) The whole-tone scale scores P = S = 6 at 14.86¢ entirely from
+the symmetric (2,2) trichord in its guard window (11.53, 23.05] — a
+census-wide reminder that ε ≥ 11.53¢ admits augmented-flavoured
+"proportional" whole-tone trichords in any scale that has them, which is
+what makes the diatonic's 15 rather than 12. (4) The six 10-note classes are the
+chromatic minus one dyad, indexed by that dyad's interval class: deleting
+an ic5 (fourth) or ic6 (tritone) dyad leaves a PROPER class, deleting
+ic1–ic4 leaves an IMPROPER one; the two frontier members at N = 10 are the
+ic4- and ic5-deletions (both P = S = 29), one improper and one proper —
+near-chromatic propriety hinges on which dyad is removed.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+re-verified post-run). Gate G-019 is queued in the consolidated ledger
+(PR #37); GATES.md not edited here.
+
+**Run receipt:** 2026-08-18, python3.12 — lattice suite 155/155 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 25 et002), freeze checks A OK on both pins (scorer
+1a840af9…9b592, melodic a16f162b…7535) before and after. Receipts
+bit-identical across two runs (diff on et002.jsonl and et002_summary.json).
+
+## 2026-08-18 — MUR-002 pre-registration (entry BEFORE any implementation or run)
+
+**Experiment:** calibrate the program's murchana machinery against the
+primary source of the concept — the Indian grāma/mūrchanā system — as
+Wilson actually lattices it. Runner: `mur002.py`; receipts:
+`results/mur002.jsonl` (one line per (scale, rotation) row) +
+`results/mur002_summary.json`; transcription: `MUR002_TRANSCRIPTION.md`
+(derived data only, page-cited; the scan stays in place per the archive
+rule). Frozen verifiers imported READ-ONLY: triads scorer v1.1.0
+(`score`, `score_tempered`) and melodic v0.1.0 (`score_melodic`,
+`best_val_kendall_tau`). Stacks on MUR-001 (research/mur-001, PR #39).
+
+**What Wilson actually drew (read 2026-08-18, in place; pages of
+`~/Documents/scans by Kraig/2010_02_24/Hanson/LatticingRagaScales.pdf`,
+37 pp; read pp. 1–26).** NOT a 22-śruti lattice: the constant background
+is Figure 1, "Major-Minor Triadic Lattice for 53 (redrawn from 1942
+original)" — L. A. Hanson's 5-limit hexagonal lattice, rows = chains of
+fifths, adjacent rows a 5/4 apart, every hex carrying a note name
+(/ = +81/80, \ = −81/80 relative to the 5-limit spelling), an exact
+ratio 3^a·5^b, and its 53-EDO degree (schisma 32805/32768 and kleisma
+tempered). p.1 is the bare figure; pp. 2–19 plot eighteen numbered ragas
+as red dots (18 Nat Bhairav, 17 Madhubanti, 16 Jogiya Todi, 15 Bhairav,
+14 Anand Bhairav, 13 "No Name", 12 Lalit, 11 Todi, 10 Lalit₂, 9 Purvi,
+8 Marwa, 7 Bhairavi, 6 Asawari, 5 Kafi, 4 **Old Kafi**, 3 Khamaj,
+2 Bilawal, 1 Kalyan). **p.20 is the 22-śruti object**: "Outlined in red
+is the theoretical scale of 22 steps, of modern India … E.W. 1997" —
+22 hexes with śruti numbers 0–21, i.e. exact ratios 1/1, 256/243, 16/15,
+10/9, 9/8, 32/27, 6/5, 5/4, 81/64, 4/3, 27/20, 45/32, 729/512, 3/2,
+128/81, 8/5, 5/3, 27/16, 16/9, 9/5, 15/8, 243/128 — twelve on the
+Pythagorean row (3^−5..3^6), five on the 5-row (5·3^k, k = −2..2), five
+on the 1/5-row (3^k/5, k = −1..3); with Wilson's own margin note that
+135/128 vs 256/243, 405/256 vs 128/81, 1215/1024 vs 32/27 "and so forth"
+are schismatically equivalent. pp. 21–23: Boomsliter & Creel "extended
+reference patterns" (major: two fifth-chains a 5/4 apart; minor; and a
+"blue" pattern to "compare with independently derived ratios for Marwa,
+Purvi, Lalit₂, Todi, Lalit"). pp. 24–26 and 36–37: Hanson keyboard
+geometry (19-tone sets, tubulongs), not raga material. Wilson does NOT
+draw a madhyama-grāma anywhere in pp. 1–26; the ṣaḍja-grāma appears
+under his label "Old Kafi" (p.16): {1/1, 10/9, 32/27, 4/3, 3/2, 5/3,
+16/9} = the classical 4-3-2-4-4-3-2 śruti pattern read on the 22-śruti
+set. The madhyama-grāma used below is DERIVED (Pa lowered one śruti,
+3/2 → 40/27) and is labeled derived, not transcribed, in every receipt.
+Every raga has C = 1/1 as its dot (Sa); Wilson's raga placements use the
+5-limit spellings /C# 135/128, /G# 405/256, /D# 1215/1024, //A#
+3645/2048 rather than their Pythagorean schisma-twins — the p.20 note is
+about exactly this. A second 22 at the archive root, `BilawalDiamond22.jpg`,
+is K. Grady's (dated 20-10-23), not Wilson's; noted in the transcription,
+descriptive only.
+
+**Corpus (locked; every ratio exact `Fraction`, every scale contains
+1/1):**
+- S22 — the p.20 22-śruti set (śruti index = sorted rank).
+- SA — ṣaḍja-grāma = Wilson's Old Kafi (p.16); MA — madhyama-grāma,
+  derived (SA with 3/2 → 40/27).
+- R1..R18 — the eighteen raga scales as drawn (pp. 2–19), exact spellings
+  as placed on the lattice; plus for each, its "śruti-spelled" twin
+  (each tone snapped to the S22 tone of the same 53-degree) and its
+  53-EDO image (degree = 31·e3 + 17·e5 mod 53, the figure's own numbers,
+  cross-checked against the transcribed degrees).
+- All 7 rotations (mūrchanās) of every 7-tone scale; the 22 rotations of
+  S22 for the invariance rail only.
+
+**Constants (locked):** melodic defaults (dedup 0.01¢, gap/CS 0.5¢,
+propriety 1e-9¢); CS ε-sweep for H-R5: {0.5, 1.0, 1.5, 1.9, 2.0, 2.5,
+3.0, 5.0}¢; triad ε ∈ {2, 3, 5, 15}¢ tempered + the exact rational path
+(`score`), max_span default (2/1 exact, 1200¢ tempered); "within-tolerance"
+for the chain/EDO fit tests = 5¢ (and 2¢ reported); coarse step word:
+T iff step > 150¢ else s; m4_proto = (tonic-relative step word as exact
+ratios; interval-from-tonic set as exact ratios + cents; tonic-consonance
+count = number of tones forming exactly one of {3/2, 4/3, 5/4, 6/5, 5/3,
+8/5} with the tonic) — computed in the runner, NOT added to melodic.py;
+python3.12 stdlib only; deterministic; run twice, receipts bit-identical
+(sha256 recorded in the results entry).
+
+**Mode-blindness, stated up front.** M1–M3 are functions of the circular
+interval spectrum, hence rotation-invariant (MUR-001 H-MU0 rail); and the
+frozen anchored triad scorer is EXACTLY transposition-invariant by
+construction (each triad is anchored at its middle tone b, with a and c
+the unique pitch-class representatives in (b/2, b) and (b, 2b) — the
+loop over b covers the pitch-class set, so a transposed set yields the
+same multiset of ratio triples; max_span c/a is likewise relative).
+Every frozen number in this experiment is therefore mūrchanā-blind by
+theorem; the experiment measures AROUND that with m4_proto and says so.
+
+**Pre-registered hypotheses, predictions derived by hand from the
+ratios BEFORE any code:**
+
+- **H-R1 (grāma structure).** SA and MA are both STRICTLY PROPER and CS
+  (hand check: SA steps (10/9, 16/15, 9/8, 9/8, 10/9, 16/15, 9/8): 1-step
+  max 203.9 < 2-step min 294.1; 2-step max 407.8 < 3-step min 498.0;
+  3-step max 590.2 < 4-step min 609.8; MA steps (10/9, 16/15, 9/8, 10/9,
+  9/8, 16/15, 9/8): 2-step max 386.3, 3-step [498.0, 590.2]; strict at
+  every span pair). Both have exactly 3 gap classes (9/8 ×3, 10/9 ×2,
+  16/15 ×2 → M1 = 1.557 bits) — so M1–M3 CANNOT distinguish SA from MA
+  at all. Rail: all 7 mūrchanās of each grāma have identical M1–M3
+  triples (0 violations, else bug). m4_proto: all 7 rotations of each
+  grāma have DISTINCT tonic step words (both words are primitive).
+  Mūrchanā matches to Wilson's own diatonic thaats — exact ratio-set
+  matches predicted: Bilawal (p.18: 1, 9/8, 5/4, 4/3, 3/2, 27/16, 15/8)
+  = SA rotated to Ni (16/9); Khamaj (p.17) = SA rotated to Ma (4/3);
+  neither is a rotation of MA (MA's Ni-rotation is Ptolemy's 5/3 major,
+  1 tone off Bilawal; MA's Ma-rotation is 1 tone off Khamaj). Coarse
+  T/s words match but exact ratios differ by comma shifts for: Kafi
+  (Dorian word = SA at Sa; 2 tones differ: 9/8, 27/16 vs 10/9, 5/3),
+  Kalyan (SA at Ga; 2 tones), Asawari (SA at Pa; 2 tones), Bhairavi (SA
+  at Ri; 5 tones). Verdict: KEPT iff propriety/CS as stated for SA and
+  MA AND the two exact matches (Bilawal@Ni, Khamaj@Ma) hold; each
+  coarse-match/comma-count claim reported separately.
+- **H-R2 (22 as housing).** (a) S22 under the frozen scorers: NOT a MOS
+  (three gap classes 256/243 ×7, 81/80 ×10, 25/24 ×5); IMPROPER (two
+  adjacent limmas 90.2+90.2 = 180.4 > 3-step min 21.5+70.7+21.5 =
+  113.7); CS at ε = 0.5¢ (predicted YES — mechanism in H-R5); exact
+  P = S = 45 (fifths 19 + 4:5:6 ×9 + 3:4:5 ×9 + 8:9:10 ×8, and the set
+  is inversionally symmetric under x → 3/x, so S = P); tempered counts
+  at 2/3/5/15¢ reported (no prediction: schisma near-coincidences and
+  the informative-guard pull in opposite directions). (b) Chain tests:
+  S22 is NOT an exact single-generator chain (rank-1 3-gap sets satisfy
+  L = M + S; here 90.2 ≠ 70.7 + 21.5 by exactly the schisma), but its
+  53-EDO image IS the chain of 22 fifths, positions −10..+11 (predicted
+  set equality: {31k mod 53 : k = −10..11} == S22 degrees), and a
+  Pythagorean chain of 22 fifths at the same anchor matches S22 22/22
+  within 5¢ (max deviation 1 schisma = 1.95¢). Against BRIDGE-001's
+  22-tone hosts: best-offset match counts within 5¢ predicted ≤ 10/22
+  for 22-EDO and ≤ 10/22 for orwell-22 (⟨22,35,51,62⟩, 271.385¢ chain),
+  vs 22/22 for 53-EDO (within 2¢). So Wilson's 22 is a DIFFERENT object
+  from the orwell/22-EDO window: a fifth-chain window (rank-1 modulo the
+  schisma), i.e. the schismatic-temperament fold of a 5-limit block.
+  (c) Housing: all 18 ragas are subsets of S22 modulo 53 (18/18), but
+  only the 7 with no schismatic spelling (Bhairavi, Asawari, Kafi, Old
+  Kafi, Khamaj, Bilawal, Kalyan) are exact-JI subsets (7/18). Verdict:
+  KEPT iff (a) MOS-no/improper/CS-yes/exact 45=45, (b) the three chain
+  claims and both ≤ 10/22 bounds, (c) 18/18 and 7/18 all hold; clauses
+  reported separately.
+- **H-R3 (rotation-invariance of P on lattice subsets).** By the
+  transposition argument above, exact and tempered (P, S) are identical
+  across all 7 rotations of every raga and both grāmas, at every ε
+  (tempered path: float noise ≪ ε). Predicted violations: 0 — a rail
+  now, but a rail worth writing down because it means "supersets good
+  for rotating" carry NO harmonic cost under the frozen convention.
+- **H-R4 (grāma shift = comma perturbation, not rotation).** SA → MA is
+  the one-śruti (81/80) lowering of Pa; MA is NOT a rotation of SA (nor
+  of its inversion) — checked by word: (m s L L m s L) vs (m s L m L s L).
+  Frozen scorers: melodic triple UNCHANGED (both strictly proper, CS,
+  1.557 bits); exact triads MOVE UP: SA (P, S) = (11, 7) → MA (13, 9)
+  (hand count under the anchored convention: SA fifths 5 + 3:4:5 ×2 +
+  4:5:6 ×2 + 8:9:10 ×2 = 11; fourths 5 + 12:15:20 ×1 + 10:12:15 ×1 +
+  36:40:45 ×0 = 7; MA fifths 5 + 3 + 3 + 2 = 13; fourths 5 + 1 + 2 + 1
+  = 9); tempered 2¢ and 3¢ equal the exact counts (no near-coincidence
+  inside 3¢ in either scale). Relation to SHADOW-001: this is a comma
+  perturbation that INCREASES exact coincidences — opposite in sign to
+  H-S1's "immediate and permanent" loss — because 40/27 lands ON the
+  5-limit lattice adjacent to 10/9 and 5/3 (the sharing/connectivity
+  effect of H-S3, in a rank-2 5-limit setting rather than a CPS one).
+  Verdict: KEPT iff (11,7) → (13,9) exact and the melodic triple is
+  identical; partial outcomes reported.
+- **H-R5 (own sharper question — the schisma as a CS phase
+  transition).** Because S22's exact spelling separates every 53-degree
+  collision by exactly one schisma (32805/32768 = 1.9537¢), and no other
+  sub-2¢ coincidence exists in the set (row span ≤ 2 in e5, so only
+  single schismas occur), the frozen CS check on exact S22 gives
+  violations = 0 for ε_CS ∈ {0.5, 1.0, 1.5, 1.9} and > 0 for
+  ε_CS ∈ {2.0, 2.5, 3.0, 5.0}; the 53-EDO image of S22 is NOT CS at
+  0.5¢, with the fifth (3/2 at 13 steps vs the schismatic 16384/10935 at
+  12 steps, both degree 31) among the violating classes. Verdict: KEPT
+  iff all four sub-2¢ epsilons give 0, all four ≥ 2¢ give > 0, and the
+  53-image is non-CS with degree-31 in the violation list.
+
+**Registered descriptive lenses (no hypothesis):** per-raga melodic
+triple and P/S; class prediction recorded for the record only — strictly
+proper: Old Kafi, Bilawal, Khamaj, Kalyan; improper: the other 14
+(Pythagorean tritone for Kafi/Asawari/Bhairavi; a 32/27 or 92¢ step
+adjacent to a large step for the Bhairav/Todi/Purvi/Marwa/Lalit family);
+Wilson-spelling vs śruti-spelling vs 53-EDO (P, S) at every ε.
+
+**Order:** commit this entry → tests/test_mur002.py + mur002.py, lattice
+suite green BEFORE the first run → run twice, bit-identity → results
+entry (incl. the ≤15-line M4 proposal) → FINDINGS.md → PR (gate G-020
+lives in the ledger PR #37; proposed row in the PR body).
+
+## 2026-08-18 — MUR-002 results + verdicts
+
+**Run:** mur002.py, python3.12, ~2 s; run twice, receipts **bit-identical**
+(sha256 `mur002.jsonl` 5aa6daf2…5d2a29, `mur002_summary.json`
+f081ac00…578584). 199 rows: S22 × 22 rotations + its 53-EDO image, SA and
+MA × 7 mūrchanās, 18 ragas × (7 rotations as drawn + śruti-spelled +
+53-EDO image). Frozen scorer v1.1.0 (exact `score` + tempered at
+ε ∈ {2, 3, 5, 15}¢) and melodic v0.1.0 read-only; freeze checks OK before
+AND after (scorer pin 1a840af9…9b592, melodic pin a16f162b…7535). Corpus
+transcription with page citations: `MUR002_TRANSCRIPTION.md`; the scan
+was read in place (pp. 1–26), nothing copied.
+
+**H-R1 — KEPT.** ṣaḍja-grāma (Wilson's "Old Kafi", p.16) and the derived
+madhyama-grāma are both STRICTLY PROPER (0 violations, 0 equalities) and
+CS (0 violations), each with 3 gap classes (9/8 ×3, 10/9 ×2, 16/15 ×2;
+M1 = 1.5567 bits), best val ⟨7, 11, 15⟩ at τ = 0 with 2 tie pairs — the
+frozen melodic triple is IDENTICAL for SA and MA, as predicted. Rail:
+melodic triple identical across all 7 mūrchanās of each grāma (0
+violations). m4_proto separates what M1–M3 cannot: 7/7 distinct tonic
+step words per grāma; tonic-consonance counts across SA's mūrchanās
+3, 3, 1, 4, 1, 3, 3 (Sa, Ri, Ga, Ma, Pa, Dha, Ni), MA's 2, 4, 2, 4, 3, 3, 4.
+Thaat lookup, exactly as predicted: **Bilawal (p.18) = SA rotated to Ni
+(k = 6), Khamaj (p.17) = SA rotated to Ma (k = 3), both exact ratio-set
+matches; neither is a rotation of MA** (MA@6 is Ptolemy's 5/3 major,
+one tone off Bilawal; MA@3 one tone off Khamaj). Coarse T/s words match a
+SA mūrchanā with comma-shifted tones for Kafi (SA@0, 2 tones: 9/8, 27/16
+vs 10/9, 5/3), Kalyan (SA@2, 2 tones), Asawari (SA@4, 2 tones), Bhairavi
+(SA@1, 5 tones) — the modern thaats sit closer to the ṣaḍja-grāma than
+to the madhyama-grāma (post-hoc, labeled: MA's nearest rotations differ
+by 1, 1, 1, 3, 4, 5 tones for Bilawal, Khamaj, Kalyan, Kafi, Asawari,
+Bhairavi). MA's Ri-mūrchanā {1, 16/15, 6/5, 4/3, 3/2, 8/5, 9/5} is the
+5-limit Phrygian — the "just" Bhairavi Wilson did NOT draw (his Bhairavi
+is the Pythagorean chain).
+
+**H-R2 — REFUTED as stated on one number, KEPT on every structural
+clause.** (a) S22: 3 gap classes (81/80 ×10, 25/24 ×5, 256/243 ×7 —
+21.51 / 70.67 / 90.23¢; NOT a MOS), IMPROPER (10 violating span pairs),
+CS at 0.5¢ (0 violations), best val ⟨22, 35, 51⟩ at τ = 0 (the
+orwell/22-EDO patent val orders it perfectly), exact **P = S = 48**, not
+the predicted 45: the hand count omitted the fifth primitive 5-limit
+arithmetic progression with c/a ≤ 2, **18:25:32** (a, 25a/18, 16a/9),
+which S22 realizes 3× (e.g. 6/5 : 5/3 : 32/15), plus its harmonic-mean
+twin 225:288:400 3× — the enumeration in the receipt lists exactly
+2:3:4 ×19, 3:4:5 ×9, 4:5:6 ×9, 8:9:10 ×8, 18:25:32 ×3 (and mirrors).
+Tempered (P, S): 70/70 at 2¢, 79/79 at 3¢, 88/88 at 5¢, 218/218 at 15¢
+(G = 110/110/98/90); its 53-EDO image scores 59/88/98/220 — the
+schisma-twins that the exact set separates recombine into
+near-coincidences at 2¢ from the other side. (b) All chain claims KEPT:
+S22 is not an exact rank-1 chain (three-gap defect L − M − S = −1.9537¢
+= exactly one schisma), its 53-degrees are exactly {31k mod 53 :
+k = −10..11}, and the Pythagorean chain of 22 fifths anchored at −10
+matches it 22/22 within 2¢ WITHOUT any offset (max deviation 1.9537¢).
+Against BRIDGE-001's hosts: best-offset matches within 5¢ — 22-EDO 5/22
+(2/22 at 2¢), orwell-22 10/22 (6/22 at 2¢; at the registered ≤ 10 bound),
+53-EDO 22/22 (also at 2¢). Wilson's 22 is a fifth-chain window
+(schismatic fold of a 5-limit block), a different object from the orwell
+window. (c) Housing KEPT: all 18 ragas ⊆ S22 modulo 53 (18/18); exactly
+the 7 without schismatic spellings are exact-JI subsets (7/18: Bhairavi,
+Asawari, Kafi, Old Kafi, Khamaj, Bilawal, Kalyan).
+
+**H-R3 — KEPT, 0 violations on 21 scales** (S22's 22 rotations, SA, MA and
+the 18 ragas × 7): exact and tempered (P, S, G) identical across every
+rotation at every ε. As argued in the pre-registration this is a theorem
+of the anchored convention; on the record now for lattice subsets, not
+just chain windows (MUR-001): under the frozen scorers a mūrchanā costs
+nothing harmonically and changes nothing melodically — everything the
+grāma system cares about lives outside M1–M3 and P.
+
+**H-R4 — REFUTED as stated on one number, direction and mechanism KEPT.**
+MA is not a rotation of SA nor of its inversion (the SAME coarse word
+TsTTTsT, different exact words (m s L L m s L) vs (m s L m L s L)); the
+melodic triple is identical (predicted); exact triads SA (11, 7) →
+MA **(13, 10)** — predicted (13, 9); the hand count missed the 12:15:20
+at 16/9 : 10/9 : 40/27 (I wrote "80/27 ✗" — 80/27 octave-reduces to
+40/27, which MA contains). Both P and S rise; tempered 2/3/5¢ equal the
+exact counts on both scales (no sub-5¢ near-coincidence), and at 15¢ SA
+= (13, 11), MA = (13, 12). Reading (as pre-registered): the one-śruti
+comma shift is a comma perturbation that GAINS exact coincidences —
+opposite in sign to SHADOW-001 H-S1 — because 40/27 lands on lattice
+edges (fifth to 10/9, fourth to 5/3, 5/4 above 32/27), the H-S3
+connectivity effect in a rank-2 5-limit setting. The grāma system is a
+historical instance of "comma perturbation of a lattice subset", and the
+frozen harmonic axis registers it (+2 P, +3 S) while the melodic axis is
+blind to it.
+
+**H-R5 — KEPT, sharp.** CS violations of exact S22 by ε_CS: 0.5 → 0,
+1.0 → 0, 1.5 → 0, 1.9 → 0, **2.0 → 30**, 2.5 → 30, 3.0 → 30, 5.0 → 30 —
+a step function at the schisma (1.9537¢), constant on both sides. The
+53-EDO image is not CS at 0.5¢ (30 violations, the same 30 classes),
+and the fifth (degree 31, 701.9¢) is among them at 12 AND 13 steps
+(3/2 vs the schismatic 16384/10935), as predicted. Post-hoc, labeled: the
+same phase transition governs the ragas — at 0.5¢ the ragas as DRAWN
+are CS 7/18, the śruti-spelled twins 16/18, and the 53-EDO images 7/18;
+so 9 ragas are CS in exact JI only by the schisma, and every raga's CS
+status is a spelling-thin property of the same kind as S22's.
+
+**Descriptive lenses (registered, no hypothesis).** Propriety histogram
+exactly the registered class prediction: strictly proper 4 (Old Kafi,
+Bilawal, Khamaj, Kalyan), improper 14 (Kafi/Asawari/Bhairavi by the
+Pythagorean tritone; the Bhairav–Todi–Purvi–Marwa–Lalit family by an
+augmented second or 92¢ step). Exact (P, S) as drawn: Old Kafi = Bilawal
+= Khamaj = (11, 7) (they are one scale up to mūrchanā), Kalyan (10, 13),
+Anand Bhairav (9, 9), Nat Bhairav and Madhubanti (9, 6), Marwa (7, 10),
+Lalit₂ and Purvi (7, 7), Kafi/Asawari/Bhairavi/Bhairav (6, 6), Lalit,
+No Name, Todi (5, 5), Jogiya Todi (4, 4). Post-hoc, labeled: **Wilson's
+schismatic spellings never lose and six times gain exact triads over the
+śruti spelling** (Lalit 5 → 4, Lalit₂ 7 → 6, Marwa (7, 10) → (6, 9), No
+Name 5 → 4, Purvi 7 → 6, Todi 5 → 4; 12 ragas tie, 0 lose) — /C#
+135/128 makes an exact 3/2 with /F# 45/32 and 4:5:6 with 405/256, which
+256/243 cannot; the "Major-Minor Triadic Lattice" placement is
+triad-optimal on the exact path, by machine check.
+
+**M4 proposal (≤ 15 lines, INPUT to a future decision; not implemented).**
+M4 = tonic-anchored melodic score of a scale S given a tonic t ∈ S:
+inputs: the interval-from-tonic set I(S,t) = {s/t reduced}, the tonic
+step word w(S,t), a consonance set C (default the 5-limit {3/2, 4/3, 5/4,
+6/5, 5/3, 8/5}, later prime-limit-parametrized) and a tolerance ε.
+Compute (i) tonic anchoring A = |I ∩ C|/|I−{1}| (fraction of tones in
+exact/ε-consonance with the tonic — SA 3/6, Khamaj 4/6, the Lydian
+mūrchanā 1/6 in this run); (ii) tonic frame F = 1 if 3/2 ∈ I else 0.5 if
+4/3 ∈ I else 0 (the Sa–Pa / Sa–Ma frame; MA scores 0.5, SA 1); (iii)
+word primitivity/rotation class of w (which mūrchanā of which grāma the
+scale IS: MUR-002 shows Bilawal and Khamaj are SA@6, SA@3 exactly);
+(iv) comma distance to the nearest grāma mūrchanā (tones differing, as
+computed here: Kafi 2, Kalyan 2, Asawari 2, Bhairavi 5). Formula
+candidate: M4 = A · (1 + F)/2, tie-broken by (iv). What it ranks
+differently from M1–M3: the seven mūrchanās of one grāma (identical
+M1–M3, P) get seven M4 values; SA vs MA (identical M1–M3) separate by F;
+Wilson's Pythagorean Bhairavi (A = 2/6, F = 1) vs MA's just Phrygian
+(A = 4/6, F = 1) separate by A. Validation gate: a blind ear check on
+mūrchanā pairs of one grāma, like G-006 — the only test that can say
+whether tonic-anchoring is what the ear ranks.
+
+**Kept.** mur002.py exactly as committed before the first run; receipts
+`results/mur002.jsonl` + `results/mur002_summary.json`;
+`MUR002_TRANSCRIPTION.md`. Lattice suite 145/145 OK (21 new mur002 tests),
+triads suite unchanged; freeze checks OK before AND after. Findings
+promoted to FINDINGS.md; gate G-020 (ledger PR #37) — proposed row in
+the PR body.
 
 ## 2026-08-19 — EAR-ε pre-registration (entry BEFORE any stimulus generation)
 
