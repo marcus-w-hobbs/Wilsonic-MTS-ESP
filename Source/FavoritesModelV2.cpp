@@ -792,7 +792,7 @@ int FavoritesModelV2::getColumnAutoSizeWidth(int columnId) {
             return widest;
         } else if(auto* rowElement = _dataList->getChildElement(i)) {
             auto text = rowElement->getStringAttribute(_getAttributeNameForColumnId(columnId));
-            widest = jmax(widest, _font.getStringWidth(text));
+            widest = jmax(widest, GlyphArrangement::getStringWidthInt(_font, text));
         }
     }
     return widest;

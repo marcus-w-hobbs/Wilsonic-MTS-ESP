@@ -68,7 +68,7 @@ private:
     XmlElement* _columnList = nullptr;
     XmlElement* _dataList = nullptr;
     int _selectedID = -1;
-    Font _font {WilsonicAppSkin::tableViewFontSize};
+    Font _font {FontOptions{WilsonicAppSkin::tableViewFontSize}};
     CriticalSection _lock;
     
     // private methods

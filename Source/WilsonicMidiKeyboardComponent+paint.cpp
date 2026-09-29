@@ -342,7 +342,7 @@ void WilsonicMidiKeyboardComponent::drawWhiteNote
         // If the description is not empty, draw it on the note
         auto fontHeight = jmin(12.0f, _keyWidth * 0.9f);
         g.setColour(textColour);
-        g.setFont(Font(fontHeight).withHorizontalScale(0.8f));
+        g.setFont(Font(FontOptions(fontHeight)).withHorizontalScale(0.8f));
         switch (_orientation) {
             case horizontalKeyboard:            g.drawText(text, area.withTrimmedLeft(1.0f).withTrimmedBottom(2.0f), Justification::centredBottom, false); break;
             case verticalKeyboardFacingLeft:    g.drawText(text, area.reduced(2.0f), Justification::centredLeft,   false); break;
@@ -523,7 +523,7 @@ void WilsonicMidiKeyboardComponent::drawMicrotonalNote
         auto fontHeight = jmax(globalFontHeightMin, (w / (strLen * magicDenominator)) * magicNumerator); // The height of the font
 
         // Set the font and color for the text
-        g.setFont(Font(fontHeight).withHorizontalScale(horizontalScale));
+        g.setFont(Font(FontOptions(fontHeight)).withHorizontalScale(horizontalScale));
         g.setColour(text_color);
 
         // Draw the text

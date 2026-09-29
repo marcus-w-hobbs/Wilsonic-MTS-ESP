@@ -1081,18 +1081,16 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" hardenedRuntime="1" hardenedRuntimeOptions="com.apple.security.cs.allow-dyld-environment-variables"
                smallIcon="G5AqF4" bigIcon="G5AqF4" applicationCategory="public.app-category.music"
-               xcodeValidArchs="arm64,x86_64" iosDevelopmentTeamID="LXFXL9GS49"
-               extraLinkerFlags="-Wl,-ld_classic " extraDefs="JUCE_SILENCE_XCODE_15_LINKER_WARNING">
+               xcodeValidArchs="arm64,x86_64" iosDevelopmentTeamID="LXFXL9GS49">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="WilsonicController" recommendedWarnings="LLVM"
                        customXcodeFlags="GCC_GENERATE_DEBUGGING_SYMBOLS=YES,&#10;GCC_DEBUGGING_SYMBOLS=full,&#10;DEBUG_INFORMATION_FORMAT=dwarf-with-dsym,&#10;COPY_PHASE_STRIP = YES"
                        defines="JUCE_CATCH_UNHANDLED_EXCEPTIONS=1" osxCompatibility="10.13 SDK"
-                       macOSBaseSDK="14.0" osxSDK="14.0 SDK" macOSDeploymentTarget="10.13"/>
+                       macOSDeploymentTarget="10.13"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="WilsonicController" vst3BinaryLocation="/Library/Audio/Plug-Ins/VST3/"
                        auBinaryLocation="/Library/Audio/Plug-Ins/Components/" stripLocalSymbols="1"
                        customXcodeFlags="GCC_GENERATE_DEBUGGING_SYMBOLS=YES,&#10;GCC_DEBUGGING_SYMBOLS=full,&#10;DEBUG_INFORMATION_FORMAT=dwarf-with-dsym,&#10;COPY_PHASE_STRIP = YES"
-                       osxCompatibility="10.13 SDK" macOSBaseSDK="14.0" osxSDK="14.0 SDK"
-                       macOSDeploymentTarget="10.13"/>
+                       osxCompatibility="10.13 SDK" macOSDeploymentTarget="10.13"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
@@ -1109,6 +1107,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
         <MODULEPATH id="juce_analytics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2022 targetFolder="Builds/VisualStudio2022" bigIcon="G5AqF4" smallIcon="G5AqF4">
@@ -1131,6 +1130,7 @@
         <MODULEPATH id="juce_graphics" path="../../juce"/>
         <MODULEPATH id="juce_gui_basics" path="../../juce"/>
         <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../juce"/>
       </MODULEPATHS>
     </VS2022>
     <XCODE_IPHONE targetFolder="Builds/iOS" iosDevelopmentTeamID="LXFXL9GS49" bigIcon="G5AqF4"
@@ -1158,6 +1158,7 @@
         <MODULEPATH id="juce_graphics" path="/Users/marcushobbs/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="/Users/marcushobbs/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="/Users/marcushobbs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_IPHONE>
     <ANDROIDSTUDIO targetFolder="Builds/Android">
@@ -1180,6 +1181,7 @@
         <MODULEPATH id="juce_graphics" path="/Users/marcushobbs/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="/Users/marcushobbs/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="/Users/marcushobbs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </ANDROIDSTUDIO>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
@@ -1202,6 +1204,7 @@
         <MODULEPATH id="juce_graphics" path="../../juce"/>
         <MODULEPATH id="juce_gui_basics" path="../../juce"/>
         <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors_headless" path="../../juce"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
@@ -1213,6 +1216,8 @@
     <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
             useGlobalPath="1"/>
     <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

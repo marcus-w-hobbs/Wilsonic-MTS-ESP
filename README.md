@@ -105,7 +105,8 @@ The search is just getting started:
 
 ### Prerequisites
 
-- Projucer (part of the JUCE framework)
+- JUCE 9.0.1 (Projucer + modules) — the `.jucer` files use the Projucer's global
+  module path, which defaults to `~/JUCE/modules`; CI clones the `9.0.1` tag there
 - C++17 compatible compiler
 - Xcode (for macOS) or Visual Studio (for Windows)
 
