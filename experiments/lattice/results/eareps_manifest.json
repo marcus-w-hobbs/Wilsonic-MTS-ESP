@@ -1,0 +1,4048 @@
+{
+ "_warning": "SEALED -- do not open this file (or its PR diff) until your responses are saved to results/eareps_responses.json. See EAREPS_PROTOCOL.md.",
+ "experiment": "EAR-eps",
+ "version": "1.0.0",
+ "seed": 20260819,
+ "scorer_version": "1.1.0",
+ "eps_grid_cents": [
+  1.0,
+  2.0,
+  3.0,
+  5.0,
+  10.0,
+  14.86,
+  20.0
+ ],
+ "rail_delta_cents": 1e-06,
+ "block_order": [
+  "B",
+  "A",
+  "C",
+  "D"
+ ],
+ "rail_failures": 0,
+ "n_stimuli": 44,
+ "rungs": {
+  "eareps_B_01": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_01.scl",
+   "delta_cents": 8.0,
+   "description": "2:3:4 power chord, fifth +8.000000c from just",
+   "triple_cents": [
+    0.0,
+    709.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    709.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 7.999999999999993,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077518
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_02": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_02.scl",
+   "delta_cents": 0.0,
+   "description": "2:3:4 power chord, fifth +0.000000c from just",
+   "triple_cents": [
+    0.0,
+    701.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 0.0,
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump_ok": null,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077484
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_03": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_03.scl",
+   "delta_cents": -1.9550008653873192,
+   "description": "2:3:4 power chord, fifth -1.955001c from just",
+   "triple_cents": [
+    0.0,
+    700.0000000000001,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    700.0000000000001,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 1.9550008653872297,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077447
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_04": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_04.scl",
+   "delta_cents": 1.0,
+   "description": "2:3:4 power chord, fifth +1.000000c from just",
+   "triple_cents": [
+    0.0,
+    702.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    702.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 1.0000000000001668,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077518
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_05": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_05.scl",
+   "delta_cents": 1.9550008653873192,
+   "description": "2:3:4 power chord, fifth +1.955001c from just",
+   "triple_cents": [
+    0.0,
+    703.9100017307748,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    703.9100017307748,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 1.9550008653873927,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077447
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_06": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_06.scl",
+   "delta_cents": 3.0,
+   "description": "2:3:4 power chord, fifth +3.000000c from just",
+   "triple_cents": [
+    0.0,
+    704.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    704.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 3.0000000000001883,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077484
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_07": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_07.scl",
+   "delta_cents": -8.0,
+   "description": "2:3:4 power chord, fifth -8.000000c from just",
+   "triple_cents": [
+    0.0,
+    693.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    693.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 8.000000000000071,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077518
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_08": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_08.scl",
+   "delta_cents": -1.0,
+   "description": "2:3:4 power chord, fifth -1.000000c from just",
+   "triple_cents": [
+    0.0,
+    700.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    700.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 0.9999999999999819,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077518
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_09": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_09.scl",
+   "delta_cents": -5.0,
+   "description": "2:3:4 power chord, fifth -5.000000c from just",
+   "triple_cents": [
+    0.0,
+    696.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    696.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 5.000000000000096,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077484
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_10": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_10.scl",
+   "delta_cents": -3.0,
+   "description": "2:3:4 power chord, fifth -3.000000c from just",
+   "triple_cents": [
+    0.0,
+    698.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    698.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 3.0000000000000355,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077518
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_B_11": {
+   "family": "B",
+   "file": "scl/eareps/eareps_B_11.scl",
+   "delta_cents": 5.0,
+   "description": "2:3:4 power chord, fifth +5.000000c from just",
+   "triple_cents": [
+    0.0,
+    706.9550008653874,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    706.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional",
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 5.0000000000002025,
+    "classify_low": {
+     "proportional": [],
+     "subcontrary": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ],
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1,
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484,
+     "subcontrary": 203.91000173077484
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_01": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_01.scl",
+   "delta_cents": 5.0,
+   "description": "4:5:6 major, third +5.000000c from just",
+   "triple_cents": [
+    0.0,
+    391.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    391.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 5.000000000000011,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_02": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_02.scl",
+   "delta_cents": 8.0,
+   "description": "4:5:6 major, third +8.000000c from just",
+   "triple_cents": [
+    0.0,
+    394.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    394.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 7.999999999999801,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_03": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_03.scl",
+   "delta_cents": -8.0,
+   "description": "4:5:6 major, third -8.000000c from just",
+   "triple_cents": [
+    0.0,
+    378.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    378.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 8.000000000000071,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_04": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_04.scl",
+   "delta_cents": -18.0,
+   "description": "4:5:6 major, third -18.000000c from just",
+   "triple_cents": [
+    0.0,
+    368.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    368.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 17.999999999999982,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_05": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_05.scl",
+   "delta_cents": 22.0,
+   "description": "4:5:6 major, third +22.000000c from just",
+   "triple_cents": [
+    0.0,
+    408.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    408.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 21.999999999999975,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_06": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_06.scl",
+   "delta_cents": -14.86,
+   "description": "4:5:6 major, third -14.860000c from just",
+   "triple_cents": [
+    0.0,
+    371.4537138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    371.4537138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 14.860000000000001,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": true
+  },
+  "eareps_A_07": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_07.scl",
+   "delta_cents": 11.0,
+   "description": "4:5:6 major, third +11.000000c from just",
+   "triple_cents": [
+    0.0,
+    397.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    397.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 10.999999999999867,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_08": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_08.scl",
+   "delta_cents": -22.0,
+   "description": "4:5:6 major, third -22.000000c from just",
+   "triple_cents": [
+    0.0,
+    364.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    364.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 21.999999999999726,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_09": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_09.scl",
+   "delta_cents": 14.86,
+   "description": "4:5:6 major, third +14.860000c from just",
+   "triple_cents": [
+    0.0,
+    401.17371386483484,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    401.17371386483484,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 14.860000000000166,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": true
+  },
+  "eareps_A_10": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_10.scl",
+   "delta_cents": -5.0,
+   "description": "4:5:6 major, third -5.000000c from just",
+   "triple_cents": [
+    0.0,
+    381.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    381.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 5.000000000000096,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_11": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_11.scl",
+   "delta_cents": -11.0,
+   "description": "4:5:6 major, third -11.000000c from just",
+   "triple_cents": [
+    0.0,
+    375.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    375.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 11.000000000000105,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_12": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_12.scl",
+   "delta_cents": -2.0,
+   "description": "4:5:6 major, third -2.000000c from just",
+   "triple_cents": [
+    0.0,
+    384.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    384.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 2.000000000000097,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_13": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_13.scl",
+   "delta_cents": 18.0,
+   "description": "4:5:6 major, third +18.000000c from just",
+   "triple_cents": [
+    0.0,
+    404.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    404.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 17.999999999999908,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_14": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_14.scl",
+   "delta_cents": 2.0,
+   "description": "4:5:6 major, third +2.000000c from just",
+   "triple_cents": [
+    0.0,
+    388.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    388.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 2.000000000000008,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_A_15": {
+   "family": "A",
+   "file": "scl/eareps/eareps_A_15.scl",
+   "delta_cents": 0.0,
+   "description": "4:5:6 major, third +0.000000c from just",
+   "triple_cents": [
+    0.0,
+    386.3137138648348,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    386.3137138648348,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 0.0,
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump_ok": null,
+    "separation_cents": {
+     "proportional": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_01": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_01.scl",
+   "delta_cents": -8.0,
+   "description": "10:12:15 minor, third -8.000000c from just",
+   "triple_cents": [
+    0.0,
+    307.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    307.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 7.999999999999993,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_02": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_02.scl",
+   "delta_cents": -14.86,
+   "description": "10:12:15 minor, third -14.860000c from just",
+   "triple_cents": [
+    0.0,
+    300.78128700055254,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    300.78128700055254,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 14.859999999999973,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": true
+  },
+  "eareps_C_03": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_03.scl",
+   "delta_cents": 18.0,
+   "description": "10:12:15 minor, third +18.000000c from just",
+   "triple_cents": [
+    0.0,
+    333.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    333.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 17.999999999999982,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_04": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_04.scl",
+   "delta_cents": -2.0,
+   "description": "10:12:15 minor, third -2.000000c from just",
+   "triple_cents": [
+    0.0,
+    313.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    313.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 2.000000000000008,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_05": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_05.scl",
+   "delta_cents": 11.0,
+   "description": "10:12:15 minor, third +11.000000c from just",
+   "triple_cents": [
+    0.0,
+    326.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    326.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 11.000000000000105,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_06": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_06.scl",
+   "delta_cents": -18.0,
+   "description": "10:12:15 minor, third -18.000000c from just",
+   "triple_cents": [
+    0.0,
+    297.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    297.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 18.000000000000103,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_07": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_07.scl",
+   "delta_cents": 22.0,
+   "description": "10:12:15 minor, third +22.000000c from just",
+   "triple_cents": [
+    0.0,
+    337.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    337.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 22.000000000000103,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_08": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_08.scl",
+   "delta_cents": -22.0,
+   "description": "10:12:15 minor, third -22.000000c from just",
+   "triple_cents": [
+    0.0,
+    293.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    293.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 22.000000000000167,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_09": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_09.scl",
+   "delta_cents": 14.86,
+   "description": "10:12:15 minor, third +14.860000c from just",
+   "triple_cents": [
+    0.0,
+    330.50128700055257,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    330.50128700055257,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 14.859999999999621,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": true
+  },
+  "eareps_C_10": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_10.scl",
+   "delta_cents": -5.0,
+   "description": "10:12:15 minor, third -5.000000c from just",
+   "triple_cents": [
+    0.0,
+    310.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    310.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 5.000000000000395,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_11": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_11.scl",
+   "delta_cents": 2.0,
+   "description": "10:12:15 minor, third +2.000000c from just",
+   "triple_cents": [
+    0.0,
+    317.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    317.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 1.9999999999997131,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_12": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_12.scl",
+   "delta_cents": 0.0,
+   "description": "10:12:15 minor, third +0.000000c from just",
+   "triple_cents": [
+    0.0,
+    315.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    315.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 0.0,
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump_ok": null,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_13": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_13.scl",
+   "delta_cents": 8.0,
+   "description": "10:12:15 minor, third +8.000000c from just",
+   "triple_cents": [
+    0.0,
+    323.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    323.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 8.000000000000071,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_14": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_14.scl",
+   "delta_cents": 5.0,
+   "description": "10:12:15 minor, third +5.000000c from just",
+   "triple_cents": [
+    0.0,
+    320.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    320.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 5.000000000000096,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_C_15": {
+   "family": "C",
+   "file": "scl/eareps/eareps_C_15.scl",
+   "delta_cents": -11.0,
+   "description": "10:12:15 minor, third -11.000000c from just",
+   "triple_cents": [
+    0.0,
+    304.64128700055255,
+    701.9550008653874
+   ],
+   "scl_degrees_cents": [
+    304.64128700055255,
+    701.9550008653874,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 11.00000000000006,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.67242686428234
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_D_01": {
+   "family": "D",
+   "file": "scl/eareps/eareps_D_01.scl",
+   "delta_cents": null,
+   "description": "12-EDO power chord 0-700-1200",
+   "triple_cents": [
+    0.0,
+    700.0,
+    1200.0
+   ],
+   "scl_degrees_cents": [
+    700.0,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 1.9550008653872297,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 203.91000173077484
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_D_02": {
+   "family": "D",
+   "file": "scl/eareps/eareps_D_02.scl",
+   "delta_cents": null,
+   "description": "12-EDO major triad 0-400-700",
+   "triple_cents": [
+    0.0,
+    400.0,
+    700.0
+   ],
+   "scl_degrees_cents": [
+    400.0,
+    700.0,
+    1200.0
+   ],
+   "target_classes": [
+    "proportional"
+   ],
+   "rails": {
+    "deviation_cents": 14.859021711645969,
+    "classify_low": {
+     "proportional": []
+    },
+    "classify_high": {
+     "proportional": [
+      "proportional"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "proportional": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "proportional": 70.28195657670832
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 2,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "proportional"
+     ],
+     "scale_P": 3,
+     "scale_S": 1,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  },
+  "eareps_D_03": {
+   "family": "D",
+   "file": "scl/eareps/eareps_D_03.scl",
+   "delta_cents": null,
+   "description": "12-EDO minor triad 0-300-700",
+   "triple_cents": [
+    0.0,
+    300.0,
+    700.0
+   ],
+   "scl_degrees_cents": [
+    300.0,
+    700.0,
+    1200.0
+   ],
+   "target_classes": [
+    "subcontrary"
+   ],
+   "rails": {
+    "deviation_cents": 14.859021711645969,
+    "classify_low": {
+     "subcontrary": []
+    },
+    "classify_high": {
+     "subcontrary": [
+      "subcontrary"
+     ]
+    },
+    "classify_flip_ok": true,
+    "scale_jump": {
+     "subcontrary": 1
+    },
+    "scale_jump_ok": true,
+    "separation_cents": {
+     "subcontrary": 70.28195657670832
+    },
+    "rail_ok": true
+   },
+   "grid": {
+    "1": {
+     "triple_labels": [],
+     "scale_P": 0,
+     "scale_S": 0,
+     "scale_G": 0
+    },
+    "2": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "3": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "5": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 1,
+     "scale_G": 0
+    },
+    "10": {
+     "triple_labels": [],
+     "scale_P": 1,
+     "scale_S": 2,
+     "scale_G": 0
+    },
+    "14.86": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    },
+    "20": {
+     "triple_labels": [
+      "subcontrary"
+     ],
+     "scale_P": 1,
+     "scale_S": 3,
+     "scale_G": 0
+    }
+   },
+   "knife_edge_at_14.86": false
+  }
+ }
+}

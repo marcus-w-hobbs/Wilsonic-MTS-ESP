@@ -1,0 +1,34 @@
+! SUBSET-MEL-000 dekany_in of eikosany [13, 17, 21, 23, 25, 27]: improper, 6 gap classes/10, exact CS viol 12, P/S exact 6/3, 3c 9/6
+!
+! parent eikosany CPS(6,3) seeds [13, 17, 21, 23, 25, 27] (Erv: 3)6)
+! subset dekany_in[in=13,out=none]: fixed in [13], fixed out []
+! top under ordering(s): melodic+cs
+! step word cfedbedade
+! 1/1 = the subset's lowest octave-reduced tone as it sits in the eikosany (a mode of the standalone CPS below)
+! standalone: CPS(5,2) of [17, 21, 23, 25, 27] transposed by the fixed-in product
+! RECREATE IN WILSONIC:
+!   Design: Combination Product Sets
+!   Scale: 5_2   [Dekany (10 tones)]
+!   A = 17
+!   B = 21
+!   C = 23
+!   D = 25
+!   E = 27
+!   (F unused at this scale selection)
+!   APVTS: CPSCALE=5_2, CPSA=17, CPSB=21, CPSC=23, CPSD=25, CPSE=27
+!   Notation: canonical CPS(5,2) = 5 seeds choose 2; Erv writes this 2)5.
+! or: EulerGenus 6 design with the parent seeds, select the subset keyboard
+!
+SUBSET-MEL-000 dekany_in of eikosany [13, 17, 21, 23, 25, 27]: improper, 6 gap classes/10, exact CS viol 12, P/S exact 6/3, 3c 9/6
+ 10
+!
+ 238/225
+ 782/675
+ 34/27
+ 34/25
+ 322/225
+ 14/9
+ 42/25
+ 46/27
+ 46/25
+ 2/1

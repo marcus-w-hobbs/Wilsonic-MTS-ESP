@@ -2209,3 +2209,1187 @@ whether tonic-anchoring is what the ear ranks.
 triads suite unchanged; freeze checks OK before AND after. Findings
 promoted to FINDINGS.md; gate G-020 (ledger PR #37) — proposed row in
 the PR body.
+
+## 2026-08-18 — SUBSET-MEL-000 pre-registration (entry BEFORE any run)
+
+**What this is.** A `-000`: a machine CENSUS of the 72 structurally embedded
+CPS subsets of a handful of eikosanies, producing ranked tables (several
+orderings, deliberately not one score) for Marcus to react to in the still-
+pending SUBSET-MEL-001 brainstorm (gate G-013). It claims NO aggregator.
+Doctrine on record it serves (G-012): "we usually don't play the eikosany, we
+play its subsets — dekanies, hexanies are the melodic sweet spots";
+melody ≈ low gap_classes/N ∧ propriety; CS is a first-class axis;
+improper-but-valid spice must never be zeroed out. Ledger: gate **G-022**
+(consolidated in PR #37; GATES.md not edited by this session).
+
+**Primary sources this censuses by machine** (archive/INDEX.md paths, cite
+don't vendor): `1-3-5-7-9-11dekanyCS.jpg` (Wilson's matrix of the twelve
+2)5/3)5 dekanies of {1,3,5,7,9,11} on one shared degree grid — exactly the
+12 dekanies enumerated here for the classic seed);
+`2010_02_24B/CPS B/Eikosany.pdf` p.1 (1967: "members of 3·5·7·11 hexany
+alternate or complementary set" — embedded-hexany addressing);
+`dekany_14_tone_constant_structure/` (Kraig→Marcus: the 1-3-7-9-15 dekany
+is NOT CS by itself and needs 4 added tones) and the Scala archive entry
+`Wilson-Grady_1-3-5-7-9 doubledekany` ("constant structure scale of the 2)5
+and 3)5 1-3-5-7-9 dekanies", 14 tones — so the bare 1-3-5-7-9 dekany is
+not CS either); `2010_02_24/CPS/DAlessandroFull.pdf` p.3 (the 2⁶ power set
+by Pascal level — the subset family in one picture). Notation: canonical
+CPS(n,k) = n choose k; Erv's "k)n" is the reverse — translated, not corrected.
+
+**Corpus (deterministic).** Seed eikosanies CPS(6,3): (1) classic
+{1,3,5,7,9,11}; (2) flagship {1,7,9,11,15,29} (CS-EIK-001, first strictly
+proper eikosany); (3–5) the top three CS winners by `cs_margin_cents`
+descending in `results/cseik001.jsonl`, EXCLUDING the flagship, ties broken
+by ascending seed tuple: {13,17,21,23,25,27} (9.22¢, G-012 max-margin),
+{1,3,13,21,23,25} (3.01¢), {1,3,11,13,25,27} (2.77¢). Five seeds × 72
+subsets = 360 rows. All five are true 20-tone eikosanies (no product
+collisions), asserted at run time.
+
+**The 72 subsets per seed** (index-structural, from the Johnson graph J(6,3)):
+6 dekanies "fix one factor IN" (3-products containing x; 10 tones = x·CPS(5,2)
+of S∖{x}); 6 dekanies "fix one factor OUT" (3-products avoiding x; 10 tones =
+CPS(5,3) of S∖{x}); 30 hexanies "x in, y out" (6 tones = x·CPS(4,2) of
+S∖{x,y}); 15 harmonic tetrads "x,y in" (4 tones = xy·(S∖{x,y})); 15
+subharmonic tetrads "x,y out" (4 tones = 3-products of S∖{x,y}).
+6+6+30+15+15 = 72 — pinned in tests. Johnson-graph adjacency = shared-tone
+counts between all subset pairs (exact tone identity), recorded so
+modulation paths are recoverable; the algebra says IN(x)∩OUT(x) = ∅,
+IN(x)∩IN(y) = tetrad_in(x,y), IN(x)∩OUT(y) = hexany(x in, y out) — pinned
+in tests, and the whole 72×72 matrix is seed-independent for collision-free
+seeds (stored once, checked identical per seed).
+
+**Per-subset measurements.** Frozen melodic v0.1.0 (M1 gap classes,
+gap_classes/N, entropy; M2 CS at 0.5¢; M3 propriety class + violations),
+exact-rational CS (cseik001.cs_check, read-only import) + CS margin, step
+word (gaps labelled a<b<c… by 0.5¢ cluster class), frozen triad scorer
+v1.1.0: exact path (P,S,G) and tempered path at ε ∈ {2, 3}¢ with G-002
+balance buckets (triads/search.balance_bucket), triad survival ratio =
+tempered P / exact P (and S/S) — "the subset's own theoretical count" is its
+exact-rational count.
+
+**Orderings reported per seed (dekanies and hexanies separately), none of
+them "the score":**
+- melodic-first: (gap_classes/N ↑, propriety rank ↑ [strict < proper <
+  improper], M3 violations ↑, exact CS violations ↑, name);
+- harmonic-first: (P+S at 3¢ ↓, exact P+S ↓, P at 3¢ ↓, name);
+- CS-first: (exact CS violations ↑, gap_classes/N ↑, propriety rank ↑,
+  M3 violations ↑, name).
+Spice list = improper subsets whose harmonic-first rank within (seed, type)
+is in the top third — listed explicitly so they are not lost.
+`.scl` exports (results/scl/subsetmel000/, to_scala convention: lowest
+canonical tone = 1/1, provenance names the parent eikosany, the subset, and
+the standalone CPS recreation in Wilsonic): per seed, the top dekany under
+each of the three orderings (deduplicated) and the top two distinct
+hexanies under melodic-first — for Marcus's ear check.
+
+**Pre-registered hypotheses and predictions:**
+
+- **H-SM1 (dekany IN/OUT asymmetry) — I predict EXACT SYMMETRY, derived.**
+  fix-IN(x) = x·CPS(5,2)(T) and fix-OUT(x) = CPS(5,3)(T) = Π(T)/CPS(5,2)(T)
+  with T = S∖{x}, so the two dekanies of the same x are an exact inversion
+  pair (checked symbolically for one case before this entry; no scoring
+  run). Inversion preserves the interval spectrum at every span ⇒ identical
+  M1/M2/M3 and exact CS/margin, step word reversed; the anchored scorer
+  swaps P↔S exactly (P+S equal). Same for the tetrads: tetrad_in(x,y) and
+  tetrad_out(x,y) are inversions (harmonic vs subharmonic). The 30 hexanies
+  are 15 transposition pairs (x·H vs y·H) ⇒ identical on every axis
+  including P=S. So the real between-dekany variation is WHICH factor is
+  dropped: 12 dekanies collapse to 6 melodic classes. Sub-prediction
+  (composite-9 fingerprint, LAT-MEL-001): for the classic seed the three
+  dekany classes that keep {1,3,9} intact (drop 5, 7, or 11) have MORE exact
+  CS violations than the three that break the 3² = 1·9 relation (drop 1, 3,
+  or 9). Any measured asymmetry within an IN/OUT pair is a bug or a
+  canonicalization artifact, not a finding.
+- **H-SM2 (hexany CS rail).** Classic seed: exactly 26/30 hexanies CS
+  (13/15 classes); the 4 failures are the two transpositions each of the
+  {1,3,5,9} and {1,3,7,9} hexanies (LAT-MEL-001 receipts: the only
+  composite-9 failures inside this seed) — i.e. hexany(7 in, 11 out),
+  hexany(11 in, 7 out), hexany(5 in, 11 out), hexany(11 in, 5 out).
+  Flagship: 30/30 CS — no pair-product or seed-ratio coincidence up to
+  powers of 2 exists among {1,7,9,11,15,29} (checked by hand: 3 ∉ S so
+  1·9 = 3² cannot fire), so no exact intra-hexany interval duplication.
+  Predict 30/30 for {13,17,21,23,25,27} as well; the two {1,3,…} winners
+  contain 1 and 3 but not 9, so predict 30/30 there too. Family rail:
+  ≥ 26/30 on every seed.
+- **H-SM3 (subset vs whole).** Flagship (strictly proper at N=20): NOT all
+  12 dekanies strictly proper — strict propriety of the 20-tone does not
+  descend to 10-tone subsets (subset spans mix parent spans); predict 2–4
+  of the 6 dekany classes non-improper (4–8 of 12). Classic (improper at
+  N=20): predict 0–2 of 6 classes non-improper (0–4 of 12), and the
+  primary-source rail: the drop-11 dekany (= the 1-3-5-7-9 dekany, 2)5 and
+  3)5) is NOT exact-CS (Wilson–Grady needed 14 tones to make it CS).
+- **H-SM4 (harmonic rails).** (a) survival ≥ 1.0 for every subset at both
+  ε (tempered ≥ exact for JI); (b) hexany survival EXACTLY 1.0 at 2¢ for
+  all 30 hexanies of the classic and the flagship (no overshoot; SHADOW-001
+  never saw a hexany overshoot), overshoot allowed only in the wide-seed
+  winners; (c) tetrads: two-in tetrads have P ≥ S (harmonic series segment
+  ⇒ arithmetic means), two-out have S ≥ P with the counts exactly swapped
+  (inversion); (d) dekanies: exact P ≠ S for a majority of the 12 (CPS(5,2)
+  is not self-inverse), classic mean exact P+S per dekany in [15, 35]
+  (against eikosany 57+57).
+- **H-SM5 (rankings disagree).** Spearman ρ (average ranks; scipy-free,
+  moslat001.ranks read-only) between the melodic-first order and the
+  harmonic-first order over a seed's 12 dekanies is < 0.5 for the classic
+  AND the flagship; pooled over all 60 dekanies also < 0.5; classic 30
+  hexanies < 0.5. This is the fact the SUBSET-MEL-001 aggregator must live
+  with. (n is small — the sign and magnitude are reported, not a p-value.)
+
+**Determinism:** python3.12 stdlib only, no randomness; runner
+`subsetmel000.py`; tests `tests/test_subsetmel000.py` written and green
+BEFORE the first run; receipts `results/subsetmel000.jsonl` (360 rows) +
+`results/subsetmel000_summary.json` (orderings, verdict numbers, adjacency
+matrix once) + `results/scl/subsetmel000/*.scl`. Both frozen pins verified
+before and after (scorer 1a840af9…9b592, melodic a16f162b…7535). Anything
+computed after this entry that is not listed here is labelled POST-HOC.
+
+## 2026-08-18 — SUBSET-MEL-000 results + verdicts
+
+**Run:** `subsetmel000.py` (~0.8 s, receipts bit-identical across three
+runs), 5 seeds × 72 = 360 rows → `results/subsetmel000.jsonl`;
+`results/subsetmel000_summary.json` (three orderings per seed for dekanies
+and hexanies, verdict numbers, spice lists, the 72×72 shared-tone matrix
+once); 21 `.scl` → `results/scl/subsetmel000/`. Tests
+`tests/test_subsetmel000.py` 32/32 green before the first run; lattice
+suite 142/142; both freeze pins verified before and after (scorer
+1a840af9…9b592, melodic a16f162b…7535). Seeds by the pre-registered rule:
+{1,3,5,7,9,11}, {1,7,9,11,15,29}, {13,17,21,23,25,27}, {1,3,13,21,23,25},
+{1,3,11,13,25,27}. Johnson adjacency identical across all 5 seeds (stored
+once). Post-run receipt-field additions (labelled in code): `P_raw`,
+`S_raw`, `degenerate_dropped` on the tempered rows; `n_distinct_keys` on
+the rank-disagreement blocks. No pre-registered verdict field depends on
+them.
+
+**H-SM1 — KEPT (exact symmetry, as derived).** All 30 IN/OUT dekany pairs
+identical on M1/M2/M3 and exact CS, with (P,S) swapped exactly on the exact
+path AND at 3¢ (30/30); all 75 hexany transposition pairs identical on
+every axis; all 75 tetrad IN/OUT pairs (P,S)-swapped. So a seed has 6
+dekany classes, 15 hexany classes, 15 tetrad classes — the census tables
+are half their nominal size, by algebra. The composite-9 sub-prediction is
+REFUTED as stated: classic classes keeping {1,3,9} (drop 5/7/11) have 14/22/
+12 exact CS-violation classes vs 12/20/12 for those breaking it (drop 1/3/
+9) — means 16.0 vs 14.7 in the predicted direction, but not uniform (drop-3
+= 20 > drop-11 = 12).
+
+**H-SM2 — KEPT exactly.** Classic: 26/30 hexanies CS (exact and M2 at
+0.5¢ agree), the four failures being precisely the predicted hexany(5 in,
+11 out), (11 in, 5 out) [= {1,3,7,9}] and (7 in, 11 out), (11 in, 7 out)
+[= {1,3,5,9}]. Flagship 30/30; the three other CS winners 30/30 each.
+Family rail (≥ 26/30 on every seed) holds.
+
+**H-SM3 — flagship REFUTED, classic KEPT, and the direction is the
+finding.** Flagship (strictly proper at N = 20): 0/12 dekanies non-improper
+(predicted 4–8), 0/12 CS; its least-improper dekany class is drop-29
+= CPS(5,2){1,7,9,11,15} (4 violating span pairs vs 8 for the other five).
+Classic: 0/12 non-improper (predicted 0–4), 0/12 CS; the drop-11 dekany
+(= the 1-3-5-7-9 dekany, 2)5/3)5) has 12 exact CS-violation classes — the
+Wilson–Grady 14-tone completion rail holds. Across all five seeds: **0/60
+dekanies are proper and 0/60 are CS.** Hexanies: classic 10/30 non-improper
+(8 strictly proper = classes {1,3,5,7}, {1,7,9,11}, {3,7,9,11}, {5,7,9,11};
+proper {1,3,5,9}); flagship 6/30 (3 classes: {7,9,11,15}, {1,9,11,29},
+{1,7,9,11}); {13,17,21,23,25,27} 6/30; {1,3,13,21,23,25} 4/30;
+{1,3,11,13,25,27} 0/30. Propriety does not descend from the eikosany to its
+subsets — it INVERTS: the improper classic has more proper hexanies than the
+first strictly proper eikosany.
+
+**H-SM4 — rails: (a) KEPT at 2¢, REFUTED-and-explained at 3¢; (b) SPLIT;
+(c) KEPT with a correction; (d) KEPT.** (a) At 2¢ tempered ≥ exact for
+P and S on all 360 rows. At 3¢, 68 rows have tempered < exact — every one
+has `degenerate_dropped` > 0 and raw ≥ exact: the frozen scorer's per-
+triple ε-guard (SPEC constraint 2) drops triples whose P/S/G labels are not
+ε-separable, and the guard widens with ε; "survival vs the exact count"
+must be read on raw counts at ε ≥ 3. (b) Hexany exact-survival at 2¢:
+classic 30/30 KEPT; flagship 28/30 REFUTED — hexany(1 in, 9 out)/(9 in,
+1 out) = CPS(4,2){7,11,15,29} overshoots 2 → 3; {13,17,21,23,25,27} 20/30,
+the two {1,3,…} winners 28/30. (c) 75/75 two-in tetrads have P ≥ S and
+75/75 IN/OUT tetrad pairs swap exactly (harmonic vs subharmonic) — KEPT;
+but the brief's premise "tetrads are trivially all-triads-present" is
+FALSE under the anchored scorer: 10/75 harmonic tetrads have exact
+P = S = 0, the modal value is (P,S) = (1,0) (24/75), max (5,2). (d) 60/60
+dekanies have exact P ≠ S; classic dekany exact P+S mean 27.5, range
+[18, 41] (predicted [15, 35]) — the richest is the drop-11 = 1-3-5-7-9
+dekany at 25+16 = 41. The CS-winner seeds' dekanies are harmonically thin:
+flagship mean 10.5 [6, 12], {13,…,27} 7.5 [3, 9], {1,3,13,21,23,25} 10.0,
+{1,3,11,13,25,27} 10.8 — roughly a third of the classic.
+
+**H-SM5 — SPLIT, and the split is more useful than a clean verdict.**
+Spearman (average ranks) melodic-first vs harmonic-first over 12
+dekanies: classic 0.373 (< 0.5, KEPT); flagship 0.650 (≥ 0.5, REFUTED —
+but with only 2 distinct melodic keys among 12: the drop-29 pair vs ten
+tied, so one pair carries the whole ρ); {13,…,27} 0.390 (2 distinct keys);
+{1,3,13,21,23,25} and {1,3,11,13,25,27}: ONE distinct melodic key — the
+melodic axis is fully degenerate on their dekanies, ρ = 0 by convention
+(vacuous). Pooled 60 dekanies: ρ = −0.283 (KEPT); classic 30 hexanies
+0.315 (KEPT). CS-first vs harmonic pooled: −0.492. Reading for G-013: where
+the frozen melodic axis discriminates at all, it disagrees with the
+harmonic axis (weakly positive within the classic, negative pooled) — but
+the sharper fact is that on coincidence-free seeds it does not
+discriminate among dekanies.
+
+**Orderings, classic {1,3,5,7,9,11} (top 3; IN/OUT twins collapsed):**
+dekanies melodic-first: drop-5 = CPS(5,2){1,3,7,9,11} (6 classes/10,
+improper 6, CS viol 14, P/S 16/11 at 3¢) > drop-1 {3,5,7,9,11} (7,
+improper 6, viol 12, 14/10) > drop-11 {1,3,5,7,9} (7, improper 6, viol 12,
+25/16); harmonic-first: drop-11 (25+16 = 41) > drop-7 {1,3,5,9,11}
+(19+13; improper 8, viol 22) > drop-9 {1,3,5,7,11} (16+11); CS-first:
+drop-1 (12) = drop-11 (12) = drop-9 (12; but 9 gap classes/10) — ties
+broken by gap_classes/N. Hexanies melodic-first: {1,3,9,11} (the only
+3-class hexany — improper) > {5,7,9,11} > {3,7,9,11} (strict, 4 classes);
+harmonic-first: {1,3,5,9} (P 9, proper, NOT CS) > {1,3,7,9} (7, improper,
+not CS) > {1,3,9,11}; CS-first = melodic-first here.
+**Flagship {1,7,9,11,15,29}:** dekanies melodic-first = CS-first: drop-29
+= CPS(5,2){1,7,9,11,15} (improper 4, 8/11 at 3¢) > drop-1 (improper 8,
+8/5) > drop-11 (improper 8, 4/3); harmonic-first: drop-29 (11+8 = 19)
+> drop-15 {1,7,9,11,29} (9+4) > drop-1 (8+5). Hexanies melodic-first:
+{7,9,11,15} (strict, P 1) > {1,7,9,11} (strict, P 3) > {1,9,11,29}
+(strict, P 1); harmonic-first: {1,7,9,11} (3) > {7,9,11,29} (2, improper)
+> {9,11,15,29} (2, improper).
+**Spice (improper, top-third harmonic within kind):** classic — the
+1-3-5-7-9 dekany (drop-11, 41 exact triads, 12 CS violations) and drop-7
+{1,3,5,9,11} (32, 22 violations); hexanies {1,3,7,9} (7+7, not CS),
+{1,3,5,11} (5+5), {3,5,7,9} (4+4); tetrads two-in {7,11}, {5,11}, {7,9}.
+Flagship — every dekany is spice by definition (all improper); hexanies
+{7,9,11,29}, {9,11,15,29}, {1,11,15,29}, {1,7,11,15} at 2+2. Full lists in
+the summary JSON.
+
+**.scl exports (21):** per seed the top dekany under each ordering
+(deduplicated: classic 3 files — drop-5 melodic, drop-11 harmonic, drop-1
+CS; every CS winner 2 files — melodic+cs coincide) and the top two distinct
+hexanies under melodic-first. Classic hexany picks: hexany(5 in, 7 out)
+= 5·{1,3,9,11} (3 gap classes, improper — the gap_classes/N-first lens
+prefers it to the strictly proper 4-class ones; a deliberate provocation
+for the ear) and hexany(1 in, 3 out) = {5,7,9,11} (strictly proper).
+
+**POST-HOC lenses (not pre-registered):**
+1. **The generic dekany fingerprint.** 22 of the 30 dekany classes in the
+   census — all 24 classes of the four CS-winner seeds except flagship
+   drop-29 (improper 4) and {13,…,27} drop-13 (improper 6) — share ONE
+   frozen-melodic profile: 6 gap classes (2.370951 bits), improper (8
+   violating span pairs), exactly 12 exact CS-violation classes. Controls
+   CPS(5,2){31,37,41,43,47} and {17,19,23,29,31} reproduce it exactly;
+   {1,3,5,7,11} gives 9 classes/12 violations, {101,103,107,109,113} 8/16.
+   So at the dekany level M1/M2 are functions of the seed pitch-ARRANGEMENT
+   class, not of the seeds' harmonic identity, and only exact coincidences
+   (composite 9 in the classic) move them. Minimum exact CS violations over
+   all 60 dekanies: 12. Conjecture for a follow-up (CS-DEK-001?): no
+   CPS(5,2) of five distinct odd seeds is CS — each seed ratio b/c occurs
+   three times as a dekany interval (ab/ac, db/dc, eb/ec) and generically
+   subtends different spans; Wilson–Grady's 14-tone completion is the
+   constructive witness.
+2. **ε-guard at 3¢** (H-SM4a): the 68 tempered-below-exact rows are 100%
+   guard-explained (raw ≥ exact on all 68).
+
+**Kept.** Runner, tests, receipts stand; both frozen scorers untouched. What
+this hands the G-013 brainstorm: (i) IN/OUT dekanies are inversions — score
+6 classes, not 12; (ii) no dekany here is proper or CS, and hexany propriety
+inverts relative to the eikosany level — "subset-first" cannot mean "the
+eikosany-level winner has the best subsets"; (iii) the frozen M1–M3 are
+nearly blind at the dekany level for coincidence-free seeds — the
+aggregator needs graded quantities (violation SIZES in cents, near-CS
+distance, evenness), not class counts alone; (iv) the harmonic axis is
+where CS-winner dekanies pay (a third of the classic's triads); (v) the
+spice is real and named — the 1-3-5-7-9 dekany is the classic's richest
+subset and its least melodic by every frozen lens.
+
+## 2026-08-18 — BRIDGE-001b pre-registration (entry BEFORE any run)
+
+**Contract:** the three named BRIDGE-001 follow-ups (LOG 2026-07-29 results:
+"sweep k₂ instead of argmin", "tone-set minimax … the obvious future tuning
+lens", and SPEC §BRIDGE-001 design decision 2's "two-gap-ness becomes an
+OBJECTIVE, not an assumption"). Same object as BRIDGE-001 in every other
+respect: EG4 = tesseract on {1,3,5,7} (16 formal vertices, 8 distinct tones
+= divisors of 105), hexany CPS(4,2) + both tetranies as embedded subsets,
+hosts = rank-2 temperaments at N ∈ 7..22 (vals = patent ± 1 per odd
+coordinate), the 63-comma enumeration, Marcus's monotonicity filter FIRST,
+strict MOS-window containment with the MOS-LAT-001 anchor sweep, frozen
+triads v1.1.0 `score_tempered` (ε = 2¢, max_span 1200¢) for survival, frozen
+melodic v0.1.0 for the host window. Runner `bridge001b.py` IMPORTS
+`bridge001.py`'s enumeration, val/comma/nullspace/HNF machinery,
+monotonicity filter, host/anchor receipt and scoring conventions read-only
+(no re-derivation); receipts `results/bridge001b.jsonl` +
+`results/bridge001b_summary.json`; `bridge001.jsonl` is NOT rewritten.
+Note: SPEC's other BRIDGE-001b clause (filler-set enumeration on the
+generator chain — "CPS image indices + filler set") is NOT run here; it is
+a separate design and is deferred to BRIDGE-001c so this run stays a clean
+three-filter variant of BRIDGE-001. Both frozen pins verified before
+writing this entry (scorer 1a840af9…9b592, melodic a16f162b…7535).
+
+**Rail (must reproduce BRIDGE-001 bit-for-bit before anything else):** with
+k₂ = argmin (bridge001.choose_completion) and prime minimax
+(bridge001.minimax_generator), the rows tagged `rail` must yield exactly
+BRIDGE-001's contained Pareto front (`results/bridge001_summary.json`):
+orwell-22 ⟨22,35,51,62⟩ g = 271.3854¢, max tone err 2.727139¢, hexany P =
+2; miracle ⟨19,31,43,53⟩ / ⟨20,32,46,56⟩ / ⟨21,33,49,59⟩ g = 116.5878¢,
+max tone err 6.857995¢, hexany P = 3 — same numbers to the printed 6
+decimals, same k₂, same mapping, same aliases; also mothra 5.678¢ and
+meantone 7.672¢ as dominated contained rows. The summary carries a
+`rail_reproduced` boolean computed by direct comparison against the
+BRIDGE-001 summary file (front rows: N, val, k2, mapping, generator_cents,
+max_error_cents, collision_count, hexany_image_P,
+posthoc_hexany_full_recovery_eps).
+
+**H-B3 — k₂ sweep (completion is a design axis, not an argmin).** For every
+monotone (comma c, val v, N) pair, EVERY primitive kernel-box monzo k₂
+independent of c is admitted; rows are deduped by (mapping M = HNF of the
+saturated left-kernel of [c,k₂], N, v), with `comma_aliases` = every
+enumerated comma in ker M and `k2_witnesses` = every k₂ producing M for
+that (c,v). Scale probe (counts only, no scoring, run 2026-08-18 to size
+the sweep): 1615 monotone (c,v) pairs, **33,711 distinct (M, N, v) rows**
+(mean 124 temperaments per val, max 921), 1.6 s to enumerate — so NO
+pruning is applied; the row count is itself a prediction (reproduce
+33,711). Predictions, tuning = prime minimax (BRIDGE-001's), front =
+non-dominated contained rows in (hexany image P at ε=2 ↑, collision count ↓,
+max tone error ↓), dedup by (M, N, v):
+- Named mid-accuracy temperaments the argmin skipped now APPEAR as scored
+  rows: **magic** (225/224 ∩ 245/243, ⟨1 0 2 −1],⟨0 5 1 12]) at N = 19
+  (patent ⟨19,30,44,53⟩, anchor interval [0,0] — chain span exactly 19) and
+  N = 22 (patent, anchor ∈ [−3,0]), CONTAINED, prime minimax 5.15¢, max
+  tone error ≈ 9.0¢ (on 21/16: e3 + e7 = 3.87 + 5.15), hexany P ≤ 1;
+  **garibaldi** (32805/32768 ∩ 5120/5103) at N = 12 (patent) and N = 17
+  (⟨17,27,39,47⟩, a7 = patent −1), both UNCONTAINED (EG4 chain span 24: 7
+  needs 14 fifths, 35/32 needs 22 — no N ≤ 22 window holds it), so
+  garibaldi cannot enter the contained front at any tuning; also expected
+  as contained-but-dominated: pajara-22 (period 600¢, span 6, tone err ≈
+  18¢ on 21/16), superpyth-17/22, porcupine-15/22, keemun-19, negri-19,
+  lemba-16, godzilla-19 — all with max tone error > 9¢.
+- **The prime-minimax contained front is UNCHANGED**: exactly BRIDGE-001's
+  four rows (orwell-22 P=2 2.727¢; miracle 19/20/21 P=3 6.858¢). Reason: per
+  (c,v) the sweep only adds temperaments LESS accurate than the argmin one,
+  and entering the front needs P ≥ 4, or P = 3 with tone error < 6.858¢, or
+  tone error < 2.727¢ — none of the named entrants qualifies (magic P ≤ 1).
+  **P-COMMA family call holds: 225/224 owns every non-dominated contained
+  row.** Falsifier: any front row whose aliases exclude 225/224 — predicted
+  none; if one exists it is named in the results entry.
+- Max hexany P at ε=2 over ALL contained rows stays 3 (miracle) under prime
+  minimax.
+
+**H-B4 — tone-set minimax (tune to the 8 EG4 images, not the 3 primes).**
+Second tuning per (M, N, v): pure octaves, period exactly 1200/x, G = the
+exact piecewise-linear minimax of max over the 8 distinct EG4 tone monzos
+(octave-reduced; 1/1 contributes the zero line) of |T(t) − cents(t)|, same
+crossing solver as bridge001.minimax_generator generalized to an arbitrary
+monzo list, tie → smaller G. Both tunings are measured on every row (both
+sets of per-tone errors, score_tempered, subsets, host step classes, ε
+regimes, hexany full-recovery ε). Hand-derived predictions (pins, written
+before the solver exists; the linear-in-δ error model, δ = G − G_prime):
+- **miracle**: prime-minimax errors e3 = e5 = −2.428, e7 = −2.002 (sign-
+  coherent) give e21 = −4.430, e105 = −6.858; the tone-set optimum
+  balances e21 (slope +4) against e105 (slope −3) at δ = −0.347¢ →
+  **max tone error 5.82¢** (e21 = e105 = −5.82; e3 = e15 = −4.51, e5 =
+  0.00, e7 = e35 = −1.31). NOT below 4¢ — the orchestrator's guess is
+  refuted by derivation: 3/2 (slope +6) and 105/64 (slope −3) pull
+  opposite ways and 21/16 caps the gain. Drop 6.858 → 5.82 (−1.04¢).
+- **orwell-22**: mixed-sign e3 = −2.257, e5 = −0.470, e7 = +2.257 give
+  e15 = −2.727 (slope +4) vs e7 (slope +8): δ = +0.039¢ → **max tone
+  error 2.570¢** (Δ = −0.157¢, "within 0.3¢" as the orchestrator guessed);
+  e3 = −1.983, e5 = −0.588, e7 = +2.570, e21 = +0.588, e35 = +1.983,
+  e105 = 0.000.
+- Other named contained rows: meantone-17/19 7.672 → 4.81¢; magic-22
+  9.02 → 5.36¢; mothra-21 5.678 → 5.48¢. So under tone-set tuning the
+  ERROR ranking of named contained hosts becomes orwell 2.57 < meantone
+  4.81 < magic 5.36 < mothra 5.48 < miracle 5.82 — miracle falls from
+  second to last. Whether the FRONT flips is decided by hexany P (below).
+- **Hexany survival under retune (H-B2 strict revival test).** The frozen
+  scorer's tempered test is translation-invariant (middle vs mean of the
+  outer tones), so survival tracks INTERVAL errors inside the hexany, not
+  absolute tone errors vs 1/1. Hand-checked triads (base (6,6): 5:6:7,
+  30:35:40, 28:35:42, 21:28:35, and the two octave-spanned 5:15/2:10 and
+  7:21/2:14 whose deviation is exactly −e3):
+  · miracle prime: e3 = −2.43 fails the two e3-triads and 21:28:35 at 2¢
+    (dev ≈ 2.43) → P = 3, recovers at ε = 3 ✓ (matches BRIDGE-001);
+    miracle tone-set: e3 = −4.51, 6/5 = −4.51, 7/6 = −3.20 → only 30:35:40
+    survives → **P = 1, full (6,6) recovery moves 3 → 5¢**. H-B2 is NOT
+    revived by the retune; the deficit widens.
+  · orwell prime: e3 = −2.257 fails both e3-triads → P = 2 ✓ (matches);
+    orwell tone-set: e3 = −1.983 → both e3-triads pass with 0.017¢ margin
+    → **P = 4** (5:6:7 at 3.24¢ and 30:35:40 at −3.4¢ still fail); full
+    recovery stays at ε = 4. (Margin caveat: 1.983 vs 2.000 — a float
+    surprise here would give P = 2, and is recorded as such.)
+  · magic-22 tone-set: 5/3 = −8.2, 7/5 = +7.9 → P = 1; meantone tone-set
+    P = 0; mothra tone-set P ≤ 1.
+- **Predicted tone-set contained front: orwell-22 ALONE** (P = 4, 2.570¢,
+  0 collisions) — miracle (P = 1, 5.82¢) becomes DOMINATED by orwell and
+  drops off; no contained row reaches P ≥ 5 or error < 2.570¢. Verdict
+  criteria: "flip" = any change in front membership or order vs the prime
+  front — predicted YES (miracle exits), by domination, not by re-ranking.
+- **Both outcomes' meaning for H-B2, pre-registered:** if ANY contained
+  injective row reaches full hexany (6,6) at ε = 2¢ under the tone-set
+  tuning, H-B2 is REVIVED under the strict reading — the 2¢ bridge exists
+  and BRIDGE-001's refutation was an artifact of the pre-registered tuning
+  choice (report the row, and it becomes the flagship). If none does
+  (predicted), BRIDGE-001's refutation is ROBUST to the tuning objective:
+  the one-cent gap is structural at N ≤ 22, and absolute-error tuning is
+  the wrong lens for survival (H-B6).
+
+**H-B5 — two-gap-ness as an objective column.** For every CONTAINED row and
+BOTH tunings, the anchored N-note host window (host_receipt's `notes`:
+npp generator steps from the used anchor × x periods) is scored with the
+frozen melodic.py (score_melodic: gap_class_count at ε_gap 0.5¢, is_cs at
+ε_CS 0.5¢, propriety classification); `gap_classes` is a COLUMN in the
+front, never a filter. Predictions:
+- Front rows: orwell-22 → 2 gap classes (22 is an orwell MOS: L 72.0¢ ×9,
+  s 42.5¢ ×13, L/s 1.70 → STRICTLY PROPER, CS); miracle-21 (blackjack) →
+  2 classes (L 82.5¢ ×10, s 34.1¢ ×11, L/s 2.42 → IMPROPER, CS);
+  miracle-19 and -20 → 3 classes (34.1, 82.5, 116.6¢), improper. So of
+  the prime front's four rows exactly two are true 2-step MOS, and the
+  only strictly-proper bridge host is orwell-22.
+- No 3-step contained candidate strictly beats the best 2-step one on
+  hexany P at ε = 2 (prime: 3-step max = 3 = miracle-19/20 ties
+  blackjack; tone-set: 2-step orwell-22 holds P = 4 and no 3-step row
+  exceeds it). Reported either way as the (gap_classes × P) table.
+- Descriptive (no verdict): distribution of gap classes over all contained
+  rows, and the joint (2-step ∧ proper ∧ P ≥ 2) count.
+
+**H-B6 (own, sharper question): the absolute-error and survival objectives
+are NOT aligned.** For the BRIDGE-001 front rows, `hexany_interval_maxerr`
+(max |error| over the 15 pairwise hexany-image intervals, translation-
+invariant) is the quantity survival tracks: miracle prime 2.86¢ → tone-set
+4.51¢ (worse: recovery 3 → 5); orwell prime 4.51¢ → tone-set 4.55¢
+(unchanged: recovery 4 → 4, but P 2 → 4 because e3 crosses under the 2¢
+threshold). Prediction: over ALL contained rows, the tone-set retune lowers
+max tone error in every row (by construction, ≤ prime value) but does NOT
+raise the contained-set maximum hexany P at ε = 2 above 4, and lowers P on
+at least one BRIDGE-001 front row (miracle: 3 → 1). Kept iff both halves
+hold. Consequence if kept: a survival-aware tuning (interval-minimax over
+the hexany image, or a direct triad-deviation minimax) is the right next
+lens — NOT run here (not pre-registered), named for BRIDGE-001c.
+
+**Constants (locked):** N ∈ 7..22; vals patent ± 1; commas =
+bridge001.enumerate_commas() (63); kernel box |e3| ≤ 8, |e5| ≤ 5, |e7| ≤ 4;
+ε_tempered = 2.0¢; recovery/regime sweep ε ∈ 1..15; melodic ε_dedup 0.01¢,
+ε_gap 0.5¢, ε_CS 0.5¢, ε_prop 1e-9¢ (melodic.py defaults); dominance =
+(P ↑, collisions ↓, max tone error ↓); FLOAT_EPS 1e-6 for host step
+classes (bridge001's). Names for temperaments are labels only, resolved
+from comma pairs at load (miracle 225/224∩1029/1024, orwell ∩1728/1715,
+magic ∩245/243, garibaldi 32805/32768∩5120/5103, meantone 81/80∩126/125,
+mothra 81/80∩1029/1024, pajara 50/49∩64/63, …); an unnamed mapping is
+reported by its HNF.
+
+**Determinism:** python3.12 stdlib only, no randomness, sorted iteration
+everywhere; run twice, receipts must be byte-identical (sha256 recorded in
+the results entry). Tests `tests/test_bridge001b.py` green BEFORE the first
+run (tone-set solver pins for miracle 5.82¢/δ −0.347 and orwell 2.570¢/δ
++0.039 at 2 decimals; sweep dedup; melodic host scoring on a known MOS;
+rail equality on the miracle/orwell rows; label resolution). Frozen files
+untouched; freeze checks A run before and after.
+
+## 2026-08-18 — BRIDGE-001b results + verdicts
+
+**Run:** `bridge001b.py` (~95 s, bit-identical across two runs: jsonl
+sha256 fec91947…4f78, sidecar b8844db1…1894, summary 6043f29e…b8bd);
+receipts `results/bridge001b.jsonl` (2,903 FULL rows = every contained or
+rail (argmin) row), `results/bridge001b_uncontained.jsonl.gz` (30,808
+compact rows: uncontained non-rail — no bridge can live there; the full
+33,711-row dump was 77 MB), `results/bridge001b_summary.json`. Tests
+20/20 new (lattice suite 130/130) green before the first run, including
+the hand-derived tone-set pins; freeze checks A OK on both pins before and
+after (scorer 1a840af9…9b592, melodic a16f162b…7535); frozen files
+untouched. Enumeration: 63 commas, 2205 (c,v) pairs, 590 monotonicity
+rejections, 1615 monotone pairs → **33,711 distinct (mapping, N, val)
+rows exactly as the scale probe predicted**, 19,818 distinct rank-2
+mappings, 1,880 contained rows (791 distinct contained mappings), 1,101
+rail rows (78 contained rail rows = BRIDGE-001's 78 contained
+temperaments).
+
+**Rail — REPRODUCED bit-for-bit.** The prime-tuned rail front equals
+BRIDGE-001's summary front on every compared field (4 rows: orwell-22
+2.727139¢ P=2, miracle-19/20/21 6.857995¢ P=3; same k₂, mapping,
+generator, collisions, recovery ε, and comma_aliases == rail_commas);
+mothra-21 5.678412¢ and meantone-17/19 7.672444¢ reappear as dominated
+contained rail rows. `rail.bridge001_comparison.reproduced = true`.
+
+**The unpre-registered discovery that reframes H-B3/H-B4/H-B6 verdicts:
+the count-based survival criterion is unsound for grossly detuned
+images.** The pre-registered fronts (P at ε=2 ↑, collisions ↓, max tone
+error ↓, NO error cap) admitted rows the k₂ sweep surfaced with 64–155¢
+tone errors and P = 5–7: e.g. ⟨1 0 1 2],⟨0 4 3 2] (kernel comma 49/48
+only, g = 498.3¢, max tone error 119.2¢) at N = 12/17 with hexany
+"P = 5" (its 3/2 is 91¢ sharp; the image is a different scale whose
+ACCIDENTAL near-arithmetic triples out-count the hexany's eight faces),
+and two 155¢ rows with P = 7 and 2 collisions. BRIDGE-001 never met this
+because argmin picked accurate temperaments. Two POST-HOC lenses, labelled
+in the runner and summary, changing no pre-registered field: (a)
+**in-budget fronts** — restrict to max tone error < 15¢ (BRIDGE-001's own
+ε_bridge regime: over-budget rows are by definition not bridges); (b)
+**triad-identity lens** — `posthoc_identity_P/S`: how many of the hexany's
+OWN twelve labelled triads (enumerated on the exact rational path,
+`posthoc.hexany_base_triads`) keep their label in the image at ε (frozen
+`classify_cents_triple`, same octave placement). Count and identity lenses
+agree on FULL survival for every in-budget contained row (0 disagreements;
+10 over-budget ones disagree) and on the P/S counts themselves for every
+in-budget row below 13.7¢ (the only mismatches are seven unnamed rows at
+13.7–14.9¢ where count P = 1, identity 0 — accidental coincidences begin
+around there); the identity lens exposes the artifacts (the 119¢ "P = 5"
+rows have identity P = 0; the 155¢ "P = 7" rows identity 2; the 64¢
+schismatic-with-7=3-fifths rows keep identity 4 because their 5-limit
+faces are honestly accurate). Only
+16 (prime) / 45 (tone-set) of the 1,880 contained rows are in-budget:
+**the k₂ sweep is 98% junk temperaments — the argmin was hiding a
+population, not a front.** Verdicts below give the pre-registered letter
+first, then the in-budget/identity reading.
+
+**H-B3 (k₂ sweep) — letter FALSIFIED, substance KEPT.**
+- Letter: the prime front is NOT unchanged — the two 119¢ ⟨1 0 1 2],
+  ⟨0 4 3 2] rows (N = 12 ⟨12,20,27,34⟩, N = 17 ⟨17,28,38,48⟩; aliases
+  {49/48}) join it, so "225/224 owns every non-dominated contained row" is
+  falsified in letter — the first non-225/224 front row is named. Under
+  the in-budget lens (and under the identity lens, budget or not, at
+  ε = 2), the prime front is EXACTLY BRIDGE-001's four rows and 225/224
+  owns all of them. In-budget contained max hexany P = 3 (miracle), as
+  predicted; unrestricted max is 5 (artifact).
+- Named entrants, all as predicted: **magic** appears at N = 19 (patent,
+  anchor [0,0]) and N = 22 (patent, anchor [−3,0]), contained, prime
+  minimax 5.15¢, max tone error **9.017¢** (pred. 9.02; on 21/16), tone-set
+  **5.364¢** (pred. 5.36), hexany P = 1 (pred. ≤ 1), recovery ε = 8 —
+  dominated under both tunings; magic-16 (uncontained) turns out to be a
+  rail row already. **Garibaldi** appears at N = 7, 12, 17 (⟨17,27,39,47⟩,
+  a7 = patent−1 as predicted, plus N = 7 unpredicted), all UNCONTAINED
+  (chain span 24 as predicted) — and all three are rail rows: BRIDGE-001
+  had scored garibaldi (2.71¢, hexany P = 4 at 2¢, full at 3¢!) but its
+  window (24 > 22) hid it; garibaldi is the best-surviving mid-accuracy
+  temperament in the sweep and simply needs N ≥ 29. Also contained-but-
+  dominated as predicted: pajara (18.2¢, 9 vals), superpyth-15/17/22
+  (28.4¢), porcupine-15/16/21/22 (18.2¢), keemun (20.5¢), negri (31.6¢),
+  lemba (30.4¢), godzilla-14/15/19 (19.1¢); one unpredicted in-budget
+  contained newcomer: **doublewide-22** (50/49 ∩ 875/864, period 600¢,
+  ⟨22,35,51,62⟩, 10.2¢, hexany P = 3 = identity 3, 2-step STRICTLY PROPER,
+  CS) — dominated by miracle on error, but the only in-budget row besides
+  orwell that is simultaneously 2-step, proper and P ≥ 2 under prime
+  tuning.
+
+**H-B4 (tone-set minimax) — KEPT in every derived number; front flips as
+predicted; H-B2 NOT revived.**
+- miracle: max tone error 6.857995 → **5.817315¢** (pred. 5.82; δ =
+  −0.3469¢, secor 116.5878 → 116.2409¢; e5 goes to exactly 0.000, e3 =
+  e15 = −4.510, e21 = e105 = −5.817). NOT below 4¢ — the orchestrator's
+  guess is refuted, the derivation held.
+- orwell-22: 2.727139 → **2.570508¢** (pred. 2.570; δ = +0.0392¢, g
+  271.3854 → 271.4246¢; e3 = −1.983, e7 = +2.571, e105 = 0.000).
+- Named error ranking under tone-set: orwell 2.571 < meantone 4.815 <
+  magic 5.364 < mothra 5.482 < miracle 5.817 — exactly the predicted
+  order; miracle falls from second to last.
+- Hexany survival under retune (identity lens confirms every hand-checked
+  deviation): miracle P 3 → **2** (pred. 1: the 21:28:35 face survives at
+  −1.69¢, hand estimate was −2.7), full (6,6) recovery **3 → 5¢** (pred.
+  5; the two octave-spanned faces sit at exactly |e3| = 4.510¢);
+  orwell P 2 → **4** (pred. 4; the two e3-faces pass at 1.983¢ — the
+  0.017¢ margin held), recovery stays 4 (5:6:7 at 3.24¢, 30:35:40 at
+  −3.42¢). Doublewide 3 → 3; magic 1 → 1; mothra 2 → 2; meantone 1 → 1.
+- **Tone-set in-budget front = orwell-22 ALONE** (P = 4 = identity 4,
+  2.570¢, 0 collisions, 2-step, strictly proper, CS) — miracle is
+  dominated by orwell and exits; `front_flipped = true` in letter too
+  (the letter front adds the 64¢/155¢ artifacts, identity P 4/2). No
+  contained row reaches P ≥ 5 in budget or error < 2.570¢.
+- **H-B2 strict revival: ZERO rows** under either tuning
+  (`h_b2_revived_rows = []`; identity full (6,6) at ε = 2 among contained
+  rows: 0/0). BRIDGE-001's refutation is ROBUST to the tuning objective:
+  the one-cent gap is structural at N ≤ 22, and (H-B6) absolute-error
+  tuning is the wrong lens for survival. Addressing-only (uncontained)
+  best stays ennealimmal-18: 0.204¢ prime → 0.132¢ tone-set, span 8 > 2.
+
+**H-B5 (two-gap objective) — KEPT (one propriety miss).** Front rows:
+orwell-22 → 2 gap classes (42.47¢ ×13, 71.99¢ ×9; L/s 1.70), STRICTLY
+PROPER, CS ✓; blackjack (miracle-21) → 2 classes (34.12 ×11, 82.47 ×10;
+L/s 2.42), IMPROPER (10 violating span pairs), CS ✓; miracle-19 → 3
+classes (34.12, 82.47, 116.59), improper, NOT CS (18 violations) ✓;
+miracle-20 → 3 classes, NOT CS, but **PROPER** (0 violations; predicted
+improper — with a single 116.6¢ step among 10+9 the spectrum still nests).
+So exactly two of BRIDGE-001's four front rows are true 2-step MOS and the
+only strictly-proper bridge host is orwell-22, as predicted. 3-step vs
+2-step: in budget, prime 3-step max P = 3 (miracle-19/20/22) ties the
+2-step max 3 (blackjack); tone-set 2-step max 4 (orwell) beats 3-step max
+2 — no 3-step contained candidate beats a 2-step one on the harmonic side
+✓ (unrestricted table: 2-step and 3-step both max 5/7, the over-budget
+artifacts). Gap-class distribution over all 1,880 contained rows: 1-step
+11/26, 2-step 928/941, 3-step 941/913 (prime/tone-set) — 49% 2-step,
+inside the predicted 30–60%; in budget 11+5 / 26+19. Joint (2-step ∧
+non-improper ∧ P ≥ 2, in budget): prime {orwell-22, doublewide-22};
+tone-set adds ⟨1 2 2 3],⟨0 9 −7 4] at N = 21/22 (225/224 ∩ 12288/12005,
+10.9¢, P = 4, strictly proper). Interesting corollary for the design
+paradigm: retuning does not change gap-class counts on any front row
+(the melodic column is tuning-robust at these δ), so two-gap-ness and
+survival can be optimized independently.
+
+**H-B6 (objectives not aligned) — letter FALSIFIED by the same artifact,
+KEPT in budget.** Tone-set lowers max tone error on all 33,711 rows ✓
+(by construction). Contained max hexany P: unrestricted 5 → 7 (artifact
+rows; letter falsified), in budget 3 → 4 (orwell) ✓ not above 4. A
+BRIDGE-001 front row loses P ✓ (miracle 3 → 2, recovery 3 → 5).
+`hexany_interval_maxerr` (translation-invariant, the quantity the frozen
+test sees): miracle 2.855 → 5.817¢ (hand: 2.86 → 4.51 — I omitted the
+21/16-vs-5/4 pair, whose error becomes 5.817 once e5 = 0), orwell 4.984 →
+5.141¢. Reading: minimizing absolute error vs 1/1 can move the hexany's
+internal intervals either way; orwell gains survival, miracle loses it.
+The survival-aware tuning (interval or direct triad-deviation minimax) is
+named for BRIDGE-001c, unrun.
+
+**Vs the BRIDGE-000 standard:** unchanged corners — Wilson's pitch-just
+corner (0¢, 7 collisions, 100% survival) and the tempered-faithful corner,
+now sharpened to orwell-22 at 2.570¢ with 4/6 identity faces at 2¢ and all
+6 at 4¢, 0 collisions, strictly proper 2-step host. Nothing at N ≤ 22
+reaches full survival at 2¢ under any tuning; the sweep of 33,711
+temperaments finds no third corner.
+
+**Kept.** Runner, tests, receipts stand; frozen scorers untouched. Post-hoc
+additions (in-budget fronts, identity lens, `posthoc.*` in the summary,
+`posthoc_identity_*` per tuning) are labelled in code and here. Method
+note for BRIDGE-002 (EG6, 2-comma kernels): any Pareto front over a k₂
+sweep must be error-capped or identity-scored — the count-based P is not
+a survival measure once tone errors exceed ~10¢. Gate G-021 (ledger PR
+#37) proposed row in the PR body.
+
+## 2026-08-19 — ET-003 pre-registration (entry BEFORE any implementation or run)
+
+**Question:** the comma-kernel history of 12-EDO, made falsifiable under the
+frozen scorers. The 11-limit patent val V12 = ⟨12, 19, 28, 34, 42⟩ has a
+kernel; European practice walked INTO that kernel one comma at a time. Four
+fixed stages, all sharing the SAME val/addressing (12 degrees, fifth = 7
+steps), differing only in the lift (tuning map):
+- **S1 Pythagorean 12** — chain of pure fifths (1200·log₂(3/2) =
+  701.955001¢), chain positions −5..+6, octave-reduced; wolf G♯–E♭ =
+  678.494990¢ (= pure fifth − Pythagorean comma).
+- **S2 quarter-comma meantone 12** — fifth = 300·log₂5 = 696.578428¢
+  (major third exactly 5/4 by construction), chain −5..+6; wolf G♯–E♭ =
+  8400 − 11·f = 737.637287¢.
+- **S3 Werckmeister III** — Andreas Werckmeister, *Musicalische
+  Temperatur* (Quedlinburg, 1691), "Correct Temperament No. 1": fifths
+  C–G, G–D, D–A, B–F♯ narrowed by 1/4 Pythagorean comma
+  (PC = 1200·(12·log₂(3/2) − 7) = 23.460010¢; tempered fifth
+  696.089998¢), all eight other fifths pure; circle closes exactly
+  (8·P + 4·T = 8400 by construction). Cents table (from C, locked in the
+  runner as the constant table): 0, 90.225, 192.180, 294.135, 390.225,
+  498.045, 588.270, 696.090, 792.180, 888.270, 996.090, 1092.180 —
+  matches Barbour, *Tuning and Temperament* (1951). Circle-of-fifths
+  word from C: T T T P P T P P P P P P.
+- **S4 12-EDO** — degrees k·100¢ (ET-001 rails apply).
+
+Runner `et003.py`; receipts `results/et003.jsonl` (7 rows: 4 stages + 3
+kernel-census rows) + `results/et003_summary.json`. Tests
+`tests/test_et003.py` green before the first run. Frozen scorers: triads
+v1.1.0 (`score_tempered`, PRIMARY anchored convention, default max_span
+1200¢) and melodic v0.1.0 (`score_melodic`, defaults). ε grid
+{1, 2, 3, 5, 10, 14.86, 20}¢ (ET-001's). Stdlib only, python3.12,
+deterministic, no wall-clock fields; two runs bit-identical (diff
+recorded). Comma enumeration and val arithmetic adapted from
+`bridge001.py` (copy-with-attribution, generalized to per-limit prime
+lists). Analytic mirror: an independent reimplementation of the anchored
+classification formulas (ET-001 method, extended off-EDO: enumerate all
+anchored triples of each 12-tone scale, per-triple deviation dev and
+guard separation sep, count on the half-open interval (dev, sep]); the
+frozen scorer is the referee at every grid point AND at every distinct
+lock value ± δ (δ = 1e−6¢, tie clustering 1e−9¢). Scratch derivation for
+everything below used independent formulas only — no frozen-scorer calls.
+
+**H-K1 (kernel census).** Boxes: |e3| ≤ 12, |e5| ≤ 5, |e7| ≤ 4,
+|e11| ≤ 3 (BRIDGE-001 box widened e3 8→12 SOLELY to admit the
+Pythagorean comma, the historical comma of 12 — deviation flagged here),
+0 < cents < 60, primitive, Tenney height n·d ≤ 2⁴⁰; kernel test
+v(c) = 0 against the patent val truncations ⟨12,19,28⟩ / ⟨12,19,28,34⟩ /
+⟨12,19,28,34,42⟩. Predicted counts: **5-limit exactly 5 members** —
+81/80 (21.5063¢), 128/125 (41.0589¢), 2048/2025 (19.5526¢),
+32805/32768 (1.9537¢), 531441/524288 (23.4600¢); **7-limit 29**
+(the 5 plus 36/35, 50/49, 64/63, 126/125, 225/224, 3136/3125, 5120/5103,
+4000/3969, … full list in receipts); **11-limit 122**. Non-members
+predicted (derived, contradicting the naive reading list): **33/32 is
+NOT in the kernel** (V12(33/32) = 1 step) and neither is 121/120
+(V12 = 1) — the D'Alessandro commas do not transfer to 12. Cross-rails
+(pinned in tests): (a) the 5-limit kernel of ⟨12,19,28⟩ is exactly
+sat⟨81/80, 128/125⟩ — the vector cross product of their monzos is
+−⟨12,19,28⟩ ITSELF (minor gcd 1 ⇒ saturated): "12-EDO is the unique
+temperament killing both 81/80 and 128/125" as one integer identity;
+(b) all five 5-limit members are (81/80)^a·(128/125)^b:
+Pythagorean comma = (81/80)³/(128/125), diaschisma = (128/125)/(81/80),
+schisma = (81/80)²/(128/125).
+
+**H-K2 (the walk gains triads — grid tables, all scorer-refereed).**
+Predicted (P, S) per stage at the grid ε = [1, 2, 3, 5, 10, 14.86, 20]:
+- S1 Pythagorean: P = S = **[11, 19, 21, 19, 20, 37, 46]**,
+  G = [30, 30, 30, 28, 28, 28, 28].
+- S2 meantone: P = S = **[2, 2, 10, 28, 39, 47, 48]**,
+  G = [30, 30, 30, 30, 28, 28, 28].
+- S3 Werckmeister III: P = **[10, 10, 14, 18, 28, 40, 48]**,
+  S = **[9, 9, 14, 19, 28, 40, 46]**, G = [20, 20, 20, 20, 39, 55, 58].
+- S4 12-EDO: P = S = [0, 12, 24, 24, 24, 48, 48] (ET-001 rail, must
+  reproduce exactly).
+At the two named points: (P,S)@2¢ = S1 (19,19), S2 (2,2), S3 (10,9),
+S4 (12,12); (P,S)@14.86¢ = S1 (37,37), S2 (47,47), S3 (40,40),
+S4 (48,48). Predicted P-ordering per ε: ε=1: S1 > S3 > S2 > S4;
+ε=2: S1 > S4 > S3 > S2; ε=3: S4 > S1 > S3 > S2 (12-EDO's rank-1 here is
+the (1,1) chromatic-cluster guard-window artifact on record since
+ET-001 — excluding (1,1)-type triples S1 wins); ε=5: S2 > S4 > S1 > S3;
+ε=10: S2 > S3 > S4 > S1; ε=14.86: S4 > S2 > S3 > S1 (12-EDO wins by ONE
+triple over meantone, 48 vs 47); ε=20: S4 = S2 = S3-on-P at 48 > S1.
+So **12-EDO tops the P column only at ε ≥ 14.86** (modulo the ε=3
+artifact) — the cultural-epsilon reading of ET-001, now historical.
+First-lock spectrum heads (each verified at ±δ):
+- S1: 0.0000¢ ×11 (power chords on the 11 pure fifths — dev exactly 0),
+  then 1.0851 ×2 (schismatic 8:9:10: 9/8 below, Pyth dim3 65536/59049
+  above), 1.2208 ×3 (schismatic major, 2nd inversion), **1.9537 ×3
+  (schismatic major 4:5:6, root position: dev = EXACTLY the schisma —
+  fa=1/1, fc=3/2 pure makes AM = 5/4 exactly, so dev =
+  1200·log₂((5/4)/(8192/6561)) = 1200·log₂(32805/32768))**, 2.3500 ×2
+  (limma-cluster, guard window (2.35, 4.70] — enters at 3, exits by 5),
+  9.9873 ×1 (wolf-fifth schismatic major, 2nd inv), 11.9809 ×8
+  (whole-tone trichord ±203.91), 12.0841 ×1 (wolf-fifth schismatic
+  major, root), 13.4727 ×8 (ditone major 2nd inv: dev = EXACTLY
+  1200·log₂(129/128), AM = (3/4 + 81/64)/2 = 129/128), 15.1499 ×3,
+  **19.5526 ×6 (dim5-below + ditone-above pattern: dev = EXACTLY the
+  diaschisma, AM/fb = 2025/2048)**. The Pythagorean ROOT-position ditone
+  major sits at dev = EXACTLY 1200·log₂(81/80) = 21.5063 — never locks
+  at ε ≤ 20: **the syntonic comma is visible as a triadic deviation the
+  grid cannot reach**.
+- S2: **0.7394 ×2 — meantone-12's FIRST lock is SEPTIMAL: the 6:7:8
+  triple (aug-2nd 269.206¢ ≈ 7/6 below, dim-3rd 234.216¢ ≈ 8/7 above),
+  locking below 1¢, so P@1 = 2 while 12-EDO's P@1 = 0.** Then 2.0143 ×8
+  (major 2nd inv), 3.2239 ×8 (major 4:5:6 root), 3.6029 ×3 (5:6:7),
+  3.8634 ×4 (5:7:9), 3.9578 ×2 (semitone cluster, window (3.96, 7.92]),
+  4.2404 ×1, 5.3766 ×11 (power chords: dev = the quarter syntonic comma
+  exactly), 7.3751 ×2 (7:8:9), 10.7531 ×8 (whole-tone ±193.16, window
+  (10.75, 21.51]), 19.5614 ×1 (the G♯ double-wolf major — dim4 third +
+  wolf fifth partially cancel back under 20¢).
+- S3: 0.0 ×8 (pure fifths), 0.1021 ×1 (accidental near-exact cluster,
+  window-bound), **0.2516 ×1 — Werckmeister III's C major in second
+  inversion is 0.25¢ from exact proportionality**, 2.4456 ×1 (F major
+  2nd inv), then the key-color ladder (full table below). Tempered
+  fifths lock at exactly PC/4 = 5.8650 ×4.
+- S4: 1.9550 ×12, 2.8865 ×12, 7.8374 ×12, 11.5268 ×12, 14.8590 ×12
+  (ET-001 rail).
+Wolf power chords never lock: S1 wolf dev = PC = 23.4600 exactly;
+S2 wolf dev = 35.6820¢.
+Duality rails: P = S at every ε for S1, S2, S4 (chain scales: inversion
+= transposition; the anchored scorer commutes with both). **S3 is the
+ONLY stage with P ≠ S** — its circle-of-fifths word TTTPPTPPPPPP is
+chirally asymmetric (its reversal is not a rotation), predicted split:
+(P,S) = (10,9) at ε=1 and 2, (18,19) at 5, (48,46) at 20, equal at
+3, 10, 14.86. A well-temperament has a HANDEDNESS the frozen scorer can
+see; neither the Pythagorean, meantone, nor equal lifts have one.
+
+**H-K3 (melodic cost of the walk — frozen melodic v0.1.0 vs pinned
+predictions).** Predicted per stage (propriety, CS violations,
+gap classes, gap multiset ¢×count, entropy bits):
+- S1: strictly proper (SPEC rail, test_melodic pin), CS (0 violations),
+  2 gap classes {90.225×7, 113.685×5}, entropy 0.979869.
+- S2: strictly proper, CS, 2 gap classes {76.049×5, 117.108×7},
+  entropy 0.979869 (same 7-5 shape as S1: both are 12-note MOS of one
+  generator; only the L/s ratio differs — 1.260 vs 1.540).
+- S3: strictly proper, CS, **4 gap classes** {90.225×2, 96.090×4,
+  101.955×2, 107.820×4}, entropy 1.918296 — the MELODIC-COMPLEXITY
+  MAXIMUM of the walk.
+- S4: strictly proper, CS, 1 gap class {100×12}, entropy 0.
+**The monotone-uniformity story is predicted REFUTED**: gap classes run
+2 → 2 → 4 → 1 and entropy 0.98 → 0.98 → 1.92 → 0 — history's melodic
+complexity is a HUMP peaking at the well-temperament, not a monotone
+descent into 12-EDO; and propriety was never traded at all (all four
+stages strictly proper, all four CS). Step-size spread (max−min gap) is
+also non-monotone: 23.460 (=PC) → 41.059 (=128/125, the meantone
+maximum) → 17.595 → 0.
+
+**H-K4 (which comma buys which triad).** Exact-identity claims (tests,
+1e−9): S1 root ditone-major dev = 1200·log₂(81/80); S1 schismatic-major
+root dev = 1200·log₂(32805/32768); S1 dim5+ditone dev =
+1200·log₂(2048/2025); S2 wrapped ("wolf") third = dim4 = 32/25 exactly,
+error vs 5/4 = 1200·log₂(128/125) exactly; S1 wolf-power-chord dev =
+1200·log₂(531441/524288). Address censuses (per-address best-voicing
+deviation, verified against the lock spectra): major-triad addresses
+covered at ε, predicted table (stage: @2, @3, @5, @10, @14.86, @20):
+S1: 3, 3, 3, 4, **12**, 12; S2: 0, 8, 8, 8, **8**, 9; S3: 1, 2, 4, 9,
+**12**, 12; S4: 0, 0, 0, 12, **12**, 12. Minor-address coverage
+predicted IDENTICAL row for row. Verdict claims:
+- **81/80 alone does NOT buy all of 12-EDO's Maj/Min addresses —
+  predicted NO** (the task's concrete question): a 12-note 81/80 chain
+  covers exactly 8 of 12 (roots at chain −5..+2); the 4 missing roots'
+  thirds wrap the chain to the dim4 = 32/25, off 5/4 by exactly the
+  UNtempered 128/125. Tempering 128/125 too (S2 → S4) buys those 4
+  addresses AND the 12th power chord (wolf → fifth): enharmonic closure
+  is 128/125's purchase, exactly as the generalized-D'Alessandro
+  framing prices it.
+- The schisma 32805/32768 is S1's purchase: it puts 3 major addresses
+  within 2¢ of exact proportionality centuries before meantone — the
+  scorer sees medieval schismatic thirds as 12's first 5-limit triads.
+- **The 7-limit kernel members buy NOTHING in 12-EDO at ε ≤ 20¢**:
+  12-EDO's locked types are exactly the five ET-001 types, all with
+  3- or 5-limit prototypes; predicted count of additional 12-EDO locks
+  ≤ 20¢ = 0. The septimal action is in MEANTONE: its first lock
+  (0.7394¢, 6:7:8) exists because 1/4-comma tempering happens to send
+  A2 (just 75/64) within 2.34¢ of 7/6 and d3 (just 144/125) within
+  3.05¢ of 8/7 — the mergers (75/64)/(7/6) = **225/224** and
+  (144/125)/(8/7) = **126/125** (both V12 kernel members, both pinned
+  as exact Fraction identities). The walk's last step S2/S3 → S4
+  DESTROYS the sub-cent septimal lock (P@1: 2 → 0): **12-EDO forecloses
+  the 7-limit door meantone had opened** — 64/63 and 50/49 are in V12's
+  kernel but purchase no triad the grid can see.
+**H-K5 (key color, pre-registered lens).** Werckmeister III's per-root
+best-voicing major-triad deviation (the "key color" of 1691, now a
+number): C 0.2516, F 2.4456, D = G 3.9273, B♭ 6.1166, B 7.6077,
+E♭ = E = A 9.7924, C♯ = F♯ = G♯ 13.4727¢ (exactly 1200·log₂(129/128) —
+those three roots carry a pure fifth + full Pythagorean ditone, S1's
+second-inversion identity). Claims: (a) exactly 7 distinct values with
+that multiset; (b) minimum at C — **W-III's C major is 31× closer to
+exact proportionality than ANY 12-EDO major voicing** (0.2516 vs
+7.8374¢); (c) even the worst key stays under the cultural epsilon,
+which is WHY the coverage row hits 12 at 14.86 — "well-temperament =
+every key usable, no key identical" as a theorem of the dev table;
+(d) at ε = 5¢ the coverage ordering is S2 (8) > S3 (4) > S1 (3) >
+S4 (0): **at tight tolerance, 12-EDO is the WORST major-triad machine
+of the four stages — the endpoint of the walk pessimizes the 5-limit
+and is redeemed only at its own 14.86¢ epsilon** (and at 14.86 meantone
+is the only stage that fails closure, 8 < 12: the wolf's price).
+
+**Constants (locked):** the four stage definitions above; ε grid
+{1, 2, 3, 5, 10, 14.86, 20}¢; scorer default max_span 1200¢; melodic
+defaults; δ = 1e−6¢; lock-tie clustering 1e−9¢; comma boxes as in H-K1;
+no other tunables. Scale: ~28 grid calls + ~250 lock-verification calls
++ 8 melodic calls + census; seconds. Anything not predicted above lands
+in clearly labeled post-hoc fields.
+
+**Archive context (read in place, cited by path+page):**
+`2010_02_24B/12&17/BasicPttnsGenus12&17.pdf` pp.1–3 (Wilson ©1980,
+reprinted 1981/1983), already on record in ET-002: Wilson draws the
+12-tone genus as the Pythagorean diatonic modulated through six keys
+and **12-Equal as one point of the meantone continuum (p.2)** — the
+meantone continuum IS the 81/80 line this experiment walks, S1 → S2 →
+S4; ET-003 adds the frozen-scorer measurement of Wilson's picture, with
+the well-temperament S3 as the off-continuum historical detour.
+
+**Post-run obligations:** results entry here with per-hypothesis
+KEPT/REFUTED, FINDINGS.md paragraph, PR on research/et-003 stacked on
+research/et-002; gate G-024 lives in the consolidated ledger PR #37
+(GATES.md NOT edited here; proposed row text in the PR body).
+
+## 2026-08-19 — ET-003 results + verdicts
+
+**Run:** `et003.py` (~0.35 s; 28 grid + 130 lock-verification frozen-scorer
+calls + 4 frozen-melodic calls + the 3-limit census; receipts bit-identical
+across two runs by diff on both files), receipts `results/et003.jsonl`
+(7 rows: 3 kernel-census + 4 stage) + `results/et003_summary.json`. Scorer
+v1.1.0, melodic v0.1.0, lattice suite 190/190 green pre-run (35 new et003
+tests), freeze checks A OK on both pins before and after. One
+verdict-comparison fix between the two invocation pairs: the H-K5 verdict
+re-rounded receipt devs (stored at 6 dp) to 4 dp, double-rounding
+3.9273497 → 3.92735 → 3.9274 against the pre-registered 4-dp literal
+3.9273; replaced string-style equality with a 2e−4 value tolerance — a
+comparison bug in the verdict code, not a prediction change (same class as
+ET-002's H-T1 fix); the jsonl receipt rows carry no verdicts and are
+unaffected. Mirror-vs-scorer: **zero failures at all 28 grid points and
+all 130 lock-threshold ± δ points across the four stages** (25 + 24 + 71 +
+10 ε points for S1/S2/S3/S4).
+
+**H-K1 — KEPT, every number.** Kernel census within the pre-registered box:
+5-limit exactly **5 members** — 81/80, 128/125, 2048/2025, 32805/32768,
+531441/524288 (and the five are exactly the (81/80)^a·(128/125)^b lattice:
+PC = (81/80)³/(128/125), diaschisma = (128/125)/(81/80), schisma =
+(81/80)²/(128/125), pinned in tests); 7-limit **29** (head by Tenney
+height: 36/35, 50/49, 64/63, 81/80, 126/125, 128/125, 225/224, 405/392,
+2048/2025, 3125/3087, 3136/3125, 3645/3584, …); 11-limit **122**. The
+cross-product rail held: monzo(81/80) × monzo(128/125) = −⟨12,19,28⟩ — the
+Grassmann product of the two commas IS the val, so sat⟨81/80, 128/125⟩ is
+the whole 5-limit kernel. As derived (against the naive reading list),
+**33/32 and 121/120 are NOT kernel members** — V12 maps both to one step —
+so the D'Alessandro commas do not transfer to 12.
+
+**H-K2 — KEPT, grids exact.** All four grid tables measured exactly as
+pre-registered, including the ET-001 rail row for S4 and the S3 chirality
+split P = [10,10,14,18,28,40,48] vs S = [9,9,14,18→19,28,40,46]: P ≠ S at
+ε ∈ {1, 2, 5, 20} exactly as predicted — **Werckmeister III is the only
+stage with a handedness** (its fifth word TTTPPTPPPPPP is chirally
+asymmetric; the sub-cent side shows it too: the 0.1021¢ accidental cluster
+exists on the P side only). (P,S)@2¢ = S1 (19,19), S2 (2,2), S3 (10,9),
+S4 (12,12); @14.86¢ = S1 (37,37), S2 (47,47), S3 (40,40), S4 (48,48). The
+P-ordering per ε ran as registered: Pythagorean first at ε ≤ 2 (11 pure
+fifths at dev 0; schismatic majors at exactly the schisma), meantone first
+at 5–10¢, **12-EDO first only at ε ≥ 14.86 — and by ONE triple over
+meantone (48 vs 47)**; the ε = 3 exception is 12-EDO's (1,1)
+chromatic-cluster guard-window artifact, on record since ET-001. First
+locks: S1 0.0¢ ×11; S2 **0.7394¢ ×2 — quarter-comma meantone's first lock
+is the SEPTIMAL 6:7:8** (A2 ≈ 7/6, d3 ≈ 8/7), locking below 1¢ where
+12-EDO has nothing; S3 0.0¢ ×8 then 0.1021, then **0.2516¢ — Werckmeister's
+C major in second inversion**; S4 1.9550¢ ×12 (rail). Wolf power chords
+never locked (S1 dev = PC exactly; S2 35.68¢).
+
+**H-K3 — KEPT; the monotone-uniformity story REFUTED exactly as
+registered.** Frozen melodic v0.1.0: all four stages strictly proper AND
+constant structures (0 violations everywhere); gap classes walk
+**2 → 2 → 4 → 1** with entropy 0.979869 → 0.979869 → 1.918296 → 0.0 bits
+(runner's monotone_uniformity flag: False). History did not trade melodic
+uniformity monotonically for 12-EDO's 1 gap class — the walk is a HUMP
+with its melodic-complexity maximum at the well-temperament (4 step
+sizes: 90.225×2, 96.090×4, 101.955×2, 107.820×4), and propriety was never
+traded at all. Step-size spread is likewise non-monotone (23.46 → 41.06 →
+17.60 → 0¢): meantone is the spread maximum (the untempered 128/125 IS
+its wolf gap).
+
+**H-K4 — KEPT.** Address censuses exact, minor ≡ major row for row.
+Major-triad coverage (@2, 3, 5, 10, 14.86, 20¢): S1 = 3,3,3,4,**12**,12;
+S2 = 0,8,8,8,**8**,9; S3 = 1,2,4,9,**12**,12; S4 = 0,0,0,12,**12**,12.
+The registered attributions all held: **81/80 alone does NOT buy all of
+12-EDO's triad addresses — a 12-note meantone chain covers exactly 8 of
+12** (the four wrapped roots' thirds are the dim4 = 32/25 exactly, off 5/4
+by exactly the untempered 128/125; test-pinned); **128/125 buys the
+enharmonic closure** — the 4 wrapped addresses plus the 12th power chord;
+the schisma bought S1 its 3 sub-2¢ major addresses centuries before
+meantone; and **the 7-limit kernel members buy nothing in 12-EDO at
+ε ≤ 20¢** — 12-EDO's locked types are exactly ET-001's five, while the
+sub-cent septimal 6:7:8 that 225/224 + 126/125 hand to meantone
+(Fraction identities (75/64)/(7/6) = 225/224, (144/125)/(8/7) = 126/125,
+test-pinned) is DESTROYED by the last step of the walk: P@1 runs
+2 → 0 from S2 to S4. Exact dev identities all verified to 1e−9: S1 root
+ditone major = 1200·log₂(81/80); schismatic major root = the schisma;
+dim5+ditone = the diaschisma; 2nd-inversion ditone = 1200·log₂(129/128);
+S1 wolf power chord = the Pythagorean comma; S2 power chord = exactly a
+quarter syntonic comma.
+
+**H-K5 — KEPT (after the verdict-layer rounding fix above).** Werckmeister
+key color measured as the predicted 12-value multiset: C 0.2516 < F 2.4456
+< D = G 3.9273 < B♭ 6.1166 < B 7.6077 < E♭ = E = A 9.7924 < C♯ = F♯ = G♯
+13.4727¢ (= 1200·log₂(129/128) exactly — pure fifth + full ditone, the S1
+second-inversion identity). Seven distinct values; every key under the
+cultural epsilon (hence coverage 12 at 14.86¢: "every key usable, no key
+identical" as a dev-table theorem); **W-III's C major is 31× closer to
+exact proportionality than any 12-EDO voicing** (0.2516 vs 7.8374¢). And
+at ε = 5¢ the coverage ordering S2 (8) > S3 (4) > S1 (3) > **S4 (0)**
+stands: at tight tolerance 12-EDO is the worst major-triad machine of the
+four stages, redeemed only at its own 14.86¢ epsilon — while meantone is
+the only stage that never closes the circle below 20¢ (8 < 12; its
+double-wolf G♯ major surfaces alone at 19.5614¢).
+
+**Post-hoc (labeled; nothing above depended on it).** The S3 receipts show
+the S-side sub-cent régime differs from P not only in count but in kind:
+the accidental 0.1021¢ P cluster (−101.96, +96.09 step pair) has no S
+twin, so a listener-facing "handedness" claim would rest on sub-cent
+proportional structure — flag for the EAR-ε program rather than for any
+grid conclusion here.
+
+**Kept.** Runner and receipts stand; both frozen scorers untouched (pins
+re-verified post-run). Gate G-024 is queued in the consolidated ledger
+(PR #37); GATES.md not edited here.
+
+**Run receipt:** 2026-08-19, python3.12 — lattice suite 190/190 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 25 et002 + 35 et003), freeze checks A OK on both pins
+(scorer 1a840af9…9b592, melodic a16f162b…7535) before and after. Receipts
+bit-identical across two runs (diff on et003.jsonl and et003_summary.json).
+
+## 2026-08-19 — EAR-ε pre-registration (entry BEFORE any stimulus generation)
+
+**Question:** at what detuning does MARCUS's ear lose the "lock" — the
+fused, reinforcing quality of a proportional/subcontrary triad? ET-001
+fixed the machine side: 12-EDO first supports the full patent 4:5:6/10:12:15
+pair at ε = 14.859022¢ (the cultural epsilon) and locks its power chord at
+1.955001¢ (= its fifth error, exactly). The literature anchor
+(CLAUDE.md, "Tolerance and Perception") puts human pitch discrimination at
+roughly 5–10¢ in musically relevant registers. EAR-ε builds the detuning
+ladder that straddles both numbers and the blinded protocol for Marcus to
+locate his own thresholds in one sitting. This entry pre-registers design,
+stimuli, blinding, response protocol, analysis, and falsifiable
+predictions BEFORE any stimulus is generated; the listening results are a
+standing ear-check gate (G-025, QUEUED in ledger PR #37) and come back
+later, exactly as G-006's did. This is a human-subject-style
+pre-registration: nothing in the analysis may be chosen after Marcus has
+heard a note.
+
+**Stimulus form (decision + justification).** Each rung is a MINIMAL .scl
+tuning — root at 1/1 (degree 0, implicit), the triad's tones as the only
+other degrees, octave 2/1 — NOT a full 12-note tuning with one triad
+detuned. Justification: (i) control — the percept under test is the fused
+triad, and context tones would add uncontrolled beats and melodic
+distraction; (ii) portability — any MTS-ESP synth renders exactly the
+triad, three adjacent MIDI keys from the root sound it, no navigation
+skill required; (iii) precedent — G-002/G-006 both used small, decisive,
+single-percept stimuli. Root maps to MIDI 60 at Wilsonic's default
+reference frequency (~261.63 Hz), left untouched for every rung, so
+register is constant and beat rates are comparable across rungs.
+
+**Stimulus families and ladders (locked; cents exact to the shown
+precision, generated from 1200·log2 of the just ratios).** Just anchors:
+M3 = 386.313714¢ (5/4), m3 = 315.641287¢ (6/5), P5 = 701.955001¢ (3/2),
+δ_pc = 1200·log2(3) − 1900 = 1.955001¢ (the exact 12-EDO fifth error).
+- **Family A (major prototype 4:5:6, third detuned):** degrees
+  {0, M3 + δ, P5}; δ ∈ {0, ±2, ±5, ±8, ±11, ±14.86, ±18, ±22}¢ —
+  15 rungs. The ladder brackets the 5–10¢ literature band (rungs 2, 5, 8,
+  11) and includes the cultural epsilon literally (±14.86) plus
+  headroom above it (±18, ±22).
+- **Family B (power chord 2:3:4, fifth detuned):** degrees {0, P5 + δ}
+  (canonical 2-degree scale; keys 60-61-62 sound root–fifth–octave);
+  δ ∈ {0, ±1, ±1.955001, ±3, ±5, ±8}¢ — 11 rungs. δ = −1.955001 IS the
+  12-EDO fifth (700.000000¢); the ladder brackets ET-001's 1.955 lock.
+- **Family C (subcontrary/minor prototype 10:12:15, third detuned):**
+  degrees {0, m3 + δ, P5}; same 15-rung δ ladder as A. Included because
+  minor lock-loss may differ from major, and that asymmetry would be a
+  finding.
+- **Family D (12-EDO anchors, 3 rungs):** the literal 12-EDO major
+  (0, 400, 700), minor (0, 300, 700), and power chord (0, 700, 1200).
+  These are the actual sonorities ET-001's thresholds describe; they tie
+  the ladder to the phase diagram end-to-end.
+44 stimuli total.
+
+**Scorer rails (registered; the frozen scorer is the referee).** In
+families A/B/C the detuned tone is exactly the mean tone of its class, so
+the frozen classifier's deviation equals |δ| EXACTLY (the P condition
+|1200·log2((fa+fc)/(2·fb))| is fb-linear and fa+fc is held fixed; dually
+for S). Rails, verified by frozen `classify_cents_triple` per rung and
+recorded in the manifest: for δ ≠ 0 the target class (P for A/B-as-2:3:4,
+S for C and B-as-3:4:6 — the power chord carries BOTH labels at |δ|, its
+3:4:6 reading being the subcontrary dual ET-001 recorded) is ABSENT at
+ε = |δ| − 1e−6 and PRESENT at ε = |δ| + 1e−6; for δ = 0, present at
+ε = 1e−6. Family D deviations must equal ET-001's numbers:
+D-major P dev = D-minor S dev = 14.859022¢ (the (4,3)/(3,4) type pair),
+D-power P dev = 1.955001¢ — each verified by the same ±1e−6 flip. Guard
+separations (outer pairs 70.28–203.91¢) exceed every ε used, so no rung
+is degeneracy-dropped. Additionally each rung's FULL scale is scored by
+frozen `score_tempered` at the ET-001 grid ε ∈ {1, 2, 3, 5, 10, 14.86,
+20}¢ and the counts stored in the manifest (joinable with et001.jsonl);
+registered scale-level rail: crossing ε = |δ| the target class count
+jumps by exactly +1 (families A/C; +1 in BOTH P and S for B). Known and
+registered, NOT railed: (i) family A/C scales contain octave-inversion
+triples (e.g. A's 3:4:5 reading at deviation ≈ 0.6255·|δ|, C's
+15:20:24-ish at ≈ 43.8¢ + O(δ)) whose grid behavior is recorded as
+scorer fact; (ii) the ±14.86 rungs sit within float noise of the 14.86
+grid point under the strict-< comparison — their classification AT that
+single grid ε is knife-edge, is recorded as whatever the scorer returns,
+and carries no rail and no interpretive weight.
+
+**Blinding (registered).** Filenames are opaque rung ids in PRESENTATION
+order: eareps_B_01..11, eareps_A_01..15, eareps_C_01..15,
+eareps_D_01..03. Within each family the rung order is shuffled by
+`random.Random(20260819)` — seed 20260819, pre-registered here —
+consuming the rng in listening-block order B, A, C, D. The .scl headers
+carry NO provenance (unlike G-006): the δ value is the secret, and a
+cents line is unavoidable, so the protocol doc instructs Marcus never to
+open the files in a text editor. The δ assignment lives only in
+results/eareps_key.json; the technical record (deltas, deviations, grid
+classifications) lives in results/eareps_manifest.json. BOTH are sealed:
+Marcus must not open either, nor this experiment's PR diff of those two
+files, until his responses are written to results/eareps_responses.json.
+Family identity (major/minor/power) is audible anyway and is not treated
+as a secret; magnitude and sign of δ are.
+
+**Response protocol (registered; plain version in
+EAREPS_PROTOCOL.md).** One sitting, blocks in order B, A, C, D, files in
+numbered order within a block. Same synth patch throughout: sustained,
+harmonically rich, STEADY — no vibrato, chorus, unison detune, or delay
+(those mask or fake beats); same playback chain throughout (note which).
+Per rung: load the .scl (Wilsonic's Scala design via drag-and-drop, or
+any MTS-ESP-respecting Scala host; ONE running Wilsonic instance —
+MTS-ESP single-master rule), hold MIDI keys 60-61-62 together for at
+least 5 seconds, twice; then write ONE verdict before moving on:
+**locked** (fuses into a single reinforcing sonority) / **beating**
+(audible waver or roughness, but the chord still reads as in-tune-ish) /
+**broken** (the fusion is gone; it reads as mistuned). Optional per rung:
+fusion rating 1–5 (5 = perfectly fused) and free notes. Replaying the
+current rung is allowed; REVISING an earlier verdict after moving on is
+not (commit-as-you-go, the G-006 write-then-unseal discipline). Responses
+go in a copy of results/eareps_responses.template.json saved as
+results/eareps_responses.json. Only after that file is written may the
+key or manifest be opened.
+
+**Analysis plan (registered — decided before any listening).** Per
+family-direction (A-sharp, A-flat, B-sharp, B-flat, C-sharp, C-flat),
+order rungs by |δ|. Let L = max |δ| with verdict "locked" (L = 0 if
+none beyond the δ=0 rung... the δ=0 rung itself counts as locked
+territory) and K = min |δ| with verdict "broken". **Threshold
+T = (L + K) / 2** — the midpoint between the last "locked" and the first
+"broken"; "beating" verdicts between them are the transition band,
+reported descriptively. Censoring: if no rung is "broken", T is
+right-censored (report "T > max rung"); if even the smallest nonzero
+rung is "broken", T < that rung. Non-monotone verdicts (a "broken" below
+a "locked") do not change the rule — T is still computed from max-locked
+and min-broken — but are flagged. **Validity rule:** the δ = 0 rung of
+each of A, B, C is a catch trial; if any δ = 0 rung is judged "broken",
+that family's block is invalid and must be re-run on a fresh sitting
+(the file order stays fixed; no new stimuli are generated).
+
+**Falsifiable predictions (committed now):**
+- **P-E1 (the cultural epsilon is cultural, not perceptual).** Marcus's
+  major-third lock-loss lies BELOW 14.86¢ in both directions:
+  T_A(sharp) < 14.86 AND T_A(flat) < 14.86, with the committed band
+  **both T_A ∈ [6, 12]¢**. KEPT if both in band; WEAK-KEPT if both
+  < 14.86 but either outside [6, 12]; REFUTED if either ≥ 14.86 (which
+  would mean 12-EDO's major third is inside his lock tolerance and the
+  "cultural" epsilon is perceptual after all).
+- **P-E2 (fifths are far tighter).** T_B(sharp) ≤ 3¢ AND T_B(flat) ≤ 3¢.
+  REFUTED if either exceeds 3¢. Sub-prediction **P-E2b:** the ±1.955001
+  rungs (the 12-EDO fifth and its sharp mirror) are NOT "broken" (locked
+  or beating) — i.e. for fifths, culture sits just inside perception,
+  the opposite regime from thirds where culture (14.86) sits far above
+  the predicted perceptual band.
+- **P-E3 (sharp/flat asymmetry of the third, direction committed).**
+  First-order combination-tone reasoning predicts NO asymmetry: for
+  4 : 5·2^(±δ/1200) : 6 the two first-order difference tones split
+  symmetrically about the root's octave (5+x−4 = 1+x vs 6−5−x = 1−x)
+  and beat at rate ∝ |δ| regardless of sign. The committed asymmetry is
+  therefore CULTURAL: a lifetime of 12-EDO's +13.69¢-SHARP major thirds
+  should extend sharp tolerance. Prediction:
+  **T_A(sharp) − T_A(flat) ≥ +1.5¢** (half the local rung spacing).
+  REFUTED if the gap is < 1.5¢ (no asymmetry: the physics-symmetric null
+  wins) or reversed (flat-tolerant: also a finding, and a strike against
+  the acculturation account).
+- **Exploratory, no commitment:** T_C vs T_A (minor vs major lock-loss
+  asymmetry — either direction is a finding); family D consistency
+  checks (P-E1 implies D-major and D-minor are heard non-locked; P-E2b
+  implies D-power is not broken).
+
+**Machinery (locked).** Generator experiments/lattice/eareps.py —
+python3.12 stdlib only, deterministic (the one rng use is the
+pre-registered seed above), no wall-clock fields anywhere; outputs
+results/scl/eareps/*.scl (44 files), results/eareps_manifest.json
+(sealed technical record incl. all rails and grid classifications),
+results/eareps_key.json (sealed answer key),
+results/eareps_responses.template.json (unsealed — the one file Marcus
+copies). Two runs must be bit-identical on every output (diff recorded).
+Frozen inputs read-only: triads scorer v1.1.0 (`classify_cents_triple`,
+`score_tempered`, `mean_separation_cents`), melodic v0.1.0 untouched by
+this experiment. Tests tests/test_eareps.py green BEFORE the first
+generation run (ladder math, |δ|-deviation identity, per-rung scorer
+flips, guard margins, .scl syntax and no-provenance blinding, shuffle
+determinism, D-anchor deviations = ET-001's numbers). Freeze checks A on
+both pins before and after. NOT in scope: any listening result, any
+threshold — those are Marcus's, and land in a later results entry
+against gate G-025.
+
+**Scale expectation:** 44 tiny .scl files, one manifest, one key, one
+template; seconds to generate. If it grows past that the design is wrong.
+
+## 2026-08-19 — EAR-ε stimuli built (what was generated, NOT listening results)
+
+**Run:** `eareps.py` (seconds; outputs bit-identical across two runs by
+diff on all 44 .scl files, manifest, key, and template), stimuli
+`results/scl/eareps/` (44 files), sealed technical record
+`results/eareps_manifest.json`, sealed answer key
+`results/eareps_key.json`, unsealed
+`results/eareps_responses.template.json`, protocol
+`EAREPS_PROTOCOL.md`. Frozen triads scorer v1.1.0 used read-only as the
+referee; melodic v0.1.0 untouched. Lattice suite 159/159 green pre- and
+post-run (29 new eareps tests), freeze checks A OK on both pins before
+and after (scorer 1a840af9…9b592, melodic a16f162b…7535).
+
+**Rails — all held, zero failures across 44 rungs.** Every family-A/B/C
+rung's target class flips in frozen `classify_cents_triple` exactly at
+ε = |δ| ± 1e−6 (the |δ|-deviation identity confirmed by the referee, not
+just the mirror), including family B's BOTH readings — 2:3:4 proportional
+on the sounding triple and 3:4:6 subcontrary on the fifth-below voicing
+(P5+δ−1200, 0, P5+δ); build note: the S label lives on that octave-dual
+triple, not on the sounding (0, P5+δ, 1200), which is where the +1
+scale-count jump for S comes from. Full-scale `score_tempered` counts
+jump by exactly +1 per target class across each threshold. Family D
+anchors reproduce ET-001's numbers through an independent path:
+12-EDO major P and minor S deviations both 14.859022¢, power chord P
+1.955001¢, each scorer-verified at ±1e−6. Registered knife-edge behavior
+recorded: at grid ε = 14.86 the A ±14.86 rungs land just at/above
+(excluded, strict <) while the C ±14.86 rungs land just below
+(included) — float noise exactly where the pre-registration said it
+would be, no rail, no interpretive weight.
+
+**Blinding executed as registered:** presentation shuffles from seed
+20260819, rng consumed in block order B, A, C, D; filenames are
+presentation-order ids (eareps_B_01..11, A_01..15, C_01..15, D_01..03);
+.scl headers carry no provenance. The manifest and key are SEALED for
+Marcus (both carry a _warning field; the protocol doc repeats it) until
+results/eareps_responses.json exists.
+
+**Not in this entry, by design:** any threshold, any verdict, any
+listening note — those are Marcus's sitting, land in a later entry, and
+decide P-E1/P-E2/P-E3 against gate G-025 (QUEUED in ledger PR #37).
+
+**Run receipt:** 2026-08-19, python3.12 — lattice suite 159/159 OK
+(25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
++ 16 et001 + 29 eareps), freeze checks A OK on both pins before and
+after. Outputs bit-identical across two runs (diff on all 47 files).
