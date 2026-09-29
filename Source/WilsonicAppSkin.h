@@ -59,7 +59,7 @@ public:
     static Colour getTextColor();
 
     // default font
-    static Font const getDefaultFont(float font_size) {return Font(font_size, Font::FontStyleFlags::plain);}
+    static Font const getDefaultFont(float font_size) {return Font(FontOptions(font_size, Font::FontStyleFlags::plain));}
 
     // default tuning render line width
     float getDefaultLineWidth();
