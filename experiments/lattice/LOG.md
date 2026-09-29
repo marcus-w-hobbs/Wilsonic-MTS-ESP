@@ -1192,3 +1192,16 @@ pre-registered field.
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001), triads suite
 88/88 OK, freeze checks A OK on both pins (scorer 1a840af9…9b592,
 melodic a16f162b…7535). Receipts bit-identical across two runs.
+
+## 2026-08-09 — Gate back-fill: G-015 PASS, G-016 PASS (Marcus, via merge)
+
+Session-start reconciliation per GATES.md protocol (merge implies pass;
+next session back-fills). Marcus merged PR #33 (MOS-LAT-002) and PR #34
+(BRIDGE-001) on 2026-07-30, plus PR #36 (ARCHIVE-001 index, no gate
+attached). Ledger updated: G-015 PASS (H-M1 null on the mixed-tail
+corpus; conjugate-descriptor program closed), G-016 PASS (H-B2 refuted
+under strict containment; blackjack carries the full EG4 hexany at
+ε = 3¢). With these, every experiment in the SPEC's original queue is
+run and gated. Open: G-013 only (SUBSET-MEL-001 spec review), which
+waits on the subset brainstorm session — a conversation with Marcus,
+not a run.
