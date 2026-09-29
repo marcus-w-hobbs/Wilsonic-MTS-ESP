@@ -144,7 +144,7 @@ void WilsonicPitchWheelComponent::_paint04(Graphics& g) {
                 auto fontHeight = jmax(globalFontHeightMin, (w * magicNumerator / (strLen * magicDenominator))); // [
                 
                 // Set the font for the text
-                g.setFont(Font(fontHeight).withHorizontalScale(horizontalScale));
+                g.setFont(Font(FontOptions(fontHeight)).withHorizontalScale(horizontalScale));
                 
                 // Create a rectangle for the text box and set its center
                 auto dr = Rectangle<float> (w, fontHeight);

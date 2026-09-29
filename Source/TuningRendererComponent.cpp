@@ -146,7 +146,7 @@ void TuningRendererComponent::_paint04(Graphics& g) {
             auto strLen = jmax(int(text.length()), minLen); 
             auto w = jmax(strLen * globalFontHeightMin, globalFontHeightMin); 
             auto fontHeight = jmax(globalFontHeightMin, w * (2.f + 3.f * radius01 * 0.4f)); 
-            g.setFont(Font(fontHeight).withHorizontalScale(horizontalScale));
+            g.setFont(Font(FontOptions(fontHeight)).withHorizontalScale(horizontalScale));
             g.drawText(text, Rectangle<float> (w, fontHeight).withCentre(Point<float> (x2, y2)), Justification::centred);
         };
 

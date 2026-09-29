@@ -71,7 +71,7 @@ void BrunLevelComponent::paint(Graphics& g) {
             g.setColour(fontColor);
             auto minFontHeight = (i == level) ? 36.f : 18.f;
             auto fontHeight = jmin(minFontHeight, ch * 0.9f);
-            auto font = Font(fontHeight).withHorizontalScale(0.8f);
+            auto font = Font(FontOptions(fontHeight)).withHorizontalScale(0.8f);
             if (i == level) font = font.boldened();
             g.setFont(font);
             g.drawText(text, r, Justification::centred, false);
