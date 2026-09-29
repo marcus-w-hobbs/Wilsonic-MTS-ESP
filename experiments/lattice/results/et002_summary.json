@@ -1,0 +1,2861 @@
+{
+  "constants": {
+    "canonical_form": "lexmin transposition; step_word = necklace-min rotation of circular steps (12 -> 'c')",
+    "eps_frontier": 14.86,
+    "eps_grid": [
+      1.0,
+      2.0,
+      3.0,
+      5.0,
+      10.0,
+      14.86,
+      20.0
+    ],
+    "frontier_lens": "per cardinality N: minimize gap_class_count, maximize P+S at eps_frontier (weak dominance)",
+    "max_span_cents": 1200.0,
+    "step_cents": 100.0
+  },
+  "corpus": {
+    "classes": 351,
+    "family": "non-empty pitch-class sets of Z12 up to transposition",
+    "limited_transposition_classes": 16,
+    "size_histogram": {
+      "1": 1,
+      "10": 6,
+      "11": 1,
+      "12": 1,
+      "2": 6,
+      "3": 19,
+      "4": 43,
+      "5": 66,
+      "6": 80,
+      "7": 66,
+      "8": 43,
+      "9": 19
+    },
+    "ti_classes": 223
+  },
+  "epsilon_semantics": "score_tempered eps is a per-mean-condition deviation in cents (strict <) with the degeneracy guard sep(a,c) >= eps; a triple counts on the half-open interval (dev, sep]. NOT the plugin's register-dependent linear-frequency 0.0005.",
+  "et001_version": "1.0.0",
+  "et002_version": "1.0.0",
+  "experiment": "ET-002",
+  "melodic_calls": 351,
+  "melodic_version": "0.1.0",
+  "per_n": {
+    "1": {
+      "classes": 1,
+      "cs": 1,
+      "improper": 0,
+      "inversionally_symmetric": 1,
+      "max_P_plus_S_at_frontier_eps": 0,
+      "mean_P_plus_S_at_frontier_eps": 0.0,
+      "proper": 0,
+      "strictly_proper": 1
+    },
+    "10": {
+      "classes": 6,
+      "cs": 0,
+      "improper": 4,
+      "inversionally_symmetric": 6,
+      "max_P_plus_S_at_frontier_eps": 58,
+      "mean_P_plus_S_at_frontier_eps": 55.333333333333336,
+      "proper": 2,
+      "strictly_proper": 0
+    },
+    "11": {
+      "classes": 1,
+      "cs": 0,
+      "improper": 0,
+      "inversionally_symmetric": 1,
+      "max_P_plus_S_at_frontier_eps": 74,
+      "mean_P_plus_S_at_frontier_eps": 74.0,
+      "proper": 1,
+      "strictly_proper": 0
+    },
+    "12": {
+      "classes": 1,
+      "cs": 1,
+      "improper": 0,
+      "inversionally_symmetric": 1,
+      "max_P_plus_S_at_frontier_eps": 96,
+      "mean_P_plus_S_at_frontier_eps": 96.0,
+      "proper": 0,
+      "strictly_proper": 1
+    },
+    "2": {
+      "classes": 6,
+      "cs": 6,
+      "improper": 0,
+      "inversionally_symmetric": 6,
+      "max_P_plus_S_at_frontier_eps": 2,
+      "mean_P_plus_S_at_frontier_eps": 0.3333333333333333,
+      "proper": 0,
+      "strictly_proper": 6
+    },
+    "3": {
+      "classes": 19,
+      "cs": 14,
+      "improper": 10,
+      "inversionally_symmetric": 5,
+      "max_P_plus_S_at_frontier_eps": 4,
+      "mean_P_plus_S_at_frontier_eps": 1.368421052631579,
+      "proper": 5,
+      "strictly_proper": 4
+    },
+    "4": {
+      "classes": 43,
+      "cs": 21,
+      "improper": 30,
+      "inversionally_symmetric": 15,
+      "max_P_plus_S_at_frontier_eps": 8,
+      "mean_P_plus_S_at_frontier_eps": 3.395348837209302,
+      "proper": 6,
+      "strictly_proper": 7
+    },
+    "5": {
+      "classes": 66,
+      "cs": 2,
+      "improper": 56,
+      "inversionally_symmetric": 10,
+      "max_P_plus_S_at_frontier_eps": 14,
+      "mean_P_plus_S_at_frontier_eps": 6.909090909090909,
+      "proper": 9,
+      "strictly_proper": 1
+    },
+    "6": {
+      "classes": 80,
+      "cs": 5,
+      "improper": 67,
+      "inversionally_symmetric": 20,
+      "max_P_plus_S_at_frontier_eps": 22,
+      "mean_P_plus_S_at_frontier_eps": 11.975,
+      "proper": 11,
+      "strictly_proper": 2
+    },
+    "7": {
+      "classes": 66,
+      "cs": 0,
+      "improper": 61,
+      "inversionally_symmetric": 10,
+      "max_P_plus_S_at_frontier_eps": 30,
+      "mean_P_plus_S_at_frontier_eps": 19.09090909090909,
+      "proper": 5,
+      "strictly_proper": 0
+    },
+    "8": {
+      "classes": 43,
+      "cs": 1,
+      "improper": 38,
+      "inversionally_symmetric": 15,
+      "max_P_plus_S_at_frontier_eps": 38,
+      "mean_P_plus_S_at_frontier_eps": 28.325581395348838,
+      "proper": 4,
+      "strictly_proper": 1
+    },
+    "9": {
+      "classes": 19,
+      "cs": 0,
+      "improper": 16,
+      "inversionally_symmetric": 5,
+      "max_P_plus_S_at_frontier_eps": 48,
+      "mean_P_plus_S_at_frontier_eps": 40.8421052631579,
+      "proper": 3,
+      "strictly_proper": 0
+    }
+  },
+  "preregistration": "experiments/lattice/LOG.md 2026-08-18",
+  "python": "3.12",
+  "scorer_calls": 2457,
+  "scorer_version": "1.1.0",
+  "tagged": {
+    "augmented_scale": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        4,
+        5,
+        8,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 3,
+        "major_triads": 3,
+        "minor_triads": 3,
+        "ps_total_frontier_eps": 18,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "grid_P": [
+        0,
+        3,
+        3,
+        3,
+        6,
+        9,
+        9
+      ],
+      "grid_S": [
+        0,
+        3,
+        3,
+        3,
+        6,
+        9,
+        9
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.3333333333333333,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 6,
+      "step_word": "131313"
+    },
+    "augmented_triad": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        4,
+        8
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 0,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.3333333333333333,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 3,
+      "step_word": "444"
+    },
+    "chromatic": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 12,
+        "ic5_from_scorer": 12,
+        "major_triads": 12,
+        "minor_triads": 12,
+        "ps_total_frontier_eps": 96,
+        "whole_tone_trichords": 12
+      },
+      "grid_G": [
+        72,
+        72,
+        72,
+        72,
+        60,
+        60,
+        60
+      ],
+      "grid_P": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "grid_S": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.08333333333333333,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 12,
+      "step_word": "111111111111"
+    },
+    "diatonic": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 6,
+        "major_triads": 3,
+        "minor_triads": 3,
+        "ps_total_frontier_eps": 30,
+        "whole_tone_trichords": 3
+      },
+      "grid_G": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "grid_P": [
+        0,
+        6,
+        6,
+        6,
+        9,
+        15,
+        15
+      ],
+      "grid_S": [
+        0,
+        6,
+        6,
+        6,
+        9,
+        15,
+        15
+      ],
+      "melodic": {
+        "cs_violations": 1,
+        "entropy_bits": 0.863120568566631,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.2857142857142857,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 7,
+      "step_word": "1221222"
+    },
+    "diminished_seventh": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 0,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.25,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 4,
+      "step_word": "3333"
+    },
+    "diminished_triad": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        3,
+        6
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 0,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "melodic": {
+        "cs_violations": 1,
+        "entropy_bits": 0.9182958340544896,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.6666666666666666,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 3,
+      "step_word": "336"
+    },
+    "dominant_seventh": {
+      "balance_at_frontier_eps": "strong_P",
+      "canonical": [
+        0,
+        2,
+        6,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 1,
+        "major_triads": 1,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 4,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "grid_P": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        3
+      ],
+      "grid_S": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.5,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 0.75,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 4,
+      "step_word": "2433"
+    },
+    "guidonian_hexachord": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        3,
+        5,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 5,
+        "major_triads": 2,
+        "minor_triads": 2,
+        "ps_total_frontier_eps": 22,
+        "whole_tone_trichords": 2
+      },
+      "grid_G": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "grid_P": [
+        0,
+        5,
+        5,
+        5,
+        7,
+        11,
+        11
+      ],
+      "grid_S": [
+        0,
+        5,
+        5,
+        5,
+        7,
+        11,
+        11
+      ],
+      "melodic": {
+        "cs_violations": 4,
+        "entropy_bits": 1.2516291673878228,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 0.5,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 6,
+      "step_word": "122322"
+    },
+    "harmonic_major": {
+      "balance_at_frontier_eps": "skew_P",
+      "canonical": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 3,
+        "minor_triads": 2,
+        "ps_total_frontier_eps": 20,
+        "whole_tone_trichords": 1
+      },
+      "grid_G": [
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        14
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        7,
+        11,
+        11
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        6,
+        9,
+        9
+      ],
+      "melodic": {
+        "cs_violations": 5,
+        "entropy_bits": 1.4488156357251847,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 0.42857142857142855,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 7,
+      "step_word": "1213122"
+    },
+    "harmonic_minor": {
+      "balance_at_frontier_eps": "skew_S",
+      "canonical": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        8,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 2,
+        "minor_triads": 3,
+        "ps_total_frontier_eps": 20,
+        "whole_tone_trichords": 1
+      },
+      "grid_G": [
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        14
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        6,
+        9,
+        9
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        7,
+        11,
+        11
+      ],
+      "melodic": {
+        "cs_violations": 5,
+        "entropy_bits": 1.4488156357251847,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 0.42857142857142855,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 7,
+      "step_word": "1212213"
+    },
+    "hexatonic": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        4,
+        5,
+        8,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 3,
+        "major_triads": 3,
+        "minor_triads": 3,
+        "ps_total_frontier_eps": 18,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "grid_P": [
+        0,
+        3,
+        3,
+        3,
+        6,
+        9,
+        9
+      ],
+      "grid_S": [
+        0,
+        3,
+        3,
+        3,
+        6,
+        9,
+        9
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.3333333333333333,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 6,
+      "step_word": "131313"
+    },
+    "major_triad": {
+      "balance_at_frontier_eps": "strong_P",
+      "canonical": [
+        0,
+        3,
+        8
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 1,
+        "major_triads": 1,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 4,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_P": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        3
+      ],
+      "grid_S": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.584962500721156,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 1.0,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 3,
+      "step_word": "354"
+    },
+    "melodic_minor": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 2,
+        "minor_triads": 2,
+        "ps_total_frontier_eps": 22,
+        "whole_tone_trichords": 3
+      },
+      "grid_G": [
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        6,
+        11,
+        11
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        6,
+        11,
+        11
+      ],
+      "melodic": {
+        "cs_violations": 3,
+        "entropy_bits": 0.863120568566631,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.2857142857142857,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 7,
+      "step_word": "1212222"
+    },
+    "messiaen_1": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 12,
+        "whole_tone_trichords": 6
+      },
+      "grid_G": [
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.16666666666666666,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 6,
+      "step_word": "222222"
+    },
+    "messiaen_2": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7,
+        9,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 4,
+        "minor_triads": 4,
+        "ps_total_frontier_eps": 24,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        8,
+        12,
+        12
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        8,
+        12,
+        12
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.25,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 8,
+      "step_word": "12121212"
+    },
+    "messiaen_3": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 3,
+        "ic5_from_scorer": 6,
+        "major_triads": 6,
+        "minor_triads": 6,
+        "ps_total_frontier_eps": 48,
+        "whole_tone_trichords": 6
+      },
+      "grid_G": [
+        30,
+        30,
+        30,
+        30,
+        27,
+        27,
+        27
+      ],
+      "grid_P": [
+        0,
+        6,
+        9,
+        9,
+        12,
+        24,
+        24
+      ],
+      "grid_S": [
+        0,
+        6,
+        9,
+        9,
+        12,
+        24,
+        24
+      ],
+      "melodic": {
+        "cs_violations": 3,
+        "entropy_bits": 0.9182958340544896,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.2222222222222222,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 9,
+      "step_word": "112112112"
+    },
+    "messiaen_4": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 4,
+        "ic5_from_scorer": 6,
+        "major_triads": 2,
+        "minor_triads": 2,
+        "ps_total_frontier_eps": 20,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        20,
+        20,
+        20,
+        20,
+        16,
+        16,
+        16
+      ],
+      "grid_P": [
+        0,
+        6,
+        10,
+        10,
+        8,
+        10,
+        10
+      ],
+      "grid_S": [
+        0,
+        6,
+        10,
+        10,
+        8,
+        10,
+        10
+      ],
+      "melodic": {
+        "cs_violations": 2,
+        "entropy_bits": 0.8112781244591328,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.25,
+        "is_cs": false,
+        "propriety": "improper",
+        "propriety_violations": 4
+      },
+      "n": 8,
+      "step_word": "11131113"
+    },
+    "messiaen_5": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        6,
+        7,
+        8
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 2,
+        "ic5_from_scorer": 4,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 8,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        10,
+        10,
+        10,
+        10,
+        8,
+        8,
+        8
+      ],
+      "grid_P": [
+        0,
+        4,
+        6,
+        6,
+        4,
+        4,
+        4
+      ],
+      "grid_S": [
+        0,
+        4,
+        6,
+        6,
+        4,
+        4,
+        4
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 0.9182958340544896,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.3333333333333333,
+        "is_cs": true,
+        "propriety": "improper",
+        "propriety_violations": 2
+      },
+      "n": 6,
+      "step_word": "114114"
+    },
+    "messiaen_6": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        4,
+        6,
+        7,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 2,
+        "ic5_from_scorer": 4,
+        "major_triads": 2,
+        "minor_triads": 2,
+        "ps_total_frontier_eps": 28,
+        "whole_tone_trichords": 6
+      },
+      "grid_G": [
+        28,
+        28,
+        28,
+        28,
+        26,
+        26,
+        26
+      ],
+      "grid_P": [
+        0,
+        4,
+        6,
+        6,
+        6,
+        14,
+        14
+      ],
+      "grid_S": [
+        0,
+        4,
+        6,
+        6,
+        6,
+        14,
+        14
+      ],
+      "melodic": {
+        "cs_violations": 4,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.25,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 8,
+      "step_word": "11221122"
+    },
+    "messiaen_7": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 6,
+        "ic5_from_scorer": 8,
+        "major_triads": 6,
+        "minor_triads": 6,
+        "ps_total_frontier_eps": 52,
+        "whole_tone_trichords": 6
+      },
+      "grid_G": [
+        42,
+        42,
+        42,
+        42,
+        36,
+        36,
+        36
+      ],
+      "grid_P": [
+        0,
+        8,
+        14,
+        14,
+        14,
+        26,
+        26
+      ],
+      "grid_S": [
+        0,
+        8,
+        14,
+        14,
+        14,
+        26,
+        26
+      ],
+      "melodic": {
+        "cs_violations": 6,
+        "entropy_bits": 0.7219280948873623,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.2,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "n": 10,
+      "step_word": "1111211112"
+    },
+    "minor_triad": {
+      "balance_at_frontier_eps": "strong_S",
+      "canonical": [
+        0,
+        3,
+        7
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 1,
+        "major_triads": 0,
+        "minor_triads": 1,
+        "ps_total_frontier_eps": 4,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_P": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "grid_S": [
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        3
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.584962500721156,
+        "gap_class_count": 3,
+        "gap_classes_over_n": 1.0,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 3,
+      "step_word": "345"
+    },
+    "octatonic": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7,
+        9,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 4,
+        "minor_triads": 4,
+        "ps_total_frontier_eps": 24,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        8,
+        12,
+        12
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        8,
+        12,
+        12
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.25,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 8,
+      "step_word": "12121212"
+    },
+    "pentatonic": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        2,
+        4,
+        7,
+        9
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 4,
+        "major_triads": 1,
+        "minor_triads": 1,
+        "ps_total_frontier_eps": 14,
+        "whole_tone_trichords": 1
+      },
+      "grid_G": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "grid_P": [
+        0,
+        4,
+        4,
+        4,
+        5,
+        7,
+        7
+      ],
+      "grid_S": [
+        0,
+        4,
+        4,
+        4,
+        5,
+        7,
+        7
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 0.9709505944546686,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.4,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 5,
+      "step_word": "22323"
+    },
+    "power_chord": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        5
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 1,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 2,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_P": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "grid_S": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 1.0,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 1.0,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 2,
+      "step_word": "57"
+    },
+    "sus_trichord": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        2,
+        7
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 2,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 4,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "grid_P": [
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "grid_S": [
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": 0.9182958340544896,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.6666666666666666,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 3,
+      "step_word": "255"
+    },
+    "tritone": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        6
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 0,
+        "whole_tone_trichords": 0
+      },
+      "grid_G": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.5,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 2,
+      "step_word": "66"
+    },
+    "whole_tone": {
+      "balance_at_frontier_eps": "diagonal",
+      "canonical": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 0,
+        "major_triads": 0,
+        "minor_triads": 0,
+        "ps_total_frontier_eps": 12,
+        "whole_tone_trichords": 6
+      },
+      "grid_G": [
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18
+      ],
+      "grid_P": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "grid_S": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "melodic": {
+        "cs_violations": 0,
+        "entropy_bits": -0.0,
+        "gap_class_count": 1,
+        "gap_classes_over_n": 0.16666666666666666,
+        "is_cs": true,
+        "propriety": "strictly_proper",
+        "propriety_violations": 0
+      },
+      "n": 6,
+      "step_word": "222222"
+    }
+  },
+  "verdicts": {
+    "H-T1": {
+      "P2_equals_ic5_all_classes": true,
+      "balance_buckets_at_frontier_eps": {
+        "diagonal": 231,
+        "near_P": 1,
+        "near_S": 1,
+        "skew_P": 31,
+        "skew_S": 31,
+        "strong_P": 28,
+        "strong_S": 28
+      },
+      "classes_P10_below_P5": 105,
+      "classes_with_P_equal_S": {
+        "1": 351,
+        "10": 231,
+        "14.86": 231,
+        "2": 351,
+        "20": 231,
+        "3": 351,
+        "5": 351
+      },
+      "classes_with_P_positive": {
+        "1": 0,
+        "10": 321,
+        "14.86": 330,
+        "2": 321,
+        "20": 330,
+        "3": 327,
+        "5": 327
+      },
+      "fifth_free_classes_with_P_at_5": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          10
+        ]
+      ],
+      "hypothesis": "H-T1 cultural epsilon inherited: P=0 below 1.955c everywhere; P@2 = ic5; cluster classes at 3/5c; N=12 row = ET-001 rail",
+      "n12_grid_P": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "n12_grid_S": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "verdict": "KEPT"
+    },
+    "H-T2": {
+      "diatonic_canonical": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        8,
+        10
+      ],
+      "diatonic_derived": {
+        "chromatic_trichord_middles": 0,
+        "ic5_from_scorer": 6,
+        "major_triads": 3,
+        "minor_triads": 3,
+        "ps_total_frontier_eps": 30,
+        "whole_tone_trichords": 3
+      },
+      "diatonic_grid_P": [
+        0,
+        6,
+        6,
+        6,
+        9,
+        15,
+        15
+      ],
+      "diatonic_grid_S": [
+        0,
+        6,
+        6,
+        6,
+        9,
+        15,
+        15
+      ],
+      "diatonic_melodic": {
+        "cs_violations": 1,
+        "entropy_bits": 0.863120568566631,
+        "gap_class_count": 2,
+        "gap_classes_over_n": 0.2857142857142857,
+        "is_cs": false,
+        "propriety": "proper",
+        "propriety_violations": 0
+      },
+      "diatonic_raw_MajMin": 6,
+      "hypothesis": "H-T2 diatonic distinction: not CS, proper not strict, P=S=15 at 14.86c and unique 7-note max of P+S / P / S; literal raw Maj+Min maximum predicted REFUTED (hexatonic+1 classes carry 7)",
+      "seven_note_P_max_classes": [
+        [
+          0,
+          1,
+          3,
+          5,
+          6,
+          8,
+          10
+        ]
+      ],
+      "seven_note_max_P": 15,
+      "seven_note_raw_MajMin_max": 7,
+      "seven_note_raw_MajMin_winners": [
+        [
+          0,
+          1,
+          2,
+          5,
+          6,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          5,
+          8,
+          9
+        ]
+      ],
+      "seven_note_ties_or_beats_on_PS": [],
+      "verdict": "KEPT (scorer P+S/P/S unique max; raw Maj+Min refuted as predicted)",
+      "verdict_raw_triad_sense": "REFUTED (as predicted)",
+      "verdict_scorer_sense": "KEPT"
+    },
+    "H-T3": {
+      "classes_at_max": 32,
+      "cs_count": 51,
+      "cs_fraction": 0.1452991452991453,
+      "hypothesis": "H-T3 propriety census: 23/46/282 strictly/proper/improper, 51 CS, max gap_classes/N = 1.0 (32 classes)",
+      "max_gap_classes_over_n": 1.0,
+      "max_gap_classes_over_n_for_n_ge_5": 0.8,
+      "melodic_mirror_agrees_all": true,
+      "per_n": {
+        "1": {
+          "classes": 1,
+          "cs": 1,
+          "improper": 0,
+          "proper": 0,
+          "strictly_proper": 1
+        },
+        "10": {
+          "classes": 6,
+          "cs": 0,
+          "improper": 4,
+          "proper": 2,
+          "strictly_proper": 0
+        },
+        "11": {
+          "classes": 1,
+          "cs": 0,
+          "improper": 0,
+          "proper": 1,
+          "strictly_proper": 0
+        },
+        "12": {
+          "classes": 1,
+          "cs": 1,
+          "improper": 0,
+          "proper": 0,
+          "strictly_proper": 1
+        },
+        "2": {
+          "classes": 6,
+          "cs": 6,
+          "improper": 0,
+          "proper": 0,
+          "strictly_proper": 6
+        },
+        "3": {
+          "classes": 19,
+          "cs": 14,
+          "improper": 10,
+          "proper": 5,
+          "strictly_proper": 4
+        },
+        "4": {
+          "classes": 43,
+          "cs": 21,
+          "improper": 30,
+          "proper": 6,
+          "strictly_proper": 7
+        },
+        "5": {
+          "classes": 66,
+          "cs": 2,
+          "improper": 56,
+          "proper": 9,
+          "strictly_proper": 1
+        },
+        "6": {
+          "classes": 80,
+          "cs": 5,
+          "improper": 67,
+          "proper": 11,
+          "strictly_proper": 2
+        },
+        "7": {
+          "classes": 66,
+          "cs": 0,
+          "improper": 61,
+          "proper": 5,
+          "strictly_proper": 0
+        },
+        "8": {
+          "classes": 43,
+          "cs": 1,
+          "improper": 38,
+          "proper": 4,
+          "strictly_proper": 1
+        },
+        "9": {
+          "classes": 19,
+          "cs": 0,
+          "improper": 16,
+          "proper": 3,
+          "strictly_proper": 0
+        }
+      },
+      "propriety_counts": {
+        "improper": 282,
+        "proper": 46,
+        "strictly_proper": 23
+      },
+      "propriety_fractions": {
+        "improper": 0.8034188034188035,
+        "proper": 0.13105413105413105,
+        "strictly_proper": 0.06552706552706553
+      },
+      "strictly_proper_classes": [
+        [
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        [
+          0,
+          1,
+          3,
+          4,
+          6,
+          7,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          4,
+          5,
+          8,
+          9
+        ],
+        [
+          0,
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          1,
+          6,
+          7
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10
+        ],
+        [
+          0,
+          2,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          2,
+          5,
+          8
+        ],
+        [
+          0,
+          2,
+          5,
+          9
+        ],
+        [
+          0,
+          2,
+          6,
+          8
+        ],
+        [
+          0,
+          2,
+          6,
+          9
+        ],
+        [
+          0,
+          2,
+          7
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3,
+          6,
+          9
+        ],
+        [
+          0,
+          3,
+          7
+        ],
+        [
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          4,
+          8
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ]
+      ],
+      "verdict": "KEPT"
+    },
+    "H-T4": {
+      "frontier": [
+        {
+          "P": 0,
+          "P_plus_S": 0,
+          "S": 0,
+          "balance": "diagonal",
+          "canonical": [
+            0
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 1,
+          "propriety": "strictly_proper",
+          "step_word": "c",
+          "tags": []
+        },
+        {
+          "P": 1,
+          "P_plus_S": 2,
+          "S": 1,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            5
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 2,
+          "propriety": "strictly_proper",
+          "step_word": "57",
+          "tags": [
+            "power_chord"
+          ]
+        },
+        {
+          "P": 0,
+          "P_plus_S": 0,
+          "S": 0,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            6
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 2,
+          "propriety": "strictly_proper",
+          "step_word": "66",
+          "tags": [
+            "tritone"
+          ]
+        },
+        {
+          "P": 2,
+          "P_plus_S": 4,
+          "S": 2,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            2,
+            7
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 3,
+          "propriety": "strictly_proper",
+          "step_word": "255",
+          "tags": [
+            "sus_trichord"
+          ]
+        },
+        {
+          "P": 0,
+          "P_plus_S": 0,
+          "S": 0,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            4,
+            8
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 3,
+          "propriety": "strictly_proper",
+          "step_word": "444",
+          "tags": [
+            "augmented_triad"
+          ]
+        },
+        {
+          "P": 2,
+          "P_plus_S": 4,
+          "S": 2,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            7
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 4,
+          "propriety": "improper",
+          "step_word": "1155",
+          "tags": []
+        },
+        {
+          "P": 4,
+          "P_plus_S": 8,
+          "S": 4,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            5,
+            8
+          ],
+          "gap_class_count": 3,
+          "is_cs": true,
+          "n": 4,
+          "propriety": "strictly_proper",
+          "step_word": "1434",
+          "tags": []
+        },
+        {
+          "P": 2,
+          "P_plus_S": 4,
+          "S": 2,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            6,
+            7
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 4,
+          "propriety": "strictly_proper",
+          "step_word": "1515",
+          "tags": []
+        },
+        {
+          "P": 2,
+          "P_plus_S": 4,
+          "S": 2,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            2,
+            4,
+            6
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 4,
+          "propriety": "improper",
+          "step_word": "2226",
+          "tags": []
+        },
+        {
+          "P": 5,
+          "P_plus_S": 8,
+          "S": 3,
+          "balance": "strong_P",
+          "canonical": [
+            0,
+            2,
+            4,
+            7
+          ],
+          "gap_class_count": 3,
+          "is_cs": false,
+          "n": 4,
+          "propriety": "improper",
+          "step_word": "2235",
+          "tags": []
+        },
+        {
+          "P": 3,
+          "P_plus_S": 8,
+          "S": 5,
+          "balance": "strong_S",
+          "canonical": [
+            0,
+            2,
+            4,
+            9
+          ],
+          "gap_class_count": 3,
+          "is_cs": false,
+          "n": 4,
+          "propriety": "improper",
+          "step_word": "2253",
+          "tags": []
+        },
+        {
+          "P": 4,
+          "P_plus_S": 8,
+          "S": 4,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            2,
+            5,
+            9
+          ],
+          "gap_class_count": 3,
+          "is_cs": true,
+          "n": 4,
+          "propriety": "strictly_proper",
+          "step_word": "2343",
+          "tags": []
+        },
+        {
+          "P": 0,
+          "P_plus_S": 0,
+          "S": 0,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            3,
+            6,
+            9
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 4,
+          "propriety": "strictly_proper",
+          "step_word": "3333",
+          "tags": [
+            "diminished_seventh"
+          ]
+        },
+        {
+          "P": 7,
+          "P_plus_S": 14,
+          "S": 7,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            2,
+            4,
+            7,
+            9
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 5,
+          "propriety": "strictly_proper",
+          "step_word": "22323",
+          "tags": [
+            "pentatonic"
+          ]
+        },
+        {
+          "P": 11,
+          "P_plus_S": 22,
+          "S": 11,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            3,
+            5,
+            8,
+            10
+          ],
+          "gap_class_count": 3,
+          "is_cs": false,
+          "n": 6,
+          "propriety": "proper",
+          "step_word": "122322",
+          "tags": [
+            "guidonian_hexachord"
+          ]
+        },
+        {
+          "P": 9,
+          "P_plus_S": 18,
+          "S": 9,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            4,
+            5,
+            8,
+            9
+          ],
+          "gap_class_count": 2,
+          "is_cs": true,
+          "n": 6,
+          "propriety": "strictly_proper",
+          "step_word": "131313",
+          "tags": [
+            "hexatonic",
+            "augmented_scale"
+          ]
+        },
+        {
+          "P": 6,
+          "P_plus_S": 12,
+          "S": 6,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 6,
+          "propriety": "strictly_proper",
+          "step_word": "222222",
+          "tags": [
+            "whole_tone",
+            "messiaen_1"
+          ]
+        },
+        {
+          "P": 15,
+          "P_plus_S": 30,
+          "S": 15,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            3,
+            5,
+            6,
+            8,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 7,
+          "propriety": "proper",
+          "step_word": "1221222",
+          "tags": [
+            "diatonic"
+          ]
+        },
+        {
+          "P": 19,
+          "P_plus_S": 38,
+          "S": 19,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            7,
+            8,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 8,
+          "propriety": "improper",
+          "step_word": "11122122",
+          "tags": []
+        },
+        {
+          "P": 24,
+          "P_plus_S": 48,
+          "S": 24,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6,
+            8,
+            9,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 9,
+          "propriety": "proper",
+          "step_word": "112112112",
+          "tags": [
+            "messiaen_3"
+          ]
+        },
+        {
+          "P": 29,
+          "P_plus_S": 58,
+          "S": 29,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            9,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 10,
+          "propriety": "improper",
+          "step_word": "1111112112",
+          "tags": []
+        },
+        {
+          "P": 29,
+          "P_plus_S": 58,
+          "S": 29,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 10,
+          "propriety": "proper",
+          "step_word": "1111121112",
+          "tags": []
+        },
+        {
+          "P": 37,
+          "P_plus_S": 74,
+          "S": 37,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "gap_class_count": 2,
+          "is_cs": false,
+          "n": 11,
+          "propriety": "proper",
+          "step_word": "11111111112",
+          "tags": []
+        },
+        {
+          "P": 48,
+          "P_plus_S": 96,
+          "S": 48,
+          "balance": "diagonal",
+          "canonical": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "gap_class_count": 1,
+          "is_cs": true,
+          "n": 12,
+          "propriety": "strictly_proper",
+          "step_word": "111111111111",
+          "tags": [
+            "chromatic"
+          ]
+        }
+      ],
+      "frontier_proper_only": [
+        [
+          0
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          2,
+          7
+        ],
+        [
+          0,
+          4,
+          8
+        ],
+        [
+          0,
+          1,
+          5,
+          8
+        ],
+        [
+          0,
+          1,
+          6,
+          7
+        ],
+        [
+          0,
+          2,
+          5,
+          9
+        ],
+        [
+          0,
+          3,
+          6,
+          9
+        ],
+        [
+          0,
+          2,
+          4,
+          7,
+          9
+        ],
+        [
+          0,
+          1,
+          3,
+          5,
+          8,
+          10
+        ],
+        [
+          0,
+          1,
+          4,
+          5,
+          8,
+          9
+        ],
+        [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10
+        ],
+        [
+          0,
+          1,
+          3,
+          5,
+          6,
+          8,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          5,
+          7,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      ],
+      "frontier_proper_only_size": 19,
+      "frontier_size": 24,
+      "hypothesis": "H-T4 Pareto (per-N frontier on gap classes vs P+S at 14.86c): 24 members incl. diatonic/pentatonic/whole-tone/hexatonic/Guidonian/Messiaen-3/chromatic; major, minor triads and octatonic NOT on it; 6 improper members",
+      "improper_on_frontier": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          5,
+          7,
+          8,
+          10
+        ],
+        [
+          0,
+          1,
+          2,
+          7
+        ],
+        [
+          0,
+          2,
+          4,
+          6
+        ],
+        [
+          0,
+          2,
+          4,
+          7
+        ],
+        [
+          0,
+          2,
+          4,
+          9
+        ]
+      ],
+      "named_membership": {
+        "augmented_triad": true,
+        "chromatic": true,
+        "diatonic": true,
+        "guidonian_hexachord": true,
+        "harmonic_major": false,
+        "harmonic_minor": false,
+        "hexatonic": true,
+        "major_triad": false,
+        "melodic_minor": false,
+        "messiaen_3": true,
+        "minor_triad": false,
+        "octatonic": false,
+        "pentatonic": true,
+        "sus_trichord": true,
+        "whole_tone": true
+      },
+      "verdict": "KEPT"
+    },
+    "R_DUAL_pairs": {
+      "failing": [],
+      "verdict": "KEPT"
+    },
+    "R_DUAL_symmetric": {
+      "failing": [],
+      "symmetric_classes": 95,
+      "verdict": "KEPT"
+    },
+    "R_MIRROR_harmonic": {
+      "failing": [],
+      "verdict": "KEPT"
+    },
+    "R_MIRROR_melodic": {
+      "failing": [],
+      "verdict": "KEPT"
+    }
+  }
+}
