@@ -415,7 +415,7 @@ void Brun::_paintGral(WilsonicProcessor& processor, Graphics& g, Rectangle<int> 
 
         // Draw the text labels for the scale degree, pitch value, and note number of the microtone
         auto const fontHeight = 10.f * _gralHexScale;
-        g.setFont(Font(fontHeight));
+        g.setFont(Font(FontOptions(fontHeight)));
         string labelStr0 = to_string(note_mt->getScaleDegree());
         string labelStr1 = to_string(static_cast<int>(1200.f * note_mt->getPitchValue01()));
         string labelStr2 = to_string(i);
@@ -439,7 +439,7 @@ void Brun::_paintGral(WilsonicProcessor& processor, Graphics& g, Rectangle<int> 
         g.saveState(); // save the state before drawing the column pattern
         g.setColour(Colours::white);
         auto const fontHeight = 12.f;
-        g.setFont(Font(fontHeight));
+        g.setFont(Font(FontOptions(fontHeight)));
 
         // Create a string for the column pattern of the Gral
         String pattern = "";
@@ -463,7 +463,7 @@ void Brun::_paintGralNPOOverride(WilsonicProcessor& processor, Graphics& g, Rect
     _paintHelper(processor, g, bounds);
     g.setColour(Colours::white);
     auto const fontHeight = 16.f;
-    g.setFont(Font(fontHeight));
+    g.setFont(Font(FontOptions(fontHeight)));
     g.drawFittedText("Can't draw Gral because\nNPO Override is enabled.\n\nDisable NPO Override to resume drawing Gral.", bounds, Justification::centred, 5);
     g.restoreState(); // restore the state after drawing the NPO Override message
 }
