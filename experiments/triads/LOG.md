@@ -549,3 +549,15 @@ stale by construction and were regenerated.
   real work (both analyzer copies, a third dot colour, and the
   `numProportional + numSubcontrary == numAllTriads` assertion in
   WilsonicMidiKeyboardComponent+paint.cpp must go).
+
+## 2026-09-29 — EPS-TIER-001: three-tier epsilon sweep (G-026)
+
+Marcus asked whether the tempered tolerance should be set by 12-ET's
+historical errors. Tiers derived in code (tier_anchors): 2.00 / 14.86 /
+32.01¢. Predictions E1–E5 committed in 89387ff before the first run.
+Results: E1 kept, E2 kept, E3 refuted (12-EDO already rank 5/35 at LOCK,
+4 at ET5, 24 at ET7), E4 kept (median ρ 0.155), E5 kept on the rail for
+P and S, 33/70 gainers at ET5 (predicted ≥35, so that half misses by two).
+New degeneracy found: loose-tier winners are near-ETs whose chroma is
+smaller than ε (ET7: 16/18 per-N winners). Scorer untouched, hash check A
+passes. Gate G-026 opened; nothing further runs until Marcus decides.
