@@ -561,3 +561,11 @@ P and S, 33/70 gainers at ET5 (predicted ≥35, so that half misses by two).
 New degeneracy found: loose-tier winners are near-ETs whose chroma is
 smaller than ε (ET7: 16/18 per-N winners). Scorer untouched, hash check A
 passes. Gate G-026 opened; nothing further runs until Marcus decides.
+
+## 2026-09-29 — DECISION: G-026 PASS, (b) then (a) (Marcus)
+
+No tolerance tier above LOCK 2¢ is adopted until the G-025 EAR-ε listening
+results give Marcus's own lock-loss thresholds. After that, the loose tiers
+become reporting tiers only behind a filter that collapses pitches closer
+than ε, applied in the report layer so the frozen scorer stays pinned.
+EPS-TIER-002 is queued as G-027 and waits on G-025.
