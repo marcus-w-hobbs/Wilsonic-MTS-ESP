@@ -53,6 +53,7 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-025 | 2026-08-19 | EAR-ε ear check: Marcus's lock-loss thresholds vs the cultural epsilon (44 blinded rungs, key sealed; decides P-E1/P-E2/P-E3) | PENDING — ladder + blinded protocol built ([PR #48](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/pull/48), stacked on #38); YOUR ACTION: listen per EAREPS_PROTOCOL.md, save results/eareps_responses.json, then unseal the key; predictions committed: third lock-loss 6–12¢ < 14.86, fifth ≤3¢ (12-EDO fifth survives), sharp-tolerant ≥1.5¢ |
 | G-026 | 2026-09-29 | EPS-TIER-001 review: should a 12-ET-derived epsilon (ET5 14.86¢ / ET7 32.01¢) join LOCK 2¢ as reporting tiers? | PASS 2026-09-29 — Marcus chose (b) then (a): no tier above LOCK until G-025's lock-loss numbers are in; after that, adopt the loose tiers as report tiers only behind a collapse-within-ε filter (report layer, no scorer unfreeze). Follow-up EPS-TIER-002 QUEUED on G-025; see triads/FINDINGS.md 2026-09-29 |
 | G-027 | 2026-09-29 | EPS-TIER-002: collapse-within-ε report filter + re-run EPS-TIER-001 tiers, choosing the above-LOCK tier(s) from G-025's results | QUEUED (needs G-025) |
+| G-028 | 2026-10-09 | BRIDGE-002 review: eikosany payload inside 11-limit rank-2 hosts at N ≤ 46 — H-C1 KEPT (no 2¢ bridge; hemififths-41 44/57 at 2¢, full at 6¢; amity-46 42/57 at 4.9¢), window not accuracy blocks (H-C2), tone-set tuning refuted as a rule (H-C3), D'Alessandro val is an addressing optimum (H-C4); ear-check `.scl` under results/scl/bridge002/ (hemififths-41, amity-46, rodan-41); merge its PR | PENDING — [branch claude/combination-product-symmetry-adqmm4](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/tree/claude/combination-product-symmetry-adqmm4); decides BRIDGE-002b scope (N ≤ 72 for miracle-72, budgeted survival tuning) |
 
 ## Currently blocked by gates
 
@@ -61,6 +62,11 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   experiments/lattice/EAREPS_PROTOCOL.md, save responses, then unseal) and
   G-013 (SUBSET-MEL-001 spec, waiting on the subset brainstorm; the
   SUBSET-MEL-000 table + 21 .scl are now on main to react to).
+- G-028 (BRIDGE-002 review, 2026-10-09): the eikosany payload run is on
+  branch `claude/combination-product-symmetry-adqmm4` — no 2¢ bridge at
+  N ≤ 46, hemififths-41 and amity-46 are the hosts to hear
+  (results/scl/bridge002/). Its PASS decides BRIDGE-002b's scope.
 - Runnable next once Marcus says go: M4 tonic-anchored scorer (NEW file, per
-  the MUR-002 proposal + blind mūrchanā ear check), BRIDGE-002 (identity/
-  in-budget front rule per G-021), SUBSET-MEL-001 (after the brainstorm).
+  the MUR-002 proposal + blind mūrchanā ear check), BRIDGE-002b (N ≤ 72 for
+  miracle-72; budgeted survival tuning), BRIDGE-001c (filler-set design),
+  SUBSET-MEL-001 (after the brainstorm).

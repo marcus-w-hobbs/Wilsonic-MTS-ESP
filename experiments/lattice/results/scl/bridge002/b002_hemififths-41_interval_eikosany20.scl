@@ -1,0 +1,29 @@
+! b002_hemififths-41_interval_eikosany20.scl
+!
+! BRIDGE-002 tempered eikosany image alone: hemififths-41 under the interval tuning (1/1 = the image's lowest tone, 33/32 tempered)
+! mapping [[1, 1, -5, -1, 2], [0, 2, 25, 13, 5]] val [41, 65, 95, 115, 142] generator 351.4939c period 1200.0000c anchor 3 of [3, 6]
+! eikosany identity survival at 2c: P=44 S=44 of 57/57; full recovery at 6c; max tone error 9.249483c; hexanies fully surviving at 2c: 14/30
+!
+b002_hemififths-41_interval_eikosany20
+ 20
+!
+ 35.85257
+ 96.30957
+ 205.97543
+ 266.43243
+ 302.28500
+ 387.34643
+ 411.95086
+ 472.40786
+ 532.86486
+ 617.92629
+ 653.77886
+ 702.98771
+ 799.29728
+ 848.50614
+ 884.35871
+ 969.42014
+ 1029.87714
+ 1090.33414
+ 1114.93857
+ 1200.00000

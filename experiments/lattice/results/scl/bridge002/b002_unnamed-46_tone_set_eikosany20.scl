@@ -1,0 +1,29 @@
+! b002_unnamed-46_tone_set_eikosany20.scl
+!
+! BRIDGE-002 tempered eikosany image alone: unnamed-46 under the tone_set tuning (1/1 = the image's lowest tone, 33/32 tempered)
+! mapping [[1, 3, 6, -2, 6], [0, 5, 13, -17, 9]] val [46, 73, 107, 129, 159] generator 860.5968c period 1200.0000c anchor -12 of [-13, -12]
+! eikosany identity survival at 2c: P=42 S=42 of 57/57; full recovery at 8c; max tone error 4.918065c; hexanies fully surviving at 2c: 12/30
+!
+b002_unnamed-46_tone_set_eikosany20
+ 20
+!
+ 48.35488
+ 109.25801
+ 205.96777
+ 266.87091
+ 315.22578
+ 387.75810
+ 424.48380
+ 472.83868
+ 545.37099
+ 630.45157
+ 654.62901
+ 702.98389
+ 812.24190
+ 860.59678
+ 884.77422
+ 969.85479
+ 1042.38711
+ 1090.74199
+ 1127.46768
+ 1200.00000

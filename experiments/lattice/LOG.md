@@ -3644,3 +3644,171 @@ contained with two anchors; a tied val is a collision and a root at degree
 1 is not a violation; melodic receipt of a known MOS window; a small
 sweep dedupes by (M, v). 33 tests, green 2026-10-09 before the run. Freeze checks A run before and after; frozen files
 untouched.
+
+## 2026-10-09 — BRIDGE-002 results + verdicts
+
+**Run:** `bridge002.py` (752.6 s; run 1 receipts: jsonl sha256
+63ef881a…8c17, sidecar a5811af2…182c; the byte-identity check against a
+second run is recorded in the determinism line at the end of this
+entry), receipts `results/bridge002.jsonl` (135 FULL
+rows: every contained in-budget row and every named row),
+`results/bridge002_sidecar.jsonl.gz` (19,139 COMPACT rows: 3,896
+contained over-budget + 15,243 uncontained in-budget), 825,360
+uncontained over-budget rows counted only (`enumeration.counted_only_by_N`),
+`results/bridge002_summary.json`. Tests 33/33 new green before the first
+run (lattice suite 339/339 green after); freeze checks A OK on both pins
+before and after (scorer 1a840af9…9b592, melodic a16f162b…7535); frozen
+files untouched. One runner fix between the pre-registration commit and the
+run: the summary layer crashed on compact rows (no `h_c1_pass` field) after
+the sweep had completed; fixed, covered by the small-sweep test, and
+`--resummarize` added so a summary bug can never cost another sweep. No
+pre-registered constant or field changed.
+
+**Enumeration — every probe count reproduced exactly.** 2,187 vals, **350
+monotone** (1,837 rejected), 1,303,691 independent (v, w) pairs,
+**844,634 distinct (M, v) rows**, **771,024 distinct mappings**, **3,995
+contained rows** over **2,431 contained mappings**; the kept-by-N table and
+the offset-pattern table match the probe line for line (P-KILL-6 KEPT:
+patent kept at every N except 20, 23, 25; 24 of the 350 kept vals are
+patent). Only **60 contained rows are in budget** (tone-set max error
+< 15¢): containment is common, accuracy is rare, and 98% of the 771k
+temperaments the join sweep produces are junk, as the k₂ sweep was in
+BRIDGE-001b. 93 named rows; 355 commas in the labelling box.
+
+**H-C1 — KEPT: no 2¢ eikosany bridge at N ≤ 46.** Zero passers under any
+of the four tunings. Best contained identity P at ε = 2¢: prime 29, tone-set
+42, interval **44**, survival **44** (hemififths-41) — at the bottom of the
+pinned [44, 52] band: the survival grid found nothing the interval minimax
+had not. Smallest contained full-recovery ε: **6¢** under all four tunings
+(hemififths-41; rodan-41 and rodan-46) — the exact pin. EG4's one-cent gap
+is a **four-cent gap** for the eikosany.
+
+**Capped fronts (identity P ↑, collisions ↓, max tone error ↓, < 15¢):**
+- prime: rodan-41/46 (P 25, 6.26¢, recovery 6); an unnamed quarter-fifth
+  temperament ⟨1 1 1 −1 2], ⟨0 4 9 26 10] (g = 175.66¢, 4g = 3/2, 9g = 5/4;
+  kernel 100/99 ∩ 225/224 ∩ 243/242 ∩ …) at 34 and 41 (P 29, 7.44¢,
+  recovery 9).
+- tone-set: rodan-41/46 (P 35, 4.82¢, rec 6); **amity-46** ⟨1 3 6 −2 6],
+  ⟨0 5 13 −17 9] (P 42, 4.92¢, rec 8).
+- interval: rodan-41/46 (35, 4.82¢); amity-46 (42, 4.92¢); hemififths-41
+  (44, 9.25¢, rec 6).
+- survival (headline): **amity-46 (42, 4.92¢, rec 8)** and **hemififths-41
+  (44, 8.82¢, rec 6)**; rodan-41 at (38, 5.47¢) is dominated by amity.
+Every front row has 0 collisions and a 2-step, strictly proper, constant-
+structure host window (rodan-46 is improper under the prime tuning only);
+`degrees_match_host_ranks` is true on all of them. The uncapped identity
+fronts are IDENTICAL to the capped ones — no over-budget row enters an
+identity front, so the identity lens is self-capping, which is what G-021
+expected and BRIDGE-001b could only assert.
+Amity-46 is the unpredicted row: not in the named list, not in any pin, a
+46-note amity MOS (7, 11, 18, 25, 32, 39, 46) whose kernel is 7-limit amity
+(4375/4374 ∩ 5120/5103) extended by 385/384 and 121/120 (label applied
+post-hoc from the kernel, not from a standard list), carrying 42 of 57
+proportional identities at under 5¢ of tone error with **12 of 30 hexanies
+locked at 2¢** — the most accurate strong host in the range.
+
+**H-C2 — KEPT: the window, not accuracy, is the blocker.** 91 uncontained
+rows reach full identity (57, 57) at ε ≤ 2¢ under the prime tuning
+(unidec-34/41 at 2¢ as pinned, plus 89 unnamed), 999 reach ≤ 4¢; the
+uncontained minimum is **1¢** (e.g. ⟨2 7 13 −1 1], ⟨0 11 24 −19 −17] at 46:
+0.77¢ max tone error, chain span 94; ⟨1 1 19 11 −10], ⟨0 2 −57 −28 46] at
+41: 1.08¢, span 138). The accurate temperaments with the SHORTEST spans are
+multi-period: ⟨8 0 −11 14 15], ⟨0 3 7 2 3] (eight 150¢ periods, span 12,
+1.74¢, recovery 2) needs N ≥ 96, and a 23-period near-46-EDO row (span 9)
+needs N ≥ 207. Named near-misses: miracle at every supporting N (20–42)
+recovers at 4¢ with span 43 — two chain positions too wide for 41 and
+unsupported by any ±1 val at 43–46, so **miracle cannot host the eikosany
+below 72 notes**; catakleismic-34/38 at 4¢ (span 57); garibaldi-24/29/41 at
+6¢ (span 49). Contained minimum 6¢ vs uncontained minimum 1¢.
+
+**H-C3 — KEPT on all three clauses; blog 002's tuning recommendation is
+refuted as a rule.** Tone-set minimax lowers identity P vs prime on 11
+in-budget contained rows and raises it on 32: huygens 12 → 10 (the named
+pin; miracle's 29 → 22 lives in the uncontained set, prime only), against
+orwell 12 → 26, magic 9 → 29, rodan 25 → 35, sensi 21 → 27. The interval
+tuning is likewise non-uniform (hemififths 22 → 44, magic 9 → 11,
+valentine 24 → 21). The three analytic fronts are pairwise different. The
+survival grid strictly exceeds the best analytic tuning on **31 of 52
+eligible rows (60%)** and is ≥ each of them everywhere. **The caveat the
+grid exposes:** a 2¢-survival-optimal generator ignores absolute error and
+pays for it — huygens-31 buys 15 (from 12) at 28.9¢ (over budget),
+valentine-45/46 buys 35 (from 24) at 12.5¢ instead of 8.2¢, sensi-46 buys
+35 (from 27) at 8.8¢ but its full-recovery ε WORSENS 9 → 11, rodan 38 (from
+35) at 5.47¢ instead of 4.82¢. So the identity count at a single ε is not
+monotone in the tuning either, and a "detuned sweet spot" can be a worse
+bridge at every other ε. Also confirmed, now below 13¢: the count lens
+over-reads — hemififths-41 (interval) scores P = 56 by `score_tempered`
+against 44 identity triads, orwell-31 54 against 32 — a 20-tone image
+manufactures accidental near-means that an 8-tone image did not; the
+identity lens is the instrument.
+
+**H-C4 — KEPT exactly.** Wilson's huygens val ⟨31,49,72,87,107⟩ at 31:
+contained (span 30, anchors [2, 3]), **injective on the 20 eikosany
+tones**, a 2-step strictly proper CS window (19 × 31.88¢ + 12 × 49.53¢);
+identity P = 12 / 10 / 12 / 15 (prime / tone-set / interval / survival),
+full recovery 12 / 14 / 11 / 12¢, hexanies locked at 2¢: 0 / 2 / 0 / 0 of
+30; on no front. The same temperament at 36, 38 and 43 collides (8, 4, 0)
+and its windows there are 3-step. Reading, as pre-registered: the template
+is an addressing optimum (BRIDGE-000: tie-optimal, and the eikosany sits in
+it injectively), and as a TEMPERED host it is far from the front at 13.8¢ —
+the two-corner picture again.
+
+**H-C5 — KEPT, more strongly than predicted.** 11 contained rows at N = 22
+(porcupine, superpyth, 9 unnamed) and **none in budget**: the best
+tone-set max error at 22 is 16.72¢ (⟨1 2 3 5 4], ⟨0 3 5 16 4]), porcupine
+28.4¢, superpyth 32.5¢. The pin's "in-budget rows exist at 22" was wrong
+because it quoted the prime-minimax error (9.1¢ over the primes) where the
+three-factor products stack to 28–36¢. So at modulus 22 the eikosany is
+addressable by eleven vals and every tempered addressing detunes some tone
+by ≥ 16.7¢ — Wilson's "melodically compatible with modulus 22" is an
+addressing claim, exactly like D'Alessandro at 31.
+
+**H-C6 — KEPT.** On hemififths-41 (recovery 6¢, survival tuning) **14 of
+30 hexanies lock fully at 2¢** (band [8, 20]), 14 at 3¢ and 4¢, all 30 at
+6¢; 2 of 12 dekanies at 2¢. Under the interval tuning 14 ≥ 12 as pinned.
+Amity-46: 12 hexanies at 2¢ at 4.92¢ error; rodan-41: 8 (survival) / 6
+(tone-set) at 2¢, 12 at 3¢, 20 at 4¢. On the best hosts roughly half the
+hexanies are navigable at the scorer's ε and all of them two to four cents
+above it.
+
+**P-COMMA-6 — KEPT for tone-set / interval / survival, FALSIFIED for
+prime.** On those three fronts every row's kernel contains 385/384 or
+441/440 and 225/224 appears in none: hemififths = 243/242 ∩ 441/440 ∩
+2401/2400 ∩ 5120/5103 ∩ …; amity-46 = 121/120 ∩ 176/175 ∩ 385/384 ∩
+4375/4374 ∩ 5120/5103 ∩ …; rodan = 245/243 ∩ 385/384 ∩ 441/440 ∩
+1029/1024 ∩ 5120/5103 ∩ …. The prime front carries the falsifier: the
+quarter-fifth temperament's kernel (100/99 ∩ 225/224 ∩ 243/242 ∩ 625/616 ∩
+…) has neither small comma, and 225/224 is on it. EG4's "225/224 owns the
+front" does not transfer to EG6 at N ≤ 46 once miracle is out of range:
+225/224's best contained carriers are magic-38/41 (29 at 7.1¢) and
+orwell-31 (32 at 10.8¢), both dominated.
+
+**Vs the BRIDGE-000 standard:** still two corners and nothing between.
+Wilson's pitch-just corner (0¢, 7 collisions on 38 tones, every hexany
+exact) and the tempered-faithful corner, now hemififths-41 (8.8¢, 0
+collisions, 44/57 at 2¢, all at 6¢) beside amity-46 (4.9¢, 0 collisions,
+42/57 at 2¢, all at 8¢). No row at N ≤ 46 reaches full survival at 2¢
+under any tuning; 844,634 temperaments find no third corner.
+
+**Kept.** Runner, tests, receipts stand; frozen scorers untouched. Ear
+check offered (standing gate): `python3.12 bridge002.py --export-scl`
+writes, for each capped-front row under its tuning, the anchored host
+window and the bare 20-tone image as cents `.scl` under
+`results/scl/bridge002/` (26 files; the amity row is filed as
+`unnamed-46` and the quarter-fifth rows as `unnamed-34/41`, since the
+runner labels only from the pre-registered list) — hemififths-41,
+amity-46, rodan-41/46 and the quarter-fifth 34/41 are the ones to hear. Gate G-028
+proposed in GATES.md.
+
+**Next (not run, named here):** (a) **BRIDGE-002b, N ≤ 72** — admits
+miracle-72 (span 43, recovery 4¢), garibaldi-53 (49, 6¢) and
+catakleismic-72 (57, 4¢); the question becomes whether a 72-note host is a
+keyboard or a tuning table; (b) a **budgeted survival tuning** (maximize
+identity at 2¢ subject to max tone error ≤ b, or maximize recovery ε
+directly) to remove the detuned-sweet-spot artifact of the bare grid;
+(c) once G-025 lands, re-read every front row at Marcus's measured
+lock-loss ε — if his third-lock-loss is 6–12¢ as predicted there,
+hemififths-41 and rodan-41 are FULL bridges at the ear's ε and amity-46 is
+one at 8¢; (d) BRIDGE-001c (filler-set design) remains unrun; (e) the
+amity-46 label wants checking against the standard 11-limit lists before
+it is used in prose.

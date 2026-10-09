@@ -1,0 +1,29 @@
+! b002_unnamed-34_prime_eikosany20.scl
+!
+! BRIDGE-002 tempered eikosany image alone: unnamed-34 under the prime tuning (1/1 = the image's lowest tone, 33/32 tempered)
+! mapping [[1, 1, 1, -1, 2], [0, 4, 9, 26, 10]] val [34, 54, 79, 96, 118] generator 175.6648c period 1200.0000c anchor 12 of [12, 12]
+! eikosany identity survival at 2c: P=29 S=29 of 57/57; full recovery at 9c; max tone error 7.443183c; hexanies fully surviving at 2c: 6/30
+!
+b002_unnamed-34_prime_eikosany20
+ 20
+!
+ 29.65377
+ 88.96130
+ 205.31859
+ 264.62613
+ 294.27990
+ 380.98342
+ 410.63718
+ 469.94472
+ 526.99447
+ 615.95578
+ 645.60954
+ 702.65930
+ 791.62060
+ 848.67035
+ 878.32412
+ 967.28542
+ 1024.33518
+ 1083.64271
+ 1113.29648
+ 1200.00000
