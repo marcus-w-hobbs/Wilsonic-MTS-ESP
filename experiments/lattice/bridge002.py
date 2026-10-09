@@ -57,6 +57,7 @@ RESULTS = HERE / "results" / "bridge002.jsonl"
 SIDECAR = HERE / "results" / "bridge002_sidecar.jsonl.gz"
 SUMMARY = HERE / "results" / "bridge002_summary.json"
 BRIDGE000 = HERE / "results" / "bridge000.json"
+SCL_DIR = HERE / "results" / "scl" / "bridge002"
 
 # ---------------------------------------------------------------- locked --
 PRIMES = (2, 3, 5, 7, 11)
@@ -1179,10 +1180,101 @@ def resummarize() -> None:
     print_summary(summary)
 
 
+# ------------------------------------------------------------ ear check --
+
+def scl_text(name: str, description: list[str], degrees: list[float]) -> str:
+    """Scala text in cents (eareps.scl_text's layout): degrees above the
+    implicit 1/1, octave last."""
+    lines = [f"! {name}.scl", "!"] + [f"! {d}" for d in description] + [
+        "!", name, f" {len(degrees)}", "!"]
+    lines += [f" {c:.5f}" for c in degrees]
+    return "\n".join(lines) + "\n"
+
+
+def export_scl() -> list[Path]:
+    """Standing ear-check exports (GATES protocol: every .scl offered is
+    implicitly PENDING): for each row on a capped front, under that
+    tuning, (a) the anchored N-note host window and (b) the 20-tone
+    eikosany image alone, both in cents with the degree map in the header.
+    Reads the receipts; writes nothing else."""
+    summary = json.loads(SUMMARY.read_text())
+    rows = {}
+    with RESULTS.open() as fh:
+        for line in fh:
+            r = json.loads(line)
+            rows[(tuple(map(tuple, r["mapping"])), r["N"], tuple(r["val"]))] = r
+    SCL_DIR.mkdir(parents=True, exist_ok=True)
+    written = []
+    seen = set()
+    for tuning in TUNINGS:
+        for e in summary["fronts_capped_15c"][tuning]:
+            key = (tuple(map(tuple, e["mapping"])), e["N"], tuple(e["val"]))
+            if (key, tuning) in seen:
+                continue
+            seen.add((key, tuning))
+            r = rows[key]
+            t = r["tunings"][tuning]
+            mapping = key[0]
+            g = t["generator_cents_raw"]
+            x = mapping[0][0]
+            per = 1200.0 / x
+            n = r["N"]
+            notes = window_cents(per, g, n, r["anchor_used"], x)
+            tbp = tempered_by_product(mapping, g)
+            label = (r["name"] or "unnamed") + f"-{n}"
+            stem = f"b002_{label}_{tuning}"
+            root = notes[0]
+            degrees = [c - root for c in notes[1:]] + [1200.0]
+            scl_deg = {}
+            for tt in TONES:
+                pc = (tbp[tt["product"]] - root) % 1200.0
+                k = min(range(n), key=lambda i: min(
+                    abs(([0.0] + degrees)[i] - pc),
+                    1200.0 - abs(([0.0] + degrees)[i] - pc)))
+                scl_deg[tt["product"]] = k
+            deg_map = ", ".join(
+                f"{frac_str(tt['ratio'])}->{scl_deg[tt['product']]}"
+                for tt in TONES)
+            head = [
+                f"BRIDGE-002 host window: {label} under the {tuning} tuning",
+                f"mapping {list(map(list, mapping))} val {r['val']} "
+                f"generator {t['generator_cents']:.4f}c period {per:.4f}c "
+                f"anchor {r['anchor_used']} of {r['anchor_interval']}",
+                f"eikosany identity survival at 2c: P={t['identity_P']} "
+                f"S={t['identity_S']} of 57/57; full recovery at "
+                f"{t['identity_full_recovery_eps']}c; max tone error "
+                f"{t['max_error_cents']}c; hexanies fully surviving at 2c: "
+                f"{t['hexanies']['full_at_eps']['2']}/30",
+                f"host: {t['melodic']['gap_classes']} gap classes, "
+                f"{t['melodic']['propriety']}, CS={t['melodic']['is_cs']}",
+                "1/1 = the window's lowest note (chain position "
+                f"{r['anchor_used']}); eikosany tones -> .scl degree: " + deg_map,
+                "kernel commas: " + ", ".join(r["kernel_commas"][:8]),
+            ]
+            path = SCL_DIR / f"{stem}_host{n}.scl"
+            path.write_text(scl_text(path.stem, head, degrees))
+            written.append(path)
+            img = sorted(tbp[p] % 1200.0 for p in PRODUCTS)
+            root = img[0]
+            img_deg = [c - root for c in img[1:]] + [1200.0]
+            head2 = [f"BRIDGE-002 tempered eikosany image alone: {label} under "
+                     f"the {tuning} tuning (1/1 = the image's lowest tone, "
+                     f"{frac_str(TONES[0]['ratio'])} tempered)",
+                     head[1], head[2]]
+            path2 = SCL_DIR / f"{stem}_eikosany20.scl"
+            path2.write_text(scl_text(path2.stem, head2, img_deg))
+            written.append(path2)
+    return written
+
+
 def main() -> None:
     import time
     if "--resummarize" in sys.argv:
         resummarize()
+        return
+    if "--export-scl" in sys.argv:
+        for p in export_scl():
+            print(p.relative_to(HERE))
         return
     t0 = time.time()
 
