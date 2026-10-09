@@ -318,6 +318,28 @@ melodic.py (M2) and MOS-LAT-001 descriptors; run after both.
 
 ---
 
+**BRIDGE-002 method addenda (2026-10-09, from the eikosany run; LOG.md
+pre-registration of that date has the full contract):**
+
+3. *Monotonicity for a payload without 1/1.* BRIDGE-001's rule copied
+   verbatim (d(1/1) = 0) rejects every sane val once the payload is a
+   bare CPS, because no odd-seeded CPS contains 1/1 and its lowest tone
+   (33/32 for the classic eikosany) never sits at degree 0 unless the val
+   collapses it into the octave. The rule is: unreduced degrees over the
+   payload tones in pitch order, weakly increasing within [0, N]; the host
+   root may sit at degree 0 or N; a tie mod N between two PAYLOAD tones is
+   a collision, a payload tone at the root is not.
+
+4. *Kernel sweep by join of vals.* A rank-2 host of an n-prime payload has
+   a kernel of rank n − 2, so BRIDGE-001b's "sweep the second comma" does
+   not generalize past the 7-limit. The temperaments supported by a val v
+   are exactly the saturated joins ⟨v, w⟩ over second vals w (kernel =
+   ker v ∩ ker w; distinct temperaments ⇔ distinct w modulo v), so the sweep
+   is over w (all vals at cardinality 1..N_max, patent ± 1), deduped by
+   (mapping, v). Named temperaments are reached by some w of cardinality
+   ≤ 17 for every supporting val (checked before the run); the comma box
+   is used only to label kernels, never to enumerate them.
+
 ## Search parameterization note (applies to all generator sweeps)
 
 Parameterize generator searches by BOUNDED CF DIGIT STRINGS, not by
