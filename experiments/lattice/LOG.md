@@ -3812,3 +3812,9 @@ hemififths-41 and rodan-41 are FULL bridges at the ear's ε and amity-46 is
 one at 8¢; (d) BRIDGE-001c (filler-set design) remains unrun; (e) the
 amity-46 label wants checking against the standard 11-limit lists before
 it is used in prose.
+
+**Determinism (second run, 634 s, in an isolated copy of the module):**
+`bridge002.jsonl` sha256 63ef881a8a04d34f526852b954da7d289618a8909c26216887eeac2734cc8c17
+and `bridge002_sidecar.jsonl.gz` a5811af238e5bca3b971b7a57e411e8361a3592f102335e569e392cfccf5182c
+are byte-identical across the two runs; `bridge002_summary.json` differs
+only in `receipts.runtime_seconds`.
