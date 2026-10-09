@@ -3393,3 +3393,254 @@ decide P-E1/P-E2/P-E3 against gate G-025 (QUEUED in ledger PR #37).
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
 + 16 et001 + 29 eareps), freeze checks A OK on both pins before and
 after. Outputs bit-identical across two runs (diff on all 47 files).
+
+## 2026-10-09 — BRIDGE-002 pre-registration (entry BEFORE any implementation or run)
+
+**Contract:** SPEC §BRIDGE-001's EG6 scale-up, unblocked by G-016/G-021
+("identity lens adopted for BRIDGE-002"; LOG 2026-08-18 method rule: any
+front over a comma sweep must be error-capped or identity-scored) and by
+blog 002's closing paragraph ("BRIDGE-002 should try the eikosany itself as
+a bridge payload, and both should tune by a tone-set minimax"). Payload =
+the classic eikosany CPS(6,3) on {1,3,5,7,9,11}: 20 distinct octave-reduced
+tones (asserted at run start; distinct because every 3-product of distinct
+odd seeds is a distinct odd integer), frozen triads v1.1.0 exact base
+**(P,S,G) = (57,57,6)** (measured 2026-10-09 with the frozen scorer before
+this entry; SPEC's "(8,8)"-era numbers do not apply). Embedded subsets, by
+`subsetmel000.enumerate_subsets` (reused read-only): the 30 hexanies
+`hexany[in=x,out=y]` = x·CPS(B,2) over the four seeds B = seeds∖{x,y}, and
+the 12 dekanies (`dekany_in`/`dekany_out`); tetrads are not scored (a
+4-tone set has at most 4 anchored triads and the frozen aggregator is
+unsettled there). Hosts = 11-limit rank-2 temperaments carried by a val
+v = ⟨N, a3, a5, a7, a11⟩ at **N ∈ 20..46**, patent ± 1 per odd coordinate
+(81 vals per N). Lower bound 20 = the pigeonhole floor; upper bound 46
+covers Wilson's three eikosany moduli (22 — "2 Eikosanies melodically
+compatible with modulus 22", 1968; 31 — D'Alessandro; 41 — the 11-limit
+miracle MOS) plus the smallest window that holds the eikosany under miracle
+(chain span 43, derived below), and stops below the next named windows
+(garibaldi 49, catakleismic 57). Runner `bridge002.py`; receipts
+`results/bridge002.jsonl` (full rows), `results/bridge002_sidecar.jsonl.gz`
+(compact rows), `results/bridge002_summary.json`. Frozen scorers imported
+read-only (triads v1.1.0 pin 1a840af9…9b592, melodic v0.1.0 pin
+a16f162b…7535, both verified before writing this entry); python3.12 stdlib;
+deterministic (sorted iteration, no randomness, byte-identical receipts
+across two runs, sha256 recorded in the results entry). `bridge001.py` /
+`bridge001b.py` machinery is generalized to five primes inside bridge002.py
+(dimension-generic saturated nullspace + 2-row HNF, the piecewise-linear
+exact minimax over an arbitrary line set, the identity lens) and each
+generalization is unit-tested against the 7-limit originals on the
+BRIDGE-001 fixtures (miracle/orwell/magic/garibaldi mappings, the 6+6 hexany
+identity triads, the miracle (3,3)@2¢/(6,6)@3¢ pin) BEFORE the first run.
+
+**Design decisions carried over unchanged (Marcus, SPEC §BRIDGE-001):**
+degree assignment BY THE VAL, no nearest-degree rounding; the monotonicity
+filter FIRST (unreduced degrees over the 20 eikosany tones in pitch order:
+d(1/1) = 0, weakly increasing, ≤ N; strict decrease ⇒ REJECT; ties =
+collisions, logged with the merged pair's comma monzo); anchoring is a free
+design parameter (MOS-LAT-001 corollary: containment = chain span ≤ N/x,
+anchor interval reported, anchor nearest 0 used).
+
+**Note for Marcus #1 — rank accounting for EG6, and the sweep that replaces
+the k₂ sweep.** The eikosany lattice is 2.3.5.7.11, rank 5 (9 = 3² is
+interior). A linear host is rank 2, so the kernel has rank **3** — three
+independent commas (SPEC's "TWO" counts octave-equivalently, as in
+BRIDGE-001's note #1). BRIDGE-001b's second-comma sweep does not scale (a
+rank-3 kernel is not a pair of commas), so the sweep is re-parameterized the
+standard way: a rank-2 temperament supported by v is exactly the saturated
+join ⟨v, w⟩ of v with a second val w, i.e. kernel = ker v ∩ ker w, and
+distinct temperaments ⇔ distinct codimension-1 sublattices of ker v ⇔
+distinct w modulo v. Locked: w ranges over ALL 11-limit vals at cardinality
+m ∈ 1..46 with coordinates patent ± 1 (3,726 vals); for each monotone v and
+each w independent of v, K = saturated nullspace of [v; w] (rank 3), M =
+row-HNF of the saturated nullspace of K (period row first, M[0][0] = x
+periods per octave, generator row with M[1][0] = 0), and v must factor as
+αM₀ + βM₁ (asserted). Rows are deduped by (M, v); `w_witness_count` and up
+to 4 witnesses are kept per row; the kernel's commas are listed by scanning
+the 11-limit comma box |e3| ≤ 8, |e5| ≤ 5, |e7| ≤ 4, |e11| ≤ 3, Tenney
+height ≤ 2⁴⁰, 0 < cents < 60. No comma box is used for the sweep itself.
+**Scale probe (counts only, no scoring, run 2026-10-09 before this entry;
+the probe is what caught the 1/1 rule below).** A first probe copied
+BRIDGE-001's monotonicity rule verbatim, including d(1/1) = 0, and rejected
+every patent val — because the eikosany has no 1/1 and its lowest tone
+33/32 never sits at degree 0 unless the val collapses it into the octave.
+The rule for a payload without 1/1 is: unreduced degrees over the 20 tones
+weakly increasing within [0, N], the host root free to sit at degree 0 or N
+(a payload tone at degree 0 or N is the window root, not a collision; a
+tie mod N between two payload tones is). Under the corrected rule, at
+N ∈ 20..46: **350 of 2,187 vals** are monotone (1,837 rejected, 84%); the
+patent val is kept at every N except 20, 23 and 25; the commonest kept
+patterns after patent itself (24) are (0,+1,0,−1) (21), (0,+1,−1,−1) (19),
+(0,+1,0,0) (18), (0,0,−1,0) (18). The join sweep then gives
+**844,634 distinct (M, v) rows**, 771,024 distinct mappings, **3,995
+contained rows** over 2,431 distinct contained mappings (578 s to
+enumerate, no pruning). Those counts are predictions the run must
+reproduce exactly. Reach check (same probe): every named temperament
+below is produced by some second val of cardinality ≤ 17 for every one of
+its monotone supporting vals — the sweep is not missing the names.
+Supporting monotone vals at N ≤ 46 (so which names can be CONTAINED):
+miracle 20, 21, 30, 31, 41, 42 — none ≥ its span 43, so **miracle cannot
+host the eikosany in this range; its next val is 72**; orwell 22, 27, 31,
+36, 40, 44, 45 (contained from 31); magic 22, 38, 41, 44 (from 38);
+huygens 24, 31, 36, 38, 43 (from 31); meanpop 24, 31, 38, 43 (from 31);
+mothra 26, 31, 36, 41, 46 (from 31); valentine 30, 31, 32, 45, 46 (from
+45); mohajira 21, 24, 28, 31, 38, 45 (from 28); hemififths 24, 34, 41
+(41 only); rodan 36, 41, 46 (41, 46); sensi 27, 38, 46 (46); myna 27, 31,
+35 (span 40: never); garibaldi 24, 29, 41 (span 49: never); catakleismic
+34, 38 (span 57: never); unidec 34, 41 (span 112: never); ennealimmal:
+unsupported (x = 18 forces N = 36, no ±1 val factors through it);
+porcupine, superpyth, pajara, injera, lemba: contained at small N with
+large errors.
+
+**Receipt schema (locked):** FULL rows = every contained row + every
+uncontained row whose mapping carries a name (the BRIDGE-001b convention,
+so named near-misses are inspectable). COMPACT sidecar = uncontained,
+unnamed rows that are in-budget under the prime tuning (max tone error
+< 15¢); uncontained, unnamed, over-budget rows are counted in the summary
+only (no bridge can live there under any tuning, because the prime minimax
+already minimizes the 4-prime error and the identity lens is
+translation-invariant but not error-tolerant above ε_bridge). Every summary
+number is derivable from the two files plus the counted remainder.
+
+**Tunings (four per contained row; prime only on uncontained rows), all
+pure-octave with period exactly 1200/x:**
+1. `prime` — exact piecewise-linear minimax over {3,5,7,11} (BRIDGE-001's
+   solver, one more line).
+2. `tone_set` — minimax over the 20 eikosany tone images (blog 002's
+   recommendation, BRIDGE-001b H-B4 at EG6 scale).
+3. `interval` — minimax over the 190 pairwise image intervals (the
+   translation-invariant error the frozen scorer's mean test sees;
+   BRIDGE-001b H-B6's "right next lens", named there for BRIDGE-001c).
+4. `survival` — direct argmax of the identity count P+S at ε = 2¢ over the
+   grid g ∈ [g_prime − 10¢, g_prime + 10¢] step 0.02¢ (1,001 points) ∪ the
+   three analytic generators; ties → smaller max tone error, then smaller g.
+   This is the existence oracle for the bridge question: if no g on the
+   grid reaches (57,57) at 2¢, no analytic tuning will (the three analytic
+   g's are in the candidate set, so `survival` ≥ each of them by
+   construction).
+
+**Measured per (row, tuning):** per-tone errors (max, mean), interval max
+error, frozen `score_tempered` (P,S,G) of the 20-tone image at ε = 2¢
+(count lens, recorded but NOT used for fronts — BRIDGE-001b showed it is
+not a survival measure above ~10¢), **identity lens** (P,S) at ε = 2¢ over
+the eikosany's own 114 labelled triads (57 P + 57 S, anchored convention,
+same octave placement), identity full-recovery ε (smallest integer ε ∈
+1..15 at which (57,57) returns), per-hexany identity (P,S) at ε = 2¢ with
+its exact base and a `full` flag, counts of fully-surviving hexanies (of
+30) at ε = 2, 3, 4¢, per-dekany identity at 2¢, collisions (val-degree ties
+among the 20 tones) with comma monzos and `pitch_merged`, host receipt
+(chain positions, span, anchor interval, step classes), and the frozen
+melodic receipt of the anchored N-note host window (gap classes, entropy,
+CS, propriety).
+
+**Fronts (locked):** contained rows only, per tuning, dominance =
+(identity P at 2¢ ↑, collisions ↓, max tone error ↓), **error-capped at
+15¢** (the G-021 rule, both halves: identity-scored AND capped). The
+uncapped identity front is reported alongside (the identity lens zeroes the
+detuned-image artifact by construction, so the two should agree; a
+disagreement is reported as a finding about the lens). The `survival`
+front is the headline front.
+
+**Hand pins (derived 2026-10-09 from the named mapping matrices with the
+linear error model and the frozen classifier on the eikosany's 114 identity
+triads, before the runner exists; labels resolved from standard 11-limit
+comma triples, a wrong label changes no number):**
+- Eikosany chain spans (minimum containing N = x·span): miracle 43,
+  orwell 31, magic 35, huygens 30, meanpop 29, mothra 31, valentine 33,
+  mohajira 27, hemififths 38, myna 40, rodan 41, sensi 45, porcupine 19,
+  superpyth 21, pajara 28 (x = 2), injera 24 (x = 2), lemba 40 (x = 2);
+  OUT of range: garibaldi 49, catakleismic 57, unidec 112, ennealimmal 126
+  (x = 18).
+- Identity survival at ε = 2¢ (P = S by inversion symmetry), prime /
+  tone_set / interval: miracle 29 / 22 / 29 (full recovery 4 / 8 / 4¢);
+  orwell 12 / 26 / 32 (15 / 11 / 11); magic 9 / 29 / 11 (12 / 9 / 9);
+  huygens 12 / 10 / 12 (12 / 14 / 11); hemififths 22 / 22 / **44**
+  (9 / 8 / 6); rodan 25 / 35 / 35 (6 / 6 / 6); myna 13 / 31 / 28
+  (8 / 6 / 6); valentine 24 / 24 / 21 (8 / 8 / 8); sensi 21 / 27 / 27;
+  garibaldi (uncontained) 43 / 34 / 38 (6 / 5 / 5); catakleismic
+  (uncontained) 41 / 44 / 44 (4 / 4 / 4); unidec (uncontained; supported by
+  the 41-patent val ⟨41,65,95,115,142⟩) 57 / 57 / — at 2¢ (recovery 2¢);
+  ennealimmal (unsupported by any N ≤ 46 val at patent ± 1: x = 18 forces
+  N = 36 and no ±1 val factors through it) 57 at 1¢.
+
+**Falsifiable predictions:**
+- **H-C1 (the 2¢ eikosany bridge does not exist at N ≤ 46).** No contained
+  injective row reaches identity (57,57) at ε = 2¢ under ANY of the four
+  tunings. Predicted KEPT. Pins: the best contained identity P at 2¢ lies in
+  **[44, 52]** (hemififths-41 under `interval`/`survival`; the grid may add
+  a few triads but not 13); the smallest contained full-recovery ε is
+  **6¢** (hemififths-41 and rodan-41/46; miracle's 4¢ and catakleismic's 4¢
+  are unreachable because their spans 43 and 57 exceed every supporting
+  val's N). EG4's one-cent gap becomes a **four-cent gap** for the
+  eikosany. Falsifier: any contained row at
+  (57,57)@2¢ — it becomes the flagship and H-C1 is refuted.
+- **H-C2 (the window, not accuracy, is the blocker — EG4's lesson repeats).**
+  Among UNCONTAINED rows at N ≤ 46 at least one temperament reaches
+  identity (57,57) at ε ≤ 2¢ under `prime` (unidec via the 34- and
+  41-patent vals, span 112), i.e. accuracy sufficient for a 2¢ bridge
+  exists in the sweep and only the MOS window excludes it. Predicted KEPT.
+  Secondary: the uncontained in-budget set's best full-recovery ε is 2¢
+  (unidec), the contained set's is 6¢; miracle-41/42 (recovery 4¢) misses
+  containment by two chain positions, catakleismic-34/38 (4¢) by nineteen.
+- **H-C3 (blog 002's tuning recommendation is wrong as a universal rule).**
+  Tone-set minimax is NOT survival-monotone: it lowers identity P at 2¢ vs
+  `prime` on at least one named contained host (pins: miracle 29 → 22,
+  huygens 12 → 10) while raising it on others (orwell 12 → 26, magic
+  9 → 29). Likewise `interval` is non-uniform (hemififths 22 → 44, magic
+  9 → 11). Therefore the three analytic tunings produce three different
+  in-budget fronts, and `survival` strictly exceeds the best analytic tuning
+  on **≥ 25% of in-budget contained rows with analytic P ≥ 10** (the
+  identity count is a non-convex function of g with many near-threshold
+  triads; the analytic objectives sit on different facets). Predicted KEPT
+  on all three clauses; the ≥ 25% clause is the falsifiable one.
+- **H-C4 (Wilson's own template as a tempered host).** The huygens val
+  ⟨31,49,72,87,107⟩ (D'Alessandro's, BRIDGE-000) at N = 31: contained (span
+  30, anchor interval of width 2), **injective on the 20 eikosany tones**
+  (its 7 BRIDGE-000 collisions all involve 4–5-factor products or
+  pigtails, none in the eikosany), 2-step strictly-proper host window
+  (31-note meantone MOS), but identity P ≤ 15 at 2¢ under every tuning and
+  full recovery ≥ 11¢ — dominated on survival by miracle, hemififths, rodan,
+  myna, valentine. Reading if kept: Wilson's template optimizes addressing
+  under regime (iii), where tempered survival is not the objective; as a
+  tempered host it is far from the front, which is the D'Alessandro
+  "two corners, nothing between" picture again.
+- **H-C5 (modulus 22, Wilson 1968).** Contained rows exist at N = 22 (x =
+  1 hosts with span ≤ 22: porcupine 19, superpyth 21, plus unnamed), but
+  every one of them has identity P ≤ 15 at 2¢ in-budget and none reaches
+  full recovery below ε = 15¢ in-budget (porcupine prime 9.1¢ → P = 0;
+  its tone-set P = 15 sits at 28¢, over budget). Predicted KEPT: at
+  modulus 22 the eikosany is addressable but not a tempered bridge;
+  Wilson's "melodically compatible" was an addressing claim.
+- **H-C6 (hexany navigation inside the best host).** On the contained row
+  with the smallest full-recovery ε (hemififths-41 or rodan-41, 6¢): of
+  the 30 embedded hexanies, between **8 and 20** survive fully at 2¢, and
+  all 30 at 6¢ (every hexany triad is an eikosany triad under the anchored
+  convention, so hexany full survival is implied by eikosany full
+  recovery — asserted in code). On hemififths-41 under `interval`: ≥ 12 of
+  30 at 2¢.
+- **P-COMMA-6 (which kernels own the front).** The in-budget `survival`
+  front is owned by **225/224-free** kernels at the survival end
+  (hemififths = 2401/2400 ∩ 5120/5103 ∩ 441/440; rodan = 245/243 ∩
+  1029/1024 ∩ 385/384), unlike EG4 where 225/224 owned every front row —
+  with miracle out of range, 225/224's best contained carrier is magic-38/41
+  (identity 29 at 9¢) or orwell-31 (32 at 11¢), both dominated on survival;
+  385/384 or 441/440 (the 11-limit "small" commas) appears in the kernel of
+  every front row. Falsifier: a front row whose kernel
+  contains neither 385/384 nor 441/440.
+- **P-KILL-6:** the run reproduces the probe's kill table exactly (350
+  kept of 2,187; patent kept at every N except 20, 23, 25; kept count
+  rising with N from 2 at N = 20 to 28 at N = 46); rejections are
+  overwhelmingly off-patent (≤ 24 of the 350 kept are patent). Reported as
+  the kept table by N and by offset pattern.
+
+**Determinism and tests:** `tests/test_bridge002.py` green BEFORE the first
+run: 5-dim nullspace/HNF reproduce bridge001's on 7-limit input (padded);
+the 20-tone eikosany and its 114 identity triads; join-of-vals gives the
+miracle mapping from ⟨31,…⟩ & ⟨41,…⟩ and orwell from ⟨22,…⟩ & ⟨31,…⟩;
+chain-span pins (miracle 43, orwell 31, huygens 30); prime-minimax pins
+(miracle 11-limit secor 116.59¢, error 2.45¢); the bisection minimax
+solver equals the exact crossing solver; identity pins (miracle prime
+(29,29)@2¢, recovery 4¢; hemififths interval (44,44)@2¢, recovery 6¢);
+survival grid ≥ each analytic tuning; huygens-31 monotone, injective,
+contained with two anchors; a tied val is a collision and a root at degree
+1 is not a violation; melodic receipt of a known MOS window; a small
+sweep dedupes by (M, v). 33 tests, green 2026-10-09 before the run. Freeze checks A run before and after; frozen files
+untouched.
