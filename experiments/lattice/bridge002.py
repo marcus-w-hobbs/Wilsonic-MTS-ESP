@@ -955,7 +955,7 @@ def summarize(rows: list, meta: dict) -> dict:
 
     # H-C1
     passers = [(_brief(r, t) | {"tuning": t}) for r in contained for t in TUNINGS
-               if r["tunings"].get(t) and r["tunings"][t]["h_c1_pass"]]
+               if r["tunings"].get(t) and r["tunings"][t].get("h_c1_pass")]
     h_c1 = {
         "passers": passers,
         "verdict": "REFUTED (bridge exists)" if passers
@@ -1153,8 +1153,37 @@ def receipt_row(row: dict) -> dict:
         "chain_span", "notes_per_period_class", "in_budget", "tunings")}
 
 
+def load_receipts() -> tuple[list, dict]:
+    """Rows kept in memory by main() (full + compact contained/in-budget),
+    reloaded from the two receipt files, plus meta from the summary."""
+    rows = []
+    with RESULTS.open() as fh:
+        rows.extend(json.loads(line) for line in fh)
+    with gzip.open(SIDECAR, "rt", encoding="utf-8") as fh:
+        rows.extend(json.loads(line) for line in fh)
+    meta = json.loads(SUMMARY.read_text())["enumeration"]
+    meta = {k: v for k, v in meta.items() if k not in (
+        "contained_rows", "contained_mappings", "contained_in_budget_rows",
+        "full_rows", "named_rows", "uncontained_in_budget_rows",
+        "uncontained_over_budget_rows", "contained_over_budget_rows")}
+    return rows, meta
+
+
+def resummarize() -> None:
+    rows, meta = load_receipts()
+    old = json.loads(SUMMARY.read_text())
+    summary = summarize(rows, meta)
+    summary["receipts"] = old.get("receipts") | {"resummarized": True} \
+        if old.get("receipts") else {"resummarized": True}
+    SUMMARY.write_text(json.dumps(summary, indent=1))
+    print_summary(summary)
+
+
 def main() -> None:
     import time
+    if "--resummarize" in sys.argv:
+        resummarize()
+        return
     t0 = time.time()
 
     def progress(n, v, nrows):
@@ -1189,6 +1218,11 @@ def main() -> None:
                 counted_by_n[row["N"]] += 1
     meta["counted_only_by_N"] = {str(k): v for k, v in sorted(counted_by_n.items())}
     meta["uncontained_over_budget_counted_only"] = n_counted
+    # meta first, so `--resummarize` can rebuild the summary from the
+    # receipts if the summary layer ever fails after a complete sweep
+    SUMMARY.write_text(json.dumps({"experiment": "BRIDGE-002",
+                                   "status": "sweep complete, summary pending",
+                                   "enumeration": meta}, indent=1))
     summary = summarize(kept, meta)
     summary["receipts"] = {
         "bridge002_jsonl_rows_full": n_full,
@@ -1198,12 +1232,19 @@ def main() -> None:
         "sha256_sidecar_gz": hashlib.sha256(SIDECAR.read_bytes()).hexdigest(),
         "runtime_seconds": round(time.time() - t0, 1)}
     SUMMARY.write_text(json.dumps(summary, indent=1))
+    print_summary(summary)
+
+
+def print_summary(summary: dict) -> None:
     e = summary["enumeration"]
+    rc = summary.get("receipts", {})
     print(f"vals {e['vals_total']} monotone {e['vals_monotone']} | rows "
           f"{e['distinct_rows']} mappings {e['distinct_mappings']} | contained "
           f"{e['contained_rows']} (in-budget {e['contained_in_budget_rows']}) | "
-          f"full {n_full} sidecar {n_compact} counted {n_counted} | "
-          f"{summary['receipts']['runtime_seconds']}s")
+          f"full {rc.get('bridge002_jsonl_rows_full')} sidecar "
+          f"{rc.get('bridge002_sidecar_rows_compact')} counted "
+          f"{rc.get('rows_counted_only_over_budget')} | "
+          f"{rc.get('runtime_seconds')}s")
     print("H-C1:", summary["h_c1"]["verdict"],
           summary["h_c1"]["best_contained_identity_P_at_eps2"],
           summary["h_c1"]["min_contained_full_recovery_eps"])

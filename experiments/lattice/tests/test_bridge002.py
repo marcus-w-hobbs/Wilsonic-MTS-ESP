@@ -305,6 +305,10 @@ class TestRows(unittest.TestCase):
         self.assertEqual(meta["distinct_rows"], len(rows))
         self.assertGreater(meta["vals_monotone"], 0)
         self.assertTrue(any(r["name"] == "huygens" for r in rows))
+        # the summary layer must accept compact rows (no h_c1_pass etc.)
+        summary = b2.summarize(rows, meta)
+        self.assertIn("h_c1", summary)
+        self.assertEqual(summary["enumeration"]["distinct_rows"], len(rows))
 
 
 class TestHostWindow(unittest.TestCase):
