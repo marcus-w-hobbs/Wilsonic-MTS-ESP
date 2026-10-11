@@ -3931,3 +3931,83 @@ n = 40 sound like anything, or like a scale drifting?
 test_meru002), freeze checks A OK on both pins (scorer 1a840af9…b592,
 melodic a16f162b…7535) before and after; both receipts and all six .scl
 bit-identical across two runs.
+
+## 2026-10-10 — CPSFIT-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program B, the objective):** CPSFIT-001's post-hoc lens 1 found
+that triad survival is not monotone in tone error (N = 11 keeps 8/12 hexany
+triads at 2¢ with tone errors up to 18.85¢, because a prime mistuned in all
+three tones cancels in the mean condition) and asked for the fit to
+minimize triad deviation directly. This experiment does that and asks what
+changes: the N at which every lattice triad survives at the LOCK tier, the
+generators and mappings the new objective picks, and whether the worst
+triad is even the right thing to minimize.
+
+**Construction.** Same lattices as CPSFIT-001 (hexany CPS(4,2){1,3,5,7},
+the EG4 tesseract's 8 tones, Ptolemy's just major) and the same chain
+model: N notes of one generator g ∈ (0, 600¢], window of consecutive k
+containing 1/1, each lattice tone assigned to its nearest degree in the
+window. New objective: for a fixed assignment, the deviation of each exact
+lattice triad re-voiced in the chain (the mirror's `triad_deviations`:
+the middle tone against the arithmetic or harmonic mean of the outer two,
+in cents) and the objective is the LARGEST such deviation, subject to the
+largest tone error ≤ 20¢ (so every tone still sits on a chain degree at
+the ET7 tier; without a cap the objective is free to abandon tones). The
+set of candidate assignments is enumerated on a 0.5¢ grid of g (an
+assignment valid within 20¢ occupies a g-interval of width ≥ 40/(N−1)¢ ≥
+0.85¢, so the grid misses none); for each assignment g is refined by
+golden-section search on its interval; ties in the objective break toward
+the smaller tone error. Per fit, as CPSFIT-001: homomorphism and kernel,
+MOS flag, frozen tempered triads of the chain at 2¢, frozen melodic, the
+lattice IMAGE under the frozen tempered scorer at 2¢ (survival, the
+referee), the mirror's deviations, nearest two-term recurrences. N ∈ 5..48.
+No ET rows (ET has no g to move).
+
+**Predictions (independent scratch sweep 2026-10-10, 0.5¢ grid + golden
+refinement; the frozen scorer referees survival).**
+- **P-T1 (the triad staircase).** Hexany dev*(N), g*(N): N ≤ 10 infeasible
+  under the 20¢ cap; 11: 17.92 @ 249.55; 12: 17.03 @ 318.93; 13–14: 7.95 @
+  490.09; 15: 5.14 @ 503.19; 16–21: 2.43 @ 116.59; **22–30: 1.156 @ 193.91**;
+  31–47: 0.305 @ 77.195; 48: 0.295 @ 582.45. Ptolemy: 7–11: 10.13 @ 506.25;
+  12–35: 0.257 @ 498.25; 36: 0.112 @ 565.99. EG4: ≤ 11 infeasible; 12: 22.97
+  @ 249.74; 13–14: 8.60 @ 490.36; 15: 7.95 @ 163.37; 16–17: 3.91 @ 116.34;
+  18–22: 3.69 @ 77.91; 23: 1.595 @ 193.31; 24–30: 1.349 @ 193.88; 31–48:
+  0.331 @ 77.191. Tolerances: 0.05¢ on dev*, 0.1¢ on g* (the runner refines
+  the same assignment).
+- **P-T2 (full survival arrives earlier).** Frozen image P + S at 2¢ reaches
+  12/12 for the hexany first at **N = 22** (CPSFIT-001: N = 31): the
+  generator moves from 193.787 to 193.908¢ and the largest tone error rises
+  from 1.367 to 2.22¢ — one tone leaves the LOCK tier so that all twelve
+  triads enter it. EG4 reaches 24/24 first at N = 23 (193.31¢, mapping
+  (−15, 2, 5), tone error 3.88¢; CPSFIT-001: 20/24 at N = 24, 24/24 at 31).
+  Ptolemy 23/23 at N = 12 as before. Survival under the new objective is
+  ≥ survival under tone-minimax at every N ≥ 15 on all three lattices.
+- **P-T3 (the mappings).** Hexany optima are homomorphic at every feasible
+  N except 48: 11 (−2, −8, −1); 12 (6, 5, 3); 13–14 (−1, −9, 2), a mapping
+  the tone staircase never visits; 15 (−1, −4, −10); 16–21 (6, −7, −2);
+  22–30 (16, 2, 5) (at N = 30 a non-homomorphic assignment ties at 1.156¢
+  and the tone-error tie-break keeps the val); 31–47 (−22, 5, −3); at N = 48
+  a non-homomorphic assignment at 582.45¢ beats the val by 0.010¢ and is
+  reported as such.
+- **P-T4 (the worst triad is not the count).** At N = 11 the triad-minimax
+  optimum (249.55¢) keeps 4/12 hexany triads by the mirror where the
+  tone-minimax optimum (249.36¢) keeps 6/12 by the mirror and 8/12 by the
+  frozen image scorer (CPSFIT-001; the frozen count also admits triads the
+  tempering creates). Registered on the referee: frozen image survival at
+  the triad-minimax N = 11 optimum is LESS than 8, and at Ptolemy N = 7 the
+  frozen survival at 506.25¢ is less than at Erv's 502.35¢ (mirror 0/23
+  against 5/23). Minimizing the largest deviation can lower the number of
+  surviving triads; a count objective is CPSFIT-003.
+- **P-T5 (the law survives the move).** The N = 15 hexany optimum moves from
+  502.86 (0.14¢ from Erv's 0.418935 recurrence) to 503.19¢ (0.46¢): the
+  hexany's own triads pull the generator away from the recurrence's. The
+  chain still sits within 2¢ of the power-of-two in-octave recurrence, so
+  by the MERU-001 law frozen P@2¢ of the N = 15 chain ≥ 11.
+
+**Deliverables:** `cpsfit002.py`; `results/cpsfit002.jsonl` (one row per
+lattice × feasible N) + `results/cpsfit002_summary.json`;
+`results/scl/cpsfit002/` — the hexany N = 22 chain at 193.908¢ (all twelve
+triads within 2¢) beside CPSFIT-001's 193.787¢, offered for listening
+(standing gate). Tests `tests/test_cpsfit002.py` green before the first
+run. Stdlib only, python3.12, deterministic, no wall-clock fields; two
+runs bit-identical.
