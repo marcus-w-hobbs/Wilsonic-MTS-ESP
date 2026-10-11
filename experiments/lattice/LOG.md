@@ -4084,3 +4084,168 @@ CPSFIT-001's 193.787¢ chain — gate G-031.
 test_cpsfit002), freeze checks A OK on both pins (scorer 1a840af9…b592,
 melodic a16f162b…7535); both receipts and the .scl bit-identical across
 two runs.
+
+## 2026-10-11 — CPSFIT-003 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program B, the third objective).** CPSFIT-002 showed that the
+worst triad and the number of surviving triads disagree: at hexany N = 18
+to 21 the miracle chain has the smaller worst triad and the orwell chain
+keeps more triads. This experiment makes the count the objective. For each
+N it finds the generator and murchana that keep the MOST exact lattice
+triads within 2 cents, with the frozen scorer as referee. It asks three
+things. Does the count objective choose different generators from the
+tone-minimax (CPSFIT-001) and the worst-triad-minimax (CPSFIT-002) at
+N = 11 to 22, on the hexany, EG4 and the dekanies? What does the count buy
+at the miracle/orwell fork? And does the self-inverse CPS theorem hold on
+the dekany pair the way the playground page states it?
+
+**Lattices.** Five, all 7-limit (9 = 3², so the mapping machinery of
+CPSFIT-001 applies unchanged):
+1. hexany CPS(4,2){1,3,5,7}: 6 tones, 12 exact triads (6 P + 6 S).
+2. EG4 tesseract, 8 tones: 24 exact triads (12 + 12).
+3. dekany CPS(5,2){1,3,5,7,9}: 10 tones, 41 exact triads (25 P + 16 S).
+4. the exact reflection 1/CPS(5,2) (the control for the inversion theorem):
+   10 tones, 41 exact triads (16 P + 25 S).
+5. dekany CPS(5,3){1,3,5,7,9}, which equals 945/512 times lattice 4:
+   10 tones, 41 exact triads (16 P + 25 S).
+The dekany with 11 is out of scope here because the mapping and kernel
+code is 7-limit.
+
+**Chain model (as CPSFIT-002).** N notes of one generator g in (0, 600]
+cents, window of consecutive degrees that contains degree 0, every lattice
+tone within 20 cents of its assigned degree. Candidate assignments are the
+nearest-degree assignments found on the 0.5 cent grid (CPSFIT-002's
+enumeration). Each candidate is then explored over its FULL tone-cap basin,
+the intersection of the per-tone intervals of half-width 20/|k| cents, and
+not only within 0.5 cents of the grid point. So a candidate can be
+evaluated at a g where it is no longer the nearest-degree assignment. The
+image is still a valid image: every tone sits within 20 cents of its
+degree.
+
+**Survival predicate (shared with cpsfit001's mirror and with the frozen
+guard).** An exact triad, voiced with each member at its fitted degree in
+the octave nearest the exact pitch, survives at ε iff |dev| < ε and the
+AM–HM separation ≥ ε. Here ε = 2 cents (LOCK).
+
+**Objective and search.** For a fixed assignment the voiced members are
+linear in g, so each triad's survival set in g is a union of intervals. The
+sweep samples the basin at steps of at most 0.1 cents, bisects every
+boundary 40 times, and also bisects zero crossings of the signed deviation
+between two dead samples (a window narrower than the sample step). The
+count as a function of g is piecewise constant. Segments narrower than
+0.01 cents are discarded: a registered count must survive a change of g by
+±0.005 cents. The objective is the largest count over all candidates and
+segments. The representative inside the best segment is the g that
+maximizes the smallest margin ε − |dev| over the surviving triads. When
+every triad survives this is CPSFIT-002's minimax. Ties break toward the
+smaller tone error, then the smaller g (keys rounded to 10⁻⁶). The murchana
+is reported as the full range of window starts that contain the assignment
+and degree 0, not only the smallest.
+
+**Referee.** The frozen triads v1.1.0 `score_tempered` of the IMAGE (the
+fitted pitch classes) at 2 cents, P + S. The objective counts exact lattice
+triads only. The frozen count can be larger, because the tempering can
+create triads among the image pitch classes that the exact lattice does
+not have. Both counts are reported on every row. Per fit, as CPSFIT-001:
+homomorphism (extended by a transposed-val test, k = j + Σ eₚkₚ for one
+constant j), kernel, MOS flag, frozen chain scores at 2 cents, frozen
+melodic, image survival at 1, 2, 3 and 5 cents, the mirror's deviations,
+nearest two-term recurrences. Comparison columns: the tone-minimax fit
+(cpsfit001.fit) and the triad-minimax fit (cpsfit002.fit_triads) are
+recomputed in the runner for all five lattices at the same N. For the
+hexany and EG4 the recomputed values must match the CPSFIT-001 and
+CPSFIT-002 receipts. N runs from 11 to 36. Infeasible N (no assignment
+under the cap) are reported as such.
+
+**Predictions (independent scratch sweep 2026-10-11, same survival
+predicate, same tie-break. The frozen scorer referees the counts).**
+Tolerances: counts exact, g within 0.02 cents, tone error and deviation
+within 0.05 cents.
+
+- **P-C1 (the count staircases).** Rows give N: count / exact @ g
+  (mapping), then the tone error of the representative.
+  Hexany: 11: 6/12 @ 249.211 (−2, −8, −1), 20.00 (the representative sits
+  on the tone cap). 12–15: 8/12 @ 317.175 (6, 5, 3), 17.74. 16–17: 10/12 @
+  116.676 (6, −7, −2), 5.22. 18–21: 10/12 @ 77.818 (9, 5, −3), 3.87. 22–30:
+  12/12 @ 193.908 (16, 2, 5), 2.22. 31–36: 12/12 @ 77.195 (−22, 5, −3),
+  0.75.
+  EG4: 11 infeasible. 12–14: 10/24 @ 249.211 (−2, −8, −1), 20.00. 15: 16/24
+  @ 317.175 (6, 5, 3), 17.74. 16–17: 18/24 @ 116.676 (6, −7, −2), 7.12.
+  18–22: 20/24 @ 77.791 (9, 5, −3), 4.03. 23: 24/24 @ 193.309 (−15, 2, 5),
+  3.87. 24–30: 24/24 @ 193.883 (16, 2, 5), 2.21. 31–36: 24/24 @ 77.191
+  (−22, 5, −3), 0.92.
+  Dekany CPS(5,2): 11–14 infeasible. 15–17: 12/41 @ 503.939 (−1, −4, −10),
+  20.00. 18: 14/41 @ 497.514 (no val), 20.00. 19–24: 25/41 @ 317.049
+  (6, 5, 3), 18.75. 25: 26/41 @ 234.429 (3, 17, −1), 4.28. 26–32: 32/41 @
+  498.066 (−1, 8, 14), 4.10. 33–34: 34/41 @ 351.484 (no val), 9.59. 35–36:
+  37/41 @ 316.825 (6, 5, 22), 4.21.
+  Dekany CPS(5,3): 11–16 infeasible. 17–21: 13/41 @ 497.381 (no val),
+  20.00. 22: 17/41 @ 233.453 (3, 12, −1), 13.53. 23: 22/41 @ 350.827 (no
+  val), 20.00. 24–25: 25/41 @ 317.049 (6, 5, 3), 18.75. 26–32: 32/41 @
+  498.066 (−1, 8, 14), 4.08. 33–34: 34/41 @ 351.484 (no val), 9.59. 35–36:
+  35/41 @ 497.399 (no val), 6.47.
+  The "no val" rows are registered as non-homomorphic under the transposed
+  test too (shift j = 0 everywhere a val exists).
+- **P-C2 (the count picks differently).** For N in 11 to 22, the count
+  optimum's generator lies within 0.05 cents of the tone-minimax optimum at
+  NO N on any of the four distinct lattices. It lies within 0.05 cents of
+  the triad-minimax optimum only at hexany N = 22 (193.908) and dekany
+  CPS(5,2) N = 15–17 (503.939). Where the vals agree the generators still
+  differ: hexany N = 16–17 keeps the miracle val (6, −7, −2) and moves g
+  from 116.502/116.588 to 116.676, which raises the tone error from 4.77 to
+  5.22 cents and the count from 6 to 10. Hexany N = 22–30 agrees with
+  CPSFIT-002 (193.908, 12/12) and N = 31–36 agrees with both (77.195).
+- **P-C3 (referee dominance, with one registered exception).** Frozen
+  image survival at the count optimum is ≥ frozen survival at the
+  tone-minimax optimum at every feasible N on all five lattices, and ≥
+  frozen survival at the triad-minimax optimum at every feasible N except
+  dekany CPS(5,2) N = 18. There the triad-minimax chain (503.939) scores
+  15 by the frozen referee against 14 for the count optimum (497.514),
+  while the exact counts are 12 against 14: three created triads tip the
+  referee. Strict gains over BOTH prior objectives: hexany N = 12–21 (8 vs
+  2–4 at 12–15, 10 vs 6 at 16–17, 10 vs 8/6 at 18–21), EG4 N = 12–22 (18 vs
+  12 at 16–17, 20 vs 16/14 at 18–22), dekany CPS(5,2) N = 19–36 (32 vs 27
+  at 26–32, 37 vs 33 at 35–36), dekany CPS(5,3) N = 17–36.
+- **P-C4 (full survival).** The first N with every exact triad surviving
+  is 22 for the hexany, 23 for EG4, and none up to 36 for either dekany
+  (best 37/41 for CPS(5,2) at N = 35, 35/41 for CPS(5,3) at N = 35). These
+  equal CPSFIT-002's arrival N where it was reached, as the predicate
+  implies (a full count is a worst deviation under 2 cents with every
+  separation at least 2 cents).
+- **P-C5 (the inversion theorem, exact half and transposed half).**
+  (a) The exact reflection 1/CPS(5,2) reproduces CPS(5,2)'s staircase at
+  every N: same count, same g to 0.001 cents, same worst deviation and
+  margin, with P and S swapped exactly in the frozen image (P₅₂ = S_refl,
+  S₅₂ = P_refl at every N), and the mirrored window −(s + N − 1) is a valid
+  window of the reflected fit. (b) CPS(5,3) does NOT reproduce it. Its
+  staircase differs from CPS(5,2)'s at N = 17–25 and 35–36 and agrees at
+  N = 26–34. The page's background fact "one fit of a dekany solves both
+  dekanies" is therefore refuted as stated, because CPS(5,3) is the
+  reflection TRANSPOSED by 945/512 (1061.49 cents), and a transposition by
+  an interval that is not a chain degree changes a fit whose chain is
+  pinned to contain the lattice's 1/1. The page will be corrected to the
+  reflection statement when the receipt lands (the receipt wins).
+  Measured in the scratch for the tone-minimax fit too: CPS(5,3) has the
+  same generator and error as CPS(5,2) only at N = 17–19 and differs at
+  N = 11–16 and 20–24.
+- **P-C6 (the fork dissolves).** At hexany N = 18–21 neither miracle
+  (6/12) nor orwell (8/12) is the count optimum: the (9, 5, −3) chain at
+  77.818 cents keeps 10/12 with tone error 3.87 cents. At N = 16–17 the
+  miracle val itself keeps 10/12 once g moves to 116.676. CPSFIT-002's
+  miracle-against-orwell disagreement was a property of the two objectives,
+  not of the two vals.
+- **P-C7 (created triads, registered as a measurement).** The frozen
+  referee exceeds the exact count at hexany N = 11 (8 vs 6), EG4 N = 12–14
+  (12 vs 10) and 15 (18 vs 16), CPS(5,2) N = 15–17 (15 vs 12) and 19–24
+  (27 vs 25), CPS(5,3) N = 17–21 (17 vs 13), 22 (19 vs 17), 23 (23 vs 22)
+  and 24–25 (27 vs 25). It equals the exact count on every other row.
+
+**Deliverables.** The runner `cpsfit003.py`. The receipts
+`results/cpsfit003.jsonl` (one row per lattice × feasible N) and
+`results/cpsfit003_summary.json`. Three Scala files under
+`results/scl/cpsfit003/`, offered for listening as a standing gate: the
+hexany N = 16 chain at 116.676 (miracle, 10 of 12), the hexany N = 18 chain
+at 77.818 (10 of 12), and the dekany CPS(5,2) N = 26 chain at 498.066 (32
+of 41). Tests `tests/test_cpsfit003.py` are green before the first run.
+Stdlib only, python3.12, deterministic, no wall-clock fields. Two runs
+must be bit-identical.
