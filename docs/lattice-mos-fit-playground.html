@@ -235,8 +235,17 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="note">Move the slider to rotate the mode. Each step drops one tone from one end of the chain and adds one at the other end. The step pattern rotates with it, and the lattice errors show which modes hold the lattice.</p>
       <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
       <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
-      <h3>Free search: best generator for each N</h3>
       <p class="note">Every N is listed with the generator that makes the largest lattice error as small as possible at that N. The max error column is that smallest possible error, so it is often above the tolerance. A row above the tolerance says that no chain of N notes holds the lattice any closer. The page highlights rows within the tolerance and lists them first.</p>
+      <h3>Family search: golden, silver, bronze or equal-tempered generators</h3>
+      <p class="note">A golden generator is one whose scale-tree path alternates forever from some point. Its levels then grow like Fibonacci numbers and the step ratio L : s tends to φ. Erv listed 64 of them in 1993. The formula is g = (a + φc) / (b + φd) for the two path fractions a/b and c/d where the alternation starts. Silver uses 1 + √2 in place of φ, so the path turns every two steps: Erv's "2-zig/2-zag". Bronze uses (3 + √13) / 2. Equal temperaments are the paths that stop. This search tries every such generator up to a seed denominator bound and reports the first level that holds the lattice.</p>
+      <div class="row" style="align-items:end">
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Family</span><select id="famSel"><option value="1">Golden (φ)</option><option value="2">Silver (1 + √2)</option><option value="3">Bronze ((3 + √13)/2)</option><option value="et">Equal temperaments</option></select></label>
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
+        <button id="famRun" class="primary" style="flex:0 0 auto">Run the family search</button>
+      </div>
+      <p class="note" id="famStatus">Press Run. Golden with denominators up to 36 tries about 800 generators.</p>
+      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
+      <h3>Free search: best generator for each N</h3>
       <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
@@ -252,6 +261,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="fact"><div><p>Inverting the generator inverts the lattice. The chain of 1 − g is the chain of g reflected about 1/1. So a lattice fits the complement generator exactly when its reflection fits g. For a CPS built from factors F, the reflection of CPS(n, k) is CPS(n, n − k) transposed by the product of F. So the hexany, the eikosany and CPS(8, 4) are their own reflections, and the tetrad, the dekany and the pentadekany swap with their partners. One fit of a dekany solves both dekanies.</p><div class="src">Verified 2026-10-11 with exact rationals. The reflected hexany fits the same chains at the mirrored murchana.</div></div></div>
     <div class="fact"><div><p>The free search gives a staircase of smallest errors. For the hexany it is 18.85 cents at N = 11 and 13.73 at N = 12 to 14. It is 4.82 at N = 15, 4.77 at 16 to 17 and 3.27 at 18. It is 2.57 at N = 19 to 21, 1.37 at 22 to 30 and 0.74 at 31. Every optimum from N = 11 up is a val: an integer mapping of the primes 3, 5, 7 to generator counts. The N = 15 fit at 502.86 cents is a septimal meantone and is Erv's 0.418935 generator to 0.14 cents. The N = 22 fit at 193.79 cents has kernel 2401/2400 and 3136/3125. No equal temperament below 73 notes holds the hexany within 2 cents.</p><div class="src">CPSFIT-001, experiments/lattice, 2026-10-10.</div></div></div>
     <div class="fact"><div><p>Fitting tones is not fitting triads. A prime mistuned in all three tones of a triad cancels in the mean condition. So a chain with large tone errors can keep triads. A chain with small tone errors can lose them. At N = 22 the tone fit keeps 10 of the hexany's 12 triads at 2 cents. Minimizing the worst triad instead moves the generator to 193.91 cents, keeps all 12, and lets one tone out to 2.22 cents. The worst triad is still not the count: at N = 18 to 21 the chain with the smaller worst triad keeps fewer triads. This page reports tones and triads side by side.</p><div class="src">CPSFIT-001 and CPSFIT-002, experiments/lattice, 2026-10-10.</div></div></div>
+    <div class="fact"><div><p>A golden generator is a noble number: its scale-tree path alternates forever from some point. The formula is g = (a + φc) / (b + φd) for the two path fractions where the alternation starts. The levels then grow like Fibonacci numbers. The step ratio L : s tends to φ at every level, so the MOS looks the same at every depth. Erv listed 64 of them in 1993, with the path of each. This page regenerates all 64 from the formula. Silver generators use 1 + √2 and turn every two steps, which is Erv's 2-zig/2-zag page, and √2 − 1 is the pure silver number. Equal temperaments are the paths that stop.</p><div class="src">Erv Wilson, "64 Golden Generators for Two-Interval Patterns (MOS)", 1993, with his calculator program. Verified 2026-10-11: 64 of 64 reproduced.</div></div></div>
+    <div class="fact"><div><p>Erv's recurrence generators, which he found by optimizing proportional and subcontrary triads, sit next to golden generators. 0.418935 is 0.09 cents from the golden generator seeded by 18/43 and 13/31. 0.415227 is 0.07 cents from one. Meta-meantone is 0.11 cents from one. 0.328173 is 0.17 cents from one. 0.238186 is 0.61 cents from one. The harmonic search and the melodic search nearly agree on where the good generators are.</p><div class="src">Measured 2026-10-11 against all noble numbers with seed denominators up to 60.</div></div></div>
     <div class="fact"><div><p>The hexany needs the primes 3, 5 and 7, which is rank 4 with the octave. One generator and the octave is rank 2. So the hexany fits a rank-2 chain only with error, or only at a large N where the chain's commas vanish. A fit with two generators is rank 3 and is the natural next search.</p><div class="src">Open question. See the options below.</div></div></div>
   </div>
 </section>
@@ -264,6 +275,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <li><b>Rank 3.</b> Search two generators and a note count, and keep the lattice within tolerance. The hexany, the dekany and the eikosany need this below N = 22. This is the D'Alessandro method applied to a general seed.</li>
     <li><b>Fit the subsets.</b> Fit each hexany inside the eikosany separately, then ask which chain holds the most of the fifteen at once. The subset doctrine says the music lives in the subsets.</li>
     <li><b>Quotient the ties.</b> When an N-chain of g holds the lattice, the 2N-chain of g/2 holds it too with the same errors. Report one representative per family so the staircase reads cleanly.</li>
+    <li><b>Golden and silver fits (new).</b> For each lattice, find the golden generator with the smallest level that holds it. Compare that level with the free search. If a golden generator holds the lattice at a level close to the free optimum, the fit is both harmonic and self-similar. That is the whole point.</li>
     <li><b>Hear the fits.</b> Export the selected chain as Scala text, load it in the plugin, and listen to the lattice tones inside the chain. Gates G-029 and G-031 wait on this for the hexany at N = 15 and N = 22.</li>
     <li><b>Murchana as a performance control.</b> A chain that holds the lattice at one murchana holds a transposed copy of it at the others. Map the murchana to a controller and play the lattice through its modes.</li>
   </ol>
@@ -476,6 +488,29 @@ function chainPitchClasses(gCents, N, toneCents, capErr) {
   return { degrees: degrees.sort((a, b) => a - b), map: bestMap, maxErr: bestMax, s: bestS };
 }
 
+const ERV64 = [0.116035754,0.131267463,0.151102276,0.156691527,0.174715006,0.177998211,0.185805707,0.189523403,0.209053800,0.211702633,0.216542364,0.218332091,0.226253492,0.228208068,0.23384192,0.237161141,0.261642996,0.264308496,0.268556819,0.269955516,0.275266748,0.276393202,0.279315664,0.280842977,0.290757565,0.292412942,0.295685999,0.296986167,0.303426964,0.305213671,0.310892842,0.314663487,0.351012952,0.354358386,0.359265392,0.360777441,0.366106828,0.367160193,0.369779544,0.371086935,0.378682506,0.379818019,0.381966011,0.382785383,0.386586030,0.387570050,0.390516909,0.392334277,0.407971249,0.409955117,0.413253661,0.414378320,0.418835878,0.419821271,0.422447117,0.423860750,0.433799266,0.435599642,0.439291419,0.440808884,0.448791122,0.451153118,0.459137199,0.464877942];
+function metallicMean(m) { return (m + Math.sqrt(m * m + 4)) / 2; }
+function nobleCandidates(m, qMax) {
+  // Farey neighbours a/b < c/d with denominators <= qMax, both orders:
+  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path
+  // alternates m-to-a-side forever from that pair (m = 1 golden, 2 silver, 3 bronze).
+  const mu = metallicMean(m);
+  const fr = [];
+  for (let q = 1; q <= qMax; q++) for (let p = 0; p <= q; p++) if (gcd(p, q) === 1) fr.push([p, q]);
+  fr.sort((x, y) => x[0] * y[1] - y[0] * x[1]);
+  const out = new Map();
+  for (let i = 0; i + 1 < fr.length; i++) {
+    const [a, b] = fr[i], [c, d] = fr[i + 1];
+    if (b * c - a * d !== 1) continue;
+    for (const [x, y] of [[fr[i], fr[i + 1]], [fr[i + 1], fr[i]]]) {
+      const g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
+      if (g <= 0 || g >= 0.5 + 1e-12) continue;
+      const key = g.toFixed(9);
+      if (!out.has(key)) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+    }
+  }
+  return [...out.values()].sort((p, q) => p.g - q.g);
+}
 const GEN_PRESETS = [
   { id: 'erv418935', label: '0.418935 · 502.72¢ · Erv 16 Jul 97, septimal meantone', oct: 0.418934662571, src: 'G = ((G³+4)/2)^(1/4), P.4a. Four fourths meet 5/4 as an arithmetic mean. CPSFIT-001 found this generator from the hexany alone at N = 15.' },
   { id: 'erv238186', label: '0.238186 · 285.82¢ · Erv 27 Jul 97', oct: 0.238186456895, src: 'G = (4 − 2G)^(1/3), P.21a. "Like 14:17:20, 32:39:46, 9:11:13". Scale tree 1/4, 1/5, 6/25: the 25-note MOS has a 2.3-cent small step.' },
@@ -669,6 +704,53 @@ if (typeof document !== 'undefined') (function () {
     set('stTri', `${r.triP} / ${r.triS} (of ${latTriadsExact.P} / ${latTriadsExact.S})`, r.triP + r.triS === latTriadsExact.P + latTriadsExact.S && latTriadsExact.P + latTriadsExact.S > 0);
     $('sclText').textContent = sclText(r, ch);
   }
+  let famRows = [];
+  function runFamily() {
+    const fam = $('famSel').value; const qMax = +$('famQ').value;
+    $('famStatus').textContent = 'Searching…';
+    setTimeout(() => {
+      const latC = lattice.tones.map(t => t.cents);
+      famRows = [];
+      const cands = fam === 'et' ? [] : nobleCandidates(+fam, qMax);
+      if (fam === 'et') {
+        for (const e of fitET(latC, S.maxN)) {
+          const step = CENTS / e.N; const map = latC.map(t => { const k = Math.round(t / step); return { t, k, err: Math.abs(t - k * step) }; });
+          const row = rowFor('fam' + e.N, 'ET', e.N, step, null, { map, maxErr: e.maxErr, degrees: [] }, true, null);
+          famRows.push({ ...row, gOct: 1 / e.N, seeds: `${e.N}-ET`, erv64: false, firstN: row.maxErr <= S.fitTol ? e.N : null });
+        }
+      } else {
+        for (const c of cands) {
+          const gC = c.g * CENTS; const path = mosPath(c.g, S.maxN);
+          let best = null, first = null;
+          for (let li = 0; li < path.length; li++) {
+            const N = path[li].N; if (N < 2) continue;
+            const ch = chainPitchClasses(gC, N, latC, 600);
+            const row = rowFor('fam' + c.g.toFixed(6) + '_' + N, 'FAM', N, gC, ch.s, ch, true, li + 1);
+            if (row.maxErr <= S.fitTol && !first) { first = row; break; }
+            if (!best || row.maxErr < best.maxErr) best = row;
+          }
+          const row = first || best; if (!row) continue;
+          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, erv64: c.erv64, firstN: first ? first.N : null });
+        }
+      }
+      famRows.sort((p, q) => (p.firstN == null ? 1 : 0) - (q.firstN == null ? 1 : 0) || (p.firstN != null ? p.firstN - q.firstN : p.maxErr - q.maxErr) || p.maxErr - q.maxErr);
+      const hits = famRows.filter(r => r.firstN != null);
+      $('famStatus').textContent = `${cands.length || famRows.length} generators tried. ${hits.length} hold every lattice tone within ${S.fitTol} cents at some level up to ${S.maxN} notes.` + (hits.length ? ` The smallest level is ${hits[0].N} notes at ${hits[0].g.toFixed(2)} cents.` : '');
+      renderFamTable(); if (hits.length) { S.fitPick = hits[0]; renderFitPick(); renderFamTable(); updatePrompt(); }
+    }, 20);
+  }
+  function renderFamTable() {
+    const tb = $('famTable').querySelector('tbody'); tb.innerHTML = '';
+    for (const r of famRows.slice(0, 200)) {
+      const tr = document.createElement('tr'); tr.className = 'sel' + (r.firstN != null ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
+      const btn = document.createElement('button'); btn.textContent = 'Use in station 2'; btn.addEventListener('click', ev => { ev.stopPropagation(); S.gen = r.gOct; S.genPreset = 'custom'; $('genPreset').value = 'custom'; genChanged(); document.getElementById('generator').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      tr.lastElementChild.appendChild(btn);
+      tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFamTable(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    if (!famRows.length) tb.innerHTML = '<tr><td colspan="10" class="note">No rows. Press Run.</td></tr>';
+  }
   function runFit() {
     $('fitStatus').textContent = 'Searching…';
     setTimeout(() => {
@@ -708,6 +790,7 @@ if (typeof document !== 'undefined') (function () {
       const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
       p.push(`Free search, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (level ' + r.level + ')' : '')} with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
     } else p.push('Free search: it did not run.');
+    if (famRows.length) { const hits = famRows.filter(r => r.firstN != null); const fam = $('famSel').options[$('famSel').selectedIndex].text; p.push(`Family search, ${fam}, seed denominators up to ${$('famQ').value}: ${hits.length ? hits.slice(0, 5).map(r => `${r.g.toFixed(2)} cents (seeds ${r.seeds}${r.erv64 ? ', in Erv\'s 64' : ''}) holds the lattice at ${r.N} notes with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'no generator of this family holds the lattice within tolerance up to ' + S.maxN + ' notes.'}`); }
     if (S.fitPick) p.push(`Selected chain: ${S.fitPick.N} notes, generator ${S.fitPick.g.toFixed(2)} cents, largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents${S.fitPick.s == null ? '' : `, 1/1 at generator position ${-S.fitPick.s} (the murchana)`}${S.fitPick.level ? `, level ${S.fitPick.level}` : ''}, triads kept ${S.fitPick.triP} / ${S.fitPick.triS}.`);
     p.push('Task: continue the lattice MOS-fit research from this state. The objective is a scale with one melodic structure that holds the lattice. Use the frozen scorers for the harmony axis and the melody axis.');
     $('promptText').textContent = p.join('\n\n');
@@ -735,6 +818,8 @@ if (typeof document !== 'undefined') (function () {
   $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); renderFixedTable(); });
   $('showET').addEventListener('change', e => { S.showET = e.target.checked; renderFitTable(); });
   $('fitRun').addEventListener('click', runFit);
+  $('famRun').addEventListener('click', runFamily);
+  $('famQ').addEventListener('input', e => { $('famQVal').textContent = e.target.value; });
   $('fitMur').addEventListener('input', e => {
     const r = S.fitPick; if (!r || r.s == null) return;
     const s2 = -(+e.target.value); const latC = lattice.tones.map(t => t.cents);
