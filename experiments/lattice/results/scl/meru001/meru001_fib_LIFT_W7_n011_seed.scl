@@ -1,0 +1,12 @@
+! meru001_fib_LIFT_W7_n011_seed.scl
+!
+MERU-001 Fibonacci: H[n-1] + H[n-2]; hexany seeds; window of 7 at step 11 (seed); 1/1 = lowest window tone
+ 7
+!
+ 1.802430
+ 154.521212
+ 335.068373
+ 517.546385
+ 685.041205
+ 909.601288
+ 1200.000000

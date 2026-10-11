@@ -3639,3 +3639,129 @@ lattice × N, plus ET rows) + `results/cpsfit001_summary.json`;
 chains, offered for listening (standing gate). Tests
 `tests/test_cpsfit001.py` green before the first run. Stdlib only,
 python3.12, deterministic, no wall-clock fields; two runs bit-identical.
+
+## 2026-10-10 — MERU-001 results + verdicts
+
+**Run:** `meru001.py` (94 s; receipts `results/meru001.jsonl`, 8,164 rows =
+16 recurrences × 2 seedings × 2 windows × every n, + `results/meru001_summary.json`;
+two runs bit-identical, `cmp` on both files and the nine .scl). Frozen
+triads v1.1.0 and melodic v0.1.0 read-only, pins verified; lattice suite
+335/335 green before the run (22 new tests). **Mirror vs frozen exact:
+0 disagreements over 8,164 windows.**
+
+- **P-M1 — KEPT.** Under EXACT seeding every registered stationary count
+  reproduces: P(last window) = W − j for the twelve in-octave power-of-two
+  recurrences (3/8, 4/9, 3/8, 5/10, 4/9, 3/8, 4/9, 3/8, 1/6, 0/3, 0/3, 0/2 at
+  W = 7/12 in LOG order), 0/0 for Fig12#12, meta-pelog, Pell and the silver
+  control; S = G = 0 at every last window; the floor P ≥ rt(n) is never
+  violated (0 of 3,968 post-seed windows); and the seed-echo census matches
+  the mirror window for window (0.415227 14/28, 0.591780 14/23, 0.773743
+  1/2, meta-meantone 4/6, Fibonacci 1/1, meta-slendro 1/2, meta-Ptolemy 2/3,
+  meta-pelog 0/3, all others 0/0). The law is exact and the frozen scorer
+  sees it.
+- **P-M2 — KEPT.** All eight lifted recurrences: exact P = 0 after the seeds
+  leave except the mirror-listed echoes (0.238186 two windows at each W,
+  Fibonacci three at W = 12, meta-Ptolemy one/six), every n_lock as
+  registered (12/17, 18/23, 21/26, 18/23, 26/31, 36/41, 20/25, 17/22), and
+  tempered P@2¢ ≥ rt(n) at every window from n_lock on (0 violations). The
+  lift turns the generator's own triads from exact into 2¢-tempered, about
+  one window-length after the seeds exit; the exact and tempered paths
+  disagree on purpose, and both are right.
+- **P-M3 — REFUTED as registered, held on eleven of twelve.** |Δn − 2/log2
+  (G/λ₂)| ≤ 3 holds for every seeding and window of the eleven faster
+  recurrences (e.g. 0.418935: 9/13/11/13 vs 10.8; meta-Ptolemy 8/9/9/11 vs
+  10.0; Fibonacci 1/1/2/2 vs 2.9; Pell 0 vs 1.6) and fails only on fit351,
+  the slowest of the "fast" group (λ₂/G = 0.944): Δn = 20 against 24.0 at
+  W = 7, and at W = 12 the 0.5¢ crossing never arrives within 130 steps.
+  The four slow recurrences (≥ 0.988) never reach chain error 2¢, as
+  predicted. The decay law is right about the rate; the crossing step of a
+  max-over-tones descriptor jitters by a few steps when λ₂ is a complex pair,
+  and the jitter scales with the time constant. A tolerance of 3 steps was
+  too tight for a 24-step constant; the refutation stands as registered.
+- **P-M4 — KEPT.** Stationary interval retention matches all sixteen
+  registered pairs; absolute "tones on the lattice" fires at 6–23% of
+  post-seed windows at W = 7 (rotation estimate 14%) for every generator,
+  including those with zero structural retention. The playground's
+  "window tones on lattice" stat is a rotation artifact and should be
+  read as such.
+- **P-M5 — KEPT.** Every fast recurrence ends at ≤ 3 gap classes (gap ε = 2¢)
+  at both W, the last window's propriety class equals the pure chain's
+  (strictly proper for 0.418935, meta-meantone, meta-Ptolemy, fit351 at
+  W = 7; improper for the rest), and LIFT and EXACT agree on every
+  stationary value.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) the tempered
+tier counts MORE than the law's floor on converged chains — Fibonacci W = 7
+P@2¢ = 7 vs rt 5, meta-slendro 5 vs 4, fit351 6 vs 1 (the 351.3¢ chain is
+MOS-LAT-002's neutral-third hot spot) — and P = S at 2¢ on every converged
+chain (chain inversional symmetry), while the exact path has S = 0: the
+subcontrary partners of the recurrence triads exist only to within the
+transient. (2) The slow four keep exact seed-echo triads for twenty-plus
+windows (0.415227 W = 12: P = 6, 6, 7, 6 … at n = 20–23 against a floor
+of 3) — persistence of harmony is literal there. (3) G@2¢ = 9 on every
+converged W = 7 chain: consecutive chain degrees are exact geometric triads,
+never counted in any loss, as designed.
+
+**Kept.** Runner and receipts stand; nine .scl exports under
+`results/scl/meru001/` (0.418935, Fibonacci, meta-meantone; seed window,
+lock window, last window) are offered for listening — gate G-028.
+
+## 2026-10-10 — CPSFIT-001 results + verdicts
+
+**Run:** `cpsfit001.py` (23 s; `results/cpsfit001.jsonl`, 333 rows = 3
+lattices × (chain N = 5..48 feasible + ET N = 5..72), +
+`results/cpsfit001_summary.json`; two runs bit-identical). Frozen triads
+v1.1.0 (`score_tempered`, 2¢) and melodic v0.1.0 read-only; frozen
+survival vs the mirror's per-triad deviations: 0 disagreements.
+
+- **P-F1 — KEPT.** Hexany staircase reproduced at every registered N to
+  0.01¢ in both ε* and g*; minimal N: 22 at 2¢ (1.367¢ @ 193.787), 31 at
+  1¢ (0.743 @ 77.198), 15 at 5¢ (4.815 @ 502.860), 12 at 15¢; EG4 24 at 2¢;
+  Ptolemy 12 at 2¢ (0.434 @ 498.262), 7 at 10¢ (8.603 @ 502.346). The
+  playground's "no fit below N = 33" was its 0.5¢ grid missing basins of
+  width 2ε/|k| ≈ 0.1¢.
+- **P-F2 — KEPT.** Non-homomorphic hexany optima are exactly N = 7 and
+  N = 10; every mapping as registered: N = 15 (−1, −4, −10) with kernel
+  3136/3125, 225/224, 126/125, 50625/50176, 81/80 — septimal meantone, and
+  the generator is Erv's 0.418935 recurrence to −0.139¢; N = 16 (6, −7, −2)
+  kernel 2401/2400, 16875/16807, 225/224, 1029/1024 (miracle); N = 19
+  (7, −3, 8) kernel 65625/65536, 6144/6125, 225/224, 1728/1715 (orwell,
+  BRIDGE-001's mapping); N = 22 (16, 2, 5) kernel 2401/2400, 6144/6125,
+  3136/3125; N = 31 (−22, 5, −3) kernel 2401/2400, 65625/65536. Ptolemy
+  N = 7: (−1, −4), Erv's generator to +0.375¢.
+- **P-F3 — KEPT.** Hexany image survival at 2¢ (frozen P + S): N = 15 2/12
+  (full recovery at 7.250¢), 16 6/12 (2.940), 19 8/12 (3.420), 22 10/12
+  (2.080), 31 12/12 (0.321); EG4 16 4/24, 19 16/24, 24 20/24. All within-2¢
+  tones at N = 22 and two triads still lost — by 0.08¢.
+- **P-F4 — KEPT.** The N = 15 hexany chain scores P@2¢ = 12 ≥ 11, the
+  Ptolemy N = 7 chain P@2¢ = 3 ≥ 3: the MERU-001 law predicts the frozen
+  triad count of a direction-2 fit from its nearest recurrence alone.
+- **P-F5 — KEPT, and stronger than registered.** No N-EDO up to 72 contains
+  the hexany within 2¢; the best ≤ 41 is 31-EDO at 6.265¢ and the best ≤ 72
+  is 53-EDO at 4.76¢. A 22-note rank-2 chain does what no equal temperament
+  below 73 notes does.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) **triad
+survival is not monotone in N while tone error is**: N = 11 (249.355¢,
+mapping (−2, −8, −1), kernel 19683/19600, 245/243, 81/80) keeps 8/12 hexany
+triads at 2¢ with tone errors up to 18.85¢, then N = 12–15 keep only 2/12
+at 13.7–4.8¢; the mechanism is exact cancellation — in 15/16 : 5/4 : 15/8
+the mistuned 5 appears in all three tones and the deviation collapses to
+the 3/2 error (0.665¢), and 5/4 : 3/2 : 7/4 survives at 1.99¢ because the
+5 and 7 errors cancel across the mean. Program B's objective at the
+harmonic axis has to be survival, not tone error; CPSFIT-002 should
+minimize max triad deviation directly. (2) Full-chain frozen P@2¢ grows
+with N and with the generator's neighbourhood (N = 18 at 77.9¢ already 40,
+N = 31 at 77.2¢ 91), so a fit's harmonic wealth is dominated by the host
+chain's own coincidences, not by the embedded hexany. (3) The playground's
+direction-2 picks (33–38-note 115.96¢ chains, 41-note 351.4¢) do not appear
+on the exact staircase at all.
+
+**Kept.** Runner and receipts stand; `results/scl/cpsfit001/` holds the
+hexany N = 15 (Erv's generator) and N = 22 chains for listening — gate
+G-029.
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 335/335 OK (22 new:
+13 meru001 + 9 cpsfit001), freeze checks A OK on both pins (scorer
+1a840af9…b592, melodic a16f162b…7535); all four receipts and all eleven
+.scl bit-identical across two runs.
