@@ -3765,3 +3765,84 @@ G-029.
 13 meru001 + 9 cpsfit001), freeze checks A OK on both pins (scorer
 1a840af9…b592, melodic a16f162b…7535); all four receipts and all eleven
 .scl bit-identical across two runs.
+
+## 2026-10-10 — MERU-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program A, the second knob):** the playground's order lift
+multiplies the characteristic polynomial by (x^k − ρ^k) and claims "a smaller
+ρ bends the seeds faster"; the research list proposed a ρ sweep as a
+"harmony half-life" knob. MERU-001 ran ρ = 1 only. This experiment sweeps ρ
+and asks three things: does the lock step follow ρ alone, does the chain
+step follow max(ρ, |λ₂|) with a plateau below |λ₂|, and does a longer
+transient keep any of the seed harmony. It also re-registers the MERU-001
+crossover law P-M3 with a tolerance that scales with the time constant,
+since a fixed 3-step tolerance refuted it on the slowest fast recurrence.
+
+**Construction.** Three recurrences from MERU-001, chosen for their spread
+of |λ₂|/G: 0.418935 (H[n] = H[n−1] + 32·H[n−4]; G = 2.673880, |λ₂| =
+2.3523, |λ₂|/G = 0.880), Fibonacci (G = 1.618034, |λ₂| = 0.618034, 0.382),
+meta-meantone (2·H[n−3] + 2·H[n−4]; G = 1.494530, |λ₂| = 1.29529, 0.867).
+Seeds: the hexany CPS(4,2){1,3,5,7}, LIFT seeding exactly as MERU-001
+(k = 6 − j extra seeds, chain-aligned octaves), but with the lift
+coefficient c = ρ^k taken over the exact rational ladder ρ ∈ {1/4, 1/2,
+3/4, 1, 5/4, 11/8, 23/16, 3/2, 25/16, 7/4, 2, 9/4, 5/2, 21/8}, keeping only
+ρ < G (so 14 values for 0.418935, 9 for Fibonacci, 9 for meta-meantone).
+The sequence stays exact (Fractions). Windows W ∈ {7, 12}, 130 generated
+terms, n₀ = 6 + W − 1 the first post-seed window. Per window: frozen exact
+and 2¢ triads (v1.1.0), frozen melodic (v0.1.0), the mirror, the lift
+residual, chain error, interval retention at 2¢, as MERU-001. Derived per
+(recurrence, ρ, W): n_lock (first post-seed window with lift residual ≤
+2¢), n_chain(ε) for ε ∈ {2, 0.5}, Δn, mean frozen P@2¢ and mean interval
+retention over the transient windows n₀ ≤ n < n_chain(2¢), and whether any
+term went non-positive. τ_eff = 1/log2(G / max(ρ, |λ₂|)).
+
+**Predictions (independent scratch sweep 2026-10-10; the frozen scorer
+referees every triad count).**
+- **P-R1 (the lock follows ρ alone).** The lift residual decays as (ρ/G)^n,
+  so n_lock depends on ρ and not on |λ₂|. Registered n_lock, W = 7: 0.418935
+  ρ ≤ 3/2 → 12 (= n₀), 7/4 → 14, 2 → 18, 9/4 → 28, 5/2 → 72; Fibonacci
+  ρ ≤ 3/4 → 12, 1 → 14, 5/4 → 22, 3/2 → 54; meta-meantone ρ ≤ 1/2 → 12, 3/4
+  and 1 → 13, 5/4 → 23. W = 12: the same values with the plateau at 17
+  (0.418935 ρ ≤ 7/4 → 17, 2 → 18; Fibonacci ρ ≤ 1 → 17; meta-meantone ρ ≤ 1
+  → 17; the rest as at W = 7). The law: n_lock is non-decreasing in ρ, and
+  for every point with n_lock > n₀ + 2, n_lock · log2(G/ρ) ∈ [5.5, 8.5]
+  (the residual's intercept in bits; scratch 5.9–8.2). The unlisted ladder
+  points (11/8, 23/16, 25/16) are predicted by the same law, tolerance ±2
+  steps around the interpolated value.
+- **P-R2 (the chain follows max(ρ, |λ₂|); plateau below |λ₂|).** n_chain(2¢)
+  at W = 7 stays within ±4 of one value for every ρ with ρ < |λ₂|: 0.418935
+  53 for ρ ≤ 9/4, then 94 at ρ = 5/2 (ρ/G = 0.935 > 0.880); meta-meantone
+  39–46 for ρ ≤ 5/4, then 71 at 11/8 and 133 at 23/16; Fibonacci's plateau
+  is only ρ ≤ 1/2 (16, 16), then 17, 22, 31, 43, 55, 75, 135 for ρ = 3/4 …
+  25/16. Above |λ₂| n_chain(2¢) is strictly increasing in ρ. The law:
+  (n_chain(2¢) − n₀) / τ_eff ∈ [5.0, 8.5] for every (recurrence, ρ) at W = 7
+  (scratch 5.5–7.95).
+- **P-R3 (ρ does not buy harmony).** Over the transient windows at W = 7,
+  mean frozen P@2¢ is non-increasing in ρ for ρ ≥ 1 (jitter ≤ +0.5 between
+  adjacent ladder points), and the ρ with the longest transient has the
+  LOWEST mean P@2¢ of its recurrence, ≤ 2.0 (scratch: 1.67, 1.56, 1.80).
+  Mean interval retention at 2¢ never exceeds 3.0 of the hexany's 15
+  interval classes × 21 pairs for any ρ (scratch max 2.61). Exact seed-echo
+  windows (P > rt) are 0 for every ρ. So the research list's "harmony
+  half-life" reading of ρ is wrong as stated: a large ρ keeps the sequence
+  away from the chain, not near the lattice. Harmony persistence belongs to
+  EXACT seeding of slow recurrences (MERU-001 lens 2), not to the lift.
+- **P-R4 (crossover law, re-registered).** Δn = n_chain(0.5¢) − n_chain(2¢)
+  satisfies |Δn − 2τ_eff| ≤ max(3, 0.3 · 2τ_eff) at both W for every
+  (recurrence, ρ) that reaches 0.5¢ within 130 steps. Scratch at W = 7:
+  0.418935 9–11 vs 10.8 (ρ ≤ 9/4), 20 vs 20.6 (5/2); Fibonacci 1, 1, 2, 1, 4,
+  20 vs 1.4, 1.4, 1.8, 2.9, 5.4, 18.3; meta-meantone 7–12 vs 9.7. The ρ = 1
+  rows reproduce MERU-001's LIFT rows exactly (same seeds, same
+  coefficients).
+- **P-R5 (positivity).** 0.418935 at ρ = 21/8 produces a non-positive term
+  (the lift coefficient −32·ρ² overwhelms the sum) and is excluded from the
+  descriptors with its first non-positive index recorded; every other
+  (recurrence, ρ < G) pair stays positive for all 136 terms.
+
+**Deliverables:** `meru002.py`; `results/meru002.jsonl` (one row per
+recurrence × ρ × W × n) + `results/meru002_summary.json`;
+`results/scl/meru002/` — 0.418935 at ρ = 1 and ρ = 5/2, W = 7, the window at
+the ρ = 1 lock step (n = 12), at n = 40, and at n = 100, offered for
+listening: does the long ρ = 5/2 transient sound like anything at all?
+Tests `tests/test_meru002.py` green before the first run. Stdlib only,
+python3.12, deterministic, no wall-clock fields; two runs bit-identical.
