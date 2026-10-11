@@ -134,7 +134,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 <div class="wrap">
 <header>
   <h1>Lattice Recurrence Playground</h1>
-  <p class="lede">Start from a just lattice. Fill the gaps between its tones with a recurrence relation. The result has one melodic structure: an MOS, which includes equal temperaments. Work in two directions. Seed a recurrence with the lattice and bend it toward a generator. Or fit an MOS to the lattice first, and then read off the recurrence.</p>
+  <p class="lede">Start from a just lattice. Fill the gaps between its tones with a recurrence relation. The result has one melodic structure: an MOS, which includes equal temperaments. Work in two directions. In direction 1, seed a recurrence with the lattice and let it converge to a generator. In direction 2, fit an MOS to the lattice first, and then find the recurrence for that generator.</p>
   <nav class="sticky">
     <a href="#lattice">1 Lattice</a><a href="#recurrence">2 Recurrence</a><a href="#seed">3 Seed and bend</a><a href="#fit">4 Fit an MOS</a><a href="#facts">Facts</a><a href="#next">Next research</a><a href="#prompt">Prompt</a>
   </nav>
@@ -179,7 +179,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 
 <!-- ───────── 2 RECURRENCE ───────── -->
 <section class="station" id="recurrence">
-  <div class="station-head"><div class="num">STATION 2</div><h2>Choose the recurrence (the generator is the taste decision)</h2>
+  <div class="station-head"><div class="num">STATION 2</div><h2>Choose the recurrence. The generator is the taste decision.</h2>
   <p class="note">Form: H[n] = a·H[n−i] + b·H[n−j]. The ratio H[n]/H[n−1] converges to the positive root G. The generator is log2(G) in octaves.</p></div>
   <div class="cols">
     <div class="controls">
@@ -196,7 +196,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
         <label class="field"><span class="lbl">extra seeds k</span><input type="number" id="liftK" value="0" min="0" max="24" step="1"></label>
         <label class="field"><span class="lbl">decay modulus ρ (0 &lt; ρ &lt; G)</span><input type="number" id="liftRho" value="1.0" min="0.05" step="0.05"></label>
       </div>
-      <p class="note">The lift multiplies the characteristic polynomial by (x<sup>k</sup> − ρ<sup>k</sup>). The k extra modes decay by ρ/G per step. The transient of the base recurrence decays by |λ₂|/G per step, where λ₂ is its second largest root. The slower of the two rates wins. MERU-002 measured the ρ ladder: a larger ρ lengthens the transient, but the mean 2-cent triad count during the transient falls with ρ. A long transient is not harmony.</p>
+      <p class="note">The lift multiplies the characteristic polynomial by (x<sup>k</sup> − ρ<sup>k</sup>). The k extra modes decay by ρ/G per step. The transient of the base recurrence decays by |λ₂|/G per step, where λ₂ is its second largest root. The slower of the two rates controls the transient. MERU-002 measured a ladder of ρ values. A larger ρ makes the transient longer. The mean count of 2-cent triads during the transient decreases as ρ increases. A long transient does not keep the harmony.</p>
     </div>
     <div class="preview">
       <div class="stats">
@@ -220,7 +220,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 <!-- ───────── 3 SEED ───────── -->
 <section class="station" id="seed">
   <div class="station-head"><div class="num">STATION 3 · DIRECTION 1</div><h2>Seed the recurrence with the lattice and bend it to the generator</h2>
-  <p class="note">The first terms are the lattice tones. Each new term is a sum of earlier terms. The new terms converge to the generator chain. Scrub through time to watch harmony become melody.</p></div>
+  <p class="note">The first terms are the lattice tones. Each new term is a sum of earlier terms. The new terms converge to the generator chain. Move the step slider to see harmony become melody.</p></div>
   <div class="cols">
     <div class="controls">
       <label class="field"><span class="lbl">Octave placement of seeds</span>
@@ -251,8 +251,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 
 <!-- ───────── 4 FIT ───────── -->
 <section class="station" id="fit">
-  <div class="station-head"><div class="num">STATION 4 · DIRECTION 2</div><h2>Fit an MOS to the lattice, then read off the recurrence</h2>
-  <p class="note">Search generators and note counts. Keep the chains that contain every lattice tone within the tolerance. For each fit, list the recurrences whose generator lands within the tolerance.</p></div>
+  <div class="station-head"><div class="num">STATION 4 · DIRECTION 2</div><h2>Fit an MOS to the lattice, then find the recurrence</h2>
+  <p class="note">Search generators and note counts. Keep the chains that contain every lattice tone within the tolerance. For each fit, list the recurrences whose generator is within the tolerance.</p></div>
   <div class="cols">
     <div class="controls">
       <label class="field"><span class="lbl">Fit tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
@@ -277,15 +277,15 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
   <div class="station-head"><div class="num">BACKGROUND</div><h2>What the mathematics says</h2></div>
   <div class="facts">
     <div class="fact"><div><p>A recurrence H[n] = a·H[n−i] + b·H[n−j] with positive a and b has exactly one positive root G. The ratio H[n]/H[n−1] converges to G. The generator is log2(G), measured in octaves.</p><div class="src">Erv Wilson, Fig 12, 23 July 1997: 193 recurrences with G = (1 + G^(j−i))^(1/j).</div></div></div>
-    <div class="fact"><div><p>The ratio converges only when G is strictly larger than every other root. For positive a and b, this is true only when i and j have no common factor. Erv's Fig 12 lists only such pairs. For j ≤ 10, it lists 31 pairs, and 31 is the number of coprime pairs.</p><div class="src">Verified 2026-10-10 against the scan.</div></div></div>
+    <div class="fact"><div><p>The ratio converges only when G is strictly larger than every other root. For positive a and b, this is true only when i and j have no common factor. Erv's Fig 12 lists only such pairs. For j ≤ 10, it lists 31 pairs, and 31 is the number of coprime pairs.</p><div class="src">Checked against the scan on 2026-10-10.</div></div></div>
     <div class="fact"><div><p>When i and j share a factor d, the sequence splits into d interleaved chains. The ratio H[n]/H[n−1] does not converge. Example: H[n] = H[n−2] + H[n−4] is two Fibonacci sequences. The consecutive ratio alternates between two values that sum to the Fibonacci generator.</p><div class="src">Counterexample to "H[n] = H[n−1] + H[n−2] implies H[n] = H[n−2] + H[n−4]": the eighth Fibonacci term is 8, and 3 + 1 is 4.</div></div></div>
-    <div class="fact"><div><p>The seeds do not change the generator. Any seeds that are not orthogonal to the dominant mode converge to the same G. The recurrence sets the melody. The seeds set the harmony. Erv re-seeded his own recurrences with harmonic material: 192, 336, 588, 1029 (a chain of 7/4) into 4·H[n−4] + H[n−1].</p><div class="src">Erv Wilson, meta-slendro 2, 10 Dec 1997, and the LLSLS page, 4 Oct 1997.</div></div></div>
+    <div class="fact"><div><p>The seeds do not change the generator. Any seeds that are not orthogonal to the dominant mode converge to the same G. The recurrence sets the melody. The seeds set the harmony. Erv seeded his own recurrences with harmonic material. Example: 192, 336, 588, 1029, a chain of 7/4, into 4·H[n−4] + H[n−1].</p><div class="src">Erv Wilson, meta-slendro 2, 10 Dec 1997, and the LLSLS page, 4 Oct 1997.</div></div></div>
     <div class="fact"><div><p>A generator g and its complement 1 − g make the same MOS. The chain ratio is different: 2^g or 2^(1−g). Erv's 0.238186 recurrence, 4·H[n−3] − 2·H[n−2] = H[n], diverges forward because a complex root pair has modulus 1.84 and the real root is 1.18. Erv wrote "converges left". The forward form is H[n] = H[n−1] + 2·H[n−3]. It converges to 1.69562, which is 2 divided by 1.17951.</p><div class="src">Erv Wilson, P.21b, 25 Aug 1997. Sloane M2419: 1, 1, 1, 3, 5, 7, 13, 23, 37, 63, 109.</div></div></div>
-    <div class="fact"><div><p>Sums, differences, and every k-th term of a solution are solutions of a recurrence with the same limit. Erv recorded this: every difference-tone series of a sequence approaches the limit chain. This closure is the correct basis for seeding. The Lucas identity F[n] = 3·F[n−2] − F[n−4] is one case of it.</p><div class="src">Erv Wilson, P.21c and P.21d, 25–26 Aug 1997.</div></div></div>
+    <div class="fact"><div><p>Sums, differences, and every k-th term of a solution are solutions of a recurrence with the same limit. Erv recorded this: every difference-tone series of a sequence approaches the limit chain. This closure is the basis for seeding. The Lucas identity F[n] = 3·F[n−2] − F[n−4] is one case of it.</p><div class="src">Erv Wilson, P.21c and P.21d, 25–26 Aug 1997.</div></div></div>
     <div class="fact"><div><p>To use more seeds than the order j, raise the order. Multiply the characteristic polynomial by (x^k − ρ^k). This adds k seeds. If ρ is smaller than G, the extra modes decay by ρ/G per step. If ρ equals G, the extra modes never decay, and the sequence keeps parallel chains. Station 2 does this with the lift control.</p><div class="src">Scratch runs 2026-10-08: hexany seeds, ρ = 0.5 reach two step sizes by step 18, ρ = 1.5 do not by step 27.</div></div></div>
-    <div class="fact"><div><p>Recurrences converge at very different speeds. The speed is the ratio of the second largest root to G. Fibonacci shrinks its transient by 0.38 per step, so 5 steps reduce it 100 times. Erv's 4·H[n−8] + 8·H[n−9] shrinks by 0.992 per step and needs about 600 steps. A slow recurrence keeps the seed harmony for a long time. This is a second knob next to ρ.</p><div class="src">Root moduli computed on this page with Durand–Kerner. See the "transient per step" value in station 2.</div></div></div>
-    <div class="fact"><div><p>Some generators have no exact recurrence. The generator √2 − 1 = 0.414214 comes from the scale tree 1/2, 2/5, 5/12, 12/29, 29/70. The number 2^(√2−1) is transcendental, so no integer recurrence reaches it. The closest two-term recurrence up to order 12 is 8·H[n−9] + 7·H[n−10] at +0.04 cents. The pure fourth 4/3 is 0.99 cents above it.</p><div class="src">Erv Wilson, ".414213562374 sequence", 22 Dec 1996: "my answer to Yasser, at about 1950".</div></div></div>
-    <div class="fact"><div><p>The exact recurrences for the favourites: 0.238186 is H[n−1] + 2·H[n−3] read as the complement. 0.328173 is H[n−1] + H[n−7], Fig 12 entry 12. 0.415227 is 4·H[n−8] + 8·H[n−9], 0.23 cents above 4/3. 0.418935 is H[n−1] + 32·H[n−4], the octave-shifted form of 2L⁴ = L³ + 4. The meta-meantone fifth 695.63 cents is 2·H[n−3] + 2·H[n−4], from the condition that 1, G⁴/4, G is a 4:5:6 proportional triad.</p><div class="src">Search over H[n] = a·H[n−i] + b·H[n−j], j ≤ 12, coefficients to 128, coprime (i, j).</div></div></div>
+    <div class="fact"><div><p>Recurrences converge at very different speeds. The speed is the ratio of the second largest root to G. Fibonacci shrinks its transient by 0.38 per step, so 5 steps reduce it 100 times. Erv's 4·H[n−8] + 8·H[n−9] shrinks by 0.992 per step and needs about 600 steps. A slow recurrence keeps the seed harmony for a long time. This is a second control, next to ρ.</p><div class="src">The page computes the root moduli with the Durand–Kerner method. See the "transient per step" value in station 2.</div></div></div>
+    <div class="fact"><div><p>Some generators have no exact recurrence. The generator √2 − 1 = 0.414214 is a scale-tree generator: 1/2, 2/5, 5/12, 12/29, 29/70. The number 2^(√2−1) is transcendental, so no integer recurrence reaches it. The closest two-term recurrence up to order 12 is 8·H[n−9] + 7·H[n−10] at +0.04 cents. The pure fourth 4/3 is 0.99 cents above it.</p><div class="src">Erv Wilson, ".414213562374 sequence", 22 Dec 1996: "my answer to Yasser, at about 1950".</div></div></div>
+    <div class="fact"><div><p>The exact recurrences for the five favourite generators: 0.238186 is H[n−1] + 2·H[n−3] read as the complement. 0.328173 is H[n−1] + H[n−7], Fig 12 entry 12. 0.415227 is 4·H[n−8] + 8·H[n−9], 0.23 cents above 4/3. 0.418935 is H[n−1] + 32·H[n−4], the octave-shifted form of 2L⁴ = L³ + 4. The meta-meantone fifth 695.63 cents is 2·H[n−3] + 2·H[n−4], from the condition that 1, G⁴/4, G is a 4:5:6 proportional triad.</p><div class="src">Search over H[n] = a·H[n−i] + b·H[n−j], j ≤ 12, coefficients to 128, coprime (i, j).</div></div></div>
   </div>
 </section>
 
@@ -293,14 +293,14 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 <section class="station research" id="next">
   <div class="station-head"><div class="num">OPTIONS</div><h2>Next lines of research</h2></div>
   <ol>
-    <li><b>Score the transient with the frozen scorers.</b> Run station 3 as a Python experiment. At each step, score the window with triads v1.1.0 (P, S counts) and melodic v0.1.0 (gap entropy, constant structure, propriety). Plot harmony against melody over time. The crossing point is the "bend" moment. Compare generators on the same seeds.</li>
-    <li><b>The ρ knob, measured (MERU-002, 2026-10-10).</b> On three recurrences and 32 values of ρ, the lock step and the chain step rise with ρ as the decay law says, but the mean 2-cent proportional-triad count during the transient falls from about 4 to under 2 as ρ grows, and interval retention never exceeds 3 of 21 pairs. ρ sets how long the sequence stays away from the chain. It does not keep it near the lattice. Harmony persistence belongs to exact seeding of slow recurrences, not to the lift.</li>
-    <li><b>Fit the triads, not the tones (CPSFIT-002, 2026-10-10).</b> Minimizing the largest deviation of any hexany triad in the chain, instead of the largest tone error, brings full 2-cent survival of all 12 triads from a 31-note chain down to a 22-note chain of 193.908 cents, with one tone at 2.22 cents. The worst-triad objective still loses to the count at 18 to 21 notes, where the miracle chain has the smaller worst triad and the orwell chain keeps more triads. A count objective is the next fork.</li>
-    <li><b>Fit first, then seed.</b> Take each row of station 4 that captures every lattice tone. Seed its recurrence with the lattice tones in chain-aligned octaves. Measure how small the transient is. The hypothesis: when the lattice already sits inside the MOS, the recurrence fills the gaps with almost no transient.</li>
+    <li><b>Score the transient with the frozen scorers.</b> Run station 3 as a Python experiment. At each step, score the window with triads v1.1.0 (P, S counts) and melodic v0.1.0 (gap entropy, constant structure, propriety). Plot harmony against melody over time. The crossing point is the bend step. Compare generators on the same seeds.</li>
+    <li><b>The ρ control, measured (MERU-002, 2026-10-10).</b> MERU-002 tested three recurrences and 32 values of ρ. The lock step and the chain step increase with ρ, as the decay law says. The mean count of proportional triads at 2 cents during the transient decreases from about 4 to less than 2 as ρ increases. Interval retention never exceeds 3 of 21 pairs. ρ sets how long the sequence stays off the chain. It does not keep the sequence near the lattice. Harmony persists with exact seeding of slow recurrences, not with the lift.</li>
+    <li><b>Fit the triads, not the tones (CPSFIT-002, 2026-10-10).</b> CPSFIT-002 minimized the largest deviation of any hexany triad in the chain, instead of the largest tone error. All 12 triads then survive at 2 cents in a 22-note chain of 193.908 cents, with one tone at 2.22 cents. The tone fit needed a 31-note chain. The worst-triad objective still loses to the count at 18 to 21 notes. There the miracle chain has the smaller worst triad, and the orwell chain keeps more triads. A count objective is the next fork.</li>
+    <li><b>Fit first, then seed.</b> Take each row of station 4 that captures every lattice tone. Seed its recurrence with the lattice tones in chain-aligned octaves. Measure how small the transient is. Hypothesis: if the lattice is already in the MOS, the recurrence fills the gaps with almost no transient.</li>
     <li><b>Extend the fit search to rank 2 and rank 3.</b> A chain of one generator is rank 2 with the octave. Many CPS lattices need two generators. Search pairs (g1, g2) and a note count, and keep the lattice within tolerance. This is the D'Alessandro method applied to a general seed.</li>
     <li><b>Catalog the two-term recurrences by their MOS.</b> For every recurrence in Fig 12 and the search, list its scale tree and its proportional triads at each MOS level. Find the recurrences whose MOS at small N contains a hexany or a tetrad. Those are the natural bridges.</li>
     <li><b>Test subtraction recurrences.</b> Erv's 4·H[n−3] − 2·H[n−2] diverges forward. Find the full set of integer recurrences with a given G as a root, including negative coefficients, and sort them by whether G is dominant. The non-dominant ones can still run backward.</li>
-    <li><b>Use slow recurrences as near-persistent harmony.</b> Erv's order-9 and order-10 recurrences keep their transient for hundreds of steps. Test whether a slow recurrence seeded with a lattice gives a scale that stays on the lattice over a playable range, and only drifts to the MOS far above and below.</li>
+    <li><b>Use slow recurrences as near-persistent harmony.</b> Erv's order-9 and order-10 recurrences keep their transient for hundreds of steps. Seed a slow recurrence with a lattice. Test whether the scale stays on the lattice over a playable range, and only drifts to the MOS far above and below that range.</li>
     <li><b>Hear it.</b> Export the window at each step as a Scala file. Audition the bend from hexany to MOS in the plugin. The ear decides where the transient stops sounding like the lattice.</li>
   </ol>
 </section>
@@ -739,7 +739,7 @@ if (typeof document !== 'undefined') (function () {
     set('stIvl', `${nIvl} / ${nPairs}`, null);
     set('stTri', `${tri.P} / ${tri.S}`, null);
     const bad = seq.some(v => !isFinite(v));
-    $('seedNote').textContent = bad ? 'The sequence left the positive numbers. Lower ρ or choose a coprime recurrence.' : `${seeds.length} seeds from ${lattice.tones.length} lattice tones (${S.seedPlace === 'chain' ? 'chain-aligned octaves' : 'one octave'}), then ${S.steps} generated terms.`;
+    $('seedNote').textContent = bad ? 'The sequence produced a term that is not positive. Decrease ρ, or choose a coprime recurrence.' : `${seeds.length} seeds from ${lattice.tones.length} lattice tones (${S.seedPlace === 'chain' ? 'chain-aligned octaves' : 'one octave'}), then ${S.steps} generated terms.`;
     $('seedNote').className = 'note ' + (bad ? 'warn' : '');
     $('seqText').textContent = seq.map(v => isFinite(v) ? (v < 1e6 ? +v.toFixed(3) : v.toExponential(3)) : '×').join('  ');
   }
@@ -767,7 +767,7 @@ if (typeof document !== 'undefined') (function () {
     drawRuler($('fitCanvas'), items, { title: `${r.type === 'ET' ? r.N + '-ET' : r.N + ' notes of generator ' + r.g.toFixed(2) + '¢'}: dots = scale, ticks = lattice with error in cents` });
     $('fitPickNote').textContent = `${r.N} notes, generator ${(r.g / CENTS).toFixed(5)} octaves (${r.g.toFixed(2)} cents, complement ${(1 - r.g / CENTS).toFixed(5)}). Largest lattice error ${r.maxErr.toFixed(2)} cents. ${r.captured} of ${lattice.tones.length} lattice tones within ${S.fitTol} cents.`;
     const near = nearestRR(RRTABLE, r.g / CENTS, S.fitTol, 6);
-    if (!near.length) { $('fitRR').innerHTML = `<span class="note">No two-term recurrence up to order 12 lands within ${S.fitTol} cents of this generator. Relax the tolerance.</span>`; return; }
+    if (!near.length) { $('fitRR').innerHTML = `<span class="note">No two-term recurrence up to order 12 is within ${S.fitTol} cents of this generator. Relax the tolerance.</span>`; return; }
     $('fitRR').innerHTML = '';
     near.forEach(n => {
       const div = document.createElement('div'); div.className = 'item';
@@ -811,15 +811,15 @@ if (typeof document !== 'undefined') (function () {
   function updatePrompt() {
     const p = [];
     p.push(`Lattice: ${latticeName()}, ${lattice.tones.length} tones: ${lattice.tones.map(t => t.num + '/' + t.den).join(' ')}.`);
-    p.push(`Recurrence: ${$('rrPoly').textContent}. Positive root G = ${rec.G.toFixed(6)}, generator ${rec.gen.toFixed(6)} octaves (${(rec.gen * CENTS).toFixed(2)} cents, complement ${(1 - rec.gen).toFixed(6)}). Transient shrinks by ${rec.rate.toFixed(3)} per step (second root modulus ${rec.lambda2.toFixed(3)}). ${rec.k ? `Order lifted by ${rec.k} with decay modulus ρ = ${rec.rho.toFixed(3)}.` : 'No order lift.'} ${rec.coprime ? '' : 'Warning: i and j are not coprime, so the ratio does not converge.'}`);
+    p.push(`Recurrence: ${$('rrPoly').textContent}. The positive root is G = ${rec.G.toFixed(6)}. The generator is ${rec.gen.toFixed(6)} octaves, which is ${(rec.gen * CENTS).toFixed(2)} cents. The complement is ${(1 - rec.gen).toFixed(6)}. The transient shrinks by ${rec.rate.toFixed(3)} per step. The second root modulus is ${rec.lambda2.toFixed(3)}. ${rec.k ? `The order is lifted by ${rec.k} with decay modulus ρ = ${rec.rho.toFixed(3)}.` : 'The order is not lifted.'} ${rec.coprime ? '' : 'Warning: i and j are not coprime, so the ratio does not converge.'}`);
     const sc = stepClasses(seq.slice(Math.max(0, S.scrub - S.win + 1), S.scrub + 1).filter(isFinite).map(v => cents(v)), S.tol);
-    p.push(`Direction 1: ${seeds.length} seeds in ${S.seedPlace === 'chain' ? 'chain-aligned' : 'compact'} octaves, ${S.steps} steps. At step ${S.scrub} the ${S.win}-tone window has ${sc.classes} step size${sc.classes === 1 ? '' : 's'}${sc.classes === 2 ? ' (MOS)' : ''}, keeps ${$('stLat').querySelector('.v').textContent} tones on the lattice within ${S.tol} cents (this count rotates with n), keeps ${$('stIvl').querySelector('.v').textContent} window dyads on lattice intervals, and has ${$('stTri').querySelector('.v').textContent} proportional/subcontrary triads.`);
+    p.push(`Direction 1: ${seeds.length} seeds in ${S.seedPlace === 'chain' ? 'chain-aligned' : 'compact'} octaves, then ${S.steps} steps. At step ${S.scrub} the ${S.win}-tone window has ${sc.classes} step size${sc.classes === 1 ? '' : 's'}${sc.classes === 2 ? ' (MOS)' : ''}. The window keeps ${$('stLat').querySelector('.v').textContent} tones on the lattice within ${S.tol} cents. This count rotates with n. The window keeps ${$('stIvl').querySelector('.v').textContent} dyads on lattice intervals. The window has ${$('stTri').querySelector('.v').textContent} proportional and subcontrary triads.`);
     if (fitRows.length) {
       const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
-      p.push(`Direction 2 (tolerance ${S.fitTol} cents, N up to ${S.maxN}): ${hits.length ? hits.slice(0, 6).map(r => `${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + '¢' + (r.mos ? ' (MOS)' : '')} max error ${r.maxErr.toFixed(2)}¢`).join('; ') : 'no scale captures every lattice tone'}.`);
-      if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves. Nearest recurrences: ${nearestRR(RRTABLE, S.fitPick.g / CENTS, S.fitTol, 3).map(n => `${n.a}·H[n−${n.i}] + ${n.b}·H[n−${n.j}] (${n.mode}, ${n.err >= 0 ? '+' : ''}${n.err.toFixed(2)}¢)`).join('; ') || 'none within tolerance'}.`);
-    } else p.push('Direction 2: the fit has not been run.');
-    p.push('Task: continue the lattice-to-MOS research from this state. Keep the two directions as separate experiments. Use the frozen scorers for harmony and melody axes.');
+      p.push(`Direction 2, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (MOS)' : '')} with largest error ${r.maxErr.toFixed(2)} cents`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
+      if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves. ${(near => near.length ? 'Nearest recurrences: ' + near.map(n => `${n.a}·H[n−${n.i}] + ${n.b}·H[n−${n.j}] (${n.mode}, ${n.err >= 0 ? '+' : ''}${n.err.toFixed(2)} cents)`).join(', ') + '.' : 'No recurrence is within the tolerance.')(nearestRR(RRTABLE, S.fitPick.g / CENTS, S.fitTol, 3))}`);
+    } else p.push('Direction 2: the fit did not run.');
+    p.push('Task: continue the lattice-to-MOS research from this state. Keep the two directions as separate experiments. Use the frozen scorers for the harmony axis and the melody axis.');
     $('promptText').textContent = p.join('\n\n');
   }
 
