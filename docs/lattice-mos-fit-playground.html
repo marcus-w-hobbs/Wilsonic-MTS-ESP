@@ -130,9 +130,17 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
   <h1>Lattice MOS-Fit Playground</h1>
   <p class="lede">Start from a just lattice. Find the MOS scales that hold every tone of the lattice within a tolerance. An MOS is a chain of one generator with two step sizes, and equal temperaments are the MOS with one step size. The fit has three controls: the generator, the level (how many notes) and the murchana (which chain position is the 1/1). Within 2 cents counts as at least as good as 12-ET.</p>
   <nav>
-    <a href="#lattice">1 Lattice</a><a href="#generator">2 Generator</a><a href="#fit">3 Fit</a><a href="#facts">Background</a><a href="#next">Options</a><a href="#prompt">Prompt</a>
+    <a href="#legend">Legend</a><a href="#lattice">1 Lattice</a><a href="#generator">2 Generator</a><a href="#fit">3 Fit</a><a href="#facts">Background</a><a href="#next">Options</a><a href="#prompt">Prompt</a>
   </nav>
 </header>
+
+<!-- ───────── LEGEND ───────── -->
+<section class="station" id="legend">
+  <div class="station-head"><div class="num">LEGEND</div><h2>What the errors mean: 12-ET against its own lattice</h2>
+  <p class="note">Every error on this page is the distance in cents from a just tone to the nearest scale degree. For a reference, here is 12-ET fitted to the harmonics 3, 5, 7, 9 and 11. The fifth is good. The major third is poor. The harmonic seventh is bad. The tolerance slider in station 3 starts at 2 cents, which is the quality of 12-ET's fifth.</p></div>
+  <canvas id="legendCanvas" width="760" height="84"></canvas>
+  <div class="stats" id="legendStats"></div>
+</section>
 
 <!-- ───────── 1 LATTICE ───────── -->
 <section class="station" id="lattice">
@@ -590,6 +598,22 @@ if (typeof document !== 'undefined') (function () {
     }
   }
 
+  // ---- legend
+  function renderLegend() {
+    const harm = tok('--harm'), acc = tok('--accent'), warn = tok('--warn');
+    const ji = [[3, 2, '3'], [5, 4, '5'], [7, 4, '7'], [9, 8, '9'], [11, 8, '11']];
+    const items = []; for (let k = 0; k < 12; k++) items.push({ cents: k * 100, color: acc, r: 4 });
+    const stats = $('legendStats'); stats.innerHTML = '';
+    ji.forEach(([n, d, name]) => {
+      const c = cents(n / d); const err = Math.abs(c - Math.round(c / 100) * 100);
+      items.push({ cents: c, color: err <= 2 ? harm : warn, r: 0, tick: true, label: `${name}: ${err.toFixed(1)}`, above: true });
+      const div = document.createElement('div'); div.className = 'stat ' + (err <= 2 ? 'good' : err <= 10 ? '' : 'bad');
+      div.innerHTML = `<div class="k">harmonic ${name} (${n}/${d})</div><div class="v">${err.toFixed(2)}¢</div>`;
+      stats.appendChild(div);
+    });
+    drawRuler($('legendCanvas'), items, { title: '12-ET degrees (dots) and the just harmonics 3, 5, 7, 9, 11 (ticks) with their errors in cents' });
+  }
+
   // ---- station 1
   function selfInverse(tones) {
     const pcs = tones.map(t => t.cents); const inv = pcs.map(c => wrapCents(-c));
@@ -803,7 +827,7 @@ if (typeof document !== 'undefined') (function () {
     const fallback = () => { const r = document.createRange(); r.selectNodeContents($(textId)); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); $(noteId).textContent = 'Text selected. Press copy.'; };
     try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
   };
-  function all() { renderLattice(); renderGenerator(); fitRows = []; S.fitPick = null; renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Press Run. Large lattices at large N take a few seconds.'; updatePrompt(); }
+  function all() { renderLegend(); renderLattice(); renderGenerator(); fitRows = []; S.fitPick = null; renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Press Run. Large lattices at large N take a few seconds.'; updatePrompt(); }
   function genChanged() { renderGenerator(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); }
   const gsel = $('genPreset'); GEN_PRESETS.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; gsel.appendChild(o); }); gsel.value = S.genPreset;
   gsel.addEventListener('change', e => { S.genPreset = e.target.value; const p = GEN_PRESETS.find(x => x.id === S.genPreset); if (p.oct != null) S.gen = p.oct; genChanged(); });
@@ -828,8 +852,8 @@ if (typeof document !== 'undefined') (function () {
   });
   $('copyBtn').addEventListener('click', copyTo('promptText', 'copyNote'));
   $('copyScl').addEventListener('click', copyTo('sclText', 'copySclNote'));
-  window.addEventListener('resize', () => { renderLattice(); renderGenerator(); renderFitPick(); });
-  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLattice(); renderGenerator(); renderFitPick(); });
+  window.addEventListener('resize', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); });
 
   all();
 })();
