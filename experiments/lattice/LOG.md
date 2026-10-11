@@ -4249,3 +4249,96 @@ at 77.818 (10 of 12), and the dekany CPS(5,2) N = 26 chain at 498.066 (32
 of 41). Tests `tests/test_cpsfit003.py` are green before the first run.
 Stdlib only, python3.12, deterministic, no wall-clock fields. Two runs
 must be bit-identical.
+
+## 2026-10-11 — CPSFIT-003 results + verdicts
+
+**Run:** `cpsfit003.py` (602 s. Receipts `results/cpsfit003.jsonl`, 115
+rows = hexany N = 11..36, EG4 12..36, CPS(5,2) 15..36, its reflection
+15..36, CPS(5,3) 17..36, plus `results/cpsfit003_summary.json`.) Frozen
+triads v1.1.0 (`score_tempered`, 2 cents) and melodic v0.1.0 read-only,
+pins verified. Lattice suite 371/371 green before the run (17 new tests).
+The objective (exact count) agrees with the mirror's survival count on
+every row (0 disagreements). The recomputed tone-minimax and triad-minimax
+fits match the CPSFIT-001 and CPSFIT-002 receipts on the hexany and EG4
+(0 mismatches).
+
+- **P-C1 — KEPT.** Every registered rung reproduces on all four distinct
+  lattices: counts exact, generators within 0.02 cents, tone errors within
+  0.05 cents, mappings as registered, and every "no val" row is also free
+  of a transposed val. First feasible N: 11, 12, 15, 15, 17 as registered.
+- **P-C2 — KEPT.** For N ≤ 22 the count optimum sits within 0.05 cents of
+  the tone-minimax optimum at no N on any lattice. It sits within 0.05
+  cents of the triad-minimax optimum only at hexany N = 22 and CPS(5,2)
+  N = 15–17. Hexany N = 16–17 keeps the miracle val (6, −7, −2) and moves
+  the generator to 116.676 cents: count 10 against 6 for both prior
+  objectives.
+- **P-C3 — REFUTED as registered, held in substance.** The runner found
+  two referee exceptions against the triad-minimax fit, (CPS(5,2), 18) and
+  (reflection, 18), where the registration named only the first. The
+  reflection lattice duplicates its partner's rows by construction, so the
+  second exception is the first one seen in the mirror. The session left it
+  off the list. The error is the session's. The numbers at CPS(5,2) N = 18
+  are as registered: frozen 14 against 15, exact 14 against 12, three
+  created triads tip the referee. There are no exceptions against the
+  tone-minimax fit on any lattice.
+- **P-C4 — KEPT.** First full survival at N = 22 (hexany), 23 (EG4), none
+  up to 36 for either dekany. Best partial: 37/41 at N = 35 for CPS(5,2),
+  35/41 at N = 35 for CPS(5,3). Wherever the count is full the
+  triad-minimax fit is full too.
+- **P-C5 — (a) KEPT, (b) REFUTED as registered, held in substance.**
+  (a) The exact reflection reproduces CPS(5,2)'s staircase at every N:
+  same count, generator, worst deviation and margin to 0.001 cents, P and
+  S swapped exactly in the frozen image, and the mirrored window
+  −(s + N − 1) is a valid window of the reflected fit at every N.
+  (b) CPS(5,3) differs from CPS(5,2) at N = 15–23, 25 and 35–36, and
+  agrees at N = 24 and 26–34. The registration said "differs at 17–25 and
+  35–36, agrees at 26–34". Two session errors. First, the registered lists
+  were copied from the scratch table before the 0.01 cent segment-width
+  rule was added. That rule moved CPS(5,3) at N = 24–25 from a knife-edge
+  26 at 309.996 cents to 25 at 317.049 cents, which is CPS(5,2)'s rung at
+  N = 24, so N = 24 now agrees. Second, the runner counts N = 15–16, where
+  CPS(5,2) is feasible and CPS(5,3) is not, as differences, and the scratch
+  compared only the overlap. The finding stands: of the 20 values of N
+  where both dekanies are feasible, 10 give different fits. The page's
+  claim "one fit of a dekany solves both dekanies" is false as stated and
+  is corrected to the reflection statement.
+- **P-C6 — KEPT.** Hexany N = 18–21: 10/12 at 77.818 cents under
+  (9, 5, −3). N = 16–17: 10/12 under the miracle val. The miracle/orwell
+  fork of CPSFIT-002 was a property of the two objectives.
+- **P-C7 — REFUTED as registered, held in substance.** Every registered
+  created-triad row reproduces exactly. The reflection lattice's rows
+  (N = 15–17: 15 against 12, N = 19–24: 27 against 25) were not
+  registered, and they duplicate CPS(5,2)'s rows as in P-C3. No other
+  unregistered created triads appear on any row.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The CPS(5,2)
+N = 26 chain at 498.066 cents is a schismatic fourth chain: mapping
+(−1, 8, 14), kernel 32805/32768, 5120/5103, 225/224, 4000/3969. It keeps
+32 of 41 exact triads at 2 cents with tone error 4.10 cents, and its own
+frozen P at 2 cents is 97. Both prior objectives stop at 27 on the same
+val. (2) The count's 34/41 at N = 33–34 is the 351.484 cent neutral-third
+chain, MOS-LAT-002's hot spot, with no val and tone error 9.59 cents. The
+count objective finds it and the tone and triad objectives do not. (3) The
+hexany N = 16 win is narrow: the 10/12 segment is 0.026 cents wide and the
+margin at the representative is 0.098 cents. The N = 18 chain at 77.818
+has kernel 6144/6125, 1029/1024, 126/125, and all ten of its survivors sit
+between 1 and 2 cents (image survival at 1 cent is 0). (4) The
+representative sits on the 20 cent tone cap at hexany N = 11, EG4
+N = 12–14, CPS(5,2) N = 15–18 and CPS(5,3) N = 17–21 and 23, so those
+rungs depend on the cap. A cap sweep (5, 10, 20 cents) is the natural
+control. (5) The count optimum is a level of its generator (a 2-step MOS)
+at only a few N: the hexany at 15, 25 and 31, EG4 at 14, 15, 25 and 31,
+CPS(5,2) at 19 and 29, CPS(5,3) at 17 and 29. Everywhere else it is a
+3-step chain. (6) At 5 cents the
+frozen referee counts 43 image triads on the CPS(5,2) N = 26 chain, more
+than the lattice's 41, which is the created-triad effect at a looser tier.
+
+**Kept.** Runner and receipts stand. `results/scl/cpsfit003/` holds the
+hexany N = 16 chain at 116.676 cents (10 of 12), the hexany N = 18 chain at
+77.818 cents (10 of 12) and the CPS(5,2) N = 26 chain at 498.066 cents (32
+of 41), offered for listening as gate G-032.
+
+**Run receipt:** 2026-10-11, python3.12 — lattice suite 371/371 OK (17 new:
+test_cpsfit003), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535). Both receipts and the three .scl are bit-identical
+across two runs (`cmp`). Each run 602 s.

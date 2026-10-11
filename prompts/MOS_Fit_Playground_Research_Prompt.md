@@ -30,7 +30,16 @@ elsewhere). Treat me as a co-investigator extending Erv Wilson's program.
   2.57@19, 1.37@22, 0.74@31; every optimum from N=11 is a val; N=15 is Erv's
   0.418935 septimal meantone; no ET<73 holds the hexany at 2¢) and CPSFIT-002
   (triad-minimax: full 12/12 survival at N=22, 193.908¢; worst-triad objective
-  loses to the count at N=18–21). Gates G-029 and G-031 (ear checks) are
+  loses to the count at N=18–21) and CPSFIT-003 (count objective: the count
+  optimum agrees with tone-minimax at no N ≤ 22 on any lattice; hexany 10/12
+  at N=16 by the miracle val moved to 116.676¢ and at N=18–21 by (9,5,−3) at
+  77.818¢ where miracle/orwell gave 6 and 8; EG4 18/24 at N=16, 20/24 at
+  18–22; dekany 1·3·5·7·9 keeps 32/41 at N=26 on a schismatic fourth chain
+  498.066¢ (−1,8,14), 37/41 at N=35, never 41 below N=37; the frozen referee
+  counts created triads and can rank chains the other way, so both counts are
+  on every row; the inversion theorem is EXACT for the reflection 1/L and
+  FALSE for the transposed partner CPS(n,n−k): CPS(5,3) differs from CPS(5,2)
+  at 10 of 20 feasible N). Gates G-029, G-031 and G-032 (ear checks) are
   PENDING on me in `experiments/GATES.md`.
 - Erv's "64 Golden Generators" (1993) is decoded: g = (a+φc)/(b+φd) from the
   two scale-tree fractions where the path starts alternating; all 64
@@ -52,17 +61,20 @@ elsewhere). Treat me as a co-investigator extending Erv Wilson's program.
   summary. Do not push without asking; commit freely on the branch.
 
 **Research questions, in priority order**
-1. Count objective (CPSFIT-003): for each N, the generator and murchana that
-   keep the MOST lattice triads within tolerance, frozen scorer as referee.
-   Does the count objective pick different generators from tone-minimax and
-   worst-triad-minimax at N = 11–22 for the hexany, EG4 and the dekanies?
+1. Count objective (CPSFIT-003): DONE 2026-10-11. Open follow-ups: sweep the
+   20¢ tone cap (5, 10, 20) as a control, because the small-N optima sit on
+   the cap; and a transposition-free fit (chain origin floating), which
+   restores the CPS(n,k)/CPS(n,n−k) symmetry. Gate G-032 decides both.
 2. Golden fits: for each lattice, the golden (then silver) generator with the
    smallest level that holds it at 2, 3, 5¢. How far is it from the free
    optimum at that N? Is the near-coincidence of Erv's recurrence generators
    with golden ones a general law (do the free optima also land near nobles)?
-3. Inversion: use the self-inverse CPS theorem (CPS(n,k)⁻¹ = CPS(n,n−k)) to
-   halve the search and to report mirrored murchanas; verify P/S swap on the
-   page's triad counts.
+3. Inversion: DONE 2026-10-11 (CPSFIT-003 P-C5). The reflection 1/L fits
+   identically at the mirrored window with P/S swapped. The partner
+   CPS(n,n−k) is the reflection TRANSPOSED by ∏F and gets different fits
+   under the pinned-origin model, so the search cannot be halved across
+   partners unless the fit becomes transposition-free. The page lists the
+   murchanas that hold the lattice by direct scan.
 4. Subsets: fit the 15 hexanies of the eikosany separately and jointly; which
    chain holds the most subsets at once (subset-first doctrine)?
 5. Rank 3: two generators + octave; the D'Alessandro method on a general
@@ -71,12 +83,16 @@ elsewhere). Treat me as a co-investigator extending Erv Wilson's program.
 7. Hear it: the page exports Scala text; build the ear-check set for the
    hexany at N=15, 19, 22, 31 and the best golden fit, for gates G-029/G-031.
 
-**Playground improvements to make as the research lands**
-- Show the staircase as a chart (max error vs N) with the family search
-  overlaid, so golden/silver fits sit on the same picture as the free optima.
-- Mapping (val) and kernel commas per fit, as CPSFIT-001 computes them.
-- Show the mirrored murchana for self-inverse lattices.
-- A "compare" panel: two selected chains side by side on one ruler.
+**Playground improvements made 2026-10-11** (staircase chart with
+free/station-2/family/ET on one picture, hover and click; val + kernel per
+selected chain, with a transposed-val test; murchanas that hold the lattice
+and the mirrored murchana; compare panel A vs B; CPSFIT-003 presets and
+background facts; inversion fact corrected).
+
+**Playground improvements still open**
+- A count-objective column computed on the page (the JS search is tone
+  minimax; CPSFIT-003 ran offline).
+- Quotient the half-generator ties in the free-search table.
 - Keep the page's numbers tied to the receipts; when a page claim and a
   receipt disagree, the receipt wins and the page is fixed.
 
