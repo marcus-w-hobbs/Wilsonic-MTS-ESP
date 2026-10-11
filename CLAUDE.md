@@ -15,7 +15,7 @@ open Builds/MacOSX/Wilsonic.xcodeproj
 # Select target (Standalone, AU, VST3) and build
 
 # Or build WilsonicController
-open Builds/MacOSX/WilsonicController.xcodeproj
+open Builds/MacOSX-WilsonicController/WilsonicController.xcodeproj
 ```
 
 ### Cross-Platform Build via Command Line

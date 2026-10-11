@@ -62,14 +62,14 @@ jobs:
             cp -r Builds/LinuxMakefile/build/Wilsonic.vst3 upload
             cp Builds/LinuxMakefile/build/Wilsonic upload
 
-            # Build WilsonicController
-            rm -r Builds
+            # Build WilsonicController (its exporters write to Builds/*-WilsonicController,
+            # so this no longer overwrites the Wilsonic build above)
             ~/JUCE/extras/Projucer/Builds/LinuxMakefile/build/Projucer --resave WilsonicController.jucer
-            cd Builds/LinuxMakefile
+            cd Builds/LinuxMakefile-WilsonicController
             make -j4 CONFIG=Release
             cd -
-            cp -r Builds/LinuxMakefile/build/WilsonicController.vst3 upload
-            cp Builds/LinuxMakefile/build/WilsonicController upload
+            cp -r Builds/LinuxMakefile-WilsonicController/build/WilsonicController.vst3 upload
+            cp Builds/LinuxMakefile-WilsonicController/build/WilsonicController upload
 
             # build and run unit tests (test_wilsonicmath + test_tuning,
             # which compile real Source/ tuning code against stub headers)
@@ -105,8 +105,8 @@ jobs:
             xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
             cd -
 
-            # Build WilsonicController
-            rm -r Builds
+            # Build WilsonicController (its exporters write to Builds/*-WilsonicController,
+            # so this no longer overwrites the Wilsonic build above)
             ~/JUCE/extras/Projucer/Builds/MacOSX/build/Debug/Projucer.app/Contents/MacOS/Projucer --resave WilsonicController.jucer
-            cd Builds/MacOSX
+            cd Builds/MacOSX-WilsonicController
             xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
