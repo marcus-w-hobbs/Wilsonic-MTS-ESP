@@ -212,7 +212,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="note" id="rrDominance"></p>
       <p class="note" id="rrSource"></p>
       <canvas id="treeCanvas" width="760" height="84"></canvas>
-      <p class="note">Scale tree of the generator: the MOS note counts in order. These are the N values where a chain of this generator has exactly two step sizes.</p>
+      <p class="note">How to read the chart: the axis is the note count N. A dot at N means that N consecutive generators, reduced to one octave, make a scale with exactly two step sizes, L and s. Those scales are the MOS of this generator. The page finds them by the scale tree. It walks the Stern–Brocot tree toward g. Each fraction p/q on the path is an MOS with q notes. The fraction p/q is also the equal temperament that the MOS approximates: q-ET, with p steps per generator. The table gives each MOS, its fraction, that ET's generator in cents, the two step sizes in cents, and their ratio. The generator and its complement 1 − g have the same MOS sizes, because the chain is the same scale read from the other end. Erv drew this walk by hand as the "zig-zag pattern" on each page of meruthree.pdf. For 0.238186 his page says "24 places", and the table shows the 25-note MOS with s = 2.3 cents.</p>
+      <div class="tablewrap" style="max-height:220px"><table id="treeTable"><thead><tr><th>N (MOS size)</th><th>p/q</th><th>ET generator ¢</th><th>L ¢</th><th>s ¢</th><th>L : s</th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
 </section>
@@ -375,7 +376,7 @@ function buildLattice(kind, opts) {
   return { tones, harmonics };
 }
 function stepClasses(centsList, tol) {
-  const pcs = [...new Set(centsList.map(c => Math.round(wrapCents(c) * 100) / 100))].sort((a, b) => a - b);
+  const pcs = [...new Set(centsList.map(c => Math.round(wrapCents(c) * 1e6) / 1e6))].sort((a, b) => a - b);
   if (pcs.length < 2) return { classes: pcs.length ? 1 : 0, steps: [], minStep: 0 };
   const steps = pcs.map((p, i) => (i + 1 < pcs.length ? pcs[i + 1] - p : pcs[0] + CENTS - p));
   const sorted = steps.slice().sort((a, b) => a - b);
@@ -451,15 +452,26 @@ function triadCounts(freqs, tol) {
   }
   return { P, S };
 }
-function scaleTree(gen, maxN) {
-  // MOS cardinalities: N where chain of N generators has 2 step sizes
+function mosPath(gen, maxN) {
+  // Walk the Stern-Brocot tree toward gen (in octaves, 0 < gen < 1). Each
+  // mediant p/q on the path is an MOS: q notes, p generators per octave in
+  // the approximation. Returns [{N, p, q, L, s}] with the two step sizes of
+  // the q-note chain in cents.
   const out = [];
-  for (let N = 2; N <= maxN; N++) {
+  let lo = [0, 1], hi = [1, 1];
+  for (let guard = 0; guard < 200; guard++) {
+    const m = [lo[0] + hi[0], lo[1] + hi[1]];
+    if (m[1] > maxN) break;
+    const N = m[1];
     const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * gen * CENTS));
-    if (stepClasses(pcs, 0.01).classes === 2) out.push(N);
+    const sorted = pcs.slice().sort((a, b) => a - b);
+    const steps = sorted.map((v, i) => (i + 1 < N ? sorted[i + 1] - v : sorted[0] + CENTS - v));
+    out.push({ N, p: m[0], q: m[1], L: Math.max(...steps), s: Math.min(...steps) });
+    if (gen < m[0] / m[1]) hi = m; else lo = m;
   }
   return out;
 }
+function scaleTree(gen, maxN) { return mosPath(gen, maxN).map(x => x.N); }
 // fit: for each N, the generator (cents) minimizing the largest circular error of any lattice tone to an
 // N-chain containing 1/1 — EXACT (CPSFIT-001 method): for a tolerance eps every (tone, k) admits a g-interval of
 // half-width eps/|k|; a sweep over interval endpoints decides feasibility; bisection on eps, then a ternary refinement.
@@ -674,9 +686,12 @@ if (typeof document !== 'undefined') (function () {
     $('rrDominance').textContent = dom + rhoNote; $('rrDominance').className = 'note ' + (rec.coprime ? 'ok' : 'warn');
     const p = RR_PRESETS.find(x => x.id === S.rrPreset); $('rrSource').textContent = p && p.src ? p.src : '';
     // scale tree
-    const tree = scaleTree(rec.gen, 60);
+    const path = mosPath(rec.gen, 60);
+    const tree = path.map(x => x.N);
     const { ctx, w, h } = prep($('treeCanvas')); const acc = tok('--accent');
-    ctx.fillStyle = tok('--muted'); ctx.fillText(`MOS note counts for g = ${rec.gen.toFixed(4)} (same for 1 − g)`, 24, 14);
+    ctx.fillStyle = tok('--muted'); ctx.fillText(`MOS sizes N for g = ${rec.gen.toFixed(4)} octaves (the same for 1 − g), N ≤ 60`, 24, 14);
+    const tb = $('treeTable').querySelector('tbody'); tb.innerHTML = '';
+    path.forEach(x => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${x.N}</td><td class="num">${x.p}/${x.q}</td><td class="num">${(x.p / x.q * CENTS).toFixed(1)}</td><td class="num">${x.L.toFixed(1)}</td><td class="num">${x.s.toFixed(1)}</td><td class="num">${(x.L / x.s).toFixed(3)}</td>`; tb.appendChild(tr); });
     const L0 = 24, R0 = w - 24; const maxN = 60;
     ctx.strokeStyle = tok('--line'); ctx.beginPath(); ctx.moveTo(L0, h - 30); ctx.lineTo(R0, h - 30); ctx.stroke();
     tree.forEach((N, idx) => { const x = L0 + (R0 - L0) * (N / maxN); ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(x, h - 30, 4, 0, Math.PI * 2); ctx.fill(); ctx.fillText(N, x - 6, h - 30 - 10 - (idx % 2) * 14); });
@@ -786,7 +801,7 @@ if (typeof document !== 'undefined') (function () {
       for (const [N, r] of best) {
         if (!(r.maxErr < Infinity)) continue;
         const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * r.g));
-        const mos = stepClasses(pcs, 0.01).classes === 2;
+        const mos = mosPath(r.g / CENTS, N).some(x => x.N === N);
         const ch = chainPitchClasses(r.g, N, latC, 60);
         fitRows.push({ key: 'mos' + N, type: 'MOS', N, g: r.g, maxErr: r.maxErr, meanErr: r.meanErr, mos, captured: ch.map.filter(m => m.err <= S.fitTol).length });
       }
