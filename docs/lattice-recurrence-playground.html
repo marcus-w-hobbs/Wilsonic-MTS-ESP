@@ -274,6 +274,11 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="preview">
       <canvas id="fitCanvas" width="760" height="84"></canvas>
       <p class="note" id="fitPickNote">No fit selected.</p>
+      <div class="row" style="align-items:center">
+        <label class="field" style="flex:1 1 240px"><span class="lbl">Murchana of the selected chain: 1/1 at generator position <span class="val" id="fitMurVal">—</span></span><input type="range" id="fitMur" min="0" max="0" value="0"></label>
+        <span class="mono note" id="fitPattern" style="flex:2 1 240px; word-break: break-all"></span>
+      </div>
+      <p class="note">Move the slider to rotate the mode. Each step drops one tone from one end of the chain and adds one at the other end. The step pattern below the slider rotates with it, and the lattice errors show which modes hold the lattice.</p>
       <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
       <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
       <h3>Free search: best generator for each N</h3>
@@ -553,6 +558,20 @@ function fitET(toneCents, maxN) {
   }
   return rows;
 }
+function chainAt(gCents, N, s, toneCents) {
+  // the chain with window [s, s+N-1] (1/1 at generator position -s): degrees and per-tone errors
+  const map = toneCents.map(t => { let mn = Infinity, mk = s; for (let k = s; k <= s + N - 1; k++) { const e = circDist(k * gCents, t); if (e < mn) { mn = e; mk = k; } } return { t, k: mk, err: mn }; });
+  const degrees = []; for (let k = s; k <= s + N - 1; k++) degrees.push(wrapCents(k * gCents));
+  return { degrees: degrees.sort((a, b) => a - b), map, maxErr: Math.max(...map.map(m => m.err)), s };
+}
+function stepPattern(degrees, tol) {
+  // letters for the step sizes in pitch order from 1/1: L, s, and m for a third size
+  const d = degrees.slice().sort((a, b) => a - b);
+  const steps = d.map((v, i) => (i + 1 < d.length ? d[i + 1] - v : d[0] + CENTS - v));
+  const sizes = [...new Set(steps.map(x => Math.round(x / tol) * tol))].sort((a, b) => b - a);
+  const letter = x => { const i = sizes.indexOf(Math.round(x / tol) * tol); return sizes.length <= 2 ? (i === 0 ? 'L' : 's') : (i === 0 ? 'L' : i === sizes.length - 1 ? 's' : 'm'); };
+  return steps.map(letter).join('');
+}
 function chainPitchClasses(gCents, N, toneCents, capErr) {
   // choose window start s containing 0 minimizing max error; return degrees and tone errors
   let bestS = 0, bestMax = Infinity, bestMap = null;
@@ -805,7 +824,10 @@ if (typeof document !== 'undefined') (function () {
     const latC = lattice.tones.map(t => t.cents);
     if (!S.fitPick) { drawRuler($('fitCanvas'), lattice.tones.map(t => ({ cents: t.cents, color: harm, r: 5 })), { title: 'lattice only' }); $('fitPickNote').textContent = 'No fit selected.'; return; }
     const r = S.fitPick;
-    const ch = chainPitchClasses(r.g, r.N, latC, 60);
+    const ch = r.s == null ? chainPitchClasses(r.g, r.N, latC, 60) : chainAt(r.g, r.N, r.s, latC);
+    $('fitMur').max = r.N - 1; $('fitMur').value = r.s == null ? 0 : -r.s; $('fitMur').disabled = r.s == null;
+    $('fitMurVal').textContent = r.s == null ? 'n/a for ET' : `${-r.s} of ${r.N}`;
+    $('fitPattern').textContent = 'steps from 1/1: ' + stepPattern(ch.degrees, 1.0);
     const items = ch.degrees.map(d => ({ cents: d, color: acc, r: 4 }));
     ch.map.forEach(m => items.push({ cents: m.t, color: m.err <= S.fitTol ? harm : tok('--warn'), r: 0, tick: true, label: m.err.toFixed(1), above: true }));
     drawRuler($('fitCanvas'), items, { title: `${r.type === 'ET' ? r.N + '-ET' : r.N + ' notes of generator ' + r.g.toFixed(2) + '¢'}: dots = scale, ticks = lattice with error in cents` });
@@ -886,6 +908,13 @@ if (typeof document !== 'undefined') (function () {
   $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); renderFixedTable(); });
   $('showET').addEventListener('change', e => { S.showET = e.target.checked; renderFitTable(); });
   $('fitRun').addEventListener('click', runFit);
+  $('fitMur').addEventListener('input', e => {
+    const r = S.fitPick; if (!r || r.s == null) return;
+    const s2 = -(+e.target.value); const latC = lattice.tones.map(t => t.cents);
+    const ch = chainAt(r.g, r.N, s2, latC);
+    S.fitPick = { ...r, key: r.key, s: s2, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length, captured: ch.map.filter(m => m.err <= S.fitTol).length, rotated: true };
+    renderFitPick(); updatePrompt();
+  });
   $('copyBtn').addEventListener('click', () => {
     const text = $('promptText').textContent;
     const done = () => { $('copyNote').textContent = 'Copied.'; setTimeout(() => $('copyNote').textContent = '', 1500); };
