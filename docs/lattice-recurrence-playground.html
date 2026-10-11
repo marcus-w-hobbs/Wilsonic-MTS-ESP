@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lattice Recurrence Playground</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -41,25 +46,26 @@ body {
   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 24px 24px;
   color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
-  padding-inline: 16px; padding-block: 24px 48px;
+  padding-inline: 16px; padding-block: 12px 40px;
 }
-.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 28px; }
-h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0; text-wrap: balance; }
-h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; text-wrap: balance; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 14px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
 h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
 p { margin: 0; max-width: 68ch; }
-.lede { color: var(--muted); font-size: 16px; max-width: 70ch; }
-header { display: grid; gap: 10px; }
+.lede { color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+header { display: grid; gap: 6px; }
+nav.sticky { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 6px 0; border-bottom: 1px solid var(--line); margin: 0 -16px; padding-inline: 16px; }
 nav { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 nav a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
 nav a:hover, nav a:focus-visible { border-bottom-color: var(--accent); outline: none; }
-section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 20px; display: grid; gap: 16px; }
-.station-head { display: grid; gap: 6px; }
+section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 10px; }
+.station-head { display: grid; gap: 3px; }
 .station-head .num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
-.cols { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 20px; }
+.cols { display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 14px; }
 @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
-.controls { display: grid; gap: 12px; align-content: start; min-width: 0; }
-.preview { display: grid; gap: 12px; min-width: 0; align-content: start; }
+.controls { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.preview { display: grid; gap: 8px; min-width: 0; align-content: start; }
 label.field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
 label.field > span.lbl { font-weight: 500; }
 select, input[type=text], input[type=number], textarea {
@@ -77,9 +83,9 @@ button:hover { border-color: var(--accent); }
 button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-.stat { border-top: 2px solid var(--line); padding-top: 6px; }
+.stat { border-top: 2px solid var(--line); padding-top: 4px; }
 .stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-.stat .v { font-family: var(--font-mono); font-size: 16px; font-variant-numeric: tabular-nums; }
+.stat .v { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; }
 .stat.harm { border-top-color: var(--harm); }
 .stat.mel { border-top-color: var(--accent); }
 .stat.good .v { color: var(--ok); }
@@ -89,7 +95,7 @@ canvas { width: 100%; height: auto; display: block; background: var(--bg); borde
 .note { font-size: 13px; color: var(--muted); }
 .note.warn { color: var(--warn); }
 .note.ok { color: var(--ok); }
-.facts { display: grid; gap: 10px; counter-reset: fact; }
+.facts { display: grid; gap: 8px; counter-reset: fact; font-size: 14px; }
 .fact { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
 .fact::before { counter-increment: fact; content: counter(fact); font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 2px; }
 .fact p { max-width: 75ch; }
@@ -102,7 +108,7 @@ tr.hit td { background: var(--accent-soft); }
 tr.pick td { outline: 2px solid var(--accent); outline-offset: -2px; }
 tr.sel { cursor: pointer; }
 tr.sel:hover td { background: var(--harm-soft); }
-.tablewrap { overflow-x: auto; max-height: 360px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; }
+.tablewrap { overflow-x: auto; max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; }
 .pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
 .pill.ok { color: var(--ok); border-color: var(--ok); }
 .pill.warn { color: var(--warn); border-color: var(--warn); }
@@ -113,7 +119,7 @@ tr.sel:hover td { background: var(--harm-soft); }
 .legend .l-mel::before { background: var(--accent); }
 .legend .l-seed::before { background: var(--harm); outline: 2px solid var(--accent); outline-offset: 1px; }
 .prompt { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; line-height: 1.5; min-width: 0; }
-.research { display: grid; gap: 12px; }
+.research { display: grid; gap: 8px; font-size: 14px; }
 .research li { max-width: 78ch; }
 .research ol { padding-left: 20px; margin: 0; display: grid; gap: 8px; }
 .research b { font-weight: 600; }
@@ -123,12 +129,13 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 .rrlist .item { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
 @media (prefers-reduced-motion: no-preference) { button { transition: border-color 120ms; } }
 </style>
-
+</head>
+<body>
 <div class="wrap">
 <header>
   <h1>Lattice Recurrence Playground</h1>
   <p class="lede">Start from a just lattice. Fill the gaps between its tones with a recurrence relation. The result has one melodic structure: an MOS, which includes equal temperaments. Work in two directions. Seed a recurrence with the lattice and bend it toward a generator. Or fit an MOS to the lattice first, and then read off the recurrence.</p>
-  <nav>
+  <nav class="sticky">
     <a href="#lattice">1 Lattice</a><a href="#recurrence">2 Recurrence</a><a href="#seed">3 Seed and bend</a><a href="#fit">4 Fit an MOS</a><a href="#facts">Facts</a><a href="#next">Next research</a><a href="#prompt">Prompt</a>
   </nav>
 </header>
@@ -163,8 +170,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="note">The page reduces each tone to one octave and sorts them. It removes duplicates.</p>
     </div>
     <div class="preview">
-      <canvas id="latCanvas" width="760" height="110"></canvas>
-      <div class="tablewrap" style="max-height:170px"><table id="latTable"><thead><tr><th>#</th><th>ratio</th><th>cents</th><th>harmonic seed</th></tr></thead><tbody></tbody></table></div>
+      <canvas id="latCanvas" width="760" height="84"></canvas>
+      <div class="tablewrap" style="max-height:132px"><table id="latTable"><thead><tr><th>#</th><th>ratio</th><th>cents</th><th>harmonic seed</th></tr></thead><tbody></tbody></table></div>
       <div class="stats"><div class="stat harm"><div class="k">tones</div><div class="v" id="latCount">6</div></div><div class="stat harm"><div class="k">smallest step</div><div class="v" id="latMinStep">—</div></div><div class="stat harm"><div class="k">step classes</div><div class="v" id="latClasses">—</div></div></div>
     </div>
   </div>
@@ -204,7 +211,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="mono" id="rrPoly"></p>
       <p class="note" id="rrDominance"></p>
       <p class="note" id="rrSource"></p>
-      <canvas id="treeCanvas" width="760" height="120"></canvas>
+      <canvas id="treeCanvas" width="760" height="84"></canvas>
       <p class="note">Scale tree of the generator: the MOS note counts in order. These are the N values where a chain of this generator has exactly two step sizes.</p>
     </div>
   </div>
@@ -226,9 +233,9 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     </div>
     <div class="preview">
       <div class="legend"><span class="l-seed">seed (lattice tone)</span><span class="l-mel">generated tone</span><span class="l-harm">lattice pitch class</span></div>
-      <canvas id="timeCanvas" width="760" height="220"></canvas>
-      <canvas id="ratioCanvas" width="760" height="120"></canvas>
-      <canvas id="winCanvas" width="760" height="110"></canvas>
+      <canvas id="timeCanvas" width="760" height="170"></canvas>
+      <canvas id="ratioCanvas" width="760" height="96"></canvas>
+      <canvas id="winCanvas" width="760" height="84"></canvas>
       <div class="stats">
         <div class="stat mel" id="stStep"><div class="k">step classes in window</div><div class="v">—</div></div>
         <div class="stat mel" id="stRatio"><div class="k">last ratio vs G</div><div class="v">—</div></div>
@@ -257,7 +264,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <div class="rrlist" id="fitRR"><span class="note">Select a row.</span></div>
     </div>
     <div class="preview">
-      <canvas id="fitCanvas" width="760" height="110"></canvas>
+      <canvas id="fitCanvas" width="760" height="84"></canvas>
       <p class="note" id="fitPickNote">No fit selected.</p>
       <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
     </div>
@@ -822,3 +829,5 @@ if (typeof document !== 'undefined') (function () {
   runFit();
 })();
 </script>
+</body>
+</html>
