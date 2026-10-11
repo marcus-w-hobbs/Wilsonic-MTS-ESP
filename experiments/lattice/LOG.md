@@ -4011,3 +4011,76 @@ triads within 2¢) beside CPSFIT-001's 193.787¢, offered for listening
 (standing gate). Tests `tests/test_cpsfit002.py` green before the first
 run. Stdlib only, python3.12, deterministic, no wall-clock fields; two
 runs bit-identical.
+
+## 2026-10-10 — CPSFIT-002 results + verdicts
+
+**Run:** `cpsfit002.py` (13.4 min; receipts `results/cpsfit002.jsonl`, 117
+rows = hexany N = 11..48, EG4 N = 12..48, Ptolemy N = 7..48, +
+`results/cpsfit002_summary.json`; two runs bit-identical, `cmp` on both
+receipts and the .scl). Frozen triads v1.1.0 (`score_tempered`, 2¢) and
+melodic v0.1.0 read-only, pins verified; lattice suite 354/354 green before
+the run (10 new tests). The objective (fast triad evaluator) agrees with
+the mirror's `triad_deviations` on every row (0 disagreements); frozen
+image survival is the referee throughout.
+
+- **P-T1 — KEPT on the hexany and EG4, REFUTED as registered on Ptolemy
+  N = 23–35 by a tie.** Every hexany and EG4 rung reproduces to the
+  registered tolerance (hexany 17.924 @ 249.549, 17.026 @ 318.934, 7.951 @
+  490.094, 5.140 @ 503.185, 2.428 @ 116.588, **1.156 @ 193.908**, 0.305 @
+  77.195, 0.295 @ 582.450; EG4 22.973 @ 249.740 … 1.595 @ 193.309, 1.349 @
+  193.883, 0.331 @ 77.191), and the first feasible N under the 20¢ cap is
+  11, 12, 7 as registered. On Ptolemy the objective value 0.257¢ is reached
+  by three different chains with the same tone error 0.50¢: 498.253
+  (−1, 8, 0), its half 249.127 (−2, 16, 0), whose every second degree is the
+  498-chain, and 233.916 (3, −24, 0). The scratch kept the first; the
+  runner's registered tie-break (equal deviation, equal tone error, then
+  the smaller g) keeps the second at N = 23–33 and the third at 34–35. The
+  staircase of values is the registered one; the representative is not.
+  An unregistered rung: Ptolemy N = 42–48 at **0.011¢ @ 249.018**
+  (−2, −37, 0), tone error 0.02¢.
+- **P-T2 — KEPT on the arrival, REFUTED as registered on dominance.** Full
+  frozen survival arrives first at **N = 22 for the hexany (12/12 at
+  193.908¢, tone error 2.22¢; CPSFIT-001 needed N = 31)**, N = 23 for EG4
+  (24/24 at 193.309¢, mapping (−15, 2, 5), tone error 3.87¢; CPSFIT-001
+  needed 31), N = 12 for Ptolemy, all as registered. The clause "survival
+  under the new objective ≥ tone-minimax survival at every N ≥ 15" is
+  false at hexany N = 18–21 (6 against 8) and EG4 N = 19–22 (14 against
+  16): the miracle chain at 116.588¢ has the smaller worst triad (2.43¢
+  against orwell's 3.42¢ at 271.425¢) but orwell keeps more triads. The
+  scratch table showed exactly this and the registration asserted the
+  opposite; the error is the session's.
+- **P-T3 — KEPT.** Every hexany mapping as registered, including the
+  (−1, −9, 2) rung at N = 13–14 that the tone staircase never visits, and
+  the N = 48 optimum is non-homomorphic (582.450¢, 0.295¢ against the
+  (−22, 5, −3) val's 0.305¢).
+- **P-T4 — KEPT.** Frozen survival at the hexany N = 11 triad-minimax
+  optimum is 4 against 8 at the tone-minimax optimum; Ptolemy N = 7 is 0
+  against 6 at Erv's 502.346¢. The worst triad is not the count.
+- **P-T5 — KEPT.** The N = 15 chain at 503.185¢ (0.463¢ from Erv's
+  H[n−1] + 32·H[n−4], power-of-two, in-octave) scores frozen P@2¢ = 17 ≥
+  11.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) The
+objective trades one tone for all twelve triads: at N = 22 the generator
+moves 0.121¢ and the 7/4's error rises from 1.37 to 2.22¢ while the two
+triads that CPSFIT-001 lost by 0.08¢ come in; the chain's own P@2¢ is 37.
+(2) Half-generator ties are generic: whenever an N-chain of g contains the
+lattice, the 2N-chain of g/2 contains it with the same triad deviations,
+so from N ≈ 2·N_min on the objective cannot distinguish them and the
+tie-break decides; a report should quotient by this. (3) The EG4 N = 23
+fit (−15, 2, 5) differs from (16, 2, 5) only in the 3-mapping, and 31
+generators of 193.309¢ are 5992.6¢, 7.4¢ short of five octaves: the chain
+nearly closes at 31 and the two mappings are the two sides of that
+near-closure. (4) The count objective is the open question this run
+sharpens: at N = 18–21 the miracle and orwell chains disagree on which
+matters, the worst triad or the number of survivors, and only the ear can
+say which it hears.
+
+**Kept.** Runner and receipts stand; `results/scl/cpsfit002/` holds the
+hexany N = 22 chain at 193.908¢ (all twelve triads within 2¢) beside
+CPSFIT-001's 193.787¢ chain — gate G-031.
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 354/354 OK (10 new:
+test_cpsfit002), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535); both receipts and the .scl bit-identical across
+two runs.
