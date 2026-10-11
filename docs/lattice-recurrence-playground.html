@@ -262,6 +262,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
   <p class="note"><b>What the fit does not do.</b> It does not change the period. It does not place the lattice's 1/1 between two degrees. It fits tones and not triads. CPSFIT-002 in the research lane fits the triads. It uses one generator, so it is rank 2 with the octave. A lattice that needs two generators, such as a 7-limit CPS at a small N, gets a large error here. The page reports the 1/1 position for each fit so you can read the murchana directly.</p></div>
   <div class="cols">
     <div class="controls">
+      <label class="field"><span class="lbl">Preset (from Erv's pages and the search), in sync with station 2</span><select id="rrPreset2"></select></label>
+      <p class="note">This generator's chains against the lattice appear in the first table. The free search below it finds the best generator for each N.</p>
       <label class="field"><span class="lbl">Fit tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
       <label class="field"><span class="lbl">Largest note count N <span class="val" id="maxNVal">41</span></span><input type="range" id="maxN" min="7" max="72" value="41"></label>
       <label class="chk"><input type="checkbox" id="onlyMOS"> Show only N where the chain is an MOS (most exact fits are 3-step chains)</label>
@@ -272,6 +274,9 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="preview">
       <canvas id="fitCanvas" width="760" height="84"></canvas>
       <p class="note" id="fitPickNote">No fit selected.</p>
+      <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
+      <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
+      <h3>Free search: best generator for each N</h3>
       <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
@@ -560,7 +565,7 @@ function chainPitchClasses(gCents, N, toneCents, capErr) {
     if (mx < bestMax) { bestMax = mx; bestS = s; bestMap = map; }
   }
   const degrees = []; for (let k = bestS; k <= bestS + N - 1; k++) degrees.push(wrapCents(k * gCents));
-  return { degrees: degrees.sort((a, b) => a - b), map: bestMap, maxErr: bestMax };
+  return { degrees: degrees.sort((a, b) => a - b), map: bestMap, maxErr: bestMax, s: bestS };
 }
 const RR_PRESETS = [
   { id: 'erv418935', label: '0.418935 · H[n−1] + 32·H[n−4] (Erv 16 Jul 97, 2L⁴ = L³ + 4)', a: 1, i: 1, b: 32, j: 4, src: 'Octave-shifted form of G = ((G³+4)/2)^(1/4), P.4a. Generator 502.72 cents.' },
@@ -591,7 +596,7 @@ if (typeof document !== 'undefined') (function () {
     seedPlace: 'chain', steps: 40, win: 7, scrub: 45, tol: 2,
     fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
   };
-  let lattice, rec, seq, seeds, fitRows = [];
+  let lattice, rec, seq, seeds, fitRows = [], fixedFirstHit = null;
 
   const LAT_PRESETS = {
     hexany: { kind: 'cps', factors: '1 3 5 7', k: 2 }, tetrad: { kind: 'cps', factors: '1 3 5 7', k: 1 },
@@ -762,6 +767,26 @@ if (typeof document !== 'undefined') (function () {
   }
 
   // ---- station 4
+  function renderFixedTable() {
+    const g = rec.gen * CENTS; const latC = lattice.tones.map(t => t.cents);
+    $('fixedGenLabel').textContent = `${rec.gen.toFixed(5)} octaves = ${g.toFixed(2)} cents`;
+    const path = mosPath(rec.gen, S.maxN);
+    const tb = $('fixedTable').querySelector('tbody'); tb.innerHTML = '';
+    let first = null;
+    for (let N = 2; N <= S.maxN; N++) {
+      const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
+      if (S.onlyMOS && !mos) continue;
+      const ch = chainPitchClasses(g, N, latC, 600);
+      const captured = ch.map.filter(m => m.err <= S.fitTol).length;
+      const row = { key: 'fix' + N, type: 'FIX', N, g, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length, mos, level: mos ? levelIdx + 1 : null, s: ch.s, captured };
+      if (row.maxErr <= S.fitTol && !first) first = row;
+      const tr = document.createElement('tr'); tr.className = 'sel' + (row.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === row.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${N}</td><td>${mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>'}</td><td class="num">${row.level == null ? '—' : row.level}</td><td class="num">${-row.s} of ${N}</td><td class="num">${row.maxErr.toFixed(2)}</td><td class="num">${row.meanErr.toFixed(2)}</td><td class="num">${captured}/${lattice.tones.length}</td>`;
+      tr.addEventListener('click', () => { S.fitPick = row; renderFitPick(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    fixedFirstHit = first;
+  }
   function renderFitTable() {
     const tb = $('fitTable').querySelector('tbody'); tb.innerHTML = '';
     const rows = fitRows.filter(r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos));
@@ -826,20 +851,24 @@ if (typeof document !== 'undefined') (function () {
       p.push(`Direction 2, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (MOS)' : '')} with largest error ${r.maxErr.toFixed(2)} cents`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
       if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves, ${S.fitPick.g.toFixed(2)} cents. Largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents.${S.fitPick.s == null ? '' : ` The 1/1 is chain degree ${-S.fitPick.s} of ${S.fitPick.N} (the murchana).`}${S.fitPick.level ? ` Scale-tree level ${S.fitPick.level}.` : ''}`);
     } else p.push('Direction 2: the fit did not run.');
+    p.push(fixedFirstHit ? `Station 2 generator against the lattice: the smallest chain of ${(rec.gen * CENTS).toFixed(2)} cents that holds every lattice tone within ${S.fitTol} cents has ${fixedFirstHit.N} notes, 1/1 at degree ${-fixedFirstHit.s}${fixedFirstHit.level ? `, scale-tree level ${fixedFirstHit.level}` : ''}.` : `Station 2 generator against the lattice: no chain up to ${S.maxN} notes holds every lattice tone within ${S.fitTol} cents.`);
     p.push('Task: continue the lattice-to-MOS research from this state. Keep the two directions as separate experiments. Use the frozen scorers for the harmony axis and the melody axis.');
     $('promptText').textContent = p.join('\n\n');
   }
 
   // ---- wiring
-  function all() { renderLattice(); renderRecurrence(); renderSeed(); if (fitRows.length) { fitRows = []; S.fitPick = null; renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Lattice changed. Press Run again.'; } updatePrompt(); }
-  const sel = $('rrPreset'); RR_PRESETS.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; sel.appendChild(o); });
+  function all() { renderLattice(); renderRecurrence(); renderSeed(); renderFixedTable(); if (fitRows.length) { fitRows = []; S.fitPick = null; renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Lattice changed. Press Run again.'; } updatePrompt(); }
+  const sel = $('rrPreset'), sel2 = $('rrPreset2'); RR_PRESETS.forEach(p => { for (const el of [sel, sel2]) { const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; el.appendChild(o); } });
+  sel2.value = S.rrPreset;
   sel.value = S.rrPreset;
   $('latPreset').addEventListener('change', e => { S.latPreset = e.target.value; $('cpsFields').hidden = S.latPreset !== 'cps'; $('ratioFields').hidden = S.latPreset !== 'ratios'; all(); });
   $('cpsFactors').addEventListener('input', e => { S.cpsFactors = e.target.value; all(); });
   $('cpsK').addEventListener('input', e => { S.cpsK = +e.target.value || 1; all(); });
   $('ratioText').addEventListener('input', e => { S.ratioText = e.target.value; all(); });
-  sel.addEventListener('change', e => { S.rrPreset = e.target.value; const p = RR_PRESETS.find(x => x.id === S.rrPreset); if (p.id !== 'custom') { S.a = p.a; S.i = p.i; S.b = p.b; S.j = p.j; ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).value = S[x.toLowerCase()]); } renderRecurrence(); renderSeed(); updatePrompt(); });
-  ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).addEventListener('input', e => { const v = Math.max(1, Math.round(+e.target.value || 1)); S[x.toLowerCase()] = v; if (S.i >= S.j) { if (x === 'I') S.j = S.i + 1; else S.i = Math.max(1, S.j - 1); $('rrI').value = S.i; $('rrJ').value = S.j; } S.rrPreset = 'custom'; sel.value = 'custom'; renderRecurrence(); renderSeed(); updatePrompt(); }));
+  const applyPreset = id => { S.rrPreset = id; sel.value = id; sel2.value = id; const p = RR_PRESETS.find(x => x.id === id); if (p.id !== 'custom') { S.a = p.a; S.i = p.i; S.b = p.b; S.j = p.j; ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).value = S[x.toLowerCase()]); } renderRecurrence(); renderSeed(); renderFixedTable(); updatePrompt(); };
+  sel.addEventListener('change', e => applyPreset(e.target.value));
+  sel2.addEventListener('change', e => { applyPreset(e.target.value); document.getElementById('fixedTable').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+  ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).addEventListener('input', e => { const v = Math.max(1, Math.round(+e.target.value || 1)); S[x.toLowerCase()] = v; if (S.i >= S.j) { if (x === 'I') S.j = S.i + 1; else S.i = Math.max(1, S.j - 1); $('rrI').value = S.i; $('rrJ').value = S.j; } S.rrPreset = 'custom'; sel.value = 'custom'; sel2.value = 'custom'; renderRecurrence(); renderSeed(); renderFixedTable(); updatePrompt(); }));
   $('liftAuto').addEventListener('change', e => { S.liftAuto = e.target.checked; renderRecurrence(); renderSeed(); updatePrompt(); });
   $('liftK').addEventListener('input', e => { S.liftK = Math.max(0, Math.round(+e.target.value || 0)); S.liftAuto = false; $('liftAuto').checked = false; renderRecurrence(); renderSeed(); updatePrompt(); });
   $('liftRho').addEventListener('input', e => { S.rho = Math.max(0.05, +e.target.value || 1); renderRecurrence(); renderSeed(); updatePrompt(); });
@@ -850,9 +879,9 @@ if (typeof document !== 'undefined') (function () {
   const onScrub = e => { S.scrub = +e.target.value; renderSeed(); updatePrompt(); };
   $('scrub').addEventListener('input', onScrub); $('scrub2').addEventListener('input', onScrub);
   $('tol').addEventListener('input', e => { S.tol = +e.target.value; $('tolVal').textContent = S.tol.toFixed(1); renderSeed(); updatePrompt(); });
-  $('fitTol').addEventListener('input', e => { S.fitTol = +e.target.value; $('fitTolVal').textContent = S.fitTol.toFixed(1); if (fitRows.length) { fitRows.forEach(r => { r.captured = r.type === 'ET' ? lattice.tones.filter(t => Math.abs(t.cents - Math.round(t.cents / r.g) * r.g) <= S.fitTol).length : chainPitchClasses(r.g, r.N, lattice.tones.map(t => t.cents), 60).map.filter(m => m.err <= S.fitTol).length; }); renderFitTable(); renderFitPick(); updatePrompt(); } });
-  $('maxN').addEventListener('input', e => { S.maxN = +e.target.value; $('maxNVal').textContent = S.maxN; });
-  $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); });
+  $('fitTol').addEventListener('input', e => { S.fitTol = +e.target.value; $('fitTolVal').textContent = S.fitTol.toFixed(1); if (fitRows.length) { fitRows.forEach(r => { r.captured = r.type === 'ET' ? lattice.tones.filter(t => Math.abs(t.cents - Math.round(t.cents / r.g) * r.g) <= S.fitTol).length : chainPitchClasses(r.g, r.N, lattice.tones.map(t => t.cents), 60).map.filter(m => m.err <= S.fitTol).length; }); renderFitTable(); renderFitPick(); updatePrompt(); }  renderFixedTable(); });
+  $('maxN').addEventListener('input', e => { S.maxN = +e.target.value; $('maxNVal').textContent = S.maxN; renderFixedTable(); });
+  $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); renderFixedTable(); });
   $('showET').addEventListener('change', e => { S.showET = e.target.checked; renderFitTable(); });
   $('fitRun').addEventListener('click', runFit);
   $('copyBtn').addEventListener('click', () => {
