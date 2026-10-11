@@ -257,7 +257,9 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 <!-- ───────── 4 FIT ───────── -->
 <section class="station" id="fit">
   <div class="station-head"><div class="num">STATION 4 · DIRECTION 2</div><h2>Fit an MOS to the lattice</h2>
-  <p class="note">Search generators and note counts. Keep the chains that contain every lattice tone within the tolerance. Select a row to see the scale against the lattice.</p></div>
+  <p class="note">Search generators and note counts. Keep the chains that contain every lattice tone within the tolerance. Select a row to see the scale against the lattice.</p>
+  <p class="note"><b>What the fit searches, in Wilson's terms.</b> A scale here is a chain: N consecutive generators, reduced to one octave. The octave is the period, and it does not change. Three things vary. The generator g runs over 0 to 600 cents, and its complement covers the rest, because g and 1 − g make the same scale. The note count N runs from 2 to the limit you set. In the Brun model N is the level, and the "only MOS" switch keeps the N values that are levels on the scale tree. The window start is the murchana. The chain contains the lattice's 1/1 at one of its N degrees. The search tries all N positions, which is the same as trying every mode of the chain. For each N the search is exact. For a tolerance ε, each tone and each degree k allow g to lie in an interval of half-width ε/|k|. A sweep over the interval endpoints finds the first g where some window of N degrees holds every tone. A bisection on ε then finds the smallest ε that works. A final refinement moves g to minimize the largest tone error. The result for each N is the generator, the murchana, the largest error and the mean error. Equal temperaments are a separate row for each N with g = 1200/N, where the murchana does not matter.</p>
+  <p class="note"><b>What the fit does not do.</b> It does not change the period. It does not place the lattice's 1/1 between two degrees. It fits tones and not triads. CPSFIT-002 in the research lane fits the triads. It uses one generator, so it is rank 2 with the octave. A lattice that needs two generators, such as a 7-limit CPS at a small N, gets a large error here. The page reports the 1/1 position for each fit so you can read the murchana directly.</p></div>
   <div class="cols">
     <div class="controls">
       <label class="field"><span class="lbl">Fit tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
@@ -270,7 +272,7 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="preview">
       <canvas id="fitCanvas" width="760" height="84"></canvas>
       <p class="note" id="fitPickNote">No fit selected.</p>
-      <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
+      <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
 </section>
@@ -765,7 +767,7 @@ if (typeof document !== 'undefined') (function () {
     const rows = fitRows.filter(r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos));
     for (const r of rows) {
       const tr = document.createElement('tr'); tr.className = 'sel' + (r.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
-      tr.innerHTML = `<td class="num">${r.N}</td><td>${r.type === 'ET' ? '<span class="pill">ET</span>' : (r.mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>')}</td><td class="num">${(r.g / CENTS).toFixed(5)}</td><td class="num">${r.g.toFixed(2)}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.meanErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td>`;
+      tr.innerHTML = `<td class="num">${r.N}</td><td>${r.type === 'ET' ? '<span class="pill">ET</span>' : (r.mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>')}</td><td class="num">${r.level == null ? '—' : r.level}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${(r.g / CENTS).toFixed(5)}</td><td class="num">${r.g.toFixed(2)}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.meanErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td>`;
       tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFitTable(); updatePrompt(); });
       tb.appendChild(tr);
     }
@@ -780,7 +782,7 @@ if (typeof document !== 'undefined') (function () {
     const items = ch.degrees.map(d => ({ cents: d, color: acc, r: 4 }));
     ch.map.forEach(m => items.push({ cents: m.t, color: m.err <= S.fitTol ? harm : tok('--warn'), r: 0, tick: true, label: m.err.toFixed(1), above: true }));
     drawRuler($('fitCanvas'), items, { title: `${r.type === 'ET' ? r.N + '-ET' : r.N + ' notes of generator ' + r.g.toFixed(2) + '¢'}: dots = scale, ticks = lattice with error in cents` });
-    $('fitPickNote').textContent = `${r.N} notes, generator ${(r.g / CENTS).toFixed(5)} octaves (${r.g.toFixed(2)} cents, complement ${(1 - r.g / CENTS).toFixed(5)}). Largest lattice error ${r.maxErr.toFixed(2)} cents. ${r.captured} of ${lattice.tones.length} lattice tones within ${S.fitTol} cents.`;
+    $('fitPickNote').textContent = `${r.N} notes, generator ${(r.g / CENTS).toFixed(5)} octaves (${r.g.toFixed(2)} cents, complement ${(1 - r.g / CENTS).toFixed(5)}). Largest lattice error ${r.maxErr.toFixed(2)} cents. ${r.captured} of ${lattice.tones.length} lattice tones within ${S.fitTol} cents.` + (r.s == null ? '' : ` The 1/1 is chain degree ${-r.s} of ${r.N}: ${-r.s} generators below it and ${r.N - 1 + r.s} above it. This is the murchana.`) + (r.level ? ` Level ${r.level} on the scale tree.` : '');
   }
   function runFit() {
     $('fitStatus').textContent = 'Searching…';
@@ -791,13 +793,13 @@ if (typeof document !== 'undefined') (function () {
       for (const [N, r] of best) {
         if (!(r.maxErr < Infinity)) continue;
         const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * r.g));
-        const mos = mosPath(r.g / CENTS, N).some(x => x.N === N);
+        const path = mosPath(r.g / CENTS, N); const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
         const ch = chainPitchClasses(r.g, N, latC, 60);
-        fitRows.push({ key: 'mos' + N, type: 'MOS', N, g: r.g, maxErr: r.maxErr, meanErr: r.meanErr, mos, captured: ch.map.filter(m => m.err <= S.fitTol).length });
+        fitRows.push({ key: 'mos' + N, type: 'MOS', N, g: r.g, maxErr: r.maxErr, meanErr: r.meanErr, mos, level: mos ? levelIdx + 1 : null, s: r.s, captured: ch.map.filter(m => m.err <= S.fitTol).length });
       }
       for (const e of fitET(latC, S.maxN)) {
         const step = CENTS / e.N; const captured = latC.filter(t => Math.abs(t - Math.round(t / step) * step) <= S.fitTol).length;
-        fitRows.push({ key: 'et' + e.N, type: 'ET', N: e.N, g: step, maxErr: e.maxErr, meanErr: e.meanErr, mos: true, captured });
+        fitRows.push({ key: 'et' + e.N, type: 'ET', N: e.N, g: step, maxErr: e.maxErr, meanErr: e.meanErr, mos: true, level: null, s: null, captured });
       }
       fitRows.sort((p, q) => (p.maxErr <= S.fitTol ? 0 : 1) - (q.maxErr <= S.fitTol ? 0 : 1) || p.N - q.N);
       const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
@@ -822,7 +824,7 @@ if (typeof document !== 'undefined') (function () {
     if (fitRows.length) {
       const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
       p.push(`Direction 2, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (MOS)' : '')} with largest error ${r.maxErr.toFixed(2)} cents`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
-      if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves, ${S.fitPick.g.toFixed(2)} cents. Largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents.`);
+      if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves, ${S.fitPick.g.toFixed(2)} cents. Largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents.${S.fitPick.s == null ? '' : ` The 1/1 is chain degree ${-S.fitPick.s} of ${S.fitPick.N} (the murchana).`}${S.fitPick.level ? ` Scale-tree level ${S.fitPick.level}.` : ''}`);
     } else p.push('Direction 2: the fit did not run.');
     p.push('Task: continue the lattice-to-MOS research from this state. Keep the two directions as separate experiments. Use the frozen scorers for the harmony axis and the melody axis.');
     $('promptText').textContent = p.join('\n\n');
