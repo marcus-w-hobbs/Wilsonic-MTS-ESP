@@ -235,7 +235,11 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="preview">
       <div class="legend"><span class="l-seed">seed (lattice tone)</span><span class="l-mel">generated tone</span><span class="l-harm">lattice pitch class</span></div>
       <canvas id="timeCanvas" width="760" height="170"></canvas>
-      <canvas id="ratioCanvas" width="760" height="96"></canvas>
+      <canvas id="ratioCanvas" width="760" height="110"></canvas>
+      <div class="row" style="align-items:center">
+        <label class="field" style="flex:1 1 200px"><span class="lbl">Steps to run <span class="val" id="stepsVal2">40</span> (linked)</span><input type="range" id="steps2" min="4" max="150" value="40"></label>
+        <label class="field" style="flex:1 1 200px"><span class="lbl">Scrub: step n = <span class="val" id="scrubVal2">—</span> (linked)</span><input type="range" id="scrub2" min="0" max="40" value="40"></label>
+      </div>
       <canvas id="winCanvas" width="760" height="84"></canvas>
       <div class="stats">
         <div class="stat mel" id="stStep"><div class="k">step classes in window</div><div class="v">—</div></div>
@@ -700,12 +704,27 @@ if (typeof document !== 'undefined') (function () {
   }
 
   // ---- station 3
+  function xAxis(ctx, x, total, L, R, B, h, seedsN, scrub) {
+    // ticks every 5 or 10 steps, the seed/generated boundary, and the scrub position
+    const muted = tok('--muted'), lineC = tok('--line'), acc = tok('--accent'), harm = tok('--harm');
+    const every = total > 80 ? 20 : total > 40 ? 10 : 5;
+    ctx.strokeStyle = lineC; ctx.beginPath(); ctx.moveTo(L, B); ctx.lineTo(R, B); ctx.stroke();
+    ctx.fillStyle = muted;
+    for (let n = 0; n < total; n += every) { ctx.beginPath(); ctx.moveTo(x(n), B); ctx.lineTo(x(n), B + 4); ctx.stroke(); ctx.fillText(String(n), x(n) - (n >= 100 ? 10 : n >= 10 ? 7 : 3), h - 4); }
+    ctx.fillText('step n', R - 36, h - 4);
+    ctx.strokeStyle = harm; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(x(seedsN - 0.5), B); ctx.lineTo(x(seedsN - 0.5), 14); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = harm; ctx.fillText('seeds | generated', x(seedsN - 0.5) + 4, 24);
+    ctx.strokeStyle = acc; ctx.beginPath(); ctx.moveTo(x(scrub), B); ctx.lineTo(x(scrub), B - 6); ctx.stroke();
+  }
   function renderSeed() {
     seeds = placeSeeds(lattice.harmonics, rec.order, S.seedPlace, rec.g);
     seq = runRecurrence(rec, seeds, S.steps);
     const total = seeds.length + S.steps;
-    $('scrub').max = total - 1; if (S.scrub > total - 1 || S.scrub < seeds.length) { S.scrub = total - 1; $('scrub').value = S.scrub; }
-    $('scrubVal').textContent = S.scrub;
+    if (S.scrub > total - 1 || S.scrub < seeds.length) S.scrub = total - 1;
+    for (const id of ['scrub', 'scrub2']) { $(id).max = total - 1; $(id).min = seeds.length; $(id).value = S.scrub; }
+    for (const id of ['scrubVal', 'scrubVal2']) $(id).textContent = S.scrub;
+    for (const id of ['steps', 'steps2']) $(id).value = S.steps;
+    for (const id of ['stepsVal', 'stepsVal2']) $(id).textContent = S.steps;
     const acc = tok('--accent'), harm = tok('--harm'), muted = tok('--muted'), lineC = tok('--line');
     const latC = lattice.tones.map(t => t.cents);
     const onLat = f => latC.some(c => circDist(cents(f), c) <= S.tol);
@@ -714,8 +733,9 @@ if (typeof document !== 'undefined') (function () {
       const valid = seq.filter(v => isFinite(v)); const ys = valid.map(v => log2(v)); const ymin = Math.min(...ys) - 0.5, ymax = Math.max(...ys) + 0.5;
       const x = n => L + (R - L) * (n / Math.max(1, total - 1)); const y = v => B - (B - T) * ((v - ymin) / (ymax - ymin));
       ctx.strokeStyle = lineC; ctx.fillStyle = muted;
-      for (let o = Math.ceil(ymin); o <= Math.floor(ymax); o++) { ctx.beginPath(); ctx.moveTo(L, y(o)); ctx.lineTo(R, y(o)); ctx.stroke(); ctx.fillText('2^' + o, 4, y(o) + 4); }
-      ctx.fillText('step n →', R - 50, h - 8); ctx.fillText('log2 pitch', L, 12);
+      const octEvery = Math.max(1, Math.ceil((ymax - ymin) / 8));
+      for (let o = Math.ceil(ymin); o <= Math.floor(ymax); o++) { if (o % octEvery) continue; ctx.beginPath(); ctx.moveTo(L, y(o)); ctx.lineTo(R, y(o)); ctx.stroke(); ctx.fillText('2^' + o, 4, y(o) + 4); }
+      ctx.fillText('log2 pitch', L, 12); xAxis(ctx, x, total, L, R, B, h, seeds.length, S.scrub);
       // limit line through last valid point with slope g
       const nLast = valid.length - 1; if (nLast >= 1) { ctx.strokeStyle = acc; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x(0), y(ys[nLast] - rec.g * nLast)); ctx.lineTo(x(nLast), y(ys[nLast])); ctx.stroke(); ctx.setLineDash([]); }
       // window shading
@@ -723,11 +743,11 @@ if (typeof document !== 'undefined') (function () {
       seq.forEach((v, n) => { if (!isFinite(v)) return; const isSeed = n < seeds.length; ctx.fillStyle = isSeed ? harm : (onLat(v) ? harm : acc); ctx.beginPath(); ctx.arc(x(n), y(log2(v)), isSeed ? 4.5 : 3.5, 0, Math.PI * 2); ctx.fill(); if (isSeed) { ctx.strokeStyle = acc; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x(n), y(log2(v)), 7, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 1; } });
     }
     // ratio plot
-    { const { ctx, w, h } = prep($('ratioCanvas')); const L = 44, R = w - 16, T = 16, B = h - 22;
+    { const { ctx, w, h } = prep($('ratioCanvas')); const L = 44, R = w - 16, T = 16, B = h - 18;
       const target = rec.g * CENTS; const rat = seq.map((v, n) => (n > 0 && isFinite(v) && isFinite(seq[n - 1])) ? cents(v / seq[n - 1]) : NaN);
       const vals = rat.filter(v => isFinite(v)); const span = Math.max(60, ...vals.map(v => Math.abs(v - target))) * 1.1;
       const x = n => L + (R - L) * (n / Math.max(1, total - 1)); const y = c => B - (B - T) * ((c - (target - span)) / (2 * span));
-      ctx.strokeStyle = lineC; ctx.fillStyle = muted; ctx.fillText('H[n]/H[n−1] in cents', L, 11);
+      ctx.strokeStyle = lineC; ctx.fillStyle = muted; ctx.fillText('H[n]/H[n−1] in cents', L, 11); xAxis(ctx, x, total, L, R, B, h, seeds.length, S.scrub);
       ctx.fillStyle = tok('--accent-soft'); ctx.fillRect(L, y(target + S.tol), R - L, y(target - S.tol) - y(target + S.tol));
       ctx.strokeStyle = acc; ctx.beginPath(); ctx.moveTo(L, y(target)); ctx.lineTo(R, y(target)); ctx.stroke(); ctx.fillStyle = acc; ctx.fillText(target.toFixed(1) + '¢', R - 56, y(target) - 4);
       ctx.strokeStyle = muted; ctx.beginPath(); let started = false; rat.forEach((c, n) => { if (!isFinite(c)) return; const yy = Math.max(T, Math.min(B, y(c))); if (!started) { ctx.moveTo(x(n), yy); started = true; } else ctx.lineTo(x(n), yy); }); ctx.stroke();
@@ -852,9 +872,11 @@ if (typeof document !== 'undefined') (function () {
   $('liftK').addEventListener('input', e => { S.liftK = Math.max(0, Math.round(+e.target.value || 0)); S.liftAuto = false; $('liftAuto').checked = false; renderRecurrence(); renderSeed(); updatePrompt(); });
   $('liftRho').addEventListener('input', e => { S.rho = Math.max(0.05, +e.target.value || 1); renderRecurrence(); renderSeed(); updatePrompt(); });
   $('seedPlace').addEventListener('change', e => { S.seedPlace = e.target.value; renderSeed(); updatePrompt(); });
-  $('steps').addEventListener('input', e => { S.steps = +e.target.value; $('stepsVal').textContent = S.steps; S.scrub = seeds.length + S.steps - 1; renderSeed(); updatePrompt(); });
+  const onSteps = e => { S.steps = +e.target.value; S.scrub = seeds.length + S.steps - 1; renderSeed(); updatePrompt(); };
+  $('steps').addEventListener('input', onSteps); $('steps2').addEventListener('input', onSteps);
   $('win').addEventListener('input', e => { S.win = +e.target.value; $('winVal').textContent = S.win; renderSeed(); updatePrompt(); });
-  $('scrub').addEventListener('input', e => { S.scrub = +e.target.value; renderSeed(); updatePrompt(); });
+  const onScrub = e => { S.scrub = +e.target.value; renderSeed(); updatePrompt(); };
+  $('scrub').addEventListener('input', onScrub); $('scrub2').addEventListener('input', onScrub);
   $('tol').addEventListener('input', e => { S.tol = +e.target.value; $('tolVal').textContent = S.tol.toFixed(1); renderSeed(); updatePrompt(); });
   $('fitTol').addEventListener('input', e => { S.fitTol = +e.target.value; $('fitTolVal').textContent = S.fitTol.toFixed(1); if (fitRows.length) { fitRows.forEach(r => { r.captured = r.type === 'ET' ? lattice.tones.filter(t => Math.abs(t.cents - Math.round(t.cents / r.g) * r.g) <= S.fitTol).length : chainPitchClasses(r.g, r.N, lattice.tones.map(t => t.cents), 60).map.filter(m => m.err <= S.fitTol).length; }); renderFitTable(); renderFitPick(); updatePrompt(); } });
   $('maxN').addEventListener('input', e => { S.maxN = +e.target.value; $('maxNVal').textContent = S.maxN; });
