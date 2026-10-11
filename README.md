@@ -23,7 +23,7 @@ Erv is gone. The search is not. Where Wilson worked with pencil and ear, we now 
 
 > **This is a first-class research program, not a folder of scripts.** The plugin ships; the harness explores. They are peers.
 
-**New here as a researcher?** Start with [The Tunings That Ring](docs/research-blog-001.md) — a living research note covering past/present/future experiments, the scoring function disclosed in full (including its measured limitations), and an open invitation to critique and extend it via [Discussions](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/discussions).
+**New here as a researcher?** Start with [The Tunings That Ring](docs/research-blog-001.md) — a living research note covering past/present/future experiments, the scoring function disclosed in full (including its measured limitations), and an open invitation to critique and extend it via [Discussions](https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/discussions). Then read [The Machine Keeps Deriving Wilson](docs/research-blog-002.md), the second post, which tells three episodes in which exhaustive searches re-derived Wilson's hand results (the 1975 D'Alessandro template, its pitch-just addressing trick, and the 1993 golden-generator table), with every number linked to its receipt.
 
 ### Two systems, one search
 

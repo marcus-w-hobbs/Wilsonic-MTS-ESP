@@ -1,0 +1,228 @@
+{
+ "_warning": "SEALED -- do not open this file (or its PR diff) until your responses are saved to results/eareps_responses.json. See EAREPS_PROTOCOL.md.",
+ "experiment": "EAR-eps",
+ "version": "1.0.0",
+ "seed": 20260819,
+ "rungs": {
+  "eareps_B_01": {
+   "family": "B",
+   "delta_cents": 8.0,
+   "description": "2:3:4 power chord, fifth +8.000000c from just"
+  },
+  "eareps_B_02": {
+   "family": "B",
+   "delta_cents": 0.0,
+   "description": "2:3:4 power chord, fifth +0.000000c from just"
+  },
+  "eareps_B_03": {
+   "family": "B",
+   "delta_cents": -1.9550008653873192,
+   "description": "2:3:4 power chord, fifth -1.955001c from just"
+  },
+  "eareps_B_04": {
+   "family": "B",
+   "delta_cents": 1.0,
+   "description": "2:3:4 power chord, fifth +1.000000c from just"
+  },
+  "eareps_B_05": {
+   "family": "B",
+   "delta_cents": 1.9550008653873192,
+   "description": "2:3:4 power chord, fifth +1.955001c from just"
+  },
+  "eareps_B_06": {
+   "family": "B",
+   "delta_cents": 3.0,
+   "description": "2:3:4 power chord, fifth +3.000000c from just"
+  },
+  "eareps_B_07": {
+   "family": "B",
+   "delta_cents": -8.0,
+   "description": "2:3:4 power chord, fifth -8.000000c from just"
+  },
+  "eareps_B_08": {
+   "family": "B",
+   "delta_cents": -1.0,
+   "description": "2:3:4 power chord, fifth -1.000000c from just"
+  },
+  "eareps_B_09": {
+   "family": "B",
+   "delta_cents": -5.0,
+   "description": "2:3:4 power chord, fifth -5.000000c from just"
+  },
+  "eareps_B_10": {
+   "family": "B",
+   "delta_cents": -3.0,
+   "description": "2:3:4 power chord, fifth -3.000000c from just"
+  },
+  "eareps_B_11": {
+   "family": "B",
+   "delta_cents": 5.0,
+   "description": "2:3:4 power chord, fifth +5.000000c from just"
+  },
+  "eareps_A_01": {
+   "family": "A",
+   "delta_cents": 5.0,
+   "description": "4:5:6 major, third +5.000000c from just"
+  },
+  "eareps_A_02": {
+   "family": "A",
+   "delta_cents": 8.0,
+   "description": "4:5:6 major, third +8.000000c from just"
+  },
+  "eareps_A_03": {
+   "family": "A",
+   "delta_cents": -8.0,
+   "description": "4:5:6 major, third -8.000000c from just"
+  },
+  "eareps_A_04": {
+   "family": "A",
+   "delta_cents": -18.0,
+   "description": "4:5:6 major, third -18.000000c from just"
+  },
+  "eareps_A_05": {
+   "family": "A",
+   "delta_cents": 22.0,
+   "description": "4:5:6 major, third +22.000000c from just"
+  },
+  "eareps_A_06": {
+   "family": "A",
+   "delta_cents": -14.86,
+   "description": "4:5:6 major, third -14.860000c from just"
+  },
+  "eareps_A_07": {
+   "family": "A",
+   "delta_cents": 11.0,
+   "description": "4:5:6 major, third +11.000000c from just"
+  },
+  "eareps_A_08": {
+   "family": "A",
+   "delta_cents": -22.0,
+   "description": "4:5:6 major, third -22.000000c from just"
+  },
+  "eareps_A_09": {
+   "family": "A",
+   "delta_cents": 14.86,
+   "description": "4:5:6 major, third +14.860000c from just"
+  },
+  "eareps_A_10": {
+   "family": "A",
+   "delta_cents": -5.0,
+   "description": "4:5:6 major, third -5.000000c from just"
+  },
+  "eareps_A_11": {
+   "family": "A",
+   "delta_cents": -11.0,
+   "description": "4:5:6 major, third -11.000000c from just"
+  },
+  "eareps_A_12": {
+   "family": "A",
+   "delta_cents": -2.0,
+   "description": "4:5:6 major, third -2.000000c from just"
+  },
+  "eareps_A_13": {
+   "family": "A",
+   "delta_cents": 18.0,
+   "description": "4:5:6 major, third +18.000000c from just"
+  },
+  "eareps_A_14": {
+   "family": "A",
+   "delta_cents": 2.0,
+   "description": "4:5:6 major, third +2.000000c from just"
+  },
+  "eareps_A_15": {
+   "family": "A",
+   "delta_cents": 0.0,
+   "description": "4:5:6 major, third +0.000000c from just"
+  },
+  "eareps_C_01": {
+   "family": "C",
+   "delta_cents": -8.0,
+   "description": "10:12:15 minor, third -8.000000c from just"
+  },
+  "eareps_C_02": {
+   "family": "C",
+   "delta_cents": -14.86,
+   "description": "10:12:15 minor, third -14.860000c from just"
+  },
+  "eareps_C_03": {
+   "family": "C",
+   "delta_cents": 18.0,
+   "description": "10:12:15 minor, third +18.000000c from just"
+  },
+  "eareps_C_04": {
+   "family": "C",
+   "delta_cents": -2.0,
+   "description": "10:12:15 minor, third -2.000000c from just"
+  },
+  "eareps_C_05": {
+   "family": "C",
+   "delta_cents": 11.0,
+   "description": "10:12:15 minor, third +11.000000c from just"
+  },
+  "eareps_C_06": {
+   "family": "C",
+   "delta_cents": -18.0,
+   "description": "10:12:15 minor, third -18.000000c from just"
+  },
+  "eareps_C_07": {
+   "family": "C",
+   "delta_cents": 22.0,
+   "description": "10:12:15 minor, third +22.000000c from just"
+  },
+  "eareps_C_08": {
+   "family": "C",
+   "delta_cents": -22.0,
+   "description": "10:12:15 minor, third -22.000000c from just"
+  },
+  "eareps_C_09": {
+   "family": "C",
+   "delta_cents": 14.86,
+   "description": "10:12:15 minor, third +14.860000c from just"
+  },
+  "eareps_C_10": {
+   "family": "C",
+   "delta_cents": -5.0,
+   "description": "10:12:15 minor, third -5.000000c from just"
+  },
+  "eareps_C_11": {
+   "family": "C",
+   "delta_cents": 2.0,
+   "description": "10:12:15 minor, third +2.000000c from just"
+  },
+  "eareps_C_12": {
+   "family": "C",
+   "delta_cents": 0.0,
+   "description": "10:12:15 minor, third +0.000000c from just"
+  },
+  "eareps_C_13": {
+   "family": "C",
+   "delta_cents": 8.0,
+   "description": "10:12:15 minor, third +8.000000c from just"
+  },
+  "eareps_C_14": {
+   "family": "C",
+   "delta_cents": 5.0,
+   "description": "10:12:15 minor, third +5.000000c from just"
+  },
+  "eareps_C_15": {
+   "family": "C",
+   "delta_cents": -11.0,
+   "description": "10:12:15 minor, third -11.000000c from just"
+  },
+  "eareps_D_01": {
+   "family": "D",
+   "delta_cents": null,
+   "description": "12-EDO power chord 0-700-1200"
+  },
+  "eareps_D_02": {
+   "family": "D",
+   "delta_cents": null,
+   "description": "12-EDO major triad 0-400-700"
+  },
+  "eareps_D_03": {
+   "family": "D",
+   "delta_cents": null,
+   "description": "12-EDO minor triad 0-300-700"
+  }
+ }
+}

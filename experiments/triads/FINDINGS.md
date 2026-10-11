@@ -167,3 +167,33 @@ behind 1-3-7-9. Unexpected bonus: the span limit repairs the window
 convention's duality failure for P and S (segment 8..16 now swaps exactly,
 (36,6) → (6,36)); G still does not swap, and the window remains
 non-transposition-invariant, so anchored stays primary.
+
+**2026-09-29 — EPS-TIER-001: a 12-ET-sized epsilon ranks different
+scales, and at the 7-limit tier it mostly rewards near-duplicate
+pitches.** I scored every MOS (1¢ generator grid, N = 5..22, 3006 rows)
+and all 70 HEX-001 hexanies on the cents path at three tiers derived from
+12-EDO: LOCK 2¢ (scorer default), ET5 14.86¢ (0-4-7 against 4:5:6's
+arithmetic mean, ET-001's cultural epsilon) and ET7 32.01¢ (7-10-12
+against 6:7:8). Against the predictions committed before the run
+(epstier001.py docstring): E1 kept, P = S for every MOS and hexany at
+every tier. E2 kept, the degeneracy guard drops 20.9%, 27.6% and 33.3% of
+labelled triples. E3 refuted in both halves, since 12-EDO at N = 12 is
+already 5th of 35 at LOCK (its P = 12 comes from 2:3:4-type chords that
+lock at the fifth's 1.96¢ error) and only 4th at ET5, then falls to 24th
+at ET7. E4 kept strongly, the median Spearman ρ of P across generators is
+0.155 for LOCK vs ET5 and 0.141 for LOCK vs ET7, so the loose tiers rank
+generators almost independently of the lock tier. E5 mostly kept: the
+LOCK rail reproduces exact P and S for all 70 hexanies (one set,
+5-7-9-11, gains two near-geometric triples within 2¢ that the exact test
+rejects), and 33/70 hexanies gain triads at ET5, just under the predicted
+half, rising to 59/70 at ET7; classic 1-3-5-7 is unchanged at ET5 and
+goes (6,6) → (11,11) at ET7. The unexpected result is where the winners
+sit. At LOCK none of the 18 per-N winners has a scale step smaller than
+ε. At ET5, 8 of 18 do, and at ET7, 16 of 18 do, mostly generators near
+481¢ and 241¢ whose MOS is a 5-EDO with 5¢ doubled pitches. A single
+chord gets counted once per near-duplicate, and the existing guard misses
+it because it only checks the outer tones' AM–HM separation. So a
+12-ET-calibrated tier is usable only with a second guard that collapses
+pitches closer than ε (report-layer filter first; a scorer rule would need
+a G-003-style unfreeze). Artifacts: results/epstier001.jsonl,
+results/epstier001_summary.json.

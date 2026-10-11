@@ -1,0 +1,569 @@
+{
+  "constants": {
+    "delta": 1e-06,
+    "meantone_fifth_cents": 696.578428,
+    "pure_fifth_cents": 701.955001,
+    "pythagorean_comma_cents": 23.46001,
+    "tie_tol": 1e-09,
+    "werckmeister_tempered_fifth_cents": 696.089998,
+    "werckmeister_word": "TTTPPTPPPPPP"
+  },
+  "coverage_major": {
+    "S1_pythagorean": {
+      "10.0": 4,
+      "14.86": 12,
+      "2.0": 3,
+      "20.0": 12,
+      "3.0": 3,
+      "5.0": 3
+    },
+    "S2_meantone": {
+      "10.0": 8,
+      "14.86": 8,
+      "2.0": 0,
+      "20.0": 9,
+      "3.0": 8,
+      "5.0": 8
+    },
+    "S3_werckmeister3": {
+      "10.0": 9,
+      "14.86": 12,
+      "2.0": 1,
+      "20.0": 12,
+      "3.0": 2,
+      "5.0": 4
+    },
+    "S4_12edo": {
+      "10.0": 12,
+      "14.86": 12,
+      "2.0": 0,
+      "20.0": 12,
+      "3.0": 0,
+      "5.0": 0
+    }
+  },
+  "coverage_minor": {
+    "S1_pythagorean": {
+      "10.0": 4,
+      "14.86": 12,
+      "2.0": 3,
+      "20.0": 12,
+      "3.0": 3,
+      "5.0": 3
+    },
+    "S2_meantone": {
+      "10.0": 8,
+      "14.86": 8,
+      "2.0": 0,
+      "20.0": 9,
+      "3.0": 8,
+      "5.0": 8
+    },
+    "S3_werckmeister3": {
+      "10.0": 9,
+      "14.86": 12,
+      "2.0": 1,
+      "20.0": 12,
+      "3.0": 2,
+      "5.0": 4
+    },
+    "S4_12edo": {
+      "10.0": 12,
+      "14.86": 12,
+      "2.0": 0,
+      "20.0": 12,
+      "3.0": 0,
+      "5.0": 0
+    }
+  },
+  "eps_grid": [
+    1.0,
+    2.0,
+    3.0,
+    5.0,
+    10.0,
+    14.86,
+    20.0
+  ],
+  "et003_version": "1.0.0",
+  "experiment": "ET-003",
+  "grid_tables": {
+    "S1_pythagorean": {
+      "G": [
+        30,
+        30,
+        30,
+        28,
+        28,
+        28,
+        28
+      ],
+      "G_raw": [
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
+      ],
+      "P": [
+        11,
+        19,
+        21,
+        19,
+        20,
+        37,
+        46
+      ],
+      "P_raw": [
+        11,
+        19,
+        21,
+        21,
+        27,
+        49,
+        58
+      ],
+      "S": [
+        11,
+        19,
+        21,
+        19,
+        20,
+        37,
+        46
+      ],
+      "S_raw": [
+        11,
+        19,
+        21,
+        21,
+        27,
+        49,
+        58
+      ],
+      "eps": [
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        14.86,
+        20.0
+      ]
+    },
+    "S2_meantone": {
+      "G": [
+        30,
+        30,
+        30,
+        30,
+        28,
+        28,
+        28
+      ],
+      "G_raw": [
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
+      ],
+      "P": [
+        2,
+        2,
+        10,
+        28,
+        39,
+        47,
+        48
+      ],
+      "P_raw": [
+        2,
+        2,
+        10,
+        28,
+        41,
+        49,
+        55
+      ],
+      "S": [
+        2,
+        2,
+        10,
+        28,
+        39,
+        47,
+        48
+      ],
+      "S_raw": [
+        2,
+        2,
+        10,
+        28,
+        41,
+        49,
+        55
+      ],
+      "eps": [
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        14.86,
+        20.0
+      ]
+    },
+    "S3_werckmeister3": {
+      "G": [
+        20,
+        20,
+        20,
+        20,
+        39,
+        55,
+        58
+      ],
+      "G_raw": [
+        20,
+        20,
+        20,
+        20,
+        42,
+        64,
+        70
+      ],
+      "P": [
+        10,
+        10,
+        14,
+        18,
+        28,
+        40,
+        48
+      ],
+      "P_raw": [
+        10,
+        10,
+        14,
+        18,
+        39,
+        52,
+        60
+      ],
+      "S": [
+        9,
+        9,
+        14,
+        19,
+        28,
+        40,
+        46
+      ],
+      "S_raw": [
+        9,
+        9,
+        14,
+        19,
+        38,
+        52,
+        58
+      ],
+      "eps": [
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        14.86,
+        20.0
+      ]
+    },
+    "S4_12edo": {
+      "G": [
+        72,
+        72,
+        72,
+        72,
+        60,
+        60,
+        60
+      ],
+      "G_raw": [
+        72,
+        72,
+        72,
+        72,
+        72,
+        72,
+        72
+      ],
+      "P": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "P_raw": [
+        0,
+        12,
+        24,
+        24,
+        36,
+        60,
+        60
+      ],
+      "S": [
+        0,
+        12,
+        24,
+        24,
+        24,
+        48,
+        48
+      ],
+      "S_raw": [
+        0,
+        12,
+        24,
+        24,
+        36,
+        60,
+        60
+      ],
+      "eps": [
+        1.0,
+        2.0,
+        3.0,
+        5.0,
+        10.0,
+        14.86,
+        20.0
+      ]
+    }
+  },
+  "kernel_census_counts": {
+    "11": 122,
+    "5": 5,
+    "7": 29
+  },
+  "melodic": {
+    "S1_pythagorean": {
+      "cs_violations": 0,
+      "entropy_bits": 0.979869,
+      "gap_class_count": 2,
+      "gap_classes": [
+        [
+          90.224996,
+          90.224996,
+          7
+        ],
+        [
+          113.685006,
+          113.685006,
+          5
+        ]
+      ],
+      "is_cs": true,
+      "melodic_version": "0.1.0",
+      "propriety": "strictly_proper",
+      "propriety_violations": 0
+    },
+    "S2_meantone": {
+      "cs_violations": 0,
+      "entropy_bits": 0.979869,
+      "gap_class_count": 2,
+      "gap_classes": [
+        [
+          76.048999,
+          76.048999,
+          5
+        ],
+        [
+          117.107858,
+          117.107858,
+          7
+        ]
+      ],
+      "is_cs": true,
+      "melodic_version": "0.1.0",
+      "propriety": "strictly_proper",
+      "propriety_violations": 0
+    },
+    "S3_werckmeister3": {
+      "cs_violations": 0,
+      "entropy_bits": 1.918296,
+      "gap_class_count": 4,
+      "gap_classes": [
+        [
+          90.224996,
+          90.224996,
+          2
+        ],
+        [
+          96.089998,
+          96.089998,
+          4
+        ],
+        [
+          101.955001,
+          101.955001,
+          2
+        ],
+        [
+          107.820003,
+          107.820003,
+          4
+        ]
+      ],
+      "is_cs": true,
+      "melodic_version": "0.1.0",
+      "propriety": "strictly_proper",
+      "propriety_violations": 0
+    },
+    "S4_12edo": {
+      "cs_violations": 0,
+      "entropy_bits": -0.0,
+      "gap_class_count": 1,
+      "gap_classes": [
+        [
+          100.0,
+          100.0,
+          12
+        ]
+      ],
+      "is_cs": true,
+      "melodic_version": "0.1.0",
+      "propriety": "strictly_proper",
+      "propriety_violations": 0
+    }
+  },
+  "melodic_version": "0.1.0",
+  "scorer_version": "1.1.0",
+  "stages": [
+    "S1_pythagorean",
+    "S2_meantone",
+    "S3_werckmeister3",
+    "S4_12edo"
+  ],
+  "verdicts": {
+    "H-K1": {
+      "counts_measured": {
+        "11": 122,
+        "5": 5,
+        "7": 29
+      },
+      "counts_predicted": {
+        "11": 122,
+        "5": 5,
+        "7": 29
+      },
+      "five_limit_members_measured": [
+        "128/125",
+        "2048/2025",
+        "32805/32768",
+        "531441/524288",
+        "81/80"
+      ],
+      "five_limit_members_predicted": [
+        "128/125",
+        "2048/2025",
+        "32805/32768",
+        "531441/524288",
+        "81/80"
+      ],
+      "kept": true
+    },
+    "H-K2": {
+      "first_locks_match": {
+        "S1_pythagorean": true,
+        "S2_meantone": true,
+        "S3_werckmeister3": true,
+        "S4_12edo": true
+      },
+      "grid_matches_prediction": {
+        "S1_pythagorean": true,
+        "S2_meantone": true,
+        "S3_werckmeister3": true,
+        "S4_12edo": true
+      },
+      "kept": true,
+      "lock_verification_clean": true,
+      "mirror_agrees_grid": true
+    },
+    "H-K3": {
+      "gap_class_walk": [
+        2,
+        2,
+        4,
+        1
+      ],
+      "kept": true,
+      "monotone_uniformity": false,
+      "note": "prediction: monotone_uniformity False (the walk is a hump peaking at Werckmeister III), with every stage strictly proper and CS",
+      "per_stage_matches": {
+        "S1_pythagorean": true,
+        "S2_meantone": true,
+        "S3_werckmeister3": true,
+        "S4_12edo": true
+      }
+    },
+    "H-K4": {
+      "coverage_major_matches": {
+        "S1_pythagorean": true,
+        "S2_meantone": true,
+        "S3_werckmeister3": true,
+        "S4_12edo": true
+      },
+      "kept": true,
+      "meantone_never_full_below_20": true,
+      "minor_equals_major": true,
+      "note": "81/80 alone buys 8 of 12 major addresses (predicted NO to 'all'); 128/125 buys the 4 wrapped addresses + the 12th power chord; comma dev identities pinned in tests"
+    },
+    "H-K5": {
+      "kept": true,
+      "note": "chirality prediction: P != S exactly at eps 1, 2, 5, 20",
+      "werck_P_neq_S_at": [
+        1.0,
+        2.0,
+        5.0,
+        20.0
+      ],
+      "werck_key_color_measured": [
+        0.2516,
+        2.4456,
+        3.9274,
+        3.9274,
+        6.1166,
+        7.6077,
+        9.7924,
+        9.7924,
+        9.7924,
+        13.4727,
+        13.4727,
+        13.4727
+      ],
+      "werck_key_color_predicted": [
+        0.2516,
+        2.4456,
+        3.9273,
+        3.9273,
+        6.1166,
+        7.6077,
+        9.7924,
+        9.7924,
+        9.7924,
+        13.4727,
+        13.4727,
+        13.4727
+      ]
+    }
+  }
+}
