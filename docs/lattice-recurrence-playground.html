@@ -239,7 +239,8 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <div class="stats">
         <div class="stat mel" id="stStep"><div class="k">step classes in window</div><div class="v">—</div></div>
         <div class="stat mel" id="stRatio"><div class="k">last ratio vs G</div><div class="v">—</div></div>
-        <div class="stat harm" id="stLat"><div class="k">window tones on lattice</div><div class="v">—</div></div>
+        <div class="stat harm" id="stLat"><div class="k">window tones on lattice (rotates)</div><div class="v">—</div></div>
+        <div class="stat harm" id="stIvl"><div class="k">window dyads on lattice intervals</div><div class="v">—</div></div>
         <div class="stat harm" id="stTri"><div class="k">prop / subcontrary triads</div><div class="v">—</div></div>
       </div>
       <p class="note" id="seedNote"></p>
@@ -256,10 +257,10 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
     <div class="controls">
       <label class="field"><span class="lbl">Fit tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
       <label class="field"><span class="lbl">Largest note count N <span class="val" id="maxNVal">41</span></span><input type="range" id="maxN" min="7" max="72" value="41"></label>
-      <label class="chk"><input type="checkbox" id="onlyMOS" checked> Show only N where the chain is an MOS</label>
+      <label class="chk"><input type="checkbox" id="onlyMOS"> Show only N where the chain is an MOS (most exact fits are 3-step chains)</label>
       <label class="chk"><input type="checkbox" id="showET" checked> Include equal temperaments</label>
       <button id="fitRun" class="primary">Run the fit</button>
-      <p class="note" id="fitStatus">Press Run. The search scans generators from 1 to 600 cents in 0.5 cent steps, then refines.</p>
+      <p class="note" id="fitStatus">Press Run. The search is exact: for each N it finds the generator that minimizes the largest lattice error (interval sweep, bisection on the tolerance). Large lattices at large N take a few seconds.</p>
       <h3>Recurrences near the selected fit</h3>
       <div class="rrlist" id="fitRR"><span class="note">Select a row.</span></div>
     </div>
@@ -458,38 +459,65 @@ function scaleTree(gen, maxN) {
   }
   return out;
 }
-// fit: for each N, best generator (cents) minimizing max error of lattice tones to an N-chain containing 1/1
-function fitLattice(toneCents, maxN, capErr) {
-  const best = new Map(); // N -> {g, maxErr, meanErr}
-  const evalG = (g, N) => {
-    // candidates per tone
-    const cand = toneCents.map(t => {
-      const list = [];
-      for (let k = -(N - 1); k <= N - 1; k++) { const e = circDist(k * g, t); if (e <= capErr) list.push([k, e]); }
-      return list;
-    });
-    let bestMax = Infinity, bestMean = 0;
-    for (let s = -(N - 1); s <= 0; s++) {
-      let mx = 0, sum = 0;
-      for (const list of cand) {
-        let mn = Infinity;
-        for (const [k, e] of list) if (k >= s && k <= s + N - 1 && e < mn) mn = e;
-        if (mn > mx) mx = mn;
-        if (mx === Infinity) break;
-        sum += mn;
+// fit: for each N, the generator (cents) minimizing the largest circular error of any lattice tone to an
+// N-chain containing 1/1 — EXACT (CPSFIT-001 method): for a tolerance eps every (tone, k) admits a g-interval of
+// half-width eps/|k|; a sweep over interval endpoints decides feasibility; bisection on eps, then a ternary refinement.
+function feasibleFit(tc, N, eps) {
+  const K = N - 1, T = tc.length;
+  const always = tc.map(c => circDist(0, c) <= eps);
+  const ev = [];
+  for (let t = 0; t < T; t++) {
+    const c = tc[t];
+    for (let k = -K; k <= K; k++) {
+      if (!k) continue;
+      for (let m = -K - 2; m <= K + 2; m++) {
+        const center = (c + CENTS * m) / k, half = eps / Math.abs(k);
+        const lo = center - half, hi = center + half;
+        if (hi <= 1e-9 || lo > 600) continue;
+        ev.push([Math.max(lo, 1e-9), 0, t, k]); ev.push([Math.min(hi, 600), 1, t, k]);
       }
-      if (mx < bestMax) { bestMax = mx; bestMean = sum / cand.length; }
     }
-    return [bestMax, bestMean];
-  };
-  for (let N = 2; N <= maxN; N++) {
-    let bg = 0, bm = Infinity, bmean = 0;
-    for (let g = 1; g <= 600; g += 0.5) { const [mx, mean] = evalG(g, N); if (mx < bm) { bm = mx; bg = g; bmean = mean; } }
-    if (bm < Infinity) {
-      for (let g = bg - 0.5; g <= bg + 0.5; g += 0.01) { const [mx, mean] = evalG(g, N); if (mx < bm) { bm = mx; bg = g; bmean = mean; } }
-    }
-    best.set(N, { g: bg, maxErr: bm, meanErr: bmean });
   }
+  ev.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const active = Array.from({ length: T }, () => new Set());
+  const check = () => {
+    let cand = null;
+    for (let t = 0; t < T; t++) {
+      if (always[t]) continue;
+      const ks = [...active[t]].sort((a, b) => a - b);
+      if (!ks.length) return null;
+      const ivs = [];
+      for (const k of ks) { const a = k - K, b = k; if (ivs.length && a <= ivs[ivs.length - 1][1]) ivs[ivs.length - 1][1] = Math.max(ivs[ivs.length - 1][1], b); else ivs.push([a, b]); }
+      if (cand === null) cand = ivs;
+      else { const nxt = []; for (const [a, b] of cand) for (const [c, d] of ivs) { const lo = Math.max(a, c), hi = Math.min(b, d); if (lo <= hi) nxt.push([lo, hi]); } cand = nxt; }
+      if (!cand.length) return null;
+    }
+    if (cand === null) return -K;
+    for (const [a, b] of cand) { const a2 = Math.max(a, -K), b2 = Math.min(b, 0); if (a2 <= b2) return a2; }
+    return null;
+  };
+  for (const [g, typ, t, k] of ev) {
+    if (typ === 0) { active[t].add(k); const s = check(); if (s !== null) return { g, s }; }
+    else active[t].delete(k);
+  }
+  return null;
+}
+function exactFit(tc, N, epsHi) {
+  let res = feasibleFit(tc, N, epsHi);
+  if (!res) return null;
+  let lo = 0, hi = epsHi;
+  for (let it = 0; it < 14; it++) { const mid = (lo + hi) / 2; const r = feasibleFit(tc, N, mid); if (r === null) lo = mid; else { hi = mid; res = r; } }
+  const { g, s } = res;
+  const ks = tc.map(c => { let best = null; for (let k = s; k < s + N; k++) { const e = circDist(k * g, c); if (best === null || e < best[1] || (e === best[1] && Math.abs(k) < Math.abs(best[0]))) best = [k, e]; } return best[0]; });
+  const err = x => Math.max(...tc.map((c, i) => circDist(ks[i] * x, c)));
+  let a = g - 0.05, b = g + 0.05;
+  for (let it = 0; it < 200; it++) { const m1 = a + (b - a) / 3, m2 = b - (b - a) / 3; if (err(m1) < err(m2)) b = m2; else a = m1; }
+  const gs = (a + b) / 2; const errs = tc.map((c, i) => circDist(ks[i] * gs, c));
+  return { g: gs, maxErr: Math.max(...errs), meanErr: errs.reduce((p, q) => p + q, 0) / errs.length, s, ks };
+}
+function fitLattice(toneCents, maxN) {
+  const best = new Map(); let epsHi = 60;
+  for (let N = 2; N <= maxN; N++) { const r = exactFit(toneCents, N, epsHi); if (!r) continue; epsHi = Math.min(60, r.maxErr + 0.02); best.set(N, r); }
   return best;
 }
 function fitET(toneCents, maxN) {
@@ -568,7 +596,7 @@ if (typeof document !== 'undefined') (function () {
     latPreset: 'hexany', cpsFactors: '1 3 5 7', cpsK: 2, ratioText: '1/1 9/8 5/4 4/3 3/2 5/3 15/8',
     rrPreset: 'erv418935', a: 1, i: 1, b: 32, j: 4, liftAuto: true, liftK: 0, rho: 1.0,
     seedPlace: 'chain', steps: 40, win: 7, scrub: 45, tol: 2,
-    fitTol: 2, maxN: 41, onlyMOS: true, showET: true, fitPick: null,
+    fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
   };
   let lattice, rec, seq, seeds, fitRows = [], RRTABLE = null;
 
@@ -699,11 +727,15 @@ if (typeof document !== 'undefined') (function () {
     const lastRatio = (S.scrub > 0 && isFinite(seq[S.scrub]) && isFinite(seq[S.scrub - 1])) ? cents(seq[S.scrub] / seq[S.scrub - 1]) : NaN;
     const dR = lastRatio - rec.g * CENTS;
     const nLat = wTones.filter(onLat).length;
+    const latIvls = [...new Set(latC.flatMap((a, i) => latC.slice(i + 1).map(b => Math.round(circDist(a, b) * 1000) / 1000)))];
+    const wCents = wTones.map(v => cents(v)); let nIvl = 0, nPairs = 0;
+    for (let i = 0; i < wCents.length; i++) for (let j = i + 1; j < wCents.length; j++) { nPairs++; const d = circDist(wCents[i], wCents[j]); if (latIvls.some(v => Math.abs(v - d) <= S.tol)) nIvl++; }
     const tri = triadCounts(wTones, S.tol);
     const set = (id, v, good) => { const el = $(id); el.querySelector('.v').textContent = v; el.classList.toggle('good', good === true); el.classList.toggle('bad', good === false); };
     set('stStep', sc.classes + (sc.classes === 2 ? ' (MOS)' : sc.classes === 1 ? ' (equal)' : ''), sc.classes <= 2);
     set('stRatio', isFinite(dR) ? (dR >= 0 ? '+' : '') + dR.toFixed(2) + '¢' : '—', isFinite(dR) ? Math.abs(dR) <= S.tol : null);
     set('stLat', `${nLat} / ${wTones.length}`, null);
+    set('stIvl', `${nIvl} / ${nPairs}`, null);
     set('stTri', `${tri.P} / ${tri.S}`, null);
     const bad = seq.some(v => !isFinite(v));
     $('seedNote').textContent = bad ? 'The sequence left the positive numbers. Lower ρ or choose a coprime recurrence.' : `${seeds.length} seeds from ${lattice.tones.length} lattice tones (${S.seedPlace === 'chain' ? 'chain-aligned octaves' : 'one octave'}), then ${S.steps} generated terms.`;
@@ -748,8 +780,7 @@ if (typeof document !== 'undefined') (function () {
     $('fitStatus').textContent = 'Searching…';
     setTimeout(() => {
       const latC = lattice.tones.map(t => t.cents);
-      const cap = Math.max(S.fitTol, 10);
-      const best = fitLattice(latC, S.maxN, cap);
+      const best = fitLattice(latC, S.maxN);
       fitRows = [];
       for (const [N, r] of best) {
         if (!(r.maxErr < Infinity)) continue;
@@ -781,7 +812,7 @@ if (typeof document !== 'undefined') (function () {
     p.push(`Lattice: ${latticeName()}, ${lattice.tones.length} tones: ${lattice.tones.map(t => t.num + '/' + t.den).join(' ')}.`);
     p.push(`Recurrence: ${$('rrPoly').textContent}. Positive root G = ${rec.G.toFixed(6)}, generator ${rec.gen.toFixed(6)} octaves (${(rec.gen * CENTS).toFixed(2)} cents, complement ${(1 - rec.gen).toFixed(6)}). Transient shrinks by ${rec.rate.toFixed(3)} per step (second root modulus ${rec.lambda2.toFixed(3)}). ${rec.k ? `Order lifted by ${rec.k} with decay modulus ρ = ${rec.rho.toFixed(3)}.` : 'No order lift.'} ${rec.coprime ? '' : 'Warning: i and j are not coprime, so the ratio does not converge.'}`);
     const sc = stepClasses(seq.slice(Math.max(0, S.scrub - S.win + 1), S.scrub + 1).filter(isFinite).map(v => cents(v)), S.tol);
-    p.push(`Direction 1: ${seeds.length} seeds in ${S.seedPlace === 'chain' ? 'chain-aligned' : 'compact'} octaves, ${S.steps} steps. At step ${S.scrub} the ${S.win}-tone window has ${sc.classes} step size${sc.classes === 1 ? '' : 's'}${sc.classes === 2 ? ' (MOS)' : ''}, keeps ${$('stLat').querySelector('.v').textContent} tones on the lattice within ${S.tol} cents, and has ${$('stTri').querySelector('.v').textContent} proportional/subcontrary triads.`);
+    p.push(`Direction 1: ${seeds.length} seeds in ${S.seedPlace === 'chain' ? 'chain-aligned' : 'compact'} octaves, ${S.steps} steps. At step ${S.scrub} the ${S.win}-tone window has ${sc.classes} step size${sc.classes === 1 ? '' : 's'}${sc.classes === 2 ? ' (MOS)' : ''}, keeps ${$('stLat').querySelector('.v').textContent} tones on the lattice within ${S.tol} cents (this count rotates with n), keeps ${$('stIvl').querySelector('.v').textContent} window dyads on lattice intervals, and has ${$('stTri').querySelector('.v').textContent} proportional/subcontrary triads.`);
     if (fitRows.length) {
       const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
       p.push(`Direction 2 (tolerance ${S.fitTol} cents, N up to ${S.maxN}): ${hits.length ? hits.slice(0, 6).map(r => `${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + '¢' + (r.mos ? ' (MOS)' : '')} max error ${r.maxErr.toFixed(2)}¢`).join('; ') : 'no scale captures every lattice tone'}.`);
