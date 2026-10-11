@@ -596,7 +596,7 @@ if (typeof document !== 'undefined') (function () {
     seedPlace: 'chain', steps: 40, win: 7, scrub: 45, tol: 2,
     fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
   };
-  let lattice, rec, seq, seeds, fitRows = [], fixedFirstHit = null;
+  let lattice, rec, seq, seeds, fitRows = [], fixedFirstHit = null, fixedBestRow = null;
 
   const LAT_PRESETS = {
     hexany: { kind: 'cps', factors: '1 3 5 7', k: 2 }, tetrad: { kind: 'cps', factors: '1 3 5 7', k: 1 },
@@ -772,7 +772,7 @@ if (typeof document !== 'undefined') (function () {
     $('fixedGenLabel').textContent = `${rec.gen.toFixed(5)} octaves = ${g.toFixed(2)} cents`;
     const path = mosPath(rec.gen, S.maxN);
     const tb = $('fixedTable').querySelector('tbody'); tb.innerHTML = '';
-    let first = null;
+    let first = null, bestRow = null;
     for (let N = 2; N <= S.maxN; N++) {
       const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
       if (S.onlyMOS && !mos) continue;
@@ -780,12 +780,13 @@ if (typeof document !== 'undefined') (function () {
       const captured = ch.map.filter(m => m.err <= S.fitTol).length;
       const row = { key: 'fix' + N, type: 'FIX', N, g, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length, mos, level: mos ? levelIdx + 1 : null, s: ch.s, captured };
       if (row.maxErr <= S.fitTol && !first) first = row;
+      if (!bestRow || row.maxErr < bestRow.maxErr) bestRow = row;
       const tr = document.createElement('tr'); tr.className = 'sel' + (row.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === row.key ? ' pick' : '');
       tr.innerHTML = `<td class="num">${N}</td><td>${mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>'}</td><td class="num">${row.level == null ? '—' : row.level}</td><td class="num">${-row.s} of ${N}</td><td class="num">${row.maxErr.toFixed(2)}</td><td class="num">${row.meanErr.toFixed(2)}</td><td class="num">${captured}/${lattice.tones.length}</td>`;
       tr.addEventListener('click', () => { S.fitPick = row; renderFitPick(); renderFixedTable(); renderFitTable(); updatePrompt(); });
       tb.appendChild(tr);
     }
-    fixedFirstHit = first;
+    fixedFirstHit = first; fixedBestRow = first || bestRow;
   }
   function renderFitTable() {
     const tb = $('fitTable').querySelector('tbody'); tb.innerHTML = '';
@@ -865,10 +866,10 @@ if (typeof document !== 'undefined') (function () {
   $('cpsFactors').addEventListener('input', e => { S.cpsFactors = e.target.value; all(); });
   $('cpsK').addEventListener('input', e => { S.cpsK = +e.target.value || 1; all(); });
   $('ratioText').addEventListener('input', e => { S.ratioText = e.target.value; all(); });
-  const applyPreset = id => { S.rrPreset = id; sel.value = id; sel2.value = id; const p = RR_PRESETS.find(x => x.id === id); if (p.id !== 'custom') { S.a = p.a; S.i = p.i; S.b = p.b; S.j = p.j; ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).value = S[x.toLowerCase()]); } renderRecurrence(); renderSeed(); renderFixedTable(); updatePrompt(); };
+  const applyPreset = id => { S.rrPreset = id; sel.value = id; sel2.value = id; const p = RR_PRESETS.find(x => x.id === id); if (p.id !== 'custom') { S.a = p.a; S.i = p.i; S.b = p.b; S.j = p.j; ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).value = S[x.toLowerCase()]); } renderRecurrence(); renderSeed(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); };
   sel.addEventListener('change', e => applyPreset(e.target.value));
   sel2.addEventListener('change', e => { applyPreset(e.target.value); document.getElementById('fixedTable').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-  ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).addEventListener('input', e => { const v = Math.max(1, Math.round(+e.target.value || 1)); S[x.toLowerCase()] = v; if (S.i >= S.j) { if (x === 'I') S.j = S.i + 1; else S.i = Math.max(1, S.j - 1); $('rrI').value = S.i; $('rrJ').value = S.j; } S.rrPreset = 'custom'; sel.value = 'custom'; sel2.value = 'custom'; renderRecurrence(); renderSeed(); renderFixedTable(); updatePrompt(); }));
+  ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).addEventListener('input', e => { const v = Math.max(1, Math.round(+e.target.value || 1)); S[x.toLowerCase()] = v; if (S.i >= S.j) { if (x === 'I') S.j = S.i + 1; else S.i = Math.max(1, S.j - 1); $('rrI').value = S.i; $('rrJ').value = S.j; } S.rrPreset = 'custom'; sel.value = 'custom'; sel2.value = 'custom'; renderRecurrence(); renderSeed(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); }));
   $('liftAuto').addEventListener('change', e => { S.liftAuto = e.target.checked; renderRecurrence(); renderSeed(); updatePrompt(); });
   $('liftK').addEventListener('input', e => { S.liftK = Math.max(0, Math.round(+e.target.value || 0)); S.liftAuto = false; $('liftAuto').checked = false; renderRecurrence(); renderSeed(); updatePrompt(); });
   $('liftRho').addEventListener('input', e => { S.rho = Math.max(0.05, +e.target.value || 1); renderRecurrence(); renderSeed(); updatePrompt(); });
