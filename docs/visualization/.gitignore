@@ -1,0 +1,8 @@
+# Local credentials and generated environments must never enter this baseline.
+.env
+.env.*
+.venv/
+venv/
+node_modules/
+runs/
+media/

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "native_runtime_installed": true,
+    "request_schema_accepts_brief": true,
+    "all_author_prompts_include_brief": true,
+    "audit_prompt_includes_brief": true,
+    "explicit_installed_manim_version": true,
+    "jev_key_file_owner_only": true,
+    "research_source_paths_present": true
+  },
+  "kind": "offline-preparation-only",
+  "model_calls": 0,
+  "jev_calls": 0,
+  "research_artifact_finalized": false,
+  "live_access_verified": false,
+  "note": "Historical preparation check before the Manim 0.22.0 update. See environment/verification.json for the current baseline; no live API verification has been performed."
+}

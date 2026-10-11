@@ -1,0 +1,1052 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lattice MOS-Fit Playground</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of numbered stations, each a controls|preview grid; graph-paper ground like Erv's notebook pages. */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;        /* melody / generator chain */
+  --accent-soft: rgba(12,111,104,0.12);
+  --harm: #b2671a;          /* harmony / lattice tones */
+  --harm-soft: rgba(178,103,26,0.14);
+  --ok: #2d7a3a;
+  --warn: #a8402f;
+  --c-free: #0c9489;       /* chart: free search */
+  --c-fixed: #b2671a;      /* chart: station 2 generator */
+  --c-fam: #7a4fb5;        /* chart: family search */
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+    --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+    --c-free: #0fa394; --c-fixed: #bf7a30; --c-fam: #8f72c8;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+  --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+  --c-free: #0fa394; --c-fixed: #bf7a30; --c-fam: #8f72c8;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 12px 40px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 14px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+header { display: grid; gap: 6px; }
+nav.sticky { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 6px 0; border-bottom: 1px solid var(--line); margin: 0 -16px; padding-inline: 16px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+nav a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+nav a:hover, nav a:focus-visible { border-bottom-color: var(--accent); outline: none; }
+section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 10px; }
+.station-head { display: grid; gap: 3px; }
+.station-head .num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+.cols { display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.controls { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.preview { display: grid; gap: 8px; min-width: 0; align-content: start; }
+label.field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+label.field > span.lbl { font-weight: 500; }
+select, input[type=text], input[type=number], textarea {
+  font: 14px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; min-width: 0;
+}
+textarea { min-height: 56px; resize: vertical; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.row > * { flex: 1 1 90px; min-width: 0; }
+.chk { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.chk input { accent-color: var(--accent); }
+.val { font-family: var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+button { font: 500 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { border-top: 2px solid var(--line); padding-top: 4px; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.stat .v { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; }
+.stat.harm { border-top-color: var(--harm); }
+.stat.mel { border-top-color: var(--accent); }
+.stat.good .v { color: var(--ok); }
+.stat.bad .v { color: var(--warn); }
+canvas { width: 100%; height: auto; max-height: 40vh; display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); }
+.note.warn { color: var(--warn); }
+.note.ok { color: var(--ok); }
+.facts { display: grid; gap: 8px; counter-reset: fact; font-size: 14px; }
+.fact { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.fact::before { counter-increment: fact; content: counter(fact); font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 2px; }
+.fact p { max-width: 75ch; }
+.fact .src { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--font-mono); }
+tr.hit td { background: var(--accent-soft); }
+tr.pick td { outline: 2px solid var(--accent); outline-offset: -2px; }
+tr.sel { cursor: pointer; }
+tr.sel:hover td { background: var(--harm-soft); }
+.tablewrap { overflow-x: auto; max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
+.pill.ok { color: var(--ok); border-color: var(--ok); }
+.pill.warn { color: var(--warn); border-color: var(--warn); }
+.pill.harm { color: var(--harm); border-color: var(--harm); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend .l-harm::before { background: var(--harm); }
+.legend .l-mel::before { background: var(--accent); }
+.legend .l-seed::before { background: var(--harm); outline: 2px solid var(--accent); outline-offset: 1px; }
+.legend .l-free::before { background: var(--c-free); }
+.legend .l-fixed::before { background: var(--c-fixed); }
+.legend .l-fam::before { background: var(--c-fam); border-radius: 0; }
+.legend .l-et::before { background: transparent; border: 2px solid var(--muted); width: 8px; height: 8px; }
+.stat.wide { grid-column: 1 / -1; }
+.stat.wide .v { font-size: 13px; white-space: normal; }
+canvas.hoverable { cursor: crosshair; }
+.prompt { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; line-height: 1.5; min-width: 0; }
+.research { display: grid; gap: 8px; font-size: 14px; }
+.research li { max-width: 78ch; }
+.research ol { padding-left: 20px; margin: 0; display: grid; gap: 8px; }
+.research b { font-weight: 600; }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+code { font-family: var(--font-mono); font-size: 0.92em; }
+.rrlist { display: grid; gap: 6px; }
+.rrlist .item { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color 120ms; } }
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Lattice MOS-Fit Playground</h1>
+  <p class="lede">Start from a just lattice. Find the MOS scales that hold every tone of the lattice within a tolerance. An MOS is a chain of one generator with two step sizes, and equal temperaments are the MOS with one step size. The fit has three controls: the generator, the level (how many notes) and the murchana (which chain position is the 1/1). Within 2 cents counts as at least as good as 12-ET.</p>
+  <nav>
+    <a href="#legend">Legend</a><a href="#lattice">1 Lattice</a><a href="#generator">2 Generator</a><a href="#fit">3 Fit</a><a href="#facts">Background</a><a href="#next">Options</a><a href="#prompt">Prompt</a>
+  </nav>
+</header>
+
+<!-- ───────── LEGEND ───────── -->
+<section class="station" id="legend">
+  <div class="station-head"><div class="num">LEGEND</div><h2>What the errors mean: 12-ET against its own lattice</h2>
+  <p class="note">Every error on this page is the distance in cents from a just tone to the nearest scale degree. For a reference, here is 12-ET fitted to the harmonics 3, 5, 7, 9 and 11. The fifth is good. The major third is poor. The harmonic seventh is bad. The tolerance slider in station 3 starts at 2 cents, which is the quality of 12-ET's fifth.</p></div>
+  <canvas id="legendCanvas" width="760" height="84"></canvas>
+  <div class="stats" id="legendStats"></div>
+</section>
+
+<!-- ───────── 1 LATTICE ───────── -->
+<section class="station" id="lattice">
+  <div class="station-head"><div class="num">STATION 1</div><h2>Choose the harmonic lattice</h2>
+  <p class="note">The lattice supplies the harmony. Its tones are the targets of the fit in station 3.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Preset</span>
+        <select id="latPreset">
+          <option value="hexany">Hexany 1·3·5·7 (CPS 2 of 4)</option>
+          <option value="tetrad">Tetrad 1·3·5·7 (CPS 1 of 4)</option>
+          <option value="dekany">Dekany 1·3·5·7·9 (CPS 2 of 5)</option>
+          <option value="dekany11">Dekany 1·3·5·7·11 (CPS 2 of 5)</option>
+          <option value="eikosany">Eikosany 1·3·5·7·9·11 (CPS 3 of 6)</option>
+          <option value="eg4">Euler genus 4: 1·3·5·7 (all subsets, 8 tones)</option>
+          <option value="ptolemy">Ptolemy just major (7 tones)</option>
+          <option value="pyth7">Pythagorean 7</option>
+          <option value="cps">Custom CPS (factors + k)</option>
+          <option value="ratios">Custom ratio list</option>
+        </select></label>
+      <div id="cpsFields" hidden>
+        <div class="row">
+          <label class="field" style="flex:3 1 160px"><span class="lbl">Factors (space separated)</span><input type="text" id="cpsFactors" value="1 3 5 7"></label>
+          <label class="field" style="flex:1 1 60px"><span class="lbl">k</span><input type="number" id="cpsK" value="2" min="1" max="6"></label>
+        </div>
+      </div>
+      <div id="ratioFields" hidden>
+        <label class="field"><span class="lbl">Ratios, one octave, space separated</span><textarea id="ratioText">1/1 9/8 5/4 4/3 3/2 5/3 15/8</textarea></label>
+      </div>
+      <p class="note">The page reduces each tone to one octave and sorts them. It removes duplicates.</p>
+      <p class="note" id="latInversion"></p>
+    </div>
+    <div class="preview">
+      <canvas id="latCanvas" width="760" height="84"></canvas>
+      <div class="tablewrap" style="max-height:170px"><table id="latTable"><thead><tr><th>#</th><th>ratio</th><th>cents</th></tr></thead><tbody></tbody></table></div>
+      <div class="stats"><div class="stat harm"><div class="k">tones</div><div class="v" id="latCount">6</div></div><div class="stat harm"><div class="k">smallest step</div><div class="v" id="latMinStep">—</div></div><div class="stat harm"><div class="k">step classes</div><div class="v" id="latClasses">—</div></div><div class="stat harm"><div class="k">exact triads P / S</div><div class="v" id="latTriads">—</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 2 GENERATOR ───────── -->
+<section class="station" id="generator">
+  <div class="station-head"><div class="num">STATION 2</div><h2>Choose a generator</h2>
+  <p class="note">A generator g in octaves. The chain is g, 2g, 3g and so on, reduced to one octave. The generator and its complement 1 − g make the same scales, read from the other end.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Preset (Erv's generators, familiar fifths, and the fits found so far)</span><select id="genPreset"></select></label>
+      <div class="row">
+        <label class="field"><span class="lbl">custom, in cents</span><input type="number" id="genCents" value="502.72" min="1" max="1199" step="0.01"></label>
+        <label class="field"><span class="lbl">custom, in octaves</span><input type="number" id="genOct" value="0.418935" min="0.0001" max="0.9999" step="0.000001"></label>
+      </div>
+      <p class="note" id="genSource"></p>
+    </div>
+    <div class="preview">
+      <div class="stats">
+        <div class="stat mel"><div class="k">generator, octaves</div><div class="v" id="gOct">—</div></div>
+        <div class="stat mel"><div class="k">generator, cents</div><div class="v" id="gCents">—</div></div>
+        <div class="stat mel"><div class="k">complement</div><div class="v" id="gCompl">—</div></div>
+        <div class="stat mel"><div class="k">MOS sizes ≤ 60</div><div class="v" id="gSizes">—</div></div>
+      </div>
+      <canvas id="treeCanvas" width="760" height="84"></canvas>
+      <p class="note">How to read the chart: the axis is the note count N. A dot at N means that N consecutive generators, reduced to one octave, make a scale with exactly two step sizes, L and s. Those scales are the MOS of this generator, and their N values are the levels. The page finds them by the scale tree. It walks the Stern–Brocot tree toward g. Each fraction p/q on the path is an MOS with q notes. The fraction p/q is also the equal temperament that the MOS approximates: q-ET, with p steps per generator. Erv drew this walk by hand as the "zig-zag pattern" on his pages.</p>
+      <div class="tablewrap" style="max-height:220px"><table id="treeTable"><thead><tr><th>level</th><th>N</th><th>p/q</th><th>ET generator ¢</th><th>L ¢</th><th>s ¢</th><th>L : s</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 3 FIT ───────── -->
+<section class="station" id="fit">
+  <div class="station-head"><div class="num">STATION 3</div><h2>Fit an MOS to the lattice</h2>
+  <p class="note">Two searches. The first table takes the station 2 generator and, for each level, finds the murchana that holds the lattice best. The second table is the free search: for each N it finds the best generator of all, with its murchana. Select a row to see the scale against the lattice, then rotate its murchana.</p>
+  <p class="note"><b>What the fit searches, in Wilson's terms.</b> A scale here is a chain: N consecutive generators, reduced to one octave. The octave is the period, and it does not change. The generator g runs over 0 to 600 cents in the free search, and its complement covers the rest. The note count N is the level. The "only MOS" switch keeps the N values that are levels on the scale tree. The window start is the murchana. The chain contains the lattice's 1/1 at one of its N degrees. The search tries all N positions, which is the same as trying every mode of the chain. For each N the free search is exact. For a tolerance ε, each tone and each degree k allow g to lie in an interval of half-width ε/|k|. A sweep over the interval endpoints finds the first g where some window of N degrees holds every tone. A bisection on ε then finds the smallest ε that works. A final refinement moves g to minimize the largest tone error.</p>
+  <p class="note"><b>What the fit does not do.</b> It does not change the period. It does not place the lattice's 1/1 between two degrees. It fits tones and not triads, and it reports the triads that survive so you can see the difference. The count objective (CPSFIT-003) ran offline, and its fits are station 2 presets. It uses one generator, so it is rank 2 with the octave. A lattice that needs two generators, such as a 7-limit CPS at a small N, gets a large error here.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
+      <p class="note">2 cents is below the 12-ET error of 3/2 (1.96 cents) and far below its error of 5/4 (13.7 cents).</p>
+      <label class="field"><span class="lbl">Largest note count N <span class="val" id="maxNVal">41</span></span><input type="range" id="maxN" min="7" max="72" value="41"></label>
+      <label class="chk"><input type="checkbox" id="onlyMOS"> Show only N that are levels (two step sizes). Most exact fits are 3-step chains.</label>
+      <label class="chk"><input type="checkbox" id="showET" checked> Show equal temperaments as their own rows. This is a preference. An ET is the MOS with one step size.</label>
+      <button id="fitRun" class="primary">Run the free search</button>
+      <p class="note" id="fitStatus">Press Run. Large lattices at large N take a few seconds.</p>
+      <h3>Selected chain</h3>
+      <div class="stats">
+        <div class="stat mel" id="stN"><div class="k">notes / level</div><div class="v">—</div></div>
+        <div class="stat mel" id="stG"><div class="k">generator ¢</div><div class="v">—</div></div>
+        <div class="stat harm" id="stErr"><div class="k">largest tone error</div><div class="v">—</div></div>
+        <div class="stat harm" id="stCap"><div class="k">tones within tolerance</div><div class="v">—</div></div>
+        <div class="stat harm" id="stTri"><div class="k">triads kept P / S (of exact)</div><div class="v">—</div></div>
+        <div class="stat mel wide" id="stVal"><div class="k">val: generator counts of the primes</div><div class="v">—</div></div>
+        <div class="stat mel wide" id="stKer"><div class="k">kernel: commas the chain tempers out (under 60 cents)</div><div class="v">—</div></div>
+      </div>
+      <div class="row"><button id="pinA" style="flex:0 0 auto">Pin as A</button><button id="pinB" style="flex:0 0 auto">Pin as B</button><span class="note" id="cmpNote">Pin two chains to compare them on one ruler.</span></div>
+      <details><summary>Scala text of the selected chain (copy it into the plugin)</summary><div class="prompt" id="sclText" style="margin-top:8px"></div><div class="row" style="margin-top:8px"><button id="copyScl" style="flex:0 0 auto">Copy Scala text</button><span class="note" id="copySclNote"></span></div></details>
+    </div>
+    <div class="preview">
+      <canvas id="fitCanvas" width="760" height="84"></canvas>
+      <p class="note" id="fitPickNote">No chain selected.</p>
+      <div class="row" style="align-items:center">
+        <label class="field" style="flex:1 1 240px"><span class="lbl">Murchana of the selected chain: 1/1 at generator position <span class="val" id="fitMurVal">—</span></span><input type="range" id="fitMur" min="0" max="0" value="0"></label>
+        <span class="mono note" id="fitPattern" style="flex:2 1 240px; word-break: break-all"></span>
+      </div>
+      <p class="note">Move the slider to rotate the mode. Each step drops one tone from one end of the chain and adds one at the other end. The step pattern rotates with it, and the lattice errors show which modes hold the lattice.</p>
+      <p class="note" id="fitMirror"></p>
+      <h3>Compare: chain A against chain B</h3>
+      <canvas id="cmpCanvas" width="760" height="110" hidden></canvas>
+      <div class="tablewrap" style="max-height:200px" hidden id="cmpWrap"><table id="cmpTable"><thead><tr><th>lattice tone</th><th>A error</th><th>B error</th></tr></thead><tbody></tbody></table></div>
+      <h3>Staircase: the smallest largest-error at each N</h3>
+      <canvas id="stairCanvas" class="hoverable" width="760" height="230"></canvas>
+      <div class="legend" id="stairLegend"><span class="l-free">free search</span><span class="l-fixed">station 2 generator</span><span class="l-fam">family search, first level within tolerance</span><span class="l-et">equal temperaments</span><span>dashed line: tolerance</span></div>
+      <p class="note" id="stairHover">Move over a point to read it. Click a point to select that chain.</p>
+      <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
+      <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
+      <p class="note">Every N is listed with the generator that makes the largest lattice error as small as possible at that N. The max error column is that smallest possible error, so it is often above the tolerance. A row above the tolerance says that no chain of N notes holds the lattice any closer. The page highlights rows within the tolerance and lists them first.</p>
+      <h3>Family search: golden, silver, bronze or equal-tempered generators</h3>
+      <p class="note">A golden generator is one whose scale-tree path alternates forever from some point. Its levels then grow like Fibonacci numbers and the step ratio L : s tends to φ. Erv listed 64 of them in 1993. The formula is g = (a + φc) / (b + φd) for the two path fractions a/b and c/d where the alternation starts. Silver uses 1 + √2 in place of φ, so the path turns every two steps: Erv's "2-zig/2-zag". Bronze uses (3 + √13) / 2. Equal temperaments are the paths that stop. This search tries every such generator up to a seed denominator bound and reports the first level that holds the lattice.</p>
+      <div class="row" style="align-items:end">
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Family</span><select id="famSel"><option value="1">Golden (φ)</option><option value="2">Silver (1 + √2)</option><option value="3">Bronze ((3 + √13)/2)</option><option value="et">Equal temperaments</option></select></label>
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
+        <button id="famRun" class="primary" style="flex:0 0 auto">Run the family search</button>
+      </div>
+      <p class="note" id="famStatus">Press Run. Golden with denominators up to 36 tries about 800 generators.</p>
+      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
+      <h3>Free search: best generator for each N</h3>
+      <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FACTS ───────── -->
+<section class="station" id="facts">
+  <div class="station-head"><div class="num">BACKGROUND</div><h2>What the mathematics says</h2></div>
+  <div class="facts">
+    <div class="fact"><div><p>A chain is N consecutive multiples of one generator, reduced to one octave. When the chain has exactly two step sizes it is an MOS, and N is a level of that generator. The levels are the denominators on the Stern–Brocot path toward g. Erv called this path the scale tree and drew it as a zig-zag on each of his generator pages.</p><div class="src">Erv Wilson, "Scale Tree" and the Meru pages, 1993–1997.</div></div></div>
+    <div class="fact"><div><p>An equal temperament is the MOS with one step size. N-ET is the N-note chain of the generator 1200/N cents. Treating ET as a separate category is a preference of the musician, not a fact of the mathematics. This page shows ET rows separately because some artists prefer ET.</p><div class="src">Marcus Hobbs, 2026-10-11.</div></div></div>
+    <div class="fact"><div><p>Murchana is the mode of the chain. The chain holds the lattice's 1/1 at one of its N generator positions. Moving that position by one drops a tone from one end and adds one at the other end, which rotates the step pattern. For a fifth generator at N = 7 the seven positions give the seven diatonic modes, Lydian through Locrian.</p><div class="src">Checked on this page: meta-meantone at N = 7 gives LLLsLLs, LLsLLLs, LLsLLsL, LsLLLsL, LsLLsLL, sLLLsLL, sLLsLLL.</div></div></div>
+    <div class="fact"><div><p>Inverting the generator inverts the lattice. The chain of 1 − g is the chain of g reflected about 1/1. So a lattice fits the complement generator exactly when its reflection fits g, at the mirrored murchana, with the same errors, and with proportional and subcontrary triads swapped. For a CPS built from factors F, the reflection of CPS(n, k) is CPS(n, n − k) transposed by the product of F. The transposition matters. The chain is pinned to contain the lattice's 1/1, so a transposition by an interval that is not a chain degree changes the fit. The dekany CPS(5, 3) gets different fits from CPS(5, 2) at 10 of the 20 note counts where both are feasible. One fit of a dekany solves its reflection. It does not solve its partner.</p><div class="src">CPSFIT-003, experiments/lattice, 2026-10-11. The exact reflection reproduced every rung of CPS(5, 2) with P and S swapped. This corrects the earlier claim on this page that one fit solves both dekanies.</div></div></div>
+    <div class="fact"><div><p>Counting the triads changes the answer. With the number of exact lattice triads within 2 cents as the objective, the best generator agrees with the tone fit at no N up to 22, and with the worst-triad fit only where every triad already survives. The hexany keeps 10 of 12 from N = 16: the miracle generator moved to 116.68 cents, with one tone out at 5.2 cents. At N = 18 to 21 the chain of 77.82 cents keeps 10 of 12, where miracle kept 6 and orwell kept 8. The dekany 1·3·5·7·9 fits a schismatic chain of fourths at N = 26, 498.07 cents, keeping 32 of its 41 triads, and reaches 37 at N = 35. The frozen scorer counts triads of the image, so it can exceed the lattice's count when the tempering creates new ones. The page reports the lattice's count.</p><div class="src">CPSFIT-003, experiments/lattice, 2026-10-11. Gate G-032 is the ear check.</div></div></div>
+    <div class="fact"><div><p>The free search gives a staircase of smallest errors. For the hexany it is 18.85 cents at N = 11 and 13.73 at N = 12 to 14. It is 4.82 at N = 15, 4.77 at 16 to 17 and 3.27 at 18. It is 2.57 at N = 19 to 21, 1.37 at 22 to 30 and 0.74 at 31. Every optimum from N = 11 up is a val: an integer mapping of the primes 3, 5, 7 to generator counts. The N = 15 fit at 502.86 cents is a septimal meantone and is Erv's 0.418935 generator to 0.14 cents. The N = 22 fit at 193.79 cents has kernel 2401/2400 and 3136/3125. No equal temperament below 73 notes holds the hexany within 2 cents.</p><div class="src">CPSFIT-001, experiments/lattice, 2026-10-10.</div></div></div>
+    <div class="fact"><div><p>Fitting tones is not fitting triads. A prime mistuned in all three tones of a triad cancels in the mean condition. So a chain with large tone errors can keep triads. A chain with small tone errors can lose them. At N = 22 the tone fit keeps 10 of the hexany's 12 triads at 2 cents. Minimizing the worst triad instead moves the generator to 193.91 cents, keeps all 12, and lets one tone out to 2.22 cents. The worst triad is still not the count: at N = 18 to 21 the chain with the smaller worst triad keeps fewer triads. This page reports tones and triads side by side.</p><div class="src">CPSFIT-001 and CPSFIT-002, experiments/lattice, 2026-10-10.</div></div></div>
+    <div class="fact"><div><p>A golden generator is a noble number: its scale-tree path alternates forever from some point. The formula is g = (a + φc) / (b + φd) for the two path fractions where the alternation starts. The levels then grow like Fibonacci numbers. The step ratio L : s tends to φ at every level, so the MOS looks the same at every depth. Erv listed 64 of them in 1993, with the path of each. This page regenerates all 64 from the formula. Silver generators use 1 + √2 and turn every two steps, which is Erv's 2-zig/2-zag page, and √2 − 1 is the pure silver number. Equal temperaments are the paths that stop.</p><div class="src">Erv Wilson, "64 Golden Generators for Two-Interval Patterns (MOS)", 1993, with his calculator program. Verified 2026-10-11: 64 of 64 reproduced.</div></div></div>
+    <div class="fact"><div><p>Erv's recurrence generators, which he found by optimizing proportional and subcontrary triads, sit next to golden generators. 0.418935 is 0.09 cents from the golden generator seeded by 18/43 and 13/31. 0.415227 is 0.07 cents from one. Meta-meantone is 0.11 cents from one. 0.328173 is 0.17 cents from one. 0.238186 is 0.61 cents from one. The harmonic search and the melodic search nearly agree on where the good generators are.</p><div class="src">Measured 2026-10-11 against all noble numbers with seed denominators up to 60.</div></div></div>
+    <div class="fact"><div><p>The hexany needs the primes 3, 5 and 7, which is rank 4 with the octave. One generator and the octave is rank 2. So the hexany fits a rank-2 chain only with error, or only at a large N where the chain's commas vanish. A fit with two generators is rank 3 and is the natural next search.</p><div class="src">Open question. See the options below.</div></div></div>
+  </div>
+</section>
+
+<!-- ───────── NEXT ───────── -->
+<section class="station research" id="next">
+  <div class="station-head"><div class="num">OPTIONS</div><h2>Next lines of research</h2></div>
+  <ol>
+    <li><b>Count the triads instead of the worst one: done (CPSFIT-003).</b> The count fits are station 2 presets. Open follow-ups: sweep the 20 cent tone cap (5, 10, 20) as a control, because the small-N optima sit on the cap, and let the chain origin float (a transposition-free fit), which restores the CPS(n, k) and CPS(n, n − k) symmetry. Gate G-032 decides both.</li>
+    <li><b>Rank 3.</b> Search two generators and a note count, and keep the lattice within tolerance. The hexany, the dekany and the eikosany need this below N = 22. This is the D'Alessandro method applied to a general seed.</li>
+    <li><b>Fit the subsets.</b> Fit each hexany inside the eikosany separately, then ask which chain holds the most of the fifteen at once. The subset doctrine says the music lives in the subsets.</li>
+    <li><b>Quotient the ties.</b> When an N-chain of g holds the lattice, the 2N-chain of g/2 holds it too with the same errors. Report one representative per family so the staircase reads cleanly.</li>
+    <li><b>Golden and silver fits (new).</b> For each lattice, find the golden generator with the smallest level that holds it. Compare that level with the free search. If a golden generator holds the lattice at a level close to the free optimum, the fit is both harmonic and self-similar. That is the whole point.</li>
+    <li><b>Hear the fits.</b> Export the selected chain as Scala text, load it in the plugin, and listen to the lattice tones inside the chain. Gates G-029 and G-031 wait on this for the hexany at N = 15 and N = 22.</li>
+    <li><b>Murchana as a performance control.</b> A chain that holds the lattice at one murchana holds a transposed copy of it at the others. Map the murchana to a controller and play the lattice through its modes.</li>
+  </ol>
+</section>
+
+<!-- ───────── PROMPT ───────── -->
+<section class="station" id="prompt">
+  <div class="station-head"><div class="num">HANDOFF</div><h2>Prompt for the next session</h2>
+  <p class="note">This text describes the current state of the page in plain language. Copy it into Claude to continue the work.</p></div>
+  <div class="prompt" id="promptText"></div>
+  <div class="row"><button id="copyBtn" class="primary" style="flex:0 0 auto">Copy prompt</button><span class="note" id="copyNote"></span></div>
+</section>
+</div>
+
+<script>
+// ───────────────────────── pure math ─────────────────────────
+const CENTS = 1200;
+const log2 = Math.log2;
+function invertedLattice(tones) { return tones.map(t => ({ num: t.den, den: t.num })); }
+function gcd(a, b) { while (b) { [a, b] = [b, a % b]; } return a; }
+function reduceOctave(x) { while (x >= 2) x /= 2; while (x < 1) x *= 2; return x; }
+function cents(x) { return CENTS * log2(x); }
+function wrapCents(c) { c = ((c % CENTS) + CENTS) % CENTS; return c; }
+function circDist(a, b) { const d = Math.abs(wrapCents(a) - wrapCents(b)); return Math.min(d, CENTS - d); }
+function combinations(arr, k) {
+  const out = [];
+  (function rec(start, acc) {
+    if (acc.length === k) { out.push(acc.slice()); return; }
+    for (let s = start; s < arr.length; s++) { acc.push(arr[s]); rec(s + 1, acc); acc.pop(); }
+  })(0, []);
+  return out;
+}
+function parseFraction(tok) {
+  const m = tok.trim().match(/^(\d+)\s*(?:\/\s*(\d+))?$/);
+  if (!m) return null;
+  const num = +m[1], den = m[2] ? +m[2] : 1;
+  if (!num || !den) return null;
+  return { num, den };
+}
+// Build lattice: returns {tones:[{num,den,ratio,cents,label}], harmonics:[int seeds ascending by pitch class]}
+function buildLattice(kind, opts) {
+  let fracs = [];
+  if (kind === 'ratios') {
+    fracs = (opts.text || '').split(/[\s,]+/).map(parseFraction).filter(Boolean);
+  } else {
+    const factors = (opts.factors || '').split(/[\s,]+/).map(Number).filter(x => x > 0 && Number.isInteger(x));
+    const k = Math.max(1, Math.min(factors.length, opts.k | 0));
+    fracs = combinations(factors, k).map(c => ({ num: c.reduce((p, q) => p * q, 1), den: 1, label: c.join('·') }));
+  }
+  if (!fracs.length) fracs = [{ num: 1, den: 1 }];
+  // octave reduce, dedupe by cents
+  const seen = new Map();
+  for (const f of fracs) {
+    let num = f.num, den = f.den;
+    while (num / den >= 2) den *= 2;
+    while (num / den < 1) num *= 2;
+    const g = gcd(num, den); num /= g; den /= g;
+    const c = cents(num / den);
+    const key = Math.round(c * 1000);
+    if (!seen.has(key)) seen.set(key, { num, den, ratio: num / den, cents: c, label: f.label || `${num}/${den}` });
+  }
+  const tones = [...seen.values()].sort((p, q) => p.cents - q.cents);
+  // harmonic integer seeds: common denominator
+  let L = 1; for (const t of tones) L = L * t.den / gcd(L, t.den);
+  const harmonics = tones.map(t => t.num * (L / t.den));
+  tones.forEach((t, idx) => t.harmonic = harmonics[idx]);
+  return { tones, harmonics };
+}
+function stepClasses(centsList, tol) {
+  const pcs = [...new Set(centsList.map(c => Math.round(wrapCents(c) * 1e6) / 1e6))].sort((a, b) => a - b);
+  if (pcs.length < 2) return { classes: pcs.length ? 1 : 0, steps: [], minStep: 0 };
+  const steps = pcs.map((p, i) => (i + 1 < pcs.length ? pcs[i + 1] - p : pcs[0] + CENTS - p));
+  const sorted = steps.slice().sort((a, b) => a - b);
+  const classes = [];
+  for (const s of sorted) { if (!classes.length || s - classes[classes.length - 1] > tol) classes.push(s); }
+  return { classes: classes.length, steps: classes, minStep: sorted[0] };
+}
+// recurrence spec -> coefficient map {lag: coef}, order, G, g
+function triadCounts(freqs, tol) {
+  // octave-reduced tones, allow spans up to one octave by adding 2x copies
+  const pcs = [...new Set(freqs.map(f => Math.round(reduceOctave(f) * 1e6) / 1e6))].sort((a, b) => a - b);
+  const all = pcs.concat(pcs.map(x => x * 2));
+  let P = 0, S = 0;
+  const near = (x, y) => Math.abs(cents(x / y)) <= tol;
+  for (let p = 0; p < pcs.length; p++) for (let q = p + 1; q < all.length; q++) {
+    const lo = pcs[p], hi = all[q];
+    if (hi <= lo || hi > lo * 2) continue;
+    const am = (lo + hi) / 2, hm = 2 * lo * hi / (lo + hi);
+    for (const m of all) { if (m <= lo || m >= hi) continue; if (near(m, am)) P++; if (near(m, hm)) S++; }
+  }
+  return { P, S };
+}
+function mosPath(gen, maxN) {
+  // Walk the Stern-Brocot tree toward gen (in octaves, 0 < gen < 1). Each
+  // mediant p/q on the path is an MOS: q notes, p generators per octave in
+  // the approximation. Returns [{N, p, q, L, s}] with the two step sizes of
+  // the q-note chain in cents.
+  const out = [];
+  let lo = [0, 1], hi = [1, 1];
+  for (let guard = 0; guard < 200; guard++) {
+    const m = [lo[0] + hi[0], lo[1] + hi[1]];
+    if (m[1] > maxN) break;
+    const N = m[1];
+    const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * gen * CENTS));
+    const sorted = pcs.slice().sort((a, b) => a - b);
+    const steps = sorted.map((v, i) => (i + 1 < N ? sorted[i + 1] - v : sorted[0] + CENTS - v));
+    out.push({ N, p: m[0], q: m[1], L: Math.max(...steps), s: Math.min(...steps) });
+    if (gen < m[0] / m[1]) hi = m; else lo = m;
+  }
+  return out;
+}
+function scaleTree(gen, maxN) { return mosPath(gen, maxN).map(x => x.N); }
+// Val (generator mapping) and kernel commas of a chain fit: a port of the
+// CPSFIT-001 homomorphism and kernel tests, for the primes the lattice uses.
+const PRIMES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+const KERNEL_BOX = { 3: 12, 5: 6, 7: 5, 11: 4, 13: 3, 17: 2, 19: 2, 23: 2, 29: 2, 31: 2 };
+function monzo(num, den) {
+  const e = {}; let e2 = 0;
+  const strip = (n, sign) => {
+    while (n % 2 === 0) { n /= 2; e2 += sign; }
+    for (const p of PRIMES) { while (n % p === 0) { n /= p; e[p] = (e[p] || 0) + sign; } }
+    return n;
+  };
+  if (strip(num, 1) !== 1 || strip(den, -1) !== 1) return null;
+  return { e2, e };
+}
+function solveInteger(rows, rhs) {
+  // integer x with rows·x = rhs, by Gaussian elimination then exact verification; null if none or not unique
+  const m = rows.length, n = rows[0].length;
+  const A = rows.map((r, i) => r.concat([rhs[i]]).map(Number));
+  let rank = 0; const pivCols = [];
+  for (let c = 0; c < n && rank < m; c++) {
+    let piv = -1; for (let r = rank; r < m; r++) if (Math.abs(A[r][c]) > 1e-9) { piv = r; break; }
+    if (piv < 0) continue;
+    [A[rank], A[piv]] = [A[piv], A[rank]];
+    const pv = A[rank][c]; for (let j = 0; j <= n; j++) A[rank][j] /= pv;
+    for (let r = 0; r < m; r++) if (r !== rank && Math.abs(A[r][c]) > 1e-9) { const f = A[r][c]; for (let j = 0; j <= n; j++) A[r][j] -= f * A[rank][j]; }
+    pivCols.push(c); rank++;
+  }
+  for (let r = rank; r < m; r++) if (Math.abs(A[r][n]) > 1e-6) return null;
+  if (rank < n) return null;
+  const x = new Array(n).fill(0);
+  pivCols.forEach((c, i) => { x[c] = Math.round(A[i][n]); if (Math.abs(A[i][n] - x[c]) > 1e-6) x[c] = NaN; });
+  if (x.some(v => Number.isNaN(v))) return null;
+  for (let r = 0; r < m; r++) { let s = 0; for (let j = 0; j < n; j++) s += rows[r][j] * x[j]; if (s !== rhs[r]) return null; }
+  return x;
+}
+function valOf(tones, ks) {
+  // tones [{num, den}] at generator counts ks. {primes, mapping, shift} or null. shift ≠ 0 is a val of a transposed image.
+  const mz = tones.map(t => monzo(t.num, t.den)); if (mz.some(x => !x)) return null;
+  const used = PRIMES.filter(p => mz.some(x => x.e[p])); if (!used.length) return null;
+  const rows = mz.map(x => used.map(p => x.e[p] || 0));
+  const plain = solveInteger(rows, ks); if (plain) return { primes: used, mapping: plain, shift: 0 };
+  const sol = solveInteger(rows.map(r => r.concat([1])), ks);
+  return sol ? { primes: used, mapping: sol.slice(0, used.length), shift: sol[used.length] } : null;
+}
+function kernelOf(val, gCents) {
+  // commas under 60 cents with Tenney height ≤ 2^40 that the mapping [octave row; generator row] sends to zero
+  const { primes, mapping } = val;
+  const gen = {}; primes.forEach((p, i) => gen[p] = mapping[i]);
+  const octv = {}; primes.forEach(p => octv[p] = Math.round((CENTS * log2(p) - gen[p] * gCents) / CENTS));
+  const out = [];
+  const rec = (i, es) => {
+    if (i === primes.length) {
+      if (es.every(e => e === 0)) return;
+      let kgen = 0, e2 = 0, lc = 0, height = 0;
+      primes.forEach((p, j) => { kgen += es[j] * gen[p]; e2 -= es[j] * octv[p]; lc += es[j] * log2(p); height += Math.abs(es[j]) * log2(p); });
+      if (kgen !== 0) return;
+      const c = CENTS * (lc + e2); if (c <= 0 || c >= 60) return;
+      if (height + Math.abs(e2) > 40) return;
+      let num = 1n, den = 1n; const mul = (b, e) => { for (let k = 0; k < Math.abs(e); k++) { if (e > 0) num *= BigInt(b); else den *= BigInt(b); } };
+      mul(2, e2); primes.forEach((p, j) => mul(p, es[j]));
+      out.push({ comma: `${num}/${den}`, cents: c });
+      return;
+    }
+    const b = KERNEL_BOX[primes[i]]; for (let e = -b; e <= b; e++) rec(i + 1, es.concat([e]));
+  };
+  rec(0, []);
+  out.sort((a, b) => a.cents - b.cents);
+  return out.slice(0, 6);
+}
+// fit: for each N, the generator (cents) minimizing the largest circular error of any lattice tone to an
+// N-chain containing 1/1 — EXACT (CPSFIT-001 method): for a tolerance eps every (tone, k) admits a g-interval of
+// half-width eps/|k|; a sweep over interval endpoints decides feasibility; bisection on eps, then a ternary refinement.
+function feasibleFit(tc, N, eps) {
+  const K = N - 1, T = tc.length;
+  const always = tc.map(c => circDist(0, c) <= eps);
+  const ev = [];
+  for (let t = 0; t < T; t++) {
+    const c = tc[t];
+    for (let k = -K; k <= K; k++) {
+      if (!k) continue;
+      for (let m = -K - 2; m <= K + 2; m++) {
+        const center = (c + CENTS * m) / k, half = eps / Math.abs(k);
+        const lo = center - half, hi = center + half;
+        if (hi <= 1e-9 || lo > 600) continue;
+        ev.push([Math.max(lo, 1e-9), 0, t, k]); ev.push([Math.min(hi, 600), 1, t, k]);
+      }
+    }
+  }
+  ev.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const active = Array.from({ length: T }, () => new Set());
+  const check = () => {
+    let cand = null;
+    for (let t = 0; t < T; t++) {
+      if (always[t]) continue;
+      const ks = [...active[t]].sort((a, b) => a - b);
+      if (!ks.length) return null;
+      const ivs = [];
+      for (const k of ks) { const a = k - K, b = k; if (ivs.length && a <= ivs[ivs.length - 1][1]) ivs[ivs.length - 1][1] = Math.max(ivs[ivs.length - 1][1], b); else ivs.push([a, b]); }
+      if (cand === null) cand = ivs;
+      else { const nxt = []; for (const [a, b] of cand) for (const [c, d] of ivs) { const lo = Math.max(a, c), hi = Math.min(b, d); if (lo <= hi) nxt.push([lo, hi]); } cand = nxt; }
+      if (!cand.length) return null;
+    }
+    if (cand === null) return -K;
+    for (const [a, b] of cand) { const a2 = Math.max(a, -K), b2 = Math.min(b, 0); if (a2 <= b2) return a2; }
+    return null;
+  };
+  for (const [g, typ, t, k] of ev) {
+    if (typ === 0) { active[t].add(k); const s = check(); if (s !== null) return { g, s }; }
+    else active[t].delete(k);
+  }
+  return null;
+}
+function exactFit(tc, N, epsHi) {
+  let res = feasibleFit(tc, N, epsHi);
+  if (!res) return null;
+  let lo = 0, hi = epsHi;
+  for (let it = 0; it < 14; it++) { const mid = (lo + hi) / 2; const r = feasibleFit(tc, N, mid); if (r === null) lo = mid; else { hi = mid; res = r; } }
+  const { g, s } = res;
+  const ks = tc.map(c => { let best = null; for (let k = s; k < s + N; k++) { const e = circDist(k * g, c); if (best === null || e < best[1] || (e === best[1] && Math.abs(k) < Math.abs(best[0]))) best = [k, e]; } return best[0]; });
+  const err = x => Math.max(...tc.map((c, i) => circDist(ks[i] * x, c)));
+  let a = g - 0.05, b = g + 0.05;
+  for (let it = 0; it < 200; it++) { const m1 = a + (b - a) / 3, m2 = b - (b - a) / 3; if (err(m1) < err(m2)) b = m2; else a = m1; }
+  const gs = (a + b) / 2; const errs = tc.map((c, i) => circDist(ks[i] * gs, c));
+  return { g: gs, maxErr: Math.max(...errs), meanErr: errs.reduce((p, q) => p + q, 0) / errs.length, s, ks };
+}
+function fitLattice(toneCents, maxN) {
+  const best = new Map(); let epsHi = 60;
+  for (let N = 2; N <= maxN; N++) { const r = exactFit(toneCents, N, epsHi); if (!r) continue; epsHi = Math.min(60, r.maxErr + 0.02); best.set(N, r); }
+  return best;
+}
+function fitET(toneCents, maxN) {
+  const rows = [];
+  for (let N = 5; N <= maxN; N++) {
+    const step = CENTS / N; let mx = 0, sum = 0;
+    for (const t of toneCents) { const e = Math.abs(t - Math.round(t / step) * step); sum += e; if (e > mx) mx = e; }
+    rows.push({ N, maxErr: mx, meanErr: sum / toneCents.length });
+  }
+  return rows;
+}
+function chainAt(gCents, N, s, toneCents) {
+  // the chain with window [s, s+N-1] (1/1 at generator position -s): degrees and per-tone errors
+  const map = toneCents.map(t => { let mn = Infinity, mk = s; for (let k = s; k <= s + N - 1; k++) { const e = circDist(k * gCents, t); if (e < mn) { mn = e; mk = k; } } return { t, k: mk, err: mn }; });
+  const degrees = []; for (let k = s; k <= s + N - 1; k++) degrees.push(wrapCents(k * gCents));
+  return { degrees: degrees.sort((a, b) => a - b), map, maxErr: Math.max(...map.map(m => m.err)), s };
+}
+function stepPattern(degrees, tol) {
+  // letters for the step sizes in pitch order from 1/1: L, s, and m for a third size
+  const d = degrees.slice().sort((a, b) => a - b);
+  const steps = d.map((v, i) => (i + 1 < d.length ? d[i + 1] - v : d[0] + CENTS - v));
+  const sizes = [...new Set(steps.map(x => Math.round(x / tol) * tol))].sort((a, b) => b - a);
+  const letter = x => { const i = sizes.indexOf(Math.round(x / tol) * tol); return sizes.length <= 2 ? (i === 0 ? 'L' : 's') : (i === 0 ? 'L' : i === sizes.length - 1 ? 's' : 'm'); };
+  return steps.map(letter).join('');
+}
+function chainPitchClasses(gCents, N, toneCents, capErr) {
+  // choose window start s containing 0 minimizing max error; return degrees and tone errors
+  let bestS = 0, bestMax = Infinity, bestMap = null;
+  for (let s = -(N - 1); s <= 0; s++) {
+    let mx = 0; const map = [];
+    for (const t of toneCents) {
+      let mn = Infinity, mk = 0;
+      for (let k = s; k <= s + N - 1; k++) { const e = circDist(k * gCents, t); if (e < mn) { mn = e; mk = k; } }
+      map.push({ t, k: mk, err: mn }); if (mn > mx) mx = mn;
+    }
+    if (mx < bestMax) { bestMax = mx; bestS = s; bestMap = map; }
+  }
+  const degrees = []; for (let k = bestS; k <= bestS + N - 1; k++) degrees.push(wrapCents(k * gCents));
+  return { degrees: degrees.sort((a, b) => a - b), map: bestMap, maxErr: bestMax, s: bestS };
+}
+
+const ERV64 = [0.116035754,0.131267463,0.151102276,0.156691527,0.174715006,0.177998211,0.185805707,0.189523403,0.209053800,0.211702633,0.216542364,0.218332091,0.226253492,0.228208068,0.23384192,0.237161141,0.261642996,0.264308496,0.268556819,0.269955516,0.275266748,0.276393202,0.279315664,0.280842977,0.290757565,0.292412942,0.295685999,0.296986167,0.303426964,0.305213671,0.310892842,0.314663487,0.351012952,0.354358386,0.359265392,0.360777441,0.366106828,0.367160193,0.369779544,0.371086935,0.378682506,0.379818019,0.381966011,0.382785383,0.386586030,0.387570050,0.390516909,0.392334277,0.407971249,0.409955117,0.413253661,0.414378320,0.418835878,0.419821271,0.422447117,0.423860750,0.433799266,0.435599642,0.439291419,0.440808884,0.448791122,0.451153118,0.459137199,0.464877942];
+function metallicMean(m) { return (m + Math.sqrt(m * m + 4)) / 2; }
+function nobleCandidates(m, qMax) {
+  // Farey neighbours a/b < c/d with denominators <= qMax, both orders:
+  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path
+  // alternates m-to-a-side forever from that pair (m = 1 golden, 2 silver, 3 bronze).
+  const mu = metallicMean(m);
+  const fr = [];
+  for (let q = 1; q <= qMax; q++) for (let p = 0; p <= q; p++) if (gcd(p, q) === 1) fr.push([p, q]);
+  fr.sort((x, y) => x[0] * y[1] - y[0] * x[1]);
+  const out = new Map();
+  for (let i = 0; i + 1 < fr.length; i++) {
+    const [a, b] = fr[i], [c, d] = fr[i + 1];
+    if (b * c - a * d !== 1) continue;
+    for (const [x, y] of [[fr[i], fr[i + 1]], [fr[i + 1], fr[i]]]) {
+      const g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
+      if (g <= 0 || g >= 0.5 + 1e-12) continue;
+      const key = g.toFixed(9);
+      if (!out.has(key)) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+    }
+  }
+  return [...out.values()].sort((p, q) => p.g - q.g);
+}
+const GEN_PRESETS = [
+  { id: 'erv418935', label: '0.418935 · 502.72¢ · Erv 16 Jul 97, septimal meantone', oct: 0.418934662571, src: 'G = ((G³+4)/2)^(1/4), P.4a. Four fourths meet 5/4 as an arithmetic mean. CPSFIT-001 found this generator from the hexany alone at N = 15.' },
+  { id: 'erv238186', label: '0.238186 · 285.82¢ · Erv 27 Jul 97', oct: 0.238186456895, src: 'G = (4 − 2G)^(1/3), P.21a. "Like 14:17:20, 32:39:46, 9:11:13". Scale tree 1/4, 1/5, 6/25: the 25-note MOS has a 2.3-cent small step.' },
+  { id: 'fig12_12', label: '0.328173 · 393.81¢ · Erv Fig 12 entry 12', oct: 0.328173397034, src: 'G = (1 + G⁶)^(1/7), 23 July 1997.' },
+  { id: 'silver', label: '0.414214 · 497.06¢ · √2 − 1, Erv\'s answer to Yasser', oct: 0.414213562374, src: 'Scale tree 1/2, 2/5, 5/12, 12/29, 29/70, all twos. 22 Dec 1996: "my answer to Yasser, at about 1950".' },
+  { id: 'erv415227', label: '0.415227 · 498.27¢ · Erv 16 Sep 97', oct: 0.4152268136, src: 'G = (8 + 4G)^(1/9). Like 2:3:5 and 4:5:6. 0.23 cents above the pure fourth.' },
+  { id: 'metaslendro', label: '0.405685 · 486.82¢ · meta-slendro', oct: 0.405685231382, src: 'Converges on the plastic number 1.3247. Sheet for Kraig Grady, 15 Oct 1993.' },
+  { id: 'metapelog', label: '0.551463 · 661.76¢ · meta-pelog', oct: 0.551463089748, src: '"Like 12:19:26". Letter to Warren Burt, 1 Aug 1997.' },
+  { id: 'metaptolemy', label: '0.287761 · 345.31¢ · meta-Ptolemy', oct: 0.287760787088, src: 'Converges on 1.22074408461. 16 Oct 1993.' },
+  { id: 'metameantone', label: '0.579692 · 695.63¢ · meta-meantone', oct: 0.5796920314, src: 'From the condition that 1, G⁴/4, G is a 4:5:6 proportional triad.' },
+  { id: 'qcmeantone', label: '0.580482 · 696.58¢ · quarter-comma meantone fifth', oct: Math.log2(5) / 4, src: 'Four fifths make a pure 5/4.' },
+  { id: 'et12', label: '0.583333 · 700.00¢ · 12-ET fifth', oct: 7 / 12, src: 'The 12-note MOS with one step size.' },
+  { id: 'pure', label: '0.584963 · 701.96¢ · pure fifth 3/2 (Pythagorean)', oct: Math.log2(1.5), src: 'Levels 2, 3, 5, 7, 12, 17, 29, 41, 53.' },
+  { id: 'phi', label: '0.694242 · 833.09¢ · φ (Fibonacci)', oct: 0.694241913631, src: 'Erv Fig 12 entry 1. Levels 2, 3, 4, 7, 10, 13, 23, 36.' },
+  { id: 'fit22', label: '0.161489 · 193.787¢ · hexany fit at N = 22 (CPSFIT-001)', oct: 193.787 / 1200, src: 'Mapping (16, 2, 5), kernel 2401/2400 and 3136/3125. Holds the hexany within 1.37 cents at 22 notes.' },
+  { id: 'fit19', label: '0.226187 · 271.425¢ · hexany fit at N = 19 (orwell)', oct: 271.425 / 1200, src: 'Mapping (7, −3, 8). 2.57 cents at 19 notes; keeps 8 of 12 triads at 2 cents.' },
+  { id: 'fit16', label: '0.097085 · 116.502¢ · hexany fit at N = 16 (miracle)', oct: 116.502 / 1200, src: 'Mapping (6, −7, −2), kernel 2401/2400, 1029/1024, 225/224. 4.77 cents at 16 notes.' },
+  { id: 'fit31', label: '0.064332 · 77.198¢ · hexany fit at N = 31', oct: 77.198 / 1200, src: 'Mapping (−22, 5, −3), kernel 2401/2400 and 65625/65536. 0.74 cents at 31 notes, all 12 triads kept.' },
+  { id: 'cnt16', label: '0.097230 · 116.676¢ · hexany count fit at N = 16 (miracle, moved)', oct: 116.676 / 1200, src: 'CPSFIT-003. The miracle val (6, −7, −2) with the generator moved 0.17 cents: 10 of 12 hexany triads within 2 cents, one tone out at 5.2 cents. The tone fit at 116.502 keeps 6.' },
+  { id: 'cnt18', label: '0.064848 · 77.818¢ · hexany count fit at N = 18 to 21', oct: 77.818 / 1200, src: 'CPSFIT-003. Mapping (9, 5, −3), kernel 6144/6125, 1029/1024, 126/125. 10 of 12 triads at 2 cents with tone error 3.9 cents. Miracle kept 6 and orwell kept 8 here.' },
+  { id: 'dek26', label: '0.415055 · 498.066¢ · dekany 1·3·5·7·9 count fit at N = 26 (schismatic)', oct: 498.066 / 1200, src: 'CPSFIT-003. Mapping (−1, 8, 14), kernel 32805/32768, 5120/5103, 225/224. 32 of the dekany\'s 41 triads within 2 cents, tone error 4.1 cents. Choose the dekany preset in station 1.' },
+  { id: 'schis', label: '0.415218 · 498.262¢ · Ptolemy fit at N = 12 (schismatic)', oct: 498.262 / 1200, src: 'Holds Ptolemy\'s just major within 0.43 cents at 12 notes.' },
+  { id: 'custom', label: 'Custom (type cents or octaves)', oct: null, src: '' },
+];
+
+// ───────────────────────── page ─────────────────────────
+if (typeof document !== 'undefined') (function () {
+  const $ = id => document.getElementById(id);
+  const tok = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const S = {
+    latPreset: 'hexany', cpsFactors: '1 3 5 7', cpsK: 2, ratioText: '1/1 9/8 5/4 4/3 3/2 5/3 15/8',
+    genPreset: 'erv418935', gen: 0.418934662571,
+    fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
+  };
+  let lattice, fitRows = [], fixedRows = [], stairPts = [], fixedFirstHit = null, fixedBestRow = null, latTriadsExact = { P: 0, S: 0 };
+
+  const LAT_PRESETS = {
+    hexany: { kind: 'cps', factors: '1 3 5 7', k: 2 }, tetrad: { kind: 'cps', factors: '1 3 5 7', k: 1 },
+    dekany: { kind: 'cps', factors: '1 3 5 7 9', k: 2 }, dekany11: { kind: 'cps', factors: '1 3 5 7 11', k: 2 },
+    eikosany: { kind: 'cps', factors: '1 3 5 7 9 11', k: 3 },
+    eg4: { kind: 'ratios', text: '1/1 35/32 5/4 21/16 3/2 105/64 7/4 15/8' },
+    ptolemy: { kind: 'ratios', text: '1/1 9/8 5/4 4/3 3/2 5/3 15/8' },
+    pyth7: { kind: 'ratios', text: '1/1 9/8 81/64 4/3 3/2 27/16 243/128' },
+  };
+  function latticeSpec() {
+    if (S.latPreset === 'cps') return { kind: 'cps', factors: S.cpsFactors, k: S.cpsK };
+    if (S.latPreset === 'ratios') return { kind: 'ratios', text: S.ratioText };
+    return LAT_PRESETS[S.latPreset];
+  }
+  function latticeName() {
+    const sel = $('latPreset'); const t = sel.options[sel.selectedIndex].text;
+    if (S.latPreset === 'cps') return `CPS ${S.cpsK} of {${S.cpsFactors.trim().split(/\s+/).join(',')}}`;
+    if (S.latPreset === 'ratios') return `custom ratios ${S.ratioText.trim()}`;
+    return t;
+  }
+
+  // ---- canvas helpers
+  function prep(cv) {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (!cv.dataset.w) { cv.dataset.w = cv.getAttribute('width'); cv.dataset.h = cv.getAttribute('height'); }
+    const h = +cv.dataset.h;
+    const w = Math.max(200, Math.min(2000, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || +cv.dataset.w));
+    cv.style.width = '100%'; cv.style.height = h + 'px'; cv.style.maxHeight = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h); ctx.font = '11px ' + tok('--font-mono'); return { ctx, w, h };
+  }
+  function drawRuler(cv, items, opts) {
+    const { ctx, w, h } = prep(cv); const L = 24, R = w - 24, y = h * 0.5;
+    const x = c => L + (R - L) * (wrapCents(c) / CENTS);
+    ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+    for (let c = 0; c <= CENTS; c += 100) { const px = c === CENTS ? R : x(c); ctx.beginPath(); ctx.moveTo(px, y - 4); ctx.lineTo(px, y + 4); ctx.stroke(); if (c % 300 === 0) ctx.fillText(c, px - 8, h - 6); }
+    if (opts && opts.title) { ctx.fillStyle = tok('--muted'); ctx.fillText(opts.title, L, 12); }
+    for (const it of items) {
+      const px = x(it.cents);
+      if (it.tick) { ctx.strokeStyle = it.color; ctx.beginPath(); ctx.moveTo(px, y - 14); ctx.lineTo(px, y + 14); ctx.stroke(); }
+      else { ctx.fillStyle = it.color; ctx.beginPath(); ctx.arc(px, y, it.r, 0, Math.PI * 2); ctx.fill(); }
+      if (it.label) { ctx.fillStyle = it.color; ctx.fillText(it.label, px - ctx.measureText(it.label).width / 2, it.above ? y - 18 : y + 26); }
+    }
+  }
+
+  // ---- legend
+  function renderLegend() {
+    const harm = tok('--harm'), acc = tok('--accent'), warn = tok('--warn');
+    const ji = [[3, 2, '3'], [5, 4, '5'], [7, 4, '7'], [9, 8, '9'], [11, 8, '11']];
+    const items = []; for (let k = 0; k < 12; k++) items.push({ cents: k * 100, color: acc, r: 4 });
+    const stats = $('legendStats'); stats.innerHTML = '';
+    ji.forEach(([n, d, name]) => {
+      const c = cents(n / d); const err = Math.abs(c - Math.round(c / 100) * 100);
+      items.push({ cents: c, color: err <= 2 ? harm : warn, r: 0, tick: true, label: `${name}: ${err.toFixed(1)}`, above: true });
+      const div = document.createElement('div'); div.className = 'stat ' + (err <= 2 ? 'good' : err <= 10 ? '' : 'bad');
+      div.innerHTML = `<div class="k">harmonic ${name} (${n}/${d})</div><div class="v">${err.toFixed(2)}¢</div>`;
+      stats.appendChild(div);
+    });
+    drawRuler($('legendCanvas'), items, { title: '12-ET degrees (dots) and the just harmonics 3, 5, 7, 9, 11 (ticks) with their errors in cents' });
+  }
+
+  // ---- station 1
+  function selfInverse(tones) {
+    const pcs = tones.map(t => t.cents); const inv = pcs.map(c => wrapCents(-c));
+    const same = (A, B) => A.length === B.length && A.every(a => B.some(b => circDist(a, b) < 0.01));
+    for (const a of pcs) for (const b of inv) { const T = inv.map(c => wrapCents(c + a - b)); if (same(pcs, T)) return (a - b); }
+    return null;
+  }
+  function renderLattice() {
+    lattice = buildLattice(latticeSpec().kind, latticeSpec());
+    const harm = tok('--harm');
+    drawRuler($('latCanvas'), lattice.tones.map((t, idx) => ({ cents: t.cents, color: harm, r: 5, label: t.label, above: idx % 2 === 0 })), { title: 'pitch classes, cents' });
+    const tb = $('latTable').querySelector('tbody'); tb.innerHTML = '';
+    lattice.tones.forEach((t, idx) => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${idx}</td><td class="num">${t.num}/${t.den}</td><td class="num">${t.cents.toFixed(2)}</td>`; tb.appendChild(tr); });
+    const sc = stepClasses(lattice.tones.map(t => t.cents), 0.5);
+    $('latCount').textContent = lattice.tones.length; $('latMinStep').textContent = sc.minStep.toFixed(1) + '¢'; $('latClasses').textContent = sc.classes;
+    latTriadsExact = triadCounts(lattice.tones.map(t => t.ratio), 0.001);
+    $('latTriads').textContent = `${latTriadsExact.P} / ${latTriadsExact.S}`;
+    const sh = selfInverse(lattice.tones);
+    $('latInversion').textContent = sh === null
+      ? 'Inversion: this lattice is not its own reflection. A chain that holds it at generator g holds its reflection at 1 − g, at the mirrored murchana.'
+      : `Inversion: this lattice is its own reflection, up to a transposition of ${wrapCents(sh).toFixed(2)} cents. Its fits for g and for 1 − g are the same chains at mirrored murchanas, and its triads come in proportional and subcontrary pairs.`;
+  }
+
+  // ---- station 2
+  function renderGenerator() {
+    const g = S.gen; const gC = g * CENTS;
+    $('gOct').textContent = g.toFixed(6); $('gCents').textContent = gC.toFixed(2) + '¢'; $('gCompl').textContent = (1 - g).toFixed(6);
+    $('genCents').value = gC.toFixed(2); $('genOct').value = g.toFixed(6);
+    const p = GEN_PRESETS.find(x => x.id === S.genPreset); $('genSource').textContent = p && p.src ? p.src : '';
+    const path = mosPath(g, 60);
+    $('gSizes').textContent = path.map(x => x.N).join(' ');
+    const { ctx, w, h } = prep($('treeCanvas')); const acc = tok('--accent');
+    ctx.fillStyle = tok('--muted'); ctx.fillText(`MOS sizes N for g = ${g.toFixed(4)} octaves (the same for 1 − g), N ≤ 60`, 24, 14);
+    const L0 = 24, R0 = w - 24, maxN = 60;
+    ctx.strokeStyle = tok('--line'); ctx.beginPath(); ctx.moveTo(L0, h - 30); ctx.lineTo(R0, h - 30); ctx.stroke();
+    path.forEach((x, idx) => { const px = L0 + (R0 - L0) * (x.N / maxN); ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(px, h - 30, 4, 0, Math.PI * 2); ctx.fill(); ctx.fillText(x.N, px - 6, h - 30 - 10 - (idx % 2) * 14); });
+    [10, 20, 30, 40, 50, 60].forEach(n => { ctx.fillStyle = tok('--muted'); ctx.fillText(n, L0 + (R0 - L0) * (n / maxN) - 6, h - 8); });
+    const tb = $('treeTable').querySelector('tbody'); tb.innerHTML = '';
+    path.forEach((x, idx) => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${idx + 1}</td><td class="num">${x.N}</td><td class="num">${x.p}/${x.q}</td><td class="num">${(x.p / x.q * CENTS).toFixed(1)}</td><td class="num">${x.L.toFixed(1)}</td><td class="num">${x.s.toFixed(1)}</td><td class="num">${(x.L / x.s).toFixed(3)}</td>`; tb.appendChild(tr); });
+  }
+
+  // ---- station 3
+  function imageTriads(ch) {
+    // lattice tones at their fitted pitch classes: how many exact triads survive within the tolerance
+    const freqs = ch.map.map(m => Math.pow(2, wrapCents(m.k * ch.g) / CENTS));
+    return triadCounts(freqs, S.fitTol);
+  }
+  function rowFor(key, type, N, g, s, ch, mos, level) {
+    const tri = imageTriads({ ...ch, g });
+    return { key, type, N, g, s, mos, level, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length,
+             captured: ch.map.filter(m => m.err <= S.fitTol).length, triP: tri.P, triS: tri.S };
+  }
+  function triCell(r) { return `${r.triP} / ${r.triS}`; }
+  function renderFixedTable() {
+    const g = S.gen * CENTS; const latC = lattice.tones.map(t => t.cents);
+    $('fixedGenLabel').textContent = `${S.gen.toFixed(5)} octaves = ${g.toFixed(2)} cents`;
+    const path = mosPath(S.gen, S.maxN);
+    const tb = $('fixedTable').querySelector('tbody'); tb.innerHTML = '';
+    let first = null, bestRow = null; fixedRows = [];
+    for (let N = 2; N <= S.maxN; N++) {
+      const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
+      if (S.onlyMOS && !mos) continue;
+      const ch = chainPitchClasses(g, N, latC, 600);
+      const row = rowFor('fix' + N, 'FIX', N, g, ch.s, ch, mos, mos ? levelIdx + 1 : null);
+      fixedRows.push(row);
+      if (row.maxErr <= S.fitTol && !first) first = row;
+      if (!bestRow || row.maxErr < bestRow.maxErr) bestRow = row;
+      const tr = document.createElement('tr'); tr.className = 'sel' + (row.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === row.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${N}</td><td>${mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>'}</td><td class="num">${row.level == null ? '—' : row.level}</td><td class="num">${-row.s} of ${N}</td><td class="num">${row.maxErr.toFixed(2)}</td><td class="num">${row.meanErr.toFixed(2)}</td><td class="num">${row.captured}/${lattice.tones.length}</td><td class="num">${triCell(row)}</td>`;
+      tr.addEventListener('click', () => { S.fitPick = row; renderFitPick(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    fixedFirstHit = first; fixedBestRow = first || bestRow;
+    renderStair();
+  }
+  // ---- staircase chart: smallest largest-error against N, every search on one picture
+  function renderStair() {
+    const cv = $('stairCanvas'); const { ctx, w, h } = prep(cv);
+    const L = 40, R = w - 14, T = 14, B = h - 24, maxN = Math.max(12, S.maxN);
+    const xN = n => L + (R - L) * ((n - 2) / (maxN - 2));
+    const ymin = 0.2, ymax = 60;
+    const yE = e => B - (B - T) * (Math.log(Math.max(ymin, Math.min(ymax, e)) / ymin) / Math.log(ymax / ymin));
+    ctx.lineWidth = 1; ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    for (const t of [0.25, 0.5, 1, 2, 5, 10, 20, 50]) { const y = yE(t); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke(); ctx.fillText(t, 4, y + 4); }
+    for (let n = 5; n <= maxN; n += 5) ctx.fillText(n, xN(n) - 6, h - 7);
+    ctx.fillText('error ¢', 4, 10); ctx.fillText('N', R - 8, h - 7);
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = tok('--muted'); ctx.beginPath(); ctx.moveTo(L, yE(S.fitTol)); ctx.lineTo(R, yE(S.fitTol)); ctx.stroke(); ctx.setLineDash([]);
+    const pts = [];
+    const mark = (x, y, color, shape, row, label) => {
+      ctx.fillStyle = color; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath();
+      if (shape === 'dot') { ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill(); }
+      else if (shape === 'hollow') { ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.stroke(); }
+      else { ctx.moveTo(x, y - 5); ctx.lineTo(x + 5, y + 4); ctx.lineTo(x - 5, y + 4); ctx.closePath(); ctx.fill(); }
+      pts.push({ x, y, row, label });
+    };
+    const fixedVisible = fixedRows.filter(r => r.N >= 2);
+    if (fixedVisible.length) {
+      ctx.strokeStyle = tok('--c-fixed'); ctx.lineWidth = 2; ctx.globalAlpha = 0.6; ctx.beginPath();
+      fixedVisible.forEach((r, i) => { const x = xN(r.N), y = yE(r.maxErr); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+      fixedVisible.forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-fixed'), 'dot', r, `station 2 generator at N = ${r.N}: largest error ${r.maxErr.toFixed(2)} cents, murchana ${-r.s}`));
+    }
+    const free = fitRows.filter(r => r.type === 'MOS').sort((a, b) => a.N - b.N);
+    if (free.length) {
+      ctx.strokeStyle = tok('--c-free'); ctx.lineWidth = 2; ctx.beginPath();
+      free.forEach((r, i) => { const x = xN(r.N), y = yE(r.maxErr); if (i === 0) ctx.moveTo(x, y); else { ctx.lineTo(x, yE(free[i - 1].maxErr)); ctx.lineTo(x, y); } });
+      ctx.stroke();
+      free.forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-free'), 'dot', r, `free search N = ${r.N}: generator ${r.g.toFixed(3)} cents, largest error ${r.maxErr.toFixed(2)} cents, triads kept ${r.triP} / ${r.triS}`));
+    }
+    fitRows.filter(r => r.type === 'ET').forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--muted'), 'hollow', r, `${r.N}-ET: largest error ${r.maxErr.toFixed(2)} cents`));
+    famRows.filter(r => r.firstN != null && r.type !== 'ET').forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-fam'), 'tri', r, `family generator ${r.g.toFixed(3)} cents (seeds ${r.seeds}): first level within tolerance N = ${r.N}, largest error ${r.maxErr.toFixed(2)} cents`));
+    if (S.fitPick) { const p = pts.find(q => q.row.key === S.fitPick.key); if (p) { ctx.strokeStyle = tok('--fg'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI * 2); ctx.stroke(); } }
+    stairPts = pts;
+  }
+  function stairNearest(ev) {
+    const cv = $('stairCanvas'); const rect = cv.getBoundingClientRect();
+    const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+    let best = null; for (const p of stairPts) { const d = Math.hypot(p.x - x, p.y - y); if (d <= 12 && (!best || d < best.d)) best = { ...p, d }; }
+    return best;
+  }
+  // ---- compare panel: two pinned chains on one ruler
+  function renderCompare() {
+    const a = S.cmpA, b = S.cmpB; const cv = $('cmpCanvas'), wrap = $('cmpWrap');
+    if (!a || !b) { cv.hidden = true; wrap.hidden = true; $('cmpNote').textContent = a || b ? `Pinned ${a ? 'A' : 'B'}: ${(a || b).N} notes of ${(a || b).g.toFixed(2)} cents. Pin the other chain.` : 'Pin two chains to compare them on one ruler.'; return; }
+    cv.hidden = false; wrap.hidden = false;
+    const latC = lattice.tones.map(t => t.cents);
+    const chainOf = r => r.s == null ? { ...chainPitchClasses(r.g, r.N, latC, 60), g: r.g } : { ...chainAt(r.g, r.N, r.s, latC), g: r.g };
+    const ca = chainOf(a), cb = chainOf(b);
+    const { ctx, w, h } = prep(cv); const Lx = 24, Rx = w - 24, y = h * 0.5;
+    const x = c => Lx + (Rx - Lx) * (wrapCents(c) / CENTS);
+    ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    ctx.beginPath(); ctx.moveTo(Lx, y); ctx.lineTo(Rx, y); ctx.stroke();
+    for (let c = 0; c <= CENTS; c += 100) { const px = c === CENTS ? Rx : x(c); ctx.beginPath(); ctx.moveTo(px, y - 3); ctx.lineTo(px, y + 3); ctx.stroke(); if (c % 300 === 0) ctx.fillText(c, px - 8, h - 4); }
+    ctx.fillStyle = tok('--c-free'); ctx.fillText(`A: ${a.N} notes of ${a.g.toFixed(2)} ¢`, Lx, 12);
+    ctx.fillStyle = tok('--c-fam'); ctx.fillText(`B: ${b.N} notes of ${b.g.toFixed(2)} ¢`, Lx, h - 16);
+    for (const t of latC) { ctx.strokeStyle = tok('--harm'); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x(t), y - 22); ctx.lineTo(x(t), y + 22); ctx.stroke(); }
+    ca.degrees.forEach(d => { ctx.fillStyle = tok('--c-free'); ctx.beginPath(); ctx.arc(x(d), y - 12, 4, 0, Math.PI * 2); ctx.fill(); });
+    cb.degrees.forEach(d => { ctx.fillStyle = tok('--c-fam'); ctx.beginPath(); ctx.arc(x(d), y + 12, 4, 0, Math.PI * 2); ctx.fill(); });
+    const tb = $('cmpTable').querySelector('tbody'); tb.innerHTML = '';
+    lattice.tones.forEach((t, i) => { const tr = document.createElement('tr'); const ea = ca.map[i].err, eb = cb.map[i].err; tr.innerHTML = `<td class="num">${t.num}/${t.den}</td><td class="num">${ea.toFixed(2)}</td><td class="num">${eb.toFixed(2)}</td>`; tb.appendChild(tr); });
+    const foot = (k, va, vb) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><b>${k}</b></td><td class="num">${va}</td><td class="num">${vb}</td>`; tb.appendChild(tr); };
+    foot('largest error', ca.maxErr.toFixed(2), cb.maxErr.toFixed(2));
+    foot('triads kept P / S', `${a.triP} / ${a.triS}`, `${b.triP} / ${b.triS}`);
+    foot('notes', a.N, b.N);
+    $('cmpNote').textContent = `A keeps ${a.triP + a.triS} triads at ${a.maxErr.toFixed(2)} cents. B keeps ${b.triP + b.triS} at ${b.maxErr.toFixed(2)} cents. Orange ticks are the lattice. Dots above the line are A, dots below are B.`;
+  }
+  function renderFitTable() {
+    const tb = $('fitTable').querySelector('tbody'); tb.innerHTML = '';
+    const rows = fitRows.filter(r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos));
+    for (const r of rows) {
+      const tr = document.createElement('tr'); tr.className = 'sel' + (r.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${r.N}</td><td>${r.type === 'ET' ? '<span class="pill">ET</span>' : (r.mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>')}</td><td class="num">${r.level == null ? '—' : r.level}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${(r.g / CENTS).toFixed(5)}</td><td class="num">${r.g.toFixed(2)}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.meanErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td>`;
+      tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    if (!rows.length) tb.innerHTML = '<tr><td colspan="10" class="note">No rows. Press Run, or relax the filters.</td></tr>';
+  }
+  function sclText(r, ch) {
+    const degrees = ch.degrees.filter(d => d > 1e-9).sort((a, b) => a - b).concat([CENTS]);
+    const name = `mosfit_${latticeName().replace(/[^A-Za-z0-9]+/g, '_')}_N${r.N}_g${r.g.toFixed(3)}`;
+    return [`! ${name}.scl`, '!', `Lattice MOS-Fit: ${latticeName()}; ${r.N} notes of generator ${r.g.toFixed(3)} cents; 1/1 at generator position ${r.s == null ? 0 : -r.s}; largest lattice error ${r.maxErr.toFixed(2)} cents`, ` ${degrees.length}`, '!'].concat(degrees.map(d => ` ${d.toFixed(6)}`)).join('\n') + '\n';
+  }
+  function renderFitPick() {
+    const harm = tok('--harm'), acc = tok('--accent');
+    const latC = lattice.tones.map(t => t.cents);
+    const set = (id, v, good) => { const el = $(id); el.querySelector('.v').textContent = v; el.classList.toggle('good', good === true); el.classList.toggle('bad', good === false); };
+    if (!S.fitPick) {
+      drawRuler($('fitCanvas'), lattice.tones.map(t => ({ cents: t.cents, color: harm, r: 5 })), { title: 'lattice only' });
+      $('fitPickNote').textContent = 'No chain selected.'; $('fitPattern').textContent = ''; $('fitMurVal').textContent = '—'; $('sclText').textContent = ''; $('fitMirror').textContent = '';
+      ['stN', 'stG', 'stErr', 'stCap', 'stTri', 'stVal', 'stKer'].forEach(id => set(id, '—', null)); return;
+    }
+    const r = S.fitPick;
+    const ch = r.s == null ? { ...chainPitchClasses(r.g, r.N, latC, 60), g: r.g } : { ...chainAt(r.g, r.N, r.s, latC), g: r.g };
+    $('fitMur').max = r.N - 1; $('fitMur').value = r.s == null ? 0 : -r.s; $('fitMur').disabled = r.s == null;
+    $('fitMurVal').textContent = r.s == null ? 'n/a for ET' : `${-r.s} of ${r.N}`;
+    $('fitPattern').textContent = 'steps from 1/1: ' + stepPattern(ch.degrees, 1.0);
+    const items = ch.degrees.map(d => ({ cents: d, color: acc, r: 4 }));
+    ch.map.forEach(m => items.push({ cents: m.t, color: m.err <= S.fitTol ? harm : tok('--warn'), r: 0, tick: true, label: m.err.toFixed(1), above: true }));
+    drawRuler($('fitCanvas'), items, { title: `${r.type === 'ET' ? r.N + '-ET' : r.N + ' notes of generator ' + r.g.toFixed(2) + '¢'}: dots = scale, ticks = lattice with error in cents` });
+    $('fitPickNote').textContent = `${r.N} notes, generator ${(r.g / CENTS).toFixed(5)} octaves (${r.g.toFixed(2)} cents, complement ${(1 - r.g / CENTS).toFixed(5)}). Largest lattice error ${r.maxErr.toFixed(2)} cents. ${r.captured} of ${lattice.tones.length} lattice tones within ${S.fitTol} cents.` + (r.s == null ? '' : ` The 1/1 is generator position ${-r.s} of ${r.N}: ${-r.s} generators below it and ${r.N - 1 + r.s} above it. This is the murchana.`) + (r.level ? ` Level ${r.level} on the scale tree.` : '');
+    set('stN', `${r.N}${r.level ? ' / L' + r.level : r.type === 'ET' ? ' / ET' : ' / chain'}`, null);
+    set('stG', r.g.toFixed(2) + '¢', null);
+    set('stErr', r.maxErr.toFixed(2) + '¢', r.maxErr <= S.fitTol);
+    set('stCap', `${r.captured} / ${lattice.tones.length}`, r.captured === lattice.tones.length);
+    set('stTri', `${r.triP} / ${r.triS} (of ${latTriadsExact.P} / ${latTriadsExact.S})`, r.triP + r.triS === latTriadsExact.P + latTriadsExact.S && latTriadsExact.P + latTriadsExact.S > 0);
+    $('sclText').textContent = sclText(r, ch);
+    // val and kernel of the fitted image (chains only; an ET row has steps, not generator counts)
+    const val = r.s == null ? null : valOf(lattice.tones, ch.map.map(m => m.k));
+    if (!val) set('stVal', r.s == null ? 'n/a for ET' : 'none: the fit is an accident, not a val', null);
+    else set('stVal', val.primes.map((p, i) => `${p} → ${val.mapping[i]}`).join(', ') + (val.shift ? ` (image transposed by ${val.shift} generators)` : ''), null);
+    const ker = val ? kernelOf(val, r.g) : [];
+    set('stKer', !val ? '—' : ker.length ? ker.map(c => `${c.comma} (${c.cents.toFixed(2)}¢)`).join(', ') : 'none under 60 cents in the search box', null);
+    // murchanas of this chain that hold the lattice, and the mirrored murchana
+    if (r.s == null) $('fitMirror').textContent = '';
+    else {
+      const holds = []; for (let p = 0; p < r.N; p++) if (chainAt(r.g, r.N, -p, latC).maxErr <= S.fitTol) holds.push(p);
+      const m = -r.s, mm = r.N - 1 - m; const sh = selfInverse(lattice.tones);
+      $('fitMirror').textContent = `Murchanas of this chain that hold the lattice within ${S.fitTol} cents: ${holds.length ? holds.join(', ') : 'none'}. The mirrored murchana ${mm} holds the reflected lattice with the same errors` + (sh === null ? ', which for a CPS is the partner CPS(n, n − k) transposed.' : `, which is this lattice transposed by ${wrapCents(sh).toFixed(2)} cents. It holds the untransposed lattice only if that transposition is a chain interval.`);
+    }
+    renderStair();
+  }
+  let famRows = [];
+  function runFamily() {
+    const fam = $('famSel').value; const qMax = +$('famQ').value;
+    $('famStatus').textContent = 'Searching…';
+    setTimeout(() => {
+      const latC = lattice.tones.map(t => t.cents);
+      famRows = [];
+      const cands = fam === 'et' ? [] : nobleCandidates(+fam, qMax);
+      if (fam === 'et') {
+        for (const e of fitET(latC, S.maxN)) {
+          const step = CENTS / e.N; const map = latC.map(t => { const k = Math.round(t / step); return { t, k, err: Math.abs(t - k * step) }; });
+          const row = rowFor('fam' + e.N, 'ET', e.N, step, null, { map, maxErr: e.maxErr, degrees: [] }, true, null);
+          famRows.push({ ...row, gOct: 1 / e.N, seeds: `${e.N}-ET`, erv64: false, firstN: row.maxErr <= S.fitTol ? e.N : null });
+        }
+      } else {
+        for (const c of cands) {
+          const gC = c.g * CENTS; const path = mosPath(c.g, S.maxN);
+          let best = null, first = null;
+          for (let li = 0; li < path.length; li++) {
+            const N = path[li].N; if (N < 2) continue;
+            const ch = chainPitchClasses(gC, N, latC, 600);
+            const row = rowFor('fam' + c.g.toFixed(6) + '_' + N, 'FAM', N, gC, ch.s, ch, true, li + 1);
+            if (row.maxErr <= S.fitTol && !first) { first = row; break; }
+            if (!best || row.maxErr < best.maxErr) best = row;
+          }
+          const row = first || best; if (!row) continue;
+          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, erv64: c.erv64, firstN: first ? first.N : null });
+        }
+      }
+      famRows.sort((p, q) => (p.firstN == null ? 1 : 0) - (q.firstN == null ? 1 : 0) || (p.firstN != null ? p.firstN - q.firstN : p.maxErr - q.maxErr) || p.maxErr - q.maxErr);
+      const hits = famRows.filter(r => r.firstN != null);
+      $('famStatus').textContent = `${cands.length || famRows.length} generators tried. ${hits.length} hold every lattice tone within ${S.fitTol} cents at some level up to ${S.maxN} notes.` + (hits.length ? ` The smallest level is ${hits[0].N} notes at ${hits[0].g.toFixed(2)} cents.` : '');
+      renderFamTable(); if (hits.length) { S.fitPick = hits[0]; renderFitPick(); renderFamTable(); updatePrompt(); }
+      renderStair();
+    }, 20);
+  }
+  function renderFamTable() {
+    const tb = $('famTable').querySelector('tbody'); tb.innerHTML = '';
+    for (const r of famRows.slice(0, 200)) {
+      const tr = document.createElement('tr'); tr.className = 'sel' + (r.firstN != null ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
+      const btn = document.createElement('button'); btn.textContent = 'Use in station 2'; btn.addEventListener('click', ev => { ev.stopPropagation(); S.gen = r.gOct; S.genPreset = 'custom'; $('genPreset').value = 'custom'; genChanged(); document.getElementById('generator').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      tr.lastElementChild.appendChild(btn);
+      tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFamTable(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    if (!famRows.length) tb.innerHTML = '<tr><td colspan="10" class="note">No rows. Press Run.</td></tr>';
+  }
+  function runFit() {
+    $('fitStatus').textContent = 'Searching…';
+    setTimeout(() => {
+      const latC = lattice.tones.map(t => t.cents);
+      const best = fitLattice(latC, S.maxN);
+      fitRows = [];
+      for (const [N, r] of best) {
+        if (!(r.maxErr < Infinity)) continue;
+        const path = mosPath(r.g / CENTS, N); const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
+        const ch = chainAt(r.g, N, r.s, latC);
+        fitRows.push(rowFor('mos' + N, 'MOS', N, r.g, r.s, ch, mos, mos ? levelIdx + 1 : null));
+      }
+      for (const e of fitET(latC, S.maxN)) {
+        const step = CENTS / e.N; const map = latC.map(t => { const k = Math.round(t / step); return { t, k, err: Math.abs(t - k * step) }; });
+        fitRows.push(rowFor('et' + e.N, 'ET', e.N, step, null, { map, maxErr: e.maxErr, degrees: [] }, true, null));
+      }
+      fitRows.sort((p, q) => (p.maxErr <= S.fitTol ? 0 : 1) - (q.maxErr <= S.fitTol ? 0 : 1) || p.N - q.N);
+      const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
+      const visible = r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos);
+      const shown = hits.filter(visible);
+      S.fitPick = shown[0] || hits[0] || null;
+      const smallest = hits[0], smallestShown = shown[0];
+      $('fitStatus').textContent = hits.length
+        ? `${hits.length} scales contain every lattice tone within ${S.fitTol} cents. The smallest is ${smallest.N} notes (${smallest.type === 'ET' ? 'ET' : smallest.mos ? 'a level' : 'a chain that is not a level'}).${smallestShown && smallestShown !== smallest ? ` The smallest that passes the filters is ${smallestShown.N} notes.` : ''}${!smallestShown ? ' None passes the filters. Untick "only levels".' : ''}`
+        : `No scale up to ${S.maxN} notes contains every lattice tone within ${S.fitTol} cents. Relax the tolerance or raise N.`;
+      renderFitTable(); renderFixedTable(); renderFitPick(); updatePrompt();
+    }, 20);
+  }
+
+  // ---- prompt
+  function updatePrompt() {
+    const p = [];
+    p.push(`Lattice: ${latticeName()}, ${lattice.tones.length} tones: ${lattice.tones.map(t => t.num + '/' + t.den).join(' ')}. Exact triads P / S: ${latTriadsExact.P} / ${latTriadsExact.S}.`);
+    p.push(`Generator: ${S.gen.toFixed(6)} octaves, ${(S.gen * CENTS).toFixed(2)} cents, complement ${(1 - S.gen).toFixed(6)}. MOS sizes up to 60: ${mosPath(S.gen, 60).map(x => x.N).join(', ')}.`);
+    p.push(fixedFirstHit ? `This generator against the lattice: the smallest chain that holds every lattice tone within ${S.fitTol} cents has ${fixedFirstHit.N} notes, 1/1 at generator position ${-fixedFirstHit.s}${fixedFirstHit.level ? `, level ${fixedFirstHit.level}` : ''}, and keeps ${fixedFirstHit.triP} / ${fixedFirstHit.triS} triads.` : `This generator against the lattice: no chain up to ${S.maxN} notes holds every lattice tone within ${S.fitTol} cents.`);
+    if (fitRows.length) {
+      const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
+      p.push(`Free search, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (level ' + r.level + ')' : '')} with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
+    } else p.push('Free search: it did not run.');
+    if (famRows.length) { const hits = famRows.filter(r => r.firstN != null); const fam = $('famSel').options[$('famSel').selectedIndex].text; p.push(`Family search, ${fam}, seed denominators up to ${$('famQ').value}: ${hits.length ? hits.slice(0, 5).map(r => `${r.g.toFixed(2)} cents (seeds ${r.seeds}${r.erv64 ? ', in Erv\'s 64' : ''}) holds the lattice at ${r.N} notes with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'no generator of this family holds the lattice within tolerance up to ' + S.maxN + ' notes.'}`); }
+    if (S.fitPick) p.push(`Selected chain: ${S.fitPick.N} notes, generator ${S.fitPick.g.toFixed(2)} cents, largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents${S.fitPick.s == null ? '' : `, 1/1 at generator position ${-S.fitPick.s} (the murchana)`}${S.fitPick.level ? `, level ${S.fitPick.level}` : ''}, triads kept ${S.fitPick.triP} / ${S.fitPick.triS}. Val: ${$('stVal').querySelector('.v').textContent}. Kernel: ${$('stKer').querySelector('.v').textContent}.`);
+    if (S.cmpA && S.cmpB) p.push(`Compared: A = ${S.cmpA.N} notes of ${S.cmpA.g.toFixed(2)} cents (largest error ${S.cmpA.maxErr.toFixed(2)}, triads ${S.cmpA.triP} / ${S.cmpA.triS}) against B = ${S.cmpB.N} notes of ${S.cmpB.g.toFixed(2)} cents (largest error ${S.cmpB.maxErr.toFixed(2)}, triads ${S.cmpB.triP} / ${S.cmpB.triS}).`);
+    p.push('Task: continue the lattice MOS-fit research from this state. The objective is a scale with one melodic structure that holds the lattice. Use the frozen scorers for the harmony axis and the melody axis.');
+    $('promptText').textContent = p.join('\n\n');
+  }
+
+  // ---- wiring
+  const copyTo = (textId, noteId) => () => {
+    const text = $(textId).textContent;
+    const done = () => { $(noteId).textContent = 'Copied.'; setTimeout(() => $(noteId).textContent = '', 1500); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($(textId)); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); $(noteId).textContent = 'Text selected. Press copy.'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  };
+  function all() { renderLegend(); renderLattice(); renderGenerator(); fitRows = []; S.fitPick = null; renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Press Run. Large lattices at large N take a few seconds.'; updatePrompt(); }
+  function genChanged() { renderGenerator(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); }
+  const gsel = $('genPreset'); GEN_PRESETS.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; gsel.appendChild(o); }); gsel.value = S.genPreset;
+  gsel.addEventListener('change', e => { S.genPreset = e.target.value; const p = GEN_PRESETS.find(x => x.id === S.genPreset); if (p.oct != null) S.gen = p.oct; genChanged(); });
+  $('genCents').addEventListener('change', e => { const v = +e.target.value; if (v > 0 && v < CENTS) { S.gen = v / CENTS; S.genPreset = 'custom'; gsel.value = 'custom'; genChanged(); } });
+  $('genOct').addEventListener('change', e => { const v = +e.target.value; if (v > 0 && v < 1) { S.gen = v; S.genPreset = 'custom'; gsel.value = 'custom'; genChanged(); } });
+  $('latPreset').addEventListener('change', e => { S.latPreset = e.target.value; $('cpsFields').hidden = S.latPreset !== 'cps'; $('ratioFields').hidden = S.latPreset !== 'ratios'; all(); });
+  $('cpsFactors').addEventListener('input', e => { S.cpsFactors = e.target.value; all(); });
+  $('cpsK').addEventListener('input', e => { S.cpsK = +e.target.value || 1; all(); });
+  $('ratioText').addEventListener('input', e => { S.ratioText = e.target.value; all(); });
+  $('fitTol').addEventListener('input', e => { S.fitTol = +e.target.value; $('fitTolVal').textContent = S.fitTol.toFixed(1); const latC = lattice.tones.map(t => t.cents); fitRows = fitRows.map(r => { const ch = r.s == null ? (() => { const step = r.g; const map = latC.map(t => { const k = Math.round(t / step); return { t, k, err: Math.abs(t - k * step) }; }); return { map, maxErr: r.maxErr, degrees: [] }; })() : chainAt(r.g, r.N, r.s, latC); return rowFor(r.key, r.type, r.N, r.g, r.s, ch, r.mos, r.level); }); if (S.fitPick) S.fitPick = fitRows.find(r => r.key === S.fitPick.key) || S.fitPick; renderFitTable(); renderFixedTable(); renderFitPick(); updatePrompt(); });
+  $('maxN').addEventListener('input', e => { S.maxN = +e.target.value; $('maxNVal').textContent = S.maxN; renderFixedTable(); });
+  $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); renderFixedTable(); });
+  $('showET').addEventListener('change', e => { S.showET = e.target.checked; renderFitTable(); });
+  $('fitRun').addEventListener('click', runFit);
+  $('famRun').addEventListener('click', runFamily);
+  $('famQ').addEventListener('input', e => { $('famQVal').textContent = e.target.value; });
+  $('fitMur').addEventListener('input', e => {
+    const r = S.fitPick; if (!r || r.s == null) return;
+    const s2 = -(+e.target.value); const latC = lattice.tones.map(t => t.cents);
+    S.fitPick = rowFor(r.key, r.type, r.N, r.g, s2, chainAt(r.g, r.N, s2, latC), r.mos, r.level);
+    renderFitPick(); updatePrompt();
+  });
+  $('pinA').addEventListener('click', () => { if (S.fitPick) { S.cmpA = S.fitPick; renderCompare(); updatePrompt(); } });
+  $('pinB').addEventListener('click', () => { if (S.fitPick) { S.cmpB = S.fitPick; renderCompare(); updatePrompt(); } });
+  $('stairCanvas').addEventListener('mousemove', ev => { const p = stairNearest(ev); $('stairHover').textContent = p ? p.label : 'Move over a point to read it. Click a point to select that chain.'; });
+  $('stairCanvas').addEventListener('click', ev => { const p = stairNearest(ev); if (!p) return; S.fitPick = p.row; renderFitPick(); renderFixedTable(); renderFitTable(); renderFamTable(); updatePrompt(); });
+  $('copyBtn').addEventListener('click', copyTo('promptText', 'copyNote'));
+  $('copyScl').addEventListener('click', copyTo('sclText', 'copySclNote'));
+  window.addEventListener('resize', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); renderCompare(); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); renderCompare(); });
+
+  all();
+})();
+</script>
+
+</body></html>

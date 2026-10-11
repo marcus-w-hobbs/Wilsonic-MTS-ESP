@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-11",
+  "purpose": "Pre-content visualization preparation and first source-review checkpoint",
+  "research_repository": "https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP",
+  "research_branch": "research/lattice-recurrence-playground",
+  "research_source_commit": "3e3cf91cbd1bf5add95801b0be8c6840f8648683",
+  "math_to_manim_repository": "https://github.com/HarleyCoops/Math-To-Manim",
+  "math_to_manim_commit": "089ffd51ece10898cc3cdb00a9bb1588268f19e0",
+  "source_receipts": {
+    "experiments/lattice/results/cpsfit003.jsonl": "3f6c5d743bfcbc059cf3a0029ae7d204d4e33319e4bee817c53c1800f77852b6"
+  },
+  "audience": "Microtonal musicians familiar with MOS and CPS",
+  "open_scope": "Whether non-MOS chains are valid musical outcomes",
+  "production_authorized": false,
+  "hash_algorithm": "sha256",
+  "files": {
+    ".gitignore": "36bcbb4490145266af84a0d3ac01541557a03fe5d36542d94e1a134b2ee89d6d",
+    "README.md": "3a402d7443f53c3bc5d01251465000dbc4608c530d312eb55782f47407710c71",
+    "RESEARCH-TO-FILM.md": "fb0f2df363ac8f6f3261636cb39d9ef9ee4aa4d009cbceff2777bebd69834255",
+    "SOURCE-MAP.md": "381a99bbe85b09aa37bcb662deacd57fba27e767df908e8fa19179c2bb477a20",
+    "environment/SETUP.md": "e7436f7c4b8db1d4c4aecd1469efe423d107f121881fe1b10f5497d28e34f4c0",
+    "environment/pytest-manim-0.22.0.txt": "08dd02966de0a216acd5daf16a3b48478571c8c2c7c17705885ae8d4a51a3533",
+    "environment/python-constraints-macos-arm64.txt": "9cb59234d88a3e01aa920b6d633615467cb468f7adea6d76c741a4a29b9a290f",
+    "environment/render-metadata.json": "b0914791237e410d7655213a84877d1da7ff465eb24d0e3b5e4b11822318a860",
+    "environment/verification.json": "c52039cf922c189d5795f791c0042d66d376c7fcc3e9c81bb4bfe97738d733cf",
+    "offline-readiness-check.json": "40e97484a3819ebee74cb1499f08031aee4953044f20be27e71fe18197ef1e05",
+    "reviews/round-01/REVIEW.md": "bc75724e133f5e981b92a06cd2ae153bd1af879b94b42b1712dcc27d73df14c4",
+    "reviews/round-01/dekany-count.png": "bdb714bd507883dabc2d3d27b1d2c02f3f93e0679c8db16e32e7a06ece5e6a70",
+    "reviews/round-01/initial.png": "d4f8957531f21ad01f490cdc44cfd618e3b5aa116bac9078fdbcf7ffd7f8fdbc",
+    "reviews/round-01/numerical-evidence.json": "8385d9d3b1fbe1ebb8d89102cb07d35d2b34cd5a207bb282905b15b353902655",
+    "reviews/round-01/playground.html": "20e9e932480dc751ca9ed5812a44033444bf40bad322c9318ea18c4001046464"
+  }
+}

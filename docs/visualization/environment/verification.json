@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-11",
+  "platform": "macOS arm64",
+  "python": "3.12.13",
+  "node": "24.1.0",
+  "uv": "0.6.14",
+  "math_to_manim_version": "2.0.0",
+  "math_to_manim_commit": "089ffd51ece10898cc3cdb00a9bb1588268f19e0",
+  "manim": "0.22.0",
+  "codex_cli": "0.156.1",
+  "codex_sdk": "0.156.1",
+  "typesafe_sdk": "0.7.2",
+  "tests": {
+    "passed": 330,
+    "warnings": 1,
+    "seconds": 77.26,
+    "warning": "Non-failing ResponseBody temporary-file cleanup warning; also present before Manim upgrade."
+  },
+  "dependency_check": {
+    "packages": 73,
+    "compatible": true
+  },
+  "render_check": {
+    "scene": "GeodesicFilm",
+    "source": "tests/fixtures/cinematic_geodesic.scene.py",
+    "animations": 9,
+    "includes": [
+      "MathTex",
+      "camera movement"
+    ],
+    "full_ffmpeg_decode_passed": true
+  },
+  "credentials": {
+    "chatgpt_login_locally_recognized": true,
+    "jev_credential_locally_recognized": true,
+    "live_generation_access_verified": false,
+    "live_jev_access_verified": false
+  },
+  "paid_model_calls": 0,
+  "research_film_created": false
+}
