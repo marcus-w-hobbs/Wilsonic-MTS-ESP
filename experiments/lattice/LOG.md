@@ -3846,3 +3846,88 @@ the ρ = 1 lock step (n = 12), at n = 40, and at n = 100, offered for
 listening: does the long ρ = 5/2 transient sound like anything at all?
 Tests `tests/test_meru002.py` green before the first run. Stdlib only,
 python3.12, deterministic, no wall-clock fields; two runs bit-identical.
+
+## 2026-10-10 — MERU-002 results + verdicts
+
+**Run:** `meru002.py` (20.5 min, exact rationals with ρ^k denominators;
+receipts `results/meru002.jsonl`, 7,395 rows = 32 (recurrence, ρ) pairs ×
+2 windows × every n, + `results/meru002_summary.json`; two runs
+bit-identical, `cmp` on both receipts and the six .scl). Frozen triads
+v1.1.0 and melodic v0.1.0 read-only, pins verified before and after;
+lattice suite 344/344 green before the run (9 new tests). **Mirror vs
+frozen exact: 0 disagreements over 7,395 windows.** ρ = 1 rows reproduce
+MERU-001's LIFT rows (n_lock 12/17, n_chain 53/56, Δn 9/13 for 0.418935;
+18/23, 22/27 for Fibonacci; 21/26, 39/43 for meta-meantone).
+
+- **P-R1 — REFUTED as registered; the registration was wrong, not the
+  law.** The scratch sweep defined n_lock on a single term's residual; the
+  runner uses MERU-001's window maximum (every generated term in the
+  window within 2¢). With k = 2 the lifted roots are ±ρ, so the single-term
+  residual oscillates with period 2 and crosses 2¢ early at a
+  near-cancellation; the window maximum waits for the envelope. Every
+  registered number above the plateau is therefore too small (0.418935
+  W = 7: 14/16/18/24/34/84 at ρ = 5/4 … 5/2 against 12/12/14/18/28/72;
+  Fibonacci 14/14/18/30/74 against 12/12/14/22/54; meta-meantone 15/21/37
+  against 13/13/23), 58 checks fail, and the "constant intercept" claim is
+  false too: n_lock · log2(G/ρ) falls monotonically with ρ, from 13.3 to
+  8.2 bits (0.418935, W = 7), 12.5 to 8.1 (Fibonacci), 14.9 to 7.6
+  (meta-meantone); the residual's amplitude depends on ρ through the lift
+  coefficient ρ^k, so the intercept is not a constant of the recurrence.
+  What survives, measured not registered: n_lock is non-decreasing in ρ on
+  all three recurrences and both windows (0 inversions in 31 ladder steps),
+  and at matched ρ/G the lock step is nearly the same across recurrences
+  whose |λ₂|/G differ by 0.5 — Fibonacci ρ/G = 0.773 → 30 against 0.418935
+  ρ/G = 0.748 → 24; meta-meantone 0.836 → 37 against 0.418935 0.841 → 34 —
+  so the lock does follow ρ and not |λ₂|, as the decay argument says.
+- **P-R2 — REFUTED as registered on one row, held on the other thirty.**
+  The scratch printed its "never reached" sentinel (135 = last index) for
+  Fibonacci at ρ = 25/16 and the registration copied it as a crossing; the
+  runner reports None (chain error never ≤ 2¢ in 130 steps, as ρ/G = 0.966
+  predicts, τ_eff = 20). Everything else held exactly: the 0.418935
+  plateau is 53 for every ρ ≤ 2 and 54 at 9/4 (ρ/G = 0.841 < 0.880), then
+  94 at 5/2; meta-meantone 39–46 for ρ ≤ 5/4, then 71 and 133; Fibonacci
+  16, 16, 17, 22, 31, 43, 55, 75 strictly increasing above |λ₂|; every
+  registered n_chain(2¢) reproduced; and (n_chain(2¢) − n₀)/τ_eff ∈
+  [5.55, 7.95] on all 30 rows (0.418935: 7.58 on every plateau row, 7.76,
+  7.95 above it; Fibonacci 5.55–7.34; meta-meantone 5.57–7.10), inside the
+  registered [5.0, 8.5]. The chain follows max(ρ, |λ₂|).
+- **P-R3 — KEPT.** ρ buys no harmony. Mean frozen P@2¢ over the transient
+  windows at W = 7 is non-increasing in ρ for ρ ≥ 1 within the 0.5 jitter
+  (0.418935: 4.15, 4.10, 4.07, 4.15, 3.98, 3.98, 3.83, 3.41, 2.52, 1.67;
+  Fibonacci: 3.60, 2.84, 2.10, 1.91, 1.73, 1.59; meta-meantone: 3.67, 2.18,
+  1.83, 1.80); the longest transient has the lowest mean on each (1.67,
+  1.59, 1.80, all ≤ 2.0); mean interval retention never exceeds 2.61 of 21
+  pairs; exact echo windows are 0 on all 32 pairs. A large ρ keeps the
+  sequence away from the chain and not near the lattice.
+- **P-R4 — KEPT.** With tolerance max(3, 0.3·2τ_eff), |Δn − 2τ_eff| holds
+  on all 54 (recurrence, ρ, W) rows that reach 0.5¢: worst cases
+  meta-meantone W = 7 at ρ ∈ {1/2, 1} Δn = 12 and ρ ∈ {3/4, 5/4} Δn = 7
+  against 9.7 (tolerance 3), Fibonacci ρ = 3/2 W = 12 16 against 18.3
+  (tolerance 5.5), 0.418935 ρ = 5/2 20/22 against 20.6. MERU-001's P-M3
+  stands in this form: the rate is right and the crossing jitters by a few
+  steps that scale with the time constant.
+- **P-R5 — KEPT.** 0.418935 at ρ = 21/8 goes non-positive at n = 53 (the
+  lift coefficient −32·ρ² = −220.5 on H[n−6]); every other pair stays
+  positive through 136 terms.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) At W = 12 the
+locks are 5 steps later than at W = 7 on the plateau and the same offset
+persists above it (0.418935 ρ = 2: 24 → 29; 5/2: 84 → 89), consistent with
+the window-maximum definition. (2) Fibonacci ρ ≤ 3/4 has a transient of
+only 4–5 windows and the highest mean P@2¢ of the run (5.75, 4.75, 5.20):
+the hexany seeds, chain-aligned, are already close to a φ-chain in step
+size, so the chain arrives before the seeds have left the window. (3) The
+meta-meantone chain's own interval retention of the hexany is the largest
+(stationary 0 at W = 7 in MERU-001, but transient means 1.9–2.6 here, above
+the other two), the meantone fourth being 2.4¢ from the hexany's 21/16 : 1
+step class.
+
+**Kept.** Runner and receipts stand; six .scl windows under
+`results/scl/meru002/` (0.418935, ρ = 1 and ρ = 5/2, W = 7, n = 12, 40, 100)
+are offered for listening — gate G-030: does the long ρ = 5/2 transient at
+n = 40 sound like anything, or like a scale drifting?
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 344/344 OK (9 new:
+test_meru002), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535) before and after; both receipts and all six .scl
+bit-identical across two runs.

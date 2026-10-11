@@ -1,0 +1,12 @@
+! meru002_erv418935_rho1-1_W7_n100.scl
+!
+MERU-002 0.418935 H[n-1] + 32 H[n-4] (Erv 16 Jul 97); hexany seeds; rho = 1; window of 7 at step 100; 1/1 = lowest window tone
+ 7
+!
+ 113.604458
+ 308.163289
+ 502.716311
+ 616.324787
+ 810.885821
+ 1005.437650
+ 1200.000000

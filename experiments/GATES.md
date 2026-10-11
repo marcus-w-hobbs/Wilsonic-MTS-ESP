@@ -55,6 +55,7 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 | G-027 | 2026-09-29 | EPS-TIER-002: collapse-within-ε report filter + re-run EPS-TIER-001 tiers, choosing the above-LOCK tier(s) from G-025's results | QUEUED (needs G-025) |
 | G-028 | 2026-10-10 | MERU-001 review: the power-of-two recurrence law (P-M1/P-M2 kept), crossover law refuted-as-registered on 1/12; ear check of nine .scl windows under results/scl/meru001/ (0.418935, Fibonacci, meta-meantone: seed, lock, last) | PENDING — does the lock window sound like the seed window's harmony arriving at the chain, or like a new chord? |
 | G-029 | 2026-10-10 | CPSFIT-001 review: hexany inside a 22-note chain at 1.37¢ (no ET < 73 does it), N = 15 fit is Erv's 0.418935 (septimal meantone), survival non-monotone in tone error; ear check of results/scl/cpsfit001/ (N = 15 and N = 22 chains); decide whether CPSFIT-002 optimizes triad deviation instead of tone error | PENDING |
+| G-030 | 2026-10-10 | MERU-002 review: the ρ knob of the order lift buys no harmony (P-R3 kept; mean P@2¢ falls with ρ), chain step follows max(ρ, λ₂) (P-R2 held on 30/31 rows), lock step follows ρ (P-R1 refuted as registered: wrong lock definition in the scratch); ear check of six .scl under results/scl/meru002/ (0.418935 at ρ = 1 vs 5/2; n = 12, 40, 100) | PENDING — does the long ρ = 5/2 transient at n = 40 sound like anything, or like a scale drifting? Decide whether ρ stays a playground control or is dropped as a research knob |
 
 ## Currently blocked by gates
 
