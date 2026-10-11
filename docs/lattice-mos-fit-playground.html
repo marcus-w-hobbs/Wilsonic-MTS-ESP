@@ -15,6 +15,9 @@
   --harm-soft: rgba(178,103,26,0.14);
   --ok: #2d7a3a;
   --warn: #a8402f;
+  --c-free: #0c9489;       /* chart: free search */
+  --c-fixed: #b2671a;      /* chart: station 2 generator */
+  --c-fam: #7a4fb5;        /* chart: family search */
   --font-display: "Spectral", Georgia, "Times New Roman", serif;
   --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
@@ -26,6 +29,7 @@
     --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
     --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
     --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+    --c-free: #0fa394; --c-fixed: #bf7a30; --c-fam: #8f72c8;
   }
 }
 :root[data-theme="dark"] {
@@ -34,6 +38,7 @@
   --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
   --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
   --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+  --c-free: #0fa394; --c-fixed: #bf7a30; --c-fam: #8f72c8;
 }
 * { box-sizing: border-box; }
 body {
@@ -113,6 +118,13 @@ tr.sel:hover td { background: var(--harm-soft); }
 .legend .l-harm::before { background: var(--harm); }
 .legend .l-mel::before { background: var(--accent); }
 .legend .l-seed::before { background: var(--harm); outline: 2px solid var(--accent); outline-offset: 1px; }
+.legend .l-free::before { background: var(--c-free); }
+.legend .l-fixed::before { background: var(--c-fixed); }
+.legend .l-fam::before { background: var(--c-fam); border-radius: 0; }
+.legend .l-et::before { background: transparent; border: 2px solid var(--muted); width: 8px; height: 8px; }
+.stat.wide { grid-column: 1 / -1; }
+.stat.wide .v { font-size: 13px; white-space: normal; }
+canvas.hoverable { cursor: crosshair; }
 .prompt { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; line-height: 1.5; min-width: 0; }
 .research { display: grid; gap: 8px; font-size: 14px; }
 .research li { max-width: 78ch; }
@@ -230,7 +242,10 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
         <div class="stat harm" id="stErr"><div class="k">largest tone error</div><div class="v">—</div></div>
         <div class="stat harm" id="stCap"><div class="k">tones within tolerance</div><div class="v">—</div></div>
         <div class="stat harm" id="stTri"><div class="k">triads kept P / S (of exact)</div><div class="v">—</div></div>
+        <div class="stat mel wide" id="stVal"><div class="k">val: generator counts of the primes</div><div class="v">—</div></div>
+        <div class="stat mel wide" id="stKer"><div class="k">kernel: commas the chain tempers out (under 60 cents)</div><div class="v">—</div></div>
       </div>
+      <div class="row"><button id="pinA" style="flex:0 0 auto">Pin as A</button><button id="pinB" style="flex:0 0 auto">Pin as B</button><span class="note" id="cmpNote">Pin two chains to compare them on one ruler.</span></div>
       <details><summary>Scala text of the selected chain (copy it into the plugin)</summary><div class="prompt" id="sclText" style="margin-top:8px"></div><div class="row" style="margin-top:8px"><button id="copyScl" style="flex:0 0 auto">Copy Scala text</button><span class="note" id="copySclNote"></span></div></details>
     </div>
     <div class="preview">
@@ -241,6 +256,14 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
         <span class="mono note" id="fitPattern" style="flex:2 1 240px; word-break: break-all"></span>
       </div>
       <p class="note">Move the slider to rotate the mode. Each step drops one tone from one end of the chain and adds one at the other end. The step pattern rotates with it, and the lattice errors show which modes hold the lattice.</p>
+      <p class="note" id="fitMirror"></p>
+      <h3>Compare: chain A against chain B</h3>
+      <canvas id="cmpCanvas" width="760" height="110" hidden></canvas>
+      <div class="tablewrap" style="max-height:200px" hidden id="cmpWrap"><table id="cmpTable"><thead><tr><th>lattice tone</th><th>A error</th><th>B error</th></tr></thead><tbody></tbody></table></div>
+      <h3>Staircase: the smallest largest-error at each N</h3>
+      <canvas id="stairCanvas" class="hoverable" width="760" height="230"></canvas>
+      <div class="legend" id="stairLegend"><span class="l-free">free search</span><span class="l-fixed">station 2 generator</span><span class="l-fam">family search, first level within tolerance</span><span class="l-et">equal temperaments</span><span>dashed line: tolerance</span></div>
+      <p class="note" id="stairHover">Move over a point to read it. Click a point to select that chain.</p>
       <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
       <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
       <p class="note">Every N is listed with the generator that makes the largest lattice error as small as possible at that N. The max error column is that smallest possible error, so it is often above the tolerance. A row above the tolerance says that no chain of N notes holds the lattice any closer. The page highlights rows within the tolerance and lists them first.</p>
@@ -396,6 +419,75 @@ function mosPath(gen, maxN) {
   return out;
 }
 function scaleTree(gen, maxN) { return mosPath(gen, maxN).map(x => x.N); }
+// Val (generator mapping) and kernel commas of a chain fit: a port of the
+// CPSFIT-001 homomorphism and kernel tests, for the primes the lattice uses.
+const PRIMES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+const KERNEL_BOX = { 3: 12, 5: 6, 7: 5, 11: 4, 13: 3, 17: 2, 19: 2, 23: 2, 29: 2, 31: 2 };
+function monzo(num, den) {
+  const e = {}; let e2 = 0;
+  const strip = (n, sign) => {
+    while (n % 2 === 0) { n /= 2; e2 += sign; }
+    for (const p of PRIMES) { while (n % p === 0) { n /= p; e[p] = (e[p] || 0) + sign; } }
+    return n;
+  };
+  if (strip(num, 1) !== 1 || strip(den, -1) !== 1) return null;
+  return { e2, e };
+}
+function solveInteger(rows, rhs) {
+  // integer x with rows·x = rhs, by Gaussian elimination then exact verification; null if none or not unique
+  const m = rows.length, n = rows[0].length;
+  const A = rows.map((r, i) => r.concat([rhs[i]]).map(Number));
+  let rank = 0; const pivCols = [];
+  for (let c = 0; c < n && rank < m; c++) {
+    let piv = -1; for (let r = rank; r < m; r++) if (Math.abs(A[r][c]) > 1e-9) { piv = r; break; }
+    if (piv < 0) continue;
+    [A[rank], A[piv]] = [A[piv], A[rank]];
+    const pv = A[rank][c]; for (let j = 0; j <= n; j++) A[rank][j] /= pv;
+    for (let r = 0; r < m; r++) if (r !== rank && Math.abs(A[r][c]) > 1e-9) { const f = A[r][c]; for (let j = 0; j <= n; j++) A[r][j] -= f * A[rank][j]; }
+    pivCols.push(c); rank++;
+  }
+  for (let r = rank; r < m; r++) if (Math.abs(A[r][n]) > 1e-6) return null;
+  if (rank < n) return null;
+  const x = new Array(n).fill(0);
+  pivCols.forEach((c, i) => { x[c] = Math.round(A[i][n]); if (Math.abs(A[i][n] - x[c]) > 1e-6) x[c] = NaN; });
+  if (x.some(v => Number.isNaN(v))) return null;
+  for (let r = 0; r < m; r++) { let s = 0; for (let j = 0; j < n; j++) s += rows[r][j] * x[j]; if (s !== rhs[r]) return null; }
+  return x;
+}
+function valOf(tones, ks) {
+  // tones [{num, den}] at generator counts ks. {primes, mapping, shift} or null. shift ≠ 0 is a val of a transposed image.
+  const mz = tones.map(t => monzo(t.num, t.den)); if (mz.some(x => !x)) return null;
+  const used = PRIMES.filter(p => mz.some(x => x.e[p])); if (!used.length) return null;
+  const rows = mz.map(x => used.map(p => x.e[p] || 0));
+  const plain = solveInteger(rows, ks); if (plain) return { primes: used, mapping: plain, shift: 0 };
+  const sol = solveInteger(rows.map(r => r.concat([1])), ks);
+  return sol ? { primes: used, mapping: sol.slice(0, used.length), shift: sol[used.length] } : null;
+}
+function kernelOf(val, gCents) {
+  // commas under 60 cents with Tenney height ≤ 2^40 that the mapping [octave row; generator row] sends to zero
+  const { primes, mapping } = val;
+  const gen = {}; primes.forEach((p, i) => gen[p] = mapping[i]);
+  const octv = {}; primes.forEach(p => octv[p] = Math.round((CENTS * log2(p) - gen[p] * gCents) / CENTS));
+  const out = [];
+  const rec = (i, es) => {
+    if (i === primes.length) {
+      if (es.every(e => e === 0)) return;
+      let kgen = 0, e2 = 0, lc = 0, height = 0;
+      primes.forEach((p, j) => { kgen += es[j] * gen[p]; e2 -= es[j] * octv[p]; lc += es[j] * log2(p); height += Math.abs(es[j]) * log2(p); });
+      if (kgen !== 0) return;
+      const c = CENTS * (lc + e2); if (c <= 0 || c >= 60) return;
+      if (height + Math.abs(e2) > 40) return;
+      let num = 1n, den = 1n; const mul = (b, e) => { for (let k = 0; k < Math.abs(e); k++) { if (e > 0) num *= BigInt(b); else den *= BigInt(b); } };
+      mul(2, e2); primes.forEach((p, j) => mul(p, es[j]));
+      out.push({ comma: `${num}/${den}`, cents: c });
+      return;
+    }
+    const b = KERNEL_BOX[primes[i]]; for (let e = -b; e <= b; e++) rec(i + 1, es.concat([e]));
+  };
+  rec(0, []);
+  out.sort((a, b) => a.cents - b.cents);
+  return out.slice(0, 6);
+}
 // fit: for each N, the generator (cents) minimizing the largest circular error of any lattice tone to an
 // N-chain containing 1/1 — EXACT (CPSFIT-001 method): for a tolerance eps every (tone, k) admits a g-interval of
 // half-width eps/|k|; a sweep over interval endpoints decides feasibility; bisection on eps, then a ternary refinement.
@@ -550,7 +642,7 @@ if (typeof document !== 'undefined') (function () {
     genPreset: 'erv418935', gen: 0.418934662571,
     fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
   };
-  let lattice, fitRows = [], fixedFirstHit = null, fixedBestRow = null, latTriadsExact = { P: 0, S: 0 };
+  let lattice, fitRows = [], fixedRows = [], stairPts = [], fixedFirstHit = null, fixedBestRow = null, latTriadsExact = { P: 0, S: 0 };
 
   const LAT_PRESETS = {
     hexany: { kind: 'cps', factors: '1 3 5 7', k: 2 }, tetrad: { kind: 'cps', factors: '1 3 5 7', k: 1 },
@@ -672,12 +764,13 @@ if (typeof document !== 'undefined') (function () {
     $('fixedGenLabel').textContent = `${S.gen.toFixed(5)} octaves = ${g.toFixed(2)} cents`;
     const path = mosPath(S.gen, S.maxN);
     const tb = $('fixedTable').querySelector('tbody'); tb.innerHTML = '';
-    let first = null, bestRow = null;
+    let first = null, bestRow = null; fixedRows = [];
     for (let N = 2; N <= S.maxN; N++) {
       const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
       if (S.onlyMOS && !mos) continue;
       const ch = chainPitchClasses(g, N, latC, 600);
       const row = rowFor('fix' + N, 'FIX', N, g, ch.s, ch, mos, mos ? levelIdx + 1 : null);
+      fixedRows.push(row);
       if (row.maxErr <= S.fitTol && !first) first = row;
       if (!bestRow || row.maxErr < bestRow.maxErr) bestRow = row;
       const tr = document.createElement('tr'); tr.className = 'sel' + (row.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === row.key ? ' pick' : '');
@@ -686,6 +779,78 @@ if (typeof document !== 'undefined') (function () {
       tb.appendChild(tr);
     }
     fixedFirstHit = first; fixedBestRow = first || bestRow;
+    renderStair();
+  }
+  // ---- staircase chart: smallest largest-error against N, every search on one picture
+  function renderStair() {
+    const cv = $('stairCanvas'); const { ctx, w, h } = prep(cv);
+    const L = 40, R = w - 14, T = 14, B = h - 24, maxN = Math.max(12, S.maxN);
+    const xN = n => L + (R - L) * ((n - 2) / (maxN - 2));
+    const ymin = 0.2, ymax = 60;
+    const yE = e => B - (B - T) * (Math.log(Math.max(ymin, Math.min(ymax, e)) / ymin) / Math.log(ymax / ymin));
+    ctx.lineWidth = 1; ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    for (const t of [0.25, 0.5, 1, 2, 5, 10, 20, 50]) { const y = yE(t); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke(); ctx.fillText(t, 4, y + 4); }
+    for (let n = 5; n <= maxN; n += 5) ctx.fillText(n, xN(n) - 6, h - 7);
+    ctx.fillText('error ¢', 4, 10); ctx.fillText('N', R - 8, h - 7);
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = tok('--muted'); ctx.beginPath(); ctx.moveTo(L, yE(S.fitTol)); ctx.lineTo(R, yE(S.fitTol)); ctx.stroke(); ctx.setLineDash([]);
+    const pts = [];
+    const mark = (x, y, color, shape, row, label) => {
+      ctx.fillStyle = color; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath();
+      if (shape === 'dot') { ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill(); }
+      else if (shape === 'hollow') { ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.stroke(); }
+      else { ctx.moveTo(x, y - 5); ctx.lineTo(x + 5, y + 4); ctx.lineTo(x - 5, y + 4); ctx.closePath(); ctx.fill(); }
+      pts.push({ x, y, row, label });
+    };
+    const fixedVisible = fixedRows.filter(r => r.N >= 2);
+    if (fixedVisible.length) {
+      ctx.strokeStyle = tok('--c-fixed'); ctx.lineWidth = 2; ctx.globalAlpha = 0.6; ctx.beginPath();
+      fixedVisible.forEach((r, i) => { const x = xN(r.N), y = yE(r.maxErr); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+      fixedVisible.forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-fixed'), 'dot', r, `station 2 generator at N = ${r.N}: largest error ${r.maxErr.toFixed(2)} cents, murchana ${-r.s}`));
+    }
+    const free = fitRows.filter(r => r.type === 'MOS').sort((a, b) => a.N - b.N);
+    if (free.length) {
+      ctx.strokeStyle = tok('--c-free'); ctx.lineWidth = 2; ctx.beginPath();
+      free.forEach((r, i) => { const x = xN(r.N), y = yE(r.maxErr); if (i === 0) ctx.moveTo(x, y); else { ctx.lineTo(x, yE(free[i - 1].maxErr)); ctx.lineTo(x, y); } });
+      ctx.stroke();
+      free.forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-free'), 'dot', r, `free search N = ${r.N}: generator ${r.g.toFixed(3)} cents, largest error ${r.maxErr.toFixed(2)} cents, triads kept ${r.triP} / ${r.triS}`));
+    }
+    fitRows.filter(r => r.type === 'ET').forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--muted'), 'hollow', r, `${r.N}-ET: largest error ${r.maxErr.toFixed(2)} cents`));
+    famRows.filter(r => r.firstN != null && r.type !== 'ET').forEach(r => mark(xN(r.N), yE(r.maxErr), tok('--c-fam'), 'tri', r, `family generator ${r.g.toFixed(3)} cents (seeds ${r.seeds}): first level within tolerance N = ${r.N}, largest error ${r.maxErr.toFixed(2)} cents`));
+    if (S.fitPick) { const p = pts.find(q => q.row.key === S.fitPick.key); if (p) { ctx.strokeStyle = tok('--fg'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI * 2); ctx.stroke(); } }
+    stairPts = pts;
+  }
+  function stairNearest(ev) {
+    const cv = $('stairCanvas'); const rect = cv.getBoundingClientRect();
+    const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+    let best = null; for (const p of stairPts) { const d = Math.hypot(p.x - x, p.y - y); if (d <= 12 && (!best || d < best.d)) best = { ...p, d }; }
+    return best;
+  }
+  // ---- compare panel: two pinned chains on one ruler
+  function renderCompare() {
+    const a = S.cmpA, b = S.cmpB; const cv = $('cmpCanvas'), wrap = $('cmpWrap');
+    if (!a || !b) { cv.hidden = true; wrap.hidden = true; $('cmpNote').textContent = a || b ? `Pinned ${a ? 'A' : 'B'}: ${(a || b).N} notes of ${(a || b).g.toFixed(2)} cents. Pin the other chain.` : 'Pin two chains to compare them on one ruler.'; return; }
+    cv.hidden = false; wrap.hidden = false;
+    const latC = lattice.tones.map(t => t.cents);
+    const chainOf = r => r.s == null ? { ...chainPitchClasses(r.g, r.N, latC, 60), g: r.g } : { ...chainAt(r.g, r.N, r.s, latC), g: r.g };
+    const ca = chainOf(a), cb = chainOf(b);
+    const { ctx, w, h } = prep(cv); const Lx = 24, Rx = w - 24, y = h * 0.5;
+    const x = c => Lx + (Rx - Lx) * (wrapCents(c) / CENTS);
+    ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    ctx.beginPath(); ctx.moveTo(Lx, y); ctx.lineTo(Rx, y); ctx.stroke();
+    for (let c = 0; c <= CENTS; c += 100) { const px = c === CENTS ? Rx : x(c); ctx.beginPath(); ctx.moveTo(px, y - 3); ctx.lineTo(px, y + 3); ctx.stroke(); if (c % 300 === 0) ctx.fillText(c, px - 8, h - 4); }
+    ctx.fillStyle = tok('--c-free'); ctx.fillText(`A: ${a.N} notes of ${a.g.toFixed(2)} ¢`, Lx, 12);
+    ctx.fillStyle = tok('--c-fam'); ctx.fillText(`B: ${b.N} notes of ${b.g.toFixed(2)} ¢`, Lx, h - 16);
+    for (const t of latC) { ctx.strokeStyle = tok('--harm'); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x(t), y - 22); ctx.lineTo(x(t), y + 22); ctx.stroke(); }
+    ca.degrees.forEach(d => { ctx.fillStyle = tok('--c-free'); ctx.beginPath(); ctx.arc(x(d), y - 12, 4, 0, Math.PI * 2); ctx.fill(); });
+    cb.degrees.forEach(d => { ctx.fillStyle = tok('--c-fam'); ctx.beginPath(); ctx.arc(x(d), y + 12, 4, 0, Math.PI * 2); ctx.fill(); });
+    const tb = $('cmpTable').querySelector('tbody'); tb.innerHTML = '';
+    lattice.tones.forEach((t, i) => { const tr = document.createElement('tr'); const ea = ca.map[i].err, eb = cb.map[i].err; tr.innerHTML = `<td class="num">${t.num}/${t.den}</td><td class="num">${ea.toFixed(2)}</td><td class="num">${eb.toFixed(2)}</td>`; tb.appendChild(tr); });
+    const foot = (k, va, vb) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><b>${k}</b></td><td class="num">${va}</td><td class="num">${vb}</td>`; tb.appendChild(tr); };
+    foot('largest error', ca.maxErr.toFixed(2), cb.maxErr.toFixed(2));
+    foot('triads kept P / S', `${a.triP} / ${a.triS}`, `${b.triP} / ${b.triS}`);
+    foot('notes', a.N, b.N);
+    $('cmpNote').textContent = `A keeps ${a.triP + a.triS} triads at ${a.maxErr.toFixed(2)} cents. B keeps ${b.triP + b.triS} at ${b.maxErr.toFixed(2)} cents. Orange ticks are the lattice. Dots above the line are A, dots below are B.`;
   }
   function renderFitTable() {
     const tb = $('fitTable').querySelector('tbody'); tb.innerHTML = '';
@@ -709,8 +874,8 @@ if (typeof document !== 'undefined') (function () {
     const set = (id, v, good) => { const el = $(id); el.querySelector('.v').textContent = v; el.classList.toggle('good', good === true); el.classList.toggle('bad', good === false); };
     if (!S.fitPick) {
       drawRuler($('fitCanvas'), lattice.tones.map(t => ({ cents: t.cents, color: harm, r: 5 })), { title: 'lattice only' });
-      $('fitPickNote').textContent = 'No chain selected.'; $('fitPattern').textContent = ''; $('fitMurVal').textContent = '—'; $('sclText').textContent = '';
-      ['stN', 'stG', 'stErr', 'stCap', 'stTri'].forEach(id => set(id, '—', null)); return;
+      $('fitPickNote').textContent = 'No chain selected.'; $('fitPattern').textContent = ''; $('fitMurVal').textContent = '—'; $('sclText').textContent = ''; $('fitMirror').textContent = '';
+      ['stN', 'stG', 'stErr', 'stCap', 'stTri', 'stVal', 'stKer'].forEach(id => set(id, '—', null)); return;
     }
     const r = S.fitPick;
     const ch = r.s == null ? { ...chainPitchClasses(r.g, r.N, latC, 60), g: r.g } : { ...chainAt(r.g, r.N, r.s, latC), g: r.g };
@@ -727,6 +892,20 @@ if (typeof document !== 'undefined') (function () {
     set('stCap', `${r.captured} / ${lattice.tones.length}`, r.captured === lattice.tones.length);
     set('stTri', `${r.triP} / ${r.triS} (of ${latTriadsExact.P} / ${latTriadsExact.S})`, r.triP + r.triS === latTriadsExact.P + latTriadsExact.S && latTriadsExact.P + latTriadsExact.S > 0);
     $('sclText').textContent = sclText(r, ch);
+    // val and kernel of the fitted image (chains only; an ET row has steps, not generator counts)
+    const val = r.s == null ? null : valOf(lattice.tones, ch.map.map(m => m.k));
+    if (!val) set('stVal', r.s == null ? 'n/a for ET' : 'none: the fit is an accident, not a val', null);
+    else set('stVal', val.primes.map((p, i) => `${p} → ${val.mapping[i]}`).join(', ') + (val.shift ? ` (image transposed by ${val.shift} generators)` : ''), null);
+    const ker = val ? kernelOf(val, r.g) : [];
+    set('stKer', !val ? '—' : ker.length ? ker.map(c => `${c.comma} (${c.cents.toFixed(2)}¢)`).join(', ') : 'none under 60 cents in the search box', null);
+    // murchanas of this chain that hold the lattice, and the mirrored murchana
+    if (r.s == null) $('fitMirror').textContent = '';
+    else {
+      const holds = []; for (let p = 0; p < r.N; p++) if (chainAt(r.g, r.N, -p, latC).maxErr <= S.fitTol) holds.push(p);
+      const m = -r.s, mm = r.N - 1 - m; const sh = selfInverse(lattice.tones);
+      $('fitMirror').textContent = `Murchanas of this chain that hold the lattice within ${S.fitTol} cents: ${holds.length ? holds.join(', ') : 'none'}. The mirrored murchana ${mm} holds the reflected lattice with the same errors` + (sh === null ? ', which for a CPS is the partner CPS(n, n − k) transposed.' : `, which is this lattice transposed by ${wrapCents(sh).toFixed(2)} cents. It holds the untransposed lattice only if that transposition is a chain interval.`);
+    }
+    renderStair();
   }
   let famRows = [];
   function runFamily() {
@@ -761,6 +940,7 @@ if (typeof document !== 'undefined') (function () {
       const hits = famRows.filter(r => r.firstN != null);
       $('famStatus').textContent = `${cands.length || famRows.length} generators tried. ${hits.length} hold every lattice tone within ${S.fitTol} cents at some level up to ${S.maxN} notes.` + (hits.length ? ` The smallest level is ${hits[0].N} notes at ${hits[0].g.toFixed(2)} cents.` : '');
       renderFamTable(); if (hits.length) { S.fitPick = hits[0]; renderFitPick(); renderFamTable(); updatePrompt(); }
+      renderStair();
     }, 20);
   }
   function renderFamTable() {
@@ -815,7 +995,8 @@ if (typeof document !== 'undefined') (function () {
       p.push(`Free search, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (level ' + r.level + ')' : '')} with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
     } else p.push('Free search: it did not run.');
     if (famRows.length) { const hits = famRows.filter(r => r.firstN != null); const fam = $('famSel').options[$('famSel').selectedIndex].text; p.push(`Family search, ${fam}, seed denominators up to ${$('famQ').value}: ${hits.length ? hits.slice(0, 5).map(r => `${r.g.toFixed(2)} cents (seeds ${r.seeds}${r.erv64 ? ', in Erv\'s 64' : ''}) holds the lattice at ${r.N} notes with largest error ${r.maxErr.toFixed(2)} cents and ${r.triP} / ${r.triS} triads kept`).join(', ') + '.' : 'no generator of this family holds the lattice within tolerance up to ' + S.maxN + ' notes.'}`); }
-    if (S.fitPick) p.push(`Selected chain: ${S.fitPick.N} notes, generator ${S.fitPick.g.toFixed(2)} cents, largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents${S.fitPick.s == null ? '' : `, 1/1 at generator position ${-S.fitPick.s} (the murchana)`}${S.fitPick.level ? `, level ${S.fitPick.level}` : ''}, triads kept ${S.fitPick.triP} / ${S.fitPick.triS}.`);
+    if (S.fitPick) p.push(`Selected chain: ${S.fitPick.N} notes, generator ${S.fitPick.g.toFixed(2)} cents, largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents${S.fitPick.s == null ? '' : `, 1/1 at generator position ${-S.fitPick.s} (the murchana)`}${S.fitPick.level ? `, level ${S.fitPick.level}` : ''}, triads kept ${S.fitPick.triP} / ${S.fitPick.triS}. Val: ${$('stVal').querySelector('.v').textContent}. Kernel: ${$('stKer').querySelector('.v').textContent}.`);
+    if (S.cmpA && S.cmpB) p.push(`Compared: A = ${S.cmpA.N} notes of ${S.cmpA.g.toFixed(2)} cents (largest error ${S.cmpA.maxErr.toFixed(2)}, triads ${S.cmpA.triP} / ${S.cmpA.triS}) against B = ${S.cmpB.N} notes of ${S.cmpB.g.toFixed(2)} cents (largest error ${S.cmpB.maxErr.toFixed(2)}, triads ${S.cmpB.triP} / ${S.cmpB.triS}).`);
     p.push('Task: continue the lattice MOS-fit research from this state. The objective is a scale with one melodic structure that holds the lattice. Use the frozen scorers for the harmony axis and the melody axis.');
     $('promptText').textContent = p.join('\n\n');
   }
@@ -850,10 +1031,14 @@ if (typeof document !== 'undefined') (function () {
     S.fitPick = rowFor(r.key, r.type, r.N, r.g, s2, chainAt(r.g, r.N, s2, latC), r.mos, r.level);
     renderFitPick(); updatePrompt();
   });
+  $('pinA').addEventListener('click', () => { if (S.fitPick) { S.cmpA = S.fitPick; renderCompare(); updatePrompt(); } });
+  $('pinB').addEventListener('click', () => { if (S.fitPick) { S.cmpB = S.fitPick; renderCompare(); updatePrompt(); } });
+  $('stairCanvas').addEventListener('mousemove', ev => { const p = stairNearest(ev); $('stairHover').textContent = p ? p.label : 'Move over a point to read it. Click a point to select that chain.'; });
+  $('stairCanvas').addEventListener('click', ev => { const p = stairNearest(ev); if (!p) return; S.fitPick = p.row; renderFitPick(); renderFixedTable(); renderFitTable(); renderFamTable(); updatePrompt(); });
   $('copyBtn').addEventListener('click', copyTo('promptText', 'copyNote'));
   $('copyScl').addEventListener('click', copyTo('sclText', 'copySclNote'));
-  window.addEventListener('resize', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); });
-  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); });
+  window.addEventListener('resize', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); renderCompare(); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLegend(); renderLattice(); renderGenerator(); renderFitPick(); renderCompare(); });
 
   all();
 })();
