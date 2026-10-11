@@ -90,7 +90,7 @@ button.primary { background: var(--accent); color: #fff; border-color: var(--acc
 .stat.mel { border-top-color: var(--accent); }
 .stat.good .v { color: var(--ok); }
 .stat.bad .v { color: var(--warn); }
-canvas { width: 100%; height: auto; display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+canvas { width: 100%; height: auto; max-height: 40vh; display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
 .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .note { font-size: 13px; color: var(--muted); }
 .note.warn { color: var(--warn); }
@@ -638,9 +638,15 @@ if (typeof document !== 'undefined') (function () {
 
   // ---- canvas helpers
   function prep(cv) {
+    // CSS size comes from the layout (or the element's original width attribute as a
+    // fallback); the pixel buffer is derived from it every time and never read back,
+    // so a hidden or narrow layout cannot compound the device-pixel scale.
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const w = cv.clientWidth || cv.width, h = cv.getAttribute('height') | 0;
-    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + 'px';
+    if (!cv.dataset.w) { cv.dataset.w = cv.getAttribute('width'); cv.dataset.h = cv.getAttribute('height'); }
+    const h = +cv.dataset.h;
+    const w = Math.max(200, Math.min(2000, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || +cv.dataset.w));
+    cv.style.width = '100%'; cv.style.height = h + 'px'; cv.style.maxHeight = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
     const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h); ctx.font = '11px ' + tok('--font-mono'); return { ctx, w, h };
   }
