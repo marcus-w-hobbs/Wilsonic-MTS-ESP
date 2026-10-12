@@ -1079,7 +1079,7 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" hardenedRuntime="1" hardenedRuntimeOptions="com.apple.security.cs.allow-dyld-environment-variables"
+    <XCODE_MAC targetFolder="Builds/MacOSX-WilsonicController" hardenedRuntime="1" hardenedRuntimeOptions="com.apple.security.cs.allow-dyld-environment-variables"
                smallIcon="G5AqF4" bigIcon="G5AqF4" applicationCategory="public.app-category.music"
                xcodeValidArchs="arm64,x86_64" iosDevelopmentTeamID="LXFXL9GS49">
       <CONFIGURATIONS>
@@ -1110,7 +1110,7 @@
         <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
-    <VS2022 targetFolder="Builds/VisualStudio2022" bigIcon="G5AqF4" smallIcon="G5AqF4">
+    <VS2022 targetFolder="Builds/VisualStudio2022-WilsonicController" bigIcon="G5AqF4" smallIcon="G5AqF4">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
@@ -1133,7 +1133,7 @@
         <MODULEPATH id="juce_audio_processors_headless" path="../../juce"/>
       </MODULEPATHS>
     </VS2022>
-    <XCODE_IPHONE targetFolder="Builds/iOS" iosDevelopmentTeamID="LXFXL9GS49" bigIcon="G5AqF4"
+    <XCODE_IPHONE targetFolder="Builds/iOS-WilsonicController" iosDevelopmentTeamID="LXFXL9GS49" bigIcon="G5AqF4"
                   smallIcon="G5AqF4" iosScreenOrientation="UIInterfaceOrientationLandscapeLeft,UIInterfaceOrientationLandscapeRight"
                   iPadScreenOrientation="UIInterfaceOrientationLandscapeLeft,UIInterfaceOrientationLandscapeRight"
                   microphonePermissionNeeded="1">
@@ -1161,7 +1161,7 @@
         <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_IPHONE>
-    <ANDROIDSTUDIO targetFolder="Builds/Android">
+    <ANDROIDSTUDIO targetFolder="Builds/Android-WilsonicController">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
@@ -1184,7 +1184,7 @@
         <MODULEPATH id="juce_audio_processors_headless" path="../../../JUCE/modules"/>
       </MODULEPATHS>
     </ANDROIDSTUDIO>
-    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile-WilsonicController">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
