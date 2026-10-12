@@ -1,0 +1,12 @@
+! meru001_erv418935_LIFT_W7_n011_seed.scl
+!
+MERU-001 Erv 0.418935: H[n-1] + 32H[n-4] (2L^4 = L^3 + 4); hexany seeds; window of 7 at step 11 (seed); 1/1 = lowest window tone
+ 7
+!
+ 45.275961
+ 133.571500
+ 297.513016
+ 669.186186
+ 806.026180
+ 950.697636
+ 1200.000000

@@ -1,0 +1,12 @@
+! meru001_erv418935_LIFT_W7_n012_lock.scl
+!
+MERU-001 Erv 0.418935: H[n-1] + 32H[n-4] (2L^4 = L^3 + 4); hexany seeds; window of 7 at step 12 (lock); 1/1 = lowest window tone
+ 7
+!
+ 371.673170
+ 508.513164
+ 653.184619
+ 947.762945
+ 1036.058484
+ 1120.416364
+ 1200.000000

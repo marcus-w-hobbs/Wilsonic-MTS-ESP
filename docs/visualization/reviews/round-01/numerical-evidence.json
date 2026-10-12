@@ -1,0 +1,73 @@
+{
+  "artifact_sha256": "20e9e932480dc751ca9ed5812a44033444bf40bad322c9318ea18c4001046464",
+  "scope": "Existing receipt inspection and bounded numeric reproduction; no experimental sweep or film generation.",
+  "hexany_N22": {
+    "tone": {
+      "P": 5,
+      "S": 5,
+      "eps_star_cents": 1.367438291928579,
+      "exact_count": 10,
+      "frozen": 10,
+      "g_cents": 193.78672266084118,
+      "mapping": [
+        16,
+        2,
+        5
+      ],
+      "max_dev": 2.0800648144593183,
+      "window_start": 0
+    },
+    "triad": {
+      "P": 6,
+      "S": 6,
+      "eps_star_cents": 2.2185489981289095,
+      "exact_count": 12,
+      "frozen": 12,
+      "g_cents": 193.9083099045841,
+      "mapping": [
+        16,
+        2,
+        5
+      ],
+      "max_dev": 1.156108226532388,
+      "objective_dev_cents": 1.156108226532388,
+      "window_start": 0
+    },
+    "generator_difference_cents": 0.12158724374279473,
+    "step_classes": 3,
+    "lost_then_recovered": [
+      {
+        "triad": "7/8:35/32:21/16",
+        "kind": "P",
+        "tone_fit_deviation_cents": 2.080064814458837,
+        "triad_fit_deviation_cents": 1.1561082265331566
+      },
+      {
+        "triad": "5/4:3/2:15/8",
+        "kind": "S",
+        "tone_fit_deviation_cents": 2.0800648144593183,
+        "triad_fit_deviation_cents": 1.156108226533493
+      }
+    ]
+  },
+  "dekany_N18": {
+    "triad_fit": {
+      "P": 9,
+      "S": 6,
+      "eps_star_cents": 19.999999999995907,
+      "exact_count": 12,
+      "frozen": 15,
+      "g_cents": 503.9386743166747,
+      "mapping": [
+        -1,
+        -4,
+        -10
+      ],
+      "max_dev": 10.638538175792561,
+      "objective_dev_cents": 10.638538175792561,
+      "window_start": -17
+    },
+    "count_fit_original_survivors": 14,
+    "count_fit_image_triads": 14
+  }
+}

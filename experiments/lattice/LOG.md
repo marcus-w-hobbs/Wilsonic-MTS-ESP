@@ -3393,3 +3393,952 @@ decide P-E1/P-E2/P-E3 against gate G-025 (QUEUED in ledger PR #37).
 (25 melodic + 12 shadow001 + 18 moslat001 + 22 bridge001 + 37 moslat002
 + 16 et001 + 29 eareps), freeze checks A OK on both pins before and
 after. Outputs bit-identical across two runs (diff on all 47 files).
+
+## 2026-10-10 — coordination: branch merged with main; playground state is the input
+
+**Context (not a run):** this branch (`research/lattice-recurrence-playground`)
+forked from main at PR #41 and carried only the interactive playground
+(`docs/lattice-recurrence-playground.html`). Main had since merged ten
+research PRs (#42–#51: ET-001..003, MUR-001/002, SUBSET-MEL-000, BRIDGE-001b,
+EAR-ε, EPS-TIER-001). Merged `origin/main` in (clean, no conflicts; both
+frozen pins untouched). The two experiments below start from the playground
+state Marcus pasted: hexany 1·3·5·7 seeded into Erv's 0.418935 recurrence
+with order lift k = 2, ρ = 1 (direction 1), and the playground's best chain
+fits for the hexany at 2¢ (direction 2). They are kept as SEPARATE
+experiments per Marcus's instruction (2026-10-08, "program A / program B").
+Reporting tier is LOCK 2¢ only (G-026: no tier above LOCK until G-025).
+
+Scratch derivations for the pre-registrations below used INDEPENDENT code
+(a mirror of the anchored classification; no frozen-scorer calls), per the
+ET-003 convention. The one playground claim they overturn is recorded here
+so it is on the record before any run: the playground's 0.5¢ grid search
+reported no 2¢ chain fit for the hexany below N = 33; the exact minimax
+sweep finds one at N = 22 (see CPSFIT-001).
+
+## 2026-10-10 — MERU-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program A, Marcus 2026-10-08):** seed a generator's linear
+recurrence with the tones of a CPS and watch pure harmony bend into pure
+melody; compare generators on identical seeds. Erv re-seeded his own
+recurrences with harmonic material (meruthree.pdf: 192, 336, 588, 1029 into
+H[n] = H[n−1] + 4H[n−4]; 13, 23, 35, 53 into the LLSLS page), so this
+continues his practice with CPS seeds. SPEC.md reserved the name MERU-001
+for the CPS-seeded recurrence bridge (H-M2); the Rauzy-window view of
+3-term recurrences is deferred to MERU-002.
+
+**Construction.** Seeds: the hexany CPS(4,2){1,3,5,7} = {35/32, 5/4, 21/16,
+3/2, 7/4, 15/8} (155.14, 386.31, 470.78, 701.96, 968.83, 1088.27¢). Sixteen
+two-term recurrences H[n] = a·H[n−i] + b·H[n−j], the playground's fifteen
+presets from Erv's pages plus the generator the playground selected in
+direction 2 (fit351 = H[n−1] + 128H[n−6], 351.34¢, provenance: direction-2
+output, included as a generator only). Two seedings, both chain-aligned
+(seed m placed in the octave nearest G^m, the playground's default):
+- **LIFT** — all six hexany tones are seeds. For order j < 6 the
+  characteristic polynomial is multiplied by (x^k − ρ^k), k = 6 − j, ρ = 1
+  (the playground's state: for 0.418935, H[n] = H[n−1] + H[n−2] − H[n−3] +
+  32H[n−4] − 32H[n−6]). For j ≥ 6 the six tones are cycled with octave
+  copies to fill j seeds (no lift).
+- **EXACT** — the first j tones (pitch order) are the seeds and the
+  two-term recurrence runs unlifted, so every term satisfies it exactly.
+  For j ≥ 6 EXACT = LIFT.
+Integer-coefficient recurrences on rational seeds give exact rationals; all
+sequence arithmetic is `fractions.Fraction`. 130 generated terms; windows of
+the W most recent terms, W ∈ {7, 12}, scrubbed over every n.
+
+**Per-window measurements.** Frozen triads v1.1.0 on the exact window
+(`score`, rational path) AND on the window in cents (`score_tempered`,
+ε = 2¢, default max_span); frozen melodic v0.1.0 (`score_melodic`, defaults;
+M1 also at gap ε = 2¢, logged). Descriptors (not frozen, all independent
+code): ratio deviation 1200·log2(H[n]/H[n−1]) − 1200·log2 G; chain error =
+max over window tones of the circular distance to the ideal W-chain
+anchored at H[n]; interval retention = number of the 21 (W = 7) or 66
+(W = 12) window dyads within 2¢ of one of the hexany's 15 interval classes
+(transposition-invariant; the playground's "tones on the lattice" is kept
+too but rotates with n and is reported as such); recurrence-triad count
+rt(n) (the law below); lift residual = max over the window's recurrence
+triads of |1200·log2(H[m]/(aH[m−i] + bH[m−j]))|; and a MIRROR of the
+anchored exact classification (independent reimplementation, span ≤ 2/1)
+whose (P, S, G) must equal the frozen exact result on every window — any
+disagreement is a verification failure, never patched.
+
+**The law (derived in scratch, the central registered claim).** For a
+two-term recurrence with power-of-two coefficients a = 2^p, b = 2^q,
+2·(H[n]/2) = aH[n−i] + bH[n−j] says H[n]/2 is the ARITHMETIC MEAN of
+aH[n−i] and bH[n−j]; since a, b are octave shifts, the pitch classes
+H[n−i], H[n], H[n−j] form an exact proportional triad in every window that
+holds all three — provided the two addends lie within an octave of each
+other, r = a·G^(j−i)/b ∈ (1/2, 2), which is also the frozen v1.1.0 span
+rule. This is the arithmetic content of Erv's "like 4:5:6", "like 2:3:5",
+"like 12:19:26" annotations and of P.21c (difference tones land on the
+series): a proportional triad is exactly one whose difference tones
+coincide. r per recurrence (G, cents, |λ₂|/G, lift k, r, in-octave):
+0.418935 1·H[n−1]+32·H[n−4] (2.673880, 502.72¢, 0.880, k 2, r 0.597, in);
+0.238186 1·H[n−1]+2·H[n−3] (1.695621, 914.18, 0.641, 3, 1.438, in);
+Fig12#12 H[n−1]+H[n−7] (1.255423, 393.81, 0.838, 0, 3.915, OUT);
+0.415227 4·H[n−8]+8·H[n−9] (1.333508, 498.27, 0.992, 0, 0.667, in);
+meta-meantone 2·H[n−3]+2·H[n−4] (1.494530, 695.63, 0.867, 2, 1.494, in);
+silver 8·H[n−9]+7·H[n−10] (1.332604, 497.10, 0.994, 0, 1.523, in but NOT
+power-of-two — the control); Fibonacci (1.618034, 833.09, 0.618, 4, 1.618,
+in); meta-pelog H[n−1]+H[n−3] (1.465571, 661.76, 0.682, 3, 2.148, OUT);
+meta-slendro H[n−2]+H[n−3] (1.324718, 486.82, 0.755, 3, 1.325, in);
+meta-Ptolemy H[n−3]+H[n−4] (1.220744, 345.31, 0.871, 2, 1.221, in);
+0.591780 16·H[n−8]+16·H[n−9] (1.507105, 710.14, 0.992, 0, 1.507, in);
+LLSLS H[n−2]+2·H[n−3] (1.521380, 726.46, 0.754, 3, 0.761, in);
+meta-slendro-2 H[n−1]+4·H[n−4] (1.748403, 967.25, 0.784, 2, 1.336, in);
+0.773743 2·H[n−3]+128·H[n−10] (1.709700, 928.49, 0.988, 0, 0.667, in);
+Pell 2·H[n−1]+H[n−2] (2.414214, 325.86, 0.414, 4, 4.828, OUT); fit351
+H[n−1]+128·H[n−6] (2.450010, 351.34, 0.944, 0, 0.690, in).
+
+**Predictions (mirror numbers; the frozen scorer is the referee).**
+- **P-M1 (law, EXACT seeding).** At every window after the seeds, frozen
+  exact P ≥ rt(n) = max(0, W − j) (the floor is never violated), S = 0 and
+  G = 0 in the stationary limit, and P = W − j exactly at the last window
+  (n = 129 + seeds): W = 7 / 12 → 0.418935 3/8, 0.238186 4/9,
+  meta-meantone 3/8, Fibonacci 5/10, meta-slendro 4/9, meta-Ptolemy 3/8,
+  LLSLS 4/9, meta-slendro-2 3/8, fit351 1/6, 0.415227 0/3, 0.591780 0/3,
+  0.773743 0/2; and 0/0 for the three out-of-octave recurrences (Fig12#12,
+  meta-pelog, Pell) and for the non-power-of-two silver control (its
+  triple (8H[n−9], H[n]/2, 7H[n−10]) is exact but 7H[n−10] is not a window
+  pitch class). Excess over the floor (P > rt) occurs only in early
+  windows as seed echoes and vanishes: mirror counts of such windows at
+  W = 7 / 12 — 0.415227 14/28, 0.591780 14/23, 0.773743 1/2,
+  meta-meantone 4/6, Fibonacci 1/1, meta-slendro 1/2, meta-Ptolemy 2/3,
+  meta-pelog 0/3, all others 0/0.
+- **P-M2 (the lift kills exactness; the tempered tier recovers it).** In
+  LIFT runs with k > 0 the sequence no longer satisfies the two-term
+  relation, only its asymptotic form (residual ∝ (ρ/G)^n = G^(−n)), so
+  frozen exact P = 0 at every post-seed window except mirror-listed seed
+  echoes (0.238186 W7 n = 12, 13; W12 n = 17, 18; Fibonacci W12 n = 17–19;
+  meta-Ptolemy W7 one window, W12 n = 17–20 and a few later; all others
+  zero), while frozen tempered P@2¢ ≥ rt(n) for every n ≥ n_lock, the
+  first window whose recurrence triads all have residual ≤ 2¢ (W = 7 / 12):
+  0.418935 12/17, 0.238186 18/23, meta-meantone 21/26, Fibonacci 18/23,
+  meta-slendro 26/31, meta-Ptolemy 36/41, LLSLS 20/25, meta-slendro-2
+  17/22. The tempered tier therefore sees the generator's own triads
+  roughly one window-length after the seeds leave; the ρ knob sets that
+  delay (ρ = 1 here; (ρ/G) per step).
+- **P-M3 (crossover law).** Define n_chain(ε) = first post-seed window with
+  chain error ≤ ε. Then Δn = n_chain(0.5¢) − n_chain(2¢) ≈ log 4 / log(G/λ₂)
+  = 2 / log2(G/λ₂): predicted Δn (and the mirror's measured Δn, LIFT W = 7)
+  0.418935 10.8 (9), 0.238186 3.1 (3), Fig12#12 7.8 (8), meta-meantone 9.7
+  (12), Fibonacci 2.9 (1), meta-pelog 3.6 (5), meta-slendro 4.9 (5),
+  meta-Ptolemy 10.0 (8), LLSLS 4.9 (6), meta-slendro-2 5.7 (4), Pell 1.6
+  (0), fit351 24.0 (20). Registered tolerance: |Δn − predicted| ≤ 3 for
+  all twelve, both W. The four slow recurrences (|λ₂|/G ≥ 0.988: 0.415227,
+  silver, 0.591780, 0.773743; predicted Δn 115–239) do not reach chain
+  error 2¢ within 130 steps at either W — harmony persists because the
+  bend is slow, Marcus's second knob beside ρ.
+- **P-M4 (interval retention is structural, absolute retention is not).**
+  Stationary interval retention at 2¢ (W = 7 / 12): 0.418935 1/6,
+  Fibonacci 3/8, meta-slendro-2 6/11, Pell 5/15, fit351 5/13, 0.773743 2/5,
+  0.415227 0/2, silver 0/2, 0.591780 0/2, meta-pelog 0/2, all others 0/0.
+  Absolute "tones on the lattice" after the seeds exit is > 0 at a
+  fraction of steps set by rotation alone (≈ 6 tones × W × 4¢ / 1200¢),
+  for every generator — it is not a property of the recurrence.
+- **P-M5 (melody arrives).** For the twelve fast recurrences the last
+  window (n = 129 + seeds) has M1 gap-class count ≤ 3 at gap ε = 2¢
+  (three-gap theorem on a converged chain), and its M3 propriety class
+  equals that of the pure W-chain of the same generator. LIFT and EXACT
+  share every stationary value (same G): the seeds set the transient, not
+  the limit.
+
+**Deliverables:** `meru001.py`; `results/meru001.jsonl` (one row per
+recurrence × seeding × W × n) + `results/meru001_summary.json`
+(law/lock/crossover tables, verdicts, mirror-vs-frozen census);
+`results/scl/meru001/` — for 0.418935, Fibonacci and meta-meantone (LIFT,
+W = 7) the seed window, the lock window and the last window, offered for
+listening (standing ear-check gate). Tests `tests/test_meru001.py` green
+before the first run. Stdlib only, python3.12, no randomness, no
+wall-clock fields; two runs bit-identical.
+
+## 2026-10-10 — CPSFIT-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program B, Marcus 2026-10-08):** choose one generator and note
+count whose MOS field approximates a CPS field, in the spirit of
+equal-temperament approximation; within 2¢ counts as at least as good as
+12-ET. The playground's direction 2 did this with a 0.5¢ generator grid.
+This experiment does it EXACTLY and then asks what the fits are.
+
+**Construction.** Lattices: the hexany CPS(4,2){1,3,5,7} (primary, G-004
+EG4-first), the EG4 tesseract's 8 distinct tones {1, 35/32, 5/4, 21/16,
+3/2, 105/64, 7/4, 15/8} (BRIDGE-001's object — the cross-rail), and
+Ptolemy's just major (control; the playground reported a 12-chain of
+498.26¢ within 0.45¢). For each N ∈ 5..48: the generator g* ∈ (0, 600¢]
+minimizing the largest circular error of any lattice tone to a degree of
+the N-note chain {k·g : k ∈ [s, s+N−1]} with s ≤ 0 ≤ s+N−1 (the chain
+contains 1/1). Solved exactly: for a tolerance ε each (tone, k) admits a
+g-interval of half-width ε/|k| around every (cents + 1200m)/k; a sweep over
+interval endpoints with per-tone active sets decides feasibility (does
+some window of N consecutive k containing 0 meet every tone's active set);
+bisection on ε (14 halvings from 60¢) finds the assignment; ternary search
+on g for that assignment gives ε*(N) and g*(N). Then: the k-assignment's
+homomorphism test (does an integer mapping (k₃, k₅, k₇) with k(tone) =
+Σ eₚkₚ exist — the fit is a val, not an accident); the kernel of that
+mapping (period = octave, octave row from the fitted cents; 7-limit commas
+in the box |e₃| ≤ 12, |e₅| ≤ 6, |e₇| ≤ 5, < 60¢, Tenney height ≤ 2^40 —
+BRIDGE-001's box); whether the chain is a 2-step MOS; frozen triads v1.1.0
+(`score_tempered`, ε = 2¢) and frozen melodic v0.1.0 of the full chain
+scale; the lattice IMAGE (the fitted tones only) under the frozen tempered
+scorer at ε ∈ {1, 2, 3, 5}¢ — hexany triad survival at the LOCK tier — plus
+the mirror's per-triad deviation and the smallest ε recovering every exact
+triad; equal temperaments N = 5..72 the same way; and the nearest two-term
+recurrences within 2¢ of g* (coefficients {1..8, 16, 32, 64, 128}, order
+≤ 12, coprime (i, j), direct and complement), flagged power-of-two and
+in-octave per the MERU-001 law.
+
+**Predictions (independent scratch sweep; the frozen scorer referees the
+triad claims).**
+- **P-F1 (the staircase).** Hexany ε*(N), g*(N): N = 6 42.23¢ @ 257.15;
+  7 40.76 @ 465.30; 8 28.52 @ 357.79; 9 24.41 @ 361.90; 10 23.30 @ 118.69;
+  11 18.85 @ 249.36; 12–14 13.73 @ 318.36; **15 4.815 @ 502.86**; 16–17
+  4.771 @ 116.50; 18 3.275 @ 77.92; 19–21 2.571 @ 271.42; **22–30 1.367 @
+  193.79**; 31–48 0.743 @ 77.20. So the smallest chain containing the
+  hexany within 2¢ has **N = 22** (the playground's grid said 33, an
+  earlier scratch said 65 — both artifacts of grid resolution), within 1¢
+  N = 31, within 5¢ N = 15, within 15¢ N = 12. EG4: the same generators
+  with N shifted (2¢ first at N = 24, 1.367¢; 271.42 at N = 19–23, 2.571¢;
+  502.86 at N = 16–17). Ptolemy: N = 7 8.60¢ @ 502.35; 12–22 0.434 @
+  498.26; 23–29 0.434 @ 249.13; 30–35 0.336 @ 475.53; 36+ 0.140 @ 565.99.
+- **P-F2 (fits are vals).** Every hexany optimum at N ≥ 11 is homomorphic;
+  N = 7 and N = 10 are not. Mappings (k₃, k₅, k₇) and kernels: N = 15
+  (−1, −4, −10), kernel 3136/3125, 225/224, 126/125, 81/80 — a septimal
+  MEANTONE, and the generator is Erv's 0.418935 recurrence to −0.14¢
+  (power-of-two, in-octave): direction 2 rediscovers Erv's recurrence
+  from the lattice alone, and the law explains it — 2L⁴ = L³ + 4 says four
+  fourths meet 5/4 as an arithmetic-mean condition; N = 16 (6, −7, −2),
+  kernel 2401/2400, 1029/1024, 225/224 (miracle; BRIDGE-001's blackjack);
+  N = 19 (7, −3, 8), kernel 225/224, 1728/1715, 6144/6125 (orwell —
+  BRIDGE-001's mapping [[1,0,3,1],[0,7,−3,8]] reproduced, free minimax
+  2.571¢ against its 2.727¢ prime-minimax tuning); N = 22 (16, 2, 5),
+  kernel 2401/2400, 3136/3125 (6144/6125 their product); N = 31
+  (−22, 5, −3), kernel 2401/2400, 65625/65536. Ptolemy N = 7 (−1, 8-free;
+  k₃ = −1, k₅ = −4): also Erv's generator, to +0.38¢ — the best seven-note
+  chain for the just major scale is a meantone fourth.
+- **P-F3 (tone fidelity ≠ triad survival at LOCK).** Hexany image
+  survival at ε = 2¢ of its 12 exact triads (6 P + 6 S; sign-coherent
+  errors stack, ET-003/BRIDGE-001 lesson): N = 15 2/12 (max dev 7.25¢,
+  full recovery at ε ≥ 7.25); N = 16 6/12 (2.94 — BRIDGE-001's "blackjack
+  recovers at 3¢" reproduced); N = 19 8/12 (3.42); **N = 22 10/12 (2.08 —
+  within-2¢ tones, two triads lost by 0.08¢)**; N = 31 12/12 (0.32). EG4:
+  N = 16 4/24, 19 16/24, 24 20/24. Survival is the frozen tempered P + S of
+  the image scale; the mirror's deviations are the explanation.
+- **P-F4 (cross-direction, the law as a floor on the fit).** The N = 15
+  hexany chain at 502.86¢ sits 0.14¢ from a power-of-two in-octave
+  recurrence of lag j = 4, so by the MERU-001 law it carries ≥ N − j = 11
+  near-exact proportional triads: frozen P@2¢ of that chain ≥ 11.
+  Likewise the Ptolemy N = 7 chain (502.35¢, 0.38¢ from the same
+  recurrence): P@2¢ ≥ 3. No such floor is claimed for the other fits (their
+  nearest recurrences are either non-power-of-two or > 0.8¢ away).
+- **P-F5 (ET comparison).** No N-EDO with N ≤ 41 contains the hexany
+  within 2¢ (the playground found 41-ET at 2.26¢ at best); the first
+  within 2¢ is reported as a measurement.
+
+**Deliverables:** `cpsfit001.py`; `results/cpsfit001.jsonl` (one row per
+lattice × N, plus ET rows) + `results/cpsfit001_summary.json`;
+`results/scl/cpsfit001/` — the hexany N = 15 (Erv's generator) and N = 22
+chains, offered for listening (standing gate). Tests
+`tests/test_cpsfit001.py` green before the first run. Stdlib only,
+python3.12, deterministic, no wall-clock fields; two runs bit-identical.
+
+## 2026-10-10 — MERU-001 results + verdicts
+
+**Run:** `meru001.py` (94 s; receipts `results/meru001.jsonl`, 8,164 rows =
+16 recurrences × 2 seedings × 2 windows × every n, + `results/meru001_summary.json`;
+two runs bit-identical, `cmp` on both files and the nine .scl). Frozen
+triads v1.1.0 and melodic v0.1.0 read-only, pins verified; lattice suite
+335/335 green before the run (22 new tests). **Mirror vs frozen exact:
+0 disagreements over 8,164 windows.**
+
+- **P-M1 — KEPT.** Under EXACT seeding every registered stationary count
+  reproduces: P(last window) = W − j for the twelve in-octave power-of-two
+  recurrences (3/8, 4/9, 3/8, 5/10, 4/9, 3/8, 4/9, 3/8, 1/6, 0/3, 0/3, 0/2 at
+  W = 7/12 in LOG order), 0/0 for Fig12#12, meta-pelog, Pell and the silver
+  control; S = G = 0 at every last window; the floor P ≥ rt(n) is never
+  violated (0 of 3,968 post-seed windows); and the seed-echo census matches
+  the mirror window for window (0.415227 14/28, 0.591780 14/23, 0.773743
+  1/2, meta-meantone 4/6, Fibonacci 1/1, meta-slendro 1/2, meta-Ptolemy 2/3,
+  meta-pelog 0/3, all others 0/0). The law is exact and the frozen scorer
+  sees it.
+- **P-M2 — KEPT.** All eight lifted recurrences: exact P = 0 after the seeds
+  leave except the mirror-listed echoes (0.238186 two windows at each W,
+  Fibonacci three at W = 12, meta-Ptolemy one/six), every n_lock as
+  registered (12/17, 18/23, 21/26, 18/23, 26/31, 36/41, 20/25, 17/22), and
+  tempered P@2¢ ≥ rt(n) at every window from n_lock on (0 violations). The
+  lift turns the generator's own triads from exact into 2¢-tempered, about
+  one window-length after the seeds exit; the exact and tempered paths
+  disagree on purpose, and both are right.
+- **P-M3 — REFUTED as registered, held on eleven of twelve.** |Δn − 2/log2
+  (G/λ₂)| ≤ 3 holds for every seeding and window of the eleven faster
+  recurrences (e.g. 0.418935: 9/13/11/13 vs 10.8; meta-Ptolemy 8/9/9/11 vs
+  10.0; Fibonacci 1/1/2/2 vs 2.9; Pell 0 vs 1.6) and fails only on fit351,
+  the slowest of the "fast" group (λ₂/G = 0.944): Δn = 20 against 24.0 at
+  W = 7, and at W = 12 the 0.5¢ crossing never arrives within 130 steps.
+  The four slow recurrences (≥ 0.988) never reach chain error 2¢, as
+  predicted. The decay law is right about the rate; the crossing step of a
+  max-over-tones descriptor jitters by a few steps when λ₂ is a complex pair,
+  and the jitter scales with the time constant. A tolerance of 3 steps was
+  too tight for a 24-step constant; the refutation stands as registered.
+- **P-M4 — KEPT.** Stationary interval retention matches all sixteen
+  registered pairs; absolute "tones on the lattice" fires at 6–23% of
+  post-seed windows at W = 7 (rotation estimate 14%) for every generator,
+  including those with zero structural retention. The playground's
+  "window tones on lattice" stat is a rotation artifact and should be
+  read as such.
+- **P-M5 — KEPT.** Every fast recurrence ends at ≤ 3 gap classes (gap ε = 2¢)
+  at both W, the last window's propriety class equals the pure chain's
+  (strictly proper for 0.418935, meta-meantone, meta-Ptolemy, fit351 at
+  W = 7; improper for the rest), and LIFT and EXACT agree on every
+  stationary value.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) the tempered
+tier counts MORE than the law's floor on converged chains — Fibonacci W = 7
+P@2¢ = 7 vs rt 5, meta-slendro 5 vs 4, fit351 6 vs 1 (the 351.3¢ chain is
+MOS-LAT-002's neutral-third hot spot) — and P = S at 2¢ on every converged
+chain (chain inversional symmetry), while the exact path has S = 0: the
+subcontrary partners of the recurrence triads exist only to within the
+transient. (2) The slow four keep exact seed-echo triads for twenty-plus
+windows (0.415227 W = 12: P = 6, 6, 7, 6 … at n = 20–23 against a floor
+of 3) — persistence of harmony is literal there. (3) G@2¢ = 9 on every
+converged W = 7 chain: consecutive chain degrees are exact geometric triads,
+never counted in any loss, as designed.
+
+**Kept.** Runner and receipts stand; nine .scl exports under
+`results/scl/meru001/` (0.418935, Fibonacci, meta-meantone; seed window,
+lock window, last window) are offered for listening — gate G-028.
+
+## 2026-10-10 — CPSFIT-001 results + verdicts
+
+**Run:** `cpsfit001.py` (23 s; `results/cpsfit001.jsonl`, 333 rows = 3
+lattices × (chain N = 5..48 feasible + ET N = 5..72), +
+`results/cpsfit001_summary.json`; two runs bit-identical). Frozen triads
+v1.1.0 (`score_tempered`, 2¢) and melodic v0.1.0 read-only; frozen
+survival vs the mirror's per-triad deviations: 0 disagreements.
+
+- **P-F1 — KEPT.** Hexany staircase reproduced at every registered N to
+  0.01¢ in both ε* and g*; minimal N: 22 at 2¢ (1.367¢ @ 193.787), 31 at
+  1¢ (0.743 @ 77.198), 15 at 5¢ (4.815 @ 502.860), 12 at 15¢; EG4 24 at 2¢;
+  Ptolemy 12 at 2¢ (0.434 @ 498.262), 7 at 10¢ (8.603 @ 502.346). The
+  playground's "no fit below N = 33" was its 0.5¢ grid missing basins of
+  width 2ε/|k| ≈ 0.1¢.
+- **P-F2 — KEPT.** Non-homomorphic hexany optima are exactly N = 7 and
+  N = 10; every mapping as registered: N = 15 (−1, −4, −10) with kernel
+  3136/3125, 225/224, 126/125, 50625/50176, 81/80 — septimal meantone, and
+  the generator is Erv's 0.418935 recurrence to −0.139¢; N = 16 (6, −7, −2)
+  kernel 2401/2400, 16875/16807, 225/224, 1029/1024 (miracle); N = 19
+  (7, −3, 8) kernel 65625/65536, 6144/6125, 225/224, 1728/1715 (orwell,
+  BRIDGE-001's mapping); N = 22 (16, 2, 5) kernel 2401/2400, 6144/6125,
+  3136/3125; N = 31 (−22, 5, −3) kernel 2401/2400, 65625/65536. Ptolemy
+  N = 7: (−1, −4), Erv's generator to +0.375¢.
+- **P-F3 — KEPT.** Hexany image survival at 2¢ (frozen P + S): N = 15 2/12
+  (full recovery at 7.250¢), 16 6/12 (2.940), 19 8/12 (3.420), 22 10/12
+  (2.080), 31 12/12 (0.321); EG4 16 4/24, 19 16/24, 24 20/24. All within-2¢
+  tones at N = 22 and two triads still lost — by 0.08¢.
+- **P-F4 — KEPT.** The N = 15 hexany chain scores P@2¢ = 12 ≥ 11, the
+  Ptolemy N = 7 chain P@2¢ = 3 ≥ 3: the MERU-001 law predicts the frozen
+  triad count of a direction-2 fit from its nearest recurrence alone.
+- **P-F5 — KEPT, and stronger than registered.** No N-EDO up to 72 contains
+  the hexany within 2¢; the best ≤ 41 is 31-EDO at 6.265¢ and the best ≤ 72
+  is 53-EDO at 4.76¢. A 22-note rank-2 chain does what no equal temperament
+  below 73 notes does.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) **triad
+survival is not monotone in N while tone error is**: N = 11 (249.355¢,
+mapping (−2, −8, −1), kernel 19683/19600, 245/243, 81/80) keeps 8/12 hexany
+triads at 2¢ with tone errors up to 18.85¢, then N = 12–15 keep only 2/12
+at 13.7–4.8¢; the mechanism is exact cancellation — in 15/16 : 5/4 : 15/8
+the mistuned 5 appears in all three tones and the deviation collapses to
+the 3/2 error (0.665¢), and 5/4 : 3/2 : 7/4 survives at 1.99¢ because the
+5 and 7 errors cancel across the mean. Program B's objective at the
+harmonic axis has to be survival, not tone error; CPSFIT-002 should
+minimize max triad deviation directly. (2) Full-chain frozen P@2¢ grows
+with N and with the generator's neighbourhood (N = 18 at 77.9¢ already 40,
+N = 31 at 77.2¢ 91), so a fit's harmonic wealth is dominated by the host
+chain's own coincidences, not by the embedded hexany. (3) The playground's
+direction-2 picks (33–38-note 115.96¢ chains, 41-note 351.4¢) do not appear
+on the exact staircase at all.
+
+**Kept.** Runner and receipts stand; `results/scl/cpsfit001/` holds the
+hexany N = 15 (Erv's generator) and N = 22 chains for listening — gate
+G-029.
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 335/335 OK (22 new:
+13 meru001 + 9 cpsfit001), freeze checks A OK on both pins (scorer
+1a840af9…b592, melodic a16f162b…7535); all four receipts and all eleven
+.scl bit-identical across two runs.
+
+## 2026-10-10 — MERU-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program A, the second knob):** the playground's order lift
+multiplies the characteristic polynomial by (x^k − ρ^k) and claims "a smaller
+ρ bends the seeds faster"; the research list proposed a ρ sweep as a
+"harmony half-life" knob. MERU-001 ran ρ = 1 only. This experiment sweeps ρ
+and asks three things: does the lock step follow ρ alone, does the chain
+step follow max(ρ, |λ₂|) with a plateau below |λ₂|, and does a longer
+transient keep any of the seed harmony. It also re-registers the MERU-001
+crossover law P-M3 with a tolerance that scales with the time constant,
+since a fixed 3-step tolerance refuted it on the slowest fast recurrence.
+
+**Construction.** Three recurrences from MERU-001, chosen for their spread
+of |λ₂|/G: 0.418935 (H[n] = H[n−1] + 32·H[n−4]; G = 2.673880, |λ₂| =
+2.3523, |λ₂|/G = 0.880), Fibonacci (G = 1.618034, |λ₂| = 0.618034, 0.382),
+meta-meantone (2·H[n−3] + 2·H[n−4]; G = 1.494530, |λ₂| = 1.29529, 0.867).
+Seeds: the hexany CPS(4,2){1,3,5,7}, LIFT seeding exactly as MERU-001
+(k = 6 − j extra seeds, chain-aligned octaves), but with the lift
+coefficient c = ρ^k taken over the exact rational ladder ρ ∈ {1/4, 1/2,
+3/4, 1, 5/4, 11/8, 23/16, 3/2, 25/16, 7/4, 2, 9/4, 5/2, 21/8}, keeping only
+ρ < G (so 14 values for 0.418935, 9 for Fibonacci, 9 for meta-meantone).
+The sequence stays exact (Fractions). Windows W ∈ {7, 12}, 130 generated
+terms, n₀ = 6 + W − 1 the first post-seed window. Per window: frozen exact
+and 2¢ triads (v1.1.0), frozen melodic (v0.1.0), the mirror, the lift
+residual, chain error, interval retention at 2¢, as MERU-001. Derived per
+(recurrence, ρ, W): n_lock (first post-seed window with lift residual ≤
+2¢), n_chain(ε) for ε ∈ {2, 0.5}, Δn, mean frozen P@2¢ and mean interval
+retention over the transient windows n₀ ≤ n < n_chain(2¢), and whether any
+term went non-positive. τ_eff = 1/log2(G / max(ρ, |λ₂|)).
+
+**Predictions (independent scratch sweep 2026-10-10; the frozen scorer
+referees every triad count).**
+- **P-R1 (the lock follows ρ alone).** The lift residual decays as (ρ/G)^n,
+  so n_lock depends on ρ and not on |λ₂|. Registered n_lock, W = 7: 0.418935
+  ρ ≤ 3/2 → 12 (= n₀), 7/4 → 14, 2 → 18, 9/4 → 28, 5/2 → 72; Fibonacci
+  ρ ≤ 3/4 → 12, 1 → 14, 5/4 → 22, 3/2 → 54; meta-meantone ρ ≤ 1/2 → 12, 3/4
+  and 1 → 13, 5/4 → 23. W = 12: the same values with the plateau at 17
+  (0.418935 ρ ≤ 7/4 → 17, 2 → 18; Fibonacci ρ ≤ 1 → 17; meta-meantone ρ ≤ 1
+  → 17; the rest as at W = 7). The law: n_lock is non-decreasing in ρ, and
+  for every point with n_lock > n₀ + 2, n_lock · log2(G/ρ) ∈ [5.5, 8.5]
+  (the residual's intercept in bits; scratch 5.9–8.2). The unlisted ladder
+  points (11/8, 23/16, 25/16) are predicted by the same law, tolerance ±2
+  steps around the interpolated value.
+- **P-R2 (the chain follows max(ρ, |λ₂|); plateau below |λ₂|).** n_chain(2¢)
+  at W = 7 stays within ±4 of one value for every ρ with ρ < |λ₂|: 0.418935
+  53 for ρ ≤ 9/4, then 94 at ρ = 5/2 (ρ/G = 0.935 > 0.880); meta-meantone
+  39–46 for ρ ≤ 5/4, then 71 at 11/8 and 133 at 23/16; Fibonacci's plateau
+  is only ρ ≤ 1/2 (16, 16), then 17, 22, 31, 43, 55, 75, 135 for ρ = 3/4 …
+  25/16. Above |λ₂| n_chain(2¢) is strictly increasing in ρ. The law:
+  (n_chain(2¢) − n₀) / τ_eff ∈ [5.0, 8.5] for every (recurrence, ρ) at W = 7
+  (scratch 5.5–7.95).
+- **P-R3 (ρ does not buy harmony).** Over the transient windows at W = 7,
+  mean frozen P@2¢ is non-increasing in ρ for ρ ≥ 1 (jitter ≤ +0.5 between
+  adjacent ladder points), and the ρ with the longest transient has the
+  LOWEST mean P@2¢ of its recurrence, ≤ 2.0 (scratch: 1.67, 1.56, 1.80).
+  Mean interval retention at 2¢ never exceeds 3.0 of the hexany's 15
+  interval classes × 21 pairs for any ρ (scratch max 2.61). Exact seed-echo
+  windows (P > rt) are 0 for every ρ. So the research list's "harmony
+  half-life" reading of ρ is wrong as stated: a large ρ keeps the sequence
+  away from the chain, not near the lattice. Harmony persistence belongs to
+  EXACT seeding of slow recurrences (MERU-001 lens 2), not to the lift.
+- **P-R4 (crossover law, re-registered).** Δn = n_chain(0.5¢) − n_chain(2¢)
+  satisfies |Δn − 2τ_eff| ≤ max(3, 0.3 · 2τ_eff) at both W for every
+  (recurrence, ρ) that reaches 0.5¢ within 130 steps. Scratch at W = 7:
+  0.418935 9–11 vs 10.8 (ρ ≤ 9/4), 20 vs 20.6 (5/2); Fibonacci 1, 1, 2, 1, 4,
+  20 vs 1.4, 1.4, 1.8, 2.9, 5.4, 18.3; meta-meantone 7–12 vs 9.7. The ρ = 1
+  rows reproduce MERU-001's LIFT rows exactly (same seeds, same
+  coefficients).
+- **P-R5 (positivity).** 0.418935 at ρ = 21/8 produces a non-positive term
+  (the lift coefficient −32·ρ² overwhelms the sum) and is excluded from the
+  descriptors with its first non-positive index recorded; every other
+  (recurrence, ρ < G) pair stays positive for all 136 terms.
+
+**Deliverables:** `meru002.py`; `results/meru002.jsonl` (one row per
+recurrence × ρ × W × n) + `results/meru002_summary.json`;
+`results/scl/meru002/` — 0.418935 at ρ = 1 and ρ = 5/2, W = 7, the window at
+the ρ = 1 lock step (n = 12), at n = 40, and at n = 100, offered for
+listening: does the long ρ = 5/2 transient sound like anything at all?
+Tests `tests/test_meru002.py` green before the first run. Stdlib only,
+python3.12, deterministic, no wall-clock fields; two runs bit-identical.
+
+## 2026-10-10 — MERU-002 results + verdicts
+
+**Run:** `meru002.py` (20.5 min, exact rationals with ρ^k denominators;
+receipts `results/meru002.jsonl`, 7,395 rows = 32 (recurrence, ρ) pairs ×
+2 windows × every n, + `results/meru002_summary.json`; two runs
+bit-identical, `cmp` on both receipts and the six .scl). Frozen triads
+v1.1.0 and melodic v0.1.0 read-only, pins verified before and after;
+lattice suite 344/344 green before the run (9 new tests). **Mirror vs
+frozen exact: 0 disagreements over 7,395 windows.** ρ = 1 rows reproduce
+MERU-001's LIFT rows (n_lock 12/17, n_chain 53/56, Δn 9/13 for 0.418935;
+18/23, 22/27 for Fibonacci; 21/26, 39/43 for meta-meantone).
+
+- **P-R1 — REFUTED as registered; the registration was wrong, not the
+  law.** The scratch sweep defined n_lock on a single term's residual; the
+  runner uses MERU-001's window maximum (every generated term in the
+  window within 2¢). With k = 2 the lifted roots are ±ρ, so the single-term
+  residual oscillates with period 2 and crosses 2¢ early at a
+  near-cancellation; the window maximum waits for the envelope. Every
+  registered number above the plateau is therefore too small (0.418935
+  W = 7: 14/16/18/24/34/84 at ρ = 5/4 … 5/2 against 12/12/14/18/28/72;
+  Fibonacci 14/14/18/30/74 against 12/12/14/22/54; meta-meantone 15/21/37
+  against 13/13/23), 58 checks fail, and the "constant intercept" claim is
+  false too: n_lock · log2(G/ρ) falls monotonically with ρ, from 13.3 to
+  8.2 bits (0.418935, W = 7), 12.5 to 8.1 (Fibonacci), 14.9 to 7.6
+  (meta-meantone); the residual's amplitude depends on ρ through the lift
+  coefficient ρ^k, so the intercept is not a constant of the recurrence.
+  What survives, measured not registered: n_lock is non-decreasing in ρ on
+  all three recurrences and both windows (0 inversions in 31 ladder steps),
+  and at matched ρ/G the lock step is nearly the same across recurrences
+  whose |λ₂|/G differ by 0.5 — Fibonacci ρ/G = 0.773 → 30 against 0.418935
+  ρ/G = 0.748 → 24; meta-meantone 0.836 → 37 against 0.418935 0.841 → 34 —
+  so the lock does follow ρ and not |λ₂|, as the decay argument says.
+- **P-R2 — REFUTED as registered on one row, held on the other thirty.**
+  The scratch printed its "never reached" sentinel (135 = last index) for
+  Fibonacci at ρ = 25/16 and the registration copied it as a crossing; the
+  runner reports None (chain error never ≤ 2¢ in 130 steps, as ρ/G = 0.966
+  predicts, τ_eff = 20). Everything else held exactly: the 0.418935
+  plateau is 53 for every ρ ≤ 2 and 54 at 9/4 (ρ/G = 0.841 < 0.880), then
+  94 at 5/2; meta-meantone 39–46 for ρ ≤ 5/4, then 71 and 133; Fibonacci
+  16, 16, 17, 22, 31, 43, 55, 75 strictly increasing above |λ₂|; every
+  registered n_chain(2¢) reproduced; and (n_chain(2¢) − n₀)/τ_eff ∈
+  [5.55, 7.95] on all 30 rows (0.418935: 7.58 on every plateau row, 7.76,
+  7.95 above it; Fibonacci 5.55–7.34; meta-meantone 5.57–7.10), inside the
+  registered [5.0, 8.5]. The chain follows max(ρ, |λ₂|).
+- **P-R3 — KEPT.** ρ buys no harmony. Mean frozen P@2¢ over the transient
+  windows at W = 7 is non-increasing in ρ for ρ ≥ 1 within the 0.5 jitter
+  (0.418935: 4.15, 4.10, 4.07, 4.15, 3.98, 3.98, 3.83, 3.41, 2.52, 1.67;
+  Fibonacci: 3.60, 2.84, 2.10, 1.91, 1.73, 1.59; meta-meantone: 3.67, 2.18,
+  1.83, 1.80); the longest transient has the lowest mean on each (1.67,
+  1.59, 1.80, all ≤ 2.0); mean interval retention never exceeds 2.61 of 21
+  pairs; exact echo windows are 0 on all 32 pairs. A large ρ keeps the
+  sequence away from the chain and not near the lattice.
+- **P-R4 — KEPT.** With tolerance max(3, 0.3·2τ_eff), |Δn − 2τ_eff| holds
+  on all 54 (recurrence, ρ, W) rows that reach 0.5¢: worst cases
+  meta-meantone W = 7 at ρ ∈ {1/2, 1} Δn = 12 and ρ ∈ {3/4, 5/4} Δn = 7
+  against 9.7 (tolerance 3), Fibonacci ρ = 3/2 W = 12 16 against 18.3
+  (tolerance 5.5), 0.418935 ρ = 5/2 20/22 against 20.6. MERU-001's P-M3
+  stands in this form: the rate is right and the crossing jitters by a few
+  steps that scale with the time constant.
+- **P-R5 — KEPT.** 0.418935 at ρ = 21/8 goes non-positive at n = 53 (the
+  lift coefficient −32·ρ² = −220.5 on H[n−6]); every other pair stays
+  positive through 136 terms.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) At W = 12 the
+locks are 5 steps later than at W = 7 on the plateau and the same offset
+persists above it (0.418935 ρ = 2: 24 → 29; 5/2: 84 → 89), consistent with
+the window-maximum definition. (2) Fibonacci ρ ≤ 3/4 has a transient of
+only 4–5 windows and the highest mean P@2¢ of the run (5.75, 4.75, 5.20):
+the hexany seeds, chain-aligned, are already close to a φ-chain in step
+size, so the chain arrives before the seeds have left the window. (3) The
+meta-meantone chain's own interval retention of the hexany is the largest
+(stationary 0 at W = 7 in MERU-001, but transient means 1.9–2.6 here, above
+the other two), the meantone fourth being 2.4¢ from the hexany's 21/16 : 1
+step class.
+
+**Kept.** Runner and receipts stand; six .scl windows under
+`results/scl/meru002/` (0.418935, ρ = 1 and ρ = 5/2, W = 7, n = 12, 40, 100)
+are offered for listening — gate G-030: does the long ρ = 5/2 transient at
+n = 40 sound like anything, or like a scale drifting?
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 344/344 OK (9 new:
+test_meru002), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535) before and after; both receipts and all six .scl
+bit-identical across two runs.
+
+## 2026-10-10 — CPSFIT-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program B, the objective):** CPSFIT-001's post-hoc lens 1 found
+that triad survival is not monotone in tone error (N = 11 keeps 8/12 hexany
+triads at 2¢ with tone errors up to 18.85¢, because a prime mistuned in all
+three tones cancels in the mean condition) and asked for the fit to
+minimize triad deviation directly. This experiment does that and asks what
+changes: the N at which every lattice triad survives at the LOCK tier, the
+generators and mappings the new objective picks, and whether the worst
+triad is even the right thing to minimize.
+
+**Construction.** Same lattices as CPSFIT-001 (hexany CPS(4,2){1,3,5,7},
+the EG4 tesseract's 8 tones, Ptolemy's just major) and the same chain
+model: N notes of one generator g ∈ (0, 600¢], window of consecutive k
+containing 1/1, each lattice tone assigned to its nearest degree in the
+window. New objective: for a fixed assignment, the deviation of each exact
+lattice triad re-voiced in the chain (the mirror's `triad_deviations`:
+the middle tone against the arithmetic or harmonic mean of the outer two,
+in cents) and the objective is the LARGEST such deviation, subject to the
+largest tone error ≤ 20¢ (so every tone still sits on a chain degree at
+the ET7 tier; without a cap the objective is free to abandon tones). The
+set of candidate assignments is enumerated on a 0.5¢ grid of g (an
+assignment valid within 20¢ occupies a g-interval of width ≥ 40/(N−1)¢ ≥
+0.85¢, so the grid misses none); for each assignment g is refined by
+golden-section search on its interval; ties in the objective break toward
+the smaller tone error. Per fit, as CPSFIT-001: homomorphism and kernel,
+MOS flag, frozen tempered triads of the chain at 2¢, frozen melodic, the
+lattice IMAGE under the frozen tempered scorer at 2¢ (survival, the
+referee), the mirror's deviations, nearest two-term recurrences. N ∈ 5..48.
+No ET rows (ET has no g to move).
+
+**Predictions (independent scratch sweep 2026-10-10, 0.5¢ grid + golden
+refinement; the frozen scorer referees survival).**
+- **P-T1 (the triad staircase).** Hexany dev*(N), g*(N): N ≤ 10 infeasible
+  under the 20¢ cap; 11: 17.92 @ 249.55; 12: 17.03 @ 318.93; 13–14: 7.95 @
+  490.09; 15: 5.14 @ 503.19; 16–21: 2.43 @ 116.59; **22–30: 1.156 @ 193.91**;
+  31–47: 0.305 @ 77.195; 48: 0.295 @ 582.45. Ptolemy: 7–11: 10.13 @ 506.25;
+  12–35: 0.257 @ 498.25; 36: 0.112 @ 565.99. EG4: ≤ 11 infeasible; 12: 22.97
+  @ 249.74; 13–14: 8.60 @ 490.36; 15: 7.95 @ 163.37; 16–17: 3.91 @ 116.34;
+  18–22: 3.69 @ 77.91; 23: 1.595 @ 193.31; 24–30: 1.349 @ 193.88; 31–48:
+  0.331 @ 77.191. Tolerances: 0.05¢ on dev*, 0.1¢ on g* (the runner refines
+  the same assignment).
+- **P-T2 (full survival arrives earlier).** Frozen image P + S at 2¢ reaches
+  12/12 for the hexany first at **N = 22** (CPSFIT-001: N = 31): the
+  generator moves from 193.787 to 193.908¢ and the largest tone error rises
+  from 1.367 to 2.22¢ — one tone leaves the LOCK tier so that all twelve
+  triads enter it. EG4 reaches 24/24 first at N = 23 (193.31¢, mapping
+  (−15, 2, 5), tone error 3.88¢; CPSFIT-001: 20/24 at N = 24, 24/24 at 31).
+  Ptolemy 23/23 at N = 12 as before. Survival under the new objective is
+  ≥ survival under tone-minimax at every N ≥ 15 on all three lattices.
+- **P-T3 (the mappings).** Hexany optima are homomorphic at every feasible
+  N except 48: 11 (−2, −8, −1); 12 (6, 5, 3); 13–14 (−1, −9, 2), a mapping
+  the tone staircase never visits; 15 (−1, −4, −10); 16–21 (6, −7, −2);
+  22–30 (16, 2, 5) (at N = 30 a non-homomorphic assignment ties at 1.156¢
+  and the tone-error tie-break keeps the val); 31–47 (−22, 5, −3); at N = 48
+  a non-homomorphic assignment at 582.45¢ beats the val by 0.010¢ and is
+  reported as such.
+- **P-T4 (the worst triad is not the count).** At N = 11 the triad-minimax
+  optimum (249.55¢) keeps 4/12 hexany triads by the mirror where the
+  tone-minimax optimum (249.36¢) keeps 6/12 by the mirror and 8/12 by the
+  frozen image scorer (CPSFIT-001; the frozen count also admits triads the
+  tempering creates). Registered on the referee: frozen image survival at
+  the triad-minimax N = 11 optimum is LESS than 8, and at Ptolemy N = 7 the
+  frozen survival at 506.25¢ is less than at Erv's 502.35¢ (mirror 0/23
+  against 5/23). Minimizing the largest deviation can lower the number of
+  surviving triads; a count objective is CPSFIT-003.
+- **P-T5 (the law survives the move).** The N = 15 hexany optimum moves from
+  502.86 (0.14¢ from Erv's 0.418935 recurrence) to 503.19¢ (0.46¢): the
+  hexany's own triads pull the generator away from the recurrence's. The
+  chain still sits within 2¢ of the power-of-two in-octave recurrence, so
+  by the MERU-001 law frozen P@2¢ of the N = 15 chain ≥ 11.
+
+**Deliverables:** `cpsfit002.py`; `results/cpsfit002.jsonl` (one row per
+lattice × feasible N) + `results/cpsfit002_summary.json`;
+`results/scl/cpsfit002/` — the hexany N = 22 chain at 193.908¢ (all twelve
+triads within 2¢) beside CPSFIT-001's 193.787¢, offered for listening
+(standing gate). Tests `tests/test_cpsfit002.py` green before the first
+run. Stdlib only, python3.12, deterministic, no wall-clock fields; two
+runs bit-identical.
+
+## 2026-10-10 — CPSFIT-002 results + verdicts
+
+**Run:** `cpsfit002.py` (13.4 min; receipts `results/cpsfit002.jsonl`, 117
+rows = hexany N = 11..48, EG4 N = 12..48, Ptolemy N = 7..48, +
+`results/cpsfit002_summary.json`; two runs bit-identical, `cmp` on both
+receipts and the .scl). Frozen triads v1.1.0 (`score_tempered`, 2¢) and
+melodic v0.1.0 read-only, pins verified; lattice suite 354/354 green before
+the run (10 new tests). The objective (fast triad evaluator) agrees with
+the mirror's `triad_deviations` on every row (0 disagreements); frozen
+image survival is the referee throughout.
+
+- **P-T1 — KEPT on the hexany and EG4, REFUTED as registered on Ptolemy
+  N = 23–35 by a tie.** Every hexany and EG4 rung reproduces to the
+  registered tolerance (hexany 17.924 @ 249.549, 17.026 @ 318.934, 7.951 @
+  490.094, 5.140 @ 503.185, 2.428 @ 116.588, **1.156 @ 193.908**, 0.305 @
+  77.195, 0.295 @ 582.450; EG4 22.973 @ 249.740 … 1.595 @ 193.309, 1.349 @
+  193.883, 0.331 @ 77.191), and the first feasible N under the 20¢ cap is
+  11, 12, 7 as registered. On Ptolemy the objective value 0.257¢ is reached
+  by three different chains with the same tone error 0.50¢: 498.253
+  (−1, 8, 0), its half 249.127 (−2, 16, 0), whose every second degree is the
+  498-chain, and 233.916 (3, −24, 0). The scratch kept the first; the
+  runner's registered tie-break (equal deviation, equal tone error, then
+  the smaller g) keeps the second at N = 23–33 and the third at 34–35. The
+  staircase of values is the registered one; the representative is not.
+  An unregistered rung: Ptolemy N = 42–48 at **0.011¢ @ 249.018**
+  (−2, −37, 0), tone error 0.02¢.
+- **P-T2 — KEPT on the arrival, REFUTED as registered on dominance.** Full
+  frozen survival arrives first at **N = 22 for the hexany (12/12 at
+  193.908¢, tone error 2.22¢; CPSFIT-001 needed N = 31)**, N = 23 for EG4
+  (24/24 at 193.309¢, mapping (−15, 2, 5), tone error 3.87¢; CPSFIT-001
+  needed 31), N = 12 for Ptolemy, all as registered. The clause "survival
+  under the new objective ≥ tone-minimax survival at every N ≥ 15" is
+  false at hexany N = 18–21 (6 against 8) and EG4 N = 19–22 (14 against
+  16): the miracle chain at 116.588¢ has the smaller worst triad (2.43¢
+  against orwell's 3.42¢ at 271.425¢) but orwell keeps more triads. The
+  scratch table showed exactly this and the registration asserted the
+  opposite; the error is the session's.
+- **P-T3 — KEPT.** Every hexany mapping as registered, including the
+  (−1, −9, 2) rung at N = 13–14 that the tone staircase never visits, and
+  the N = 48 optimum is non-homomorphic (582.450¢, 0.295¢ against the
+  (−22, 5, −3) val's 0.305¢).
+- **P-T4 — KEPT.** Frozen survival at the hexany N = 11 triad-minimax
+  optimum is 4 against 8 at the tone-minimax optimum; Ptolemy N = 7 is 0
+  against 6 at Erv's 502.346¢. The worst triad is not the count.
+- **P-T5 — KEPT.** The N = 15 chain at 503.185¢ (0.463¢ from Erv's
+  H[n−1] + 32·H[n−4], power-of-two, in-octave) scores frozen P@2¢ = 17 ≥
+  11.
+
+**Measured, not registered (post-hoc lenses, labelled):** (1) The
+objective trades one tone for all twelve triads: at N = 22 the generator
+moves 0.121¢ and the 7/4's error rises from 1.37 to 2.22¢ while the two
+triads that CPSFIT-001 lost by 0.08¢ come in; the chain's own P@2¢ is 37.
+(2) Half-generator ties are generic: whenever an N-chain of g contains the
+lattice, the 2N-chain of g/2 contains it with the same triad deviations,
+so from N ≈ 2·N_min on the objective cannot distinguish them and the
+tie-break decides; a report should quotient by this. (3) The EG4 N = 23
+fit (−15, 2, 5) differs from (16, 2, 5) only in the 3-mapping, and 31
+generators of 193.309¢ are 5992.6¢, 7.4¢ short of five octaves: the chain
+nearly closes at 31 and the two mappings are the two sides of that
+near-closure. (4) The count objective is the open question this run
+sharpens: at N = 18–21 the miracle and orwell chains disagree on which
+matters, the worst triad or the number of survivors, and only the ear can
+say which it hears.
+
+**Kept.** Runner and receipts stand; `results/scl/cpsfit002/` holds the
+hexany N = 22 chain at 193.908¢ (all twelve triads within 2¢) beside
+CPSFIT-001's 193.787¢ chain — gate G-031.
+
+**Run receipt:** 2026-10-10, python3.12 — lattice suite 354/354 OK (10 new:
+test_cpsfit002), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535); both receipts and the .scl bit-identical across
+two runs.
+
+## 2026-10-11 — CPSFIT-003 pre-registration (entry BEFORE any implementation or run)
+
+**Question (program B, the third objective).** CPSFIT-002 showed that the
+worst triad and the number of surviving triads disagree: at hexany N = 18
+to 21 the miracle chain has the smaller worst triad and the orwell chain
+keeps more triads. This experiment makes the count the objective. For each
+N it finds the generator and murchana that keep the MOST exact lattice
+triads within 2 cents, with the frozen scorer as referee. It asks three
+things. Does the count objective choose different generators from the
+tone-minimax (CPSFIT-001) and the worst-triad-minimax (CPSFIT-002) at
+N = 11 to 22, on the hexany, EG4 and the dekanies? What does the count buy
+at the miracle/orwell fork? And does the self-inverse CPS theorem hold on
+the dekany pair the way the playground page states it?
+
+**Lattices.** Five, all 7-limit (9 = 3², so the mapping machinery of
+CPSFIT-001 applies unchanged):
+1. hexany CPS(4,2){1,3,5,7}: 6 tones, 12 exact triads (6 P + 6 S).
+2. EG4 tesseract, 8 tones: 24 exact triads (12 + 12).
+3. dekany CPS(5,2){1,3,5,7,9}: 10 tones, 41 exact triads (25 P + 16 S).
+4. the exact reflection 1/CPS(5,2) (the control for the inversion theorem):
+   10 tones, 41 exact triads (16 P + 25 S).
+5. dekany CPS(5,3){1,3,5,7,9}, which equals 945/512 times lattice 4:
+   10 tones, 41 exact triads (16 P + 25 S).
+The dekany with 11 is out of scope here because the mapping and kernel
+code is 7-limit.
+
+**Chain model (as CPSFIT-002).** N notes of one generator g in (0, 600]
+cents, window of consecutive degrees that contains degree 0, every lattice
+tone within 20 cents of its assigned degree. Candidate assignments are the
+nearest-degree assignments found on the 0.5 cent grid (CPSFIT-002's
+enumeration). Each candidate is then explored over its FULL tone-cap basin,
+the intersection of the per-tone intervals of half-width 20/|k| cents, and
+not only within 0.5 cents of the grid point. So a candidate can be
+evaluated at a g where it is no longer the nearest-degree assignment. The
+image is still a valid image: every tone sits within 20 cents of its
+degree.
+
+**Survival predicate (shared with cpsfit001's mirror and with the frozen
+guard).** An exact triad, voiced with each member at its fitted degree in
+the octave nearest the exact pitch, survives at ε iff |dev| < ε and the
+AM–HM separation ≥ ε. Here ε = 2 cents (LOCK).
+
+**Objective and search.** For a fixed assignment the voiced members are
+linear in g, so each triad's survival set in g is a union of intervals. The
+sweep samples the basin at steps of at most 0.1 cents, bisects every
+boundary 40 times, and also bisects zero crossings of the signed deviation
+between two dead samples (a window narrower than the sample step). The
+count as a function of g is piecewise constant. Segments narrower than
+0.01 cents are discarded: a registered count must survive a change of g by
+±0.005 cents. The objective is the largest count over all candidates and
+segments. The representative inside the best segment is the g that
+maximizes the smallest margin ε − |dev| over the surviving triads. When
+every triad survives this is CPSFIT-002's minimax. Ties break toward the
+smaller tone error, then the smaller g (keys rounded to 10⁻⁶). The murchana
+is reported as the full range of window starts that contain the assignment
+and degree 0, not only the smallest.
+
+**Referee.** The frozen triads v1.1.0 `score_tempered` of the IMAGE (the
+fitted pitch classes) at 2 cents, P + S. The objective counts exact lattice
+triads only. The frozen count can be larger, because the tempering can
+create triads among the image pitch classes that the exact lattice does
+not have. Both counts are reported on every row. Per fit, as CPSFIT-001:
+homomorphism (extended by a transposed-val test, k = j + Σ eₚkₚ for one
+constant j), kernel, MOS flag, frozen chain scores at 2 cents, frozen
+melodic, image survival at 1, 2, 3 and 5 cents, the mirror's deviations,
+nearest two-term recurrences. Comparison columns: the tone-minimax fit
+(cpsfit001.fit) and the triad-minimax fit (cpsfit002.fit_triads) are
+recomputed in the runner for all five lattices at the same N. For the
+hexany and EG4 the recomputed values must match the CPSFIT-001 and
+CPSFIT-002 receipts. N runs from 11 to 36. Infeasible N (no assignment
+under the cap) are reported as such.
+
+**Predictions (independent scratch sweep 2026-10-11, same survival
+predicate, same tie-break. The frozen scorer referees the counts).**
+Tolerances: counts exact, g within 0.02 cents, tone error and deviation
+within 0.05 cents.
+
+- **P-C1 (the count staircases).** Rows give N: count / exact @ g
+  (mapping), then the tone error of the representative.
+  Hexany: 11: 6/12 @ 249.211 (−2, −8, −1), 20.00 (the representative sits
+  on the tone cap). 12–15: 8/12 @ 317.175 (6, 5, 3), 17.74. 16–17: 10/12 @
+  116.676 (6, −7, −2), 5.22. 18–21: 10/12 @ 77.818 (9, 5, −3), 3.87. 22–30:
+  12/12 @ 193.908 (16, 2, 5), 2.22. 31–36: 12/12 @ 77.195 (−22, 5, −3),
+  0.75.
+  EG4: 11 infeasible. 12–14: 10/24 @ 249.211 (−2, −8, −1), 20.00. 15: 16/24
+  @ 317.175 (6, 5, 3), 17.74. 16–17: 18/24 @ 116.676 (6, −7, −2), 7.12.
+  18–22: 20/24 @ 77.791 (9, 5, −3), 4.03. 23: 24/24 @ 193.309 (−15, 2, 5),
+  3.87. 24–30: 24/24 @ 193.883 (16, 2, 5), 2.21. 31–36: 24/24 @ 77.191
+  (−22, 5, −3), 0.92.
+  Dekany CPS(5,2): 11–14 infeasible. 15–17: 12/41 @ 503.939 (−1, −4, −10),
+  20.00. 18: 14/41 @ 497.514 (no val), 20.00. 19–24: 25/41 @ 317.049
+  (6, 5, 3), 18.75. 25: 26/41 @ 234.429 (3, 17, −1), 4.28. 26–32: 32/41 @
+  498.066 (−1, 8, 14), 4.10. 33–34: 34/41 @ 351.484 (no val), 9.59. 35–36:
+  37/41 @ 316.825 (6, 5, 22), 4.21.
+  Dekany CPS(5,3): 11–16 infeasible. 17–21: 13/41 @ 497.381 (no val),
+  20.00. 22: 17/41 @ 233.453 (3, 12, −1), 13.53. 23: 22/41 @ 350.827 (no
+  val), 20.00. 24–25: 25/41 @ 317.049 (6, 5, 3), 18.75. 26–32: 32/41 @
+  498.066 (−1, 8, 14), 4.08. 33–34: 34/41 @ 351.484 (no val), 9.59. 35–36:
+  35/41 @ 497.399 (no val), 6.47.
+  The "no val" rows are registered as non-homomorphic under the transposed
+  test too (shift j = 0 everywhere a val exists).
+- **P-C2 (the count picks differently).** For N in 11 to 22, the count
+  optimum's generator lies within 0.05 cents of the tone-minimax optimum at
+  NO N on any of the four distinct lattices. It lies within 0.05 cents of
+  the triad-minimax optimum only at hexany N = 22 (193.908) and dekany
+  CPS(5,2) N = 15–17 (503.939). Where the vals agree the generators still
+  differ: hexany N = 16–17 keeps the miracle val (6, −7, −2) and moves g
+  from 116.502/116.588 to 116.676, which raises the tone error from 4.77 to
+  5.22 cents and the count from 6 to 10. Hexany N = 22–30 agrees with
+  CPSFIT-002 (193.908, 12/12) and N = 31–36 agrees with both (77.195).
+- **P-C3 (referee dominance, with one registered exception).** Frozen
+  image survival at the count optimum is ≥ frozen survival at the
+  tone-minimax optimum at every feasible N on all five lattices, and ≥
+  frozen survival at the triad-minimax optimum at every feasible N except
+  dekany CPS(5,2) N = 18. There the triad-minimax chain (503.939) scores
+  15 by the frozen referee against 14 for the count optimum (497.514),
+  while the exact counts are 12 against 14: three created triads tip the
+  referee. Strict gains over BOTH prior objectives: hexany N = 12–21 (8 vs
+  2–4 at 12–15, 10 vs 6 at 16–17, 10 vs 8/6 at 18–21), EG4 N = 12–22 (18 vs
+  12 at 16–17, 20 vs 16/14 at 18–22), dekany CPS(5,2) N = 19–36 (32 vs 27
+  at 26–32, 37 vs 33 at 35–36), dekany CPS(5,3) N = 17–36.
+- **P-C4 (full survival).** The first N with every exact triad surviving
+  is 22 for the hexany, 23 for EG4, and none up to 36 for either dekany
+  (best 37/41 for CPS(5,2) at N = 35, 35/41 for CPS(5,3) at N = 35). These
+  equal CPSFIT-002's arrival N where it was reached, as the predicate
+  implies (a full count is a worst deviation under 2 cents with every
+  separation at least 2 cents).
+- **P-C5 (the inversion theorem, exact half and transposed half).**
+  (a) The exact reflection 1/CPS(5,2) reproduces CPS(5,2)'s staircase at
+  every N: same count, same g to 0.001 cents, same worst deviation and
+  margin, with P and S swapped exactly in the frozen image (P₅₂ = S_refl,
+  S₅₂ = P_refl at every N), and the mirrored window −(s + N − 1) is a valid
+  window of the reflected fit. (b) CPS(5,3) does NOT reproduce it. Its
+  staircase differs from CPS(5,2)'s at N = 17–25 and 35–36 and agrees at
+  N = 26–34. The page's background fact "one fit of a dekany solves both
+  dekanies" is therefore refuted as stated, because CPS(5,3) is the
+  reflection TRANSPOSED by 945/512 (1061.49 cents), and a transposition by
+  an interval that is not a chain degree changes a fit whose chain is
+  pinned to contain the lattice's 1/1. The page will be corrected to the
+  reflection statement when the receipt lands (the receipt wins).
+  Measured in the scratch for the tone-minimax fit too: CPS(5,3) has the
+  same generator and error as CPS(5,2) only at N = 17–19 and differs at
+  N = 11–16 and 20–24.
+- **P-C6 (the fork dissolves).** At hexany N = 18–21 neither miracle
+  (6/12) nor orwell (8/12) is the count optimum: the (9, 5, −3) chain at
+  77.818 cents keeps 10/12 with tone error 3.87 cents. At N = 16–17 the
+  miracle val itself keeps 10/12 once g moves to 116.676. CPSFIT-002's
+  miracle-against-orwell disagreement was a property of the two objectives,
+  not of the two vals.
+- **P-C7 (created triads, registered as a measurement).** The frozen
+  referee exceeds the exact count at hexany N = 11 (8 vs 6), EG4 N = 12–14
+  (12 vs 10) and 15 (18 vs 16), CPS(5,2) N = 15–17 (15 vs 12) and 19–24
+  (27 vs 25), CPS(5,3) N = 17–21 (17 vs 13), 22 (19 vs 17), 23 (23 vs 22)
+  and 24–25 (27 vs 25). It equals the exact count on every other row.
+
+**Deliverables.** The runner `cpsfit003.py`. The receipts
+`results/cpsfit003.jsonl` (one row per lattice × feasible N) and
+`results/cpsfit003_summary.json`. Three Scala files under
+`results/scl/cpsfit003/`, offered for listening as a standing gate: the
+hexany N = 16 chain at 116.676 (miracle, 10 of 12), the hexany N = 18 chain
+at 77.818 (10 of 12), and the dekany CPS(5,2) N = 26 chain at 498.066 (32
+of 41). Tests `tests/test_cpsfit003.py` are green before the first run.
+Stdlib only, python3.12, deterministic, no wall-clock fields. Two runs
+must be bit-identical.
+
+## 2026-10-11 — CPSFIT-003 results + verdicts
+
+**Run:** `cpsfit003.py` (602 s. Receipts `results/cpsfit003.jsonl`, 115
+rows = hexany N = 11..36, EG4 12..36, CPS(5,2) 15..36, its reflection
+15..36, CPS(5,3) 17..36, plus `results/cpsfit003_summary.json`.) Frozen
+triads v1.1.0 (`score_tempered`, 2 cents) and melodic v0.1.0 read-only,
+pins verified. Lattice suite 371/371 green before the run (17 new tests).
+The objective (exact count) agrees with the mirror's survival count on
+every row (0 disagreements). The recomputed tone-minimax and triad-minimax
+fits match the CPSFIT-001 and CPSFIT-002 receipts on the hexany and EG4
+(0 mismatches).
+
+- **P-C1 — KEPT.** Every registered rung reproduces on all four distinct
+  lattices: counts exact, generators within 0.02 cents, tone errors within
+  0.05 cents, mappings as registered, and every "no val" row is also free
+  of a transposed val. First feasible N: 11, 12, 15, 15, 17 as registered.
+- **P-C2 — KEPT.** For N ≤ 22 the count optimum sits within 0.05 cents of
+  the tone-minimax optimum at no N on any lattice. It sits within 0.05
+  cents of the triad-minimax optimum only at hexany N = 22 and CPS(5,2)
+  N = 15–17. Hexany N = 16–17 keeps the miracle val (6, −7, −2) and moves
+  the generator to 116.676 cents: count 10 against 6 for both prior
+  objectives.
+- **P-C3 — REFUTED as registered, held in substance.** The runner found
+  two referee exceptions against the triad-minimax fit, (CPS(5,2), 18) and
+  (reflection, 18), where the registration named only the first. The
+  reflection lattice duplicates its partner's rows by construction, so the
+  second exception is the first one seen in the mirror. The session left it
+  off the list. The error is the session's. The numbers at CPS(5,2) N = 18
+  are as registered: frozen 14 against 15, exact 14 against 12, three
+  created triads tip the referee. There are no exceptions against the
+  tone-minimax fit on any lattice.
+- **P-C4 — KEPT.** First full survival at N = 22 (hexany), 23 (EG4), none
+  up to 36 for either dekany. Best partial: 37/41 at N = 35 for CPS(5,2),
+  35/41 at N = 35 for CPS(5,3). Wherever the count is full the
+  triad-minimax fit is full too.
+- **P-C5 — (a) KEPT, (b) REFUTED as registered, held in substance.**
+  (a) The exact reflection reproduces CPS(5,2)'s staircase at every N:
+  same count, generator, worst deviation and margin to 0.001 cents, P and
+  S swapped exactly in the frozen image, and the mirrored window
+  −(s + N − 1) is a valid window of the reflected fit at every N.
+  (b) CPS(5,3) differs from CPS(5,2) at N = 15–23, 25 and 35–36, and
+  agrees at N = 24 and 26–34. The registration said "differs at 17–25 and
+  35–36, agrees at 26–34". Two session errors. First, the registered lists
+  were copied from the scratch table before the 0.01 cent segment-width
+  rule was added. That rule moved CPS(5,3) at N = 24–25 from a knife-edge
+  26 at 309.996 cents to 25 at 317.049 cents, which is CPS(5,2)'s rung at
+  N = 24, so N = 24 now agrees. Second, the runner counts N = 15–16, where
+  CPS(5,2) is feasible and CPS(5,3) is not, as differences, and the scratch
+  compared only the overlap. The finding stands: of the 20 values of N
+  where both dekanies are feasible, 10 give different fits. The page's
+  claim "one fit of a dekany solves both dekanies" is false as stated and
+  is corrected to the reflection statement.
+- **P-C6 — KEPT.** Hexany N = 18–21: 10/12 at 77.818 cents under
+  (9, 5, −3). N = 16–17: 10/12 under the miracle val. The miracle/orwell
+  fork of CPSFIT-002 was a property of the two objectives.
+- **P-C7 — REFUTED as registered, held in substance.** Every registered
+  created-triad row reproduces exactly. The reflection lattice's rows
+  (N = 15–17: 15 against 12, N = 19–24: 27 against 25) were not
+  registered, and they duplicate CPS(5,2)'s rows as in P-C3. No other
+  unregistered created triads appear on any row.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The CPS(5,2)
+N = 26 chain at 498.066 cents is a schismatic fourth chain: mapping
+(−1, 8, 14), kernel 32805/32768, 5120/5103, 225/224, 4000/3969. It keeps
+32 of 41 exact triads at 2 cents with tone error 4.10 cents, and its own
+frozen P at 2 cents is 97. Both prior objectives stop at 27 on the same
+val. (2) The count's 34/41 at N = 33–34 is the 351.484 cent neutral-third
+chain, MOS-LAT-002's hot spot, with no val and tone error 9.59 cents. The
+count objective finds it and the tone and triad objectives do not. (3) The
+hexany N = 16 win is narrow: the 10/12 segment is 0.026 cents wide and the
+margin at the representative is 0.098 cents. The N = 18 chain at 77.818
+has kernel 6144/6125, 1029/1024, 126/125, and all ten of its survivors sit
+between 1 and 2 cents (image survival at 1 cent is 0). (4) The
+representative sits on the 20 cent tone cap at hexany N = 11, EG4
+N = 12–14, CPS(5,2) N = 15–18 and CPS(5,3) N = 17–21 and 23, so those
+rungs depend on the cap. A cap sweep (5, 10, 20 cents) is the natural
+control. (5) The count optimum is a level of its generator (a 2-step MOS)
+at only a few N: the hexany at 15, 25 and 31, EG4 at 14, 15, 25 and 31,
+CPS(5,2) at 19 and 29, CPS(5,3) at 17 and 29. Everywhere else it is a
+3-step chain. (6) At 5 cents the
+frozen referee counts 43 image triads on the CPS(5,2) N = 26 chain, more
+than the lattice's 41, which is the created-triad effect at a looser tier.
+
+**Kept.** Runner and receipts stand. `results/scl/cpsfit003/` holds the
+hexany N = 16 chain at 116.676 cents (10 of 12), the hexany N = 18 chain at
+77.818 cents (10 of 12) and the CPS(5,2) N = 26 chain at 498.066 cents (32
+of 41), offered for listening as gate G-032.
+
+**Run receipt:** 2026-10-11, python3.12 — lattice suite 371/371 OK (17 new:
+test_cpsfit003), freeze checks A OK on both pins (scorer 1a840af9…b592,
+melodic a16f162b…7535). Both receipts and the three .scl are bit-identical
+across two runs (`cmp`). Each run 602 s.

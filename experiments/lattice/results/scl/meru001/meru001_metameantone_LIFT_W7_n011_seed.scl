@@ -1,0 +1,12 @@
+! meru001_metameantone_LIFT_W7_n011_seed.scl
+!
+MERU-001 meta-meantone: 2H[n-3] + 2H[n-4]; hexany seeds; window of 7 at step 11 (seed); 1/1 = lowest window tone
+ 7
+!
+ 74.131437
+ 240.391776
+ 476.268183
+ 577.352028
+ 916.518784
+ 1025.592764
+ 1200.000000

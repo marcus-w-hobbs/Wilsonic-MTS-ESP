@@ -1,0 +1,23 @@
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 65%]
+........................................................................ [ 87%]
+..........................................                               [100%]
+=============================== warnings summary ===============================
+tests/test_charter.py::test_find_scene_class_missing_raises
+  <Math-To-Manim checkout>/.venv/lib/python3.12/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <function _TemporaryFileCloser.__del__ at 0x109fb05e0>
+
+  Traceback (most recent call last):
+    File "/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/tempfile.py", line 472, in __del__
+      self.cleanup()
+    File "/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/tempfile.py", line 452, in cleanup
+      self.file.close()
+      ^^^^^^^^^^^^^^^
+  AttributeError: 'ResponseBody' object has no attribute 'close'
+
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+330 passed, 1 warning in 77.26s (0:01:17)

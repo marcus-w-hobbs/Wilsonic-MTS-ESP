@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lattice Recurrence Playground</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of numbered stations, each a controls|preview grid; graph-paper ground like Erv's notebook pages. */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;        /* melody / generator chain */
+  --accent-soft: rgba(12,111,104,0.12);
+  --harm: #b2671a;          /* harmony / lattice tones */
+  --harm-soft: rgba(178,103,26,0.14);
+  --ok: #2d7a3a;
+  --warn: #a8402f;
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+    --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+  --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 12px 40px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 14px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+header { display: grid; gap: 6px; }
+nav.sticky { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 6px 0; border-bottom: 1px solid var(--line); margin: 0 -16px; padding-inline: 16px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+nav a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+nav a:hover, nav a:focus-visible { border-bottom-color: var(--accent); outline: none; }
+section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 10px; }
+.station-head { display: grid; gap: 3px; }
+.station-head .num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+.cols { display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.controls { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.preview { display: grid; gap: 8px; min-width: 0; align-content: start; }
+label.field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+label.field > span.lbl { font-weight: 500; }
+select, input[type=text], input[type=number], textarea {
+  font: 14px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; min-width: 0;
+}
+textarea { min-height: 56px; resize: vertical; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.row > * { flex: 1 1 90px; min-width: 0; }
+.chk { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.chk input { accent-color: var(--accent); }
+.val { font-family: var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+button { font: 500 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { border-top: 2px solid var(--line); padding-top: 4px; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.stat .v { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; }
+.stat.harm { border-top-color: var(--harm); }
+.stat.mel { border-top-color: var(--accent); }
+.stat.good .v { color: var(--ok); }
+.stat.bad .v { color: var(--warn); }
+canvas { width: 100%; height: auto; max-height: 40vh; display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); }
+.note.warn { color: var(--warn); }
+.note.ok { color: var(--ok); }
+.facts { display: grid; gap: 8px; counter-reset: fact; font-size: 14px; }
+.fact { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.fact::before { counter-increment: fact; content: counter(fact); font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 2px; }
+.fact p { max-width: 75ch; }
+.fact .src { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--font-mono); }
+tr.hit td { background: var(--accent-soft); }
+tr.pick td { outline: 2px solid var(--accent); outline-offset: -2px; }
+tr.sel { cursor: pointer; }
+tr.sel:hover td { background: var(--harm-soft); }
+.tablewrap { overflow-x: auto; max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
+.pill.ok { color: var(--ok); border-color: var(--ok); }
+.pill.warn { color: var(--warn); border-color: var(--warn); }
+.pill.harm { color: var(--harm); border-color: var(--harm); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend .l-harm::before { background: var(--harm); }
+.legend .l-mel::before { background: var(--accent); }
+.legend .l-seed::before { background: var(--harm); outline: 2px solid var(--accent); outline-offset: 1px; }
+.prompt { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; line-height: 1.5; min-width: 0; }
+.research { display: grid; gap: 8px; font-size: 14px; }
+.research li { max-width: 78ch; }
+.research ol { padding-left: 20px; margin: 0; display: grid; gap: 8px; }
+.research b { font-weight: 600; }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+code { font-family: var(--font-mono); font-size: 0.92em; }
+.rrlist { display: grid; gap: 6px; }
+.rrlist .item { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color 120ms; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Lattice Recurrence Playground</h1>
+  <p class="lede">Start from a just lattice. Fill the gaps between its tones with a recurrence relation. The result has one melodic structure: an MOS, which includes equal temperaments. Work in two directions. In direction 1, seed a recurrence with the lattice and let it converge to a generator. In direction 2, fit an MOS to the lattice directly. The MOS is the answer, and no recurrence is needed.</p>
+  <nav class="sticky">
+    <a href="#lattice">1 Lattice</a><a href="#recurrence">2 Recurrence</a><a href="#seed">3 Seed and bend</a><a href="#fit">4 Fit an MOS</a><a href="#facts">Facts</a><a href="#next">Next research</a><a href="#prompt">Prompt</a>
+  </nav>
+</header>
+
+<!-- ───────── 1 LATTICE ───────── -->
+<section class="station" id="lattice">
+  <div class="station-head"><div class="num">STATION 1</div><h2>Choose the harmonic lattice</h2>
+  <p class="note">The lattice supplies the harmony. Its tones become the seeds in station 3 and the targets in station 4.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Preset</span>
+        <select id="latPreset">
+          <option value="hexany">Hexany 1·3·5·7 (CPS 2 of 4)</option>
+          <option value="tetrad">Tetrad 1·3·5·7 (CPS 1 of 4)</option>
+          <option value="dekany">Dekany 1·3·5·7·9 (CPS 2 of 5)</option>
+          <option value="dekany11">Dekany 1·3·5·7·11 (CPS 2 of 5)</option>
+          <option value="eikosany">Eikosany 1·3·5·7·9·11 (CPS 3 of 6)</option>
+          <option value="ptolemy">Ptolemy just major (7 tones)</option>
+          <option value="pyth7">Pythagorean 7</option>
+          <option value="cps">Custom CPS (factors + k)</option>
+          <option value="ratios">Custom ratio list</option>
+        </select></label>
+      <div id="cpsFields" hidden>
+        <div class="row">
+          <label class="field" style="flex:3 1 160px"><span class="lbl">Factors (space separated)</span><input type="text" id="cpsFactors" value="1 3 5 7"></label>
+          <label class="field" style="flex:1 1 60px"><span class="lbl">k</span><input type="number" id="cpsK" value="2" min="1" max="6"></label>
+        </div>
+      </div>
+      <div id="ratioFields" hidden>
+        <label class="field"><span class="lbl">Ratios, one octave, space separated</span><textarea id="ratioText">1/1 9/8 5/4 4/3 3/2 5/3 15/8</textarea></label>
+      </div>
+      <p class="note">The page reduces each tone to one octave and sorts them. It removes duplicates.</p>
+    </div>
+    <div class="preview">
+      <canvas id="latCanvas" width="760" height="84"></canvas>
+      <div class="tablewrap" style="max-height:132px"><table id="latTable"><thead><tr><th>#</th><th>ratio</th><th>cents</th><th>harmonic seed</th></tr></thead><tbody></tbody></table></div>
+      <div class="stats"><div class="stat harm"><div class="k">tones</div><div class="v" id="latCount">6</div></div><div class="stat harm"><div class="k">smallest step</div><div class="v" id="latMinStep">—</div></div><div class="stat harm"><div class="k">step classes</div><div class="v" id="latClasses">—</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 2 RECURRENCE ───────── -->
+<section class="station" id="recurrence">
+  <div class="station-head"><div class="num">STATION 2</div><h2>Choose the recurrence. The generator is the taste decision.</h2>
+  <p class="note">Form: H[n] = a·H[n−i] + b·H[n−j]. The ratio H[n]/H[n−1] converges to the positive root G. The generator is log2(G) in octaves.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Preset (from Erv's pages and the search)</span><select id="rrPreset"></select></label>
+      <div class="row">
+        <label class="field"><span class="lbl">a</span><input type="number" id="rrA" value="1" min="1" step="1"></label>
+        <label class="field"><span class="lbl">i</span><input type="number" id="rrI" value="1" min="1" step="1"></label>
+        <label class="field"><span class="lbl">b</span><input type="number" id="rrB" value="32" min="1" step="1"></label>
+        <label class="field"><span class="lbl">j</span><input type="number" id="rrJ" value="4" min="2" step="1"></label>
+      </div>
+      <h3>Order lift (more seeds, same generator)</h3>
+      <label class="chk"><input type="checkbox" id="liftAuto" checked> Lift the order so every lattice tone is a seed</label>
+      <div class="row">
+        <label class="field"><span class="lbl">extra seeds k</span><input type="number" id="liftK" value="0" min="0" max="24" step="1"></label>
+        <label class="field"><span class="lbl">decay modulus ρ (0 &lt; ρ &lt; G)</span><input type="number" id="liftRho" value="1.0" min="0.05" step="0.05"></label>
+      </div>
+      <p class="note">The lift multiplies the characteristic polynomial by (x<sup>k</sup> − ρ<sup>k</sup>). The k extra modes decay by ρ/G per step. The transient of the base recurrence decays by |λ₂|/G per step, where λ₂ is its second largest root. The slower of the two rates controls the transient. MERU-002 measured a ladder of ρ values. A larger ρ makes the transient longer. The mean count of 2-cent triads during the transient decreases as ρ increases. A long transient does not keep the harmony.</p>
+    </div>
+    <div class="preview">
+      <div class="stats">
+        <div class="stat mel"><div class="k">root G</div><div class="v" id="rrG">—</div></div>
+        <div class="stat mel"><div class="k">generator log2 G</div><div class="v" id="rrGen">—</div></div>
+        <div class="stat mel"><div class="k">generator cents</div><div class="v" id="rrCents">—</div></div>
+        <div class="stat mel"><div class="k">complement 1−g</div><div class="v" id="rrCompl">—</div></div>
+        <div class="stat"><div class="k">seeds (order)</div><div class="v" id="rrOrder">—</div></div>
+        <div class="stat"><div class="k">transient per step</div><div class="v" id="rrDecay">—</div></div>
+        <div class="stat"><div class="k">steps to shrink 100×</div><div class="v" id="rrSteps">—</div></div>
+      </div>
+      <p class="mono" id="rrPoly"></p>
+      <p class="note" id="rrDominance"></p>
+      <p class="note" id="rrSource"></p>
+      <canvas id="treeCanvas" width="760" height="84"></canvas>
+      <p class="note">How to read the chart: the axis is the note count N. A dot at N means that N consecutive generators, reduced to one octave, make a scale with exactly two step sizes, L and s. Those scales are the MOS of this generator. The page finds them by the scale tree. It walks the Stern–Brocot tree toward g. Each fraction p/q on the path is an MOS with q notes. The fraction p/q is also the equal temperament that the MOS approximates: q-ET, with p steps per generator. The table gives each MOS, its fraction, that ET's generator in cents, the two step sizes in cents, and their ratio. The generator and its complement 1 − g have the same MOS sizes, because the chain is the same scale read from the other end. Erv drew this walk by hand as the "zig-zag pattern" on each page of meruthree.pdf. For 0.238186 his page says "24 places", and the table shows the 25-note MOS with s = 2.3 cents.</p>
+      <div class="tablewrap" style="max-height:220px"><table id="treeTable"><thead><tr><th>N (MOS size)</th><th>p/q</th><th>ET generator ¢</th><th>L ¢</th><th>s ¢</th><th>L : s</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 3 SEED ───────── -->
+<section class="station" id="seed">
+  <div class="station-head"><div class="num">STATION 3 · DIRECTION 1</div><h2>Seed the recurrence with the lattice and bend it to the generator</h2>
+  <p class="note">The first terms are the lattice tones. Each new term is a sum of earlier terms. The new terms converge to the generator chain. Move the step slider to see harmony become melody.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Octave placement of seeds</span>
+        <select id="seedPlace"><option value="chain">Chain-aligned (each seed in the octave nearest G^m)</option><option value="compact">Compact (all seeds in one octave, ascending)</option></select></label>
+      <label class="field"><span class="lbl">Steps to run <span class="val" id="stepsVal">40</span></span><input type="range" id="steps" min="4" max="150" value="40"></label>
+      <label class="field"><span class="lbl">Window (most recent tones) <span class="val" id="winVal">7</span></span><input type="range" id="win" min="3" max="24" value="7"></label>
+      <label class="field"><span class="lbl">Scrub: step n = <span class="val" id="scrubVal">—</span></span><input type="range" id="scrub" min="0" max="40" value="40"></label>
+      <label class="field"><span class="lbl">Tolerance (cents) <span class="val" id="tolVal">2.0</span></span><input type="range" id="tol" min="0.5" max="20" step="0.5" value="2"></label>
+      <p class="note">2 cents is below the 12-ET error of 3/2 (1.96 cents) and far below its error of 5/4 (13.7 cents).</p>
+    </div>
+    <div class="preview">
+      <div class="legend"><span class="l-seed">seed (lattice tone)</span><span class="l-mel">generated tone</span><span class="l-harm">lattice pitch class</span></div>
+      <canvas id="timeCanvas" width="760" height="170"></canvas>
+      <canvas id="ratioCanvas" width="760" height="110"></canvas>
+      <div class="row" style="align-items:center">
+        <label class="field" style="flex:1 1 200px"><span class="lbl">Steps to run <span class="val" id="stepsVal2">40</span> (linked)</span><input type="range" id="steps2" min="4" max="150" value="40"></label>
+        <label class="field" style="flex:1 1 200px"><span class="lbl">Scrub: step n = <span class="val" id="scrubVal2">—</span> (linked)</span><input type="range" id="scrub2" min="0" max="40" value="40"></label>
+      </div>
+      <canvas id="winCanvas" width="760" height="84"></canvas>
+      <div class="stats">
+        <div class="stat mel" id="stStep"><div class="k">step classes in window</div><div class="v">—</div></div>
+        <div class="stat mel" id="stRatio"><div class="k">last ratio vs G</div><div class="v">—</div></div>
+        <div class="stat harm" id="stLat"><div class="k">window tones on lattice (rotates)</div><div class="v">—</div></div>
+        <div class="stat harm" id="stIvl"><div class="k">window dyads on lattice intervals</div><div class="v">—</div></div>
+        <div class="stat harm" id="stTri"><div class="k">prop / subcontrary triads</div><div class="v">—</div></div>
+      </div>
+      <p class="note" id="seedNote"></p>
+      <details><summary>Show the sequence</summary><p class="mono note" id="seqText" style="max-width:none;word-break:break-word"></p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 4 FIT ───────── -->
+<section class="station" id="fit">
+  <div class="station-head"><div class="num">STATION 4 · DIRECTION 2</div><h2>Fit an MOS to the lattice</h2>
+  <p class="note">Search generators and note counts. Keep the chains that contain every lattice tone within the tolerance. Select a row to see the scale against the lattice.</p>
+  <p class="note"><b>What the fit searches, in Wilson's terms.</b> A scale here is a chain: N consecutive generators, reduced to one octave. The octave is the period, and it does not change. Three things vary. The generator g runs over 0 to 600 cents, and its complement covers the rest, because g and 1 − g make the same scale. The note count N runs from 2 to the limit you set. In the Brun model N is the level, and the "only MOS" switch keeps the N values that are levels on the scale tree. The window start is the murchana. The chain contains the lattice's 1/1 at one of its N degrees. The search tries all N positions, which is the same as trying every mode of the chain. For each N the search is exact. For a tolerance ε, each tone and each degree k allow g to lie in an interval of half-width ε/|k|. A sweep over the interval endpoints finds the first g where some window of N degrees holds every tone. A bisection on ε then finds the smallest ε that works. A final refinement moves g to minimize the largest tone error. The result for each N is the generator, the murchana, the largest error and the mean error. Equal temperaments are a separate row for each N with g = 1200/N, where the murchana does not matter.</p>
+  <p class="note"><b>What the fit does not do.</b> It does not change the period. It does not place the lattice's 1/1 between two degrees. It fits tones and not triads. CPSFIT-002 in the research lane fits the triads. It uses one generator, so it is rank 2 with the octave. A lattice that needs two generators, such as a 7-limit CPS at a small N, gets a large error here. The page reports the 1/1 position for each fit so you can read the murchana directly.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Preset (from Erv's pages and the search), in sync with station 2</span><select id="rrPreset2"></select></label>
+      <p class="note">This generator's chains against the lattice appear in the first table. The free search below it finds the best generator for each N.</p>
+      <label class="field"><span class="lbl">Fit tolerance (cents) <span class="val" id="fitTolVal">2.0</span></span><input type="range" id="fitTol" min="0.5" max="20" step="0.5" value="2"></label>
+      <label class="field"><span class="lbl">Largest note count N <span class="val" id="maxNVal">41</span></span><input type="range" id="maxN" min="7" max="72" value="41"></label>
+      <label class="chk"><input type="checkbox" id="onlyMOS"> Show only N where the chain is an MOS (most exact fits are 3-step chains)</label>
+      <label class="chk"><input type="checkbox" id="showET" checked> Include equal temperaments</label>
+      <button id="fitRun" class="primary">Run the fit</button>
+      <p class="note" id="fitStatus">Press Run. The search is exact: for each N it finds the generator that minimizes the largest lattice error (interval sweep, bisection on the tolerance). Large lattices at large N take a few seconds.</p>
+    </div>
+    <div class="preview">
+      <canvas id="fitCanvas" width="760" height="84"></canvas>
+      <p class="note" id="fitPickNote">No fit selected.</p>
+      <div class="row" style="align-items:center">
+        <label class="field" style="flex:1 1 240px"><span class="lbl">Murchana of the selected chain: 1/1 at generator position <span class="val" id="fitMurVal">—</span></span><input type="range" id="fitMur" min="0" max="0" value="0"></label>
+        <span class="mono note" id="fitPattern" style="flex:2 1 240px; word-break: break-all"></span>
+      </div>
+      <p class="note">Move the slider to rotate the mode. Each step drops one tone from one end of the chain and adds one at the other end. The step pattern below the slider rotates with it, and the lattice errors show which modes hold the lattice.</p>
+      <h3>Chains of the station 2 generator, <span id="fixedGenLabel"></span></h3>
+      <div class="tablewrap" style="max-height:220px"><table id="fixedTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
+      <h3>Free search: best generator for each N</h3>
+      <p class="note">Every N is listed with the generator that makes the largest lattice error as small as possible at that N. The max error column is that smallest possible error, so it is often above the tolerance. A row above the tolerance says that no chain of N notes holds the lattice any closer. Rows within the tolerance are highlighted and come first. The mean error is the average over the lattice tones at the same generator.</p>
+      <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FACTS ───────── -->
+<section class="station" id="facts">
+  <div class="station-head"><div class="num">BACKGROUND</div><h2>What the mathematics says</h2></div>
+  <div class="facts">
+    <div class="fact"><div><p>A recurrence H[n] = a·H[n−i] + b·H[n−j] with positive a and b has exactly one positive root G. The ratio H[n]/H[n−1] converges to G. The generator is log2(G), measured in octaves.</p><div class="src">Erv Wilson, Fig 12, 23 July 1997: 193 recurrences with G = (1 + G^(j−i))^(1/j).</div></div></div>
+    <div class="fact"><div><p>The ratio converges only when G is strictly larger than every other root. For positive a and b, this is true only when i and j have no common factor. Erv's Fig 12 lists only such pairs. For j ≤ 10, it lists 31 pairs, and 31 is the number of coprime pairs.</p><div class="src">Checked against the scan on 2026-10-10.</div></div></div>
+    <div class="fact"><div><p>When i and j share a factor d, the sequence splits into d interleaved chains. The ratio H[n]/H[n−1] does not converge. Example: H[n] = H[n−2] + H[n−4] is two Fibonacci sequences. The consecutive ratio alternates between two values that sum to the Fibonacci generator.</p><div class="src">Counterexample to "H[n] = H[n−1] + H[n−2] implies H[n] = H[n−2] + H[n−4]": the eighth Fibonacci term is 8, and 3 + 1 is 4.</div></div></div>
+    <div class="fact"><div><p>The seeds do not change the generator. Any seeds that are not orthogonal to the dominant mode converge to the same G. The recurrence sets the melody. The seeds set the harmony. Erv seeded his own recurrences with harmonic material. Example: 192, 336, 588, 1029, a chain of 7/4, into 4·H[n−4] + H[n−1].</p><div class="src">Erv Wilson, meta-slendro 2, 10 Dec 1997, and the LLSLS page, 4 Oct 1997.</div></div></div>
+    <div class="fact"><div><p>A generator g and its complement 1 − g make the same MOS. The chain ratio is different: 2^g or 2^(1−g). Erv's 0.238186 recurrence, 4·H[n−3] − 2·H[n−2] = H[n], diverges forward because a complex root pair has modulus 1.84 and the real root is 1.18. Erv wrote "converges left". The forward form is H[n] = H[n−1] + 2·H[n−3]. It converges to 1.69562, which is 2 divided by 1.17951.</p><div class="src">Erv Wilson, P.21b, 25 Aug 1997. Sloane M2419: 1, 1, 1, 3, 5, 7, 13, 23, 37, 63, 109.</div></div></div>
+    <div class="fact"><div><p>Sums, differences, and every k-th term of a solution are solutions of a recurrence with the same limit. Erv recorded this: every difference-tone series of a sequence approaches the limit chain. This closure is the basis for seeding. The Lucas identity F[n] = 3·F[n−2] − F[n−4] is one case of it.</p><div class="src">Erv Wilson, P.21c and P.21d, 25–26 Aug 1997.</div></div></div>
+    <div class="fact"><div><p>To use more seeds than the order j, raise the order. Multiply the characteristic polynomial by (x^k − ρ^k). This adds k seeds. If ρ is smaller than G, the extra modes decay by ρ/G per step. If ρ equals G, the extra modes never decay, and the sequence keeps parallel chains. Station 2 does this with the lift control.</p><div class="src">Scratch runs 2026-10-08: hexany seeds, ρ = 0.5 reach two step sizes by step 18, ρ = 1.5 do not by step 27.</div></div></div>
+    <div class="fact"><div><p>Recurrences converge at very different speeds. The speed is the ratio of the second largest root to G. Fibonacci shrinks its transient by 0.38 per step, so 5 steps reduce it 100 times. Erv's 4·H[n−8] + 8·H[n−9] shrinks by 0.992 per step and needs about 600 steps. A slow recurrence keeps the seed harmony for a long time. This is a second control, next to ρ.</p><div class="src">The page computes the root moduli with the Durand–Kerner method. See the "transient per step" value in station 2.</div></div></div>
+    <div class="fact"><div><p>Some generators have no exact recurrence. The generator √2 − 1 = 0.414214 is a scale-tree generator: 1/2, 2/5, 5/12, 12/29, 29/70. The number 2^(√2−1) is transcendental, so no integer recurrence reaches it. The closest two-term recurrence up to order 12 is 8·H[n−9] + 7·H[n−10] at +0.04 cents. The pure fourth 4/3 is 0.99 cents above it.</p><div class="src">Erv Wilson, ".414213562374 sequence", 22 Dec 1996: "my answer to Yasser, at about 1950".</div></div></div>
+    <div class="fact"><div><p>The exact recurrences for the five favourite generators: 0.238186 is H[n−1] + 2·H[n−3] read as the complement. 0.328173 is H[n−1] + H[n−7], Fig 12 entry 12. 0.415227 is 4·H[n−8] + 8·H[n−9], 0.23 cents above 4/3. 0.418935 is H[n−1] + 32·H[n−4], the octave-shifted form of 2L⁴ = L³ + 4. The meta-meantone fifth 695.63 cents is 2·H[n−3] + 2·H[n−4], from the condition that 1, G⁴/4, G is a 4:5:6 proportional triad.</p><div class="src">Search over H[n] = a·H[n−i] + b·H[n−j], j ≤ 12, coefficients to 128, coprime (i, j).</div></div></div>
+  </div>
+</section>
+
+<!-- ───────── NEXT ───────── -->
+<section class="station research" id="next">
+  <div class="station-head"><div class="num">OPTIONS</div><h2>Next lines of research</h2></div>
+  <ol>
+    <li><b>Score the transient with the frozen scorers.</b> Run station 3 as a Python experiment. At each step, score the window with triads v1.1.0 (P, S counts) and melodic v0.1.0 (gap entropy, constant structure, propriety). Plot harmony against melody over time. The crossing point is the bend step. Compare generators on the same seeds.</li>
+    <li><b>The ρ control, measured (MERU-002, 2026-10-10).</b> MERU-002 tested three recurrences and 32 values of ρ. The lock step and the chain step increase with ρ, as the decay law says. The mean count of proportional triads at 2 cents during the transient decreases from about 4 to less than 2 as ρ increases. Interval retention never exceeds 3 of 21 pairs. ρ sets how long the sequence stays off the chain. It does not keep the sequence near the lattice. Harmony persists with exact seeding of slow recurrences, not with the lift.</li>
+    <li><b>Fit the triads, not the tones (CPSFIT-002, 2026-10-10).</b> CPSFIT-002 minimized the largest deviation of any hexany triad in the chain, instead of the largest tone error. All 12 triads then survive at 2 cents in a 22-note chain of 193.908 cents, with one tone at 2.22 cents. The tone fit needed a 31-note chain. The worst-triad objective still loses to the count at 18 to 21 notes. There the miracle chain has the smaller worst triad, and the orwell chain keeps more triads. A count objective is the next fork.</li>
+    <li><b>Fit first, then seed.</b> Take each row of station 4 that captures every lattice tone. Seed its recurrence with the lattice tones in chain-aligned octaves. Measure how small the transient is. Hypothesis: if the lattice is already in the MOS, the recurrence fills the gaps with almost no transient.</li>
+    <li><b>Extend the fit search to rank 2 and rank 3.</b> A chain of one generator is rank 2 with the octave. Many CPS lattices need two generators. Search pairs (g1, g2) and a note count, and keep the lattice within tolerance. This is the D'Alessandro method applied to a general seed.</li>
+    <li><b>Catalog the two-term recurrences by their MOS.</b> For every recurrence in Fig 12 and the search, list its scale tree and its proportional triads at each MOS level. Find the recurrences whose MOS at small N contains a hexany or a tetrad. Those are the natural bridges.</li>
+    <li><b>Test subtraction recurrences.</b> Erv's 4·H[n−3] − 2·H[n−2] diverges forward. Find the full set of integer recurrences with a given G as a root, including negative coefficients, and sort them by whether G is dominant. The non-dominant ones can still run backward.</li>
+    <li><b>Use slow recurrences as near-persistent harmony.</b> Erv's order-9 and order-10 recurrences keep their transient for hundreds of steps. Seed a slow recurrence with a lattice. Test whether the scale stays on the lattice over a playable range, and only drifts to the MOS far above and below that range.</li>
+    <li><b>Generator to recurrence, earmarked as a separate task.</b> Given a generator, find the integer recurrences whose dominant root is 2 to that power. Erv did this by hand with his "integer log2 mods". Build it as a regeneratable task with its own receipts, and make a Manim video of the search. This playground does not need it: once an MOS holds the lattice, the MOS is the answer.</li>
+    <li><b>Hear it.</b> Export the window at each step as a Scala file. Audition the bend from hexany to MOS in the plugin. The ear decides where the transient stops sounding like the lattice.</li>
+  </ol>
+</section>
+
+<!-- ───────── PROMPT ───────── -->
+<section class="station" id="prompt">
+  <div class="station-head"><div class="num">HANDOFF</div><h2>Prompt for the next session</h2>
+  <p class="note">This text describes the current state of the page in plain language. Copy it into Claude to continue the work.</p></div>
+  <div class="prompt" id="promptText"></div>
+  <div class="row"><button id="copyBtn" class="primary" style="flex:0 0 auto">Copy prompt</button><span class="note" id="copyNote"></span></div>
+</section>
+</div>
+
+<script>
+// ───────────────────────── pure math ─────────────────────────
+const CENTS = 1200;
+const log2 = Math.log2;
+function gcd(a, b) { while (b) { [a, b] = [b, a % b]; } return a; }
+function posRoot(j, i, a, b) {
+  const f = x => Math.pow(x, j) - a * Math.pow(x, j - i) - b;
+  let lo = 1e-9, hi = 1;
+  while (f(hi) < 0) hi *= 2;
+  for (let n = 0; n < 200; n++) { const m = (lo + hi) / 2; if (f(m) < 0) lo = m; else hi = m; }
+  return (lo + hi) / 2;
+}
+function reduceOctave(x) { while (x >= 2) x /= 2; while (x < 1) x *= 2; return x; }
+function cents(x) { return CENTS * log2(x); }
+function wrapCents(c) { c = ((c % CENTS) + CENTS) % CENTS; return c; }
+function circDist(a, b) { const d = Math.abs(wrapCents(a) - wrapCents(b)); return Math.min(d, CENTS - d); }
+function combinations(arr, k) {
+  const out = [];
+  (function rec(start, acc) {
+    if (acc.length === k) { out.push(acc.slice()); return; }
+    for (let s = start; s < arr.length; s++) { acc.push(arr[s]); rec(s + 1, acc); acc.pop(); }
+  })(0, []);
+  return out;
+}
+function parseFraction(tok) {
+  const m = tok.trim().match(/^(\d+)\s*(?:\/\s*(\d+))?$/);
+  if (!m) return null;
+  const num = +m[1], den = m[2] ? +m[2] : 1;
+  if (!num || !den) return null;
+  return { num, den };
+}
+// Build lattice: returns {tones:[{num,den,ratio,cents,label}], harmonics:[int seeds ascending by pitch class]}
+function buildLattice(kind, opts) {
+  let fracs = [];
+  if (kind === 'ratios') {
+    fracs = (opts.text || '').split(/[\s,]+/).map(parseFraction).filter(Boolean);
+  } else {
+    const factors = (opts.factors || '').split(/[\s,]+/).map(Number).filter(x => x > 0 && Number.isInteger(x));
+    const k = Math.max(1, Math.min(factors.length, opts.k | 0));
+    fracs = combinations(factors, k).map(c => ({ num: c.reduce((p, q) => p * q, 1), den: 1, label: c.join('·') }));
+  }
+  if (!fracs.length) fracs = [{ num: 1, den: 1 }];
+  // octave reduce, dedupe by cents
+  const seen = new Map();
+  for (const f of fracs) {
+    let num = f.num, den = f.den;
+    while (num / den >= 2) den *= 2;
+    while (num / den < 1) num *= 2;
+    const g = gcd(num, den); num /= g; den /= g;
+    const c = cents(num / den);
+    const key = Math.round(c * 1000);
+    if (!seen.has(key)) seen.set(key, { num, den, ratio: num / den, cents: c, label: f.label || `${num}/${den}` });
+  }
+  const tones = [...seen.values()].sort((p, q) => p.cents - q.cents);
+  // harmonic integer seeds: common denominator
+  let L = 1; for (const t of tones) L = L * t.den / gcd(L, t.den);
+  const harmonics = tones.map(t => t.num * (L / t.den));
+  tones.forEach((t, idx) => t.harmonic = harmonics[idx]);
+  return { tones, harmonics };
+}
+function stepClasses(centsList, tol) {
+  const pcs = [...new Set(centsList.map(c => Math.round(wrapCents(c) * 1e6) / 1e6))].sort((a, b) => a - b);
+  if (pcs.length < 2) return { classes: pcs.length ? 1 : 0, steps: [], minStep: 0 };
+  const steps = pcs.map((p, i) => (i + 1 < pcs.length ? pcs[i + 1] - p : pcs[0] + CENTS - p));
+  const sorted = steps.slice().sort((a, b) => a - b);
+  const classes = [];
+  for (const s of sorted) { if (!classes.length || s - classes[classes.length - 1] > tol) classes.push(s); }
+  return { classes: classes.length, steps: classes, minStep: sorted[0] };
+}
+// recurrence spec -> coefficient map {lag: coef}, order, G, g
+function rootModuli(c) {
+  // Durand-Kerner on monic polynomial c[0..n], c[0] = 1, p(x) = Σ c[k]·x^(n−k); returns moduli sorted descending
+  const n = c.length - 1; const re = [], im = [];
+  for (let k = 0; k < n; k++) { const ang = 2 * Math.PI * k / n + 0.4; re.push(Math.cos(ang) * 1.3); im.push(Math.sin(ang) * 1.3); }
+  const pe = (x, y) => { let pr = 0, pi = 0; for (let k = 0; k <= n; k++) { const nr = pr * x - pi * y + c[k], ni = pr * y + pi * x; pr = nr; pi = ni; } return [pr, pi]; };
+  for (let it = 0; it < 600; it++) for (let p = 0; p < n; p++) {
+    const [pr, pi] = pe(re[p], im[p]); let dr = 1, di = 0;
+    for (let q = 0; q < n; q++) { if (q === p) continue; const ar = re[p] - re[q], ai = im[p] - im[q]; const nr = dr * ar - di * ai, ni = dr * ai + di * ar; dr = nr; di = ni; }
+    const den = dr * dr + di * di || 1e-30; re[p] -= (pr * dr + pi * di) / den; im[p] -= (pi * dr - pr * di) / den;
+  }
+  return re.map((r, p) => Math.hypot(r, im[p])).sort((x, y) => y - x);
+}
+function buildRecurrence(a, i, b, j, k, rho) {
+  const G = posRoot(j, i, a, b);
+  const c = new Array(j + 1).fill(0); c[0] = 1; c[i] = -a; c[j] = -b;
+  const mods = rootModuli(c); const lambda2 = mods.length > 1 ? mods[1] : 0;
+  const coefs = new Map([[i, a], [j, b]]);
+  let order = j;
+  if (k > 0) {
+    const c = Math.pow(rho, k);
+    const add = (lag, v) => coefs.set(lag, (coefs.get(lag) || 0) + v);
+    add(k, c); add(i + k, -a * c); add(j + k, -b * c);
+    order = j + k;
+  }
+  const rate = Math.max(lambda2, k > 0 ? rho : 0) / G;
+  return { a, i, b, j, k, rho, G, g: log2(G), gen: ((log2(G) % 1) + 1) % 1, coefs, order, coprime: gcd(i, j) === 1, lambda2, rate };
+}
+function runRecurrence(rec, seeds, steps) {
+  const h = seeds.slice();
+  for (let n = seeds.length; n < seeds.length + steps; n++) {
+    let v = 0;
+    for (const [lag, c] of rec.coefs) v += c * h[n - lag];
+    if (!(v > 0) || !isFinite(v)) { h.push(NaN); break; }
+    h.push(v);
+  }
+  return h;
+}
+function placeSeeds(harmonics, order, mode, g) {
+  // cycle lattice tones (octave copies) to fill the order
+  const seeds = [];
+  const pcs = harmonics.map(reduceOctave);
+  for (let m = 0; m < order; m++) {
+    const base = pcs[m % pcs.length];
+    if (mode === 'compact') {
+      const cyc = Math.floor(m / pcs.length);
+      seeds.push(base * Math.pow(2, cyc));
+    } else {
+      const e = Math.round(m * g - log2(base));
+      seeds.push(base * Math.pow(2, e));
+    }
+  }
+  return seeds;
+}
+function triadCounts(freqs, tol) {
+  // octave-reduced tones, allow spans up to one octave by adding 2x copies
+  const pcs = [...new Set(freqs.map(f => Math.round(reduceOctave(f) * 1e6) / 1e6))].sort((a, b) => a - b);
+  const all = pcs.concat(pcs.map(x => x * 2));
+  let P = 0, S = 0;
+  const near = (x, y) => Math.abs(cents(x / y)) <= tol;
+  for (let p = 0; p < pcs.length; p++) for (let q = p + 1; q < all.length; q++) {
+    const lo = pcs[p], hi = all[q];
+    if (hi <= lo || hi > lo * 2) continue;
+    const am = (lo + hi) / 2, hm = 2 * lo * hi / (lo + hi);
+    for (const m of all) { if (m <= lo || m >= hi) continue; if (near(m, am)) P++; if (near(m, hm)) S++; }
+  }
+  return { P, S };
+}
+function mosPath(gen, maxN) {
+  // Walk the Stern-Brocot tree toward gen (in octaves, 0 < gen < 1). Each
+  // mediant p/q on the path is an MOS: q notes, p generators per octave in
+  // the approximation. Returns [{N, p, q, L, s}] with the two step sizes of
+  // the q-note chain in cents.
+  const out = [];
+  let lo = [0, 1], hi = [1, 1];
+  for (let guard = 0; guard < 200; guard++) {
+    const m = [lo[0] + hi[0], lo[1] + hi[1]];
+    if (m[1] > maxN) break;
+    const N = m[1];
+    const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * gen * CENTS));
+    const sorted = pcs.slice().sort((a, b) => a - b);
+    const steps = sorted.map((v, i) => (i + 1 < N ? sorted[i + 1] - v : sorted[0] + CENTS - v));
+    out.push({ N, p: m[0], q: m[1], L: Math.max(...steps), s: Math.min(...steps) });
+    if (gen < m[0] / m[1]) hi = m; else lo = m;
+  }
+  return out;
+}
+function scaleTree(gen, maxN) { return mosPath(gen, maxN).map(x => x.N); }
+// fit: for each N, the generator (cents) minimizing the largest circular error of any lattice tone to an
+// N-chain containing 1/1 — EXACT (CPSFIT-001 method): for a tolerance eps every (tone, k) admits a g-interval of
+// half-width eps/|k|; a sweep over interval endpoints decides feasibility; bisection on eps, then a ternary refinement.
+function feasibleFit(tc, N, eps) {
+  const K = N - 1, T = tc.length;
+  const always = tc.map(c => circDist(0, c) <= eps);
+  const ev = [];
+  for (let t = 0; t < T; t++) {
+    const c = tc[t];
+    for (let k = -K; k <= K; k++) {
+      if (!k) continue;
+      for (let m = -K - 2; m <= K + 2; m++) {
+        const center = (c + CENTS * m) / k, half = eps / Math.abs(k);
+        const lo = center - half, hi = center + half;
+        if (hi <= 1e-9 || lo > 600) continue;
+        ev.push([Math.max(lo, 1e-9), 0, t, k]); ev.push([Math.min(hi, 600), 1, t, k]);
+      }
+    }
+  }
+  ev.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const active = Array.from({ length: T }, () => new Set());
+  const check = () => {
+    let cand = null;
+    for (let t = 0; t < T; t++) {
+      if (always[t]) continue;
+      const ks = [...active[t]].sort((a, b) => a - b);
+      if (!ks.length) return null;
+      const ivs = [];
+      for (const k of ks) { const a = k - K, b = k; if (ivs.length && a <= ivs[ivs.length - 1][1]) ivs[ivs.length - 1][1] = Math.max(ivs[ivs.length - 1][1], b); else ivs.push([a, b]); }
+      if (cand === null) cand = ivs;
+      else { const nxt = []; for (const [a, b] of cand) for (const [c, d] of ivs) { const lo = Math.max(a, c), hi = Math.min(b, d); if (lo <= hi) nxt.push([lo, hi]); } cand = nxt; }
+      if (!cand.length) return null;
+    }
+    if (cand === null) return -K;
+    for (const [a, b] of cand) { const a2 = Math.max(a, -K), b2 = Math.min(b, 0); if (a2 <= b2) return a2; }
+    return null;
+  };
+  for (const [g, typ, t, k] of ev) {
+    if (typ === 0) { active[t].add(k); const s = check(); if (s !== null) return { g, s }; }
+    else active[t].delete(k);
+  }
+  return null;
+}
+function exactFit(tc, N, epsHi) {
+  let res = feasibleFit(tc, N, epsHi);
+  if (!res) return null;
+  let lo = 0, hi = epsHi;
+  for (let it = 0; it < 14; it++) { const mid = (lo + hi) / 2; const r = feasibleFit(tc, N, mid); if (r === null) lo = mid; else { hi = mid; res = r; } }
+  const { g, s } = res;
+  const ks = tc.map(c => { let best = null; for (let k = s; k < s + N; k++) { const e = circDist(k * g, c); if (best === null || e < best[1] || (e === best[1] && Math.abs(k) < Math.abs(best[0]))) best = [k, e]; } return best[0]; });
+  const err = x => Math.max(...tc.map((c, i) => circDist(ks[i] * x, c)));
+  let a = g - 0.05, b = g + 0.05;
+  for (let it = 0; it < 200; it++) { const m1 = a + (b - a) / 3, m2 = b - (b - a) / 3; if (err(m1) < err(m2)) b = m2; else a = m1; }
+  const gs = (a + b) / 2; const errs = tc.map((c, i) => circDist(ks[i] * gs, c));
+  return { g: gs, maxErr: Math.max(...errs), meanErr: errs.reduce((p, q) => p + q, 0) / errs.length, s, ks };
+}
+function fitLattice(toneCents, maxN) {
+  const best = new Map(); let epsHi = 60;
+  for (let N = 2; N <= maxN; N++) { const r = exactFit(toneCents, N, epsHi); if (!r) continue; epsHi = Math.min(60, r.maxErr + 0.02); best.set(N, r); }
+  return best;
+}
+function fitET(toneCents, maxN) {
+  const rows = [];
+  for (let N = 5; N <= maxN; N++) {
+    const step = CENTS / N; let mx = 0, sum = 0;
+    for (const t of toneCents) { const e = Math.abs(t - Math.round(t / step) * step); sum += e; if (e > mx) mx = e; }
+    rows.push({ N, maxErr: mx, meanErr: sum / toneCents.length });
+  }
+  return rows;
+}
+function chainAt(gCents, N, s, toneCents) {
+  // the chain with window [s, s+N-1] (1/1 at generator position -s): degrees and per-tone errors
+  const map = toneCents.map(t => { let mn = Infinity, mk = s; for (let k = s; k <= s + N - 1; k++) { const e = circDist(k * gCents, t); if (e < mn) { mn = e; mk = k; } } return { t, k: mk, err: mn }; });
+  const degrees = []; for (let k = s; k <= s + N - 1; k++) degrees.push(wrapCents(k * gCents));
+  return { degrees: degrees.sort((a, b) => a - b), map, maxErr: Math.max(...map.map(m => m.err)), s };
+}
+function stepPattern(degrees, tol) {
+  // letters for the step sizes in pitch order from 1/1: L, s, and m for a third size
+  const d = degrees.slice().sort((a, b) => a - b);
+  const steps = d.map((v, i) => (i + 1 < d.length ? d[i + 1] - v : d[0] + CENTS - v));
+  const sizes = [...new Set(steps.map(x => Math.round(x / tol) * tol))].sort((a, b) => b - a);
+  const letter = x => { const i = sizes.indexOf(Math.round(x / tol) * tol); return sizes.length <= 2 ? (i === 0 ? 'L' : 's') : (i === 0 ? 'L' : i === sizes.length - 1 ? 's' : 'm'); };
+  return steps.map(letter).join('');
+}
+function chainPitchClasses(gCents, N, toneCents, capErr) {
+  // choose window start s containing 0 minimizing max error; return degrees and tone errors
+  let bestS = 0, bestMax = Infinity, bestMap = null;
+  for (let s = -(N - 1); s <= 0; s++) {
+    let mx = 0; const map = [];
+    for (const t of toneCents) {
+      let mn = Infinity, mk = 0;
+      for (let k = s; k <= s + N - 1; k++) { const e = circDist(k * gCents, t); if (e < mn) { mn = e; mk = k; } }
+      map.push({ t, k: mk, err: mn }); if (mn > mx) mx = mn;
+    }
+    if (mx < bestMax) { bestMax = mx; bestS = s; bestMap = map; }
+  }
+  const degrees = []; for (let k = bestS; k <= bestS + N - 1; k++) degrees.push(wrapCents(k * gCents));
+  return { degrees: degrees.sort((a, b) => a - b), map: bestMap, maxErr: bestMax, s: bestS };
+}
+const RR_PRESETS = [
+  { id: 'erv418935', label: '0.418935 · H[n−1] + 32·H[n−4] (Erv 16 Jul 97, 2L⁴ = L³ + 4)', a: 1, i: 1, b: 32, j: 4, src: 'Octave-shifted form of G = ((G³+4)/2)^(1/4), P.4a. Generator 502.72 cents.' },
+  { id: 'erv238186', label: '0.238186 · H[n−1] + 2·H[n−3], read as complement (Erv P.21a/b)', a: 1, i: 1, b: 2, j: 3, src: 'Sloane M2419. G = 1.69562 = 2/1.17951. Erv\'s 4H[n−3] − 2H[n−2] form converges left.' },
+  { id: 'fig12_12', label: '0.328173 · H[n−1] + H[n−7] (Fig 12 entry 12)', a: 1, i: 1, b: 1, j: 7, src: 'G = (1 + G⁶)^(1/7). Erv\'s table, 23 July 1997.' },
+  { id: 'erv415227', label: '0.415227 · 4·H[n−8] + 8·H[n−9] (Erv 16 Sep 97)', a: 4, i: 8, b: 8, j: 9, src: 'G = (8 + 4G)^(1/9). Like 2:3:5 and 4:5:6. 0.23 cents above the pure fourth.' },
+  { id: 'metameantone', label: '0.579692 · 2·H[n−3] + 2·H[n−4] (meta-meantone, 695.63 cents)', a: 2, i: 3, b: 2, j: 4, src: 'From the condition that 1 : G⁴/4 : G is a 4:5:6 proportional triad, so G⁴ = 2G + 2.' },
+  { id: 'silver414', label: '0.414248 · 8·H[n−9] + 7·H[n−10] (nearest to √2 − 1)', a: 8, i: 9, b: 7, j: 10, src: '√2 − 1 has no exact recurrence: 2^(√2−1) is transcendental. This is +0.04 cents away.' },
+  { id: 'fib', label: '0.694242 · H[n−1] + H[n−2] (Fibonacci, Fig 12 entry 1)', a: 1, i: 1, b: 1, j: 2, src: 'G = φ. Complement 0.305758, Erv\'s "rediscovered Phi" page, Jan 1997.' },
+  { id: 'metapelog', label: '0.551463 · H[n−1] + H[n−3] (meta-pelog, Fig 12 entry 2)', a: 1, i: 1, b: 1, j: 3, src: 'G = (1 + G²)^(1/3). "Like 12:19:26". Letter to Warren Burt, 1 Aug 1997.' },
+  { id: 'metaslendro', label: '0.405685 · H[n−2] + H[n−3] (meta-slendro, Fig 12 entry 3)', a: 1, i: 2, b: 1, j: 3, src: 'Converges on 1.32471795724, the plastic number. Sheet for Kraig Grady, 15 Oct 1993.' },
+  { id: 'metaptolemy', label: '0.287761 · H[n−3] + H[n−4] (meta-Ptolemy, Fig 12 entry 5)', a: 1, i: 3, b: 1, j: 4, src: 'Converges on 1.22074408461. 16 Oct 1993.' },
+  { id: 'erv59178', label: '0.591780 · 16·H[n−8] + 16·H[n−9] (Erv 18 Sep 97)', a: 16, i: 8, b: 16, j: 9, src: 'G = (16 + 16G)^(1/9). Ref: linear tuning of the 32-40-48 arithmetic mean, 1989.' },
+  { id: 'llsls', label: '0.605380 · H[n−2] + 2·H[n−3] (LLSLS s\'lendro, Erv 4 Oct 97)', a: 1, i: 2, b: 2, j: 3, src: 'G = (2 + G)^(1/3). Re-seed example on the page: 13, 23, 35, 53, 81, 123.' },
+  { id: 'metaslendro2', label: '0.806038 · H[n−1] + 4·H[n−4] (meta-slendro 2, Erv 10 Dec 97)', a: 1, i: 1, b: 4, j: 4, src: 'G = (4 + G³)^(1/4). Re-seeded with 192, 336, 588, 1029, a chain of 7/4.' },
+  { id: 'erv773743', label: '0.773743 · 2·H[n−3] + 128·H[n−10] (Erv 23 Sep 97)', a: 2, i: 3, b: 128, j: 10, src: 'G = (128 + 2G⁷)^(1/10). Scales of Mt. Meru recurrence 29.' },
+  { id: 'pell', label: '0.271553 · 2·H[n−1] + H[n−2] (Pell, silver ratio, Erv 30 Sep 97)', a: 2, i: 1, b: 1, j: 2, src: 'G = 1 + √2. Sloane 2665: 1, 1, 3, 7, 17, 41, 99, 239.' },
+  { id: 'custom', label: 'Custom (edit a, i, b, j)', a: 1, i: 1, b: 1, j: 2, src: '' },
+];
+
+// ───────────────────────── page ─────────────────────────
+if (typeof document !== 'undefined') (function () {
+  const $ = id => document.getElementById(id);
+  const tok = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const S = {
+    latPreset: 'hexany', cpsFactors: '1 3 5 7', cpsK: 2, ratioText: '1/1 9/8 5/4 4/3 3/2 5/3 15/8',
+    rrPreset: 'erv418935', a: 1, i: 1, b: 32, j: 4, liftAuto: true, liftK: 0, rho: 1.0,
+    seedPlace: 'chain', steps: 40, win: 7, scrub: 45, tol: 2,
+    fitTol: 2, maxN: 41, onlyMOS: false, showET: true, fitPick: null,
+  };
+  let lattice, rec, seq, seeds, fitRows = [], fixedFirstHit = null, fixedBestRow = null;
+
+  const LAT_PRESETS = {
+    hexany: { kind: 'cps', factors: '1 3 5 7', k: 2 }, tetrad: { kind: 'cps', factors: '1 3 5 7', k: 1 },
+    dekany: { kind: 'cps', factors: '1 3 5 7 9', k: 2 }, dekany11: { kind: 'cps', factors: '1 3 5 7 11', k: 2 },
+    eikosany: { kind: 'cps', factors: '1 3 5 7 9 11', k: 3 },
+    ptolemy: { kind: 'ratios', text: '1/1 9/8 5/4 4/3 3/2 5/3 15/8' },
+    pyth7: { kind: 'ratios', text: '1/1 9/8 81/64 4/3 3/2 27/16 243/128' },
+  };
+  function latticeSpec() {
+    if (S.latPreset === 'cps') return { kind: 'cps', factors: S.cpsFactors, k: S.cpsK };
+    if (S.latPreset === 'ratios') return { kind: 'ratios', text: S.ratioText };
+    return LAT_PRESETS[S.latPreset];
+  }
+  function latticeName() {
+    const sel = $('latPreset'); const t = sel.options[sel.selectedIndex].text;
+    if (S.latPreset === 'cps') return `CPS ${S.cpsK} of {${S.cpsFactors.trim().split(/\s+/).join(',')}}`;
+    if (S.latPreset === 'ratios') return `custom ratios ${S.ratioText.trim()}`;
+    return t;
+  }
+
+  // ---- canvas helpers
+  function prep(cv) {
+    // CSS size comes from the layout (or the element's original width attribute as a
+    // fallback); the pixel buffer is derived from it every time and never read back,
+    // so a hidden or narrow layout cannot compound the device-pixel scale.
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (!cv.dataset.w) { cv.dataset.w = cv.getAttribute('width'); cv.dataset.h = cv.getAttribute('height'); }
+    const h = +cv.dataset.h;
+    const w = Math.max(200, Math.min(2000, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || +cv.dataset.w));
+    cv.style.width = '100%'; cv.style.height = h + 'px'; cv.style.maxHeight = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h); ctx.font = '11px ' + tok('--font-mono'); return { ctx, w, h };
+  }
+  function drawRuler(cv, items, opts) {
+    // items: [{cents, color, r, ring, label}]
+    const { ctx, w, h } = prep(cv); const L = 24, R = w - 24, y = h * 0.5;
+    const x = c => L + (R - L) * (wrapCents(c) / CENTS);
+    ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+    for (let c = 0; c <= CENTS; c += 100) { ctx.beginPath(); ctx.moveTo(x(c === CENTS ? 1199.999 : c), y - 4); ctx.lineTo(x(c === CENTS ? 1199.999 : c), y + 4); ctx.stroke(); if (c % 300 === 0) ctx.fillText(c, (c === CENTS ? R : x(c)) - 8, h - 6); }
+    if (opts && opts.title) { ctx.fillStyle = tok('--muted'); ctx.fillText(opts.title, L, 12); }
+    for (const it of items) {
+      const px = x(it.cents);
+      if (it.ring) { ctx.strokeStyle = it.ring; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(px, y, it.r + 3, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 1; }
+      if (it.tick) { ctx.strokeStyle = it.color; ctx.beginPath(); ctx.moveTo(px, y - 14); ctx.lineTo(px, y + 14); ctx.stroke(); }
+      else { ctx.fillStyle = it.color; ctx.beginPath(); ctx.arc(px, y, it.r, 0, Math.PI * 2); ctx.fill(); }
+      if (it.label) { ctx.fillStyle = it.color; ctx.fillText(it.label, px - ctx.measureText(it.label).width / 2, it.above ? y - 18 : y + 26); }
+    }
+  }
+
+  // ---- station 1
+  function renderLattice() {
+    lattice = buildLattice(latticeSpec().kind, latticeSpec());
+    const harm = tok('--harm');
+    drawRuler($('latCanvas'), lattice.tones.map((t, idx) => ({ cents: t.cents, color: harm, r: 5, label: t.label, above: idx % 2 === 0 })), { title: 'pitch classes, cents' });
+    const tb = $('latTable').querySelector('tbody'); tb.innerHTML = '';
+    lattice.tones.forEach((t, idx) => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${idx}</td><td class="num">${t.num}/${t.den}</td><td class="num">${t.cents.toFixed(2)}</td><td class="num">${t.harmonic}</td>`; tb.appendChild(tr); });
+    const sc = stepClasses(lattice.tones.map(t => t.cents), 0.5);
+    $('latCount').textContent = lattice.tones.length; $('latMinStep').textContent = sc.minStep.toFixed(1) + '¢'; $('latClasses').textContent = sc.classes;
+  }
+
+  // ---- station 2
+  function renderRecurrence() {
+    const L = lattice.tones.length;
+    if (S.liftAuto) { S.liftK = Math.max(0, L - S.j); $('liftK').value = S.liftK; }
+    const G0 = posRoot(S.j, S.i, S.a, S.b);
+    let rho = S.rho; let rhoNote = '';
+    if (S.liftK > 0 && rho >= G0) { rho = Math.min(S.rho, G0 * 0.99); rhoNote = ` ρ was clamped below G (${rho.toFixed(3)}).`; }
+    rec = buildRecurrence(S.a, S.i, S.b, S.j, S.liftK, rho);
+    $('rrG').textContent = rec.G.toFixed(6); $('rrGen').textContent = rec.gen.toFixed(6);
+    $('rrCents').textContent = (rec.gen * CENTS).toFixed(2) + '¢'; $('rrCompl').textContent = (1 - rec.gen).toFixed(6);
+    $('rrOrder').textContent = rec.order + (rec.k ? ` (${rec.j}+${rec.k})` : '');
+    $('rrDecay').textContent = rec.rate.toFixed(3) + ' /step'; $('rrSteps').textContent = rec.rate < 1 ? Math.ceil(Math.log(0.01) / Math.log(rec.rate)) : '∞';
+    const terms = [...rec.coefs].sort((p, q) => p[0] - q[0]).map(([lag, c]) => `${c < 0 ? '− ' : '+ '}${Math.abs(+c.toFixed(4))}·H[n−${lag}]`).join(' ');
+    $('rrPoly').textContent = `H[n] = ${terms.replace(/^\+ /, '')}`;
+    const dom = rec.coprime ? `i = ${rec.i} and j = ${rec.j} are coprime, so G is strictly dominant and the ratio converges forward.` : `i = ${rec.i} and j = ${rec.j} share a factor, so the sequence splits into ${gcd(rec.i, rec.j)} interleaved chains and the ratio does not converge.`;
+    $('rrDominance').textContent = dom + rhoNote; $('rrDominance').className = 'note ' + (rec.coprime ? 'ok' : 'warn');
+    const p = RR_PRESETS.find(x => x.id === S.rrPreset); $('rrSource').textContent = p && p.src ? p.src : '';
+    // scale tree
+    const path = mosPath(rec.gen, 60);
+    const tree = path.map(x => x.N);
+    const { ctx, w, h } = prep($('treeCanvas')); const acc = tok('--accent');
+    ctx.fillStyle = tok('--muted'); ctx.fillText(`MOS sizes N for g = ${rec.gen.toFixed(4)} octaves (the same for 1 − g), N ≤ 60`, 24, 14);
+    const tb = $('treeTable').querySelector('tbody'); tb.innerHTML = '';
+    path.forEach(x => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${x.N}</td><td class="num">${x.p}/${x.q}</td><td class="num">${(x.p / x.q * CENTS).toFixed(1)}</td><td class="num">${x.L.toFixed(1)}</td><td class="num">${x.s.toFixed(1)}</td><td class="num">${(x.L / x.s).toFixed(3)}</td>`; tb.appendChild(tr); });
+    const L0 = 24, R0 = w - 24; const maxN = 60;
+    ctx.strokeStyle = tok('--line'); ctx.beginPath(); ctx.moveTo(L0, h - 30); ctx.lineTo(R0, h - 30); ctx.stroke();
+    tree.forEach((N, idx) => { const x = L0 + (R0 - L0) * (N / maxN); ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(x, h - 30, 4, 0, Math.PI * 2); ctx.fill(); ctx.fillText(N, x - 6, h - 30 - 10 - (idx % 2) * 14); });
+    [10, 20, 30, 40, 50, 60].forEach(n => { ctx.fillStyle = tok('--muted'); ctx.fillText(n, L0 + (R0 - L0) * (n / maxN) - 6, h - 8); });
+    rec.tree = tree;
+  }
+
+  // ---- station 3
+  function xAxis(ctx, x, total, L, R, B, h, seedsN, scrub) {
+    // ticks every 5 or 10 steps, the seed/generated boundary, and the scrub position
+    const muted = tok('--muted'), lineC = tok('--line'), acc = tok('--accent'), harm = tok('--harm');
+    const every = total > 80 ? 20 : total > 40 ? 10 : 5;
+    ctx.strokeStyle = lineC; ctx.beginPath(); ctx.moveTo(L, B); ctx.lineTo(R, B); ctx.stroke();
+    ctx.fillStyle = muted;
+    for (let n = 0; n < total; n += every) { ctx.beginPath(); ctx.moveTo(x(n), B); ctx.lineTo(x(n), B + 4); ctx.stroke(); ctx.fillText(String(n), x(n) - (n >= 100 ? 10 : n >= 10 ? 7 : 3), h - 4); }
+    ctx.fillText('step n', R - 36, h - 4);
+    ctx.strokeStyle = harm; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(x(seedsN - 0.5), B); ctx.lineTo(x(seedsN - 0.5), 14); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = harm; ctx.fillText('seeds | generated', x(seedsN - 0.5) + 4, 24);
+    ctx.strokeStyle = acc; ctx.beginPath(); ctx.moveTo(x(scrub), B); ctx.lineTo(x(scrub), B - 6); ctx.stroke();
+  }
+  function renderSeed() {
+    seeds = placeSeeds(lattice.harmonics, rec.order, S.seedPlace, rec.g);
+    seq = runRecurrence(rec, seeds, S.steps);
+    const total = seeds.length + S.steps;
+    if (S.scrub > total - 1 || S.scrub < seeds.length) S.scrub = total - 1;
+    for (const id of ['scrub', 'scrub2']) { $(id).max = total - 1; $(id).min = seeds.length; $(id).value = S.scrub; }
+    for (const id of ['scrubVal', 'scrubVal2']) $(id).textContent = S.scrub;
+    for (const id of ['steps', 'steps2']) $(id).value = S.steps;
+    for (const id of ['stepsVal', 'stepsVal2']) $(id).textContent = S.steps;
+    const acc = tok('--accent'), harm = tok('--harm'), muted = tok('--muted'), lineC = tok('--line');
+    const latC = lattice.tones.map(t => t.cents);
+    const onLat = f => latC.some(c => circDist(cents(f), c) <= S.tol);
+    // time plot
+    { const { ctx, w, h } = prep($('timeCanvas')); const L = 44, R = w - 16, T = 18, B = h - 24;
+      const valid = seq.filter(v => isFinite(v)); const ys = valid.map(v => log2(v)); const ymin = Math.min(...ys) - 0.5, ymax = Math.max(...ys) + 0.5;
+      const x = n => L + (R - L) * (n / Math.max(1, total - 1)); const y = v => B - (B - T) * ((v - ymin) / (ymax - ymin));
+      ctx.strokeStyle = lineC; ctx.fillStyle = muted;
+      const octEvery = Math.max(1, Math.ceil((ymax - ymin) / 8));
+      for (let o = Math.ceil(ymin); o <= Math.floor(ymax); o++) { if (o % octEvery) continue; ctx.beginPath(); ctx.moveTo(L, y(o)); ctx.lineTo(R, y(o)); ctx.stroke(); ctx.fillText('2^' + o, 4, y(o) + 4); }
+      ctx.fillText('log2 pitch', L, 12); xAxis(ctx, x, total, L, R, B, h, seeds.length, S.scrub);
+      // limit line through last valid point with slope g
+      const nLast = valid.length - 1; if (nLast >= 1) { ctx.strokeStyle = acc; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(x(0), y(ys[nLast] - rec.g * nLast)); ctx.lineTo(x(nLast), y(ys[nLast])); ctx.stroke(); ctx.setLineDash([]); }
+      // window shading
+      const wLo = Math.max(0, S.scrub - S.win + 1); ctx.fillStyle = tok('--accent-soft'); ctx.fillRect(x(wLo) - 4, T, x(S.scrub) - x(wLo) + 8, B - T);
+      seq.forEach((v, n) => { if (!isFinite(v)) return; const isSeed = n < seeds.length; ctx.fillStyle = isSeed ? harm : (onLat(v) ? harm : acc); ctx.beginPath(); ctx.arc(x(n), y(log2(v)), isSeed ? 4.5 : 3.5, 0, Math.PI * 2); ctx.fill(); if (isSeed) { ctx.strokeStyle = acc; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x(n), y(log2(v)), 7, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 1; } });
+    }
+    // ratio plot
+    { const { ctx, w, h } = prep($('ratioCanvas')); const L = 44, R = w - 16, T = 16, B = h - 18;
+      const target = rec.g * CENTS; const rat = seq.map((v, n) => (n > 0 && isFinite(v) && isFinite(seq[n - 1])) ? cents(v / seq[n - 1]) : NaN);
+      const vals = rat.filter(v => isFinite(v)); const span = Math.max(60, ...vals.map(v => Math.abs(v - target))) * 1.1;
+      const x = n => L + (R - L) * (n / Math.max(1, total - 1)); const y = c => B - (B - T) * ((c - (target - span)) / (2 * span));
+      ctx.strokeStyle = lineC; ctx.fillStyle = muted; ctx.fillText('H[n]/H[n−1] in cents', L, 11); xAxis(ctx, x, total, L, R, B, h, seeds.length, S.scrub);
+      ctx.fillStyle = tok('--accent-soft'); ctx.fillRect(L, y(target + S.tol), R - L, y(target - S.tol) - y(target + S.tol));
+      ctx.strokeStyle = acc; ctx.beginPath(); ctx.moveTo(L, y(target)); ctx.lineTo(R, y(target)); ctx.stroke(); ctx.fillStyle = acc; ctx.fillText(target.toFixed(1) + '¢', R - 56, y(target) - 4);
+      ctx.strokeStyle = muted; ctx.beginPath(); let started = false; rat.forEach((c, n) => { if (!isFinite(c)) return; const yy = Math.max(T, Math.min(B, y(c))); if (!started) { ctx.moveTo(x(n), yy); started = true; } else ctx.lineTo(x(n), yy); }); ctx.stroke();
+      rat.forEach((c, n) => { if (!isFinite(c)) return; ctx.fillStyle = n < seeds.length ? harm : acc; ctx.beginPath(); ctx.arc(x(n), Math.max(T, Math.min(B, y(c))), 2.5, 0, Math.PI * 2); ctx.fill(); });
+    }
+    // window ruler
+    const wTones = seq.slice(Math.max(0, S.scrub - S.win + 1), S.scrub + 1).filter(v => isFinite(v));
+    const items = lattice.tones.map(t => ({ cents: t.cents, color: harm, r: 0, tick: true }));
+    wTones.forEach(v => items.push({ cents: cents(v), color: onLat(v) ? harm : acc, r: 5 }));
+    drawRuler($('winCanvas'), items, { title: `window of ${wTones.length} tones at step ${S.scrub}, reduced to one octave (ticks = lattice)` });
+    // stats
+    const sc = stepClasses(wTones.map(v => cents(v)), S.tol);
+    const lastRatio = (S.scrub > 0 && isFinite(seq[S.scrub]) && isFinite(seq[S.scrub - 1])) ? cents(seq[S.scrub] / seq[S.scrub - 1]) : NaN;
+    const dR = lastRatio - rec.g * CENTS;
+    const nLat = wTones.filter(onLat).length;
+    const latIvls = [...new Set(latC.flatMap((a, i) => latC.slice(i + 1).map(b => Math.round(circDist(a, b) * 1000) / 1000)))];
+    const wCents = wTones.map(v => cents(v)); let nIvl = 0, nPairs = 0;
+    for (let i = 0; i < wCents.length; i++) for (let j = i + 1; j < wCents.length; j++) { nPairs++; const d = circDist(wCents[i], wCents[j]); if (latIvls.some(v => Math.abs(v - d) <= S.tol)) nIvl++; }
+    const tri = triadCounts(wTones, S.tol);
+    const set = (id, v, good) => { const el = $(id); el.querySelector('.v').textContent = v; el.classList.toggle('good', good === true); el.classList.toggle('bad', good === false); };
+    set('stStep', sc.classes + (sc.classes === 2 ? ' (MOS)' : sc.classes === 1 ? ' (equal)' : ''), sc.classes <= 2);
+    set('stRatio', isFinite(dR) ? (dR >= 0 ? '+' : '') + dR.toFixed(2) + '¢' : '—', isFinite(dR) ? Math.abs(dR) <= S.tol : null);
+    set('stLat', `${nLat} / ${wTones.length}`, null);
+    set('stIvl', `${nIvl} / ${nPairs}`, null);
+    set('stTri', `${tri.P} / ${tri.S}`, null);
+    const bad = seq.some(v => !isFinite(v));
+    $('seedNote').textContent = bad ? 'The sequence produced a term that is not positive. Decrease ρ, or choose a coprime recurrence.' : `${seeds.length} seeds from ${lattice.tones.length} lattice tones (${S.seedPlace === 'chain' ? 'chain-aligned octaves' : 'one octave'}), then ${S.steps} generated terms.`;
+    $('seedNote').className = 'note ' + (bad ? 'warn' : '');
+    $('seqText').textContent = seq.map(v => isFinite(v) ? (v < 1e6 ? +v.toFixed(3) : v.toExponential(3)) : '×').join('  ');
+  }
+
+  // ---- station 4
+  function renderFixedTable() {
+    const g = rec.gen * CENTS; const latC = lattice.tones.map(t => t.cents);
+    $('fixedGenLabel').textContent = `${rec.gen.toFixed(5)} octaves = ${g.toFixed(2)} cents`;
+    const path = mosPath(rec.gen, S.maxN);
+    const tb = $('fixedTable').querySelector('tbody'); tb.innerHTML = '';
+    let first = null, bestRow = null;
+    for (let N = 2; N <= S.maxN; N++) {
+      const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
+      if (S.onlyMOS && !mos) continue;
+      const ch = chainPitchClasses(g, N, latC, 600);
+      const captured = ch.map.filter(m => m.err <= S.fitTol).length;
+      const row = { key: 'fix' + N, type: 'FIX', N, g, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length, mos, level: mos ? levelIdx + 1 : null, s: ch.s, captured };
+      if (row.maxErr <= S.fitTol && !first) first = row;
+      if (!bestRow || row.maxErr < bestRow.maxErr) bestRow = row;
+      const tr = document.createElement('tr'); tr.className = 'sel' + (row.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === row.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${N}</td><td>${mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>'}</td><td class="num">${row.level == null ? '—' : row.level}</td><td class="num">${-row.s} of ${N}</td><td class="num">${row.maxErr.toFixed(2)}</td><td class="num">${row.meanErr.toFixed(2)}</td><td class="num">${captured}/${lattice.tones.length}</td>`;
+      tr.addEventListener('click', () => { S.fitPick = row; renderFitPick(); renderFixedTable(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    fixedFirstHit = first; fixedBestRow = first || bestRow;
+  }
+  function renderFitTable() {
+    const tb = $('fitTable').querySelector('tbody'); tb.innerHTML = '';
+    const rows = fitRows.filter(r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos));
+    for (const r of rows) {
+      const tr = document.createElement('tr'); tr.className = 'sel' + (r.maxErr <= S.fitTol ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${r.N}</td><td>${r.type === 'ET' ? '<span class="pill">ET</span>' : (r.mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>')}</td><td class="num">${r.level == null ? '—' : r.level}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${(r.g / CENTS).toFixed(5)}</td><td class="num">${r.g.toFixed(2)}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.meanErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td>`;
+      tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFitTable(); updatePrompt(); });
+      tb.appendChild(tr);
+    }
+    if (!rows.length) tb.innerHTML = '<tr><td colspan="7" class="note">No rows. Press Run, or relax the filters.</td></tr>';
+  }
+  function renderFitPick() {
+    const harm = tok('--harm'), acc = tok('--accent');
+    const latC = lattice.tones.map(t => t.cents);
+    if (!S.fitPick) { drawRuler($('fitCanvas'), lattice.tones.map(t => ({ cents: t.cents, color: harm, r: 5 })), { title: 'lattice only' }); $('fitPickNote').textContent = 'No fit selected.'; return; }
+    const r = S.fitPick;
+    const ch = r.s == null ? chainPitchClasses(r.g, r.N, latC, 60) : chainAt(r.g, r.N, r.s, latC);
+    $('fitMur').max = r.N - 1; $('fitMur').value = r.s == null ? 0 : -r.s; $('fitMur').disabled = r.s == null;
+    $('fitMurVal').textContent = r.s == null ? 'n/a for ET' : `${-r.s} of ${r.N}`;
+    $('fitPattern').textContent = 'steps from 1/1: ' + stepPattern(ch.degrees, 1.0);
+    const items = ch.degrees.map(d => ({ cents: d, color: acc, r: 4 }));
+    ch.map.forEach(m => items.push({ cents: m.t, color: m.err <= S.fitTol ? harm : tok('--warn'), r: 0, tick: true, label: m.err.toFixed(1), above: true }));
+    drawRuler($('fitCanvas'), items, { title: `${r.type === 'ET' ? r.N + '-ET' : r.N + ' notes of generator ' + r.g.toFixed(2) + '¢'}: dots = scale, ticks = lattice with error in cents` });
+    $('fitPickNote').textContent = `${r.N} notes, generator ${(r.g / CENTS).toFixed(5)} octaves (${r.g.toFixed(2)} cents, complement ${(1 - r.g / CENTS).toFixed(5)}). Largest lattice error ${r.maxErr.toFixed(2)} cents. ${r.captured} of ${lattice.tones.length} lattice tones within ${S.fitTol} cents.` + (r.s == null ? '' : ` The 1/1 is chain degree ${-r.s} of ${r.N}: ${-r.s} generators below it and ${r.N - 1 + r.s} above it. This is the murchana.`) + (r.level ? ` Level ${r.level} on the scale tree.` : '');
+  }
+  function runFit() {
+    $('fitStatus').textContent = 'Searching…';
+    setTimeout(() => {
+      const latC = lattice.tones.map(t => t.cents);
+      const best = fitLattice(latC, S.maxN);
+      fitRows = [];
+      for (const [N, r] of best) {
+        if (!(r.maxErr < Infinity)) continue;
+        const pcs = []; for (let k = 0; k < N; k++) pcs.push(wrapCents(k * r.g));
+        const path = mosPath(r.g / CENTS, N); const levelIdx = path.findIndex(x => x.N === N); const mos = levelIdx >= 0;
+        const ch = chainPitchClasses(r.g, N, latC, 60);
+        fitRows.push({ key: 'mos' + N, type: 'MOS', N, g: r.g, maxErr: r.maxErr, meanErr: r.meanErr, mos, level: mos ? levelIdx + 1 : null, s: r.s, captured: ch.map.filter(m => m.err <= S.fitTol).length });
+      }
+      for (const e of fitET(latC, S.maxN)) {
+        const step = CENTS / e.N; const captured = latC.filter(t => Math.abs(t - Math.round(t / step) * step) <= S.fitTol).length;
+        fitRows.push({ key: 'et' + e.N, type: 'ET', N: e.N, g: step, maxErr: e.maxErr, meanErr: e.meanErr, mos: true, level: null, s: null, captured });
+      }
+      fitRows.sort((p, q) => (p.maxErr <= S.fitTol ? 0 : 1) - (q.maxErr <= S.fitTol ? 0 : 1) || p.N - q.N);
+      const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
+      const visible = r => (S.showET || r.type !== 'ET') && (!S.onlyMOS || r.type === 'ET' || r.mos);
+      const shown = hits.filter(visible);
+      S.fitPick = shown[0] || hits[0] || null;
+      const smallest = hits[0], smallestShown = shown[0];
+      $('fitStatus').textContent = hits.length
+        ? `${hits.length} scales contain every lattice tone within ${S.fitTol} cents. The smallest is ${smallest.N} notes (${smallest.type === 'ET' ? 'ET' : smallest.mos ? 'MOS' : 'a chain that is not an MOS'}).${smallestShown && smallestShown !== smallest ? ` The smallest that passes the filters is ${smallestShown.N} notes.` : ''}${!smallestShown ? ' None passes the filters. Untick "only MOS".' : ''}`
+        : `No scale up to ${S.maxN} notes contains every lattice tone within ${S.fitTol} cents. Relax the tolerance or raise N.`;
+      renderFitTable(); renderFitPick(); updatePrompt();
+    }, 20);
+  }
+
+  // ---- prompt
+  function updatePrompt() {
+    const p = [];
+    p.push(`Lattice: ${latticeName()}, ${lattice.tones.length} tones: ${lattice.tones.map(t => t.num + '/' + t.den).join(' ')}.`);
+    p.push(`Recurrence: ${$('rrPoly').textContent}. The positive root is G = ${rec.G.toFixed(6)}. The generator is ${rec.gen.toFixed(6)} octaves, which is ${(rec.gen * CENTS).toFixed(2)} cents. The complement is ${(1 - rec.gen).toFixed(6)}. The transient shrinks by ${rec.rate.toFixed(3)} per step. The second root modulus is ${rec.lambda2.toFixed(3)}. ${rec.k ? `The order is lifted by ${rec.k} with decay modulus ρ = ${rec.rho.toFixed(3)}.` : 'The order is not lifted.'} ${rec.coprime ? '' : 'Warning: i and j are not coprime, so the ratio does not converge.'}`);
+    const sc = stepClasses(seq.slice(Math.max(0, S.scrub - S.win + 1), S.scrub + 1).filter(isFinite).map(v => cents(v)), S.tol);
+    p.push(`Direction 1: ${seeds.length} seeds in ${S.seedPlace === 'chain' ? 'chain-aligned' : 'compact'} octaves, then ${S.steps} steps. At step ${S.scrub} the ${S.win}-tone window has ${sc.classes} step size${sc.classes === 1 ? '' : 's'}${sc.classes === 2 ? ' (MOS)' : ''}. The window keeps ${$('stLat').querySelector('.v').textContent} tones on the lattice within ${S.tol} cents. This count rotates with n. The window keeps ${$('stIvl').querySelector('.v').textContent} dyads on lattice intervals. The window has ${$('stTri').querySelector('.v').textContent} proportional and subcontrary triads.`);
+    if (fitRows.length) {
+      const hits = fitRows.filter(r => r.maxErr <= S.fitTol);
+      p.push(`Direction 2, tolerance ${S.fitTol} cents, N up to ${S.maxN}. ${hits.length ? 'Scales that contain every lattice tone: ' + hits.slice(0, 6).map(r => `a ${r.N}-note ${r.type === 'ET' ? 'ET' : 'chain of ' + r.g.toFixed(2) + ' cents' + (r.mos ? ' (MOS)' : '')} with largest error ${r.maxErr.toFixed(2)} cents`).join(', ') + '.' : 'No scale contains every lattice tone.'}`);
+      if (S.fitPick) p.push(`Selected fit: ${S.fitPick.N} notes, generator ${(S.fitPick.g / CENTS).toFixed(5)} octaves, ${S.fitPick.g.toFixed(2)} cents. Largest lattice error ${S.fitPick.maxErr.toFixed(2)} cents.${S.fitPick.s == null ? '' : ` The 1/1 is chain degree ${-S.fitPick.s} of ${S.fitPick.N} (the murchana).`}${S.fitPick.level ? ` Scale-tree level ${S.fitPick.level}.` : ''}`);
+    } else p.push('Direction 2: the fit did not run.');
+    p.push(fixedFirstHit ? `Station 2 generator against the lattice: the smallest chain of ${(rec.gen * CENTS).toFixed(2)} cents that holds every lattice tone within ${S.fitTol} cents has ${fixedFirstHit.N} notes, 1/1 at degree ${-fixedFirstHit.s}${fixedFirstHit.level ? `, scale-tree level ${fixedFirstHit.level}` : ''}.` : `Station 2 generator against the lattice: no chain up to ${S.maxN} notes holds every lattice tone within ${S.fitTol} cents.`);
+    p.push('Task: continue the lattice-to-MOS research from this state. Keep the two directions as separate experiments. Use the frozen scorers for the harmony axis and the melody axis.');
+    $('promptText').textContent = p.join('\n\n');
+  }
+
+  // ---- wiring
+  function all() { renderLattice(); renderRecurrence(); renderSeed(); renderFixedTable(); if (fitRows.length) { fitRows = []; S.fitPick = null; renderFitTable(); renderFitPick(); $('fitStatus').textContent = 'Lattice changed. Press Run again.'; } updatePrompt(); }
+  const sel = $('rrPreset'), sel2 = $('rrPreset2'); RR_PRESETS.forEach(p => { for (const el of [sel, sel2]) { const o = document.createElement('option'); o.value = p.id; o.textContent = p.label; el.appendChild(o); } });
+  sel2.value = S.rrPreset;
+  sel.value = S.rrPreset;
+  $('latPreset').addEventListener('change', e => { S.latPreset = e.target.value; $('cpsFields').hidden = S.latPreset !== 'cps'; $('ratioFields').hidden = S.latPreset !== 'ratios'; all(); });
+  $('cpsFactors').addEventListener('input', e => { S.cpsFactors = e.target.value; all(); });
+  $('cpsK').addEventListener('input', e => { S.cpsK = +e.target.value || 1; all(); });
+  $('ratioText').addEventListener('input', e => { S.ratioText = e.target.value; all(); });
+  const applyPreset = id => { S.rrPreset = id; sel.value = id; sel2.value = id; const p = RR_PRESETS.find(x => x.id === id); if (p.id !== 'custom') { S.a = p.a; S.i = p.i; S.b = p.b; S.j = p.j; ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).value = S[x.toLowerCase()]); } renderRecurrence(); renderSeed(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); };
+  sel.addEventListener('change', e => applyPreset(e.target.value));
+  sel2.addEventListener('change', e => { applyPreset(e.target.value); document.getElementById('fixedTable').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+  ['A', 'I', 'B', 'J'].forEach(x => $('rr' + x).addEventListener('input', e => { const v = Math.max(1, Math.round(+e.target.value || 1)); S[x.toLowerCase()] = v; if (S.i >= S.j) { if (x === 'I') S.j = S.i + 1; else S.i = Math.max(1, S.j - 1); $('rrI').value = S.i; $('rrJ').value = S.j; } S.rrPreset = 'custom'; sel.value = 'custom'; sel2.value = 'custom'; renderRecurrence(); renderSeed(); renderFixedTable(); S.fitPick = fixedBestRow; renderFixedTable(); renderFitTable(); renderFitPick(); updatePrompt(); }));
+  $('liftAuto').addEventListener('change', e => { S.liftAuto = e.target.checked; renderRecurrence(); renderSeed(); updatePrompt(); });
+  $('liftK').addEventListener('input', e => { S.liftK = Math.max(0, Math.round(+e.target.value || 0)); S.liftAuto = false; $('liftAuto').checked = false; renderRecurrence(); renderSeed(); updatePrompt(); });
+  $('liftRho').addEventListener('input', e => { S.rho = Math.max(0.05, +e.target.value || 1); renderRecurrence(); renderSeed(); updatePrompt(); });
+  $('seedPlace').addEventListener('change', e => { S.seedPlace = e.target.value; renderSeed(); updatePrompt(); });
+  const onSteps = e => { S.steps = +e.target.value; S.scrub = seeds.length + S.steps - 1; renderSeed(); updatePrompt(); };
+  $('steps').addEventListener('input', onSteps); $('steps2').addEventListener('input', onSteps);
+  $('win').addEventListener('input', e => { S.win = +e.target.value; $('winVal').textContent = S.win; renderSeed(); updatePrompt(); });
+  const onScrub = e => { S.scrub = +e.target.value; renderSeed(); updatePrompt(); };
+  $('scrub').addEventListener('input', onScrub); $('scrub2').addEventListener('input', onScrub);
+  $('tol').addEventListener('input', e => { S.tol = +e.target.value; $('tolVal').textContent = S.tol.toFixed(1); renderSeed(); updatePrompt(); });
+  $('fitTol').addEventListener('input', e => { S.fitTol = +e.target.value; $('fitTolVal').textContent = S.fitTol.toFixed(1); if (fitRows.length) { fitRows.forEach(r => { r.captured = r.type === 'ET' ? lattice.tones.filter(t => Math.abs(t.cents - Math.round(t.cents / r.g) * r.g) <= S.fitTol).length : chainPitchClasses(r.g, r.N, lattice.tones.map(t => t.cents), 60).map.filter(m => m.err <= S.fitTol).length; }); renderFitTable(); renderFitPick(); updatePrompt(); }  renderFixedTable(); });
+  $('maxN').addEventListener('input', e => { S.maxN = +e.target.value; $('maxNVal').textContent = S.maxN; renderFixedTable(); });
+  $('onlyMOS').addEventListener('change', e => { S.onlyMOS = e.target.checked; renderFitTable(); renderFixedTable(); });
+  $('showET').addEventListener('change', e => { S.showET = e.target.checked; renderFitTable(); });
+  $('fitRun').addEventListener('click', runFit);
+  $('fitMur').addEventListener('input', e => {
+    const r = S.fitPick; if (!r || r.s == null) return;
+    const s2 = -(+e.target.value); const latC = lattice.tones.map(t => t.cents);
+    const ch = chainAt(r.g, r.N, s2, latC);
+    S.fitPick = { ...r, key: r.key, s: s2, maxErr: ch.maxErr, meanErr: ch.map.reduce((p, m) => p + m.err, 0) / ch.map.length, captured: ch.map.filter(m => m.err <= S.fitTol).length, rotated: true };
+    renderFitPick(); updatePrompt();
+  });
+  $('copyBtn').addEventListener('click', () => {
+    const text = $('promptText').textContent;
+    const done = () => { $('copyNote').textContent = 'Copied.'; setTimeout(() => $('copyNote').textContent = '', 1500); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($('promptText')); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); $('copyNote').textContent = 'Text selected. Press copy.'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+  window.addEventListener('resize', () => { renderLattice(); renderRecurrence(); renderSeed(); renderFitPick(); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { renderLattice(); renderRecurrence(); renderSeed(); renderFitPick(); });
+
+  all();
+  renderFitPick();
+  runFit();
+})();
+</script>
+</body>
+</html>
