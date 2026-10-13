@@ -60,28 +60,38 @@ elsewhere). Treat me as a co-investigator extending Erv Wilson's program.
 - Work autonomously; batch decisions for me into gates and an end-of-stretch
   summary. Do not push without asking; commit freely on the branch.
 
+**Where this is going (Marcus, 2026-10-12).** Music no one has heard, coherent
+because it follows a model of how we hear pitch. Target object: the eikosany
+CPS(6,3) on ANY six seeds A–F, fitted by one generator into one MOS, with every
+embedded subset (dekanies, hexanies, tetrads) playable inside that same MOS.
+Triads (P and S first) are the objective, not tones: a chain that holds all 20
+tones and loses the triads is not a fit. Golden/noble generators are an
+aesthetic axis to keep in the search space, not the objective. Murchana is a
+control, not an axis. Inversion is a small fact about self-symmetric CPS, not a
+program. Path to the musician: Wilsonic (Scala export first).
+
 **Research questions, in priority order**
-1. Count objective (CPSFIT-003): DONE 2026-10-11. Open follow-ups: sweep the
-   20¢ tone cap (5, 10, 20) as a control, because the small-N optima sit on
-   the cap; and a transposition-free fit (chain origin floating), which
-   restores the CPS(n,k)/CPS(n,n−k) symmetry. Gate G-032 decides both.
-2. Golden fits: for each lattice, the golden (then silver) generator with the
-   smallest level that holds it at 2, 3, 5¢. How far is it from the free
-   optimum at that N? Is the near-coincidence of Erv's recurrence generators
-   with golden ones a general law (do the free optima also land near nobles)?
-3. Inversion: DONE 2026-10-11 (CPSFIT-003 P-C5). The reflection 1/L fits
-   identically at the mirrored window with P/S swapped. The partner
-   CPS(n,n−k) is the reflection TRANSPOSED by ∏F and gets different fits
-   under the pinned-origin model, so the search cannot be halved across
-   partners unless the fit becomes transposition-free. The page lists the
-   murchanas that hold the lattice by direct scan.
-4. Subsets: fit the 15 hexanies of the eikosany separately and jointly; which
-   chain holds the most subsets at once (subset-first doctrine)?
-5. Rank 3: two generators + octave; the D'Alessandro method on a general
-   seed. Start with the hexany and the 2-of-5 dekany.
-6. Quotient half-generator ties (an N-chain of g equals the 2N-chain of g/2).
-7. Hear it: the page exports Scala text; build the ear-check set for the
-   hexany at N=15, 19, 22, 31 and the best golden fit, for gates G-029/G-031.
+1. Triads as the objective on the page and on the eikosany: port the
+   CPSFIT-003 count search into the page's free search (count-optimal beside
+   tone-optimal); extend val/kernel code to 11-limit; run the count fit on the
+   eikosany (CPSFIT-004). Controls from G-032: tone-cap sweep (5, 10, 20¢) and
+   a transposition-free fit. Geometric triads as a possible third class.
+2. Eikosany + subsets jointly: score each embedded subset CPS (SUBSET-MEL-000
+   census) inside the candidate chain; which chain keeps the most triads in
+   the whole and in the most subsets.
+3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
+4. Golden as an aesthetic axis: family search scored by triad count; the
+   noble-vs-free trade-off per N; "noble only" vs "best triads" on the page;
+   needs ear evals.
+5. Erv's hand-found generators vs golden, thoroughly: every generator in the
+   archive (Meru pages, Fig 12, 1997 sheets, letters) against the nearest
+   golden/silver, with triad counts of both, figure-cited (read in place, ship
+   derived work only). Is "optimize P/S triads ⇒ noble" a law?
+6. Hear it: six chains are in Wilsonic's user Scala library (hexany N=15, 16,
+   18, 22×2; dekany N=26); gates G-029, G-031, G-032.
+7. Rank 3 (two generators + octave, D'Alessandro on a general seed) and the
+   half-generator tie quotient: lower priority until the rank-2 triad fits are
+   heard.
 
 **Playground improvements made 2026-10-11** (staircase chart with
 free/station-2/family/ET on one picture, hover and click; val + kernel per
