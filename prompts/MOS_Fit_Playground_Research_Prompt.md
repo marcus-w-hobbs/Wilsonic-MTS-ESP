@@ -89,9 +89,18 @@ program. Path to the musician: Wilsonic (Scala export first).
    derived work only). Is "optimize P/S triads ⇒ noble" a law?
 6. Hear it: six chains are in Wilsonic's user Scala library (hexany N=15, 16,
    18, 22×2; dekany N=26); gates G-029, G-031, G-032.
-7. Rank 3 (two generators + octave, D'Alessandro on a general seed) and the
-   half-generator tie quotient: lower priority until the rank-2 triad fits are
-   heard.
+7. Rank 3: RAN 2026-10-12 as RANK3-001 (brun3.py = port of the iOS Wilsonic
+   Brun3, Viggo Brun's three-term algorithm; runner rank3001.py). Hexany in
+   19 notes at 0.47¢ with 12/12 (65625/65536), 21 at 0.12¢ (2401/2400);
+   EG4 24/24 from N=19; dekany with 9 held in full at N=29 (schisma); the
+   eikosany (rank 5) stops at 12¢ with no val: three generators (Brun
+   four-term) are the next rung. Gate G-033. Lessons: register the COMMA,
+   never the generator pair (coordinates are not invariant); say which
+   survival count (mirror vs frozen) a clause uses; the frozen referee
+   counts created triads heavily at 15¢ error. Open follow-ups: rank-3
+   count objective, rank 4 for the eikosany, a Brun3 design in Wilsonic
+   MTS-ESP (plugin lane), a rank-3 station on the page.
+8. The half-generator tie quotient: still open, low priority.
 
 **Playground improvements made 2026-10-11** (staircase chart with
 free/station-2/family/ET on one picture, hover and click; val + kernel per

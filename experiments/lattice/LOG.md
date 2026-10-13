@@ -4434,3 +4434,95 @@ first run. Receipts `results/rank3001.jsonl` and
 `results/rank3001_summary.json`. Scala exports under `results/scl/rank3001/`
 for the hexany at N = 19 and N = 21 and the dekany at N = 29, offered for
 listening as a standing gate.
+
+## 2026-10-12 — RANK3-001 results + verdicts
+
+**Run:** `rank3001.py` (50 s with 8 worker processes. Receipts
+`results/rank3001.jsonl`, 122 rows = one per lattice and note count, plus
+`results/rank3001_summary.json`.) Frozen triads v1.1.0 (`score_tempered`,
+2 cents) and melodic v0.1.0 read-only, pins verified. Lattice suite
+388/388 green before the first run (8 tests for `brun3.py`, 10 for the
+runner). Four generator pairs on the grid are commensurable with the octave
+(600 with 450 cents, 900 with 300, 1050 with 450, 1050 with 750, all under
+A−C) and Brun3 runs out of intervals there. The runner skips and counts
+them. Every refined fit kept its Brun3 structure at the solution.
+
+- **P-R1 — REFUTED as registered on one clause, held on the rest.** Every
+  error bound holds and the runner improves on three: hexany N = 19 is
+  0.47 cents (registered 0.61), N = 24 is 0.24 (registered 0.46), N = 29 is
+  0.24 (registered 0.25). Every registered comma reproduces (225/224 at
+  N = 10 and 20, 1029/1024 at 15, 65625/65536 at 19, 2401/2400 at 21 and
+  27, 32805/32768 at 24 and 29). The first N within 2 cents is 19 and the
+  first N with all 12 triads is 19, as registered. The clause that fell:
+  at N = 20 the runner's optimum (699.384 and 693.772 cents) has the same
+  worst tone error as the scratch's (2.571 against 2.574 cents, a better
+  solution by 0.003 cents) and keeps 4 triads where the scratch's chain
+  kept 10. Tone minimax has ties at N = 20 and the tie-break is the error,
+  so a survival floor was not a prediction the objective could carry. The
+  error is the session's.
+- **P-R2 — KEPT.** EG4 reproduces every rung and comma, with N = 19 at
+  0.47 cents (24/24) and N = 24 at 0.24, and first full survival at N = 19.
+- **P-R3 — REFUTED as registered on the generator pair, held on the
+  rest.** The dekany with 9 reaches 41/41 at N = 29 under the schisma
+  32805/32768 at 0.651 cents (registered 0.66), and 25/41 at N = 21 under
+  1728/1715 at 3.27 cents. The runner's N = 29 scale uses the pair
+  (498.262, 27.047) cents, a fourth and a 27 cent step, where the scratch's
+  pair was (701.73, 64.0). The two scales are different (their closest
+  modes differ by 6.2 cents), both are schismatic, and the runner's is the
+  better one. A generator pair is a choice of coordinates on the
+  temperament and is not invariant, which is what the session told Marcus
+  the same day and then registered anyway. The comma is the invariant and
+  it held. The error is the session's.
+- **P-R4 — REFUTED as registered, held on the quantity the scratch
+  measured.** No Brun3 scale up to level 7 holds the eikosany within 10
+  cents. The best is 11.98 cents at N = 31, as registered. Survival by the
+  mirror (exact triads, |dev| < 2 and separation ≥ 2 cents) never exceeds
+  28 of 114, inside the registered 29. Survival by the frozen referee
+  reaches 59 of 114 at N = 28 and 58 at N = 22 and 24, because the frozen
+  scorer counts every triad among the 20 image pitch classes, and at 15
+  cents of tone error the tempering creates dozens that the lattice does
+  not have. The registration said "survival" and the runner's verdict
+  used the frozen number, so the clause fell. The scratch's number was the
+  mirror. Both are now on every row. The error is the session's.
+- **P-R5 — REFUTED as registered, held in substance.** Every winner at a
+  registered N is a val. At N = 10 and 20 (hexany) and N = 10 (EG4) the
+  kernel box holds two commas under 60 cents, 225/224 and its square
+  50625/50176. The kernel is rank 1 as the registration meant, and the
+  listing counts a multiple as a second comma. The error is the session's
+  wording.
+- **P-R6 — KEPT.** Every hexany fit within 3 cents is at level 7, and the
+  calc types at the registered N are as listed (A−C at N = 10 and 24, A−B
+  elsewhere).
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) New rungs
+the scratch missed: hexany N = 18 at 2.18 cents under 1728/1715 (4/12),
+N = 23 at 2.18 cents with no val (8/12), N = 22 at 1.34 under 6144/6125
+(10/12). (2) Hexany N = 26 keeps all 12 triads at 1.07 cents with NO val:
+a rank-3 accident, the first non-homomorphic fit in the program with full
+survival. Three generator pairs tie at that N ((424.78, 119.89),
+(424.78, 230.55), (775.22, 119.89)), which is the coordinate freedom of
+P-R3 again. (3) EG4 N = 31 at 4.30 cents tempers 81/80 alone: a meantone
+with 7 left free, which is the first time the syntonic comma appears in
+these fits. EG4 N = 18 tempers 875/864 (10/24). The dekany at N = 14
+tempers 49/48 (15.3 cents, 12/41). (4) The rank-2 and rank-3 ladders side
+by side for the hexany at 2 cents: rank 1 (ET) needs 73 notes, rank 2
+needs 22 (1.37 cents, 10/12), rank 3 needs 19 (0.47 cents, 12/12), rank 4
+is the hexany itself at 6 notes and zero error. Each rank buys one comma.
+(5) Every count-and-error winner at level 7 has three step sizes. The only
+two-step winners are the dekany at N = 30 and the eikosany at N = 29,
+neither of them a good fit. A rank-3 scale that holds a lattice is a
+three-interval pattern, not an MOS, which is what Brun's algorithm says it
+should be. (6) The eikosany stays at 12 to 16 cents from N = 22 up with no
+val anywhere, which is the rank-5 wall. Three generators are the next
+rung.
+
+**Kept.** Runner and receipts stand. `results/scl/rank3001/` holds the
+hexany N = 19 scale (1002.862 and 385.844 cents, 65625/65536), the hexany
+N = 21 scale (350.978 and 231.294 cents, 2401/2400) and the dekany N = 29
+scale (498.262 and 27.047 cents, the schisma), offered for listening as
+gate G-033.
+
+**Run receipt:** 2026-10-12, python3.12 — lattice suite 388/388 OK (18 new:
+test_brun3, test_rank3001), freeze checks A OK on both pins (scorer
+1a840af9…b592, melodic a16f162b…7535). Both receipts and the three .scl are
+bit-identical across two runs (`cmp`). Each run 50 s with 8 workers.
