@@ -4342,3 +4342,95 @@ of 41), offered for listening as gate G-032.
 test_cpsfit003), freeze checks A OK on both pins (scorer 1a840af9…b592,
 melodic a16f162b…7535). Both receipts and the three .scl are bit-identical
 across two runs (`cmp`). Each run 602 s.
+
+## 2026-10-12 — RANK3-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-12).** The iOS Wilsonic (Wilsonic_v_1_8_6,
+`Wilsonic/Brun/Brun3.m`, 2016) builds scales from the octave and TWO
+generators with Viggo Brun's three-term algorithm (Erv's "Viggo Rhythm"
+paper). Marcus did not port it to Wilsonic MTS-ESP for lack of time and
+asked whether it lets a smaller scale hold a larger just lattice. If it
+does, rank 3 is to be explored in full. This experiment measures that: for
+each note count N, the smallest largest-tone-error at which a Brun3 scale
+holds the lattice, the triads that survive, and the temperament each
+winning scale is.
+
+**The Brun3 construction (ported, to be a new file `brun3.py`).** Inputs
+O > G0 > G1 > 0 in octaves. Level 0 is the single interval O. At each level
+the three current intervals are sorted large to small. The largest A is
+replaced by A − B (calc type AB) or A − C (calc type AC). In the step list
+every copy of the old largest step is replaced by its two pieces, with the
+iOS "balance" rule: the second piece B goes first unless the previous step
+already equals B. Levels run to 7. Each step is tracked as an exact
+integer triple over (O, G0, G1), so every degree is an integer combination
+and a fitted lattice has a three-row val (octave, G0, G1 rows). Rank here counts the octave: a 7-limit
+lattice is rank 4 and a two-generator scale is rank 3 (octave-equivalently
+3 and 2, the convention of SPEC.md), so a rank-3 fit leaves exactly one
+comma in the kernel.
+The port reproduces the iOS header's example: (2/1, 3/2, 5/4) under AB
+gives levels of 1, 2, 3, 5, 7, 10, 15 and 22 notes, the 5-note level is
+1/1, 5/4, 4/3, 3/2, 15/8, and AC at level 5 gives 1/1, 16/15, 5/4, 4/3,
+3/2, 8/5, 15/8. Murchana (mode) rotates the scale to any degree.
+
+**Lattices.** Hexany CPS(4,2){1,3,5,7}, the EG4 tesseract (8 tones),
+dekany CPS(5,2){1,3,5,7,9}, and the eikosany CPS(6,3){1,3,5,7,9,11}
+(20 tones, 114 exact triads: 57 P + 57 S). The eikosany is rank 5, so no
+rank-3 scale can hold it exactly. It is included to measure how close
+two generators get and how many triads survive, which is the number
+Marcus cares about.
+
+**Search.** Objective: the largest circular tone error (tone minimax, as
+CPSFIT-001), with the lattice's 1/1 on a scale degree (the mode). Stage 1
+enumerates (g0, g1) on a 2 cent grid over 0 < g1 < g0 < 1200 cents, both
+calc types, levels 1 to 7, every mode, and keeps the best candidates per
+N. Stage 2 refines each candidate exactly: with the scale's coefficient
+structure, mode and nearest-degree assignment held fixed, the minimax over
+(g0, g1) is a Chebyshev linear program in two unknowns. The runner solves
+it exactly (vertex enumeration), subject to the ordering constraints that
+keep the Brun3 structure valid, and rejects a solution whose structure
+changes. Per fit: the three-row val by exact integer solve on the tones'
+monzos, the kernel comma (box |e3| ≤ 12, |e5| ≤ 6, |e7| ≤ 5, under 60
+cents, Tenney height ≤ 2^40), frozen image survival at 2 cents (P + S),
+the mirror's triad deviations, whether the scale has 2 or 3 step sizes,
+frozen melodic of the scale. Stdlib only, multiprocessing allowed,
+deterministic, two bit-identical runs. The scratch that produced the
+predictions used a 2 cent grid with a coordinate-descent refinement and
+no exactness guarantee, so the registered errors are UPPER bounds: the
+runner must find an error at most the registered value plus 0.05 cents
+at each listed N. A better optimum with a different comma refutes the
+comma clause.
+
+**Predictions (scratch sweep 2026-10-12, 2 cent grid, python3.11 with
+numpy; the frozen scorer referees survival).**
+- **P-R1 (hexany staircase and commas).** N: error ≤ (comma; survival at
+  2 cents). 10: 2.57 (225/224; 4/12). 15: 2.81 (1029/1024; 10/12). 19:
+  0.61 (65625/65536; 12/12). 20: 2.57 (225/224; 10/12). 21: 0.12
+  (2401/2400; 12/12). 24: 0.46 (32805/32768; 12/12). 27: 0.12 (2401/2400;
+  12/12). 29: 0.25 (32805/32768; 12/12). The first N within 2 cents is 19
+  (rank 2: 22) and the first N with all 12 triads is 19 (rank 2: 31 under
+  the tone fit, 22 under the triad fit). Survival is ≥ the listed value.
+- **P-R2 (EG4).** 10: 2.57 (225/224; 8/24). 15: 2.81 (1029/1024; 18/24).
+  19: 0.47 (65625/65536; 24/24). 21: 0.12 (2401/2400; 24/24). 24: 0.46
+  (32805/32768; 24/24). First full survival at N = 19 (rank 2: 23).
+- **P-R3 (dekany with 9).** 21: 3.27 (1728/1715; 25/41). 29: 0.66
+  (32805/32768; 41/41), with G0 a fifth of 701.73 cents and G1 of 64.0
+  cents. Rank 2 reached 37/41 at best below N = 37 and never 41. So the
+  schisma, tempered once, is what the dekany with 9 needs.
+- **P-R4 (eikosany).** No Brun3 scale up to level 7 (N ≤ 34) holds the
+  eikosany within 10 cents. The best is about 12 cents at N = 31, and
+  survival never exceeds 29 of 114 at any N ≤ 34. Two generators are not
+  enough for a rank-5 lattice. Three generators (Brun's four-term
+  algorithm) are the natural next step and are out of scope here.
+- **P-R5 (every winner is a val).** At every N listed in P-R1 to P-R3 the
+  optimum is homomorphic with exactly one kernel comma under 60 cents in
+  the box, and the comma is the one listed.
+- **P-R6 (depth).** Every hexany fit within 3 cents occurs at level 7, the
+  deepest level, and both calc types appear among the winners (AC at
+  N = 10 and 24, AB elsewhere).
+
+**Deliverables.** `brun3.py` (the port, stdlib) with tests pinned to the
+iOS example. `rank3001.py` and `tests/test_rank3001.py`, green before the
+first run. Receipts `results/rank3001.jsonl` and
+`results/rank3001_summary.json`. Scala exports under `results/scl/rank3001/`
+for the hexany at N = 19 and N = 21 and the dekany at N = 29, offered for
+listening as a standing gate.
