@@ -104,6 +104,15 @@ class TestRefine(unittest.TestCase):
 
 
 class TestGridColumn(unittest.TestCase):
+    def test_degenerate_pair_is_skipped_not_fatal(self):
+        # a commensurable pair makes Brun3 run out of intervals; the grid must skip it
+        with self.assertRaises(RuntimeError):
+            brun3.brun3_levels(1.0, 0.5, 0.375, "AC")   # 600 and 450 cents, both commensurable with the octave
+        tc = [c1.cents_of(t) for t in c1.LATTICES["hexany"]]
+        part = r3.grid_column((600.0, tc))
+        self.assertIn(-1, part)
+        self.assertGreaterEqual(len(part[-1]), 1)
+
     def test_one_column_has_small_n_entries(self):
         tc = [c1.cents_of(t) for t in c1.LATTICES["hexany"]]
         part = r3.grid_column((850.0, tc))

@@ -162,7 +162,12 @@ def grid_column(args) -> dict[int, list]:
     while j < g0c:
         g1 = j / CENTS
         for calc in brun3.CALCS:
-            lv = brun3.brun3_levels(1.0, g0, g1, calc)
+            try:
+                lv = brun3.brun3_levels(1.0, g0, g1, calc)
+            except RuntimeError:
+                # commensurable pair: the rank collapses and Brun3 runs out of intervals to split
+                best.setdefault(-1, []).append((0.0, g0c, j, calc, 0, 0))
+                continue
             for L in LEVELS:
                 steps = lv[L]
                 pcs = brun3.scale_cents(steps, 1.0, g0, g1, 0)
@@ -173,6 +178,8 @@ def grid_column(args) -> dict[int, list]:
                 lst.append((e, g0c, j, calc, L, m))
         j += GRID
     for n, lst in best.items():
+        if n == -1:
+            continue
         lst.sort()
         del lst[TOPK:]
     return best
@@ -181,13 +188,18 @@ def grid_column(args) -> dict[int, list]:
 def stage1(tones: list[float]) -> dict[int, list]:
     cols = [(g0c, tones) for g0c in _frange(2 * GRID, CENTS - GRID, GRID)]
     merged: dict[int, list] = {}
+    skipped = 0
     with Pool(WORKERS) as pool:
         for part in pool.imap(grid_column, cols, chunksize=4):
             for n, lst in part.items():
+                if n == -1:
+                    skipped += len(lst)
+                    continue
                 merged.setdefault(n, []).extend(lst)
     for n, lst in merged.items():
         lst.sort()
         del lst[TOPK:]
+    merged[-1] = skipped
     return merged
 
 
@@ -294,7 +306,10 @@ def solve_chebyshev(rows: list[tuple[float, float, float]], cons: list[tuple[flo
 def refine(tones: list[float], cand) -> dict | None:
     e0, g0c, g1c, calc, L, mode = cand
     g0, g1 = g0c / CENTS, g1c / CENTS
-    steps = brun3.brun3_levels(1.0, g0, g1, calc)[L]
+    try:
+        steps = brun3.brun3_levels(1.0, g0, g1, calc)[L]
+    except RuntimeError:
+        return None
     cons = structure_constraints(1.0, g0, g1, calc, L)
     cons_c = [(a * CENTS, b, c) for a, b, c in cons]     # in cents with x=g0c, y=g1c
     cur = (g0c, g1c)
@@ -318,7 +333,10 @@ def refine(tones: list[float], cand) -> dict | None:
         cur = (x, y)
     x, y = cur
     # validate the structure at the solution
-    steps2 = brun3.brun3_levels(1.0, x / CENTS, y / CENTS, calc)[L]
+    try:
+        steps2 = brun3.brun3_levels(1.0, x / CENTS, y / CENTS, calc)[L]
+    except RuntimeError:
+        return None
     if steps2 != steps:
         return None
     rot = rotated_degrees(steps, x / CENTS, y / CENTS, mode)
@@ -445,6 +463,7 @@ def fit_row(name: str, tones: tuple[Fraction, ...], tc: list[float], f: dict, rr
 def run_lattice(name: str, tones: tuple[Fraction, ...], rr_table) -> list[dict]:
     tc = [c1.cents_of(t) for t in tones]
     cands = stage1(tc)
+    skipped = cands.pop(-1, 0)
     rows = []
     for n in sorted(cands):
         fits = []
@@ -459,6 +478,7 @@ def run_lattice(name: str, tones: tuple[Fraction, ...], rr_table) -> list[dict]:
         row = fit_row(name, tones, tc, best, rr_table)
         row["n_candidates"] = len(cands[n])
         row["n_refined"] = len(fits)
+        row["grid_pairs_skipped_degenerate"] = skipped
         row["runners_up"] = [{"eps": f["eps"], "g0_cents": f["g0_cents"], "g1_cents": f["g1_cents"],
                               "calc": f["calc"], "level": f["level"], "mode": f["mode"]} for f in fits[1:4]]
         rows.append(row)
