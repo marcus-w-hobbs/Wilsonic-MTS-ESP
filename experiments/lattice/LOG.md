@@ -4402,18 +4402,18 @@ comma clause.
 
 **Predictions (scratch sweep 2026-10-12, 2 cent grid, python3.11 with
 numpy; the frozen scorer referees survival).**
-- **P-R1 (hexany staircase and commas).** N: error ≤ (comma; survival at
-  2 cents). 10: 2.57 (225/224; 4/12). 15: 2.81 (1029/1024; 10/12). 19:
-  0.61 (65625/65536; 12/12). 20: 2.57 (225/224; 10/12). 21: 0.12
-  (2401/2400; 12/12). 24: 0.46 (32805/32768; 12/12). 27: 0.12 (2401/2400;
-  12/12). 29: 0.25 (32805/32768; 12/12). The first N within 2 cents is 19
+- **P-R1 (hexany staircase and commas).** N: error ≤ (comma, survival at
+  2 cents). 10: 2.57 (225/224, 4/12). 15: 2.81 (1029/1024, 10/12). 19:
+  0.61 (65625/65536, 12/12). 20: 2.57 (225/224, 10/12). 21: 0.12
+  (2401/2400, 12/12). 24: 0.46 (32805/32768, 12/12). 27: 0.12 (2401/2400;
+  12/12). 29: 0.25 (32805/32768, 12/12). The first N within 2 cents is 19
   (rank 2: 22) and the first N with all 12 triads is 19 (rank 2: 31 under
   the tone fit, 22 under the triad fit). Survival is ≥ the listed value.
-- **P-R2 (EG4).** 10: 2.57 (225/224; 8/24). 15: 2.81 (1029/1024; 18/24).
-  19: 0.47 (65625/65536; 24/24). 21: 0.12 (2401/2400; 24/24). 24: 0.46
-  (32805/32768; 24/24). First full survival at N = 19 (rank 2: 23).
-- **P-R3 (dekany with 9).** 21: 3.27 (1728/1715; 25/41). 29: 0.66
-  (32805/32768; 41/41), with G0 a fifth of 701.73 cents and G1 of 64.0
+- **P-R2 (EG4).** 10: 2.57 (225/224, 8/24). 15: 2.81 (1029/1024, 18/24).
+  19: 0.47 (65625/65536, 24/24). 21: 0.12 (2401/2400, 24/24). 24: 0.46
+  (32805/32768, 24/24). First full survival at N = 19 (rank 2: 23).
+- **P-R3 (dekany with 9).** 21: 3.27 (1728/1715, 25/41). 29: 0.66
+  (32805/32768, 41/41), with G0 a fifth of 701.73 cents and G1 of 64.0
   cents. Rank 2 reached 37/41 at best below N = 37 and never 41. So the
   schisma, tempered once, is what the dekany with 9 needs.
 - **P-R4 (eikosany).** No Brun3 scale up to level 7 (N ≤ 34) holds the
