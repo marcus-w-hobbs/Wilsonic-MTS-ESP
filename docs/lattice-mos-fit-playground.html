@@ -271,11 +271,11 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="note">A golden generator is one whose scale-tree path alternates forever from some point. Its levels then grow like Fibonacci numbers and the step ratio L : s tends to φ. Erv listed 64 of them in 1993. The formula is g = (a + φc) / (b + φd) for the two path fractions a/b and c/d where the alternation starts. Silver uses 1 + √2 in place of φ, so the path turns every two steps: Erv's "2-zig/2-zag". Bronze uses (3 + √13) / 2. Equal temperaments are the paths that stop. This search tries every such generator up to a seed denominator bound and reports the first level that holds the lattice.</p>
       <div class="row" style="align-items:end">
         <label class="field" style="flex:1 1 160px"><span class="lbl">Family</span><select id="famSel"><option value="1">Golden (φ)</option><option value="2">Silver (1 + √2)</option><option value="3">Bronze ((3 + √13)/2)</option><option value="et">Equal temperaments</option></select></label>
-        <label class="field" style="flex:1 1 160px"><span class="lbl">Seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Complexity: seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
         <button id="famRun" class="primary" style="flex:0 0 auto">Run the family search</button>
       </div>
-      <p class="note" id="famStatus">Press Run. Golden with denominators up to 36 tries about 800 generators.</p>
-      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
+      <p class="note" id="famStatus">Press Run. Golden with complexity up to 36 tries about 400 generators. Complexity is the smallest seed denominator pair that makes the generator, so the simple nobles come first.</p>
+      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>complexity</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
       <h3>Free search: best generator for each N</h3>
       <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
     </div>
@@ -301,15 +301,19 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
 
 <!-- ───────── NEXT ───────── -->
 <section class="station research" id="next">
-  <div class="station-head"><div class="num">OPTIONS</div><h2>Next lines of research</h2></div>
+  <div class="station-head"><div class="num">OPTIONS</div><h2>Next lines of research</h2>
+  <p class="note"><b>Where this is going.</b> The goal is music that no one has heard, and that still makes sense because it follows a model of how we hear pitch. The target object is the eikosany: a CPS(6, 3) on any six seeds A to F, fitted by one generator into one MOS. Every subset the eikosany contains (its dekanies, hexanies and tetrads) must be playable inside that same MOS. The fit must keep the triads, proportional and subcontrary first, and not only the tones. A chain that holds all 20 tones and loses the triads is not a fit. The path to the musician is Wilsonic: Scala export first, a design later.</p></div>
   <ol>
-    <li><b>Count the triads instead of the worst one: done (CPSFIT-003).</b> The count fits are station 2 presets. Open follow-ups: sweep the 20 cent tone cap (5, 10, 20) as a control, because the small-N optima sit on the cap, and let the chain origin float (a transposition-free fit), which restores the CPS(n, k) and CPS(n, n − k) symmetry. Gate G-032 decides both.</li>
-    <li><b>Rank 3.</b> Search two generators and a note count, and keep the lattice within tolerance. The hexany, the dekany and the eikosany need this below N = 22. This is the D'Alessandro method applied to a general seed.</li>
-    <li><b>Fit the subsets.</b> Fit each hexany inside the eikosany separately, then ask which chain holds the most of the fifteen at once. The subset doctrine says the music lives in the subsets.</li>
+    <li><b>Triads are the objective.</b> CPSFIT-003 made the count of surviving proportional and subcontrary triads the objective and it changed the answer at every N below full survival. Next: bring that search onto this page, so the free search reports the count-optimal chain beside the tone-optimal one. Then run it on the eikosany. That lattice has 20 tones and uses the prime 11, so the mapping and kernel code must grow from 7-limit to 11-limit. Open controls from gate G-032: a sweep of the 20 cent tone cap (5, 10, 20), and a fit that lets the chain origin float. Geometric triads are a possible third class to count.</li>
+    <li><b>Fit the eikosany and its subsets at once.</b> Score each embedded subset CPS inside the candidate chain. The SUBSET-MEL-000 census lists those subsets. Then ask which chain keeps the most triads in the whole and in the most subsets. The subset doctrine says the music lives in the subsets, so a chain that holds the eikosany but breaks its hexanies fails the musician.</li>
+    <li><b>Any seeds, any generator.</b> The page already takes a custom CPS and a custom generator. The fit must stay exact for six arbitrary seeds. That means primes beyond 7 in the val and kernel, and a search that scales to 20 tones.</li>
+    <li><b>Golden as an aesthetic axis, triads as the objective.</b> Run the golden and silver family search with the triad count as its score. Report the trade-off: how many triads a noble generator gives up against the free optimum at the same N. A noble chain looks the same at every level, which is a musical quality of its own. So the page should let a musician choose "noble only" or "best triads" and hear both. This needs ear evaluations.</li>
+    <li><b>Erv's hand-found generators against the golden ones, thoroughly.</b> Erv found his recurrence generators by optimizing proportional and subcontrary triads by hand. The first five measured sit 0.07 to 0.61 cents from golden generators. Measure every generator in the archive against the nearest golden and silver generator, with the triad counts of both. The archive means the Meru pages, Fig 12, the 1997 sheets and the letters, and each figure is cited. The question is whether optimizing for these triads lands on noble numbers as a law. If it does, golden becomes a search space and not only an aesthetic.</li>
+    <li><b>Hear the fits.</b> Six chains sit in Wilsonic's user Scala library. They are the hexany at N = 15, 16, 18 and 22 (two versions) and the dekany at N = 26. Gates G-029, G-031 and G-032 wait on the ear. The count chains ask one question from two sides. Do ten triads with one tone out at 5 cents sound better than six triads at 4.8 cents?</li>
+    <li><b>Murchana is a control, not an axis.</b> It gives the fit one more degree of freedom and names the mode. The page keeps the slider and the list of murchanas that hold the lattice. It gets no research line of its own.</li>
+    <li><b>Inversion, kept small.</b> For the self-symmetric CPS (hexany, eikosany, CPS(8, 4)) a generator below the fifth and its complement fit the same lattice up to a transposition. The page states this and the transposition caveat. It halves no search across CPS(n, k) and CPS(n, n − k) unless the fit becomes transposition-free.</li>
+    <li><b>Rank 3.</b> One generator and the octave is rank 2. A 7-limit lattice needs rank 4 to be exact, so a rank-2 chain holds it only with error or at a large N. Two generators and the octave (rank 3) is the next step, and it is the D'Alessandro method applied to a general seed. Lower priority until the rank-2 triad fits are heard.</li>
     <li><b>Quotient the ties.</b> When an N-chain of g holds the lattice, the 2N-chain of g/2 holds it too with the same errors. Report one representative per family so the staircase reads cleanly.</li>
-    <li><b>Golden and silver fits (new).</b> For each lattice, find the golden generator with the smallest level that holds it. Compare that level with the free search. If a golden generator holds the lattice at a level close to the free optimum, the fit is both harmonic and self-similar. That is the whole point.</li>
-    <li><b>Hear the fits.</b> Export the selected chain as Scala text, load it in the plugin, and listen to the lattice tones inside the chain. Gates G-029 and G-031 wait on this for the hexany at N = 15 and N = 22.</li>
-    <li><b>Murchana as a performance control.</b> A chain that holds the lattice at one murchana holds a transposed copy of it at the others. Map the murchana to a controller and play the lattice through its modes.</li>
   </ol>
 </section>
 
@@ -592,22 +596,28 @@ function chainPitchClasses(gCents, N, toneCents, capErr) {
 const ERV64 = [0.116035754,0.131267463,0.151102276,0.156691527,0.174715006,0.177998211,0.185805707,0.189523403,0.209053800,0.211702633,0.216542364,0.218332091,0.226253492,0.228208068,0.23384192,0.237161141,0.261642996,0.264308496,0.268556819,0.269955516,0.275266748,0.276393202,0.279315664,0.280842977,0.290757565,0.292412942,0.295685999,0.296986167,0.303426964,0.305213671,0.310892842,0.314663487,0.351012952,0.354358386,0.359265392,0.360777441,0.366106828,0.367160193,0.369779544,0.371086935,0.378682506,0.379818019,0.381966011,0.382785383,0.386586030,0.387570050,0.390516909,0.392334277,0.407971249,0.409955117,0.413253661,0.414378320,0.418835878,0.419821271,0.422447117,0.423860750,0.433799266,0.435599642,0.439291419,0.440808884,0.448791122,0.451153118,0.459137199,0.464877942];
 function metallicMean(m) { return (m + Math.sqrt(m * m + 4)) / 2; }
 function nobleCandidates(m, qMax) {
-  // Farey neighbours a/b < c/d with denominators <= qMax, both orders:
-  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path
-  // alternates m-to-a-side forever from that pair (m = 1 golden, 2 silver, 3 bronze).
+  // Every unimodular pair a/b, c/d (|bc - ad| = 1, denominators <= qMax), both orders:
+  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path alternates
+  // forever from that pair (m = 1 golden, 2 silver, 3 bronze). Each g is kept once with
+  // its COMPLEXITY, the smallest max(b, d) over the pairs that generate it: the seed pair
+  // where the alternation starts. (GOLD-002, 2026-10-13: the earlier version used only
+  // neighbours at the deepest Farey level and labelled every noble with qMax.)
   const mu = metallicMean(m);
-  const fr = [];
-  for (let q = 1; q <= qMax; q++) for (let p = 0; p <= q; p++) if (gcd(p, q) === 1) fr.push([p, q]);
-  fr.sort((x, y) => x[0] * y[1] - y[0] * x[1]);
   const out = new Map();
-  for (let i = 0; i + 1 < fr.length; i++) {
-    const [a, b] = fr[i], [c, d] = fr[i + 1];
-    if (b * c - a * d !== 1) continue;
-    for (const [x, y] of [[fr[i], fr[i + 1]], [fr[i + 1], fr[i]]]) {
-      const g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
-      if (g <= 0 || g >= 0.5 + 1e-12) continue;
-      const key = g.toFixed(9);
-      if (!out.has(key)) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+  for (let b = 1; b <= qMax; b++) for (let d = 1; d <= qMax; d++) for (let a = 0; a <= b; a++) {
+    if (gcd(a, b) !== 1) continue;
+    for (const sgn of [1, -1]) {
+      const num = a * d + sgn;
+      if (num % b !== 0) continue;
+      const c = num / b;
+      if (c < 0 || c > d || gcd(c, d) !== 1) continue;
+      for (const [x, y] of [[[a, b], [c, d]], [[c, d], [a, b]]]) {
+        let g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
+        if (g > 0.5) g = 1 - g;             // g and 1 - g make the same chains
+        if (g <= 0 || g > 0.5) continue;
+        const key = g.toFixed(9), cx = Math.max(x[1], y[1]);
+        if (!out.has(key) || cx < out.get(key).complexity) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, complexity: cx, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+      }
     }
   }
   return [...out.values()].sort((p, q) => p.g - q.g);
@@ -937,7 +947,7 @@ if (typeof document !== 'undefined') (function () {
             if (!best || row.maxErr < best.maxErr) best = row;
           }
           const row = first || best; if (!row) continue;
-          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, erv64: c.erv64, firstN: first ? first.N : null });
+          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, complexity: c.complexity, erv64: c.erv64, firstN: first ? first.N : null });
         }
       }
       famRows.sort((p, q) => (p.firstN == null ? 1 : 0) - (q.firstN == null ? 1 : 0) || (p.firstN != null ? p.firstN - q.firstN : p.maxErr - q.maxErr) || p.maxErr - q.maxErr);
@@ -951,7 +961,7 @@ if (typeof document !== 'undefined') (function () {
     const tb = $('famTable').querySelector('tbody'); tb.innerHTML = '';
     for (const r of famRows.slice(0, 200)) {
       const tr = document.createElement('tr'); tr.className = 'sel' + (r.firstN != null ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
-      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
+      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td class="num">${r.complexity == null ? '—' : r.complexity}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
       const btn = document.createElement('button'); btn.textContent = 'Use in station 2'; btn.addEventListener('click', ev => { ev.stopPropagation(); S.gen = r.gOct; S.genPreset = 'custom'; $('genPreset').value = 'custom'; genChanged(); document.getElementById('generator').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
       tr.lastElementChild.appendChild(btn);
       tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFamTable(); renderFixedTable(); renderFitTable(); updatePrompt(); });

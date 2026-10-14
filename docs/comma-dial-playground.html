@@ -1,0 +1,1078 @@
+<title>Comma Dial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of numbered stations, each a controls|preview grid; graph-paper ground like Erv's notebook pages. Same tokens as lattice-mos-fit-playground.html, plus three dial colors. */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;        /* melody / scale degrees */
+  --accent-soft: rgba(12,111,104,0.12);
+  --harm: #b2671a;          /* harmony / lattice tones */
+  --harm-soft: rgba(178,103,26,0.14);
+  --ok: #2d7a3a;
+  --warn: #a8402f;
+  --c1: #0c9489;            /* dial 1 */
+  --c2: #7a4fb5;            /* dial 2 */
+  --c3: #b03a6a;            /* dial 3 */
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+    --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+    --c1: #0fa394; --c2: #8f72c8; --c3: #d0668f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+  --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+  --c1: #0fa394; --c2: #8f72c8; --c3: #d0668f;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 12px 40px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 14px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+header { display: grid; gap: 6px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+nav a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+nav a:hover, nav a:focus-visible { border-bottom-color: var(--accent); outline: none; }
+section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 10px; }
+.station-head { display: grid; gap: 3px; }
+.station-head .num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+.cols { display: grid; grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.controls { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.preview { display: grid; gap: 8px; min-width: 0; align-content: start; }
+label.field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+label.field > span.lbl { font-weight: 500; }
+select, input[type=text], input[type=number], textarea {
+  font: 14px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; min-width: 0;
+}
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+.row > * { flex: 1 1 90px; min-width: 0; }
+.val { font-family: var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+button { font: 500 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.small { padding: 3px 8px; font-size: 12px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { border-top: 2px solid var(--line); padding-top: 4px; min-width: 0; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.stat .v { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat.harm { border-top-color: var(--harm); }
+.stat.mel { border-top-color: var(--accent); }
+.stat.good .v { color: var(--ok); }
+.stat.bad .v { color: var(--warn); }
+.stat.big .v { font-size: 26px; font-family: var(--font-display); }
+.stat.wide { grid-column: 1 / -1; }
+.stat.wide .v { font-size: 13px; white-space: normal; }
+canvas { width: 100%; height: auto; max-height: 50vh; display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); }
+.note.warn { color: var(--warn); }
+.note.ok { color: var(--ok); }
+.facts { display: grid; gap: 8px; counter-reset: fact; font-size: 14px; }
+.fact { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.fact::before { counter-increment: fact; content: counter(fact); font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 2px; }
+.fact p { max-width: 75ch; }
+.fact .src { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: top; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--font-mono); }
+td.wrapcell { white-space: normal; min-width: 180px; }
+tr.hit td { background: var(--accent-soft); }
+tr.pick td { outline: 2px solid var(--accent); outline-offset: -2px; }
+tr.sel { cursor: pointer; }
+tr.sel:hover td { background: var(--harm-soft); }
+tr.lost td { color: var(--warn); }
+.tablewrap { overflow-x: auto; max-height: 260px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 10px; border: 1px solid var(--line); color: var(--muted); }
+.pill.ok { color: var(--ok); border-color: var(--ok); }
+.pill.warn { color: var(--warn); border-color: var(--warn); }
+.pill.harm { color: var(--harm); border-color: var(--harm); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend .l-harm::before { background: var(--harm); }
+.legend .l-mel::before { background: var(--accent); }
+.legend .l-root::before { background: transparent; border: 2px solid var(--harm); width: 8px; height: 8px; }
+.legend .l-ghost::before { background: transparent; border: 1px dashed var(--muted); width: 8px; height: 8px; }
+.legend .l-c1::before { background: var(--c1); }
+.legend .l-c2::before { background: var(--c2); }
+.legend .l-c3::before { background: var(--c3); }
+.legend .l-ji::before { background: var(--muted); width: 2px; height: 12px; border-radius: 0; }
+.prompt { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; line-height: 1.5; min-width: 0; }
+blockquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--harm); background: var(--harm-soft); font-family: var(--font-display); font-size: 16px; line-height: 1.45; max-width: 78ch; border-radius: 0 4px 4px 0; }
+blockquote footer { font-family: var(--font-body); font-size: 12px; color: var(--muted); margin-top: 6px; }
+.slot { border: 1px solid var(--line); border-left-width: 4px; border-radius: 4px; padding: 8px 10px; display: grid; gap: 6px; background: var(--bg); }
+.slot.s1 { border-left-color: var(--c1); } .slot.s2 { border-left-color: var(--c2); } .slot.s3 { border-left-color: var(--c3); }
+.slot .top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.slot .top .name { font-family: var(--font-mono); color: var(--fg); font-weight: 500; }
+.slot .btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.slot input[type=range] { accent-color: var(--fg); }
+.slot.s1 input[type=range] { accent-color: var(--c1); } .slot.s2 input[type=range] { accent-color: var(--c2); } .slot.s3 input[type=range] { accent-color: var(--c3); }
+.rankbox { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
+code { font-family: var(--font-mono); font-size: 0.92em; }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color 120ms; } }
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Comma Dial</h1>
+  <p class="lede">Start from a just lattice. Each prime is a generator. Turn a dial to make a comma vanish. Two directions of the lattice become one direction. The rank drops by one. A scale closes. Built for Marcus Hobbs from his own explanation, on the hexany first.</p>
+  <nav>
+    <a href="#idea">The idea</a><a href="#lattice">1 Lattice</a><a href="#commas">2 Commas</a><a href="#dial">3 The dial</a><a href="#closes">4 What closes</a><a href="#receipts">5 Receipts</a><a href="#facts">Background</a><a href="#prompt">Prompt</a>
+  </nav>
+</header>
+
+<!-- ───────── THE IDEA ───────── -->
+<section class="station" id="idea">
+  <div class="station-head"><div class="num">THE IDEA</div><h2>Each rank buys one comma</h2></div>
+  <blockquote>A generator per prime is just intonation itself. The hexany's lattice has four independent directions when you count the octave: 2, 3, 5 and 7. If every prime gets its own generator you have four generators, no error, no coincidences, and no two-step or three-step melody, because the scale never closes. Every time you temper one comma you fuse two of those directions into one and drop the rank by one, and that is where the melodic structure comes from. So the dial you are turning is how many commas vanish. Rank 4 is JI with zero commas. Rank 3 is two generators with one comma. Rank 2 is one generator with two commas. Rank 1 is equal temperament with three commas.<footer>The explanation this page is built on. Session of 2026-10-12, after RANK3-001.</footer></blockquote>
+  <p class="note">Station 1 shows the lattice with one generator per prime. Station 2 lists the commas. Station 3 is the dial. Station 4 shows the scales that close at each rank. Station 5 is the table of measured results. The page computes every number live from the monzos, except the receipts in station 5.</p>
+</section>
+
+<!-- ───────── 1 LATTICE ───────── -->
+<section class="station" id="lattice">
+  <div class="station-head"><div class="num">STATION 1</div><h2>One generator per prime is just intonation</h2>
+  <p class="note">Each tone is a product of primes. Its monzo lists the exponent of each prime. To reach the tone, walk that many steps along each prime axis. The primes are the generators. The rank is the number of independent generators.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <label class="field"><span class="lbl">Lattice</span>
+        <select id="latSel">
+          <option value="ptolemy">Ptolemy's just major (5-limit, 7 tones)</option>
+          <option value="hexany" selected>Hexany CPS(4,2) on 1·3·5·7 (6 tones)</option>
+          <option value="eg4">Euler genus 4 on 1·3·5·7 (8 tones)</option>
+        </select></label>
+      <p class="note" id="latNote"></p>
+      <div class="stats">
+        <div class="stat harm big"><div class="k">rank, with the octave</div><div class="v" id="latRank">4</div></div>
+        <div class="stat harm"><div class="k">rank, octave-equivalent</div><div class="v" id="latRankOE">3</div></div>
+        <div class="stat harm"><div class="k">generators</div><div class="v" id="latGens">2, 3, 5, 7</div></div>
+        <div class="stat harm"><div class="k">tones</div><div class="v" id="latCount">6</div></div>
+        <div class="stat harm"><div class="k">exact triads P / S</div><div class="v" id="latTriads">6 / 6</div></div>
+        <div class="stat harm"><div class="k">commas vanished</div><div class="v">0</div></div>
+      </div>
+      <p class="note">Two ways to count the rank. With the octave, the hexany is rank 4: generators 2, 3, 5 and 7. Octave-equivalent, it is rank 3: generators 3, 5 and 7, with pitch classes on a circle. The repo's SPEC.md counts octave-equivalent. This page counts with the octave, so that equal temperament is rank 1.</p>
+      <p class="note">Just intonation never closes. Each new step of 3, 5 or 7 lands on a new pitch class. No finite scale contains the lattice and all its transpositions. So there is no MOS, no two-step pattern and no three-step pattern. The error is zero. The price is the open lattice.</p>
+    </div>
+    <div class="preview">
+      <canvas id="latCanvas" width="760" height="340"></canvas>
+      <div class="legend"><span class="l-harm">lattice tone</span><span class="l-root">1/1, the root</span><span class="l-ghost">lattice point that is not a tone</span><span>lines: one step of a prime</span></div>
+      <div class="tablewrap" style="max-height:220px"><table id="monzoTable"><thead><tr><th>tone</th><th>cents</th><th id="monzoHead">monzo 2 · 3 · 5 · 7</th><th>walk from 1/1</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 2 COMMAS ───────── -->
+<section class="station" id="commas">
+  <div class="station-head"><div class="num">STATION 2</div><h2>A comma is two routes to almost the same note</h2>
+  <p class="note">A comma is a lattice vector with a small pitch. Its positive exponents are one route. Its negative exponents are the other route. The two routes end a few cents apart. When the comma vanishes, the two ends are one note. Select a row to draw the comma on the lattice. Press Add to put it on the dial.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <p class="note">The list holds every comma under 60 cents. The box is |e3| ≤ 12, |e5| ≤ 6, |e7| ≤ 5. The Tenney height is at most 2<sup>40</sup>. The page leaves out powers of a smaller comma. <span id="commaCount"></span></p>
+      <label class="field"><span class="lbl">Show commas up to (cents) <span class="val" id="commaMaxVal">60</span></span><input type="range" id="commaMax" min="5" max="60" step="1" value="60"></label>
+      <h3>Selected comma</h3>
+      <p class="note" id="commaWords">Select a comma.</p>
+      <div class="row"><button id="commaAdd" class="primary" style="flex:0 0 auto">Add to the dial</button><span class="note" id="commaAddNote"></span></div>
+    </div>
+    <div class="preview">
+      <canvas id="commaCanvas" width="760" height="300"></canvas>
+      <div class="legend"><span class="l-c1">up route and its end</span><span class="l-c2">down route and its end</span><span>arrow: the comma</span></div>
+      <div class="tablewrap"><table id="commaTable"><thead><tr><th>comma</th><th>cents</th><th>monzo</th><th>up route</th><th>down route</th><th>name</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 3 THE DIAL ───────── -->
+<section class="station" id="dial">
+  <div class="station-head"><div class="num">STATION 3</div><h2>The dial: make a comma vanish</h2>
+  <p class="note">Each slot holds one comma and one slider. At 0 the comma is intact and the tuning is just. At 1 the comma is gone. Between 0 and 1 the comma shrinks and the tones move. The rank is discrete. It drops only when a slider reaches 1. Up to three independent commas can go.</p></div>
+  <div class="cols">
+    <div class="controls">
+      <div class="presets" id="presets"></div>
+      <div id="slots"></div>
+      <label class="field"><span class="lbl">Tuning rule</span>
+        <select id="ruleSel">
+          <option value="tones" selected>Smallest largest error over the lattice tones, octave pure</option>
+          <option value="primes">Smallest largest error over the primes, octave pure</option>
+          <option value="fifth">Octave pure and fifth pure, then smallest largest error over the other primes</option>
+        </select></label>
+      <p class="note">The rule says how the comma's error is shared among the primes. The default matches the receipts in station 5. The prime rule is the usual minimax. The third rule keeps 3/2 pure when the commas permit it.</p>
+      <label class="field"><span class="lbl">Tolerance for a scale and for a triad (cents) <span class="val" id="tolVal">2.0</span></span><input type="range" id="tol" min="0.5" max="10" step="0.5" value="2"></label>
+    </div>
+    <div class="preview">
+      <div class="rankbox">
+        <div class="stat harm big" id="rankStat"><div class="k">rank now</div><div class="v">4</div></div>
+        <div class="stat harm" id="rankNext"><div class="k">commas gone / shrinking</div><div class="v">0 / 0</div></div>
+        <div class="stat harm" id="triadStat"><div class="k">triads kept P / S</div><div class="v">6 / 6</div></div>
+        <div class="stat harm" id="errStat"><div class="k">largest tone error</div><div class="v">0.00¢</div></div>
+      </div>
+      <canvas id="dialLattice" width="760" height="340"></canvas>
+      <p class="note">The lattice flattens along the comma. Points that differ by the comma slide together. At 1 they are one point and the lattice has one direction less.</p>
+      <canvas id="rulerCanvas" width="760" height="170"></canvas>
+      <div class="legend"><span class="l-ji">just position</span><span class="l-harm">tone now</span><span class="l-c1">dial 1 routes</span><span class="l-c2">dial 2 routes</span><span class="l-c3">dial 3 routes</span></div>
+      <p class="note" id="rankNote"></p>
+      <h3>Generators now</h3>
+      <div class="tablewrap" style="max-height:200px"><table id="genTable"><thead><tr><th>prime</th><th>just cents</th><th>tempered cents</th><th>error</th><th id="genMapHead">as a sum of the generators</th></tr></thead><tbody></tbody></table></div>
+      <p class="note" id="genNote"></p>
+      <div class="tablewrap" style="max-height:200px"><table id="toneTable"><thead><tr><th>tone</th><th>just</th><th>now</th><th>error</th></tr></thead><tbody></tbody></table></div>
+      <h3>Triads</h3>
+      <p class="note">A proportional triad has a middle tone at the arithmetic mean of the outer two frequencies, like 4:5:6. A subcontrary triad has a middle tone at the harmonic mean, like 10:12:15. The hexany has 6 of each. A triad survives when the tempered middle tone sits within the tolerance of its mean.</p>
+      <div class="tablewrap" style="max-height:220px"><table id="triadTable"><thead><tr><th>kind</th><th>triad</th><th>middle to its mean, cents</th><th>status</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 4 WHAT CLOSES ───────── -->
+<section class="station" id="closes">
+  <div class="station-head"><div class="num">STATION 4</div><h2>What closes now</h2>
+  <p class="note" id="closeLead"></p></div>
+  <div class="cols">
+    <div class="controls">
+      <div class="stats" id="closeStats"></div>
+      <p class="note" id="closeNote"></p>
+      <div id="closeControls"></div>
+    </div>
+    <div class="preview">
+      <canvas id="scaleCanvas" width="760" height="110"></canvas>
+      <p class="note" id="scalePickNote"></p>
+      <div id="closeTables"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 5 RECEIPTS ───────── -->
+<section class="station" id="receipts">
+  <div class="station-head"><div class="num">STATION 5</div><h2>What the receipts measured for the hexany</h2>
+  <p class="note">These rows come from the experiment logs. The page does not recompute them. Tolerance 2 cents. Triads are the exact proportional and subcontrary triads of the hexany, 12 in all. Each rank buys one comma. Each comma buys a smaller scale and costs some triads.</p></div>
+  <div class="tablewrap" style="max-height:none">
+    <table>
+      <thead><tr><th>rank</th><th>commas gone</th><th>generators</th><th>smallest scale</th><th>error</th><th>triads kept</th><th>source</th></tr></thead>
+      <tbody>
+        <tr><td class="num">4</td><td>none</td><td>2, 3, 5, 7</td><td class="num">6 notes, the hexany itself</td><td class="num">0</td><td class="num">12 of 12</td><td>never closes</td></tr>
+        <tr><td class="num">3</td><td class="num">225/224</td><td>octave + two</td><td class="num">10 notes, three step sizes</td><td class="num">2.57¢</td><td class="num">4 of 12</td><td>RANK3-001, 2026-10-12</td></tr>
+        <tr><td class="num">3</td><td class="num">1029/1024</td><td>octave + two</td><td class="num">15 notes</td><td class="num">2.81¢</td><td class="num">10 of 12</td><td>RANK3-001</td></tr>
+        <tr><td class="num">3</td><td class="num">65625/65536</td><td>octave + two</td><td class="num">19 notes</td><td class="num">0.47¢</td><td class="num">12 of 12</td><td>RANK3-001</td></tr>
+        <tr><td class="num">3</td><td class="num">2401/2400</td><td>octave + two</td><td class="num">21 notes</td><td class="num">0.12¢</td><td class="num">12 of 12</td><td>RANK3-001</td></tr>
+        <tr><td class="num">3</td><td class="num">32805/32768</td><td>octave + two</td><td class="num">24 notes</td><td class="num">0.24¢</td><td class="num">12 of 12</td><td>RANK3-001</td></tr>
+        <tr><td class="num">2</td><td class="num">2401/2400, 3136/3125</td><td>octave + 193.787¢ (3→16, 5→2, 7→5)</td><td class="num">22 notes</td><td class="num">1.37¢</td><td class="num">10 of 12</td><td>CPSFIT-001, 2026-10-10</td></tr>
+        <tr><td class="num">2</td><td class="num">2401/2400, 3136/3125</td><td>the same</td><td class="num">31 notes</td><td class="num">0.74¢</td><td class="num">12 of 12</td><td>CPSFIT-001</td></tr>
+        <tr><td class="num">1</td><td>three</td><td>one step</td><td class="num">no ET from 5 to 72 notes holds the hexany within 2¢</td><td class="num">above 2¢</td><td class="num">not measured</td><td>CPSFIT-001, ET range 5 to 72</td></tr>
+        <tr><td class="num">1</td><td class="num">2401/2400, 3136/3125, 19683/19600</td><td>one step of 9.231¢</td><td class="num">130-ET, the first ET within 2¢</td><td class="num">1.78¢</td><td class="num">see the dial</td><td>computed on this page, not a receipt</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="facts">
+    <div class="fact"><div><p>The dekany CPS(5,2) on 1·3·5·7·9 has 41 exact triads. No one-generator chain below 37 notes holds all of them. Two generators hold the dekany in full at 29 notes within 0.65 cents, under the schisma 32805/32768.</p><div class="src">RANK3-001, 2026-10-12.</div></div></div>
+    <div class="fact"><div><p>The eikosany CPS(6,3) on 1·3·5·7·9·11 is rank 5 with the octave. Two generators stop at about 12 cents. It needs a third generator.</p><div class="src">RANK3-001, 2026-10-12.</div></div></div>
+    <div class="fact"><div><p>Marcus prefers fewer notes for melody. He would rather explore a 10-note scale than a 21-note scale. He does not need the generators to be nameable intervals. He wants to keep the triads. So the 10-note scale under 225/224 and the 15-note scale under 1029/1024 are the ones to explore first. The triad count is the price. The 10-note scale keeps 4 of 12. The 15-note scale keeps 10 of 12.</p><div class="src">Session notes, 2026-10-12.</div></div></div>
+  </div>
+</section>
+
+<!-- ───────── FACTS ───────── -->
+<section class="station" id="facts">
+  <div class="station-head"><div class="num">BACKGROUND</div><h2>What the mathematics says</h2></div>
+  <div class="facts">
+    <div class="fact"><div><p>A val is an integer map from the primes to generator counts. A comma is a lattice vector that the val sends to zero. The set of all such vectors is the kernel of the val. Each independent comma in the kernel lowers the rank by one. With all primes free, the kernel is empty and the lattice is just intonation. This page builds the val from the chosen commas by integer column reduction, so the kernel is exactly the chosen commas and nothing smaller.</p><div class="src">Standard regular temperament theory, in the vocabulary of experiments/lattice/SPEC.md.</div></div></div>
+    <div class="fact"><div><p>Rank counts the independent generators. With the octave, a 7-limit lattice is rank 4 and equal temperament is rank 1. Octave-equivalent, the same lattice is rank 3 and an MOS is rank 1. The repo's SPEC.md uses the octave-equivalent count. This page uses the count with the octave. The difference is always one.</p><div class="src">experiments/lattice/SPEC.md, "Rank accounting".</div></div></div>
+    <div class="fact"><div><p>With two generators and the octave, the scales come from Viggo Brun's three-term algorithm. At each level the largest of three intervals is replaced by its difference with the second (calc AB) or the third (calc AC). Each step of the scale is an exact integer sum of the octave and the two generators. Erv Wilson described the algorithm in "Viggo Rhythm". Marcus Hobbs implemented it in the iOS Wilsonic in 2016 with a balance rule for the order of the two new pieces. This page ports that implementation from experiments/lattice/brun3.py.</p><div class="src">Erv Wilson, anaphoria.com/ViggoRhythm.pdf. Wilsonic_v_1_8_6/Wilsonic/Brun/Brun3.m, 2016.</div></div></div>
+    <div class="fact"><div><p>The tuning rule on this page keeps the octave pure. The default rule makes the largest error of any lattice tone as small as possible. For one comma this gives the error floors in the receipts. On the hexany, 225/224 gives 7.71/3 = 2.57 cents. 1029/1024 gives 8.43/3 = 2.81. 65625/65536 gives 2.35/5 = 0.47. 2401/2400 gives 0.72/6 = 0.12. The schisma gives 1.95/8 = 0.24. The prime rule shares the error over the primes instead. Between 0 and 1 the page shrinks the comma to the matching fraction of its size. The same rule applies. So one comma moves the tones in a straight line.</p><div class="src">Checked by hand against RANK3-001, 2026-10-12.</div></div></div>
+    <div class="fact"><div><p>The two generators of a rank-3 quotient are a coordinate choice. The comma is the invariant. The same temperament arrives from many generator pairs, and the Brun3 scale sizes depend on the pair. So station 4 searches small integer changes of basis and reports the pair with the smallest scale that holds the lattice.</p><div class="src">RANK3-001 finding, 2026-10-12.</div></div></div>
+    <div class="fact"><div><p>The receipts. CPSFIT-001 (2026-10-10): no equal temperament from 5 to 72 notes holds the hexany within 2 cents. One generator of 193.787 cents holds the hexany at 22 notes within 1.37 cents with 10 of 12 triads. The same generator holds it at 31 notes within 0.74 cents with all 12. RANK3-001 (2026-10-12): two generators hold the hexany at 10, 15, 19, 21 and 24 notes under one comma each. Two generators hold the dekany with 9 at 29 notes under the schisma. This page adds one computed fact. The first equal temperament within 2 cents of the hexany is 130-ET at 1.78 cents. 73-ET misses by 8.2 cents on 5/4. The session note that named 73 as the first misread the 5 to 72 range.</p><div class="src">experiments/lattice/FINDINGS.md. 130-ET computed on this page from the patent val ⟨130 206 302 365].</div></div></div>
+  </div>
+</section>
+
+<!-- ───────── PROMPT ───────── -->
+<section class="station" id="prompt">
+  <div class="station-head"><div class="num">HANDOFF</div><h2>Prompt for the next session</h2>
+  <p class="note">This text describes the current state of the page in plain language. Copy it into Claude to continue the work.</p></div>
+  <div class="prompt" id="promptText"></div>
+  <div class="row"><button id="copyBtn" class="primary" style="flex:0 0 auto">Copy prompt</button><span class="note" id="copyNote"></span></div>
+</section>
+</div>
+
+<script>
+// ───────────────────────── pure math (no DOM) ─────────────────────────
+const CENTS = 1200;
+const log2 = Math.log2;
+const ALLP = [2, 3, 5, 7];
+const JIC = { 2: 1200, 3: 1200 * log2(3), 5: 1200 * log2(5), 7: 1200 * log2(7) };
+const BOX = { 3: 12, 5: 6, 7: 5 };
+const COMMA_NAMES = {
+  '81/80': 'syntonic comma', '225/224': 'marvel comma', '126/125': 'starling comma', '64/63': "Archytas' comma",
+  '2401/2400': 'breedsma', '1029/1024': 'gamelisma', '3136/3125': 'hemimean comma', '6144/6125': 'porwell comma',
+  '65625/65536': 'horwell comma', '32805/32768': 'schisma', '1728/1715': 'orwellisma', '50/49': 'jubilisma',
+  '49/48': 'slendro diesis', '128/125': 'diesis', '36/35': 'septimal quarter tone', '245/243': 'sensamagic comma',
+  '4375/4374': 'ragisma', '5120/5103': 'hemifamity comma', '2048/2025': 'diaschisma', '3125/3072': 'magic comma',
+  '250/243': 'porcupine comma', '15625/15552': 'kleisma', '531441/524288': 'Pythagorean comma', '16875/16807': 'mirkwai comma',
+  '420175/419904': 'wizma', '10976/10935': 'hemimage comma', '19683/19600': 'cataharry comma', '875/864': 'keema', '686/675': 'senga',
+};
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
+function wrapCents(c) { return ((c % CENTS) + CENTS) % CENTS; }
+function circDist(a, b) { const d = Math.abs(wrapCents(a) - wrapCents(b)); return Math.min(d, CENTS - d); }
+function dot(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
+function combos(n, k) { const out = []; (function rec(s, acc) { if (acc.length === k) { out.push(acc.slice()); return; } for (let i = s; i < n; i++) { acc.push(i); rec(i + 1, acc); acc.pop(); } })(0, []); return out; }
+function parseFraction(tok) { const m = tok.trim().match(/^(\d+)\s*(?:\/\s*(\d+))?$/); if (!m) return null; const num = +m[1], den = m[2] ? +m[2] : 1; return num && den ? { num, den } : null; }
+function monzoOf(num, den) {
+  const e = [0, 0, 0, 0];
+  const strip = (n, sign) => { ALLP.forEach((p, i) => { while (n % p === 0) { n /= p; e[i] += sign; } }); return n; };
+  if (strip(num, 1) !== 1 || strip(den, -1) !== 1) return null;
+  return e;
+}
+function centsOfMonzo(m) { return m.reduce((s, e, i) => s + e * JIC[ALLP[i]], 0); }
+function ratioOfMonzo(m) {
+  let num = 1n, den = 1n;
+  m.forEach((e, i) => { for (let k = 0; k < Math.abs(e); k++) { if (e > 0) num *= BigInt(ALLP[i]); else den *= BigInt(ALLP[i]); } });
+  return `${num}/${den}`;
+}
+function octaveReduceMonzo(m) { const r = m.slice(); r[0] -= Math.floor(centsOfMonzo(m) / CENTS); return r; }
+function monzoStr(m, dims) { return '[' + dims.map(i => m[i]).join(' ') + '⟩'; }
+
+// ---- lattices
+const LATTICES = {
+  ptolemy: { name: "Ptolemy's just major", text: '1/1 9/8 5/4 4/3 3/2 5/3 15/8', note: 'The 5-limit example. Two odd primes, so rank 3 with the octave. One comma makes a one-generator scale. Two commas make an equal temperament.' },
+  hexany: { name: 'Hexany CPS(4,2) on 1·3·5·7', text: '35/32 5/4 21/16 3/2 7/4 15/8', note: 'Six tones, each a product of two of 1, 3, 5, 7. The 1/1 is the implied root and is not a tone of the hexany, so it is drawn hollow. Rank 4 with the octave.' },
+  eg4: { name: 'Euler genus 4 on 1·3·5·7', text: '1/1 35/32 5/4 21/16 3/2 105/64 7/4 15/8', note: 'All eight products of subsets of 1, 3, 5, 7. The cube of the lattice. The hexany is its six middle vertices.' },
+};
+function buildLattice(key) {
+  const spec = LATTICES[key];
+  const tones = [];
+  for (const tok of spec.text.split(/\s+/)) {
+    const f = parseFraction(tok); if (!f) continue;
+    const m0 = monzoOf(f.num, f.den); if (!m0) continue;
+    const m = octaveReduceMonzo(m0);
+    tones.push({ m, cents: centsOfMonzo(m), label: ratioOfMonzo(m) });
+  }
+  tones.sort((a, b) => a.cents - b.cents);
+  const dims = [0]; for (let i = 1; i < ALLP.length; i++) if (tones.some(t => t.m[i])) dims.push(i);
+  const oddIdx = dims.slice(1);
+  return { key, name: spec.name, note: spec.note, tones, dims, oddIdx, D: dims.length, hasRoot: tones.some(t => t.cents < 1e-9) };
+}
+
+// ---- commas
+function enumerateCommas(oddIdx) {
+  const out = [];
+  const rec = (k, es) => {
+    if (k === oddIdx.length) {
+      if (es.every(e => e === 0)) return;
+      const m = [0, 0, 0, 0]; oddIdx.forEach((i, j) => m[i] = es[j]);
+      const co = centsOfMonzo(m); m[0] = -Math.round(co / CENTS);
+      const c = centsOfMonzo(m); if (c <= 0 || c >= 60) return;
+      const height = m.reduce((s, e, i) => s + Math.abs(e) * log2(ALLP[i]), 0); if (height > 40) return;
+      let g = 0; m.forEach(e => g = gcd(g, e)); if (g !== 1) return;
+      const str = ratioOfMonzo(m);
+      out.push({ m, cents: c, height, str, name: COMMA_NAMES[str] || '' });
+      return;
+    }
+    const b = BOX[ALLP[oddIdx[k]]]; for (let e = -b; e <= b; e++) rec(k + 1, es.concat([e]));
+  };
+  rec(0, []);
+  out.sort((a, b) => a.cents - b.cents);
+  return out;
+}
+function routesOf(comma) {
+  const up = comma.m.map((e, i) => (i > 0 && e > 0 ? e : 0)), down = comma.m.map((e, i) => (i > 0 && e < 0 ? -e : 0));
+  const mk = m => { const r = octaveReduceMonzo(m); return { m, r, str: ratioOfMonzo(r), cents: centsOfMonzo(r) }; };
+  const words = m => { const parts = []; m.forEach((e, i) => { if (i > 0 && e > 0) parts.push(`${e} step${e > 1 ? 's' : ''} of ${ALLP[i]}`); }); return parts.length ? parts.join(' and ') : 'no step'; };
+  return { up: { ...mk(up), words: words(up) }, down: { ...mk(down), words: words(down) } };
+}
+
+// ---- linear algebra, floats
+function rref(A, b) {
+  const m = A.length, n = A[0].length;
+  const M = A.map((r, i) => r.concat([b[i]]));
+  const piv = []; let row = 0;
+  for (let c = 0; c < n && row < m; c++) {
+    let best = row; for (let r = row; r < m; r++) if (Math.abs(M[r][c]) > Math.abs(M[best][c])) best = r;
+    if (Math.abs(M[best][c]) < 1e-9) continue;
+    [M[row], M[best]] = [M[best], M[row]];
+    const pv = M[row][c]; for (let j = 0; j <= n; j++) M[row][j] /= pv;
+    for (let r = 0; r < m; r++) if (r !== row && Math.abs(M[r][c]) > 1e-12) { const f = M[r][c]; for (let j = 0; j <= n; j++) M[r][j] -= f * M[row][j]; }
+    piv.push(c); row++;
+  }
+  for (let r = row; r < m; r++) if (Math.abs(M[r][n]) > 1e-6) return null;
+  const x0 = new Array(n).fill(0); piv.forEach((c, i) => { x0[c] = M[i][n]; });
+  const N = [];
+  for (let f = 0; f < n; f++) { if (piv.includes(f)) continue; const v = new Array(n).fill(0); v[f] = 1; piv.forEach((c, i) => { v[c] = -M[i][f]; }); N.push(v); }
+  return { x0, N, rank: row };
+}
+function solveSquare(A, b) {
+  const n = A.length; const M = A.map((r, i) => r.concat([b[i]]));
+  for (let c = 0; c < n; c++) {
+    let best = c; for (let r = c; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[best][c])) best = r;
+    if (Math.abs(M[best][c]) < 1e-10) return null;
+    [M[c], M[best]] = [M[best], M[c]];
+    for (let r = 0; r < n; r++) if (r !== c) { const f = M[r][c] / M[c][c]; for (let j = c; j <= n; j++) M[r][j] -= f * M[c][j]; }
+  }
+  return M.map((r, i) => r[n] / r[i]);
+}
+// minimize max_i |a_i·e + c_i| subject to eqA·e = eqB, e in R^n. Vertex enumeration on the epigraph.
+function chebyshev(rows, eqA, eqB, n) {
+  let x0, N;
+  if (eqA.length) { const s = rref(eqA, eqB); if (!s) return null; x0 = s.x0; N = s.N; }
+  else { x0 = new Array(n).fill(0); N = []; for (let i = 0; i < n; i++) { const v = new Array(n).fill(0); v[i] = 1; N.push(v); } }
+  const m = N.length;
+  const red = rows.map(r => ({ a: N.map(v => dot(r.a, v)), c: dot(r.a, x0) + r.c }));
+  if (m === 0) return { e: x0, eps: Math.max(0, ...red.map(r => Math.abs(r.c))) };
+  const cons = []; red.forEach(r => { cons.push({ a: r.a, c: r.c, s: 1 }); cons.push({ a: r.a, c: r.c, s: -1 }); });
+  let best = null;
+  for (const sub of combos(cons.length, m + 1)) {
+    const A = sub.map(i => cons[i].a.map(v => cons[i].s * v).concat([-1]));
+    const b = sub.map(i => -cons[i].s * cons[i].c);
+    const sol = solveSquare(A, b); if (!sol) continue;
+    const eps = sol[m]; if (eps < -1e-9) continue;
+    const x = sol.slice(0, m);
+    if (best && eps >= best.eps) continue;
+    if (red.every(r => Math.abs(dot(r.a, x) + r.c) <= eps + 1e-7)) best = { eps, x };
+  }
+  if (!best) return null;
+  const e = x0.map((v, i) => v + best.x.reduce((s, xv, j) => s + xv * N[j][i], 0));
+  return { e, eps: Math.max(0, best.eps) };
+}
+
+// ---- integer lattice algebra
+function integerKernel(C, D) {
+  // C: k rows of length D. Column operations by a unimodular U: C·U = [H | 0]. The last D − rank columns of U span the integer kernel of C.
+  const M = C.map(r => r.slice()); const k = M.length;
+  const U = []; for (let i = 0; i < D; i++) { const r = new Array(D).fill(0); r[i] = 1; U.push(r); }
+  const swapCols = (a, b) => { if (a === b) return; for (const r of M) [r[a], r[b]] = [r[b], r[a]]; for (const r of U) [r[a], r[b]] = [r[b], r[a]]; };
+  const addCol = (j, i, q) => { for (const r of M) r[j] -= q * r[i]; for (const r of U) r[j] -= q * r[i]; };
+  let p = 0;
+  for (let r = 0; r < k && p < D; r++) {
+    for (let guard = 0; guard < 200; guard++) {
+      let jmin = -1; for (let j = p; j < D; j++) if (M[r][j] !== 0 && (jmin < 0 || Math.abs(M[r][j]) < Math.abs(M[r][jmin]))) jmin = j;
+      if (jmin < 0) break;
+      swapCols(jmin, p);
+      let done = true;
+      for (let j = p + 1; j < D; j++) if (M[r][j] !== 0) { addCol(j, p, Math.trunc(M[r][j] / M[r][p])); if (M[r][j] !== 0) done = false; }
+      if (done) { p++; break; }
+    }
+  }
+  const basis = []; for (let j = p; j < D; j++) basis.push(U.map(row => row[j]));
+  return { basis, rank: p };
+}
+function det(A) { const n = A.length; if (n === 1) return A[0][0]; if (n === 2) return A[0][0] * A[1][1] - A[0][1] * A[1][0]; let s = 0; for (let j = 0; j < n; j++) { const minor = A.slice(1).map(r => r.filter((_, c) => c !== j)); s += (j % 2 ? -1 : 1) * A[0][j] * det(minor); } return s; }
+function commaSetStatus(commaMs, dims) {
+  // rank over Q and saturation (gcd of the maximal minors) of the chosen commas
+  const k = commaMs.length; if (!k) return { ok: true, rank: 0 };
+  const C = commaMs.map(m => dims.map(i => m[i]));
+  const kr = integerKernel(C, dims.length);
+  if (kr.rank < k) return { ok: false, rank: kr.rank, why: 'dependent' };
+  let g = 0; for (const cols of combos(dims.length, k)) g = gcd(g, det(C.map(r => cols.map(c => r[c]))));
+  if (g !== 1) return { ok: false, rank: k, why: 'torsion', g };
+  return { ok: true, rank: k };
+}
+function reducePeriodColumn(rows) {
+  const R = rows.map(r => r.slice());
+  for (let guard = 0; guard < 200; guard++) {
+    let imin = -1; for (let i = 0; i < R.length; i++) if (R[i][0] !== 0 && (imin < 0 || Math.abs(R[i][0]) < Math.abs(R[imin][0]))) imin = i;
+    if (imin < 0) break;
+    [R[0], R[imin]] = [R[imin], R[0]];
+    let done = true;
+    for (let i = 1; i < R.length; i++) if (R[i][0] !== 0) { const q = Math.trunc(R[i][0] / R[0][0]); R[i] = R[i].map((x, j) => x - q * R[0][j]); if (R[i][0] !== 0) done = false; }
+    if (done) break;
+  }
+  if (R[0][0] < 0) R[0] = R[0].map(x => -x);
+  return R;
+}
+// The quotient lattice after the commas vanish: val rows (period row first) and generator sizes from the tuning map T (cents per prime, over dims).
+function quotientBasis(commaMs, dims, T) {
+  const D = dims.length;
+  const C = commaMs.map(m => dims.map(i => m[i]));
+  const kr = C.length ? integerKernel(C, D) : { basis: dims.map((_, i) => { const v = new Array(D).fill(0); v[i] = 1; return v; }), rank: 0 };
+  let rows = reducePeriodColumn(kr.basis);
+  const r = rows.length;
+  const solveG = () => { const A = rows.map(a => rows.map(b => dot(a, b))); const rhs = rows.map(a => dot(a, T)); return solveSquare(A, rhs); };
+  let g = solveG(); if (!g) return null;
+  const period = g[0];
+  for (let i = 1; i < r; i++) {
+    if (g[i] < 0) { rows[i] = rows[i].map(x => -x); g[i] = -g[i]; }
+    const n = Math.floor(g[i] / period + 1e-9);
+    if (n) { rows[0] = rows[0].map((x, j) => x + n * rows[i][j]); g[i] -= n * period; }
+    if (r === 2 && g[i] > period / 2 + 1e-9) { rows[i] = rows[i].map(x => -x); rows[0] = rows[0].map((x, j) => x + rows[i][j]); g[i] = period - g[i]; }
+  }
+  return { rows, gens: g, period, periodsPerOctave: rows[0][0], r };
+}
+
+// ---- tuning: e_p per odd prime (dims[1..]) under the rule, with each active comma shrunk to (1 − λ) of its size
+function tuningFor(lat, active, rule) {
+  const n = lat.oddIdx.length;
+  const eqA = active.map(s => lat.oddIdx.map(i => s.comma.m[i])), eqB = active.map(s => -s.lam * s.comma.cents);
+  const toneRows = lat.tones.filter(t => t.cents > 1e-9).map(t => ({ a: lat.oddIdx.map(i => t.m[i]), c: 0 }));
+  const primeRows = lat.oddIdx.map((_, j) => { const a = new Array(n).fill(0); a[j] = 1; return { a, c: 0 }; });
+  let res = null, used = rule;
+  if (rule === 'fifth' && lat.oddIdx.includes(1)) {
+    const j3 = lat.oddIdx.indexOf(1); const a3 = new Array(n).fill(0); a3[j3] = 1;
+    res = chebyshev(primeRows.filter((_, j) => j !== j3), eqA.concat([a3]), eqB.concat([0]), n);
+    if (!res) used = 'primes';
+  }
+  if (!res) res = chebyshev(used === 'tones' ? toneRows : primeRows, eqA, eqB, n);
+  if (!res) return null;
+  const err = {}; lat.oddIdx.forEach((i, j) => err[i] = res.e[j]);
+  const T = lat.dims.map(i => JIC[ALLP[i]] + (err[i] || 0));
+  const toneErr = lat.tones.map(t => lat.oddIdx.reduce((s, i) => s + t.m[i] * err[i], 0));
+  return { err, T, toneErr, maxToneErr: Math.max(0, ...toneErr.map(Math.abs)), rule: used };
+}
+function temperedCents(m, lat, T) { return lat.dims.reduce((s, i, j) => s + m[i] * T[j], 0); }
+
+// ---- triads: exact proportional (arithmetic mean) and subcontrary (harmonic mean) triads of the just lattice
+function exactTriads(lat) {
+  const freqs = lat.tones.map(t => Math.pow(2, t.cents / CENTS));
+  const n = freqs.length, all = freqs.concat(freqs.map(f => f * 2));
+  const near = (x, y) => Math.abs(CENTS * log2(x / y)) <= 0.001;
+  const out = [];
+  for (let p = 0; p < n; p++) for (let q = p + 1; q < all.length; q++) {
+    const lo = freqs[p], hi = all[q]; if (hi <= lo || hi > lo * 2) continue;
+    const am = (lo + hi) / 2, hm = 2 * lo * hi / (lo + hi);
+    for (let k = 0; k < all.length; k++) { const mid = all[k]; if (mid <= lo || mid >= hi) continue; if (near(mid, am)) out.push({ kind: 'P', idx: [p, k, q] }); if (near(mid, hm)) out.push({ kind: 'S', idx: [p, k, q] }); }
+  }
+  return out;
+}
+function triadStatus(lat, triads, toneErr, tol) {
+  const n = lat.tones.length;
+  const f = k => Math.pow(2, (lat.tones[k % n].cents + toneErr[k % n]) / CENTS) * (k >= n ? 2 : 1);
+  return triads.map(tr => {
+    const [p, k, q] = tr.idx; const lo = f(p), mid = f(k), hi = f(q);
+    const am = (lo + hi) / 2, hm = 2 * lo * hi / (lo + hi);
+    const dev = CENTS * log2(mid / (tr.kind === 'P' ? am : hm)), apart = Math.abs(CENTS * log2(am / hm));
+    return { ...tr, dev, alive: Math.abs(dev) < tol && apart >= tol, names: [p, k, q].map(i => lat.tones[i % n].label + (i >= n ? "'" : '')) };
+  });
+}
+
+// ---- rank 2: chain of one generator inside the period
+function mosPath(gen, maxN) {
+  const out = []; let lo = [0, 1], hi = [1, 1];
+  for (let guard = 0; guard < 200; guard++) {
+    const m = [lo[0] + hi[0], lo[1] + hi[1]]; if (m[1] > maxN) break;
+    out.push(m[1]); if (gen < m[0] / m[1]) hi = m; else lo = m;
+  }
+  return out;
+}
+function chainDegrees(P, g, n, s) { const d = []; const ppo = Math.round(CENTS / P); for (let k = s; k < s + n; k++) for (let j = 0; j < ppo; j++) d.push(wrapCents(k * g + j * P)); return d.sort((a, b) => a - b); }
+function nearestErr(degrees, c) { let mn = Infinity; for (const d of degrees) { const e = circDist(d, c); if (e < mn) mn = e; } return mn; }
+function chainScan(P, g, latC, maxN) {
+  const ppo = Math.round(CENTS / P); const rows = []; const mos = new Set(mosPath(g / P, Math.floor(maxN / ppo)));
+  for (let n = 1; n * ppo <= maxN; n++) {
+    let best = null;
+    for (let s = -(n - 1); s <= 0; s++) { const d = chainDegrees(P, g, n, s); const e = Math.max(...latC.map(c => nearestErr(d, c))); if (!best || e < best.err) best = { err: e, s, degrees: d }; }
+    rows.push({ N: n * ppo, n, mos: mos.has(n), ...best });
+  }
+  return rows;
+}
+
+// ---- rank 3: Brun3, a port of experiments/lattice/brun3.py (iOS Wilsonic Brun3.m, Marcus Hobbs 2016)
+const BRUN3_MAX_LEVEL = 7;
+function brun3Levels(O, g0, g1, calc, maxLevel = BRUN3_MAX_LEVEL) {
+  if (!(O > g0 && g0 > g1 && g1 > 0)) return null;
+  const eq = (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+  const H = [[O, [1, 0, 0]], [g0, [0, 1, 0]], [g1, [0, 0, 1]]];
+  H.sort((a, b) => b[0] - a[0]);
+  let scale = [H[0][1]]; const levels = [scale.slice()];
+  const j = calc === 'AB' ? 1 : 2; let it = 0, noop = 0;
+  while (it < maxLevel) {
+    const interval0 = H[0][1];
+    const newco = H[0][1].map((x, i) => x - H[j][1][i]);
+    H[0] = [H[0][0] - H[j][0], newco];
+    const pieceNew = newco, pieceOld = H[j][1];
+    const out = []; let replaced = false;
+    for (const st of scale) {
+      if (eq(st, interval0)) { if (out.length && eq(out[out.length - 1], pieceOld)) out.push(pieceNew, pieceOld); else out.push(pieceOld, pieceNew); replaced = true; }
+      else out.push(st);
+    }
+    scale = out;
+    if (replaced) { it++; levels.push(scale.slice()); } else { noop++; if (noop > 10) return null; }
+    H.sort((a, b) => b[0] - a[0]);
+  }
+  return levels;
+}
+function brun3Degrees(steps) { const out = [[0, 0, 0]]; let acc = [0, 0, 0]; for (const st of steps.slice(0, -1)) { acc = acc.map((x, i) => x + st[i]); out.push(acc); } return out; }
+function brun3Value(co, O, g0, g1) { return co[0] * O + co[1] * g0 + co[2] * g1; }
+function brun3ScaleCents(steps, O, g0, g1, mode) { const cos = brun3Degrees(steps); const base = brun3Value(cos[mode], O, g0, g1); return cos.map(c => wrapPeriod((brun3Value(c, O, g0, g1) - base) * CENTS, O * CENTS)); }
+function wrapPeriod(c, P) { return ((c % P) + P) % P; }
+function brun3StepSizes(steps, O, g0, g1) { const sizes = []; for (const st of steps) { const v = brun3Value(st, O, g0, g1) * CENTS; if (!sizes.some(s => Math.abs(s - v) <= 1e-6)) sizes.push(v); } return sizes.sort((a, b) => a - b); }
+function pitchClassesFromPeriod(pcsP, P) { const ppo = Math.round(CENTS / P); const out = []; for (const c of pcsP) for (let j = 0; j < ppo; j++) out.push(wrapCents(c + j * P)); return out.sort((a, b) => a - b); }
+function nearestSorted(arr, x) {
+  // arr: sorted pitch classes in [0, 1200). Circular distance from x to the nearest entry.
+  let lo = 0, hi = arr.length; while (lo < hi) { const mid = (lo + hi) >> 1; if (arr[mid] < x) lo = mid + 1; else hi = mid; }
+  const n = arr.length; return Math.min(circDist(arr[lo % n], x), circDist(arr[(lo - 1 + n) % n], x));
+}
+const BASIS_RANGE = 9;
+function brun3Candidates(P, ga, gb) {
+  const gens = new Map();
+  for (let a = -BASIS_RANGE; a <= BASIS_RANGE; a++) for (let b = -BASIS_RANGE; b <= BASIS_RANGE; b++) {
+    if (!(a || b) || gcd(a, b) !== 1) continue;
+    const G = wrapPeriod(a * ga + b * gb, P); if (G < 1e-6 || P - G < 1e-6) continue;
+    const key = G.toFixed(6); if (!gens.has(key)) gens.set(key, { G, a, b });
+  }
+  const list = [...gens.values()], pairs = new Map();
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const x = list[i], y = list[j]; if (Math.abs(x.a * y.b - y.a * x.b) !== 1) continue;
+    const [G0, G1] = x.G > y.G ? [x.G, y.G] : [y.G, x.G]; if (G0 - G1 < 1e-6) continue;
+    pairs.set(`${G0.toFixed(6)}|${G1.toFixed(6)}`, { G0, G1, co: x.G > y.G ? [x, y] : [y, x] });
+  }
+  return [...pairs.values()];
+}
+function brun3Search(P, ga, gb, latC) {
+  const O = P / CENTS; const perN = new Map(); const pairs = brun3Candidates(P, ga, gb);
+  for (const pr of pairs) for (const calc of ['AB', 'AC']) {
+    const lv = brun3Levels(O, pr.G0 / CENTS, pr.G1 / CENTS, calc); if (!lv) continue;
+    for (let L = 1; L < lv.length; L++) {
+      const steps = lv[L]; const nP = steps.length; const N = nP * Math.round(CENTS / P);
+      const cur = perN.get(N);
+      const pcs0 = brun3ScaleCents(steps, O, pr.G0 / CENTS, pr.G1 / CENTS, 0);
+      const set = pitchClassesFromPeriod(pcs0, P);
+      let best = null;
+      for (let mode = 0; mode < nP; mode++) {
+        // rotating degree `mode` to 1/1 shifts every tone by +pcs0[mode] against the unrotated set
+        let e = 0; for (const c of latC) { const d = nearestSorted(set, wrapCents(c + pcs0[mode])); if (d > e) e = d; if (cur && e >= cur.err) break; }
+        if (!best || e < best.err - 1e-9) best = { err: e, mode };
+      }
+      if (!cur || best.err < cur.err - 1e-9) perN.set(N, { N, err: best.err, mode: best.mode, pcs: pitchClassesFromPeriod(brun3ScaleCents(steps, O, pr.G0 / CENTS, pr.G1 / CENTS, best.mode), P), G0: pr.G0, G1: pr.G1, co: pr.co, calc, level: L, steps, sizes: brun3StepSizes(steps, O, pr.G0 / CENTS, pr.G1 / CENTS) });
+    }
+  }
+  return { rows: [...perN.values()].sort((a, b) => a.N - b.N), pairsTried: pairs.length };
+}
+function brun3LevelTable(P, G0, G1, calc) {
+  const O = P / CENTS; const lv = brun3Levels(O, G0 / CENTS, G1 / CENTS, calc); if (!lv) return [];
+  return lv.slice(1).map((steps, i) => ({ level: i + 1, N: steps.length * Math.round(CENTS / P), sizes: brun3StepSizes(steps, O, G0 / CENTS, G1 / CENTS) }));
+}
+
+// ───────────────────────── page ─────────────────────────
+if (typeof document !== 'undefined') (function () {
+  const $ = id => document.getElementById(id);
+  const tok = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const SLOT_TOK = ['--c1', '--c2', '--c3'];
+  const S = { lat: 'hexany', rule: 'tones', tol: 2, commaMax: 60, hover: null, slots: [{ comma: null, lam: 0 }, { comma: null, lam: 0 }, { comma: null, lam: 0 }], pick: null, pickKind: null };
+  let lat, commas, triads, tuning, basis, closeState = {};
+  const fmt = (x, d = 2) => (Math.abs(x) < 5e-3 && d === 2 ? '0.00' : x.toFixed(d));
+
+  // ---- canvas helpers
+  function prep(cv) {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (!cv.dataset.w) { cv.dataset.w = cv.getAttribute('width'); cv.dataset.h = cv.getAttribute('height'); }
+    const h = +cv.dataset.h;
+    const w = Math.max(200, Math.min(2000, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || +cv.dataset.w));
+    cv.style.width = '100%'; cv.style.height = h + 'px'; cv.style.maxHeight = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h); ctx.font = '11px ' + tok('--font-mono'); return { ctx, w, h };
+  }
+  function arrow(ctx, x1, y1, x2, y2, color, width) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    const L = Math.hypot(x2 - x1, y2 - y1); if (L < 6) return;
+    const ux = (x2 - x1) / L, uy = (y2 - y1) / L;
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - 8 * ux + 4 * uy, y2 - 8 * uy - 4 * ux); ctx.lineTo(x2 - 8 * ux - 4 * uy, y2 - 8 * uy + 4 * ux); ctx.closePath(); ctx.fill();
+  }
+
+  // ---- lattice geometry: odd exponents → squashed → 2D
+  function axes() { return lat.oddIdx.length === 2 ? [[1, 0], [0, 1]] : [[1, 0], [0.45, 0.8], [-0.7, 0.4]]; }
+  function oddVec(m) { return lat.oddIdx.map(i => m[i]); }
+  function viewRows(commaVecs) {
+    // Two rows that span the complement of the comma vectors, oriented like the fixed axes. With no comma: the axes themselves.
+    const ax = axes(); const d = ax.length;
+    const A = [ax.map(a => a[0]), ax.map(a => a[1])];
+    if (!commaVecs.length) return A;
+    const basisC = [];
+    for (const c of commaVecs) { let v = c.slice(); for (const b of basisC) { const f = dot(v, b) / dot(b, b); v = v.map((x, i) => x - f * b[i]); } if (dot(v, v) > 1e-12) basisC.push(v); }
+    const proj = v => { let q = v.slice(); for (const b of basisC) { const f = dot(q, b) / dot(b, b); q = q.map((x, i) => x - f * b[i]); } return q; };
+    const cands = A.slice(); for (let i = 0; i < d; i++) { const e = new Array(d).fill(0); e[i] = 1; cands.push(e); }
+    const rows = [];
+    for (const r of cands) {
+      if (rows.length === 2) break;
+      let v = proj(r); for (const b of rows) { const f = dot(v, b); v = v.map((x, i) => x - f * b[i]); }
+      const n = Math.sqrt(dot(v, v)); if (n > 1e-6) rows.push(v.map(x => x / n));
+    }
+    while (rows.length < 2) rows.push(new Array(d).fill(0));
+    return rows;
+  }
+  function viewFor(active) {
+    // The view interpolates from the fixed axes toward the quotient view: gone commas are exact, the strongest shrinking comma is partial.
+    const gone = active.filter(s => s.lam >= 1).map(s => oddVec(s.comma.m));
+    const partial = active.filter(s => s.lam < 1).sort((a, b) => b.lam - a.lam)[0];
+    const base = viewRows(gone);
+    if (!partial) return base;
+    const target = viewRows(gone.concat([oddVec(partial.comma.m)]));
+    return base.map((row, k) => row.map((x, i) => (1 - partial.lam) * x + partial.lam * target[k][i]));
+  }
+  function to2DWith(rows, v) { return [dot(rows[0], v), dot(rows[1], v)]; }
+  function gridPoints() {
+    const rng = lat.oddIdx.map(i => (i === 1 ? [-1, 0, 1, 2] : [-1, 0, 1])); const out = [];
+    const rec = (k, acc) => { if (k === rng.length) { out.push(acc.slice()); return; } for (const e of rng[k]) { acc.push(e); rec(k + 1, acc); acc.pop(); } };
+    rec(0, []); return out;
+  }
+  function drawLattice(cv, active, showComma, opts) {
+    const { ctx, w, h } = prep(cv);
+    const view = viewFor(active), view0 = viewRows([]), view1 = viewRows(active.map(s => oddVec(s.comma.m)));
+    const toneVecs = lat.tones.map(t => oddVec(t.m)); const origin = lat.oddIdx.map(() => 0);
+    const routeVecs = []; const shown = showComma ? [{ comma: showComma, lam: 0, color: tok('--c1'), colorDown: tok('--c2'), preview: true }] : active.map((s, i) => ({ ...s, color: tok(SLOT_TOK[s.slot]), colorDown: tok(SLOT_TOK[s.slot]) }));
+    for (const s of shown) { const r = routesOf(s.comma); routeVecs.push(oddVec(r.up.m), oddVec(r.down.m)); }
+    const frame = [origin].concat(toneVecs, routeVecs);
+    const pts2 = [].concat(...[view0, view1, view].map(rows => frame.map(v => to2DWith(rows, v))));
+    const xs = pts2.map(p => p[0]), ys = pts2.map(p => p[1]);
+    const minX = Math.min(...xs) - 0.35, maxX = Math.max(...xs) + 0.35, minY = Math.min(...ys) - 0.35, maxY = Math.max(...ys) + 0.35;
+    const sc = Math.min((w - 40) / (maxX - minX), (h - 40) / (maxY - minY));
+    const ox = (w - sc * (maxX + minX)) / 2, oy = (h + sc * (maxY + minY)) / 2;
+    const P = v => { const [x, y] = to2DWith(view, v); return [ox + sc * x, oy - sc * y]; };
+    // faint grid
+    ctx.fillStyle = tok('--line');
+    for (const g of gridPoints()) { const [x, y] = P(g); ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); }
+    // prime axes from the root
+    lat.oddIdx.forEach((i, k) => { const u = origin.slice(); u[k] = 1; const [x0, y0] = P(origin), [x1, y1] = P(u); ctx.globalAlpha = 0.7; arrow(ctx, x0, y0, x1, y1, tok('--muted'), 1); ctx.globalAlpha = 1; ctx.fillStyle = tok('--muted'); ctx.fillText('×' + ALLP[i], x1 + (x1 - x0) * 0.18 - 6, y1 + (y1 - y0) * 0.18 + 4); });
+    // edges: one prime step between lattice nodes (tones and the root)
+    const nodes = toneVecs.concat(lat.hasRoot ? [] : [origin]);
+    ctx.strokeStyle = tok('--harm'); ctx.globalAlpha = 0.45; ctx.lineWidth = 1.5;
+    for (let a = 0; a < nodes.length; a++) for (let b = a + 1; b < nodes.length; b++) { const d = nodes[a].map((x, i) => x - nodes[b][i]); if (d.reduce((s, x) => s + Math.abs(x), 0) === 1) { const [x1, y1] = P(nodes[a]), [x2, y2] = P(nodes[b]); ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); } }
+    ctx.globalAlpha = 1;
+    // routes and comma arrows
+    for (const s of shown) {
+      const r = routesOf(s.comma);
+      const walk = (m, color) => { let cur = origin.slice(); const pts = [P(cur)]; lat.oddIdx.forEach((i, k) => { for (let n = 0; n < m[i]; n++) { cur = cur.slice(); cur[k] += 1; pts.push(P(cur)); } }); ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.setLineDash([5, 4]); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke(); ctx.setLineDash([]); return pts[pts.length - 1]; };
+      const pu = walk(r.up.m, s.color), pd = walk(r.down.m, s.colorDown);
+      const ghost = (p, label, color, m) => { const isTone = lat.tones.some(t => oddVec(t.m).every((x, i) => x === m[i])); if (!isTone) { ctx.strokeStyle = color; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 6, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = color; ctx.fillText(label, p[0] + 8, p[1] - 8); } };
+      ghost(pu, r.up.str, s.color, oddVec(r.up.m)); ghost(pd, r.down.str, s.colorDown, oddVec(r.down.m));
+      const gap = Math.hypot(pu[0] - pd[0], pu[1] - pd[1]);
+      arrow(ctx, pd[0], pd[1], pu[0], pu[1], s.color, 2);
+      const size = s.comma.cents * (1 - (s.lam || 0));
+      ctx.fillStyle = s.color; const mx = (pu[0] + pd[0]) / 2, my = (pu[1] + pd[1]) / 2;
+      ctx.fillText(gap < 4 ? `${s.comma.str} = 0: one note` : `${s.comma.str} ${fmt(size)}¢`, mx + 8, my + 14);
+    }
+    // tones
+    const harm = tok('--harm');
+    lat.tones.forEach((t, i) => { const [x, y] = P(toneVecs[i]); ctx.fillStyle = harm; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = tok('--fg'); ctx.fillText(t.label, x + 8, y + (i % 2 ? 14 : -6)); });
+    if (!lat.hasRoot) { const [x, y] = P(origin); ctx.strokeStyle = harm; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = tok('--fg'); ctx.fillText('1/1', x + 8, y + 14); }
+    if (opts && opts.title) { ctx.fillStyle = tok('--muted'); ctx.fillText(opts.title, 8, 14); }
+  }
+
+  // ---- rulers
+  function rulerBase(cv, yFrac) {
+    const { ctx, w, h } = prep(cv); const L = 24, R = w - 24, y = h * (yFrac || 0.5);
+    const x = c => L + (R - L) * (wrapCents(c) / CENTS);
+    ctx.strokeStyle = tok('--line'); ctx.fillStyle = tok('--muted');
+    ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+    for (let c = 0; c <= CENTS; c += 100) { const px = c === CENTS ? R : x(c); ctx.beginPath(); ctx.moveTo(px, y - 4); ctx.lineTo(px, y + 4); ctx.stroke(); if (c % 300 === 0) ctx.fillText(c, px - 8, h - 6); }
+    return { ctx, w, h, x, y, L, R };
+  }
+  function drawDialRuler(active) {
+    const { ctx, h, x, y } = rulerBase($('rulerCanvas'), 0.4);
+    ctx.fillStyle = tok('--muted'); ctx.fillText('pitch classes in cents: just ticks, tones now, and the two route ends of each comma', 24, 12);
+    lat.tones.forEach(t => { ctx.strokeStyle = tok('--muted'); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x(t.cents), y - 12); ctx.lineTo(x(t.cents), y + 12); ctx.stroke(); });
+    const harm = tok('--harm');
+    lat.tones.forEach((t, i) => { const c = t.cents + tuning.toneErr[i]; ctx.fillStyle = harm; ctx.beginPath(); ctx.arc(x(c), y, 5, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = tok('--fg'); ctx.fillText(t.label, x(c) - ctx.measureText(t.label).width / 2, i % 2 ? y + 26 : y - 18); });
+    active.forEach((s, k) => {
+      const r = routesOf(s.comma); const color = tok(SLOT_TOK[s.slot]);
+      const cu = temperedCents(r.up.r, lat, tuning.T), cd = temperedCents(r.down.r, lat, tuning.T);
+      const yy = y + 44 + k * 18; const xu = x(cu), xd = x(cd);
+      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xd, yy); ctx.lineTo(xu, yy); ctx.stroke();
+      ctx.fillStyle = color; ctx.beginPath(); ctx.arc(xu, yy, 3.5, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(xd, yy, 3.5, 0, Math.PI * 2); ctx.fill();
+      const gap = circDist(cu, cd); const lbl = `${s.comma.str}: ${r.up.str} and ${r.down.str} are ${fmt(gap)}¢ apart`;
+      ctx.fillText(lbl, Math.min(Math.max(24, (xu + xd) / 2 - ctx.measureText(lbl).width / 2), x(1199) - ctx.measureText(lbl).width), yy + 12);
+    });
+    void h;
+  }
+  function drawScaleRuler(degrees, title, pickErrs) {
+    const { ctx, x, y } = rulerBase($('scaleCanvas'));
+    ctx.fillStyle = tok('--muted'); ctx.fillText(title, 24, 12);
+    const acc = tok('--accent'), harm = tok('--harm'), warn = tok('--warn');
+    for (const d of degrees) { ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(x(d), y, 4, 0, Math.PI * 2); ctx.fill(); }
+    lat.tones.forEach((t, i) => { const e = pickErrs ? pickErrs[i] : nearestErr(degrees, t.cents); ctx.strokeStyle = e <= S.tol ? harm : warn; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x(t.cents), y - 14); ctx.lineTo(x(t.cents), y + 14); ctx.stroke(); ctx.fillStyle = ctx.strokeStyle; const l = fmt(e, 1); ctx.fillText(l, x(t.cents) - ctx.measureText(l).width / 2, i % 2 ? y + 26 : y - 18); });
+  }
+
+  // ---- station 1
+  function renderLattice() {
+    $('latNote').textContent = lat.note;
+    $('latRank').textContent = lat.D; $('latRankOE').textContent = lat.D - 1;
+    $('latGens').textContent = lat.dims.map(i => ALLP[i]).join(', ');
+    $('latCount').textContent = lat.tones.length;
+    const P = triads.filter(t => t.kind === 'P').length, Sx = triads.filter(t => t.kind === 'S').length;
+    $('latTriads').textContent = `${P} / ${Sx}`;
+    $('monzoHead').textContent = 'monzo ' + lat.dims.map(i => ALLP[i]).join(' · ');
+    const tb = $('monzoTable').querySelector('tbody'); tb.innerHTML = '';
+    for (const t of lat.tones) {
+      const walk = lat.oddIdx.map(i => t.m[i] ? `${Math.abs(t.m[i])} ${t.m[i] > 0 ? 'up' : 'down'} by ${ALLP[i]}` : null).filter(Boolean).join(', ') || 'stay';
+      const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${t.label}</td><td class="num">${fmt(t.cents)}</td><td class="num">${monzoStr(t.m, lat.dims)}</td><td class="wrapcell">${walk}, then octaves</td>`; tb.appendChild(tr);
+    }
+    drawLattice($('latCanvas'), [], null, { title: `${lat.name}: one axis per prime` });
+  }
+
+  // ---- station 2
+  function visibleCommas() { return commas.filter(c => c.cents <= S.commaMax); }
+  function renderCommas() {
+    $('commaCount').textContent = `${commas.length} commas in the box for the primes ${lat.dims.map(i => ALLP[i]).join(', ')}.`;
+    const tb = $('commaTable').querySelector('tbody'); tb.innerHTML = '';
+    for (const c of visibleCommas()) {
+      const r = routesOf(c);
+      const tr = document.createElement('tr'); tr.className = 'sel' + (S.hover === c ? ' pick' : '');
+      tr.innerHTML = `<td class="num">${c.str}</td><td class="num">${fmt(c.cents)}</td><td class="num">${monzoStr(c.m, lat.dims)}</td><td class="num">${r.up.str}</td><td class="num">${r.down.str}</td><td>${c.name}</td>`;
+      tr.addEventListener('click', () => { S.hover = c; renderCommas(); });
+      tb.appendChild(tr);
+    }
+    const c = S.hover;
+    if (c) {
+      const r = routesOf(c);
+      $('commaWords').textContent = `${c.str}${c.name ? ', the ' + c.name : ''}, ${fmt(c.cents)} cents. Up route: ${r.up.words} reach ${r.up.str} at ${fmt(r.up.cents)}¢. Down route: ${r.down.words} reach ${r.down.str} at ${fmt(r.down.cents)}¢. The two ends are ${fmt(c.cents)} cents apart. When ${c.str} vanishes, ${r.up.str} and ${r.down.str} are the same note.`;
+      drawLattice($('commaCanvas'), [], c, { title: `${c.str}: the two routes and the arrow between their ends` });
+    } else { $('commaWords').textContent = 'Select a comma in the table.'; drawLattice($('commaCanvas'), [], null, { title: 'select a comma' }); }
+  }
+
+  // ---- station 3
+  function activeSlots() { return S.slots.map((s, i) => ({ ...s, slot: i })).filter(s => s.comma && s.lam > 0); }
+  function goneSlots() { return S.slots.map((s, i) => ({ ...s, slot: i })).filter(s => s.comma && s.lam >= 1); }
+  function chosenMs(exceptSlot) { return S.slots.filter((s, i) => s.comma && i !== exceptSlot).map(s => s.comma.m); }
+  function canChoose(c, slot) { const ms = chosenMs(slot).concat([c.m]); return commaSetStatus(ms, lat.dims); }
+  function slotOptions(sel, slot) {
+    sel.innerHTML = '<option value="">none</option>';
+    for (const c of commas) { const st = canChoose(c, slot); const o = document.createElement('option'); o.value = c.str; o.textContent = `${c.str} · ${fmt(c.cents)}¢${c.name ? ' · ' + c.name : ''}${st.ok ? '' : (st.why === 'dependent' ? ' · dependent, not allowed' : ' · torsion, not allowed')}`; o.disabled = !st.ok; sel.appendChild(o); }
+    sel.value = S.slots[slot].comma ? S.slots[slot].comma.str : '';
+  }
+  function buildSlots() {
+    const box = $('slots'); box.innerHTML = '';
+    S.slots.forEach((s, i) => {
+      const div = document.createElement('div'); div.className = 'slot s' + (i + 1); div.id = 'slot' + i;
+      div.innerHTML = `<div class="top"><span>dial ${i + 1}</span><span class="name" id="slotName${i}"></span><span class="pill" id="slotPill${i}"></span></div>
+        <select id="slotSel${i}"></select>
+        <label class="field"><span class="lbl">comma size now <span class="val" id="slotSize${i}"></span></span><input type="range" id="slotRange${i}" min="0" max="1" step="0.01" value="0"></label>
+        <div class="btns"><button class="small" id="slotZero${i}">Restore (0)</button><button class="small" id="slotOne${i}">Vanish (1)</button><button class="small" id="slotPlay${i}">Animate</button><button class="small" id="slotClear${i}">Clear</button></div>`;
+      box.appendChild(div);
+      slotOptions($('slotSel' + i), i);
+      $('slotSel' + i).addEventListener('change', e => { const c = commas.find(x => x.str === e.target.value) || null; if (c) { const st = canChoose(c, i); if (!st.ok) { e.target.value = S.slots[i].comma ? S.slots[i].comma.str : ''; return; } } S.slots[i].comma = c; if (!c) S.slots[i].lam = 0; S.pick = null; refreshSlotOptions(); renderAll(); });
+      $('slotRange' + i).addEventListener('input', e => { S.slots[i].lam = +e.target.value; S.pick = null; renderAll(); });
+      $('slotZero' + i).addEventListener('click', () => animateTo(i, 0));
+      $('slotOne' + i).addEventListener('click', () => animateTo(i, 1));
+      $('slotPlay' + i).addEventListener('click', () => animateTo(i, S.slots[i].lam >= 1 ? 0 : 1, true));
+      $('slotClear' + i).addEventListener('click', () => { S.slots[i] = { comma: null, lam: 0 }; S.pick = null; refreshSlotOptions(); renderAll(); });
+    });
+  }
+  let anim = null;
+  function animateTo(i, target, slow) {
+    if (!S.slots[i].comma) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!slow || reduce) { S.slots[i].lam = target; S.pick = null; renderAll(); return; }
+    if (anim) cancelAnimationFrame(anim);
+    const start = S.slots[i].lam, t0 = performance.now(), dur = 2200;
+    const step = now => { const u = Math.min(1, (now - t0) / dur); const ease = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; S.slots[i].lam = +(start + (target - start) * ease).toFixed(3); if (u >= 1) S.slots[i].lam = target; S.pick = null; renderAll(); if (u < 1) anim = requestAnimationFrame(step); };
+    anim = requestAnimationFrame(step);
+  }
+  function refreshSlotOptions() { S.slots.forEach((s, i) => slotOptions($('slotSel' + i), i)); }
+  function renderSlots() {
+    S.slots.forEach((s, i) => {
+      $('slotName' + i).textContent = s.comma ? `${s.comma.str} · ${fmt(s.comma.cents)}¢` : 'empty';
+      $('slotRange' + i).value = s.lam; $('slotRange' + i).disabled = !s.comma;
+      $('slotSize' + i).textContent = s.comma ? `${fmt(s.comma.cents * (1 - s.lam))}¢ (dial ${s.lam.toFixed(2)})` : '';
+      const pill = $('slotPill' + i); pill.textContent = !s.comma ? '' : s.lam >= 1 ? 'gone: rank −1' : s.lam > 0 ? `shrinking ${Math.round(s.lam * 100)}%` : 'intact';
+      pill.className = 'pill' + (!s.comma ? '' : s.lam >= 1 ? ' ok' : s.lam > 0 ? ' harm' : '');
+    });
+  }
+  function renderDial() {
+    const active = activeSlots(), gone = goneSlots();
+    tuning = tuningFor(lat, active, S.rule);
+    const rank = lat.D - gone.length;
+    const set = (id, v, good) => { const el = $(id); el.querySelector('.v').textContent = v; el.classList.toggle('good', good === true); el.classList.toggle('bad', good === false); };
+    set('rankStat', `${rank} (${rank - 1} octave-equivalent)`, null);
+    set('rankNext', `${gone.length} / ${active.length - gone.length}`, null);
+    const st = triadStatus(lat, triads, tuning.toneErr, S.tol);
+    const P = st.filter(t => t.kind === 'P'), Sx = st.filter(t => t.kind === 'S');
+    const kept = st.filter(t => t.alive).length;
+    set('triadStat', `${P.filter(t => t.alive).length} / ${Sx.filter(t => t.alive).length} of ${P.length} / ${Sx.length}`, kept === st.length ? true : kept === 0 ? false : null);
+    set('errStat', fmt(tuning.maxToneErr) + '¢', tuning.maxToneErr <= S.tol);
+    drawLattice($('dialLattice'), active, null, { title: active.length ? `the lattice, flattened along ${active.map(s => s.comma.str).join(' and ')}` : 'the just lattice, nothing tempered' });
+    drawDialRuler(active);
+    const names = { tones: 'smallest largest tone error', primes: 'smallest largest prime error', fifth: 'pure fifth, then smallest largest error over the other primes' };
+    const shrinking = active.filter(s => s.lam < 1);
+    $('rankNote').textContent = (gone.length ? `Rank ${rank}. ${listWords(gone.map(s => s.comma.str))} ${gone.length > 1 ? 'are' : 'is'} gone. ` : `Rank ${lat.D}, the full just lattice. `) + (shrinking.length ? `${listWords(shrinking.map(s => s.comma.str + ' at ' + Math.round(s.lam * 100) + '%'))} ${shrinking.length > 1 ? 'are' : 'is'} shrinking. The rank stays ${rank} until the dial reaches 1. ` : '') + `Tuning rule: ${names[tuning.rule]}, octave pure.` + (tuning.rule !== S.rule ? ' The pure fifth rule was not possible for these commas, so the prime rule was used.' : '');
+    // generators table
+    basis = gone.length ? quotientBasis(gone.map(s => s.comma.m), lat.dims, tuning.T) : null;
+    const tb = $('genTable').querySelector('tbody'); tb.innerHTML = '';
+    const gnames = basis ? ['period'].concat(basis.r > 1 ? ['g0'] : [], basis.r > 2 ? ['g1'] : []) : [];
+    $('genMapHead').textContent = basis ? 'as a sum of ' + gnames.join(', ') : 'as a generator';
+    lat.dims.forEach((i, j) => {
+      const tr = document.createElement('tr'); const e = tuning.T[j] - JIC[ALLP[i]];
+      let map;
+      if (!basis) map = `the prime ${ALLP[i]} itself`;
+      else { const parts = basis.rows.map((row, k) => row[j] ? `${row[j] > 0 && k ? '+ ' : row[j] < 0 ? '− ' : ''}${Math.abs(row[j]) === 1 ? '' : Math.abs(row[j]) + ' '}${gnames[k]}` : null).filter(Boolean); map = parts.length ? parts.join(' ').replace(/^\+ /, '') : '0'; }
+      tr.innerHTML = `<td class="num">${ALLP[i]}</td><td class="num">${fmt(JIC[ALLP[i]])}</td><td class="num">${fmt(tuning.T[j])}</td><td class="num">${e >= 0 ? '+' : '−'}${fmt(Math.abs(e))}</td><td class="wrapcell">${map}</td>`; tb.appendChild(tr);
+    });
+    if (basis) {
+      const gl = gnames.map((n, k) => `${n} = ${fmt(basis.gens[k], 3)}¢`).join(', ');
+      $('genNote').textContent = `${basis.r} generator${basis.r > 1 ? 's' : ''} now: ${gl}.` + (basis.periodsPerOctave > 1 ? ` The period is 1/${basis.periodsPerOctave} of an octave.` : ' The period is the octave.') + ` Each prime is an integer sum of ${basis.r > 1 ? 'them' : 'it'}. ${gone.length > 1 ? 'The commas ' + listWords(gone.map(s => s.comma.str)) + ' map' : 'The comma ' + gone[0].comma.str + ' maps'} to zero.`;
+    } else $('genNote').textContent = `${lat.D} generators, one per prime.` + (active.length ? ' The primes are detuned while a comma shrinks, but no direction has fused yet.' : ' Every tone is exactly just.');
+    const tt = $('toneTable').querySelector('tbody'); tt.innerHTML = '';
+    lat.tones.forEach((t, i) => { const e = tuning.toneErr[i]; const tr = document.createElement('tr'); tr.innerHTML = `<td class="num">${t.label}</td><td class="num">${fmt(t.cents)}</td><td class="num">${fmt(t.cents + e)}</td><td class="num">${e >= 0 ? '+' : '−'}${fmt(Math.abs(e))}</td>`; tt.appendChild(tr); });
+    const tr3 = $('triadTable').querySelector('tbody'); tr3.innerHTML = '';
+    for (const t of st) { const tr = document.createElement('tr'); tr.className = t.alive ? '' : 'lost'; tr.innerHTML = `<td>${t.kind === 'P' ? 'proportional' : 'subcontrary'}</td><td class="num">${t.names.join(' : ')}</td><td class="num">${t.dev >= 0 ? '+' : '−'}${fmt(Math.abs(t.dev))}</td><td>${t.alive ? '<span class="pill ok">kept</span>' : '<span class="pill warn">lost</span>'}</td>`; tr3.appendChild(tr); }
+    closeState = { rank, gone, kept, P: P.filter(t => t.alive).length, S: Sx.filter(t => t.alive).length, Ptot: P.length, Stot: Sx.length };
+  }
+
+  // ---- station 4
+  function smallerOf(a, b) { if (!a) return b; if (!b) return a; return b.N <= a.N ? b : a; }
+  function listWords(items) { return items.length <= 1 ? items.join('') : items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1]; }
+  function renderClose() {
+    const { rank, gone } = closeState; const latC = lat.tones.map(t => t.cents);
+    const stats = $('closeStats'), tables = $('closeTables'), ctl = $('closeControls'); stats.innerHTML = ''; tables.innerHTML = ''; ctl.innerHTML = '';
+    const stat = (k, v, cls) => { const d = document.createElement('div'); d.className = 'stat ' + (cls || 'mel'); d.innerHTML = `<div class="k">${k}</div><div class="v">${v}</div>`; stats.appendChild(d); };
+    const triadWords = `${closeState.P} / ${closeState.S} of ${closeState.Ptot} / ${closeState.Stot}`;
+    if (rank === lat.D) {
+      $('closeLead').textContent = `Rank ${rank}: just intonation. No comma is gone.`;
+      stat('scale', `the lattice itself, ${lat.tones.length} tones`, 'harm'); stat('error', fmt(tuning.maxToneErr) + '¢', 'harm'); stat('triads kept P / S', triadWords, 'harm'); stat('closure', 'none');
+      $('closeNote').textContent = 'The lattice never closes. Every transposition adds new pitch classes. There is no MOS and no finite scale that holds the lattice and its transpositions. Make a comma vanish in station 3 to get a scale.';
+      drawScaleRuler(latC, 'the just lattice: every tone is its own degree', tuning.toneErr.map(Math.abs)); $('scalePickNote').textContent = '';
+      closeState.summary = `rank ${rank}, just intonation, ${lat.tones.length} tones, no closure`;
+      return;
+    }
+    if (!basis) { $('closeLead').textContent = 'The quotient could not be computed.'; return; }
+    if (basis.r === 1) {
+      const N = basis.periodsPerOctave, step = CENTS / N; const degrees = []; for (let k = 0; k < N; k++) degrees.push(k * step);
+      const errs = lat.tones.map(t => nearestErr(degrees, t.cents)); const mx = Math.max(...errs);
+      $('closeLead').textContent = `Rank 1: equal temperament. ${gone.length} commas are gone: ${gone.map(s => s.comma.str).join(', ')}.`;
+      stat('equal temperament', `${N}-ET`, 'mel'); stat('step', fmt(step) + '¢'); stat('largest tone error', fmt(mx) + '¢', mx <= S.tol ? 'harm good' : 'harm bad'); stat('triads kept P / S', triadWords, 'harm');
+      $('closeNote').textContent = `The val is ⟨${basis.rows[0].join(' ')}] over the primes ${lat.dims.map(i => ALLP[i]).join(', ')}. One step size. The tuning has no free choice once the octave is pure, so the tuning rule does not matter here.` + (mx <= S.tol ? ` ${N}-ET holds every tone within ${S.tol} cents.` : ` ${N}-ET misses the tolerance of ${S.tol} cents.`);
+      drawScaleRuler(degrees, `${N}-ET: dots are the steps, ticks are the lattice with its error in cents`, errs); $('scalePickNote').textContent = '';
+      const tb = document.createElement('div'); tb.className = 'tablewrap'; tb.innerHTML = '<table><thead><tr><th>tone</th><th>nearest step</th><th>error</th></tr></thead><tbody>' + lat.tones.map((t, i) => `<tr><td class="num">${t.label}</td><td class="num">${Math.round(t.cents / step)} of ${N}</td><td class="num">${fmt(errs[i])}</td></tr>`).join('') + '</tbody></table>'; tables.appendChild(tb);
+      closeState.summary = `rank 1, ${N}-ET, largest tone error ${fmt(mx)} cents, triads kept ${triadWords}`;
+      return;
+    }
+    if (basis.r === 2) {
+      const P = basis.period, g = basis.gens[1]; const rows = chainScan(P, g, latC, 72);
+      const first = rows.find(r => r.err <= S.tol), floor = rows.find(r => r.err <= tuning.maxToneErr + 1e-6);
+      const mos = mosPath(g / P, Math.floor(72 / basis.periodsPerOctave)).map(n => n * basis.periodsPerOctave);
+      $('closeLead').textContent = `Rank 2: one generator and the period. ${gone.length} commas are gone: ${gone.map(s => s.comma.str).join(', ')}.`;
+      stat('generator', fmt(g, 3) + '¢', 'mel'); stat('period', fmt(P) + '¢'); stat('MOS sizes up to 72', mos.join(' ') || 'none');
+      stat('first chain within ' + S.tol + '¢', first ? `${first.N} notes at ${fmt(first.err)}¢` : 'none up to 72', first ? 'harm good' : 'harm bad');
+      stat('first chain at the tuning floor', floor ? `${floor.N} notes at ${fmt(floor.err)}¢` : 'none up to 72', 'harm');
+      stat('triads kept P / S', triadWords, 'harm');
+      const map = lat.dims.map((i, j) => `${ALLP[i]} → ${basis.rows[1][j]}`).join(', ');
+      $('closeNote').textContent = `Generator counts of the primes: ${map}. The chain is N consecutive generators reduced to the period. The 1/1 sits at the best position. The table lists every N. The page highlights each row within the tolerance. The floor is the tuning's own largest tone error, ${fmt(tuning.maxToneErr)} cents. No chain of this generator does better.`;
+      const pick = (S.pickKind === 'r2' && rows.find(r => r.N === S.pick)) || smallerOf(first, floor) || rows[rows.length - 1];
+      S.pick = pick.N; S.pickKind = 'r2';
+      drawScaleRuler(pick.degrees, `${pick.N} notes of ${fmt(g)}¢: dots are the chain, ticks are the lattice with its error`);
+      $('scalePickNote').textContent = `${pick.N} notes, 1/1 at generator position ${-pick.s}. Largest tone error ${fmt(pick.err)} cents.${pick.mos ? ' This N is an MOS of the generator.' : ' This N is a chain with three step sizes, not an MOS.'} Select another row to change it.`;
+      const tb = document.createElement('div'); tb.className = 'tablewrap';
+      tb.innerHTML = '<table><thead><tr><th>N</th><th>type</th><th>1/1 at position</th><th>largest error</th></tr></thead><tbody>' + rows.map(r => `<tr class="sel${r.err <= S.tol ? ' hit' : ''}${r.N === pick.N ? ' pick' : ''}" data-n="${r.N}"><td class="num">${r.N}</td><td>${r.mos ? '<span class="pill ok">MOS</span>' : '<span class="pill">chain</span>'}</td><td class="num">${-r.s}</td><td class="num">${fmt(r.err)}</td></tr>`).join('') + '</tbody></table>';
+      tb.querySelectorAll('tr.sel').forEach(tr => tr.addEventListener('click', () => { S.pick = +tr.dataset.n; S.pickKind = 'r2'; renderClose(); updatePrompt(); }));
+      tables.appendChild(tb);
+      closeState.summary = `rank 2, generator ${fmt(g, 3)} cents with period ${fmt(P)} cents, mapping ${map}, MOS sizes ${mos.join(' ')}, first chain within ${S.tol} cents: ${first ? first.N + ' notes at ' + fmt(first.err) + ' cents' : 'none up to 72'}, first chain at the floor: ${floor ? floor.N + ' notes at ' + fmt(floor.err) + ' cents' : 'none up to 72'}, triads kept ${triadWords}`;
+      return;
+    }
+    if (basis.r === 3) {
+      const P = basis.period; const [ga, gb] = [basis.gens[1], basis.gens[2]];
+      const res = brun3Search(P, ga, gb, latC); const rows = res.rows;
+      const first = rows.find(r => r.err <= S.tol), floor = rows.find(r => r.err <= tuning.maxToneErr + 1e-6);
+      $('closeLead').textContent = `Rank 3: two generators and the period. ${gone.length} comma is gone: ${gone.map(s => s.comma.str).join(', ')}. Scales come from Viggo Brun's three-term algorithm, as the iOS Wilsonic builds them.`;
+      stat('basis generators', `${fmt(ga, 2)}¢, ${fmt(gb, 2)}¢`, 'mel'); stat('period', fmt(P) + '¢');
+      stat('first scale within ' + S.tol + '¢', first ? `${first.N} notes at ${fmt(first.err)}¢` : 'none to level 7', first ? 'harm good' : 'harm bad');
+      stat('first scale at the tuning floor', floor ? `${floor.N} notes at ${fmt(floor.err)}¢` : 'none to level 7', 'harm');
+      stat('triads kept P / S', triadWords, 'harm'); stat('generator pairs tried', res.pairsTried);
+      $('closeNote').textContent = `The two generators are a coordinate choice. So the page tries small integer changes of basis. Each candidate is G = a·g0 + b·g1 reduced to the period, with |a|, |b| ≤ ${BASIS_RANGE}. A pair is kept when its determinant is ±1. For each pair the page runs Brun3 with both calc types to level 7 and every mode. It keeps the best scale for each note count. The floor is the tuning's own largest tone error, ${fmt(tuning.maxToneErr)} cents. A scale at the floor holds every tempered tone exactly.`;
+      const pick = (S.pickKind === 'r3' && rows.find(r => r.N === S.pick)) || smallerOf(first, floor) || rows[rows.length - 1];
+      if (!pick) { $('scalePickNote').textContent = 'No Brun3 scale could be built.'; return; }
+      S.pick = pick.N; S.pickKind = 'r3';
+      drawScaleRuler(pick.pcs, `${pick.N} notes from generators ${fmt(pick.G0)}¢ and ${fmt(pick.G1)}¢ (${pick.calc}, level ${pick.level}, mode ${pick.mode})`);
+      $('scalePickNote').textContent = `${pick.N} notes. Generators ${fmt(pick.G0, 3)}¢ and ${fmt(pick.G1, 3)}¢, calc ${pick.calc}, level ${pick.level}, mode ${pick.mode}. Step sizes ${pick.sizes.map(s => fmt(s, 1)).join(', ')} cents. Largest tone error ${fmt(pick.err)} cents. Select another row to change it.`;
+      const tb = document.createElement('div'); tb.className = 'tablewrap';
+      tb.innerHTML = '<table><thead><tr><th>N</th><th>largest error</th><th>G0</th><th>G1</th><th>calc</th><th>level</th><th>mode</th><th>step sizes</th></tr></thead><tbody>' + rows.map(r => `<tr class="sel${r.err <= S.tol ? ' hit' : ''}${r.N === pick.N ? ' pick' : ''}" data-n="${r.N}"><td class="num">${r.N}</td><td class="num">${fmt(r.err)}</td><td class="num">${fmt(r.G0)}</td><td class="num">${fmt(r.G1)}</td><td>${r.calc}</td><td class="num">${r.level}</td><td class="num">${r.mode}</td><td class="num">${r.sizes.map(s => fmt(s, 1)).join(' ')}</td></tr>`).join('') + '</tbody></table>';
+      tb.querySelectorAll('tr.sel').forEach(tr => tr.addEventListener('click', () => { S.pick = +tr.dataset.n; S.pickKind = 'r3'; renderClose(); updatePrompt(); }));
+      tables.appendChild(tb);
+      const lvl = document.createElement('div'); lvl.innerHTML = '<h3 style="margin-top:8px">Brun3 levels of the selected pair</h3>';
+      for (const calc of ['AB', 'AC']) { const t = brun3LevelTable(P, pick.G0, pick.G1, calc); const wrap = document.createElement('div'); wrap.className = 'tablewrap'; wrap.style.marginTop = '6px'; wrap.innerHTML = `<table><thead><tr><th>calc ${calc}: level</th><th>N</th><th>step sizes</th></tr></thead><tbody>` + t.map(r => `<tr><td class="num">${r.level}</td><td class="num">${r.N}</td><td class="num">${r.sizes.map(s => fmt(s, 1)).join(' ')}</td></tr>`).join('') + '</tbody></table>'; lvl.appendChild(wrap); }
+      tables.appendChild(lvl);
+      closeState.summary = `rank 3, basis generators ${fmt(ga, 3)} and ${fmt(gb, 3)} cents with period ${fmt(P)} cents, first Brun3 scale within ${S.tol} cents: ${first ? first.N + ' notes at ' + fmt(first.err) + ' cents (generators ' + fmt(first.G0, 3) + ' and ' + fmt(first.G1, 3) + ', ' + first.calc + ' level ' + first.level + ' mode ' + first.mode + ')' : 'none to level 7'}, first scale at the floor: ${floor ? floor.N + ' notes at ' + fmt(floor.err) + ' cents (generators ' + fmt(floor.G0, 3) + ' and ' + fmt(floor.G1, 3) + ', ' + floor.calc + ' level ' + floor.level + ' mode ' + floor.mode + ')' : 'none to level 7'}, triads kept ${triadWords}`;
+      return;
+    }
+    $('closeLead').textContent = `Rank ${rank}. This page builds scales for rank 1, 2 and 3.`;
+    closeState.summary = `rank ${rank}`;
+  }
+
+  // ---- presets
+  const PRESETS = [
+    { label: 'Clear all', set: [] },
+    { label: 'Marvel 225/224 (10 notes)', set: ['225/224'] },
+    { label: '1029/1024 (15 notes)', set: ['1029/1024'] },
+    { label: '65625/65536 (19 notes)', set: ['65625/65536'] },
+    { label: '2401/2400 (21 notes)', set: ['2401/2400'] },
+    { label: 'Breed pair: 2401/2400 + 3136/3125 (22 notes)', set: ['2401/2400', '3136/3125'] },
+    { label: '130-ET: breed pair + 19683/19600', set: ['2401/2400', '3136/3125', '19683/19600'] },
+    { label: '140-ET: 2401/2400 + 5120/5103 + 15625/15552', set: ['2401/2400', '5120/5103', '15625/15552'] },
+    { label: 'Meantone 81/80', set: ['81/80'] },
+  ];
+  function buildPresets() {
+    const box = $('presets'); box.innerHTML = '';
+    for (const p of PRESETS) {
+      const b = document.createElement('button'); b.className = 'small'; b.textContent = p.label;
+      b.addEventListener('click', () => { S.slots = [{ comma: null, lam: 0 }, { comma: null, lam: 0 }, { comma: null, lam: 0 }]; p.set.forEach((str, i) => { const c = commas.find(x => x.str === str); if (c) S.slots[i] = { comma: c, lam: 1 }; }); S.pick = null; refreshSlotOptions(); renderAll(); });
+      box.appendChild(b);
+    }
+  }
+
+  // ---- prompt
+  function updatePrompt() {
+    const p = [];
+    p.push(`Comma Dial state. Lattice: ${lat.name}, ${lat.tones.length} tones: ${lat.tones.map(t => t.label).join(' ')}. Rank ${lat.D} with the octave (${lat.D - 1} octave-equivalent). Exact triads P / S: ${closeState.Ptot} / ${closeState.Stot}.`);
+    const dials = S.slots.map((s, i) => s.comma ? `dial ${i + 1}: ${s.comma.str} (${fmt(s.comma.cents)} cents) at ${s.lam.toFixed(2)}` : null).filter(Boolean);
+    p.push(dials.length ? `Dials: ${dials.join('. ')}.` : 'Dials: all empty.');
+    p.push(`Tuning rule: ${tuning.rule === 'tones' ? 'smallest largest error over the lattice tones' : tuning.rule === 'primes' ? 'smallest largest error over the primes' : 'pure fifth, then smallest largest error over the other primes'}, octave pure. Tolerance ${S.tol} cents. Per-prime errors in cents: ${lat.dims.slice(1).map((i, j) => `${ALLP[i]} ${(tuning.T[j + 1] - JIC[ALLP[i]]).toFixed(3)}`).join(', ')}. Largest tone error ${fmt(tuning.maxToneErr)} cents.`);
+    p.push(`Rank now ${closeState.rank}. Triads kept P / S: ${closeState.P} / ${closeState.S}.` + (basis ? ` Generators: ${basis.gens.map((g, k) => (k ? 'g' + (k - 1) : 'period') + ' = ' + fmt(g, 3) + ' cents').join(', ')}. Val rows over the primes ${lat.dims.map(i => ALLP[i]).join(', ')}: ${basis.rows.map(r => '⟨' + r.join(' ') + ']').join(', ')}.` : ' Generators: the primes themselves.'));
+    p.push(`What closes: ${closeState.summary || 'nothing yet'}.`);
+    p.push('Task: continue from this state. The objective is the smallest scale that holds the lattice and keeps its proportional and subcontrary triads. Each rank buys one comma. Prefer fewer notes for melody. Report which comma costs which triads. Receipts: CPSFIT-001 (2026-10-10) and RANK3-001 (2026-10-12) in experiments/lattice.');
+    $('promptText').textContent = p.join('\n\n');
+  }
+
+  // ---- wiring
+  const copyTo = (textId, noteId) => () => {
+    const text = $(textId).textContent;
+    const done = () => { $(noteId).textContent = 'Copied.'; setTimeout(() => { $(noteId).textContent = ''; }, 1500); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($(textId)); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); $(noteId).textContent = 'Text selected. Press copy.'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  };
+  function renderAll() { renderSlots(); renderDial(); renderClose(); updatePrompt(); }
+  function loadLattice() {
+    lat = buildLattice(S.lat); commas = enumerateCommas(lat.oddIdx); triads = exactTriads(lat);
+    S.slots = [{ comma: null, lam: 0 }, { comma: null, lam: 0 }, { comma: null, lam: 0 }]; S.pick = null;
+    const def = commas.find(c => c.str === (lat.oddIdx.length === 2 ? '81/80' : '225/224')); if (def) { S.slots[0] = { comma: def, lam: 0 }; S.hover = def; } else S.hover = commas[0] || null;
+    renderLattice(); renderCommas(); buildSlots(); renderAll();
+  }
+  $('latSel').addEventListener('change', e => { S.lat = e.target.value; loadLattice(); });
+  $('ruleSel').addEventListener('change', e => { S.rule = e.target.value; S.pick = null; renderAll(); });
+  $('tol').addEventListener('input', e => { S.tol = +e.target.value; $('tolVal').textContent = S.tol.toFixed(1); renderAll(); });
+  $('commaMax').addEventListener('input', e => { S.commaMax = +e.target.value; $('commaMaxVal').textContent = S.commaMax; renderCommas(); });
+  $('commaAdd').addEventListener('click', () => {
+    const c = S.hover; if (!c) { $('commaAddNote').textContent = 'Select a comma first.'; return; }
+    const already = S.slots.findIndex(s => s.comma === c); if (already >= 0) { $('commaAddNote').textContent = `${c.str} is dial ${already + 1} already.`; return; }
+    const free = S.slots.findIndex(s => !s.comma); if (free < 0) { $('commaAddNote').textContent = 'All three dials are full. Clear one first.'; return; }
+    const st = canChoose(c, free); if (!st.ok) { $('commaAddNote').textContent = st.why === 'dependent' ? `${c.str} is a combination of the commas on the dial. The rank would not drop again.` : `${c.str} with the chosen commas also vanishes a smaller comma. Choose that comma instead.`; return; }
+    S.slots[free] = { comma: c, lam: 0 }; $('commaAddNote').textContent = `${c.str} is dial ${free + 1}. Scroll to station 3.`; S.pick = null; refreshSlotOptions(); renderAll();
+  });
+  $('copyBtn').addEventListener('click', copyTo('promptText', 'copyNote'));
+  window.addEventListener('resize', () => { renderLattice(); renderCommas(); renderDial(); renderClose(); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', () => { renderLattice(); renderCommas(); renderDial(); renderClose(); });
+  buildPresets();
+  loadLattice();
+})();
+</script>

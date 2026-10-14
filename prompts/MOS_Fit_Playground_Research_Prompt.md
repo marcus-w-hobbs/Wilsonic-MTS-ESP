@@ -60,28 +60,59 @@ elsewhere). Treat me as a co-investigator extending Erv Wilson's program.
 - Work autonomously; batch decisions for me into gates and an end-of-stretch
   summary. Do not push without asking; commit freely on the branch.
 
+**Where this is going (Marcus, 2026-10-12).** Music no one has heard, coherent
+because it follows a model of how we hear pitch. Target object: the eikosany
+CPS(6,3) on ANY six seeds A–F, fitted by one generator into one MOS, with every
+embedded subset (dekanies, hexanies, tetrads) playable inside that same MOS.
+Triads (P and S first) are the objective, not tones: a chain that holds all 20
+tones and loses the triads is not a fit. Golden/noble generators are an
+aesthetic axis to keep in the search space, not the objective. Murchana is a
+control, not an axis. Inversion is a small fact about self-symmetric CPS, not a
+program. Path to the musician: Wilsonic (Scala export first).
+
 **Research questions, in priority order**
-1. Count objective (CPSFIT-003): DONE 2026-10-11. Open follow-ups: sweep the
-   20¢ tone cap (5, 10, 20) as a control, because the small-N optima sit on
-   the cap; and a transposition-free fit (chain origin floating), which
-   restores the CPS(n,k)/CPS(n,n−k) symmetry. Gate G-032 decides both.
-2. Golden fits: for each lattice, the golden (then silver) generator with the
-   smallest level that holds it at 2, 3, 5¢. How far is it from the free
-   optimum at that N? Is the near-coincidence of Erv's recurrence generators
-   with golden ones a general law (do the free optima also land near nobles)?
-3. Inversion: DONE 2026-10-11 (CPSFIT-003 P-C5). The reflection 1/L fits
-   identically at the mirrored window with P/S swapped. The partner
-   CPS(n,n−k) is the reflection TRANSPOSED by ∏F and gets different fits
-   under the pinned-origin model, so the search cannot be halved across
-   partners unless the fit becomes transposition-free. The page lists the
-   murchanas that hold the lattice by direct scan.
-4. Subsets: fit the 15 hexanies of the eikosany separately and jointly; which
-   chain holds the most subsets at once (subset-first doctrine)?
-5. Rank 3: two generators + octave; the D'Alessandro method on a general
-   seed. Start with the hexany and the 2-of-5 dekany.
-6. Quotient half-generator ties (an N-chain of g equals the 2N-chain of g/2).
-7. Hear it: the page exports Scala text; build the ear-check set for the
-   hexany at N=15, 19, 22, 31 and the best golden fit, for gates G-029/G-031.
+1. Triads as the objective on the page and on the eikosany: port the
+   CPSFIT-003 count search into the page's free search (count-optimal beside
+   tone-optimal); extend val/kernel code to 11-limit; run the count fit on the
+   eikosany (CPSFIT-004). Controls from G-032: tone-cap sweep (5, 10, 20¢) and
+   a transposition-free fit. Geometric triads as a possible third class.
+2. Eikosany + subsets jointly: RAN 2026-10-14 as SUBFIT-001 (gate G-036).
+   One chain keeps at most 20/30 hexanies + 4/12 dekanies at N = 70; usable
+   MOS today: 41-note level of 351.44¢ (14 + 2) and 53-note level of
+   497.77¢ (16 + 2). LESSON: a cap-free survival predicate counts chain
+   coincidences (tones up to 71¢ off still "kept" a triad) — never drop the
+   per-tone cap; SUBFIT-002 re-registers with 20¢ and 10¢ caps. Lesson 2:
+   a scratch must use the SAME assignment rule as the runner (global vs
+   in-window nearest degree changed every number).
+3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
+4. Golden as an aesthetic axis: RAN 2026-10-13 as GOLD-001 (gate G-035).
+   Golden at complexity ≤ 20 loses triads to the free optimum on every
+   lattice (hexany 8/12 where free has 12); silver loses fewer; the
+   MOS-level constraint costs more than either; a pure MOS keeps all 12
+   hexany triads first at N = 25. The selector is a real trade. Open: the
+   page's family search scored by triad count (it scores tone error now);
+   "noble only" vs "best triads" on the page; ear evals.
+5. Erv's generators vs golden: RAN 2026-10-13 as GOLD-002 (gate G-034) on
+   the 17 generators the repo cites. The strong law is refuted against a
+   null model (3–6 of 17 in the tail, never most); silver fits as well;
+   nearness ≠ harmony at depth. Complexity = minimal seed-denominator pair
+   (gold002.nobles; the page's enumeration was corrected). Open: GOLD-003
+   on the full archive (read in place, figure-cited) only if G-034 says the
+   weak signal is worth it.
+6. Hear it: six chains are in Wilsonic's user Scala library (hexany N=15, 16,
+   18, 22×2; dekany N=26); gates G-029, G-031, G-032.
+7. Rank 3: RAN 2026-10-12 as RANK3-001 (brun3.py = port of the iOS Wilsonic
+   Brun3, Viggo Brun's three-term algorithm; runner rank3001.py). Hexany in
+   19 notes at 0.47¢ with 12/12 (65625/65536), 21 at 0.12¢ (2401/2400);
+   EG4 24/24 from N=19; dekany with 9 held in full at N=29 (schisma); the
+   eikosany (rank 5) stops at 12¢ with no val: three generators (Brun
+   four-term) are the next rung. Gate G-033. Lessons: register the COMMA,
+   never the generator pair (coordinates are not invariant); say which
+   survival count (mirror vs frozen) a clause uses; the frozen referee
+   counts created triads heavily at 15¢ error. Open follow-ups: rank-3
+   count objective, rank 4 for the eikosany, a Brun3 design in Wilsonic
+   MTS-ESP (plugin lane), a rank-3 station on the page.
+8. The half-generator tie quotient: still open, low priority.
 
 **Playground improvements made 2026-10-11** (staircase chart with
 free/station-2/family/ET on one picture, hover and click; val + kernel per

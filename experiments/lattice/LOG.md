@@ -4342,3 +4342,703 @@ of 41), offered for listening as gate G-032.
 test_cpsfit003), freeze checks A OK on both pins (scorer 1a840af9…b592,
 melodic a16f162b…7535). Both receipts and the three .scl are bit-identical
 across two runs (`cmp`). Each run 602 s.
+
+## 2026-10-12 — RANK3-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-12).** The iOS Wilsonic (Wilsonic_v_1_8_6,
+`Wilsonic/Brun/Brun3.m`, 2016) builds scales from the octave and TWO
+generators with Viggo Brun's three-term algorithm (Erv's "Viggo Rhythm"
+paper). Marcus did not port it to Wilsonic MTS-ESP for lack of time and
+asked whether it lets a smaller scale hold a larger just lattice. If it
+does, rank 3 is to be explored in full. This experiment measures that: for
+each note count N, the smallest largest-tone-error at which a Brun3 scale
+holds the lattice, the triads that survive, and the temperament each
+winning scale is.
+
+**The Brun3 construction (ported, to be a new file `brun3.py`).** Inputs
+O > G0 > G1 > 0 in octaves. Level 0 is the single interval O. At each level
+the three current intervals are sorted large to small. The largest A is
+replaced by A − B (calc type AB) or A − C (calc type AC). In the step list
+every copy of the old largest step is replaced by its two pieces, with the
+iOS "balance" rule: the second piece B goes first unless the previous step
+already equals B. Levels run to 7. Each step is tracked as an exact
+integer triple over (O, G0, G1), so every degree is an integer combination
+and a fitted lattice has a three-row val (octave, G0, G1 rows). Rank here counts the octave: a 7-limit
+lattice is rank 4 and a two-generator scale is rank 3 (octave-equivalently
+3 and 2, the convention of SPEC.md), so a rank-3 fit leaves exactly one
+comma in the kernel.
+The port reproduces the iOS header's example: (2/1, 3/2, 5/4) under AB
+gives levels of 1, 2, 3, 5, 7, 10, 15 and 22 notes, the 5-note level is
+1/1, 5/4, 4/3, 3/2, 15/8, and AC at level 5 gives 1/1, 16/15, 5/4, 4/3,
+3/2, 8/5, 15/8. Murchana (mode) rotates the scale to any degree.
+
+**Lattices.** Hexany CPS(4,2){1,3,5,7}, the EG4 tesseract (8 tones),
+dekany CPS(5,2){1,3,5,7,9}, and the eikosany CPS(6,3){1,3,5,7,9,11}
+(20 tones, 114 exact triads: 57 P + 57 S). The eikosany is rank 5, so no
+rank-3 scale can hold it exactly. It is included to measure how close
+two generators get and how many triads survive, which is the number
+Marcus cares about.
+
+**Search.** Objective: the largest circular tone error (tone minimax, as
+CPSFIT-001), with the lattice's 1/1 on a scale degree (the mode). Stage 1
+enumerates (g0, g1) on a 2 cent grid over 0 < g1 < g0 < 1200 cents, both
+calc types, levels 1 to 7, every mode, and keeps the best candidates per
+N. Stage 2 refines each candidate exactly: with the scale's coefficient
+structure, mode and nearest-degree assignment held fixed, the minimax over
+(g0, g1) is a Chebyshev linear program in two unknowns. The runner solves
+it exactly (vertex enumeration), subject to the ordering constraints that
+keep the Brun3 structure valid, and rejects a solution whose structure
+changes. Per fit: the three-row val by exact integer solve on the tones'
+monzos, the kernel comma (box |e3| ≤ 12, |e5| ≤ 6, |e7| ≤ 5, under 60
+cents, Tenney height ≤ 2^40), frozen image survival at 2 cents (P + S),
+the mirror's triad deviations, whether the scale has 2 or 3 step sizes,
+frozen melodic of the scale. Stdlib only, multiprocessing allowed,
+deterministic, two bit-identical runs. The scratch that produced the
+predictions used a 2 cent grid with a coordinate-descent refinement and
+no exactness guarantee, so the registered errors are UPPER bounds: the
+runner must find an error at most the registered value plus 0.05 cents
+at each listed N. A better optimum with a different comma refutes the
+comma clause.
+
+**Predictions (scratch sweep 2026-10-12, 2 cent grid, python3.11 with
+numpy; the frozen scorer referees survival).**
+- **P-R1 (hexany staircase and commas).** N: error ≤ (comma, survival at
+  2 cents). 10: 2.57 (225/224, 4/12). 15: 2.81 (1029/1024, 10/12). 19:
+  0.61 (65625/65536, 12/12). 20: 2.57 (225/224, 10/12). 21: 0.12
+  (2401/2400, 12/12). 24: 0.46 (32805/32768, 12/12). 27: 0.12 (2401/2400;
+  12/12). 29: 0.25 (32805/32768, 12/12). The first N within 2 cents is 19
+  (rank 2: 22) and the first N with all 12 triads is 19 (rank 2: 31 under
+  the tone fit, 22 under the triad fit). Survival is ≥ the listed value.
+- **P-R2 (EG4).** 10: 2.57 (225/224, 8/24). 15: 2.81 (1029/1024, 18/24).
+  19: 0.47 (65625/65536, 24/24). 21: 0.12 (2401/2400, 24/24). 24: 0.46
+  (32805/32768, 24/24). First full survival at N = 19 (rank 2: 23).
+- **P-R3 (dekany with 9).** 21: 3.27 (1728/1715, 25/41). 29: 0.66
+  (32805/32768, 41/41), with G0 a fifth of 701.73 cents and G1 of 64.0
+  cents. Rank 2 reached 37/41 at best below N = 37 and never 41. So the
+  schisma, tempered once, is what the dekany with 9 needs.
+- **P-R4 (eikosany).** No Brun3 scale up to level 7 (N ≤ 34) holds the
+  eikosany within 10 cents. The best is about 12 cents at N = 31, and
+  survival never exceeds 29 of 114 at any N ≤ 34. Two generators are not
+  enough for a rank-5 lattice. Three generators (Brun's four-term
+  algorithm) are the natural next step and are out of scope here.
+- **P-R5 (every winner is a val).** At every N listed in P-R1 to P-R3 the
+  optimum is homomorphic with exactly one kernel comma under 60 cents in
+  the box, and the comma is the one listed.
+- **P-R6 (depth).** Every hexany fit within 3 cents occurs at level 7, the
+  deepest level, and both calc types appear among the winners (AC at
+  N = 10 and 24, AB elsewhere).
+
+**Deliverables.** `brun3.py` (the port, stdlib) with tests pinned to the
+iOS example. `rank3001.py` and `tests/test_rank3001.py`, green before the
+first run. Receipts `results/rank3001.jsonl` and
+`results/rank3001_summary.json`. Scala exports under `results/scl/rank3001/`
+for the hexany at N = 19 and N = 21 and the dekany at N = 29, offered for
+listening as a standing gate.
+
+## 2026-10-12 — RANK3-001 results + verdicts
+
+**Run:** `rank3001.py` (50 s with 8 worker processes. Receipts
+`results/rank3001.jsonl`, 122 rows = one per lattice and note count, plus
+`results/rank3001_summary.json`.) Frozen triads v1.1.0 (`score_tempered`,
+2 cents) and melodic v0.1.0 read-only, pins verified. Lattice suite
+388/388 green before the first run (8 tests for `brun3.py`, 10 for the
+runner). Four generator pairs on the grid are commensurable with the octave
+(600 with 450 cents, 900 with 300, 1050 with 450, 1050 with 750, all under
+A−C) and Brun3 runs out of intervals there. The runner skips and counts
+them. Every refined fit kept its Brun3 structure at the solution.
+
+- **P-R1 — REFUTED as registered on one clause, held on the rest.** Every
+  error bound holds and the runner improves on three: hexany N = 19 is
+  0.47 cents (registered 0.61), N = 24 is 0.24 (registered 0.46), N = 29 is
+  0.24 (registered 0.25). Every registered comma reproduces (225/224 at
+  N = 10 and 20, 1029/1024 at 15, 65625/65536 at 19, 2401/2400 at 21 and
+  27, 32805/32768 at 24 and 29). The first N within 2 cents is 19 and the
+  first N with all 12 triads is 19, as registered. The clause that fell:
+  at N = 20 the runner's optimum (699.384 and 693.772 cents) has the same
+  worst tone error as the scratch's (2.571 against 2.574 cents, a better
+  solution by 0.003 cents) and keeps 4 triads where the scratch's chain
+  kept 10. Tone minimax has ties at N = 20 and the tie-break is the error,
+  so a survival floor was not a prediction the objective could carry. The
+  error is the session's.
+- **P-R2 — KEPT.** EG4 reproduces every rung and comma, with N = 19 at
+  0.47 cents (24/24) and N = 24 at 0.24, and first full survival at N = 19.
+- **P-R3 — REFUTED as registered on the generator pair, held on the
+  rest.** The dekany with 9 reaches 41/41 at N = 29 under the schisma
+  32805/32768 at 0.651 cents (registered 0.66), and 25/41 at N = 21 under
+  1728/1715 at 3.27 cents. The runner's N = 29 scale uses the pair
+  (498.262, 27.047) cents, a fourth and a 27 cent step, where the scratch's
+  pair was (701.73, 64.0). The two scales are different (their closest
+  modes differ by 6.2 cents), both are schismatic, and the runner's is the
+  better one. A generator pair is a choice of coordinates on the
+  temperament and is not invariant, which is what the session told Marcus
+  the same day and then registered anyway. The comma is the invariant and
+  it held. The error is the session's.
+- **P-R4 — REFUTED as registered, held on the quantity the scratch
+  measured.** No Brun3 scale up to level 7 holds the eikosany within 10
+  cents. The best is 11.98 cents at N = 31, as registered. Survival by the
+  mirror (exact triads, |dev| < 2 and separation ≥ 2 cents) never exceeds
+  28 of 114, inside the registered 29. Survival by the frozen referee
+  reaches 59 of 114 at N = 28 and 58 at N = 22 and 24, because the frozen
+  scorer counts every triad among the 20 image pitch classes, and at 15
+  cents of tone error the tempering creates dozens that the lattice does
+  not have. The registration said "survival" and the runner's verdict
+  used the frozen number, so the clause fell. The scratch's number was the
+  mirror. Both are now on every row. The error is the session's.
+- **P-R5 — REFUTED as registered, held in substance.** Every winner at a
+  registered N is a val. At N = 10 and 20 (hexany) and N = 10 (EG4) the
+  kernel box holds two commas under 60 cents, 225/224 and its square
+  50625/50176. The kernel is rank 1 as the registration meant, and the
+  listing counts a multiple as a second comma. The error is the session's
+  wording.
+- **P-R6 — KEPT.** Every hexany fit within 3 cents is at level 7, and the
+  calc types at the registered N are as listed (A−C at N = 10 and 24, A−B
+  elsewhere).
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) New rungs
+the scratch missed: hexany N = 18 at 2.18 cents under 1728/1715 (4/12),
+N = 23 at 2.18 cents with no val (8/12), N = 22 at 1.34 under 6144/6125
+(10/12). (2) Hexany N = 26 keeps all 12 triads at 1.07 cents with NO val:
+a rank-3 accident, the first non-homomorphic fit in the program with full
+survival. Three generator pairs tie at that N ((424.78, 119.89),
+(424.78, 230.55), (775.22, 119.89)), which is the coordinate freedom of
+P-R3 again. (3) EG4 N = 31 at 4.30 cents tempers 81/80 alone: a meantone
+with 7 left free, which is the first time the syntonic comma appears in
+these fits. EG4 N = 18 tempers 875/864 (10/24). The dekany at N = 14
+tempers 49/48 (15.3 cents, 12/41). (4) The rank-2 and rank-3 ladders side
+by side for the hexany at 2 cents: rank 1 (ET) needs more than 72 notes
+(CPSFIT-001 scanned 5 to 72 and found none; the comma-dial page computes
+the first as 130-ET at 1.78 cents, which is not a receipt), rank 2
+needs 22 (1.37 cents, 10/12), rank 3 needs 19 (0.47 cents, 12/12), rank 4
+is the hexany itself at 6 notes and zero error. Each rank buys one comma.
+(5) Every count-and-error winner at level 7 has three step sizes. The only
+two-step winners are the dekany at N = 30 and the eikosany at N = 29,
+neither of them a good fit. A rank-3 scale that holds a lattice is a
+three-interval pattern, not an MOS, which is what Brun's algorithm says it
+should be. (6) The eikosany stays at 12 to 16 cents from N = 22 up with no
+val anywhere, which is the rank-5 wall. Three generators are the next
+rung.
+
+**Kept.** Runner and receipts stand. `results/scl/rank3001/` holds the
+hexany N = 19 scale (1002.862 and 385.844 cents, 65625/65536), the hexany
+N = 21 scale (350.978 and 231.294 cents, 2401/2400) and the dekany N = 29
+scale (498.262 and 27.047 cents, the schisma), offered for listening as
+gate G-033.
+
+**Run receipt:** 2026-10-12, python3.12 — lattice suite 388/388 OK (18 new:
+test_brun3, test_rank3001), freeze checks A OK on both pins (scorer
+1a840af9…b592, melodic a16f162b…7535). Both receipts and the three .scl are
+bit-identical across two runs (`cmp`). Each run 50 s with 8 workers.
+
+## 2026-10-13 — GOLD-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, a series he asked Claude to own).** Erv
+found his recurrence generators by optimizing proportional and subcontrary
+triads by hand. The first five measured sat 0.07 to 0.61 cents from a
+golden generator. Is "optimize the triads and you land near a noble
+number" a law? If it is, the generator-family selector in the planned
+Wilsonic design costs nothing. If it is not, the selector is a real trade
+between closure character and harmony. This experiment measures the
+claim against a null model, because nobles are dense: with seed
+denominators up to 60 there are 1102 golden generators in 600 cents, so
+any generator at all sits within 0.18 cents of one on average. Nearness
+only means something against the nearness of a random generator at the
+same complexity.
+
+**Generators.** The seventeen Erv and control generators the repo already
+cites with sources: the sixteen two-term recurrences of MERU-001 (the
+roots of H[n] = a·H[n−i] + b·H[n−j]: Erv 0.418935, 0.238186, Fig 12 #12,
+0.415227, meta-meantone, the silver control 8H[n−9] + 7H[n−10], Fibonacci,
+meta-pelog, meta-slendro, meta-Ptolemy, 0.591780, LLSLS, meta-slendro 2,
+0.773743, Pell, and the playground pick fit351), plus phi (Fig 12 entry 1).
+Each is folded to (0, 0.5] because g and 1 − g make the same chains. The
+archive scans (read in place, never vendored) extend this list in a later
+pass, GOLD-003.
+
+**Nobles and complexity.** A golden generator is (a + φc)/(b + φd) for a
+unimodular pair a/b, c/d (|bc − ad| = 1), either order. Silver uses
+1 + √2. The COMPLEXITY of a noble is the smallest max(b, d) over every pair
+that generates it, which is the seed pair where its scale-tree path starts
+to alternate. The ladder is Q = 8, 12, 20, 30, 60 (22, 46, 128, 278 and
+1102 golden generators, 33, 69, 192, 417 and 1653 silver). The earlier
+page enumeration took only neighbours at the deepest Farey level and gave
+every noble complexity 60. That is corrected here and on the page.
+
+**Null model.** 20000 generators uniform on (0, 0.5], seed 20261013. For
+each family and Q, the nearest-noble distance of each random generator
+gives a distribution. Each Erv generator's distance is reported with its
+percentile in that distribution. The strong form of the law says most of
+the seventeen sit in the low tail (percentile ≤ 0.10) at some single Q.
+The expected count under the null is 1.7 of 17.
+
+**Chain triads.** For each Erv generator and its nearest golden (Q = 60),
+the frozen P + S at 2 cents (`score_tempered`) of the N-chain of each at
+the golden generator's MOS levels up to 41, from degree 0.
+
+**Predictions (scratch 2026-10-13, deterministic, same definitions as the
+runner).**
+- **P-G2-1 (null distances).** Median nearest-golden distance of a random
+  generator: 8.58, 4.21, 1.52, 0.71 and 0.18 cents at Q = 8, 12, 20, 30,
+  60. Tenth percentile: 1.35, 0.66, 0.24, 0.11, 0.027 cents. Silver
+  medians 5.54, 2.69, 0.97, 0.45, 0.11 cents.
+- **P-G2-2 (the strong law is refuted).** Golden, Erv generators at or
+  below the tenth percentile: Q = 8: 5 of 17 (0.418935, meta-meantone, the
+  silver control, Fibonacci, phi). Q = 12: 5 (meta-meantone, Fibonacci,
+  meta-pelog, fit351, phi). Q = 20: 3 (0.418935, the silver control,
+  0.773743). Q = 30: 2 (meta-slendro, 0.773743). Q = 60: 4 (meta-slendro,
+  meta-Ptolemy, 0.773743, Pell). Silver: 4, 5, 6, 4, 4. At no Q do more
+  than 6 of 17 fall in the tail, so "most" fails at every Q. The weak form
+  survives: 3 to 6 against an expected 1.7, and 0.773743 sits on a golden
+  generator of complexity 20 to 0.00 cents.
+- **P-G2-3 (registered distances, 0.01 cent tolerance).** Nearest golden
+  at Q = 20: 0.418935 −0.12, 0.238186 −1.23, Fig 12 #12 −10.58, 0.415227
+  −1.02, meta-meantone −0.58, silver control +0.16, Fibonacci −0.65,
+  meta-pelog +0.31, meta-slendro +2.74, meta-Ptolemy +3.60, 0.591780 −0.30,
+  LLSLS −2.74, meta-slendro 2 −2.72, 0.773743 −0.00, Pell −1.92, fit351
+  −0.45, phi −0.65 cents. At Q = 60: 0.418935 +0.09 (seeds 18/43, 13/31),
+  0.238186 +0.61, Fig 12 #12 −0.17, 0.415227 +0.07, meta-meantone +0.11,
+  silver control −0.08, Fibonacci +0.07, meta-pelog +0.12, meta-slendro
+  +0.02, meta-Ptolemy −0.02, 0.591780 +0.17, LLSLS −0.19, meta-slendro 2
+  −0.05, 0.773743 −0.00, Pell −0.01, fit351 +0.11, phi +0.07.
+- **P-G2-4 (Erv against the noble on the chain's own triads).** At the
+  deepest common MOS level ≤ 41, Erv's generator out-scores its nearest
+  golden (Q = 60) on frozen P + S at 2 cents for nine (0.418935 212
+  against 190 at N = 31, 0.238186 138 against 94 at 25, Fig 12 #12 364
+  against 314 at 40, meta-meantone 156 against 140 at 31, Fibonacci 366
+  against 264 at 36, meta-slendro 404 against 380 at 37, meta-Ptolemy 400
+  against 354 at 38, LLSLS 396 against 390 at 38, phi 366 against 264 at
+  36), loses for six (0.415227 492 against 494 at 41, silver control 302
+  against 372 at 41, meta-pelog 100 against 152 at 29, 0.591780 128
+  against 154 at 27, meta-slendro 2 308 against 326 at 36, fit351 634
+  against 652 at 41) and ties for two (0.773743 at 31, Pell at 37). At
+  every level of 12 or fewer notes the two tie. Being near a noble is not
+  the same as having its triads: a tenth of a cent moves dozens of
+  2 cent coincidences at 30 notes.
+
+**Deliverables.** `gold002.py`, `tests/test_gold002.py` green before the
+first run, receipts `results/gold002.jsonl` + `results/gold002_summary.json`.
+No Scala exports (nothing new to hear, because the generators are already on the
+page). A gate for the verdict on the law and the design selector.
+
+## 2026-10-13 — GOLD-002 results + verdicts
+
+**Run:** `gold002.py` (about 10 s. Receipts `results/gold002.jsonl`, 17
+rows, and `results/gold002_summary.json`. Two runs bit-identical, `cmp` on
+both.) Frozen triads v1.1.0 read-only, pin verified. Lattice suite
+399/399 green before the first run (11 new tests).
+
+- **P-G2-1 — KEPT.** The null model reproduces every registered figure.
+  A random generator sits a median 8.58, 4.21, 1.52, 0.71 and 0.18 cents
+  from the nearest golden generator at Q = 8, 12, 20, 30 and 60.
+- **P-G2-2 — KEPT. The strong law is refuted.** The golden tail
+  memberships at every Q are exactly as registered (5, 5, 3, 2 and 4 of
+  17), the silver tail counts are 4, 5, 6, 4 and 4, and at no Q do more
+  than 6 of the 17 generators sit at or below the tenth percentile. "Most
+  of Erv's generators sit near a noble number" is false at every
+  complexity. The weak form stands: 3 to 6 in the tail against 1.7
+  expected, and 0.773743 sits on a golden generator of complexity 20 to
+  0.00 cents.
+- **P-G2-3 — KEPT.** Every registered distance at Q = 20 and Q = 60
+  reproduces within 0.01 cents, and 0.418935's nearest golden generator at
+  Q = 60 is seeded by 18/43 and 13/31.
+- **P-G2-4 — REFUTED as registered on one clause, held on the
+  classification.** The nine Erv wins, six golden wins and two ties at the
+  deepest common level reproduce exactly. The clause "at every level of
+  12 or fewer notes the two tie" fails once: 0.238186 against its nearest
+  golden at N = 9 scores 16 against 12. The scratch table showed that
+  figure and the session wrote "every" anyway. The error is the
+  session's. Every other level of 12 or fewer notes is a tie (15 of 16
+  generators, all of their shallow levels).
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The silver
+family is as close to Erv's generators as the golden one: at Q = 20, six
+of 17 sit in the silver tail (0.418935, the silver control, Fibonacci,
+0.591780, fit351 and phi) against three in the golden tail. Erv's
+2-zig/2-zag page may be the better description of several of his
+generators. (2) The nearness and the triads part company at depth: nine
+of Erv's generators out-score their nearest golden on the chain's own
+P + S at 2 cents at the deepest common level, by as much as 138 to 94
+(0.238186 at N = 25) and 366 to 264 (Fibonacci at N = 36), while the
+nearest golden to 0.415227 wins 494 to 492 at N = 41 and the one nearest
+the silver control wins 372 to 302. A tenth of a cent is nothing at 7
+notes and everything at 30. (3) For the design: the generator-family
+selector is a real trade. For most of Erv's generators a noble neighbour
+of modest complexity does not exist within the tolerance that preserves
+their triads, so "golden" and "best triads" are different settings and
+the design should show the price of each. Erv's own list belongs in the
+selector as its own family.
+
+**Kept.** Runner and receipts stand. Nothing new to hear. Gate G-034 is
+the verdict on the law and on the selector.
+
+**Run receipt:** 2026-10-13, python3.12 — lattice suite 399/399 OK (11 new:
+test_gold002), freeze check A OK (scorer 1a840af9…b592). Both receipts
+bit-identical across two runs (`cmp`).
+
+## 2026-10-13 — GOLD-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, the series Claude owns).** The planned
+Wilsonic design fits an MOS to an Euler genus by triad survival and offers
+the generator family as an aesthetic choice: free optimum, golden, silver,
+Erv's list, ET. What does a family cost? For each lattice and note count
+N, this experiment scores the golden and silver families by the same
+triad-survival objective as CPSFIT-003 and compares them with the free
+optimum, on a complexity ladder, with and without the MOS constraint
+(the design needs a level, so a chain that is not a level does not count
+for it). GOLD-002 (same day) showed that nobles are dense, so a family's
+reach is measured per complexity Q, never only at Q = 60.
+
+**Lattices.** Hexany CPS(4,2){1,3,5,7}, the EG4 tesseract, dekany
+CPS(5,2){1,3,5,7,9}, and the eikosany's embedded subsets on seeds
+1·3·5·7·9·11 from the SUBSET-MEL-000 census: 30 hexanies (one seed in,
+one out), 6 dekanies with a seed in and 6 with a seed out. N runs 11 to
+36 for the three 7-limit lattices and 11 to 24 for the 42 subsets.
+
+**Measures, per lattice and N.**
+1. The free count optimum c* and its generator g*: CPSFIT-003's receipts
+   for the hexany, EG4 and the dekany, and `cpsfit003.fit_count` for the
+   subsets. If any noble candidate keeps more triads than c*, the free
+   optimum is reported as that larger count and the CPSFIT-003 receipt is
+   flagged as beaten (its grid seeding can miss a narrow basin).
+2. The free optimum restricted to MOS levels: CPSFIT-003's count segments
+   intersected with the set of g for which N is a scale-tree level, which
+   is the union of the open intervals between Farey neighbours p/q and
+   p'/q' with q + q' = N. Exact, not a grid.
+3. For each family (golden, silver) and each complexity Q in 8, 12, 20,
+   30, 60: the best candidate by count (tie: smaller tone error) over all
+   windows within the 20 cent tone cap, any N, and the best whose N is a
+   level of the candidate. Candidates and complexity as GOLD-002 defines
+   them (`gold002.nobles`).
+4. The nearest candidate to g* at each Q, its distance and its count.
+Survival is the mirror predicate (|dev| < 2 cents and separation ≥ 2) and
+the frozen `score_tempered` count of the image is reported beside it.
+
+**Predictions (scratch 2026-10-13, Q ladder and null as GOLD-002, the
+MOS-only free optimum on a 0.5 cent grid, so its registered values are
+lower bounds).**
+- **P-G1-1 (hexany, golden).** At Q = 60 the golden best equals c* at
+  every N from 11 to 36 except 16 and 17 (8 against 10). At Q ≤ 20 the
+  golden best is 8 at every N from 12 to 36 and never reaches 10 or 12.
+  At Q = 8 it is 4 at N = 15 to 31 and 5 at 32 to 36. The hexany's free
+  optimum at N = 12 to 15 (317.175 cents, 8 of 12) is itself a golden
+  generator of complexity 11 (seeds 3/11 and 1/4, in Erv's 64) to 0.005
+  cents.
+- **P-G1-2 (hexany, silver).** Silver reaches 10 at N = 18 to 28 and 12
+  at N = 29 to 36 with complexity ≤ 20, and 12 from N = 22 at Q = 60. At
+  Q ≤ 20 silver beats golden at every N from 16 to 36.
+- **P-G1-3 (hexany, MOS only).** The golden best that is a level reaches
+  12 first at N = 25 and again at 31 (193.993 cents, complexity 37),
+  only at Q = 60. At Q ≤ 20 the level-only golden best never exceeds 8.
+  The exact MOS-only free optimum is ≥ 8 at N = 15 and 19, and ≥ 12 at
+  N = 25 and 31.
+- **P-G1-4 (nearest golden to the free generator).** At Q = 60 the
+  nearest golden to g* keeps c* at every N from 11 to 30 (distance ≤ 0.1
+  cents) and keeps only 4 of 12 at N = 31 to 36 (0.17 cents away, outside
+  the basin). At Q = 20 it keeps c* only at N = 12 to 15.
+- **P-G1-5 (EG4).** Golden at Q = 60 equals c* only at N = 12 to 15 and
+  36, and sits at 16 (N = 16 to 22), 20 (N = 23), 22 (N = 24 to 35)
+  against 18, 20, 24, 24. Silver at Q = 60 equals c* at N = 12 to 15 and
+  from 24 (24 of 24). Level-only golden at Q = 60 reaches 22 at N = 25
+  and 31 and never 24.
+- **P-G1-6 (dekany with 9).** At N = 13 to 18 a golden candidate at
+  Q = 30 keeps 16 triads where CPSFIT-003's receipt has 12 (N = 15 to 17)
+  and 14 (N = 18): the receipt is beaten and the free optimum is at least
+  16 there. From N = 19 golden at Q = 60 trails: 22 against 25 (N = 19 to
+  24), 25 against 26, 27 against 32 (N = 26 to 30), 29 against 32, 34
+  against 34 (N = 33 to 34) and 34 against 37. Silver at Q = 20 reaches
+  25 at N = 23 to 24, 27 to 28 at 26 to 32, 34 at 33 to 34 and 37 at 35
+  to 36, so silver at complexity 20 equals or beats golden at
+  complexity 60 at every N from 23 on.
+- **P-G1-7 (eikosany subsets, aggregate over feasible cells).** Hexanies,
+  408 cells: golden at Q = 60 reaches c* in 339, silver at Q = 60 in 369,
+  golden at Q = 20 in 172, and silver at Q = 20 is at least golden at
+  Q = 20 in 354. Full survival of a subset's own triads occurs in 165
+  cells for the free optimum, 128 for golden at Q = 60 and 85 for silver
+  at Q = 20. Dekanies, 124 cells: golden at Q = 60 reaches c* in 59,
+  golden at Q = 20 in 11, and silver at Q = 20 is at least golden at
+  Q = 20 in 97. Tolerance: ± 3 cells on every count, because the free
+  optimum is recomputed and may move by one.
+- **P-G1-8 (the design statement).** On every lattice the golden family
+  at complexity ≤ 20 loses triads to the free optimum at most N, the
+  silver family at the same complexity loses fewer, and the MOS-level
+  constraint costs more than either family. The selector is a real
+  trade and the N at which a family first reaches full survival is the
+  number the design must show.
+
+**Deliverables.** `gold001.py` on `gold002.nobles` and the CPSFIT-003
+machinery, `tests/test_gold001.py` green before the first run, receipts
+`results/gold001.jsonl` and `results/gold001_summary.json`, Scala exports
+under `results/scl/gold001/` for the hexany's complexity-11 golden
+generator at its 15-note level and the silver 12-of-12 chain at N = 29,
+offered for listening. A gate.
+
+## 2026-10-13 — GOLD-001 results + verdicts
+
+**Run:** `gold001.py` v1.0.1 (about 130 s with 8 workers. Receipts
+`results/gold001.jsonl`, 666 rows = 45 lattices × their N ranges, and
+`results/gold001_summary.json`. Two runs bit-identical, `cmp` on both
+receipts and the two .scl.) Frozen triads v1.1.0 read-only, pin verified.
+Lattice suite green before the first run (7 new tests, then 8). Version
+1.0.1 fixed a verdict bug found on the first run of 1.0.0: the subset
+aggregate and the EG4 equality lists treated a survival count of zero as a
+missing candidate. The measurements did not change. The recorded run is
+1.0.1.
+
+**A correction to CPSFIT-003.** A noble candidate is a chain the free
+search should have found. In 28 rows one keeps more triads than the free
+fit: the dekany with 9 at N = 13 to 18 keeps 16 under the golden generator
+249.263 cents (complexity 29) where CPSFIT-003's receipt had 12 at N = 15
+to 17 and 14 at N = 18 and no fit at 13 to 14. CPSFIT-003 seeds its
+assignments on a 0.5 cent grid and this basin is narrower than that. The
+runner reports the larger count as the effective free optimum and flags
+the receipt. The CPSFIT-003 staircase on the page stands for the hexany
+and EG4 and is superseded for the dekany at N = 13 to 18.
+
+- **P-G1-1 — KEPT.** On the hexany the golden best at complexity 60
+  equals the free count at every N except 16 and 17 (8 against 10), at
+  complexity 20 or less it is 8 at every N from 12 to 36, at complexity 8
+  it is 4 at N = 15 to 31 and 5 at 32 to 36, and the free optimum at
+  N = 12 to 15 is the complexity-11 golden generator seeded by 3/11 and
+  1/4 to 0.005 cents.
+- **P-G1-2 — REFUTED as registered on one clause, held on the rest.**
+  Silver at complexity 20 or less reaches 10 at N = 18 to 28 and 12 from
+  N = 29, and silver at complexity 60 reaches 12 from N = 22, as
+  registered. The clause "silver beats golden at complexity 20 or less
+  from N = 16" fails at N = 16 and 17 (6 against 8). The scratch table
+  showed those two values and the session wrote 16. The error is the
+  session's. The clause holds from N = 18.
+- **P-G1-3 — KEPT.** The level-only golden best reaches 12 exactly at
+  N = 25 and 31 at 193.993 cents, never above 8 at complexity 20 or less,
+  and the exact MOS-only free optimum is 8 at N = 15 and 19 and 12 at 25
+  and 31 (and 30, 32, 34, which the lower bounds did not cover).
+- **P-G1-4 — REFUTED as registered on N = 16 and 17, held on the rest.**
+  The nearest golden to the free generator at complexity 60 keeps the free
+  count at every N from 11 to 30 except 16 and 17, where it sits 0.097
+  cents away and keeps 8 of the 10, and keeps 4 at N = 31 to 36. The
+  scratch showed (0.1, 8) at N = 16 and 17 and the session registered a
+  range that included them. The error is the session's. At complexity 20
+  it keeps the free count only at N = 12 to 15, as registered.
+- **P-G1-5 — REFUTED as registered on the values at N = 18 to 22, held
+  on the rest.** EG4's golden best at complexity 60 equals the free count
+  at N = 12 to 15 and 36 and nowhere else. Its values are 16 at N = 16 to
+  17, 18 at N = 18 to 22, 20 at 23, 22 at 24 to 35. The registration wrote
+  16 for the whole range 16 to 22. The scratch table showed 18 at 18 to
+  22 and the session compressed the range. The error is the session's.
+  Silver at complexity 60 equals the free count at N = 12 to 15 and from
+  24, and the level-only golden best reaches 22 at N = 25 and 31 and
+  never 24, as registered.
+- **P-G1-6 — KEPT.** The dekany: the free count is at least 16 at N = 13
+  to 18 (the receipt is beaten there), golden at complexity 60 is 22, 25,
+  27, 29 and 34 on the registered ranges, silver at complexity 20 is 25,
+  27 or more, 34 and 37 on its ranges, and silver at complexity 20 equals
+  or beats golden at complexity 60 at every N from 23.
+- **P-G1-7 — KEPT.** Hexany subsets, 408 cells: golden at complexity 60
+  reaches the free count in 339, silver at 60 in 367, golden at 20 in
+  169, silver at 20 is at least golden at 20 in 354, and full survival
+  occurs in 165, 128 and 85 cells for the free optimum, golden at 60 and
+  silver at 20. Dekany subsets, 124 cells: 59, 11 and 97. All within the
+  registered 3 cells (the free optimum moved by the beaten-receipt rule
+  in a few cells).
+- **P-G1-8 — KEPT.** On each of the three 7-limit lattices the golden
+  family at complexity 20 loses triads to the free optimum at more than
+  half of the note counts, silver at the same complexity is at least
+  golden at more than half, and the exact MOS-only optimum is below the
+  free optimum at more than half.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The exact
+MOS-only staircase for the hexany: a pure two-step scale keeps all 12
+hexany triads at 2 cents first at N = 25 (193.91 cents, the breed-family
+generator, 10 at N = 21 and 22), then at 30, 31, 32 and 34. For EG4 all 24
+first at N = 25 and 31. For the dekany with 9, 25 of 41 at N = 19 (317.05
+cents) and 32 at N = 29 (498.07 cents, schismatic). These are the numbers
+the Wilsonic design's Gral has to make playable, because the design wants
+a level. (2) The dekany's new 16-triad chain at N = 13 to 18 is the
+249.263 cent golden generator of complexity 29 (seeds 6/29, 5/24), the
+same neighbourhood as the hexany's N = 11 free optimum (249.211). (3) On
+the eikosany's dekanies no family and no free chain reaches full survival
+at N ≤ 24, and on its hexanies the free optimum reaches full survival in
+165 of 408 cells against 128 for golden at complexity 60. (4) The two
+Scala exports: the hexany at the complexity-11 golden generator's
+15-note level (317.170 cents, 8 of 12) and the silver chain at N = 29
+(316.827 cents, 12 of 12, tone error under 4 cents), which is the
+cheapest noble full survival on the hexany at complexity 20.
+
+**Kept.** Runner and receipts stand. Gate G-035 is the verdict on the
+selector's price.
+
+**Run receipt:** 2026-10-13, python3.12 — lattice suite 407/407 OK (8 new:
+test_gold001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
+the two .scl bit-identical across two runs of v1.0.1 (`cmp`), about 130 s
+each with 8 workers.
+
+## 2026-10-14 — SUBFIT-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, the design goal).** The planned Wilsonic
+design fits one MOS to an Euler genus and lets the player move through
+the genus's subsets while the fitted scale stays under the hands. The
+subset doctrine says the music lives in the subsets, so the fit that
+matters is the one that keeps the most subsets playable at once. For the
+classic eikosany on 1·3·5·7·9·11 and each note count N, which single
+generator chain keeps the most of its 72 embedded subsets fully playable,
+how many of the eikosany's 114 exact triads does it keep, and what does
+the MOS-level constraint cost? The Gral makes a dense scale playable, so
+N runs to 72.
+
+**Objects.** The eikosany CPS(6,3){1,3,5,7,9,11}: 20 tones, 114 exact
+triads (57 proportional, 57 subcontrary). Its 72 embedded subsets from
+the SUBSET-MEL-000 census: 30 hexanies (one seed in, one out), 6 dekanies
+with a seed in, 6 with a seed out, 15 harmonic tetrads, 15 subharmonic
+tetrads. Every exact triad of every subset is one of the eikosany's 114
+(checked, 0 unmatched). The subsets' own triad counts vary: hexanies have
+2 to 18, dekanies 18 to 41, tetrads 1 to 7, because 9 = 3² makes some
+pairs of tones coincide.
+
+**Chain model.** N consecutive degrees of one generator g in (0, 600]
+cents, any window (mode). There is NO tone cap: a tone outside every
+surviving triad may sit anywhere, because the design only needs the
+subsets it keeps. Each tone goes to the nearest degree inside the
+window. A triad survives when its voiced members satisfy the mirror
+predicate (|dev| < 2 cents and separation ≥ 2 cents). A subset is
+PLAYABLE when every one of its exact triads survives. The objective per N
+is lexicographic: most playable hexanies plus dekanies, then most playable
+tetrads, then most of the 114 triads kept, then the smaller largest tone
+error among the tones that sit in a kept triad.
+
+**Search.** Stage 1: g on a 0.1 cent grid, every window, the objective as
+above. Stage 2: the twelve best distinct grid generators per N refined on
+a 0.002 cent grid over ± 0.1 cents. Also the MOS-only variant: the same
+search restricted to g for which N is a scale-tree level (the exact level
+intervals of GOLD-001), reported beside the free result. Per winner: the
+list of playable subsets by name, the frozen `score_tempered` count of the
+20-tone image, the val of the fit if one exists (11-limit, as RANK3-001
+computes it) and the kernel commas, and the level flag. Stdlib,
+multiprocessing over N, deterministic, two bit-identical runs.
+
+**Predictions (scratch 2026-10-14, 0.1 cent grid with 0.002 cent
+refinement, tones assigned to the nearest degree of the whole
+2N − 1 degree chain and then checked against the window, so the
+registered counts are LOWER BOUNDS for the exact per-window assignment,
+and the generators are registered within 0.05 cents).**
+- **P-S1 (the staircase, playable hexanies / dekanies / tetrads and
+  triads kept).** N = 11: 1/0/1, 16 triads (500.04 cents). 12: 1/0/1, 17
+  (566.33). 13: 2/0/1, 16 (350.98). 14 to 16: 2/0/2, 20 to 26 (351.32).
+  17 to 23: 3/0/3, 24 to 30 (351.32). 24: 3/0/5, 32 (350.76). 25: 4/0/4,
+  52 (271.61). 26 to 34: 6/1/7, 39 to 43 (350.76). 35 to 36: 7/1/7, 48
+  (350.76). 37 to 38: 9/0/9, 59 (116.73). 39: 7/1/8, 52 (350.76). 40:
+  7/1/9, 50 (497.77). 41 to 44: 8/1/10, 73 (339.40). 45 to 48: 12/2/12,
+  84 (339.40). 49 to 69: 16/2/16, 76 (497.77). 70 to 72: 20/4/20, 102
+  (175.38).
+- **P-S2 (no chain up to 72 notes keeps every subset).** The best keeps
+  20 of 30 hexanies and 4 of 12 dekanies, at N = 70, with 102 of 114
+  triads. No chain keeps a dekany before N = 26 or more than 3 hexanies
+  before N = 25.
+- **P-S3 (four generators own the staircase).** From N = 14 to 36 the
+  neutral-third generators 351.32 and 350.76 cents win every N except 25
+  (271.61). From 41 to 48 it is 339.40 cents, from 49 to 69 the fourth
+  497.77 cents, from 70 the 175.38 cent generator. The miracle generator
+  116.73 cents wins only N = 37 and 38 with 9 hexanies and no dekany.
+- **P-S4 (the MOS-level constraint).** Among levels the best are: N = 46
+  at 339.40 cents keeps 12 hexanies and no dekany (82 triads), N = 53 at
+  497.77 keeps 16 hexanies and 2 dekanies (76 triads), N = 31 at 116.7
+  keeps 5 hexanies, N = 68 at 193.8 keeps 8 hexanies and 1 dekany. At
+  every N where the free winner is not a level, the level-only best is
+  strictly below it in playable hexanies, except N = 46 and 53 where the
+  free winner is itself a level.
+- **P-S5 (tone error does not predict playability).** The largest error
+  among tones in kept triads is 27 to 28 cents for the winners at N = 14
+  to 20, 9 cents at 21 to 39, and 4 to 5 cents from N = 40, while the
+  playable count climbs from 2 to 20 hexanies. A chain can keep three
+  hexanies with tones 28 cents off their degrees, because the kept
+  triads sit on degrees that share the error.
+
+**Deliverables.** `subfit001.py` and `tests/test_subfit001.py` green
+before the first run, receipts `results/subfit001.jsonl` and
+`results/subfit001_summary.json`, Scala exports under
+`results/scl/subfit001/` for the winners at N = 26 (350.76), 45 (339.40),
+49 (497.77) and 70 (175.38), and the N = 46 and 53 levels, offered for
+listening. A gate.
+
+## 2026-10-14 — SUBFIT-001 results + verdicts
+
+**Run:** `subfit001.py` (809 s per run with 8 workers. Receipts
+`results/subfit001.jsonl`, 62 rows, and `results/subfit001_summary.json`.
+Two runs bit-identical, `cmp` on both receipts and the six .scl.) Frozen
+triads v1.1.0 read-only, pin verified. Lattice suite 413/413 green before
+the first run (6 new tests).
+
+**All five predictions are refuted as registered, and the cause is a
+flaw in the registration, not in the runner.** The scratch assigned each
+tone to its nearest degree of the whole 2N − 1 degree chain and then
+asked whether that degree sat in the window. The runner assigns each
+tone to its nearest degree INSIDE the window, as registered. With no
+tone cap, the two differ a lot: a tone whose nearest degree lies outside
+the window is given the nearest degree inside it, however far away, and
+a triad whose three members land on in-window degrees that happen to
+satisfy the mean condition counts as kept even when those degrees are
+nowhere near the just pitches. The largest error among tones in kept
+triads is 71 cents at N = 11, 52 at N = 12 and 13, 33 to 37 at N = 15 to
+17, 29 at N = 20 to 23, 22 at N = 26 to 32, and falls under 10 cents only
+from N = 37. So at small N the objective was counting created
+coincidences in the chain, not the eikosany's subsets, and the
+registered "lower bound" clause on the counts held for a bad reason.
+Below N = 37 the counts are not evidence about the eikosany. From N = 37
+the errors are 4 to 10 cents and the counts mean what they were meant
+to mean.
+
+- **P-S1 — REFUTED as registered.** Counts never fell below the
+  registered lower bounds, as the clause allowed, but the generators and
+  triad totals differ at 20 of 62 N. Winners by N: 11: 248.87 cents
+  (2 hexanies, 22 triads). 12 to 14: 498.50 (3, 3, 2 hexanies). 15 to
+  16: 498.04 (3). 17 to 23: 351.39 (4 then 5 hexanies). 24 to 25: 317.13
+  (6 hexanies, 56 triads). 26 to 36: 350.75 (7 to 9 hexanies, 1 dekany).
+  37: 350.76 (12 hexanies, 2 dekanies, 70 triads). 38 to 48: 351.44 (14
+  hexanies, 2 dekanies, 88 triads). 49 to 56: 497.77 (16 hexanies, 2
+  dekanies, 76 triads). 57 to 69: 316.78 (18 hexanies, 2 dekanies, 96
+  triads). 70 to 72: 175.38 (20 hexanies, 4 dekanies, 102 triads).
+- **P-S2 — REFUTED as registered on the small-N clause.** The best chain
+  is at N = 70 with 20 hexanies, 4 dekanies and 102 triads, as registered,
+  and no chain keeps every subset. The first dekany arrives at N = 26, as
+  registered. "No more than 3 hexanies before N = 25" fails: 4 at N = 17
+  to 19 and 5 at 20 to 23, with tones up to 34 cents off. See the flaw
+  above.
+- **P-S3 — REFUTED as registered.** The neutral-third generators own
+  N = 17 to 23 and 26 to 48, with 498.5 and 498.0 cents (a fourth) at 12
+  to 16 and 317.13 at 24 to 25 instead. The miracle generator wins at no
+  N: the exact assignment gives 351.444 cents 14 hexanies at N = 37 to
+  48 where the scratch had 9 for miracle at 37 to 38.
+- **P-S4 — REFUTED as registered.** The level-only winners differ: N = 46
+  keeps 12 hexanies and 2 dekanies at 443.13 cents (the scratch had
+  339.40 with none), N = 53 keeps 16 and 2 at 497.77 as registered, N = 41
+  is a level of 351.44 with 14 hexanies and 2 dekanies, N = 72 keeps 20
+  hexanies and 4 dekanies at 483.28 as a level (100 triads), N = 67
+  keeps 14 and 2 at 483.28. The free winner is a level at N = 12, 17, 41
+  and 53, not at 46. The clause "level-only strictly below free in
+  hexanies" fails at N = 11, 14 and others where both are small.
+- **P-S5 — REFUTED as registered.** The error bands were an artefact of
+  the scratch's assignment. The exact figures are above.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) From N = 37
+on, where the kept triads sit within 10 cents of the just pitches, the
+staircase reads: 14 hexanies and 2 dekanies at 38 to 48 notes under the
+neutral third 351.444 cents (a level at N = 41), 16 and 2 at 49 to 56
+under the fourth 497.774 (a level at N = 53, kernel 131072/130977 and
+41503/41472), 18 and 2 at 57 to 69 under 316.778 (kernel 4375/4374 and
+160083/160000), 20 and 4 at 70 to 72 under 175.378 (kernel 2401/2400 and
+131072/130977), and 20 and 4 as a 72-note level under 483.28 cents. (2)
+The 41-note level of 351.444 cents and the 53-note level of 497.774 cents
+are the two MOS the design can use today for the eikosany: 14 of 30
+hexanies with 2 of 12 dekanies, and 16 with 2, every kept tone within
+9.5 and 4.2 cents. (3) The follow-up, SUBFIT-002, puts a per-tone cap in
+the predicate (a triad counts only when all three tones sit within the
+cap of their just pitch, 20 cents as CPSFIT-003 and 10 cents as a
+stricter tier) and re-registers from a capped scratch. (4) Of the six
+Scala exports, the three at N = 49, 53 and 70 are worth hearing. The N = 26
+and 45 chains carry 22 and 9.5 cent errors and the N = 46 level is the
+443 cent one.
+
+**Kept.** Runner and receipts stand as the measurement of the registered
+(flawed) objective. Gate G-036.
+
+**Run receipt:** 2026-10-14, python3.12 — lattice suite 413/413 OK (6 new:
+test_subfit001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
+the six .scl bit-identical across two runs (`cmp`), 809 s each with 8
+workers.
