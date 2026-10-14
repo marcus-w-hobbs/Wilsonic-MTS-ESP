@@ -281,9 +281,11 @@ def row_task(args) -> dict:
                 near[str(q)] = {"g": g * CENTS, "dist_cents": (g - fg01) * CENTS, "seeds": seeds, "complexity": cx,
                                 "count": r[0] if r else None, "tone_err": r[1] if r else None}
             row[fam + "_nearest_to_free_by_Q"] = near
-    if free is not None and best_noble is not None and best_noble[1]["count"] > free["count"]:
+    # the free optimum is the larger of the free fit and the best noble candidate (a noble
+    # candidate IS a chain the free search should have found); a receipt that loses is flagged
+    if best_noble is not None and (free is None or best_noble[1]["count"] > free["count"]):
         row["free_beaten_by_noble"] = {"count": best_noble[1]["count"], "g": best_noble[1]["g"],
-                                       "receipt_count": free["count"]}
+                                       "receipt_count": None if free is None else free["count"]}
         row["free_effective_count"] = best_noble[1]["count"]
     else:
         row["free_beaten_by_noble"] = None
@@ -433,8 +435,9 @@ def verdict_p_g1_6(rows):
     fails = []
     for n in range(p["beaten_N"][0], p["beaten_N"][1] + 1):
         r = by[n]
-        if r["free_effective_count"] < p["beaten_count"] or (r["free"] is not None and r["free_beaten_by_noble"] is None and r["free"]["count"] < p["beaten_count"]):
-            fails.append(f"N={n}: free effective {r['free_effective_count']} < {p['beaten_count']}")
+        eff = r["free_effective_count"]
+        if eff is None or eff < p["beaten_count"] or r["free_beaten_by_noble"] is None:
+            fails.append(f"N={n}: free effective {eff}, beaten {r['free_beaten_by_noble'] is not None}")
     for n, r in by.items():
         want = _in(p["golden60_values"], n)
         if want is not None and _cnt(r["golden_by_Q"]["60"]) != want:
