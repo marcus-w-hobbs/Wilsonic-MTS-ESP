@@ -4869,3 +4869,90 @@ selector's price.
 test_gold001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
 the two .scl bit-identical across two runs of v1.0.1 (`cmp`), about 130 s
 each with 8 workers.
+
+## 2026-10-14 — SUBFIT-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, the design goal).** The planned Wilsonic
+design fits one MOS to an Euler genus and lets the player move through
+the genus's subsets while the fitted scale stays under the hands. The
+subset doctrine says the music lives in the subsets, so the fit that
+matters is the one that keeps the most subsets playable at once. For the
+classic eikosany on 1·3·5·7·9·11 and each note count N, which single
+generator chain keeps the most of its 72 embedded subsets fully playable,
+how many of the eikosany's 114 exact triads does it keep, and what does
+the MOS-level constraint cost? The Gral makes a dense scale playable, so
+N runs to 72.
+
+**Objects.** The eikosany CPS(6,3){1,3,5,7,9,11}: 20 tones, 114 exact
+triads (57 proportional, 57 subcontrary). Its 72 embedded subsets from
+the SUBSET-MEL-000 census: 30 hexanies (one seed in, one out), 6 dekanies
+with a seed in, 6 with a seed out, 15 harmonic tetrads, 15 subharmonic
+tetrads. Every exact triad of every subset is one of the eikosany's 114
+(checked, 0 unmatched). The subsets' own triad counts vary: hexanies have
+2 to 18, dekanies 18 to 41, tetrads 1 to 7, because 9 = 3² makes some
+pairs of tones coincide.
+
+**Chain model.** N consecutive degrees of one generator g in (0, 600]
+cents, any window (mode). There is NO tone cap: a tone outside every
+surviving triad may sit anywhere, because the design only needs the
+subsets it keeps. Each tone goes to the nearest degree inside the
+window. A triad survives when its voiced members satisfy the mirror
+predicate (|dev| < 2 cents and separation ≥ 2 cents). A subset is
+PLAYABLE when every one of its exact triads survives. The objective per N
+is lexicographic: most playable hexanies plus dekanies, then most playable
+tetrads, then most of the 114 triads kept, then the smaller largest tone
+error among the tones that sit in a kept triad.
+
+**Search.** Stage 1: g on a 0.1 cent grid, every window, the objective as
+above. Stage 2: the twelve best distinct grid generators per N refined on
+a 0.002 cent grid over ± 0.1 cents. Also the MOS-only variant: the same
+search restricted to g for which N is a scale-tree level (the exact level
+intervals of GOLD-001), reported beside the free result. Per winner: the
+list of playable subsets by name, the frozen `score_tempered` count of the
+20-tone image, the val of the fit if one exists (11-limit, as RANK3-001
+computes it) and the kernel commas, and the level flag. Stdlib,
+multiprocessing over N, deterministic, two bit-identical runs.
+
+**Predictions (scratch 2026-10-14, 0.1 cent grid with 0.002 cent
+refinement, tones assigned to the nearest degree of the whole
+2N − 1 degree chain and then checked against the window, so the
+registered counts are LOWER BOUNDS for the exact per-window assignment,
+and the generators are registered within 0.05 cents).**
+- **P-S1 (the staircase, playable hexanies / dekanies / tetrads and
+  triads kept).** N = 11: 1/0/1, 16 triads (500.04 cents). 12: 1/0/1, 17
+  (566.33). 13: 2/0/1, 16 (350.98). 14 to 16: 2/0/2, 20 to 26 (351.32).
+  17 to 23: 3/0/3, 24 to 30 (351.32). 24: 3/0/5, 32 (350.76). 25: 4/0/4,
+  52 (271.61). 26 to 34: 6/1/7, 39 to 43 (350.76). 35 to 36: 7/1/7, 48
+  (350.76). 37 to 38: 9/0/9, 59 (116.73). 39: 7/1/8, 52 (350.76). 40:
+  7/1/9, 50 (497.77). 41 to 44: 8/1/10, 73 (339.40). 45 to 48: 12/2/12,
+  84 (339.40). 49 to 69: 16/2/16, 76 (497.77). 70 to 72: 20/4/20, 102
+  (175.38).
+- **P-S2 (no chain up to 72 notes keeps every subset).** The best keeps
+  20 of 30 hexanies and 4 of 12 dekanies, at N = 70, with 102 of 114
+  triads. No chain keeps a dekany before N = 26 or more than 3 hexanies
+  before N = 25.
+- **P-S3 (four generators own the staircase).** From N = 14 to 36 the
+  neutral-third generators 351.32 and 350.76 cents win every N except 25
+  (271.61). From 41 to 48 it is 339.40 cents, from 49 to 69 the fourth
+  497.77 cents, from 70 the 175.38 cent generator. The miracle generator
+  116.73 cents wins only N = 37 and 38 with 9 hexanies and no dekany.
+- **P-S4 (the MOS-level constraint).** Among levels the best are: N = 46
+  at 339.40 cents keeps 12 hexanies and no dekany (82 triads), N = 53 at
+  497.77 keeps 16 hexanies and 2 dekanies (76 triads), N = 31 at 116.7
+  keeps 5 hexanies, N = 68 at 193.8 keeps 8 hexanies and 1 dekany. At
+  every N where the free winner is not a level, the level-only best is
+  strictly below it in playable hexanies, except N = 46 and 53 where the
+  free winner is itself a level.
+- **P-S5 (tone error does not predict playability).** The largest error
+  among tones in kept triads is 27 to 28 cents for the winners at N = 14
+  to 20, 9 cents at 21 to 39, and 4 to 5 cents from N = 40, while the
+  playable count climbs from 2 to 20 hexanies. A chain can keep three
+  hexanies with tones 28 cents off their degrees, because the kept
+  triads sit on degrees that share the error.
+
+**Deliverables.** `subfit001.py` and `tests/test_subfit001.py` green
+before the first run, receipts `results/subfit001.jsonl` and
+`results/subfit001_summary.json`, Scala exports under
+`results/scl/subfit001/` for the winners at N = 26 (350.76), 45 (339.40),
+49 (497.77) and 70 (175.38), and the N = 46 and 53 levels, offered for
+listening. A gate.
