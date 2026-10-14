@@ -50,7 +50,7 @@ import subsetmel000 as sm  # noqa: E402
 from scorer import SCORER_VERSION, score_tempered  # noqa: E402
 from families.cps import cps_scale  # noqa: E402
 
-GOLD001_VERSION = "1.0.0"
+GOLD001_VERSION = "1.0.1"   # 1.0.1: a zero count is a count, not a missing candidate (aggregate + P-G1-5)
 EXPERIMENT = "GOLD-001"
 RESULTS_DIR = _HERE / "results"
 RESULTS = RESULTS_DIR / "gold001.jsonl"
@@ -413,14 +413,14 @@ def verdict_p_g1_5(rows):
     p = PREDICTIONS["P-G1-5"]
     by = _by(rows, "eg4")
     fails = []
-    eq60 = [n for n, r in by.items() if _cnt(r["golden_by_Q"]["60"]) == r["free_effective_count"]]
+    eq60 = [n for n, r in by.items() if r["free_effective_count"] is not None and _cnt(r["golden_by_Q"]["60"]) == r["free_effective_count"]]
     if eq60 != p["golden60_equals_free_N"]:
         fails.append(f"golden60 equals free at {eq60}")
     for n, r in by.items():
         want = _in(p["golden60_values"], n)
         if want is not None and _cnt(r["golden_by_Q"]["60"]) != want:
             fails.append(f"N={n}: golden60 {_cnt(r['golden_by_Q']['60'])} != {want}")
-    eqs = [n for n, r in by.items() if _cnt(r["silver_by_Q"]["60"]) == r["free_effective_count"]]
+    eqs = [n for n, r in by.items() if r["free_effective_count"] is not None and _cnt(r["silver_by_Q"]["60"]) == r["free_effective_count"]]
     if eqs != p["silver60_equals_free_N"]:
         fails.append(f"silver60 equals free at {eqs}")
     lv22 = [n for n, r in by.items() if _cnt(r["golden_level_only_by_Q"]["60"]) == 22]
@@ -460,12 +460,13 @@ def _aggregate(rows, kinds):
             continue
         f = r["free_effective_count"]
         agg["cells"] += 1
-        g60, s60, g20, s20 = (_cnt(r["golden_by_Q"]["60"]), _cnt(r["silver_by_Q"]["60"]),
-                              _cnt(r["golden_by_Q"]["20"]), _cnt(r["silver_by_Q"]["20"]))
-        agg["golden60"] += (g60 or -1) >= f
-        agg["silver60"] += (s60 or -1) >= f
-        agg["golden20"] += (g20 or -1) >= f
-        agg["silver20_ge_golden20"] += (s20 if s20 is not None else -1) >= (g20 if g20 is not None else -1)
+        miss = lambda x: -1 if x is None else x      # a zero count is a count; only None is missing
+        g60, s60, g20, s20 = (miss(_cnt(r["golden_by_Q"]["60"])), miss(_cnt(r["silver_by_Q"]["60"])),
+                              miss(_cnt(r["golden_by_Q"]["20"])), miss(_cnt(r["silver_by_Q"]["20"])))
+        agg["golden60"] += g60 >= f
+        agg["silver60"] += s60 >= f
+        agg["golden20"] += g20 >= f
+        agg["silver20_ge_golden20"] += s20 >= g20
         agg["full_free"] += f == r["exact_triads"]
         agg["full_golden60"] += g60 == r["exact_triads"]
         agg["full_silver20"] += s20 == r["exact_triads"]

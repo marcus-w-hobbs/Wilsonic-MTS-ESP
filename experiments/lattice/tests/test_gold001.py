@@ -95,6 +95,10 @@ class TestVerdicts(unittest.TestCase):
         self.assertEqual((a["cells"], a["golden60"], a["golden20"], a["silver60"], a["silver20_ge_golden20"], a["full_free"]), (2, 2, 1, 2, 2, 1))
         d = g1._aggregate(rows, ("dekany_in", "dekany_out"))
         self.assertEqual((d["cells"], d["golden60"]), (1, 0))
+        # a zero count on both sides is a match, not a missing candidate
+        z = [_row("h0", "hexany", 11, 0, 2, 0, 0, 0, 0)]
+        a0 = g1._aggregate(z, ("hexany",))
+        self.assertEqual((a0["golden60"], a0["golden20"], a0["silver20_ge_golden20"]), (1, 1, 1))
 
     def test_p_g1_8_shape(self):
         rows = []
