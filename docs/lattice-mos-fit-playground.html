@@ -271,11 +271,11 @@ code { font-family: var(--font-mono); font-size: 0.92em; }
       <p class="note">A golden generator is one whose scale-tree path alternates forever from some point. Its levels then grow like Fibonacci numbers and the step ratio L : s tends to φ. Erv listed 64 of them in 1993. The formula is g = (a + φc) / (b + φd) for the two path fractions a/b and c/d where the alternation starts. Silver uses 1 + √2 in place of φ, so the path turns every two steps: Erv's "2-zig/2-zag". Bronze uses (3 + √13) / 2. Equal temperaments are the paths that stop. This search tries every such generator up to a seed denominator bound and reports the first level that holds the lattice.</p>
       <div class="row" style="align-items:end">
         <label class="field" style="flex:1 1 160px"><span class="lbl">Family</span><select id="famSel"><option value="1">Golden (φ)</option><option value="2">Silver (1 + √2)</option><option value="3">Bronze ((3 + √13)/2)</option><option value="et">Equal temperaments</option></select></label>
-        <label class="field" style="flex:1 1 160px"><span class="lbl">Seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
+        <label class="field" style="flex:1 1 160px"><span class="lbl">Complexity: seed denominators up to <span class="val" id="famQVal">36</span></span><input type="range" id="famQ" min="8" max="60" value="36"></label>
         <button id="famRun" class="primary" style="flex:0 0 auto">Run the family search</button>
       </div>
-      <p class="note" id="famStatus">Press Run. Golden with denominators up to 36 tries about 800 generators.</p>
-      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
+      <p class="note" id="famStatus">Press Run. Golden with complexity up to 36 tries about 400 generators. Complexity is the smallest seed denominator pair that makes the generator, so the simple nobles come first.</p>
+      <div class="tablewrap" style="max-height:260px"><table id="famTable"><thead><tr><th>generator ¢</th><th>octaves</th><th>seeds</th><th>complexity</th><th>Erv 64</th><th>first level within tol</th><th>murchana</th><th>max err</th><th>captured</th><th>triads kept</th><th></th></tr></thead><tbody></tbody></table></div>
       <h3>Free search: best generator for each N</h3>
       <div class="tablewrap"><table id="fitTable"><thead><tr><th>N</th><th>type</th><th>level</th><th>murchana (1/1 at degree)</th><th>generator</th><th>cents</th><th>max err</th><th>mean err</th><th>captured</th><th>triads kept</th></tr></thead><tbody></tbody></table></div>
     </div>
@@ -596,22 +596,28 @@ function chainPitchClasses(gCents, N, toneCents, capErr) {
 const ERV64 = [0.116035754,0.131267463,0.151102276,0.156691527,0.174715006,0.177998211,0.185805707,0.189523403,0.209053800,0.211702633,0.216542364,0.218332091,0.226253492,0.228208068,0.23384192,0.237161141,0.261642996,0.264308496,0.268556819,0.269955516,0.275266748,0.276393202,0.279315664,0.280842977,0.290757565,0.292412942,0.295685999,0.296986167,0.303426964,0.305213671,0.310892842,0.314663487,0.351012952,0.354358386,0.359265392,0.360777441,0.366106828,0.367160193,0.369779544,0.371086935,0.378682506,0.379818019,0.381966011,0.382785383,0.386586030,0.387570050,0.390516909,0.392334277,0.407971249,0.409955117,0.413253661,0.414378320,0.418835878,0.419821271,0.422447117,0.423860750,0.433799266,0.435599642,0.439291419,0.440808884,0.448791122,0.451153118,0.459137199,0.464877942];
 function metallicMean(m) { return (m + Math.sqrt(m * m + 4)) / 2; }
 function nobleCandidates(m, qMax) {
-  // Farey neighbours a/b < c/d with denominators <= qMax, both orders:
-  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path
-  // alternates m-to-a-side forever from that pair (m = 1 golden, 2 silver, 3 bronze).
+  // Every unimodular pair a/b, c/d (|bc - ad| = 1, denominators <= qMax), both orders:
+  // g = (a + mu*c) / (b + mu*d) is the generator whose scale-tree path alternates
+  // forever from that pair (m = 1 golden, 2 silver, 3 bronze). Each g is kept once with
+  // its COMPLEXITY, the smallest max(b, d) over the pairs that generate it: the seed pair
+  // where the alternation starts. (GOLD-002, 2026-10-13: the earlier version used only
+  // neighbours at the deepest Farey level and labelled every noble with qMax.)
   const mu = metallicMean(m);
-  const fr = [];
-  for (let q = 1; q <= qMax; q++) for (let p = 0; p <= q; p++) if (gcd(p, q) === 1) fr.push([p, q]);
-  fr.sort((x, y) => x[0] * y[1] - y[0] * x[1]);
   const out = new Map();
-  for (let i = 0; i + 1 < fr.length; i++) {
-    const [a, b] = fr[i], [c, d] = fr[i + 1];
-    if (b * c - a * d !== 1) continue;
-    for (const [x, y] of [[fr[i], fr[i + 1]], [fr[i + 1], fr[i]]]) {
-      const g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
-      if (g <= 0 || g >= 0.5 + 1e-12) continue;
-      const key = g.toFixed(9);
-      if (!out.has(key)) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+  for (let b = 1; b <= qMax; b++) for (let d = 1; d <= qMax; d++) for (let a = 0; a <= b; a++) {
+    if (gcd(a, b) !== 1) continue;
+    for (const sgn of [1, -1]) {
+      const num = a * d + sgn;
+      if (num % b !== 0) continue;
+      const c = num / b;
+      if (c < 0 || c > d || gcd(c, d) !== 1) continue;
+      for (const [x, y] of [[[a, b], [c, d]], [[c, d], [a, b]]]) {
+        let g = (x[0] + mu * y[0]) / (x[1] + mu * y[1]);
+        if (g > 0.5) g = 1 - g;             // g and 1 - g make the same chains
+        if (g <= 0 || g > 0.5) continue;
+        const key = g.toFixed(9), cx = Math.max(x[1], y[1]);
+        if (!out.has(key) || cx < out.get(key).complexity) out.set(key, { g, seeds: `${x[0]}/${x[1]}, ${y[0]}/${y[1]}`, complexity: cx, erv64: m === 1 && ERV64.some(v => Math.abs(v - g) < 2e-6) });
+      }
     }
   }
   return [...out.values()].sort((p, q) => p.g - q.g);
@@ -941,7 +947,7 @@ if (typeof document !== 'undefined') (function () {
             if (!best || row.maxErr < best.maxErr) best = row;
           }
           const row = first || best; if (!row) continue;
-          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, erv64: c.erv64, firstN: first ? first.N : null });
+          famRows.push({ ...row, gOct: c.g, seeds: c.seeds, complexity: c.complexity, erv64: c.erv64, firstN: first ? first.N : null });
         }
       }
       famRows.sort((p, q) => (p.firstN == null ? 1 : 0) - (q.firstN == null ? 1 : 0) || (p.firstN != null ? p.firstN - q.firstN : p.maxErr - q.maxErr) || p.maxErr - q.maxErr);
@@ -955,7 +961,7 @@ if (typeof document !== 'undefined') (function () {
     const tb = $('famTable').querySelector('tbody'); tb.innerHTML = '';
     for (const r of famRows.slice(0, 200)) {
       const tr = document.createElement('tr'); tr.className = 'sel' + (r.firstN != null ? ' hit' : '') + (S.fitPick && S.fitPick.key === r.key ? ' pick' : '');
-      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
+      tr.innerHTML = `<td class="num">${r.g.toFixed(2)}</td><td class="num">${r.gOct.toFixed(6)}</td><td class="num">${r.seeds}</td><td class="num">${r.complexity == null ? '—' : r.complexity}</td><td>${r.erv64 ? '<span class="pill ok">yes</span>' : ''}</td><td class="num">${r.firstN != null ? r.N + (r.level ? ' (L' + r.level + ')' : '') : 'none; best N ' + r.N}</td><td class="num">${r.s == null ? '—' : (-r.s) + ' of ' + r.N}</td><td class="num">${r.maxErr.toFixed(2)}</td><td class="num">${r.captured}/${lattice.tones.length}</td><td class="num">${triCell(r)}</td><td></td>`;
       const btn = document.createElement('button'); btn.textContent = 'Use in station 2'; btn.addEventListener('click', ev => { ev.stopPropagation(); S.gen = r.gOct; S.genPreset = 'custom'; $('genPreset').value = 'custom'; genChanged(); document.getElementById('generator').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
       tr.lastElementChild.appendChild(btn);
       tr.addEventListener('click', () => { S.fitPick = r; renderFitPick(); renderFamTable(); renderFixedTable(); renderFitTable(); updatePrompt(); });
