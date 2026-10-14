@@ -4673,3 +4673,100 @@ the verdict on the law and on the selector.
 **Run receipt:** 2026-10-13, python3.12 — lattice suite 399/399 OK (11 new:
 test_gold002), freeze check A OK (scorer 1a840af9…b592). Both receipts
 bit-identical across two runs (`cmp`).
+
+## 2026-10-13 — GOLD-001 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, the series Claude owns).** The planned
+Wilsonic design fits an MOS to an Euler genus by triad survival and offers
+the generator family as an aesthetic choice: free optimum, golden, silver,
+Erv's list, ET. What does a family cost? For each lattice and note count
+N, this experiment scores the golden and silver families by the same
+triad-survival objective as CPSFIT-003 and compares them with the free
+optimum, on a complexity ladder, with and without the MOS constraint
+(the design needs a level, so a chain that is not a level does not count
+for it). GOLD-002 (same day) showed that nobles are dense, so a family's
+reach is measured per complexity Q, never only at Q = 60.
+
+**Lattices.** Hexany CPS(4,2){1,3,5,7}, the EG4 tesseract, dekany
+CPS(5,2){1,3,5,7,9}, and the eikosany's embedded subsets on seeds
+1·3·5·7·9·11 from the SUBSET-MEL-000 census: 30 hexanies (one seed in,
+one out), 6 dekanies with a seed in and 6 with a seed out. N runs 11 to
+36 for the three 7-limit lattices and 11 to 24 for the 42 subsets.
+
+**Measures, per lattice and N.**
+1. The free count optimum c* and its generator g*: CPSFIT-003's receipts
+   for the hexany, EG4 and the dekany, and `cpsfit003.fit_count` for the
+   subsets. If any noble candidate keeps more triads than c*, the free
+   optimum is reported as that larger count and the CPSFIT-003 receipt is
+   flagged as beaten (its grid seeding can miss a narrow basin).
+2. The free optimum restricted to MOS levels: CPSFIT-003's count segments
+   intersected with the set of g for which N is a scale-tree level, which
+   is the union of the open intervals between Farey neighbours p/q and
+   p'/q' with q + q' = N. Exact, not a grid.
+3. For each family (golden, silver) and each complexity Q in 8, 12, 20,
+   30, 60: the best candidate by count (tie: smaller tone error) over all
+   windows within the 20 cent tone cap, any N, and the best whose N is a
+   level of the candidate. Candidates and complexity as GOLD-002 defines
+   them (`gold002.nobles`).
+4. The nearest candidate to g* at each Q, its distance and its count.
+Survival is the mirror predicate (|dev| < 2 cents and separation ≥ 2) and
+the frozen `score_tempered` count of the image is reported beside it.
+
+**Predictions (scratch 2026-10-13, Q ladder and null as GOLD-002, the
+MOS-only free optimum on a 0.5 cent grid, so its registered values are
+lower bounds).**
+- **P-G1-1 (hexany, golden).** At Q = 60 the golden best equals c* at
+  every N from 11 to 36 except 16 and 17 (8 against 10). At Q ≤ 20 the
+  golden best is 8 at every N from 12 to 36 and never reaches 10 or 12.
+  At Q = 8 it is 4 at N = 15 to 31 and 5 at 32 to 36. The hexany's free
+  optimum at N = 12 to 15 (317.175 cents, 8 of 12) is itself a golden
+  generator of complexity 11 (seeds 3/11 and 1/4, in Erv's 64) to 0.005
+  cents.
+- **P-G1-2 (hexany, silver).** Silver reaches 10 at N = 18 to 28 and 12
+  at N = 29 to 36 with complexity ≤ 20, and 12 from N = 22 at Q = 60. At
+  Q ≤ 20 silver beats golden at every N from 16 to 36.
+- **P-G1-3 (hexany, MOS only).** The golden best that is a level reaches
+  12 first at N = 25 and again at 31 (193.993 cents, complexity 37),
+  only at Q = 60. At Q ≤ 20 the level-only golden best never exceeds 8.
+  The exact MOS-only free optimum is ≥ 8 at N = 15 and 19, and ≥ 12 at
+  N = 25 and 31.
+- **P-G1-4 (nearest golden to the free generator).** At Q = 60 the
+  nearest golden to g* keeps c* at every N from 11 to 30 (distance ≤ 0.1
+  cents) and keeps only 4 of 12 at N = 31 to 36 (0.17 cents away, outside
+  the basin). At Q = 20 it keeps c* only at N = 12 to 15.
+- **P-G1-5 (EG4).** Golden at Q = 60 equals c* only at N = 12 to 15 and
+  36, and sits at 16 (N = 16 to 22), 20 (N = 23), 22 (N = 24 to 35)
+  against 18, 20, 24, 24. Silver at Q = 60 equals c* at N = 12 to 15 and
+  from 24 (24 of 24). Level-only golden at Q = 60 reaches 22 at N = 25
+  and 31 and never 24.
+- **P-G1-6 (dekany with 9).** At N = 13 to 18 a golden candidate at
+  Q = 30 keeps 16 triads where CPSFIT-003's receipt has 12 (N = 15 to 17)
+  and 14 (N = 18): the receipt is beaten and the free optimum is at least
+  16 there. From N = 19 golden at Q = 60 trails: 22 against 25 (N = 19 to
+  24), 25 against 26, 27 against 32 (N = 26 to 30), 29 against 32, 34
+  against 34 (N = 33 to 34) and 34 against 37. Silver at Q = 20 reaches
+  25 at N = 23 to 24, 27 to 28 at 26 to 32, 34 at 33 to 34 and 37 at 35
+  to 36, so silver at complexity 20 equals or beats golden at
+  complexity 60 at every N from 23 on.
+- **P-G1-7 (eikosany subsets, aggregate over feasible cells).** Hexanies,
+  408 cells: golden at Q = 60 reaches c* in 339, silver at Q = 60 in 369,
+  golden at Q = 20 in 172, and silver at Q = 20 is at least golden at
+  Q = 20 in 354. Full survival of a subset's own triads occurs in 165
+  cells for the free optimum, 128 for golden at Q = 60 and 85 for silver
+  at Q = 20. Dekanies, 124 cells: golden at Q = 60 reaches c* in 59,
+  golden at Q = 20 in 11, and silver at Q = 20 is at least golden at
+  Q = 20 in 97. Tolerance: ± 3 cells on every count, because the free
+  optimum is recomputed and may move by one.
+- **P-G1-8 (the design statement).** On every lattice the golden family
+  at complexity ≤ 20 loses triads to the free optimum at most N, the
+  silver family at the same complexity loses fewer, and the MOS-level
+  constraint costs more than either family. The selector is a real
+  trade and the N at which a family first reaches full survival is the
+  number the design must show.
+
+**Deliverables.** `gold001.py` on `gold002.nobles` and the CPSFIT-003
+machinery, `tests/test_gold001.py` green before the first run, receipts
+`results/gold001.jsonl` and `results/gold001_summary.json`, Scala exports
+under `results/scl/gold001/` for the hexany's complexity-11 golden
+generator at its 15-note level and the silver 12-of-12 chain at N = 29,
+offered for listening. A gate.
