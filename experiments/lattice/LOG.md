@@ -4528,3 +4528,93 @@ gate G-033.
 test_brun3, test_rank3001), freeze checks A OK on both pins (scorer
 1a840af9…b592, melodic a16f162b…7535). Both receipts and the three .scl are
 bit-identical across two runs (`cmp`). Each run 50 s with 8 workers.
+
+## 2026-10-13 — GOLD-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question (Marcus, 2026-10-13, a series he asked Claude to own).** Erv
+found his recurrence generators by optimizing proportional and subcontrary
+triads by hand. The first five measured sat 0.07 to 0.61 cents from a
+golden generator. Is "optimize the triads and you land near a noble
+number" a law? If it is, the generator-family selector in the planned
+Wilsonic design costs nothing. If it is not, the selector is a real trade
+between closure character and harmony. This experiment measures the
+claim against a null model, because nobles are dense: with seed
+denominators up to 60 there are 1102 golden generators in 600 cents, so
+any generator at all sits within 0.18 cents of one on average. Nearness
+only means something against the nearness of a random generator at the
+same complexity.
+
+**Generators.** The seventeen Erv and control generators the repo already
+cites with sources: the sixteen two-term recurrences of MERU-001 (the
+roots of H[n] = a·H[n−i] + b·H[n−j]: Erv 0.418935, 0.238186, Fig 12 #12,
+0.415227, meta-meantone, the silver control 8H[n−9] + 7H[n−10], Fibonacci,
+meta-pelog, meta-slendro, meta-Ptolemy, 0.591780, LLSLS, meta-slendro 2,
+0.773743, Pell, and the playground pick fit351), plus phi (Fig 12 entry 1).
+Each is folded to (0, 0.5] because g and 1 − g make the same chains. The
+archive scans (read in place, never vendored) extend this list in a later
+pass, GOLD-003.
+
+**Nobles and complexity.** A golden generator is (a + φc)/(b + φd) for a
+unimodular pair a/b, c/d (|bc − ad| = 1), either order. Silver uses
+1 + √2. The COMPLEXITY of a noble is the smallest max(b, d) over every pair
+that generates it, which is the seed pair where its scale-tree path starts
+to alternate. The ladder is Q = 8, 12, 20, 30, 60 (22, 46, 128, 278 and
+1102 golden generators, 33, 69, 192, 417 and 1653 silver). The earlier
+page enumeration took only neighbours at the deepest Farey level and gave
+every noble complexity 60. That is corrected here and on the page.
+
+**Null model.** 20000 generators uniform on (0, 0.5], seed 20261013. For
+each family and Q, the nearest-noble distance of each random generator
+gives a distribution. Each Erv generator's distance is reported with its
+percentile in that distribution. The strong form of the law says most of
+the seventeen sit in the low tail (percentile ≤ 0.10) at some single Q.
+The expected count under the null is 1.7 of 17.
+
+**Chain triads.** For each Erv generator and its nearest golden (Q = 60),
+the frozen P + S at 2 cents (`score_tempered`) of the N-chain of each at
+the golden generator's MOS levels up to 41, from degree 0.
+
+**Predictions (scratch 2026-10-13, deterministic, same definitions as the
+runner).**
+- **P-G2-1 (null distances).** Median nearest-golden distance of a random
+  generator: 8.58, 4.21, 1.52, 0.71 and 0.18 cents at Q = 8, 12, 20, 30,
+  60. Tenth percentile: 1.35, 0.66, 0.24, 0.11, 0.027 cents. Silver
+  medians 5.54, 2.69, 0.97, 0.45, 0.11 cents.
+- **P-G2-2 (the strong law is refuted).** Golden, Erv generators at or
+  below the tenth percentile: Q = 8: 5 of 17 (0.418935, meta-meantone, the
+  silver control, Fibonacci, phi). Q = 12: 5 (meta-meantone, Fibonacci,
+  meta-pelog, fit351, phi). Q = 20: 3 (0.418935, the silver control,
+  0.773743). Q = 30: 2 (meta-slendro, 0.773743). Q = 60: 4 (meta-slendro,
+  meta-Ptolemy, 0.773743, Pell). Silver: 4, 5, 6, 4, 4. At no Q do more
+  than 6 of 17 fall in the tail, so "most" fails at every Q. The weak form
+  survives: 3 to 6 against an expected 1.7, and 0.773743 sits on a golden
+  generator of complexity 20 to 0.00 cents.
+- **P-G2-3 (registered distances, 0.01 cent tolerance).** Nearest golden
+  at Q = 20: 0.418935 −0.12, 0.238186 −1.23, Fig 12 #12 −10.58, 0.415227
+  −1.02, meta-meantone −0.58, silver control +0.16, Fibonacci −0.65,
+  meta-pelog +0.31, meta-slendro +2.74, meta-Ptolemy +3.60, 0.591780 −0.30,
+  LLSLS −2.74, meta-slendro 2 −2.72, 0.773743 −0.00, Pell −1.92, fit351
+  −0.45, phi −0.65 cents. At Q = 60: 0.418935 +0.09 (seeds 18/43, 13/31),
+  0.238186 +0.61, Fig 12 #12 −0.17, 0.415227 +0.07, meta-meantone +0.11,
+  silver control −0.08, Fibonacci +0.07, meta-pelog +0.12, meta-slendro
+  +0.02, meta-Ptolemy −0.02, 0.591780 +0.17, LLSLS −0.19, meta-slendro 2
+  −0.05, 0.773743 −0.00, Pell −0.01, fit351 +0.11, phi +0.07.
+- **P-G2-4 (Erv against the noble on the chain's own triads).** At the
+  deepest common MOS level ≤ 41, Erv's generator out-scores its nearest
+  golden (Q = 60) on frozen P + S at 2 cents for nine (0.418935 212
+  against 190 at N = 31, 0.238186 138 against 94 at 25, Fig 12 #12 364
+  against 314 at 40, meta-meantone 156 against 140 at 31, Fibonacci 366
+  against 264 at 36, meta-slendro 404 against 380 at 37, meta-Ptolemy 400
+  against 354 at 38, LLSLS 396 against 390 at 38, phi 366 against 264 at
+  36), loses for six (0.415227 492 against 494 at 41, silver control 302
+  against 372 at 41, meta-pelog 100 against 152 at 29, 0.591780 128
+  against 154 at 27, meta-slendro 2 308 against 326 at 36, fit351 634
+  against 652 at 41) and ties for two (0.773743 at 31, Pell at 37). At
+  every level of 12 or fewer notes the two tie. Being near a noble is not
+  the same as having its triads: a tenth of a cent moves dozens of
+  2 cent coincidences at 30 notes.
+
+**Deliverables.** `gold002.py`, `tests/test_gold002.py` green before the
+first run, receipts `results/gold002.jsonl` + `results/gold002_summary.json`.
+No Scala exports (nothing new to hear, because the generators are already on the
+page). A gate for the verdict on the law and the design selector.
