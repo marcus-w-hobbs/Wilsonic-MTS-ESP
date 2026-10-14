@@ -83,7 +83,14 @@ program. Path to the musician: Wilsonic (Scala export first).
    coincidences (tones up to 71¢ off still "kept" a triad) — never drop the
    per-tone cap; SUBFIT-002 re-registers with 20¢ and 10¢ caps. Lesson 2:
    a scratch must use the SAME assignment rule as the runner (global vs
-   in-window nearest degree changed every number).
+   in-window nearest degree changed every number). SUBFIT-002 RAN
+   2026-10-14 (gate G-037): caps 20¢ and 10¢ agree from N = 38 up, all
+   six predictions kept. Lesson 3: report `homomorphic` for every winner —
+   the 351.444¢ neutral-third chain (41/58-note levels) keeps 14 hexanies
+   by an assignment no single 11-limit val produces; the homomorphic
+   level floors are 46 (443.128¢, 12 + 2), 53 (497.774¢, 16 + 2) and 72
+   (483.278¢, 20 + 4). Open on G-037: cap choice and whether the design
+   requires one val.
 3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
 4. Golden as an aesthetic axis: RAN 2026-10-13 as GOLD-001 (gate G-035).
    Golden at complexity ≤ 20 loses triads to the free optimum on every

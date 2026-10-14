@@ -5113,3 +5113,69 @@ cap and N) and `results/subfit002_summary.json`, Scala exports under
 `results/scl/subfit002/` for the N = 41 and N = 72 levels and the N = 37
 cap-20 chain. The N = 49, 53 and 70 chains are already in the Wilsonic
 library from SUBFIT-001. A gate.
+
+## 2026-10-14 — SUBFIT-002 results + verdicts
+
+**Run:** `subfit002.py` (about 8200 s for the first run and 7200 s for the second with 8 workers over 124 (cap, N) tasks, against 809 s for SUBFIT-001's single cap; the machine was shared with other work and I did not profile it.
+Receipts `results/subfit002.jsonl`, 124 rows, and
+`results/subfit002_summary.json`. Two runs bit-identical, `cmp` on both
+receipts and the three .scl.) Frozen triads v1.1.0 read-only, pin
+verified. Lattice suite 422/422 green before the first run (9 new tests).
+
+**All six predictions KEPT.** The runner is the scratch's search with the
+scratch's predicate, so this is a reproduction and not a surprise. The
+value of the run is the receipts and the structure of each winner, which
+the scratch did not compute.
+
+- **P-T20 — KEPT.** Every N from 11 to 72 matches the registered
+  generator within 0.01 cents, the registered counts exactly, and the
+  registered triads and errors.
+- **P-T10 — KEPT.** Same, and from N = 38 the rows equal the cap-20 rows.
+- **P-T-A — KEPT.** The two caps agree at every N from 38 to 72 and
+  differ at 37.
+- **P-T-B — KEPT.** First dekany at N = 26 under both caps, best chain
+  N = 70 (20 hexanies, 4 dekanies, 102 triads) under both, no chain keeps
+  every subset, no hexany at N = 11 or 12 under cap 10 and none keeps
+  more than 3 before N = 26.
+- **P-T-C — KEPT.** Free winner is a level at N = 17, 41, 53 (cap 20) and
+  17, 24, 41, 53 (cap 10). Level-only values as registered at N = 31, 41,
+  46, 53, 58, 65, 72.
+- **P-T-D — KEPT.** The smallest level with at least 14, 16, 20 hexanies
+  is N = 41, 53, 72, within 9.5, 4.2, 8.0 cents, under both caps.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The cap
+decides nothing above 37 notes. Below it, the cap-20 staircase keeps 4
+to 9 hexanies at N = 22 to 36 with tones 18 to 19 cents off, and cap 10
+keeps 3 to 8 with tones within 10. Whether an 18-cent tone "is" the
+eikosany tone is the ear question of G-036, and the two tables give the
+gate both answers. (2) Structure of the winners, from the runner's
+11-limit val solve on the assignment. This is the finding the scratch
+could not see: the neutral-third winner 351.444 at N = 38 to 48, and so
+the 41-note and 58-note levels, is NOT a homomorphic image of the
+11-limit lattice. No integer val maps the eikosany's monzos to the
+assigned degrees, so the 14 hexanies and 2 dekanies are kept by an
+assignment that is not a temperament: the same just interval lands on
+different step counts in different places of the chain. The cap-20
+free winners that ARE homomorphic: N = 24 to 25 (317.126, 6 hexanies,
+tones 18 cents off), N = 37 (350.756, 12 hexanies and 2 dekanies, val
+(2, -16, 13, 5) on primes 3, 5, 7, 11, kernel 32805/32768 and
+19712/19683), N = 49 to 56 (497.774, val (-1, 8, 14, -23), kernel
+131072/130977 and 41503/41472), N = 57 to 69 (316.778, val (6, 5, 22,
+-21), kernel 4375/4374 and 160083/160000), N = 70 to 72 (175.378, val
+(4, -32, -15, 10), kernel 2401/2400 and 131072/130977). Among the
+level-only winners the homomorphic ones with six or more hexanies are
+N = 46 and 65 (443.128, val (7, 9, 13, -15), kernel 4375/4374 and
+8019/8000, 12 hexanies and 2 dekanies within 8.3 cents), N = 53
+(497.774, 16 and 2), N = 63 (38.31, 12 and 0, 86 triads within 5.8) and
+N = 72 (483.278, val (-6, -29, 2, 21), kernel 3025/3024 and
+420175/419904, 20 and 4, 100 triads within 8.0). The 31-note 116.68
+level (6 hexanies) and the 41- and 58-note 351.444 levels are not
+homomorphic. So if the design requires one val (a Gral keyboard where
+every just interval is one fixed step vector), the eikosany's MOS
+floors move to 46 notes for 12 hexanies, 53 for 16 and 72 for 20, and
+the 41-note level drops out. Same under cap 10. (3) The three new .scl: the 41-note level (14 hexanies, 2 dekanies,
+within 9.5 cents), the 72-note level (20 and 4, 100 triads, within 8.0),
+and the 37-note cap-20 chain of 350.756 (12 and 2, within 10.3), which
+is the smallest chain that keeps twelve hexanies.
+
+**Kept.** Gate G-037.
