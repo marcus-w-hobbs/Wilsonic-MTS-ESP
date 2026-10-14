@@ -80,13 +80,20 @@ program. Path to the musician: Wilsonic (Scala export first).
    census) inside the candidate chain; which chain keeps the most triads in
    the whole and in the most subsets.
 3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
-4. Golden as an aesthetic axis: family search scored by triad count; the
-   noble-vs-free trade-off per N; "noble only" vs "best triads" on the page;
-   needs ear evals.
-5. Erv's hand-found generators vs golden, thoroughly: every generator in the
-   archive (Meru pages, Fig 12, 1997 sheets, letters) against the nearest
-   golden/silver, with triad counts of both, figure-cited (read in place, ship
-   derived work only). Is "optimize P/S triads ⇒ noble" a law?
+4. Golden as an aesthetic axis: RAN 2026-10-13 as GOLD-001 (gate G-035).
+   Golden at complexity ≤ 20 loses triads to the free optimum on every
+   lattice (hexany 8/12 where free has 12); silver loses fewer; the
+   MOS-level constraint costs more than either; a pure MOS keeps all 12
+   hexany triads first at N = 25. The selector is a real trade. Open: the
+   page's family search scored by triad count (it scores tone error now);
+   "noble only" vs "best triads" on the page; ear evals.
+5. Erv's generators vs golden: RAN 2026-10-13 as GOLD-002 (gate G-034) on
+   the 17 generators the repo cites. The strong law is refuted against a
+   null model (3–6 of 17 in the tail, never most); silver fits as well;
+   nearness ≠ harmony at depth. Complexity = minimal seed-denominator pair
+   (gold002.nobles; the page's enumeration was corrected). Open: GOLD-003
+   on the full archive (read in place, figure-cited) only if G-034 says the
+   weak signal is worth it.
 6. Hear it: six chains are in Wilsonic's user Scala library (hexany N=15, 16,
    18, 22×2; dekany N=26); gates G-029, G-031, G-032.
 7. Rank 3: RAN 2026-10-12 as RANK3-001 (brun3.py = port of the iOS Wilsonic

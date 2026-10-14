@@ -4770,3 +4770,102 @@ machinery, `tests/test_gold001.py` green before the first run, receipts
 under `results/scl/gold001/` for the hexany's complexity-11 golden
 generator at its 15-note level and the silver 12-of-12 chain at N = 29,
 offered for listening. A gate.
+
+## 2026-10-13 — GOLD-001 results + verdicts
+
+**Run:** `gold001.py` v1.0.1 (about 130 s with 8 workers. Receipts
+`results/gold001.jsonl`, 666 rows = 45 lattices × their N ranges, and
+`results/gold001_summary.json`. Two runs bit-identical, `cmp` on both
+receipts and the two .scl.) Frozen triads v1.1.0 read-only, pin verified.
+Lattice suite green before the first run (7 new tests, then 8). Version
+1.0.1 fixed a verdict bug found on the first run of 1.0.0: the subset
+aggregate and the EG4 equality lists treated a survival count of zero as a
+missing candidate. The measurements did not change. The recorded run is
+1.0.1.
+
+**A correction to CPSFIT-003.** A noble candidate is a chain the free
+search should have found. In 28 rows one keeps more triads than the free
+fit: the dekany with 9 at N = 13 to 18 keeps 16 under the golden generator
+249.263 cents (complexity 29) where CPSFIT-003's receipt had 12 at N = 15
+to 17 and 14 at N = 18 and no fit at 13 to 14. CPSFIT-003 seeds its
+assignments on a 0.5 cent grid and this basin is narrower than that. The
+runner reports the larger count as the effective free optimum and flags
+the receipt. The CPSFIT-003 staircase on the page stands for the hexany
+and EG4 and is superseded for the dekany at N = 13 to 18.
+
+- **P-G1-1 — KEPT.** On the hexany the golden best at complexity 60
+  equals the free count at every N except 16 and 17 (8 against 10), at
+  complexity 20 or less it is 8 at every N from 12 to 36, at complexity 8
+  it is 4 at N = 15 to 31 and 5 at 32 to 36, and the free optimum at
+  N = 12 to 15 is the complexity-11 golden generator seeded by 3/11 and
+  1/4 to 0.005 cents.
+- **P-G1-2 — REFUTED as registered on one clause, held on the rest.**
+  Silver at complexity 20 or less reaches 10 at N = 18 to 28 and 12 from
+  N = 29, and silver at complexity 60 reaches 12 from N = 22, as
+  registered. The clause "silver beats golden at complexity 20 or less
+  from N = 16" fails at N = 16 and 17 (6 against 8). The scratch table
+  showed those two values and the session wrote 16. The error is the
+  session's. The clause holds from N = 18.
+- **P-G1-3 — KEPT.** The level-only golden best reaches 12 exactly at
+  N = 25 and 31 at 193.993 cents, never above 8 at complexity 20 or less,
+  and the exact MOS-only free optimum is 8 at N = 15 and 19 and 12 at 25
+  and 31 (and 30, 32, 34, which the lower bounds did not cover).
+- **P-G1-4 — REFUTED as registered on N = 16 and 17, held on the rest.**
+  The nearest golden to the free generator at complexity 60 keeps the free
+  count at every N from 11 to 30 except 16 and 17, where it sits 0.097
+  cents away and keeps 8 of the 10, and keeps 4 at N = 31 to 36. The
+  scratch showed (0.1, 8) at N = 16 and 17 and the session registered a
+  range that included them. The error is the session's. At complexity 20
+  it keeps the free count only at N = 12 to 15, as registered.
+- **P-G1-5 — REFUTED as registered on the values at N = 18 to 22, held
+  on the rest.** EG4's golden best at complexity 60 equals the free count
+  at N = 12 to 15 and 36 and nowhere else. Its values are 16 at N = 16 to
+  17, 18 at N = 18 to 22, 20 at 23, 22 at 24 to 35. The registration wrote
+  16 for the whole range 16 to 22. The scratch table showed 18 at 18 to
+  22 and the session compressed the range. The error is the session's.
+  Silver at complexity 60 equals the free count at N = 12 to 15 and from
+  24, and the level-only golden best reaches 22 at N = 25 and 31 and
+  never 24, as registered.
+- **P-G1-6 — KEPT.** The dekany: the free count is at least 16 at N = 13
+  to 18 (the receipt is beaten there), golden at complexity 60 is 22, 25,
+  27, 29 and 34 on the registered ranges, silver at complexity 20 is 25,
+  27 or more, 34 and 37 on its ranges, and silver at complexity 20 equals
+  or beats golden at complexity 60 at every N from 23.
+- **P-G1-7 — KEPT.** Hexany subsets, 408 cells: golden at complexity 60
+  reaches the free count in 339, silver at 60 in 367, golden at 20 in
+  169, silver at 20 is at least golden at 20 in 354, and full survival
+  occurs in 165, 128 and 85 cells for the free optimum, golden at 60 and
+  silver at 20. Dekany subsets, 124 cells: 59, 11 and 97. All within the
+  registered 3 cells (the free optimum moved by the beaten-receipt rule
+  in a few cells).
+- **P-G1-8 — KEPT.** On each of the three 7-limit lattices the golden
+  family at complexity 20 loses triads to the free optimum at more than
+  half of the note counts, silver at the same complexity is at least
+  golden at more than half, and the exact MOS-only optimum is below the
+  free optimum at more than half.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The exact
+MOS-only staircase for the hexany: a pure two-step scale keeps all 12
+hexany triads at 2 cents first at N = 25 (193.91 cents, the breed-family
+generator, 10 at N = 21 and 22), then at 30, 31, 32 and 34. For EG4 all 24
+first at N = 25 and 31. For the dekany with 9, 25 of 41 at N = 19 (317.05
+cents) and 32 at N = 29 (498.07 cents, schismatic). These are the numbers
+the Wilsonic design's Gral has to make playable, because the design wants
+a level. (2) The dekany's new 16-triad chain at N = 13 to 18 is the
+249.263 cent golden generator of complexity 29 (seeds 6/29, 5/24), the
+same neighbourhood as the hexany's N = 11 free optimum (249.211). (3) On
+the eikosany's dekanies no family and no free chain reaches full survival
+at N ≤ 24, and on its hexanies the free optimum reaches full survival in
+165 of 408 cells against 128 for golden at complexity 60. (4) The two
+Scala exports: the hexany at the complexity-11 golden generator's
+15-note level (317.170 cents, 8 of 12) and the silver chain at N = 29
+(316.827 cents, 12 of 12, tone error under 4 cents), which is the
+cheapest noble full survival on the hexany at complexity 20.
+
+**Kept.** Runner and receipts stand. Gate G-035 is the verdict on the
+selector's price.
+
+**Run receipt:** 2026-10-13, python3.12 — lattice suite 407/407 OK (8 new:
+test_gold001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
+the two .scl bit-identical across two runs of v1.0.1 (`cmp`), about 130 s
+each with 8 workers.
