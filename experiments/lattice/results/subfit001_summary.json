@@ -1,0 +1,1533 @@
+{
+ "N_range": [
+  11,
+  72
+ ],
+ "epsilon_lock_cents": 2.0,
+ "experiment": "SUBFIT-001",
+ "grid_cents": 0.1,
+ "n_subsets": 72,
+ "n_tones": 20,
+ "n_triads": 114,
+ "refine_step_cents": 0.002,
+ "runner_version": "1.0.0",
+ "scl_files": [
+  "subfit001_eikosany_N26_free_g350.748.scl",
+  "subfit001_eikosany_N45_free_g351.444.scl",
+  "subfit001_eikosany_N49_free_g497.774.scl",
+  "subfit001_eikosany_N70_free_g175.378.scl",
+  "subfit001_eikosany_N46_mos_g443.128.scl",
+  "subfit001_eikosany_N53_mos_g497.774.scl"
+ ],
+ "scorer_version": "1.1.0",
+ "seeds": [
+  1,
+  3,
+  5,
+  7,
+  9,
+  11
+ ],
+ "staircase": [
+  {
+   "N": 11,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 248.86800000000082,
+   "hex": 2,
+   "kernel": [],
+   "max_err_kept": 71.2758488338809,
+   "mode": 9,
+   "mos": {
+    "dek": 0,
+    "g": 99.99399999999979,
+    "hex": 2,
+    "tet": 1,
+    "triads": 23
+   },
+   "tet": 2,
+   "triads": 22
+  },
+  {
+   "N": 12,
+   "dek": 0,
+   "free_is_level": true,
+   "g": 498.5040000000005,
+   "hex": 3,
+   "kernel": [],
+   "max_err_kept": 52.01365796036316,
+   "mode": 1,
+   "mos": {
+    "dek": 0,
+    "g": 498.5040000000005,
+    "hex": 3,
+    "tet": 2,
+    "triads": 36
+   },
+   "tet": 2,
+   "triads": 36
+  },
+  {
+   "N": 13,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 498.5040000000005,
+   "hex": 3,
+   "kernel": [],
+   "max_err_kept": 52.01365796036316,
+   "mode": 2,
+   "mos": {
+    "dek": 0,
+    "g": 99.99399999999979,
+    "hex": 2,
+    "tet": 2,
+    "triads": 25
+   },
+   "tet": 2,
+   "triads": 36
+  },
+  {
+   "N": 14,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 498.5040000000005,
+   "hex": 2,
+   "kernel": [],
+   "max_err_kept": 47.85237966603927,
+   "mode": 6,
+   "mos": {
+    "dek": 0,
+    "g": 423.38000000000085,
+    "hex": 2,
+    "tet": 0,
+    "triads": 9
+   },
+   "tet": 4,
+   "triads": 32
+  },
+  {
+   "N": 15,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 498.0400000000002,
+   "hex": 3,
+   "kernel": [],
+   "max_err_kept": 36.93705503908154,
+   "mode": 0,
+   "mos": {
+    "dek": 0,
+    "g": 566.4959999999977,
+    "hex": 2,
+    "tet": 2,
+    "triads": 26
+   },
+   "tet": 3,
+   "triads": 37
+  },
+  {
+   "N": 16,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 498.0400000000002,
+   "hex": 3,
+   "kernel": [],
+   "max_err_kept": 36.93705503908154,
+   "mode": 5,
+   "mos": {
+    "dek": 0,
+    "g": 70.68599999999958,
+    "hex": 1,
+    "tet": 2,
+    "triads": 7
+   },
+   "tet": 3,
+   "triads": 40
+  },
+  {
+   "N": 17,
+   "dek": 0,
+   "free_is_level": true,
+   "g": 351.39000000000044,
+   "hex": 4,
+   "kernel": [],
+   "max_err_kept": 33.65205590446476,
+   "mode": 14,
+   "mos": {
+    "dek": 0,
+    "g": 351.5100000000005,
+    "hex": 4,
+    "tet": 4,
+    "triads": 37
+   },
+   "tet": 4,
+   "triads": 38
+  },
+  {
+   "N": 18,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 4,
+   "kernel": [],
+   "max_err_kept": 32.82705676985188,
+   "mode": 15,
+   "mos": {
+    "dek": 0,
+    "g": 339.3340000000002,
+    "hex": 1,
+    "tet": 1,
+    "triads": 24
+   },
+   "tet": 4,
+   "triads": 41
+  },
+  {
+   "N": 19,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 4,
+   "kernel": [],
+   "max_err_kept": 32.82705676985188,
+   "mode": 15,
+   "mos": {
+    "dek": 0,
+    "g": 248.86800000000082,
+    "hex": 2,
+    "tet": 4,
+    "triads": 32
+   },
+   "tet": 4,
+   "triads": 41
+  },
+  {
+   "N": 20,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 5,
+   "kernel": [],
+   "max_err_kept": 28.844997403833077,
+   "mode": 17,
+   "mos": {
+    "dek": 0,
+    "g": 178.47600000000037,
+    "hex": 2,
+    "tet": 1,
+    "triads": 11
+   },
+   "tet": 5,
+   "triads": 44
+  },
+  {
+   "N": 21,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 5,
+   "kernel": [],
+   "max_err_kept": 28.844997403833077,
+   "mode": 17,
+   "mos": {
+    "dek": 0,
+    "g": 230.80600000000004,
+    "hex": 2,
+    "tet": 2,
+    "triads": 6
+   },
+   "tet": 5,
+   "triads": 44
+  },
+  {
+   "N": 22,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 5,
+   "kernel": [],
+   "max_err_kept": 28.844997403833077,
+   "mode": 17,
+   "mos": {
+    "dek": 0,
+    "g": 165.5160000000001,
+    "hex": 3,
+    "tet": 3,
+    "triads": 29
+   },
+   "tet": 5,
+   "triads": 44
+  },
+  {
+   "N": 23,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 351.39000000000044,
+   "hex": 5,
+   "kernel": [],
+   "max_err_kept": 28.844997403833077,
+   "mode": 17,
+   "mos": {
+    "dek": 0,
+    "g": 206.89800000000048,
+    "hex": 2,
+    "tet": 2,
+    "triads": 28
+   },
+   "tet": 5,
+   "triads": 44
+  },
+  {
+   "N": 24,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 317.1260000000006,
+   "hex": 6,
+   "kernel": [
+    "160083/160000",
+    "6250/6237",
+    "385/384",
+    "15625/15552"
+   ],
+   "max_err_kept": 18.131620333954743,
+   "mode": 0,
+   "mos": {
+    "dek": 0,
+    "g": 351.39000000000044,
+    "hex": 5,
+    "tet": 5,
+    "triads": 44
+   },
+   "tet": 6,
+   "triads": 56
+  },
+  {
+   "N": 25,
+   "dek": 0,
+   "free_is_level": false,
+   "g": 317.1260000000006,
+   "hex": 6,
+   "kernel": [
+    "160083/160000",
+    "6250/6237",
+    "385/384",
+    "15625/15552"
+   ],
+   "max_err_kept": 18.131620333954743,
+   "mode": 0,
+   "mos": {
+    "dek": 0,
+    "g": 339.3340000000002,
+    "hex": 2,
+    "tet": 2,
+    "triads": 30
+   },
+   "tet": 6,
+   "triads": 56
+  },
+  {
+   "N": 26,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 3,
+   "mos": {
+    "dek": 0,
+    "g": 140.39200000000045,
+    "hex": 4,
+    "tet": 4,
+    "triads": 30
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 27,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 3,
+   "mos": {
+    "dek": 0,
+    "g": 443.13600000000065,
+    "hex": 3,
+    "tet": 3,
+    "triads": 39
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 28,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 3,
+   "mos": {
+    "dek": 0,
+    "g": 387.66800000000035,
+    "hex": 4,
+    "tet": 5,
+    "triads": 50
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 29,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 3,
+   "mos": {
+    "dek": 0,
+    "g": 497.84200000000067,
+    "hex": 4,
+    "tet": 4,
+    "triads": 39
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 30,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 3,
+   "mos": {
+    "dek": 0,
+    "g": 38.2,
+    "hex": 2,
+    "tet": 4,
+    "triads": 38
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 31,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 4,
+   "mos": {
+    "dek": 0,
+    "g": 116.68399999999981,
+    "hex": 6,
+    "tet": 8,
+    "triads": 64
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 32,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 22.09234377041139,
+   "mode": 5,
+   "mos": {
+    "dek": 0,
+    "g": 409.8020000000005,
+    "hex": 3,
+    "tet": 2,
+    "triads": 31
+   },
+   "tet": 7,
+   "triads": 47
+  },
+  {
+   "N": 33,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 7,
+   "kernel": [],
+   "max_err_kept": 19.21128526978009,
+   "mode": 10,
+   "mos": {
+    "dek": 0,
+    "g": 585.2219999999971,
+    "hex": 3,
+    "tet": 3,
+    "triads": 35
+   },
+   "tet": 8,
+   "triads": 56
+  },
+  {
+   "N": 34,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 8,
+   "kernel": [],
+   "max_err_kept": 19.21128526978009,
+   "mode": 11,
+   "mos": {
+    "dek": 0,
+    "g": 175.6600000000003,
+    "hex": 6,
+    "tet": 6,
+    "triads": 58
+   },
+   "tet": 8,
+   "triads": 61
+  },
+  {
+   "N": 35,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 9,
+   "kernel": [],
+   "max_err_kept": 19.21128526978009,
+   "mode": 12,
+   "mos": {
+    "dek": 0,
+    "g": 585.2219999999971,
+    "hex": 4,
+    "tet": 4,
+    "triads": 39
+   },
+   "tet": 9,
+   "triads": 66
+  },
+  {
+   "N": 36,
+   "dek": 1,
+   "free_is_level": false,
+   "g": 350.7480000000002,
+   "hex": 9,
+   "kernel": [],
+   "max_err_kept": 19.21128526978009,
+   "mode": 12,
+   "mos": {
+    "dek": 0,
+    "g": 233.95000000000073,
+    "hex": 5,
+    "tet": 6,
+    "triads": 60
+   },
+   "tet": 9,
+   "triads": 66
+  },
+  {
+   "N": 37,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 350.75600000000026,
+   "hex": 12,
+   "kernel": [
+    "32805/32768",
+    "19712/19683",
+    "46656/46585",
+    "385/384"
+   ],
+   "max_err_kept": 10.326909065282052,
+   "mode": 14,
+   "mos": {
+    "dek": 0,
+    "g": 292.6960000000004,
+    "hex": 4,
+    "tet": 4,
+    "triads": 46
+   },
+   "tet": 12,
+   "triads": 70
+  },
+  {
+   "N": 38,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 35,
+   "mos": {
+    "dek": 0,
+    "g": 409.6960000000005,
+    "hex": 4,
+    "tet": 6,
+    "triads": 52
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 39,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 35,
+   "mos": {
+    "dek": 0,
+    "g": 339.4020000000005,
+    "hex": 4,
+    "tet": 8,
+    "triads": 62
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 40,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 35,
+   "mos": {
+    "dek": 0,
+    "g": 29.329999999999927,
+    "hex": 4,
+    "tet": 6,
+    "triads": 47
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 41,
+   "dek": 2,
+   "free_is_level": true,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 35,
+   "mos": {
+    "dek": 2,
+    "g": 351.4440000000002,
+    "hex": 14,
+    "tet": 14,
+    "triads": 88
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 42,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 36,
+   "mos": {
+    "dek": 0,
+    "g": 483.3040000000005,
+    "hex": 4,
+    "tet": 5,
+    "triads": 37
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 43,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 37,
+   "mos": {
+    "dek": 0,
+    "g": 585.583999999998,
+    "hex": 5,
+    "tet": 4,
+    "triads": 54
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 44,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 38,
+   "mos": {
+    "dek": 0,
+    "g": 409.6960000000005,
+    "hex": 5,
+    "tet": 5,
+    "triads": 50
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 45,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 39,
+   "mos": {
+    "dek": 0,
+    "g": 292.7380000000006,
+    "hex": 4,
+    "tet": 4,
+    "triads": 50
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 46,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 40,
+   "mos": {
+    "dek": 2,
+    "g": 443.1280000000006,
+    "hex": 12,
+    "tet": 12,
+    "triads": 70
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 47,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 41,
+   "mos": {
+    "dek": 0,
+    "g": 483.2680000000003,
+    "hex": 5,
+    "tet": 6,
+    "triads": 48
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 48,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 351.4440000000002,
+   "hex": 14,
+   "kernel": [],
+   "max_err_kept": 9.471620333960345,
+   "mode": 42,
+   "mos": {
+    "dek": 0,
+    "g": 175.31600000000057,
+    "hex": 8,
+    "tet": 8,
+    "triads": 56
+   },
+   "tet": 14,
+   "triads": 88
+  },
+  {
+   "N": 49,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 1,
+    "g": 416.6440000000007,
+    "hex": 6,
+    "tet": 9,
+    "triads": 45
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 50,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 0,
+    "g": 407.5100000000005,
+    "hex": 4,
+    "tet": 6,
+    "triads": 60
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 51,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 1,
+    "g": 516.8739999999959,
+    "hex": 6,
+    "tet": 9,
+    "triads": 58
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 52,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 0,
+    "g": 484.81400000000053,
+    "hex": 6,
+    "tet": 6,
+    "triads": 30
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 53,
+   "dek": 2,
+   "free_is_level": true,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 2,
+    "g": 497.77400000000034,
+    "hex": 16,
+    "tet": 16,
+    "triads": 76
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 54,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 0,
+    "g": 22.629999999999928,
+    "hex": 4,
+    "tet": 4,
+    "triads": 61
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 55,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 0,
+    "g": 152.49400000000045,
+    "hex": 6,
+    "tet": 7,
+    "triads": 51
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 56,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 497.77400000000034,
+   "hex": 16,
+   "kernel": [
+    "131072/130977",
+    "41503/41472",
+    "32805/32768",
+    "19712/19683"
+   ],
+   "max_err_kept": 4.241656229596629,
+   "mode": 26,
+   "mos": {
+    "dek": 1,
+    "g": 193.21400000000057,
+    "hex": 7,
+    "tet": 11,
+    "triads": 69
+   },
+   "tet": 16,
+   "triads": 76
+  },
+  {
+   "N": 57,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 0,
+    "g": 483.27800000000036,
+    "hex": 6,
+    "tet": 9,
+    "triads": 60
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 58,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 2,
+    "g": 351.4440000000002,
+    "hex": 14,
+    "tet": 14,
+    "triads": 88
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 59,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 1,
+    "g": 242.51000000000053,
+    "hex": 6,
+    "tet": 7,
+    "triads": 49
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 60,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 0,
+    "g": 339.7680000000003,
+    "hex": 8,
+    "tet": 8,
+    "triads": 60
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 61,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 1,
+    "g": 315.1740000000004,
+    "hex": 5,
+    "tet": 6,
+    "triads": 54
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 62,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 1,
+    "g": 483.2680000000003,
+    "hex": 9,
+    "tet": 12,
+    "triads": 68
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 63,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 0,
+    "g": 38.31200000000014,
+    "hex": 12,
+    "tet": 12,
+    "triads": 86
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 64,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 1,
+    "g": 242.51000000000053,
+    "hex": 6,
+    "tet": 7,
+    "triads": 50
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 65,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 2,
+    "g": 443.1280000000006,
+    "hex": 12,
+    "tet": 12,
+    "triads": 70
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 66,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 1,
+    "g": 16.621999999999932,
+    "hex": 7,
+    "tet": 12,
+    "triads": 59
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 67,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 2,
+    "g": 483.27800000000036,
+    "hex": 14,
+    "tet": 17,
+    "triads": 93
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 68,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 2,
+    "g": 193.83800000000068,
+    "hex": 10,
+    "tet": 13,
+    "triads": 72
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 69,
+   "dek": 2,
+   "free_is_level": false,
+   "g": 316.7780000000009,
+   "hex": 18,
+   "kernel": [
+    "4375/4374",
+    "160083/160000",
+    "41503/41472",
+    "472392/471625"
+   ],
+   "max_err_kept": 8.653657960369856,
+   "mode": 16,
+   "mos": {
+    "dek": 0,
+    "g": 382.23000000000064,
+    "hex": 8,
+    "tet": 8,
+    "triads": 62
+   },
+   "tet": 18,
+   "triads": 96
+  },
+  {
+   "N": 70,
+   "dek": 4,
+   "free_is_level": false,
+   "g": 175.37800000000038,
+   "hex": 20,
+   "kernel": [
+    "2401/2400",
+    "131072/130977",
+    "32805/32768",
+    "200704/200475"
+   ],
+   "max_err_kept": 4.556437301269398,
+   "mode": 47,
+   "mos": {
+    "dek": 2,
+    "g": 497.39600000000047,
+    "hex": 13,
+    "tet": 18,
+    "triads": 77
+   },
+   "tet": 20,
+   "triads": 102
+  },
+  {
+   "N": 71,
+   "dek": 4,
+   "free_is_level": false,
+   "g": 175.37800000000038,
+   "hex": 20,
+   "kernel": [
+    "2401/2400",
+    "131072/130977",
+    "32805/32768",
+    "200704/200475"
+   ],
+   "max_err_kept": 4.556437301269398,
+   "mode": 47,
+   "mos": {
+    "dek": 0,
+    "g": 16.621999999999932,
+    "hex": 10,
+    "tet": 13,
+    "triads": 83
+   },
+   "tet": 20,
+   "triads": 102
+  },
+  {
+   "N": 72,
+   "dek": 4,
+   "free_is_level": false,
+   "g": 175.37800000000038,
+   "hex": 20,
+   "kernel": [
+    "2401/2400",
+    "131072/130977",
+    "32805/32768",
+    "200704/200475"
+   ],
+   "max_err_kept": 4.556437301269398,
+   "mode": 47,
+   "mos": {
+    "dek": 4,
+    "g": 483.27800000000036,
+    "hex": 20,
+    "tet": 20,
+    "triads": 100
+   },
+   "tet": 20,
+   "triads": 102
+  }
+ ],
+ "subset_kinds": {
+  "dekany_in": 6,
+  "dekany_out": 6,
+  "hexany": 30,
+  "tetrad_in": 15,
+  "tetrad_out": 15
+ },
+ "verdicts": {
+  "P-S1": {
+   "failures": [
+    "N=11: triads 22 outside 16..16",
+    "N=11: g 248.868 != 500.04",
+    "N=12: triads 36 outside 17..17",
+    "N=12: g 498.504 != 566.33",
+    "N=13: triads 36 outside 16..16",
+    "N=13: g 498.504 != 350.98",
+    "N=14: triads 32 outside 20..26",
+    "N=14: g 498.504 != 351.32",
+    "N=15: triads 37 outside 20..26",
+    "N=15: g 498.040 != 351.32",
+    "N=16: triads 40 outside 20..26",
+    "N=16: g 498.040 != 351.32",
+    "N=17: triads 38 outside 24..30",
+    "N=17: g 351.390 != 351.32",
+    "N=18: triads 41 outside 24..30",
+    "N=18: g 351.390 != 351.32",
+    "N=19: triads 41 outside 24..30",
+    "N=19: g 351.390 != 351.32",
+    "N=20: triads 44 outside 24..30",
+    "N=20: g 351.390 != 351.32",
+    "N=21: triads 44 outside 24..30",
+    "N=21: g 351.390 != 351.32",
+    "N=22: triads 44 outside 24..30",
+    "N=22: g 351.390 != 351.32",
+    "N=23: triads 44 outside 24..30",
+    "N=23: g 351.390 != 351.32",
+    "N=24: triads 56 outside 32..32",
+    "N=24: g 317.126 != 350.76",
+    "N=25: triads 56 outside 52..52",
+    "N=25: g 317.126 != 271.61",
+    "N=26: triads 47 outside 39..43",
+    "N=27: triads 47 outside 39..43",
+    "N=28: triads 47 outside 39..43",
+    "N=29: triads 47 outside 39..43",
+    "N=30: triads 47 outside 39..43",
+    "N=31: triads 47 outside 39..43",
+    "N=32: triads 47 outside 39..43",
+    "N=33: triads 56 outside 39..43",
+    "N=34: triads 61 outside 39..43",
+    "N=35: triads 66 outside 48..48",
+    "N=36: triads 66 outside 48..48",
+    "N=37: triads 70 outside 59..59",
+    "N=37: g 350.756 != 116.73",
+    "N=38: triads 88 outside 59..59",
+    "N=38: g 351.444 != 116.73",
+    "N=39: triads 88 outside 52..52",
+    "N=39: g 351.444 != 350.76",
+    "N=40: triads 88 outside 50..50",
+    "N=40: g 351.444 != 497.77",
+    "N=41: triads 88 outside 73..73",
+    "N=41: g 351.444 != 339.4",
+    "N=42: triads 88 outside 73..73",
+    "N=42: g 351.444 != 339.4",
+    "N=43: triads 88 outside 73..73",
+    "N=43: g 351.444 != 339.4",
+    "N=44: triads 88 outside 73..73",
+    "N=44: g 351.444 != 339.4",
+    "N=45: triads 88 outside 84..84",
+    "N=45: g 351.444 != 339.4",
+    "N=46: triads 88 outside 84..84",
+    "N=46: g 351.444 != 339.4",
+    "N=47: triads 88 outside 84..84",
+    "N=47: g 351.444 != 339.4",
+    "N=48: triads 88 outside 84..84",
+    "N=48: g 351.444 != 339.4",
+    "N=57: triads 96 outside 76..76",
+    "N=57: g 316.778 != 497.77",
+    "N=58: triads 96 outside 76..76",
+    "N=58: g 316.778 != 497.77",
+    "N=59: triads 96 outside 76..76",
+    "N=59: g 316.778 != 497.77",
+    "N=60: triads 96 outside 76..76",
+    "N=60: g 316.778 != 497.77",
+    "N=61: triads 96 outside 76..76",
+    "N=61: g 316.778 != 497.77",
+    "N=62: triads 96 outside 76..76",
+    "N=62: g 316.778 != 497.77",
+    "N=63: triads 96 outside 76..76",
+    "N=63: g 316.778 != 497.77",
+    "N=64: triads 96 outside 76..76",
+    "N=64: g 316.778 != 497.77",
+    "N=65: triads 96 outside 76..76",
+    "N=65: g 316.778 != 497.77",
+    "N=66: triads 96 outside 76..76",
+    "N=66: g 316.778 != 497.77",
+    "N=67: triads 96 outside 76..76",
+    "N=67: g 316.778 != 497.77",
+    "N=68: triads 96 outside 76..76",
+    "N=68: g 316.778 != 497.77",
+    "N=69: triads 96 outside 76..76",
+    "N=69: g 316.778 != 497.77"
+   ],
+   "kept": false
+  },
+  "P-S2": {
+   "failures": [
+    "more than 3 hexanies before N=25"
+   ],
+   "kept": false
+  },
+  "P-S3": {
+   "failures": [
+    "N=14: g 498.50 not a neutral third",
+    "N=15: g 498.04 not a neutral third",
+    "N=16: g 498.04 not a neutral third",
+    "N=24: g 317.13 not a neutral third",
+    "N=25: g 317.13 != 271.61",
+    "N=37: g 350.76 != miracle",
+    "N=38: g 351.44 != miracle"
+   ],
+   "kept": false
+  },
+  "P-S4": {
+   "failures": [
+    "N=46 level-only (443.13, 12, 2, 70) != (339.4, 12, 0, 82)",
+    "N=11: level-only hexanies 2 not below free 2",
+    "N=12: free winner is a level (unregistered)",
+    "N=14: level-only hexanies 2 not below free 2",
+    "N=17: free winner is a level (unregistered)",
+    "N=41: free winner is a level (unregistered)",
+    "N=72: level-only hexanies 20 not below free 20",
+    "N=46: free winner is not a level"
+   ],
+   "kept": false
+  },
+  "P-S5": {
+   "failures": [
+    "N=14: max error in kept triads 47.9 outside (27.0, 28.5)",
+    "N=15: max error in kept triads 36.9 outside (27.0, 28.5)",
+    "N=16: max error in kept triads 36.9 outside (27.0, 28.5)",
+    "N=17: max error in kept triads 33.7 outside (27.0, 28.5)",
+    "N=18: max error in kept triads 32.8 outside (27.0, 28.5)",
+    "N=19: max error in kept triads 32.8 outside (27.0, 28.5)",
+    "N=20: max error in kept triads 28.8 outside (27.0, 28.5)",
+    "N=21: max error in kept triads 28.8 outside (8.0, 10.0)",
+    "N=22: max error in kept triads 28.8 outside (8.0, 10.0)",
+    "N=23: max error in kept triads 28.8 outside (8.0, 10.0)",
+    "N=24: max error in kept triads 18.1 outside (8.0, 10.0)",
+    "N=25: max error in kept triads 18.1 outside (8.0, 10.0)",
+    "N=26: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=27: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=28: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=29: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=30: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=31: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=32: max error in kept triads 22.1 outside (8.0, 10.0)",
+    "N=33: max error in kept triads 19.2 outside (8.0, 10.0)",
+    "N=34: max error in kept triads 19.2 outside (8.0, 10.0)",
+    "N=35: max error in kept triads 19.2 outside (8.0, 10.0)",
+    "N=36: max error in kept triads 19.2 outside (8.0, 10.0)",
+    "N=37: max error in kept triads 10.3 outside (8.0, 10.0)",
+    "N=40: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=41: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=42: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=43: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=44: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=45: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=46: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=47: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=48: max error in kept triads 9.5 outside (4.0, 5.0)",
+    "N=57: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=58: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=59: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=60: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=61: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=62: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=63: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=64: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=65: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=66: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=67: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=68: max error in kept triads 8.7 outside (4.0, 5.0)",
+    "N=69: max error in kept triads 8.7 outside (4.0, 5.0)"
+   ],
+   "kept": false
+  }
+ }
+}

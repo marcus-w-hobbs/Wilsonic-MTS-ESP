@@ -4956,3 +4956,89 @@ before the first run, receipts `results/subfit001.jsonl` and
 `results/scl/subfit001/` for the winners at N = 26 (350.76), 45 (339.40),
 49 (497.77) and 70 (175.38), and the N = 46 and 53 levels, offered for
 listening. A gate.
+
+## 2026-10-14 — SUBFIT-001 results + verdicts
+
+**Run:** `subfit001.py` (809 s per run with 8 workers. Receipts
+`results/subfit001.jsonl`, 62 rows, and `results/subfit001_summary.json`.
+Two runs bit-identical, `cmp` on both receipts and the six .scl.) Frozen
+triads v1.1.0 read-only, pin verified. Lattice suite 413/413 green before
+the first run (6 new tests).
+
+**All five predictions are refuted as registered, and the cause is a
+flaw in the registration, not in the runner.** The scratch assigned each
+tone to its nearest degree of the whole 2N − 1 degree chain and then
+asked whether that degree sat in the window. The runner assigns each
+tone to its nearest degree INSIDE the window, as registered. With no
+tone cap, the two differ a lot: a tone whose nearest degree lies outside
+the window is given the nearest degree inside it, however far away, and
+a triad whose three members land on in-window degrees that happen to
+satisfy the mean condition counts as kept even when those degrees are
+nowhere near the just pitches. The largest error among tones in kept
+triads is 71 cents at N = 11, 52 at N = 12 and 13, 33 to 37 at N = 15 to
+17, 29 at N = 20 to 23, 22 at N = 26 to 32, and falls under 10 cents only
+from N = 37. So at small N the objective was counting created
+coincidences in the chain, not the eikosany's subsets, and the
+registered "lower bound" clause on the counts held for a bad reason.
+Below N = 37 the counts are not evidence about the eikosany. From N = 37
+the errors are 4 to 10 cents and the counts mean what they were meant
+to mean.
+
+- **P-S1 — REFUTED as registered.** Counts never fell below the
+  registered lower bounds, as the clause allowed, but the generators and
+  triad totals differ at 20 of 62 N. Winners by N: 11: 248.87 cents
+  (2 hexanies, 22 triads). 12 to 14: 498.50 (3, 3, 2 hexanies). 15 to
+  16: 498.04 (3). 17 to 23: 351.39 (4 then 5 hexanies). 24 to 25: 317.13
+  (6 hexanies, 56 triads). 26 to 36: 350.75 (7 to 9 hexanies, 1 dekany).
+  37: 350.76 (12 hexanies, 2 dekanies, 70 triads). 38 to 48: 351.44 (14
+  hexanies, 2 dekanies, 88 triads). 49 to 56: 497.77 (16 hexanies, 2
+  dekanies, 76 triads). 57 to 69: 316.78 (18 hexanies, 2 dekanies, 96
+  triads). 70 to 72: 175.38 (20 hexanies, 4 dekanies, 102 triads).
+- **P-S2 — REFUTED as registered on the small-N clause.** The best chain
+  is at N = 70 with 20 hexanies, 4 dekanies and 102 triads, as registered,
+  and no chain keeps every subset. The first dekany arrives at N = 26, as
+  registered. "No more than 3 hexanies before N = 25" fails: 4 at N = 17
+  to 19 and 5 at 20 to 23, with tones up to 34 cents off. See the flaw
+  above.
+- **P-S3 — REFUTED as registered.** The neutral-third generators own
+  N = 17 to 23 and 26 to 48, with 498.5 and 498.0 cents (a fourth) at 12
+  to 16 and 317.13 at 24 to 25 instead. The miracle generator wins at no
+  N: the exact assignment gives 351.444 cents 14 hexanies at N = 37 to
+  48 where the scratch had 9 for miracle at 37 to 38.
+- **P-S4 — REFUTED as registered.** The level-only winners differ: N = 46
+  keeps 12 hexanies and 2 dekanies at 443.13 cents (the scratch had
+  339.40 with none), N = 53 keeps 16 and 2 at 497.77 as registered, N = 41
+  is a level of 351.44 with 14 hexanies and 2 dekanies, N = 72 keeps 20
+  hexanies and 4 dekanies at 483.28 as a level (100 triads), N = 67
+  keeps 14 and 2 at 483.28. The free winner is a level at N = 12, 17, 41
+  and 53, not at 46. The clause "level-only strictly below free in
+  hexanies" fails at N = 11, 14 and others where both are small.
+- **P-S5 — REFUTED as registered.** The error bands were an artefact of
+  the scratch's assignment. The exact figures are above.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) From N = 37
+on, where the kept triads sit within 10 cents of the just pitches, the
+staircase reads: 14 hexanies and 2 dekanies at 38 to 48 notes under the
+neutral third 351.444 cents (a level at N = 41), 16 and 2 at 49 to 56
+under the fourth 497.774 (a level at N = 53, kernel 131072/130977 and
+41503/41472), 18 and 2 at 57 to 69 under 316.778 (kernel 4375/4374 and
+160083/160000), 20 and 4 at 70 to 72 under 175.378 (kernel 2401/2400 and
+131072/130977), and 20 and 4 as a 72-note level under 483.28 cents. (2)
+The 41-note level of 351.444 cents and the 53-note level of 497.774 cents
+are the two MOS the design can use today for the eikosany: 14 of 30
+hexanies with 2 of 12 dekanies, and 16 with 2, every kept tone within
+9.5 and 4.2 cents. (3) The follow-up, SUBFIT-002, puts a per-tone cap in
+the predicate (a triad counts only when all three tones sit within the
+cap of their just pitch, 20 cents as CPSFIT-003 and 10 cents as a
+stricter tier) and re-registers from a capped scratch. (4) Of the six
+Scala exports, the three at N = 49, 53 and 70 are worth hearing. The N = 26
+and 45 chains carry 22 and 9.5 cent errors and the N = 46 level is the
+443 cent one.
+
+**Kept.** Runner and receipts stand as the measurement of the registered
+(flawed) objective. Gate G-036.
+
+**Run receipt:** 2026-10-14, python3.12 — lattice suite 413/413 OK (6 new:
+test_subfit001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
+the six .scl bit-identical across two runs (`cmp`), 809 s each with 8
+workers.

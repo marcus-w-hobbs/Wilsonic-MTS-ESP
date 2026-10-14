@@ -76,9 +76,14 @@ program. Path to the musician: Wilsonic (Scala export first).
    tone-optimal); extend val/kernel code to 11-limit; run the count fit on the
    eikosany (CPSFIT-004). Controls from G-032: tone-cap sweep (5, 10, 20¢) and
    a transposition-free fit. Geometric triads as a possible third class.
-2. Eikosany + subsets jointly: score each embedded subset CPS (SUBSET-MEL-000
-   census) inside the candidate chain; which chain keeps the most triads in
-   the whole and in the most subsets.
+2. Eikosany + subsets jointly: RAN 2026-10-14 as SUBFIT-001 (gate G-036).
+   One chain keeps at most 20/30 hexanies + 4/12 dekanies at N = 70; usable
+   MOS today: 41-note level of 351.44¢ (14 + 2) and 53-note level of
+   497.77¢ (16 + 2). LESSON: a cap-free survival predicate counts chain
+   coincidences (tones up to 71¢ off still "kept" a triad) — never drop the
+   per-tone cap; SUBFIT-002 re-registers with 20¢ and 10¢ caps. Lesson 2:
+   a scratch must use the SAME assignment rule as the runner (global vs
+   in-window nearest degree changed every number).
 3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
 4. Golden as an aesthetic axis: RAN 2026-10-13 as GOLD-001 (gate G-035).
    Golden at complexity ≤ 20 loses triads to the free optimum on every
