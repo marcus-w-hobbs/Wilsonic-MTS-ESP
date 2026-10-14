@@ -5042,3 +5042,74 @@ and 45 chains carry 22 and 9.5 cent errors and the N = 46 level is the
 test_subfit001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
 the six .scl bit-identical across two runs (`cmp`), 809 s each with 8
 workers.
+
+## 2026-10-14 — SUBFIT-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question.** SUBFIT-001 scored a chain by the eikosany subsets it keeps
+playable and dropped the per-tone cap. Its runner then counted chain
+coincidences below 37 notes, because three in-window degrees that
+satisfy the mean condition counted as a kept triad however far they sat
+from the just pitches. This experiment puts the cap back into the
+predicate and re-measures the same staircase at two tiers, 20 cents (the
+CPSFIT-003 cap) and 10 cents (a stricter tier), on the same search.
+Marcus's gate G-036 asks which cap defines "the subset is still there".
+Both are reported so the gate can choose.
+
+**Construction.** Everything as SUBFIT-001 (the eikosany on 1·3·5·7·9·11,
+its 114 exact triads and 72 census subsets, N from 11 to 72, a 0.1 cent
+grid of g with a 0.002 cent refinement of the twelve best, every window,
+tones to the nearest in-window degree, the MOS-only variant on the exact
+level intervals) with one change to the predicate: a triad survives only
+when its three tones each sit within CAP cents of their just pitch at
+the assigned degree AND the mirror condition holds (|dev| < 2 cents,
+separation ≥ 2 cents). A subset is playable when every one of its exact
+triads survives. The objective and tie-breaks are SUBFIT-001's. The
+runner is `subfit002.py`, which reuses SUBFIT-001's objects and search
+and parametrizes the predicate by the cap. The scratch that produced the
+predictions ran the same search with the same predicate, so the
+registered values are exact to the counts and to 0.01 cents on g.
+
+**Predictions (scratch 2026-10-14, `subfit2_sweep.py` on the SUBFIT-001
+search).** Rows give N: generator (cents), playable hexanies / dekanies /
+tetrads, triads kept, largest error among tones in kept triads.
+- **P-T20 (cap 20).** 11 to 12: 124.23, 1/0/0, 10 to 12, 16.2. 13: 350.98,
+  1/0/1, 8, 8.1. 14 to 15: 351.32, 1/0/2, 12 to 18, 9.1. 16: 351.32,
+  2/0/2, 21, 9.1. 17 to 21: 351.32, 3/0/3, 24, 9.1. 22 to 23: 317.13,
+  4/0/5, 50, 18.1. 24 to 25: 317.13, 6/0/6, 56, 18.1. 26 to 29: 350.75,
+  6/1/7, 43, 19.2. 30 to 31: 350.75, 6/1/7, 47, 19.2. 32: 350.75, 6/1/7,
+  55. 33: 350.75, 7/1/8, 56. 34: 350.75, 8/1/8, 61. 35 to 36: 350.75,
+  9/1/9, 66, 19.2. 37: 350.76, 12/2/12, 70, 10.3. 38 to 48: 351.44,
+  14/2/14, 88, 9.5. 49 to 56: 497.77, 16/2/16, 76, 4.2. 57 to 69: 316.78,
+  18/2/18, 96, 8.7. 70 to 72: 175.38, 20/4/20, 102, 4.6.
+- **P-T10 (cap 10).** 11 to 12: 175.49, 0/0/1, 10, 8.1. 13: 350.98,
+  1/0/1, 8. 14 to 15: 351.32, 1/0/2, 12 to 18, 9.1. 16: 351.32, 2/0/2,
+  21. 17 to 21: 351.32, 3/0/3, 24, 9.1. 22 to 23: 351.32, 3/0/3, 25.
+  24 to 25: 350.76, 3/0/5, 32, 8.3. 26 to 29: 350.76, 6/1/7, 39, 8.3.
+  30 to 31: 350.76, 6/1/7, 42, 9.4. 32: 350.76, 6/1/7, 49, 9.9. 33 to 34:
+  350.76, 7/1/8, 52, 9.9. 35 to 36: 350.76, 8/1/8, 58, 9.9. 37: 351.44,
+  10/1/12, 80, 9.5. 38 to 72: identical to cap 20.
+- **P-T-A (the caps agree where it matters).** From N = 38 to 72 the two
+  caps give the same generator, mode, counts and triads at every N. They
+  differ at N = 37 (cap 20 keeps 12 hexanies and 2 dekanies at 350.76,
+  cap 10 keeps 10 and 1 at 351.44) and below.
+- **P-T-B (the shape).** Under both caps the first dekany arrives at
+  N = 26, the best chain is N = 70 with 20 hexanies, 4 dekanies and 102
+  triads, and no chain keeps every subset. Under cap 10 no chain keeps a
+  hexany at N = 11 or 12 and none keeps more than 3 before N = 26.
+- **P-T-C (levels).** The free winner is a level at N = 17, 41 and 53
+  under cap 20 and at N = 17, 24, 41 and 53 under cap 10. The level-only
+  best keeps 14 hexanies and 2 dekanies at N = 41 (351.44) and N = 58
+  (351.44), 16 and 2 at N = 53 (497.77), 20 and 4 at N = 72 (483.28, 100
+  triads), 12 and 2 at N = 46 and 65 (443.13), 6 hexanies at N = 31
+  (116.68), under both caps.
+- **P-T-D (design floors for the eikosany in one MOS).** The smallest
+  level that keeps at least 14 hexanies is N = 41, at least 16 is N = 53,
+  at least 20 is N = 72, with every kept tone within 9.5, 4.2 and 8.0
+  cents, under both caps.
+
+**Deliverables.** `subfit002.py` and `tests/test_subfit002.py` green
+before the first run, receipts `results/subfit002.jsonl` (one row per
+cap and N) and `results/subfit002_summary.json`, Scala exports under
+`results/scl/subfit002/` for the N = 41 and N = 72 levels and the N = 37
+cap-20 chain. The N = 49, 53 and 70 chains are already in the Wilsonic
+library from SUBFIT-001. A gate.
