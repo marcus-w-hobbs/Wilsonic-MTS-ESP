@@ -4505,7 +4505,9 @@ P-R3 again. (3) EG4 N = 31 at 4.30 cents tempers 81/80 alone: a meantone
 with 7 left free, which is the first time the syntonic comma appears in
 these fits. EG4 N = 18 tempers 875/864 (10/24). The dekany at N = 14
 tempers 49/48 (15.3 cents, 12/41). (4) The rank-2 and rank-3 ladders side
-by side for the hexany at 2 cents: rank 1 (ET) needs 73 notes, rank 2
+by side for the hexany at 2 cents: rank 1 (ET) needs more than 72 notes
+(CPSFIT-001 scanned 5 to 72 and found none; the comma-dial page computes
+the first as 130-ET at 1.78 cents, which is not a receipt), rank 2
 needs 22 (1.37 cents, 10/12), rank 3 needs 19 (0.47 cents, 12/12), rank 4
 is the hexany itself at 6 notes and zero error. Each rank buys one comma.
 (5) Every count-and-error winner at level 7 has three step sizes. The only
