@@ -4618,3 +4618,58 @@ runner).**
 first run, receipts `results/gold002.jsonl` + `results/gold002_summary.json`.
 No Scala exports (nothing new to hear, because the generators are already on the
 page). A gate for the verdict on the law and the design selector.
+
+## 2026-10-13 — GOLD-002 results + verdicts
+
+**Run:** `gold002.py` (about 10 s. Receipts `results/gold002.jsonl`, 17
+rows, and `results/gold002_summary.json`. Two runs bit-identical, `cmp` on
+both.) Frozen triads v1.1.0 read-only, pin verified. Lattice suite
+399/399 green before the first run (11 new tests).
+
+- **P-G2-1 — KEPT.** The null model reproduces every registered figure.
+  A random generator sits a median 8.58, 4.21, 1.52, 0.71 and 0.18 cents
+  from the nearest golden generator at Q = 8, 12, 20, 30 and 60.
+- **P-G2-2 — KEPT. The strong law is refuted.** The golden tail
+  memberships at every Q are exactly as registered (5, 5, 3, 2 and 4 of
+  17), the silver tail counts are 4, 5, 6, 4 and 4, and at no Q do more
+  than 6 of the 17 generators sit at or below the tenth percentile. "Most
+  of Erv's generators sit near a noble number" is false at every
+  complexity. The weak form stands: 3 to 6 in the tail against 1.7
+  expected, and 0.773743 sits on a golden generator of complexity 20 to
+  0.00 cents.
+- **P-G2-3 — KEPT.** Every registered distance at Q = 20 and Q = 60
+  reproduces within 0.01 cents, and 0.418935's nearest golden generator at
+  Q = 60 is seeded by 18/43 and 13/31.
+- **P-G2-4 — REFUTED as registered on one clause, held on the
+  classification.** The nine Erv wins, six golden wins and two ties at the
+  deepest common level reproduce exactly. The clause "at every level of
+  12 or fewer notes the two tie" fails once: 0.238186 against its nearest
+  golden at N = 9 scores 16 against 12. The scratch table showed that
+  figure and the session wrote "every" anyway. The error is the
+  session's. Every other level of 12 or fewer notes is a tie (15 of 16
+  generators, all of their shallow levels).
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The silver
+family is as close to Erv's generators as the golden one: at Q = 20, six
+of 17 sit in the silver tail (0.418935, the silver control, Fibonacci,
+0.591780, fit351 and phi) against three in the golden tail. Erv's
+2-zig/2-zag page may be the better description of several of his
+generators. (2) The nearness and the triads part company at depth: nine
+of Erv's generators out-score their nearest golden on the chain's own
+P + S at 2 cents at the deepest common level, by as much as 138 to 94
+(0.238186 at N = 25) and 366 to 264 (Fibonacci at N = 36), while the
+nearest golden to 0.415227 wins 494 to 492 at N = 41 and the one nearest
+the silver control wins 372 to 302. A tenth of a cent is nothing at 7
+notes and everything at 30. (3) For the design: the generator-family
+selector is a real trade. For most of Erv's generators a noble neighbour
+of modest complexity does not exist within the tolerance that preserves
+their triads, so "golden" and "best triads" are different settings and
+the design should show the price of each. Erv's own list belongs in the
+selector as its own family.
+
+**Kept.** Runner and receipts stand. Nothing new to hear. Gate G-034 is
+the verdict on the law and on the selector.
+
+**Run receipt:** 2026-10-13, python3.12 — lattice suite 399/399 OK (11 new:
+test_gold002), freeze check A OK (scorer 1a840af9…b592). Both receipts
+bit-identical across two runs (`cmp`).
