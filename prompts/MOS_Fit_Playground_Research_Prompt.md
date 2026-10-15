@@ -93,6 +93,18 @@ program. Path to the musician: Wilsonic (Scala export first).
    requires one val.
 3. Any seeds, any generator: exact fit for six arbitrary seeds (primes > 7).
 4. Golden as an aesthetic axis: RAN 2026-10-13 as GOLD-001 (gate G-035).
+   PRINCIPLE (Marcus, 2026-10-14, governs every golden/metallic question):
+   nobility does not predict harmony, there is no mechanism. Harmony is a
+   Diophantine condition between k·g and log2 of the primes; nobility is a
+   condition on g's own continued fraction; the two are independent. Never
+   register "golden ⇒ triads" and never use nearness-to-a-noble as a score.
+   The testable form of Erv's practice is "the noble lies INSIDE the triad
+   survival segment" (GOLD-003 arm A RAN 2026-10-14, gate G-038: a hint,
+   317.170¢ and 503.786¢ inside CPSFIT-003 segments at complexity ≤ 12,
+   p = 0.002 distinct / 0.012 merged, nothing else; arm B = Erv's
+   ear-marked nobles vs un-marked at matched complexity, waits on the
+   scale-tree sheets). Design: golden selector = snap to the noble inside
+   the segment if one exists, else show the triad cost.
    Golden at complexity ≤ 20 loses triads to the free optimum on every
    lattice (hexany 8/12 where free has 12); silver loses fewer; the
    MOS-level constraint costs more than either; a pure MOS keeps all 12

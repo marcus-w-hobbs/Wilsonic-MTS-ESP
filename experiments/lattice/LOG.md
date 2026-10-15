@@ -5258,3 +5258,42 @@ transcription is scored.
 **Deliverables.** `gold003.py` and `tests/test_gold003.py` green before
 the first run, receipts `results/gold003.jsonl` (one row per segment set,
 family and Q) and `results/gold003_summary.json`. No new scales. A gate.
+
+## 2026-10-14 — GOLD-003 results + verdicts (arm A)
+
+**Run:** `gold003.py` (under a minute per run. Receipts `results/gold003.jsonl`, 20 rows,
+and `results/gold003_summary.json`. Two runs bit-identical, `cmp` on both.)
+Inputs read-only: `results/cpsfit003.jsonl` and `gold002.nobles`. Lattice
+suite 429/429 green before the first run (7 new tests).
+
+**All five predictions KEPT.** The measured table, distinct segments
+(22): golden contained 1, 3, 3, 4, 7 at Q = 8, 12, 20, 30, 60 with
+p = 0.109, 0.0020, 0.027, 0.052, 0.223. Silver 1, 1, 3, 3, 14 with
+p = 0.16, 0.31, 0.073, 0.37, 0.0006. Merged segments (15): golden 1, 2,
+2, 3, 6 with p = 0.073, 0.012, 0.073, 0.065, 0.086. Silver 1, 1, 3, 3, 9
+with p = 0.107, 0.21, 0.024, 0.16, 0.0084. Signals at the registered
+0.005 level: distinct golden Q = 12 and distinct silver Q = 60 only.
+Merged golden Q = 12 is a hint. The contained goldens at Q = 12 are
+317.170 (3/11, 1/4) and 503.786 (2/3, 1/2), as registered.
+
+**Reading, under the principle.** Arm A is a hint and no more. Two of
+the shallow goldens sit inside count-optimal segments, and that is
+consistent with "chosen inside the segment" for a small catalogue. It
+is not evidence that nobility predicts harmony, and the registration
+said in advance that it could not be. The silver Q = 60 signal is the
+density regime (1653 nobles about 0.36 cents apart against segments up
+to 0.43 cents wide) and I do not read it. The test that can decide
+something is arm B, Erv's ear-marked nobles against the un-marked nobles
+of the same complexity, and that waits on the sheets.
+
+**Measured, not registered (post-hoc, labelled).** (1) The two Q = 12
+containments are the two segments with the widest margins in the whole
+CPSFIT-003 table, 0.43 and 0.16 cents, and a wide segment is more likely
+to contain anything. A width-matched null is the same null, so this
+does not change the p-values, but it says the hint rests on the two
+easiest segments. (2) The 351.472-cent silver of complexity 1, which is
+the pure silver generator (1 + √2 folded), sits inside the dekany
+N = 33 to 34 segment. That is one silver coincidence at the lowest
+possible complexity, on one lattice, and I note it without reading it.
+
+**Kept.** Gate G-038.
