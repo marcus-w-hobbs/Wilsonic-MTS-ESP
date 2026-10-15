@@ -1,0 +1,262 @@
+{
+ "Q_ladder": [
+  8,
+  12,
+  20,
+  30,
+  60
+ ],
+ "experiment": "GOLD-003",
+ "hint_p": 0.05,
+ "n_distinct_segments": 22,
+ "n_merged_segments": 15,
+ "null_n": 20000,
+ "null_seed": 20261014,
+ "runner_version": "1.0.0",
+ "signal_p": 0.005,
+ "source": "cpsfit003.jsonl",
+ "table": [
+  {
+   "Q": 8,
+   "contained": 1,
+   "family": "golden",
+   "n_nobles": 22,
+   "n_segments": 22,
+   "null_mean": 0.11415,
+   "p_ge": 0.1087,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 12,
+   "contained": 3,
+   "family": "golden",
+   "n_nobles": 46,
+   "n_segments": 22,
+   "null_mean": 0.24085,
+   "p_ge": 0.002,
+   "set": "distinct",
+   "verdict": "signal"
+  },
+  {
+   "Q": 20,
+   "contained": 3,
+   "family": "golden",
+   "n_nobles": 128,
+   "n_segments": 22,
+   "null_mean": 0.6733,
+   "p_ge": 0.02705,
+   "set": "distinct",
+   "verdict": "hint"
+  },
+  {
+   "Q": 30,
+   "contained": 4,
+   "family": "golden",
+   "n_nobles": 278,
+   "n_segments": 22,
+   "null_mean": 1.46765,
+   "p_ge": 0.05245,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 60,
+   "contained": 7,
+   "family": "golden",
+   "n_nobles": 1102,
+   "n_segments": 22,
+   "null_mean": 5.13265,
+   "p_ge": 0.22285,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 8,
+   "contained": 1,
+   "family": "silver",
+   "n_nobles": 33,
+   "n_segments": 22,
+   "null_mean": 0.17465,
+   "p_ge": 0.16245,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 12,
+   "contained": 1,
+   "family": "silver",
+   "n_nobles": 69,
+   "n_segments": 22,
+   "null_mean": 0.369,
+   "p_ge": 0.31255,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 20,
+   "contained": 3,
+   "family": "silver",
+   "n_nobles": 192,
+   "n_segments": 22,
+   "null_mean": 1.00725,
+   "p_ge": 0.07285,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 30,
+   "contained": 3,
+   "family": "silver",
+   "n_nobles": 417,
+   "n_segments": 22,
+   "null_mean": 2.17335,
+   "p_ge": 0.371,
+   "set": "distinct",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 60,
+   "contained": 14,
+   "family": "silver",
+   "n_nobles": 1653,
+   "n_segments": 22,
+   "null_mean": 6.9133,
+   "p_ge": 0.00055,
+   "set": "distinct",
+   "verdict": "signal"
+  },
+  {
+   "Q": 8,
+   "contained": 1,
+   "family": "golden",
+   "n_nobles": 22,
+   "n_segments": 15,
+   "null_mean": 0.07595,
+   "p_ge": 0.0734,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 12,
+   "contained": 2,
+   "family": "golden",
+   "n_nobles": 46,
+   "n_segments": 15,
+   "null_mean": 0.16685,
+   "p_ge": 0.01185,
+   "set": "merged",
+   "verdict": "hint"
+  },
+  {
+   "Q": 20,
+   "contained": 2,
+   "family": "golden",
+   "n_nobles": 128,
+   "n_segments": 15,
+   "null_mean": 0.45205,
+   "p_ge": 0.073,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 30,
+   "contained": 3,
+   "family": "golden",
+   "n_nobles": 278,
+   "n_segments": 15,
+   "null_mean": 0.95865,
+   "p_ge": 0.0652,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 60,
+   "contained": 6,
+   "family": "golden",
+   "n_nobles": 1102,
+   "n_segments": 15,
+   "null_mean": 3.3876,
+   "p_ge": 0.0863,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 8,
+   "contained": 1,
+   "family": "silver",
+   "n_nobles": 33,
+   "n_segments": 15,
+   "null_mean": 0.1119,
+   "p_ge": 0.10655,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 12,
+   "contained": 1,
+   "family": "silver",
+   "n_nobles": 69,
+   "n_segments": 15,
+   "null_mean": 0.2364,
+   "p_ge": 0.2115,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 20,
+   "contained": 3,
+   "family": "silver",
+   "n_nobles": 192,
+   "n_segments": 15,
+   "null_mean": 0.6694,
+   "p_ge": 0.0243,
+   "set": "merged",
+   "verdict": "hint"
+  },
+  {
+   "Q": 30,
+   "contained": 3,
+   "family": "silver",
+   "n_nobles": 417,
+   "n_segments": 15,
+   "null_mean": 1.4313,
+   "p_ge": 0.1619,
+   "set": "merged",
+   "verdict": "nothing"
+  },
+  {
+   "Q": 60,
+   "contained": 9,
+   "family": "silver",
+   "n_nobles": 1653,
+   "n_segments": 15,
+   "null_mean": 4.5688,
+   "p_ge": 0.00845,
+   "set": "merged",
+   "verdict": "hint"
+  }
+ ],
+ "verdicts": {
+  "P-G3-1": {
+   "failures": [],
+   "kept": true
+  },
+  "P-G3-2": {
+   "failures": [],
+   "kept": true
+  },
+  "P-G3-3": {
+   "failures": [],
+   "kept": true
+  },
+  "P-G3-4": {
+   "failures": [],
+   "kept": true
+  },
+  "P-G3-5": {
+   "failures": [],
+   "kept": true
+  }
+ }
+}

@@ -1,0 +1,374 @@
+<title>Diophantine Harmony</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of three stations (circle, landscape, scatter) with short prose between; graph-paper ground, same tokens as comma-dial-playground.html. Harmony = --harm (amber), nobility = --c2 (violet), the chain = --accent (teal). */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;
+  --accent-soft: rgba(12,111,104,0.12);
+  --harm: #b2671a;
+  --harm-soft: rgba(178,103,26,0.14);
+  --noble: #7a4fb5;
+  --noble-soft: rgba(122,79,181,0.14);
+  --ok: #2d7a3a;
+  --warn: #a8402f;
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+    --noble: #a88ad8; --noble-soft: rgba(168,138,216,0.16);
+    --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+  --noble: #a88ad8; --noble-soft: rgba(168,138,216,0.16);
+  --ok: #6cc77a; --warn: #ef8a78; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 12px 40px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3vw, 34px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
+h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+header { display: grid; gap: 8px; }
+.thesis { font-family: var(--font-display); font-size: clamp(18px, 2.2vw, 23px); line-height: 1.3; max-width: 34em; padding: 12px 16px; border-left: 3px solid var(--harm); background: var(--paper); }
+.thesis em { font-style: italic; }
+.thesis .k { color: var(--harm); }
+.thesis .n { color: var(--noble); }
+.station { background: var(--paper); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 12px; }
+.station > .head { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.station > .head .num { font-family: var(--font-mono); color: var(--muted); font-size: 12px; }
+.grid2 { display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); gap: 16px; }
+.grid2 > * { min-width: 0; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+.controls { display: grid; gap: 10px; align-content: start; }
+.ctl { display: grid; gap: 3px; }
+.ctl label { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.ctl label b { font-family: var(--font-mono); font-weight: 500; color: var(--fg); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+input[type=text], select { font: 13px var(--font-mono); padding: 5px 7px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); width: 100%; }
+button { font: 13px var(--font-body); padding: 5px 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+button:hover, button:focus-visible { border-color: var(--accent); outline: none; }
+button.on { background: var(--accent-soft); border-color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.hit { color: var(--ok); font-weight: 600; }
+.miss { color: var(--warn); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 720px) { .two { grid-template-columns: 1fr; } }
+.panel { border: 1px solid var(--line); padding: 10px 12px; display: grid; gap: 6px; background: var(--bg); min-width: 0; }
+.panel.h { border-top: 3px solid var(--harm); }
+.panel.n { border-top: 3px solid var(--noble); }
+.tablewrap { overflow-x: auto; }
+svg, canvas { display: block; max-width: 100%; }
+canvas { width: 100%; height: auto; border: 1px solid var(--line); background: var(--bg); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 5px; }
+.note { font-size: 13px; color: var(--muted); max-width: 70ch; }
+.prose { display: grid; gap: 10px; max-width: 72ch; }
+.prose p { max-width: 72ch; }
+.readout { font-family: var(--font-mono); font-size: 13px; }
+.big { font-family: var(--font-display); font-size: 26px; line-height: 1; }
+footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Diophantine Harmony</h1>
+  <p class="lede">A playground for one sentence. The sentence has two halves. The page shows that the two halves do not depend on each other.</p>
+  <div class="thesis"><span class="k">Harmony is a Diophantine condition between <em>k·g</em> and log<sub>2</sub> of the primes.</span> <span class="n">Nobility is a condition on the continued fraction of <em>g</em> itself.</span> The two are independent.</div>
+  <p class="lede">I wrote this sentence on 2026-10-14, after GOLD-002. That experiment showed that every generator is within one cent of some golden generator at complexity 60, because the golden generators are dense. So the statement "Erv's generator is near a golden one" has no content at that depth. The sentence above is what survives. On this page the harmony half is amber, the nobility half is violet, and the generator chain is teal.</p>
+</header>
+
+<section class="station" id="s1">
+  <div class="head"><span class="num">station 1</span><h2>One generator, two readouts</h2></div>
+  <p class="lede">Select a generator <em>g</em>. The circle is one octave. The amber marks are the targets: 1200·log<sub>2</sub>(p), folded into the octave. The teal dots are the chain: <em>k·g</em> for each k from −K to K. The harmony question is: for each target, does a chain dot fall within ε of it? The nobility question is: what is the continued fraction of <em>g</em>/1200? Change the targets and see which readout changes.</p>
+  <div class="grid2">
+    <div class="controls">
+      <div class="ctl"><label for="g">generator g (cents) <b id="gv">317.175</b></label><input type="range" id="g" min="0.5" max="600" step="0.005" value="317.175"></div>
+      <div class="ctl"><label for="K">chain reach K (|k| ≤ K) <b id="Kv">12</b></label><input type="range" id="K" min="1" max="40" step="1" value="12"></div>
+      <div class="ctl"><label for="eps">tolerance ε (cents) <b id="epsv">5.0</b></label><input type="range" id="eps" min="0.5" max="20" step="0.5" value="5"></div>
+      <div class="ctl"><label for="targets">targets (ratios or primes, comma separated)</label><input type="text" id="targets" value="3, 5, 7, 11"></div>
+      <div class="chips" id="presets"></div>
+      <div class="ctl"><label>jump to</label><div class="chips" id="jumps"></div></div>
+      <p class="note">The presets are the Wilsonic lattices. The last button moves the targets to random positions. The violet readout does not change.</p>
+    </div>
+    <div style="display:grid;gap:12px;min-width:0">
+      <svg id="circle" viewBox="0 0 420 420" width="420" height="420" role="img" aria-label="octave circle with targets and chain"></svg>
+      <div class="two">
+        <div class="panel h">
+          <h3>Diophantine readout (harmony)</h3>
+          <div class="tablewrap"><table id="htab"><thead><tr><th>target</th><th class="num">cents</th><th class="num">best k</th><th class="num">error</th><th>within ε</th></tr></thead><tbody></tbody></table></div>
+          <div class="readout" id="hsum"></div>
+        </div>
+        <div class="panel n">
+          <h3>Continued-fraction readout (nobility)</h3>
+          <div class="readout" id="cf"></div>
+          <div class="readout" id="nob"></div>
+          <div class="readout" id="lev"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="station" id="s2">
+  <div class="head"><span class="num">station 2</span><h2>The landscape</h2></div>
+  <p class="lede">The landscape shows every generator from 0 to 600 cents. The amber line is the worst error over the targets, with |k| ≤ K, on a log scale. The dips are where harmony is possible. The shaded bands are the survival segments, where the worst error is less than ε. The violet ticks are the golden generators with complexity up to Q. Move the targets to random positions and the dips move. The ticks do not move, because they depend on <em>g</em> only.</p>
+  <div class="row">
+    <div class="ctl" style="min-width:200px"><label for="Q">golden complexity Q <b id="Qv">12</b></label><input type="range" id="Q" min="3" max="30" step="1" value="12"></div>
+    <label class="row" style="font-size:13px"><input type="checkbox" id="showper" checked> per-target lines</label>
+    <label class="row" style="font-size:13px"><input type="checkbox" id="showsilver"> silver ticks too</label>
+    <span class="note" id="segsum"></span>
+  </div>
+  <canvas id="land" width="1080" height="360"></canvas>
+  <div class="legend"><span><i style="background:var(--harm)"></i>worst target error</span><span><i style="background:var(--accent)"></i>per-target error</span><span><i style="background:var(--harm-soft);height:10px"></i>survival segment (≤ ε)</span><span><i style="background:var(--noble)"></i>golden tick</span><span id="hover" class="mono"></span></div>
+  <p class="note">Click the landscape to send that generator to station 1. The table below lists the segments. GOLD-003 tests this question: does a segment contain a golden generator of complexity ≤ Q more often than a random segment of the same width?</p>
+  <div class="tablewrap"><table id="segtab"><thead><tr><th class="num">segment (cents)</th><th class="num">width</th><th class="num">worst error</th><th>golden inside (complexity ≤ Q)</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section class="station" id="s3">
+  <div class="head"><span class="num">station 3</span><h2>Independence, as a cloud</h2></div>
+  <p class="lede">The cloud shows 2000 random generators. The horizontal axis is the distance from each generator to the nearest golden generator of complexity ≤ Q, in cents. The vertical axis is the worst target error with |k| ≤ K. If nobility predicted harmony, the cloud would tilt. The page shows the correlation below the chart. The large violet points are the golden generators. The amber squares are the CPSFIT-003 count winners on the hexany, EG4 and the dekany.</p>
+  <canvas id="scat" width="1080" height="400"></canvas>
+  <div class="row"><span class="readout" id="corr"></span><button id="reseed">new random sample</button></div>
+</section>
+
+<section class="station">
+  <div class="head"><h2>What I think the sentence means</h2></div>
+  <div class="prose">
+    <p><b>The harmony half.</b> A generator chain plays the just interval p/q when some integer multiple of the generator falls within the tolerance of 1200·log<sub>2</sub>(p/q), modulo the octave. This is a simultaneous inhomogeneous Diophantine approximation. One real number <em>g</em> must approximate several fixed real targets with small integer multipliers. The multipliers are the val. The primes set the targets. This condition does not refer to the continued fraction of <em>g</em>.</p>
+    <p><b>The nobility half.</b> A noble number has a continued fraction that ends in ones only. This makes it the hardest kind of number to approximate with rationals. The same property has three musical consequences. Its MOS ladder grows as slowly as possible. Every level has a large-to-small step ratio near φ. The Gral keyboard of its chain keeps the same cell shape at every depth. All of this concerns <em>g</em> and the rationals. None of it concerns the primes.</p>
+    <p><b>Why there is no mechanism.</b> Move the targets and the dips in station 2 move. The ticks stay. No equation takes the continued fraction of <em>g</em> and returns the distance from <em>k·g</em> to log<sub>2</sub> 3. GOLD-002 measured the consequence. At complexity 60 the golden generators are about one cent apart, so every generator is near one. The near generators fit triads no better than the far generators.</p>
+    <p><b>What Erv did, on this reading.</b> A triad-optimal generator is a survival segment. The segment is the full interval of <em>g</em> over which the kept triads stay within tolerance. Harmony cannot choose a point inside the segment. So the choice inside the segment is free. A golden generator inside the segment gives the melodic properties at no harmonic cost. The testable statement is this: the golden generator lies inside the segment. The statement "the optimum is within one cent of a golden generator" has no content at depth, because the golden generators are dense. GOLD-003 arm A found two of Erv's shallow golden generators inside count-optimal segments, at 317.170 and 503.786 cents. The expected number by chance was 0.24. This is a hint. The independence described above is the reason it cannot be more than a hint.</p>
+    <p><b>For Wilsonic.</b> The generator-family selector is an aesthetic choice. The "golden" setting should do this: select the golden generator inside the survival segment when one exists. When none exists, it should show the triad cost of a move out of the segment. The setting must not act as a harmonic filter.</p>
+  </div>
+</section>
+
+<footer>Marcus Hobbs, 2026. This page is a companion to the Lattice MOS-Fit Playground and the Comma Dial. The harmony condition on this page applies the tolerance to single tones. Triads also need sum and difference coincidences. The MOS-Fit Playground scores those. The golden generators are (a + φc)/(b + φd) over unimodular pairs, with complexity max(b, d), folded into (0, 600] cents.</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const CENTS = 1200;
+  const PHI = (1 + Math.sqrt(5)) / 2, SILVER = 1 + Math.sqrt(2);
+  const $ = (id) => document.getElementById(id);
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // ---------- targets ----------
+  const PRESETS = [
+    ['3-limit', '3'], ['5-limit', '3, 5'], ['7-limit', '3, 5, 7'], ['11-limit', '3, 5, 7, 11'],
+    ['hexany 1.3.5.7', '3/2, 5/4, 7/4, 15/8, 21/16, 35/32'], ['eikosany', '3, 5, 7, 9, 11'], ['scramble', 'scramble'],
+  ];
+  const JUMPS = [['317.175 hexany', 317.175], ['116.676 miracle', 116.676], ['193.908 breed', 193.908], ['498.066 schismatic', 498.066],
+                 ['503.939 dekany', 503.939], ['351.444 neutral', 351.444], ['443.128 46-level', 443.128], ['483.278 72-level', 483.278]];
+  let targets = [];     // {label, cents}
+  function parseTargets(text) {
+    if (text.trim() === 'scramble') return null;
+    const out = [];
+    for (const tok of text.split(',')) {
+      const s = tok.trim(); if (!s) continue;
+      let v;
+      if (/^\d+\s*\/\s*\d+$/.test(s)) { const [a, b] = s.split('/').map(Number); if (b > 0) v = CENTS * Math.log2(a / b); }
+      else if (/^\d+(\.\d+)?$/.test(s)) { const n = Number(s); v = n > 1 && Number.isInteger(n) ? CENTS * Math.log2(n) : n; }
+      else if (/^[\d.]+c$/.test(s)) v = Number(s.slice(0, -1));
+      if (v === undefined || !isFinite(v)) continue;
+      out.push({ label: s, cents: ((v % CENTS) + CENTS) % CENTS });
+    }
+    return out;
+  }
+  let scrambleSeed = 1;
+  function scrambled() {
+    let x = scrambleSeed * 2654435761 % 4294967296;
+    const out = [];
+    for (let i = 0; i < 4; i++) { x = (x * 1664525 + 1013904223) % 4294967296; const c = 30 + (x / 4294967296) * 1140; out.push({ label: 'random ' + (i + 1), cents: c }); }
+    return out;
+  }
+
+  // ---------- math ----------
+  const circ = (a, b) => { const d = Math.abs(((a - b) % CENTS + CENTS) % CENTS); return Math.min(d, CENTS - d); };
+  function bestK(g, t, K) {
+    let bk = 0, be = circ(0, t);
+    for (let k = -K; k <= K; k++) { const e = circ(k * g, t); if (e < be - 1e-12 || (Math.abs(e - be) < 1e-12 && Math.abs(k) < Math.abs(bk))) { be = e; bk = k; } }
+    return [bk, be];
+  }
+  function worst(g, K, tg) { let w = 0; for (const t of tg) { const e = bestK(g, t.cents, K)[1]; if (e > w) w = e; } return w; }
+  function cf(x, n) { const out = []; for (let i = 0; i < n; i++) { const a = Math.floor(x); out.push(a); const f = x - a; if (f < 1e-12) break; x = 1 / f; if (!isFinite(x)) break; } return out; }
+  function gcd(a, b) { while (b) { [a, b] = [b, a % b]; } return a; }
+  function nobles(mu, Q) {
+    const out = new Map();
+    for (let b = 1; b <= Q; b++) for (let d = 1; d <= Q; d++) for (let a = 0; a <= b; a++) {
+      if (gcd(a, b) !== 1) continue;
+      for (const sgn of [1, -1]) {
+        const num = a * d + sgn; if (num % b) continue; const c = num / b;
+        if (c < 0 || c > d || gcd(c, d) !== 1) continue;
+        for (const [[x0, x1], [y0, y1]] of [[[a, b], [c, d]], [[c, d], [a, b]]]) {
+          let gg = (x0 + mu * y0) / (x1 + mu * y1); if (gg > 0.5) gg = 1 - gg; if (gg <= 0 || gg > 0.5) continue;
+          const key = gg.toFixed(9), cx = Math.max(x1, y1);
+          if (!out.has(key) || cx < out.get(key).cx) out.set(key, { g: gg * CENTS, seeds: `${x0}/${x1},${y0}/${y1}`, cx });
+        }
+      }
+    }
+    return [...out.values()].sort((p, q) => p.g - q.g);
+  }
+  const GOLD = nobles(PHI, 30), SILV = nobles(SILVER, 30);
+  function levels(g01, maxN) { let lo = [0, 1], hi = [1, 1]; const out = []; for (let i = 0; i < 100; i++) { const m = [lo[0] + hi[0], lo[1] + hi[1]]; if (m[1] > maxN) break; out.push(m[1]); if (g01 < m[0] / m[1]) hi = m; else lo = m; } return out; }
+  function nearestNoble(list, Q, g) { let best = null; for (const n of list) { if (n.cx > Q) continue; const d = Math.abs(n.g - g); if (!best || d < best.d) best = { d, n }; } return best; }
+
+  // ---------- state ----------
+  const S = { g: 317.175, K: 12, eps: 5, Q: 12 };
+
+  // ---------- station 1 ----------
+  function drawCircle() {
+    const svg = $('circle'); const R = 150, cx = 210, cy = 210;
+    const pt = (c, r) => { const a = (c / CENTS) * 2 * Math.PI - Math.PI / 2; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; };
+    let h = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${css('--line')}" stroke-width="1.5"/>`;
+    for (let c = 0; c < CENTS; c += 100) { const [x1, y1] = pt(c, R - 4), [x2, y2] = pt(c, R + 4); h += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${css('--line')}"/>`; }
+    const [x0, y0] = pt(0, R + 18); h += `<text x="${x0}" y="${y0 + 4}" text-anchor="middle" font-size="11" fill="${css('--muted')}" font-family="${css('--font-mono')}">1/1</text>`;
+    // chain
+    for (let k = -S.K; k <= S.K; k++) { const c = ((k * S.g) % CENTS + CENTS) % CENTS; const [x, y] = pt(c, R); const r = k === 0 ? 5 : 3.2; h += `<circle cx="${x}" cy="${y}" r="${r}" fill="${css('--accent')}" opacity="${k === 0 ? 1 : 0.75}"><title>k=${k}: ${c.toFixed(2)}c</title></circle>`; }
+    // targets and their best chain dots
+    for (const t of targets) {
+      const [k, e] = bestK(S.g, t.cents, S.K); const ok = e <= S.eps;
+      const [x1, y1] = pt(t.cents, R - 22), [x2, y2] = pt(t.cents, R); const [xl, yl] = pt(t.cents, R - 40);
+      h += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${css('--harm')}" stroke-width="2.5"/>`;
+      h += `<text x="${xl}" y="${yl + 4}" text-anchor="middle" font-size="11" fill="${css('--harm')}" font-family="${css('--font-mono')}">${t.label}</text>`;
+      const c = ((k * S.g) % CENTS + CENTS) % CENTS; const [x3, y3] = pt(c, R);
+      h += `<circle cx="${x3}" cy="${y3}" r="7" fill="none" stroke="${ok ? css('--ok') : css('--warn')}" stroke-width="2"><title>${t.label}: k=${k}, error ${e.toFixed(2)}c</title></circle>`;
+    }
+    // generator arrow
+    const [gx, gy] = pt(S.g, R); h += `<line x1="${cx}" y1="${cy}" x2="${gx}" y2="${gy}" stroke="${css('--accent')}" stroke-width="1" stroke-dasharray="3 3"/>`;
+    h += `<text x="${cx}" y="${cy - 6}" text-anchor="middle" font-size="13" fill="${css('--fg')}" font-family="${css('--font-mono')}">g = ${S.g.toFixed(3)}c</text>`;
+    h += `<text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="11" fill="${css('--muted')}" font-family="${css('--font-mono')}">|k| ≤ ${S.K}, ε = ${S.eps.toFixed(1)}c</text>`;
+    svg.innerHTML = h;
+  }
+  function readouts() {
+    const tb = $('htab').querySelector('tbody'); let rows = '', hits = 0;
+    for (const t of targets) { const [k, e] = bestK(S.g, t.cents, S.K); const ok = e <= S.eps; if (ok) hits++;
+      rows += `<tr><td class="mono">${t.label}</td><td class="num">${t.cents.toFixed(2)}</td><td class="num">${k}</td><td class="num">${e.toFixed(2)}</td><td class="${ok ? 'hit' : 'miss'}">${ok ? 'yes' : 'no'}</td></tr>`; }
+    tb.innerHTML = rows;
+    $('hsum').innerHTML = `${hits} of ${targets.length} targets within ε. worst error <b>${worst(S.g, S.K, targets).toFixed(2)}c</b>.`;
+    const x = S.g / CENTS; const terms = cf(x, 14); const tail = terms.slice(1);
+    let onesFrom = -1; for (let i = 0; i < tail.length; i++) { if (tail.slice(i).every(v => v === 1) && tail.length - i >= 4) { onesFrom = i; break; } }
+    $('cf').innerHTML = `g/1200 = [${terms[0]}; ${tail.join(', ')}]` + (onesFrom >= 0 ? ` <span style="color:var(--noble)">ones from term ${onesFrom + 1}</span>` : ' <span style="color:var(--muted)">no tail of ones in 14 terms</span>');
+    const ng = nearestNoble(GOLD, S.Q, S.g), ns = nearestNoble(SILV, S.Q, S.g);
+    $('nob').innerHTML = `nearest golden (Q ≤ ${S.Q}): <b>${ng.n.g.toFixed(3)}c</b> (${ng.n.seeds}, complexity ${ng.n.cx}), ${ng.d.toFixed(2)}c away. nearest silver: ${ns.n.g.toFixed(3)}c, ${ns.d.toFixed(2)}c away.`;
+    const lv = levels(x, 72); $('lev').innerHTML = `MOS levels ≤ 72: ${lv.join(', ')} <span style="color:var(--muted)">(${lv.length} of them)</span>`;
+  }
+  function station1() { $('gv').textContent = S.g.toFixed(3); $('Kv').textContent = S.K; $('epsv').textContent = S.eps.toFixed(1); drawCircle(); readouts(); }
+
+  // ---------- station 2 ----------
+  let landCache = null;
+  function landscape() {
+    const cv = $('land'), ctx = cv.getContext('2d'); const W = cv.width, H = cv.height, L = 44, Rr = 10, T = 10, B = 26;
+    const step = 0.05, n = Math.round(600 / step);
+    const per = targets.map(() => new Float32Array(n)); const wv = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const g = (i + 1) * step; let w = 0; targets.forEach((t, j) => { const e = bestK(g, t.cents, S.K)[1]; per[j][i] = e; if (e > w) w = e; }); wv[i] = w; }
+    landCache = { wv, step };
+    const ymin = 0.05, ymax = 600; const ylog = (e) => T + (Math.log10(ymax) - Math.log10(Math.max(e, ymin))) / (Math.log10(ymax) - Math.log10(ymin)) * (H - T - B);
+    const xs = (g) => L + (g / 600) * (W - L - Rr);
+    ctx.fillStyle = css('--bg'); ctx.fillRect(0, 0, W, H);
+    ctx.font = '11px ' + css('--font-mono'); ctx.fillStyle = css('--muted'); ctx.strokeStyle = css('--line');
+    for (const e of [0.1, 1, 10, 100]) { const y = ylog(e); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(W - Rr, y); ctx.stroke(); ctx.fillText(e + 'c', 4, y + 4); }
+    for (let g = 0; g <= 600; g += 100) { const x = xs(g); ctx.beginPath(); ctx.moveTo(x, T); ctx.lineTo(x, H - B); ctx.stroke(); ctx.fillText(g, x - 8, H - 8); }
+    // segments
+    const segs = []; let inseg = false, s0 = 0, wmax = 0;
+    for (let i = 0; i < n; i++) { const ok = wv[i] <= S.eps; if (ok && !inseg) { inseg = true; s0 = i; wmax = 0; } if (ok) wmax = Math.max(wmax, wv[i]); if (!ok && inseg) { inseg = false; segs.push([(s0 + 1) * step, i * step, wmax]); } }
+    if (inseg) segs.push([(s0 + 1) * step, n * step, wmax]);
+    ctx.fillStyle = css('--harm-soft'); for (const [a, b] of segs) ctx.fillRect(xs(a), T, Math.max(1.5, xs(b) - xs(a)), H - T - B);
+    // ticks
+    const tick = (list, color, h) => { ctx.strokeStyle = color; ctx.lineWidth = 1.2; for (const nb of list) { if (nb.cx > S.Q) continue; const x = xs(nb.g); ctx.beginPath(); ctx.moveTo(x, H - B); ctx.lineTo(x, H - B - h); ctx.stroke(); } };
+    tick(GOLD, css('--noble'), 60); if ($('showsilver').checked) tick(SILV, css('--accent'), 30);
+    // per-target
+    if ($('showper').checked) { ctx.strokeStyle = css('--accent'); ctx.lineWidth = 0.8; ctx.globalAlpha = 0.45; for (const arr of per) { ctx.beginPath(); for (let i = 0; i < n; i++) { const x = xs((i + 1) * step), y = ylog(arr[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); } ctx.globalAlpha = 1; }
+    ctx.strokeStyle = css('--harm'); ctx.lineWidth = 1.6; ctx.beginPath(); for (let i = 0; i < n; i++) { const x = xs((i + 1) * step), y = ylog(wv[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+    // epsilon line + current g
+    ctx.strokeStyle = css('--warn'); ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(L, ylog(S.eps)); ctx.lineTo(W - Rr, ylog(S.eps)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = css('--fg'); ctx.beginPath(); ctx.moveTo(xs(S.g), T); ctx.lineTo(xs(S.g), H - B); ctx.stroke();
+    // segment table
+    const tb = $('segtab').querySelector('tbody'); let rows = '', contained = 0;
+    for (const [a, b, wm] of segs) { const inside = GOLD.filter(nb => nb.cx <= S.Q && nb.g >= a && nb.g <= b); if (inside.length) contained++;
+      rows += `<tr><td class="num">${a.toFixed(2)} to ${b.toFixed(2)}</td><td class="num">${(b - a).toFixed(2)}</td><td class="num">${wm.toFixed(2)}</td><td class="mono">${inside.length ? inside.map(nb => `${nb.g.toFixed(3)} (${nb.seeds}, cx ${nb.cx})`).join('; ') : '<span style="color:var(--muted)">none</span>'}</td></tr>`; }
+    tb.innerHTML = rows || '<tr><td colspan="4" class="note">no segment: no generator holds every target within ε at this K</td></tr>';
+    const nG = GOLD.filter(nb => nb.cx <= S.Q).length;
+    $('segsum').textContent = `${segs.length} segments at ε = ${S.eps}c, ${contained} contain a golden of complexity ≤ ${S.Q} (${nG} goldens in 600c, mean spacing ${(600 / nG).toFixed(1)}c).`;
+    $('Qv').textContent = S.Q;
+    cv.onmousemove = (ev) => { const r = cv.getBoundingClientRect(); const x = (ev.clientX - r.left) * (W / r.width); const g = ((x - L) / (W - L - Rr)) * 600; if (g > 0 && g <= 600) { const i = Math.min(n - 1, Math.max(0, Math.round(g / step) - 1)); $('hover').textContent = `g = ${g.toFixed(2)}c, worst error ${wv[i].toFixed(2)}c`; } };
+    cv.onclick = (ev) => { const r = cv.getBoundingClientRect(); const x = (ev.clientX - r.left) * (W / r.width); const g = ((x - L) / (W - L - Rr)) * 600; if (g > 0 && g <= 600) { S.g = Math.round(g * 200) / 200; $('g').value = S.g; station1(); landscape(); } };
+  }
+
+  // ---------- station 3 ----------
+  let seed = 20261014;
+  function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+  function scatter() {
+    const cv = $('scat'), ctx = cv.getContext('2d'); const W = cv.width, H = cv.height, L = 44, Rr = 10, T = 10, B = 26;
+    const golds = GOLD.filter(nb => nb.cx <= S.Q);
+    const pts = []; for (let i = 0; i < 2000; i++) { const g = 0.5 + rnd() * 599.5; pts.push({ g, d: nearestNoble(GOLD, S.Q, g).d, e: worst(g, S.K, targets) }); }
+    const dmax = Math.max(1, ...pts.map(p => p.d)), emax = 600, emin = 0.05;
+    const xs = (d) => L + (Math.log10(Math.max(d, 0.01)) + 2) / (Math.log10(dmax) + 2) * (W - L - Rr);
+    const ys = (e) => T + (Math.log10(emax) - Math.log10(Math.max(e, emin))) / (Math.log10(emax) - Math.log10(emin)) * (H - T - B);
+    ctx.fillStyle = css('--bg'); ctx.fillRect(0, 0, W, H); ctx.font = '11px ' + css('--font-mono'); ctx.fillStyle = css('--muted'); ctx.strokeStyle = css('--line');
+    for (const e of [0.1, 1, 10, 100]) { const y = ys(e); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(W - Rr, y); ctx.stroke(); ctx.fillText(e + 'c', 4, y + 4); }
+    for (const d of [0.01, 0.1, 1, 10]) { if (d > dmax) continue; const x = xs(d); ctx.beginPath(); ctx.moveTo(x, T); ctx.lineTo(x, H - B); ctx.stroke(); ctx.fillText(d + 'c', x - 10, H - 8); }
+    ctx.fillStyle = css('--muted'); ctx.fillText('distance to nearest golden →', W - 200, H - 8);
+    ctx.fillStyle = css('--fg'); ctx.globalAlpha = 0.5; for (const p of pts) ctx.fillRect(xs(p.d) - 1, ys(p.e) - 1, 2.4, 2.4); ctx.globalAlpha = 1;
+    ctx.fillStyle = css('--noble'); for (const nb of golds) { const e = worst(nb.g, S.K, targets); ctx.beginPath(); ctx.arc(xs(0.01), ys(e), 4, 0, 7); ctx.fill(); }
+    ctx.fillStyle = css('--harm'); for (const [, g] of JUMPS.slice(0, 5)) { const d = nearestNoble(GOLD, S.Q, g).d, e = worst(g, S.K, targets); ctx.fillRect(xs(d) - 4, ys(e) - 4, 8, 8); }
+    // correlation of log d vs log e
+    const lx = pts.map(p => Math.log10(Math.max(p.d, 0.01))), ly = pts.map(p => Math.log10(Math.max(p.e, emin)));
+    const mx = lx.reduce((a, b) => a + b) / lx.length, my = ly.reduce((a, b) => a + b) / ly.length;
+    let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < lx.length; i++) { sxy += (lx[i] - mx) * (ly[i] - my); sxx += (lx[i] - mx) ** 2; syy += (ly[i] - my) ** 2; }
+    const r = sxy / Math.sqrt(sxx * syy);
+    const hit = pts.filter(p => p.e <= S.eps); const near = hit.filter(p => p.d < 1).length;
+    $('corr').innerHTML = `correlation of log distance with log worst error: <b>r = ${r.toFixed(3)}</b> over 2000 generators. ${hit.length} generators hold every target within ε, ${near} of them within 1c of a golden (Q ≤ ${S.Q}); of all 2000, ${pts.filter(p => p.d < 1).length} are within 1c of a golden.`;
+  }
+
+  // ---------- wiring ----------
+  function setTargets(text) { const t = parseTargets(text); targets = t === null ? scrambled() : t; }
+  function all() { station1(); landscape(); scatter(); }
+  $('g').addEventListener('input', (e) => { S.g = Number(e.target.value); station1(); landscape(); });
+  $('K').addEventListener('input', (e) => { S.K = Number(e.target.value); all(); });
+  $('eps').addEventListener('input', (e) => { S.eps = Number(e.target.value); all(); });
+  $('Q').addEventListener('input', (e) => { S.Q = Number(e.target.value); station1(); landscape(); scatter(); });
+  $('targets').addEventListener('change', (e) => { setTargets(e.target.value); all(); });
+  $('showper').addEventListener('change', landscape); $('showsilver').addEventListener('change', landscape);
+  $('reseed').addEventListener('click', () => { seed = Math.floor(Math.random() * 4294967296); scatter(); });
+  const pres = $('presets');
+  for (const [label, text] of PRESETS) { const b = document.createElement('button'); b.textContent = label; b.onclick = () => { if (text === 'scramble') { scrambleSeed++; $('targets').value = 'scramble'; } else $('targets').value = text; setTargets($('targets').value); all(); }; pres.appendChild(b); }
+  const jm = $('jumps');
+  for (const [label, g] of JUMPS) { const b = document.createElement('button'); b.textContent = label; b.onclick = () => { S.g = g; $('g').value = g; station1(); landscape(); }; jm.appendChild(b); }
+  setTargets($('targets').value); all();
+  const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', all);
+  new MutationObserver(all).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>

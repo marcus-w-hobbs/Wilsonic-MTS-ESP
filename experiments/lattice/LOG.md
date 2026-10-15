@@ -5042,3 +5042,258 @@ and 45 chains carry 22 and 9.5 cent errors and the N = 46 level is the
 test_subfit001), freeze check A OK (scorer 1a840af9…b592). Both receipts and
 the six .scl bit-identical across two runs (`cmp`), 809 s each with 8
 workers.
+
+## 2026-10-14 — SUBFIT-002 pre-registration (entry BEFORE any implementation or run)
+
+**Question.** SUBFIT-001 scored a chain by the eikosany subsets it keeps
+playable and dropped the per-tone cap. Its runner then counted chain
+coincidences below 37 notes, because three in-window degrees that
+satisfy the mean condition counted as a kept triad however far they sat
+from the just pitches. This experiment puts the cap back into the
+predicate and re-measures the same staircase at two tiers, 20 cents (the
+CPSFIT-003 cap) and 10 cents (a stricter tier), on the same search.
+Marcus's gate G-036 asks which cap defines "the subset is still there".
+Both are reported so the gate can choose.
+
+**Construction.** Everything as SUBFIT-001 (the eikosany on 1·3·5·7·9·11,
+its 114 exact triads and 72 census subsets, N from 11 to 72, a 0.1 cent
+grid of g with a 0.002 cent refinement of the twelve best, every window,
+tones to the nearest in-window degree, the MOS-only variant on the exact
+level intervals) with one change to the predicate: a triad survives only
+when its three tones each sit within CAP cents of their just pitch at
+the assigned degree AND the mirror condition holds (|dev| < 2 cents,
+separation ≥ 2 cents). A subset is playable when every one of its exact
+triads survives. The objective and tie-breaks are SUBFIT-001's. The
+runner is `subfit002.py`, which reuses SUBFIT-001's objects and search
+and parametrizes the predicate by the cap. The scratch that produced the
+predictions ran the same search with the same predicate, so the
+registered values are exact to the counts and to 0.01 cents on g.
+
+**Predictions (scratch 2026-10-14, `subfit2_sweep.py` on the SUBFIT-001
+search).** Rows give N: generator (cents), playable hexanies / dekanies /
+tetrads, triads kept, largest error among tones in kept triads.
+- **P-T20 (cap 20).** 11 to 12: 124.23, 1/0/0, 10 to 12, 16.2. 13: 350.98,
+  1/0/1, 8, 8.1. 14 to 15: 351.32, 1/0/2, 12 to 18, 9.1. 16: 351.32,
+  2/0/2, 21, 9.1. 17 to 21: 351.32, 3/0/3, 24, 9.1. 22 to 23: 317.13,
+  4/0/5, 50, 18.1. 24 to 25: 317.13, 6/0/6, 56, 18.1. 26 to 29: 350.75,
+  6/1/7, 43, 19.2. 30 to 31: 350.75, 6/1/7, 47, 19.2. 32: 350.75, 6/1/7,
+  55. 33: 350.75, 7/1/8, 56. 34: 350.75, 8/1/8, 61. 35 to 36: 350.75,
+  9/1/9, 66, 19.2. 37: 350.76, 12/2/12, 70, 10.3. 38 to 48: 351.44,
+  14/2/14, 88, 9.5. 49 to 56: 497.77, 16/2/16, 76, 4.2. 57 to 69: 316.78,
+  18/2/18, 96, 8.7. 70 to 72: 175.38, 20/4/20, 102, 4.6.
+- **P-T10 (cap 10).** 11 to 12: 175.49, 0/0/1, 10, 8.1. 13: 350.98,
+  1/0/1, 8. 14 to 15: 351.32, 1/0/2, 12 to 18, 9.1. 16: 351.32, 2/0/2,
+  21. 17 to 21: 351.32, 3/0/3, 24, 9.1. 22 to 23: 351.32, 3/0/3, 25.
+  24 to 25: 350.76, 3/0/5, 32, 8.3. 26 to 29: 350.76, 6/1/7, 39, 8.3.
+  30 to 31: 350.76, 6/1/7, 42, 9.4. 32: 350.76, 6/1/7, 49, 9.9. 33 to 34:
+  350.76, 7/1/8, 52, 9.9. 35 to 36: 350.76, 8/1/8, 58, 9.9. 37: 351.44,
+  10/1/12, 80, 9.5. 38 to 72: identical to cap 20.
+- **P-T-A (the caps agree where it matters).** From N = 38 to 72 the two
+  caps give the same generator, mode, counts and triads at every N. They
+  differ at N = 37 (cap 20 keeps 12 hexanies and 2 dekanies at 350.76,
+  cap 10 keeps 10 and 1 at 351.44) and below.
+- **P-T-B (the shape).** Under both caps the first dekany arrives at
+  N = 26, the best chain is N = 70 with 20 hexanies, 4 dekanies and 102
+  triads, and no chain keeps every subset. Under cap 10 no chain keeps a
+  hexany at N = 11 or 12 and none keeps more than 3 before N = 26.
+- **P-T-C (levels).** The free winner is a level at N = 17, 41 and 53
+  under cap 20 and at N = 17, 24, 41 and 53 under cap 10. The level-only
+  best keeps 14 hexanies and 2 dekanies at N = 41 (351.44) and N = 58
+  (351.44), 16 and 2 at N = 53 (497.77), 20 and 4 at N = 72 (483.28, 100
+  triads), 12 and 2 at N = 46 and 65 (443.13), 6 hexanies at N = 31
+  (116.68), under both caps.
+- **P-T-D (design floors for the eikosany in one MOS).** The smallest
+  level that keeps at least 14 hexanies is N = 41, at least 16 is N = 53,
+  at least 20 is N = 72, with every kept tone within 9.5, 4.2 and 8.0
+  cents, under both caps.
+
+**Deliverables.** `subfit002.py` and `tests/test_subfit002.py` green
+before the first run, receipts `results/subfit002.jsonl` (one row per
+cap and N) and `results/subfit002_summary.json`, Scala exports under
+`results/scl/subfit002/` for the N = 41 and N = 72 levels and the N = 37
+cap-20 chain. The N = 49, 53 and 70 chains are already in the Wilsonic
+library from SUBFIT-001. A gate.
+
+## 2026-10-14 — SUBFIT-002 results + verdicts
+
+**Run:** `subfit002.py` (about 8200 s for the first run and 7200 s for the second with 8 workers over 124 (cap, N) tasks, against 809 s for SUBFIT-001's single cap; the machine was shared with other work and I did not profile it.
+Receipts `results/subfit002.jsonl`, 124 rows, and
+`results/subfit002_summary.json`. Two runs bit-identical, `cmp` on both
+receipts and the three .scl.) Frozen triads v1.1.0 read-only, pin
+verified. Lattice suite 422/422 green before the first run (9 new tests).
+
+**All six predictions KEPT.** The runner is the scratch's search with the
+scratch's predicate, so this is a reproduction and not a surprise. The
+value of the run is the receipts and the structure of each winner, which
+the scratch did not compute.
+
+- **P-T20 — KEPT.** Every N from 11 to 72 matches the registered
+  generator within 0.01 cents, the registered counts exactly, and the
+  registered triads and errors.
+- **P-T10 — KEPT.** Same, and from N = 38 the rows equal the cap-20 rows.
+- **P-T-A — KEPT.** The two caps agree at every N from 38 to 72 and
+  differ at 37.
+- **P-T-B — KEPT.** First dekany at N = 26 under both caps, best chain
+  N = 70 (20 hexanies, 4 dekanies, 102 triads) under both, no chain keeps
+  every subset, no hexany at N = 11 or 12 under cap 10 and none keeps
+  more than 3 before N = 26.
+- **P-T-C — KEPT.** Free winner is a level at N = 17, 41, 53 (cap 20) and
+  17, 24, 41, 53 (cap 10). Level-only values as registered at N = 31, 41,
+  46, 53, 58, 65, 72.
+- **P-T-D — KEPT.** The smallest level with at least 14, 16, 20 hexanies
+  is N = 41, 53, 72, within 9.5, 4.2, 8.0 cents, under both caps.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) The cap
+decides nothing above 37 notes. Below it, the cap-20 staircase keeps 4
+to 9 hexanies at N = 22 to 36 with tones 18 to 19 cents off, and cap 10
+keeps 3 to 8 with tones within 10. Whether an 18-cent tone "is" the
+eikosany tone is the ear question of G-036, and the two tables give the
+gate both answers. (2) Structure of the winners, from the runner's
+11-limit val solve on the assignment. This is the finding the scratch
+could not see: the neutral-third winner 351.444 at N = 38 to 48, and so
+the 41-note and 58-note levels, is NOT a homomorphic image of the
+11-limit lattice. No integer val maps the eikosany's monzos to the
+assigned degrees, so the 14 hexanies and 2 dekanies are kept by an
+assignment that is not a temperament: the same just interval lands on
+different step counts in different places of the chain. The cap-20
+free winners that ARE homomorphic: N = 24 to 25 (317.126, 6 hexanies,
+tones 18 cents off), N = 37 (350.756, 12 hexanies and 2 dekanies, val
+(2, -16, 13, 5) on primes 3, 5, 7, 11, kernel 32805/32768 and
+19712/19683), N = 49 to 56 (497.774, val (-1, 8, 14, -23), kernel
+131072/130977 and 41503/41472), N = 57 to 69 (316.778, val (6, 5, 22,
+-21), kernel 4375/4374 and 160083/160000), N = 70 to 72 (175.378, val
+(4, -32, -15, 10), kernel 2401/2400 and 131072/130977). Among the
+level-only winners the homomorphic ones with six or more hexanies are
+N = 46 and 65 (443.128, val (7, 9, 13, -15), kernel 4375/4374 and
+8019/8000, 12 hexanies and 2 dekanies within 8.3 cents), N = 53
+(497.774, 16 and 2), N = 63 (38.31, 12 and 0, 86 triads within 5.8) and
+N = 72 (483.278, val (-6, -29, 2, 21), kernel 3025/3024 and
+420175/419904, 20 and 4, 100 triads within 8.0). The 31-note 116.68
+level (6 hexanies) and the 41- and 58-note 351.444 levels are not
+homomorphic. So if the design requires one val (a Gral keyboard where
+every just interval is one fixed step vector), the eikosany's MOS
+floors move to 46 notes for 12 hexanies, 53 for 16 and 72 for 20, and
+the 41-note level drops out. Same under cap 10. (3) The three new .scl: the 41-note level (14 hexanies, 2 dekanies,
+within 9.5 cents), the 72-note level (20 and 4, 100 triads, within 8.0),
+and the 37-note cap-20 chain of 350.756 (12 and 2, within 10.3), which
+is the smallest chain that keeps twelve hexanies.
+
+**Kept.** Gate G-037.
+
+## 2026-10-14 — GOLD-003 pre-registration (entry BEFORE any implementation or run)
+
+**Principle this experiment serves (Marcus, 2026-10-14).** Nobility does
+not predict harmony, because there is no mechanism for it. Harmony is a
+Diophantine condition between k·g and log2 of the primes. Nobility is a
+condition on g's own continued fraction. The two are independent. So the
+statement "Erv's optimum is under a cent from a golden generator" is not
+the statement to test, because nobles of complexity 60 are about one
+cent apart and every generator is near one. The statement to test is:
+a triad-optimal generator is a survival SEGMENT (the interval of g over
+which the count-optimal triads all stay within tolerance, CPSFIT-003's
+`segment_cents`), harmony cannot choose inside the segment, and a noble
+inside the segment is a free melodic upgrade (L/s → φ at every level,
+the Fibonacci ladder of MOS sizes, Gral cells of constant shape). The
+question is whether the segments contain nobles more often than chance.
+
+**Arm A (this registration): segments against randomly placed segments.**
+Objects: the 22 distinct count-optimal segments of CPSFIT-003 (115 rows
+on hexany, EG4, dek52, dek52refl, dek53 for N = 11 to 36. A segment is
+distinct by its rounded end points, so the reflected dekany and the
+shared dek53 segments count once), widths 0.02 to 0.43 cents, and the
+15 segments that remain when overlapping intervals are merged across
+lattices (the hexany and EG4 segments at 317 cents become one). Nobles:
+`gold002.nobles(m, 60)` for golden (m = 1) and silver (m = 2), folded to
+(0, 600] cents, complexity ladder Q = 8, 12, 20, 30, 60. Statistic: the
+number of segments that contain at least one noble of complexity ≤ Q.
+Null: 20000 draws (seed 20261014) in which every segment keeps its width
+and is placed uniformly on (0, 600). The p-value is the fraction of draws with at
+least the observed count. Decision rule, fixed now: ten tests per
+segment set (two families × five Q), so a result counts as a signal
+only at p ≤ 0.005. Between 0.005 and 0.05 it is a hint. Above 0.05 it is
+nothing.
+
+**Predictions (scratch 2026-10-14, `gold3_sweep.py`).**
+- **P-G3-1 (distinct segments, golden).** Contained counts by Q = 8, 12,
+  20, 30, 60: 1, 3, 3, 4, 7 of 22, null means 0.12, 0.24, 0.68, 1.47,
+  5.12, p = 0.11, 0.0012, 0.028, 0.054, 0.22. Only Q = 12 is a signal.
+- **P-G3-2 (distinct segments, silver).** 1, 1, 3, 3, 14 of 22, null
+  means 0.17, 0.37, 1.02, 2.17, 6.90, p = 0.16, 0.31, 0.077, 0.37,
+  0.0007. Only Q = 60 is a signal, and at Q = 60 the silver set is 1653
+  nobles about 0.36 cents apart, so this is the density regime and not
+  evidence about low-complexity nobles.
+- **P-G3-3 (merged segments).** Golden: 1, 2, 2, 3, 6 of 15, p = 0.075,
+  0.0095, 0.070, 0.068, 0.090. Silver: 1, 1, 3, 3, 9 of 15, p = 0.11,
+  0.22, 0.024, 0.16, 0.011. No test reaches 0.005. The golden Q = 12
+  result falls from a signal to a hint when the 317-cent coincidence is
+  counted once.
+- **P-G3-4 (which nobles).** The golden nobles of complexity ≤ 12 that
+  sit inside a segment are exactly two: 317.170 cents (3/11, 1/4,
+  complexity 11), inside the hexany N = 12 to 15 and EG4 N = 15 segments
+  (Erv's generator, the hexany count optimum), and 503.786 cents (2/3,
+  1/2, complexity 3) inside the dekany N = 15 to 17 segment. The silver
+  nobles of complexity ≤ 20 inside a segment are 351.472 (0/1, 1/1,
+  complexity 1) in the dekany N = 33 to 34 segment, 316.827 (4/15, 5/19)
+  in the dekany N = 35 to 36 segment and 77.850 (1/13, 0/1) in the
+  hexany N = 18 to 21 segment.
+- **P-G3-5 (the verdict I expect).** Arm A gives at most a hint: a
+  Bonferroni-level signal on the distinct-segment set at golden Q = 12
+  that does not survive merging. This is consistent with the principle
+  and is not evidence that nobility predicts harmony. It says two of
+  Erv's shallow goldens sit inside count-optimal segments, which is what
+  "chosen inside the segment" predicts for a small catalogue and what
+  "near a golden" cannot distinguish.
+
+**Arm B (defined now, predictions deferred).** Treatment: the nobles Erv
+ear-marked on his scale-tree sheets (the 1994 Peirce-sequence page
+Marcus shared, plus the fuller page where every Farey delta carries its
+golden limit, not yet located). Control: the un-marked nobles of the
+same complexity on the same sheets. Statistic: the fraction of each set
+whose value lies inside any count-optimal segment (CPSFIT-003's, plus
+the eikosany subset winners of SUBFIT-002 once their segments are
+measured). Exact test on the two fractions. Arm B is registered when the
+marked set is transcribed. I will write its predictions before that
+transcription is scored.
+
+**Deliverables.** `gold003.py` and `tests/test_gold003.py` green before
+the first run, receipts `results/gold003.jsonl` (one row per segment set,
+family and Q) and `results/gold003_summary.json`. No new scales. A gate.
+
+## 2026-10-14 — GOLD-003 results + verdicts (arm A)
+
+**Run:** `gold003.py` (under a minute per run. Receipts `results/gold003.jsonl`, 20 rows,
+and `results/gold003_summary.json`. Two runs bit-identical, `cmp` on both.)
+Inputs read-only: `results/cpsfit003.jsonl` and `gold002.nobles`. Lattice
+suite 429/429 green before the first run (7 new tests).
+
+**All five predictions KEPT.** The measured table, distinct segments
+(22): golden contained 1, 3, 3, 4, 7 at Q = 8, 12, 20, 30, 60 with
+p = 0.109, 0.0020, 0.027, 0.052, 0.223. Silver 1, 1, 3, 3, 14 with
+p = 0.16, 0.31, 0.073, 0.37, 0.0006. Merged segments (15): golden 1, 2,
+2, 3, 6 with p = 0.073, 0.012, 0.073, 0.065, 0.086. Silver 1, 1, 3, 3, 9
+with p = 0.107, 0.21, 0.024, 0.16, 0.0084. Signals at the registered
+0.005 level: distinct golden Q = 12 and distinct silver Q = 60 only.
+Merged golden Q = 12 is a hint. The contained goldens at Q = 12 are
+317.170 (3/11, 1/4) and 503.786 (2/3, 1/2), as registered.
+
+**Reading, under the principle.** Arm A is a hint and no more. Two of
+the shallow goldens sit inside count-optimal segments, and that is
+consistent with "chosen inside the segment" for a small catalogue. It
+is not evidence that nobility predicts harmony, and the registration
+said in advance that it could not be. The silver Q = 60 signal is the
+density regime (1653 nobles about 0.36 cents apart against segments up
+to 0.43 cents wide) and I do not read it. The test that can decide
+something is arm B, Erv's ear-marked nobles against the un-marked nobles
+of the same complexity, and that waits on the sheets.
+
+**Measured, not registered (post-hoc, labelled).** (1) The two Q = 12
+containments are the two segments with the widest margins in the whole
+CPSFIT-003 table, 0.43 and 0.16 cents, and a wide segment is more likely
+to contain anything. A width-matched null is the same null, so this
+does not change the p-values, but it says the hint rests on the two
+easiest segments. (2) The 351.472-cent silver of complexity 1, which is
+the pure silver generator (1 + √2 folded), sits inside the dekany
+N = 33 to 34 segment. That is one silver coincidence at the lowest
+possible complexity, on one lattice, and I note it without reading it.
+
+**Kept.** Gate G-038.
