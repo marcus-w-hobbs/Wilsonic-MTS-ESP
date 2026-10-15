@@ -104,14 +104,14 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
 <div class="wrap">
 <header>
   <h1>Diophantine Harmony</h1>
-  <p class="lede">A playground for one sentence. It has two halves, and the point of the page is that the two halves do not talk to each other.</p>
+  <p class="lede">A playground for one sentence. The sentence has two halves. The page shows that the two halves do not depend on each other.</p>
   <div class="thesis"><span class="k">Harmony is a Diophantine condition between <em>k·g</em> and log<sub>2</sub> of the primes.</span> <span class="n">Nobility is a condition on the continued fraction of <em>g</em> itself.</span> The two are independent.</div>
-  <p class="lede">I wrote this down on 2026-10-14 after GOLD-002 showed that "Erv's generator is under a cent from a golden one" is true of every generator at depth, because noble numbers are dense. The sentence is what survives. Below, the harmony half lives in amber, the nobility half in violet, and the generator chain in teal.</p>
+  <p class="lede">I wrote this sentence on 2026-10-14, after GOLD-002. That experiment showed that every generator is within one cent of some golden generator at complexity 60, because the golden generators are dense. So the statement "Erv's generator is near a golden one" has no content at that depth. The sentence above is what survives. On this page the harmony half is amber, the nobility half is violet, and the generator chain is teal.</p>
 </header>
 
 <section class="station" id="s1">
   <div class="head"><span class="num">station 1</span><h2>One generator, two readouts</h2></div>
-  <p class="lede">Pick a generator <em>g</em>. The circle is one octave. The amber marks are the targets, 1200·log<sub>2</sub>(p) folded into the octave. The teal dots are the chain, <em>k·g</em> for |k| up to K. Harmony asks, for each target, whether some chain dot lands within ε. Nobility asks only what the continued fraction of <em>g</em>/1200 looks like. Change the targets and watch which readout moves.</p>
+  <p class="lede">Select a generator <em>g</em>. The circle is one octave. The amber marks are the targets: 1200·log<sub>2</sub>(p), folded into the octave. The teal dots are the chain: <em>k·g</em> for each k from −K to K. The harmony question is: for each target, does a chain dot fall within ε of it? The nobility question is: what is the continued fraction of <em>g</em>/1200? Change the targets and see which readout changes.</p>
   <div class="grid2">
     <div class="controls">
       <div class="ctl"><label for="g">generator g (cents) <b id="gv">317.175</b></label><input type="range" id="g" min="0.5" max="600" step="0.005" value="317.175"></div>
@@ -120,7 +120,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
       <div class="ctl"><label for="targets">targets (ratios or primes, comma separated)</label><input type="text" id="targets" value="3, 5, 7, 11"></div>
       <div class="chips" id="presets"></div>
       <div class="ctl"><label>jump to</label><div class="chips" id="jumps"></div></div>
-      <p class="note">Presets are the Wilsonic lattices. The last chip scrambles the targets to random places so you can see that the violet readout does not care.</p>
+      <p class="note">The presets are the Wilsonic lattices. The last button moves the targets to random positions. The violet readout does not change.</p>
     </div>
     <div style="display:grid;gap:12px;min-width:0">
       <svg id="circle" viewBox="0 0 420 420" width="420" height="420" role="img" aria-label="octave circle with targets and chain"></svg>
@@ -143,7 +143,7 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
 
 <section class="station" id="s2">
   <div class="head"><span class="num">station 2</span><h2>The landscape</h2></div>
-  <p class="lede">Every generator from 0 to 600 cents at once. The amber line is the worst error over the targets, the smallest it can be with |k| ≤ K, on a log scale. The dips are where harmony lives, and the shaded bands are the survival segments, where the worst error is under ε. The violet ticks are the golden generators of complexity up to Q. Scramble the targets and the dips move. The ticks never move, because they come from <em>g</em> alone.</p>
+  <p class="lede">The landscape shows every generator from 0 to 600 cents. The amber line is the worst error over the targets, with |k| ≤ K, on a log scale. The dips are where harmony is possible. The shaded bands are the survival segments, where the worst error is less than ε. The violet ticks are the golden generators with complexity up to Q. Move the targets to random positions and the dips move. The ticks do not move, because they depend on <em>g</em> only.</p>
   <div class="row">
     <div class="ctl" style="min-width:200px"><label for="Q">golden complexity Q <b id="Qv">12</b></label><input type="range" id="Q" min="3" max="30" step="1" value="12"></div>
     <label class="row" style="font-size:13px"><input type="checkbox" id="showper" checked> per-target lines</label>
@@ -152,13 +152,13 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
   </div>
   <canvas id="land" width="1080" height="360"></canvas>
   <div class="legend"><span><i style="background:var(--harm)"></i>worst target error</span><span><i style="background:var(--accent)"></i>per-target error</span><span><i style="background:var(--harm-soft);height:10px"></i>survival segment (≤ ε)</span><span><i style="background:var(--noble)"></i>golden tick</span><span id="hover" class="mono"></span></div>
-  <p class="note">Click the landscape to send that generator to station 1. The segment list below is what GOLD-003 tests: does a segment contain a golden of complexity ≤ Q more often than a randomly placed segment of the same width?</p>
+  <p class="note">Click the landscape to send that generator to station 1. The table below lists the segments. GOLD-003 tests this question: does a segment contain a golden generator of complexity ≤ Q more often than a random segment of the same width?</p>
   <div class="tablewrap"><table id="segtab"><thead><tr><th class="num">segment (cents)</th><th class="num">width</th><th class="num">worst error</th><th>golden inside (complexity ≤ Q)</th></tr></thead><tbody></tbody></table></div>
 </section>
 
 <section class="station" id="s3">
   <div class="head"><span class="num">station 3</span><h2>Independence, as a cloud</h2></div>
-  <p class="lede">Two thousand random generators. Across: how far each one sits from the nearest golden generator of complexity ≤ Q, in cents. Up: its worst target error with |k| ≤ K. If nobility predicted harmony the cloud would lean. The correlation is printed. The large violet points are the goldens themselves, and the amber squares are the CPSFIT-003 count winners on the hexany, EG4 and dekany.</p>
+  <p class="lede">The cloud shows 2000 random generators. The horizontal axis is the distance from each generator to the nearest golden generator of complexity ≤ Q, in cents. The vertical axis is the worst target error with |k| ≤ K. If nobility predicted harmony, the cloud would tilt. The page shows the correlation below the chart. The large violet points are the golden generators. The amber squares are the CPSFIT-003 count winners on the hexany, EG4 and the dekany.</p>
   <canvas id="scat" width="1080" height="400"></canvas>
   <div class="row"><span class="readout" id="corr"></span><button id="reseed">new random sample</button></div>
 </section>
@@ -166,15 +166,15 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
 <section class="station">
   <div class="head"><h2>What I think the sentence means</h2></div>
   <div class="prose">
-    <p><b>The harmony half.</b> A generator chain plays a just interval p/q when some integer multiple of the generator lands within tolerance of 1200·log<sub>2</sub>(p/q), modulo the octave. That is a simultaneous inhomogeneous Diophantine approximation: one real number <em>g</em> must approximate several fixed real targets with small integer multipliers. The multipliers are the val. The targets are set by the primes. Nothing in this condition refers to the continued fraction of <em>g</em>.</p>
-    <p><b>The nobility half.</b> A noble number has a continued fraction that ends in all ones. That makes it the hardest number to approximate by rationals, which is the same as saying its MOS ladder grows as slowly as possible, every level has a large to small step ratio near φ, and the Gral keyboard of its chain keeps the same cell shape at every depth. All of this is about <em>g</em> and the rationals. None of it is about the primes.</p>
-    <p><b>Why there is no mechanism.</b> Move the targets and the dips of station 2 move. The ticks stay. There is no equation that takes the continued fraction of <em>g</em> and returns a distance from <em>k·g</em> to log<sub>2</sub> 3. GOLD-002 measured the consequence: at complexity 60 the goldens are about one cent apart, so every generator is near one, and the near ones fit triads no better than the far ones.</p>
-    <p><b>What Erv was doing, on this reading.</b> A triad-optimal generator is never a point. It is a survival segment, the whole interval of <em>g</em> over which the kept triads stay within tolerance. Harmony cannot choose inside the segment. So the choice inside the segment is free, and a golden generator inside it buys the melodic things at no harmonic cost. "Under a cent from a golden" is the wrong statement. "The golden lies inside the segment" is the right one, and it is testable. GOLD-003 arm A found two of Erv's shallow goldens inside count-optimal segments, 317.170 and 503.786 cents, against a quarter of one expected. That is a hint, and the page says why it can never be more than a hint.</p>
-    <p><b>For Wilsonic.</b> The generator family selector is an aesthetic axis. "Golden" should mean: snap to the golden generator inside the survival segment when one exists, and otherwise show the triad cost of leaving the segment. It should never be a harmonic filter.</p>
+    <p><b>The harmony half.</b> A generator chain plays the just interval p/q when some integer multiple of the generator falls within the tolerance of 1200·log<sub>2</sub>(p/q), modulo the octave. This is a simultaneous inhomogeneous Diophantine approximation. One real number <em>g</em> must approximate several fixed real targets with small integer multipliers. The multipliers are the val. The primes set the targets. This condition does not refer to the continued fraction of <em>g</em>.</p>
+    <p><b>The nobility half.</b> A noble number has a continued fraction that ends in ones only. This makes it the hardest kind of number to approximate with rationals. The same property has three musical consequences. Its MOS ladder grows as slowly as possible. Every level has a large-to-small step ratio near φ. The Gral keyboard of its chain keeps the same cell shape at every depth. All of this concerns <em>g</em> and the rationals. None of it concerns the primes.</p>
+    <p><b>Why there is no mechanism.</b> Move the targets and the dips in station 2 move. The ticks stay. No equation takes the continued fraction of <em>g</em> and returns the distance from <em>k·g</em> to log<sub>2</sub> 3. GOLD-002 measured the consequence. At complexity 60 the golden generators are about one cent apart, so every generator is near one. The near generators fit triads no better than the far generators.</p>
+    <p><b>What Erv did, on this reading.</b> A triad-optimal generator is a survival segment. The segment is the full interval of <em>g</em> over which the kept triads stay within tolerance. Harmony cannot choose a point inside the segment. So the choice inside the segment is free. A golden generator inside the segment gives the melodic properties at no harmonic cost. The testable statement is this: the golden generator lies inside the segment. The statement "the optimum is within one cent of a golden generator" has no content at depth, because the golden generators are dense. GOLD-003 arm A found two of Erv's shallow golden generators inside count-optimal segments, at 317.170 and 503.786 cents. The expected number by chance was 0.24. This is a hint. The independence described above is the reason it cannot be more than a hint.</p>
+    <p><b>For Wilsonic.</b> The generator-family selector is an aesthetic choice. The "golden" setting should do this: select the golden generator inside the survival segment when one exists. When none exists, it should show the triad cost of a move out of the segment. The setting must not act as a harmonic filter.</p>
   </div>
 </section>
 
-<footer>Marcus Hobbs, 2026. Companion to the Lattice MOS-Fit Playground and the Comma Dial. The harmony condition uses the mirror tolerance on tones only; triads need both sum and difference coincidences, which the MOS-Fit playground scores. Golden generators are (a + φc)/(b + φd) over unimodular pairs, complexity = max(b, d), folded into (0, 600] cents.</footer>
+<footer>Marcus Hobbs, 2026. This page is a companion to the Lattice MOS-Fit Playground and the Comma Dial. The harmony condition on this page applies the tolerance to single tones. Triads also need sum and difference coincidences. The MOS-Fit Playground scores those. The golden generators are (a + φc)/(b + φd) over unimodular pairs, with complexity max(b, d), folded into (0, 600] cents.</footer>
 </div>
 
 <script>
