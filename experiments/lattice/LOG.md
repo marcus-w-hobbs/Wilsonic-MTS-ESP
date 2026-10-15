@@ -5198,7 +5198,7 @@ question is whether the segments contain nobles more often than chance.
 
 **Arm A (this registration): segments against randomly placed segments.**
 Objects: the 22 distinct count-optimal segments of CPSFIT-003 (115 rows
-on hexany, EG4, dek52, dek52refl, dek53 for N = 11 to 36; a segment is
+on hexany, EG4, dek52, dek52refl, dek53 for N = 11 to 36. A segment is
 distinct by its rounded end points, so the reflected dekany and the
 shared dek53 segments count once), widths 0.02 to 0.43 cents, and the
 15 segments that remain when overlapping intervals are merged across
@@ -5207,10 +5207,10 @@ lattices (the hexany and EG4 segments at 317 cents become one). Nobles:
 (0, 600] cents, complexity ladder Q = 8, 12, 20, 30, 60. Statistic: the
 number of segments that contain at least one noble of complexity ≤ Q.
 Null: 20000 draws (seed 20261014) in which every segment keeps its width
-and is placed uniformly on (0, 600); p is the fraction of draws with at
+and is placed uniformly on (0, 600). The p-value is the fraction of draws with at
 least the observed count. Decision rule, fixed now: ten tests per
 segment set (two families × five Q), so a result counts as a signal
-only at p ≤ 0.005; between 0.005 and 0.05 it is a hint; above 0.05 it is
+only at p ≤ 0.005. Between 0.005 and 0.05 it is a hint. Above 0.05 it is
 nothing.
 
 **Predictions (scratch 2026-10-14, `gold3_sweep.py`).**
@@ -5252,7 +5252,7 @@ same complexity on the same sheets. Statistic: the fraction of each set
 whose value lies inside any count-optimal segment (CPSFIT-003's, plus
 the eikosany subset winners of SUBFIT-002 once their segments are
 measured). Exact test on the two fractions. Arm B is registered when the
-marked set is transcribed; its predictions will be written before that
+marked set is transcribed. I will write its predictions before that
 transcription is scored.
 
 **Deliverables.** `gold003.py` and `tests/test_gold003.py` green before
