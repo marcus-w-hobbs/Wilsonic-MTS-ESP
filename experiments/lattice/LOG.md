@@ -5179,3 +5179,82 @@ and the 37-note cap-20 chain of 350.756 (12 and 2, within 10.3), which
 is the smallest chain that keeps twelve hexanies.
 
 **Kept.** Gate G-037.
+
+## 2026-10-14 — GOLD-003 pre-registration (entry BEFORE any implementation or run)
+
+**Principle this experiment serves (Marcus, 2026-10-14).** Nobility does
+not predict harmony, because there is no mechanism for it. Harmony is a
+Diophantine condition between k·g and log2 of the primes. Nobility is a
+condition on g's own continued fraction. The two are independent. So the
+statement "Erv's optimum is under a cent from a golden generator" is not
+the statement to test, because nobles of complexity 60 are about one
+cent apart and every generator is near one. The statement to test is:
+a triad-optimal generator is a survival SEGMENT (the interval of g over
+which the count-optimal triads all stay within tolerance, CPSFIT-003's
+`segment_cents`), harmony cannot choose inside the segment, and a noble
+inside the segment is a free melodic upgrade (L/s → φ at every level,
+the Fibonacci ladder of MOS sizes, Gral cells of constant shape). The
+question is whether the segments contain nobles more often than chance.
+
+**Arm A (this registration): segments against randomly placed segments.**
+Objects: the 22 distinct count-optimal segments of CPSFIT-003 (115 rows
+on hexany, EG4, dek52, dek52refl, dek53 for N = 11 to 36; a segment is
+distinct by its rounded end points, so the reflected dekany and the
+shared dek53 segments count once), widths 0.02 to 0.43 cents, and the
+15 segments that remain when overlapping intervals are merged across
+lattices (the hexany and EG4 segments at 317 cents become one). Nobles:
+`gold002.nobles(m, 60)` for golden (m = 1) and silver (m = 2), folded to
+(0, 600] cents, complexity ladder Q = 8, 12, 20, 30, 60. Statistic: the
+number of segments that contain at least one noble of complexity ≤ Q.
+Null: 20000 draws (seed 20261014) in which every segment keeps its width
+and is placed uniformly on (0, 600); p is the fraction of draws with at
+least the observed count. Decision rule, fixed now: ten tests per
+segment set (two families × five Q), so a result counts as a signal
+only at p ≤ 0.005; between 0.005 and 0.05 it is a hint; above 0.05 it is
+nothing.
+
+**Predictions (scratch 2026-10-14, `gold3_sweep.py`).**
+- **P-G3-1 (distinct segments, golden).** Contained counts by Q = 8, 12,
+  20, 30, 60: 1, 3, 3, 4, 7 of 22, null means 0.12, 0.24, 0.68, 1.47,
+  5.12, p = 0.11, 0.0012, 0.028, 0.054, 0.22. Only Q = 12 is a signal.
+- **P-G3-2 (distinct segments, silver).** 1, 1, 3, 3, 14 of 22, null
+  means 0.17, 0.37, 1.02, 2.17, 6.90, p = 0.16, 0.31, 0.077, 0.37,
+  0.0007. Only Q = 60 is a signal, and at Q = 60 the silver set is 1653
+  nobles about 0.36 cents apart, so this is the density regime and not
+  evidence about low-complexity nobles.
+- **P-G3-3 (merged segments).** Golden: 1, 2, 2, 3, 6 of 15, p = 0.075,
+  0.0095, 0.070, 0.068, 0.090. Silver: 1, 1, 3, 3, 9 of 15, p = 0.11,
+  0.22, 0.024, 0.16, 0.011. No test reaches 0.005. The golden Q = 12
+  result falls from a signal to a hint when the 317-cent coincidence is
+  counted once.
+- **P-G3-4 (which nobles).** The golden nobles of complexity ≤ 12 that
+  sit inside a segment are exactly two: 317.170 cents (3/11, 1/4,
+  complexity 11), inside the hexany N = 12 to 15 and EG4 N = 15 segments
+  (Erv's generator, the hexany count optimum), and 503.786 cents (2/3,
+  1/2, complexity 3) inside the dekany N = 15 to 17 segment. The silver
+  nobles of complexity ≤ 20 inside a segment are 351.472 (0/1, 1/1,
+  complexity 1) in the dekany N = 33 to 34 segment, 316.827 (4/15, 5/19)
+  in the dekany N = 35 to 36 segment and 77.850 (1/13, 0/1) in the
+  hexany N = 18 to 21 segment.
+- **P-G3-5 (the verdict I expect).** Arm A gives at most a hint: a
+  Bonferroni-level signal on the distinct-segment set at golden Q = 12
+  that does not survive merging. This is consistent with the principle
+  and is not evidence that nobility predicts harmony. It says two of
+  Erv's shallow goldens sit inside count-optimal segments, which is what
+  "chosen inside the segment" predicts for a small catalogue and what
+  "near a golden" cannot distinguish.
+
+**Arm B (defined now, predictions deferred).** Treatment: the nobles Erv
+ear-marked on his scale-tree sheets (the 1994 Peirce-sequence page
+Marcus shared, plus the fuller page where every Farey delta carries its
+golden limit, not yet located). Control: the un-marked nobles of the
+same complexity on the same sheets. Statistic: the fraction of each set
+whose value lies inside any count-optimal segment (CPSFIT-003's, plus
+the eikosany subset winners of SUBFIT-002 once their segments are
+measured). Exact test on the two fractions. Arm B is registered when the
+marked set is transcribed; its predictions will be written before that
+transcription is scored.
+
+**Deliverables.** `gold003.py` and `tests/test_gold003.py` green before
+the first run, receipts `results/gold003.jsonl` (one row per segment set,
+family and Q) and `results/gold003_summary.json`. No new scales. A gate.
