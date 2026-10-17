@@ -70,6 +70,10 @@ Colour WilsonicAppSkin::getProportionalTriadDotColour() {
     return Colours::darkolivegreen;
 }
 
+Colour WilsonicAppSkin::getGeometricTriadDotColour() {
+    return Colours::darkcyan;
+}
+
 Colour WilsonicAppSkin::getSubcontraryTriadDotColour() {
     return Colours::darkmagenta;
 }

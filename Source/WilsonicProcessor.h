@@ -176,6 +176,8 @@ public:
     int restoreBrunDisplayMode();
     void saveShowProportionalTriads(bool should_show);
     bool restoreShowProportionalTriads();
+    void saveShowGeometricTriads(bool should_show);
+    bool restoreShowGeometricTriads();
     void saveKeyboardVisible(bool should_show);
     bool restoreKeyboardVisible();
     void saveFavoritesStoreNPOOverride(bool should_store);

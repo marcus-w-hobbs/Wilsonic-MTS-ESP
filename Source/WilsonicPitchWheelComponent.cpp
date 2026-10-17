@@ -197,11 +197,20 @@ void WilsonicPitchWheelComponent::_paint04(Graphics& g) {
         // Calculate the radius for the proportional and subcontrary triad dots
         auto const radius20 = (0.67f) * 0.5f * margin * dimension; // dot: proportional triad scale degree
         auto const radius21 = (0.80f) * 0.5f * margin * dimension; // dot: subcontrary triad scale degree
+        auto const radius22 = (0.735f) * 0.5f * margin * dimension; // dot: geometric triad scale degree (between the two)
         // Draw dots for each degree of each proportional triad
         for(auto triad : _tuning->getProportionalTriads()) {
             aat(triad.getRoot(), radius20);
             aat(triad.getThird(), radius20);
             aat(triad.getFifth(), radius20);
+        }
+        // Set the color for the geometric triad dots
+        g.setColour(skin.getGeometricTriadDotColour());
+        // Draw dots for each degree of each geometric triad
+        for(auto triad : _tuning->getGeometricTriads()) {
+            aat(triad.getRoot(), radius22);
+            aat(triad.getThird(), radius22);
+            aat(triad.getFifth(), radius22);
         }
         // Set the color for the subcontrary triad dots
         g.setColour(skin.getSubcontraryTriadDotColour());

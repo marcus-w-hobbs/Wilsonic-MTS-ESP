@@ -750,13 +750,14 @@ void TuningImp::_analyzeIntervals() {
 
 /// report proportional major triads and subcontrary minor triads
 /// proportional major triads = (a+b)/2
+/// geometric triads = sqrt(ab), i.e. b^2 = ac; harmonic < geometric < arithmetic
 /// subcontrary minor triads = (2ab)/(a+b)
 /// fibonacci triplets a, b, a+b...this is merely octave reducing the term (a+b) -> (a+b)/2
 
 /**
  * @brief Analyzes the proportional triads of the tuning.
  * 
- * This function analyzes the proportional triads of the tuning. It calculates the major and minor triads for each note in the tuning and stores them in the respective member variables.
+ * This function analyzes the proportional triads of the tuning. It calculates the proportional (arithmetic mean), geometric (geometric mean), and subcontrary (harmonic mean) triads for each note in the tuning and stores them in the respective member variables; _allTriads holds proportional, then subcontrary, then geometric.
  * The function also checks for duplicate triads and skips them. The function uses a tolerance value to determine if a note is part of a triad.
  *
  * Note that this method uses _processedArray, NOT _processedArrayNPO
@@ -778,8 +779,16 @@ void TuningImp::_analyzeProportionalTriads() {
     // Get the count of the processed array (NOT the _processedArrayNPO!)
     auto const npo = _processedArray.count();
     vector<PythagoreanMeans> proportionalTriads;
+    vector<PythagoreanMeans> geometricTriads;
     vector<PythagoreanMeans> subcontraryTriads;
     vector<PythagoreanMeans> allTriads;
+
+    // Clear the reported lists first so a scale that shrinks below three
+    // notes does not keep the previous scale's triads
+    _proportionalTriads.clear();
+    _geometricTriads.clear();
+    _subcontraryTriads.clear();
+    _allTriads.clear();
 
     // Trivial NOP
     if(npo < 3) {
@@ -801,11 +810,14 @@ void TuningImp::_analyzeProportionalTriads() {
             auto const jfac = (ji < j) ? _octave : 1;
             auto const jm = _processedArray.microtoneAtIndex(ji);
             auto const jmf = jfac * jm->getFrequencyValue();
-            auto const major = (imf + jmf) / 2;
-            auto const minor = 2 * (imf * jmf) / (imf + jmf);
+            auto const major = (imf + jmf) / 2;              // arithmetic mean: proportional
+            auto const geometric = sqrtf(imf * jmf);          // geometric mean:  b^2 = ac
+            auto const minor = 2 * (imf * jmf) / (imf + jmf); // harmonic mean:   subcontrary
             constexpr float major_2nd = 9.f/8.f;
             constexpr float fourth = 4.f/3.f;
+            // the same lower-interval window gates all three types
             auto const majorInLimits = (major / imf > major_2nd && major / imf < fourth);
+            auto const geometricInLimits = (geometric / imf > major_2nd && geometric / imf < fourth);
             auto const minorInLimits = (minor / imf > major_2nd && minor / imf < fourth);
             for(unsigned long k = i + 1; k < j; k++) { // third
                 auto const ki = k % npo;
@@ -836,15 +848,23 @@ void TuningImp::_analyzeProportionalTriads() {
                         allTriads.push_back(minorTriad);
                     }
                 }
+
+                // geometric
+                if (geometricInLimits && fabsf(geometric - kmf) < tolerance) {
+                    // dedup dedup
+                    SUL mt = {i, ki, ji};
+                    if (gmt.find(mt) == gmt.end()) {
+                        gmt[mt] = 1UL; // add to dedup list
+                        auto geometricTriad = PythagoreanMeans(i, k, j, PythagoreanMeans::Type::Geometric);
+                        geometricTriads.push_back(geometricTriad);
+                        allTriads.push_back(geometricTriad);
+                    }
+                }
             }
         }
     }
     
     // filter/transform by npo override
-    _proportionalTriads.clear();
-    _geometricTriads.clear();
-    _subcontraryTriads.clear();
-    _allTriads.clear();
 
     auto isTriadInNPOOverride = [&](auto& triad) -> bool {
         auto isDegreeInMap = [&](auto const degree) -> bool {
@@ -878,6 +898,14 @@ void TuningImp::_analyzeProportionalTriads() {
         if(isTriadInNPOOverride(triad)) {
             auto convertedTriad = xfmTriad(triad);
             _subcontraryTriads.push_back(convertedTriad);
+            _allTriads.push_back(convertedTriad);
+        }
+    }
+
+    for(auto& triad : geometricTriads) {
+        if(isTriadInNPOOverride(triad)) {
+            auto convertedTriad = xfmTriad(triad);
+            _geometricTriads.push_back(convertedTriad);
             _allTriads.push_back(convertedTriad);
         }
     }
