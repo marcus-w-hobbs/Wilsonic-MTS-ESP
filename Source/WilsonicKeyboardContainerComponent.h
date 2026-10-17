@@ -67,6 +67,7 @@ private:
     unique_ptr<DrawableButton> _keyboardButton = nullptr;
     unique_ptr<DrawableButton> _pitchWheelButton = nullptr;
     unique_ptr<DrawableButton> _triadsButton = nullptr;
+    unique_ptr<DrawableButton> _geometricTriadsButton = nullptr;
     unique_ptr<ToggleButton> _npoOverrideToggle = nullptr;
     Slider _npoOverrideSlider;
     Label _octaveMiddleCSliderLabel { "octavemiddlecsliderlabel", "Period Middle C" };
@@ -87,5 +88,6 @@ private:
     DrawableImage _getMidiPanicHelper(bool big);
     DrawableImage _getPitchWheelHelper(bool desaturate, bool big);
     DrawableImage _getTriadsHelper(float saturationMultiplier01, bool big);
+    DrawableImage _getGeometricTriadsHelper(float saturationMultiplier01, bool big);
     DrawableImage _getKeyboardHelper(bool desaturate, bool big);
 };

@@ -180,10 +180,17 @@ void TuningRendererComponent::_paint04(Graphics& g) {
         g.setColour(_processor.getAppSkin().getProportionalTriadDotColour());
         auto const radius20 = (0.67f) * 0.5f * margin * dimension; // dot: proportional triad scale degree
         auto const radius21 = (0.80f) * 0.5f * margin * dimension; // dot: subcontrary triad scale degree
+        auto const radius22 = (0.735f) * 0.5f * margin * dimension; // dot: geometric triad scale degree (between the two)
         for(auto triad : _tuning->getProportionalTriads()) {
             aat(triad.getRoot(), radius20);
             aat(triad.getThird(), radius20);
             aat(triad.getFifth(), radius20);
+        }
+        g.setColour(_processor.getAppSkin().getGeometricTriadDotColour());
+        for(auto triad : _tuning->getGeometricTriads()) {
+            aat(triad.getRoot(), radius22);
+            aat(triad.getThird(), radius22);
+            aat(triad.getFifth(), radius22);
         }
         g.setColour(_processor.getAppSkin().getSubcontraryTriadDotColour());
         for(auto triad : _tuning->getSubcontraryTriads()) {

@@ -134,20 +134,25 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
         }
     }
 
-    // If the proportional triads are to be shown, draw the dots and lines of all triads on the keyboard
+    // Draw the dots and lines of the triads on the keyboard. Two independent
+    // toggles: proportional+subcontrary (the original "triads" button) and
+    // geometric (its own button, off by default).
     // (skipped while a Genus Space keyboard subset is active: triad positions
     // are computed in full-table note numbers, not compacted slots)
-    if (_processor.restoreShowProportionalTriads() && !_processor.getAppTuningModel()->keyboardSubsetActive()) {
+    auto const showProportionalSubcontrary = _processor.restoreShowProportionalTriads();
+    auto const showGeometric = _processor.restoreShowGeometricTriads();
+    if ((showProportionalSubcontrary || showGeometric) && !_processor.getAppTuningModel()->keyboardSubsetActive()) {
         auto const atm = _processor.getAppTuningModel();
-        
-        // Assume numProportional + numSubcontrary = numAllTriads.  i.e., no geometric triads
-        auto const numTriads = atm->getTuning()->getProportionalTriads().size() + atm->getTuning()->getSubcontraryTriads().size();
-        auto const numAllTriads = atm->getTuning()->getAllTriads().size();
-        jassert(numTriads == numAllTriads);
+        auto const tuning = atm->getTuning();
+
+        // numTriads is the number of rows actually drawn, so the dots space evenly
+        auto const numProportionalSubcontrary = tuning->getProportionalTriads().size() + tuning->getSubcontraryTriads().size();
+        auto const numGeometric = tuning->getGeometricTriads().size();
+        jassert(numProportionalSubcontrary + numGeometric == tuning->getAllTriads().size());
+        auto const numTriads = (showProportionalSubcontrary ? numProportionalSubcontrary : 0UL) + (showGeometric ? numGeometric : 0UL);
         if (numTriads < 1)
             return;
 
-        // Proportional and subcontrary triads (no geometric for now)
         auto const nnMiddleC = atm->uiGetNoteNumberMiddleC();
         auto const npo = atm->getTuningTableNPO();
         auto const dotSmallRadius = 13.f;
@@ -181,13 +186,19 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
                 if (nn60 + triad.getRoot()  >= WilsonicProcessorConstants::numMidiNotes) continue;
                 if (nn60 + triad.getThird() >= WilsonicProcessorConstants::numMidiNotes) continue;
                 if (nn60 + triad.getFifth() >= WilsonicProcessorConstants::numMidiNotes) continue;
+                // Skip the types whose toggle is off
+                auto const isGeometric = (triad.getType() == PythagoreanMeans::Type::Geometric);
+                if (isGeometric && !showGeometric) continue;
+                if (!isGeometric && !showProportionalSubcontrary) continue;
                 // Set the color of the triad dot based on the type of the triad
                 if (triad.getType() == PythagoreanMeans::Type::Proportional) {
                     g.setColour(_processor.getAppSkin().getProportionalTriadDotColour());
+                } else if (triad.getType() == PythagoreanMeans::Type::Geometric) {
+                    g.setColour(_processor.getAppSkin().getGeometricTriadDotColour());
                 } else if (triad.getType() == PythagoreanMeans::Type::Subcontrary) {
                     g.setColour(_processor.getAppSkin().getSubcontraryTriadDotColour());
                 } else {
-                    // This should never happen, as there are only two types of triads
+                    // This should never happen, as there are only three types of triads
                     jassertfalse;
                 }
                 // Draw the dots for the root, third, and fifth of the triad

@@ -9,7 +9,7 @@
 //
 // Output: one JSON object on stdout:
 //   {"scale": [{"float": f, "bits": "xxxxxxxx"}, ...],
-//    "proportional": N, "subcontrary": N}
+//    "proportional": N, "subcontrary": N, "geometric": N}
 // scale = the processed array (octave-reduced, sorted); counts = the
 // analyzer's REPORTED triads (post NPO-map filter, matching the UI).
 
@@ -43,9 +43,10 @@ void emitResult(Tuning& t)
         std::printf("%s{\"float\": %.9g, \"bits\": \"%08x\"}",
                     i == 0 ? "" : ", ", static_cast<double>(f), bits(f));
     }
-    std::printf("], \"proportional\": %lu, \"subcontrary\": %lu}\n",
+    std::printf("], \"proportional\": %lu, \"subcontrary\": %lu, \"geometric\": %lu}\n",
                 static_cast<unsigned long>(t.getProportionalTriads().size()),
-                static_cast<unsigned long>(t.getSubcontraryTriads().size()));
+                static_cast<unsigned long>(t.getSubcontraryTriads().size()),
+                static_cast<unsigned long>(t.getGeometricTriads().size()));
 }
 
 int runHexany(int argc, char** argv)

@@ -71,8 +71,9 @@ public:
     // default tuning render cps line segment color
     Colour getCPSIntervalColour();
 
-    // default harmonic and subharmonic triad color
+    // default harmonic, geometric, and subharmonic triad colors
     Colour getProportionalTriadDotColour();
+    Colour getGeometricTriadDotColour();
     Colour getSubcontraryTriadDotColour();
 
     // Favorites

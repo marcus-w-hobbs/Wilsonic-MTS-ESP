@@ -88,6 +88,22 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
         addAndMakeVisible (*_triadsButton);
     }
 
+    // Initialize the show geometric triads button (independent of the proportional/subcontrary toggle)
+    {
+        auto on_small = _getGeometricTriadsHelper(1.f, false);
+        auto on_big = _getGeometricTriadsHelper(1.f, true);
+        auto off_small = _getGeometricTriadsHelper(0.1f, false);
+        auto off_big = _getGeometricTriadsHelper(0.1f, true);
+        _geometricTriadsButton = make_unique<DrawableButton> ("Geometric Triads", DrawableButton::ImageFitted);
+        _geometricTriadsButton->setImages (&off_small, &off_big, &on_big,  &off_small,
+                                           &on_small,  &on_big,  &off_big, &off_small);
+        _geometricTriadsButton->setClickingTogglesState(true);
+        _geometricTriadsButton->setTooltip ("Toggle the display of geometric triads on the keyboard.\nThe middle tone is the geometric mean of the outer tones (b^2 = ac).");
+        _geometricTriadsButton->setToggleState(_processor.restoreShowGeometricTriads(), dontSendNotification);
+        _geometricTriadsButton->addListener(this);
+        addAndMakeVisible (*_geometricTriadsButton);
+    }
+
     // NPO override toggle
     _npoOverrideToggle = make_unique<ToggleButton>("NPO Override");
     _npoOverrideToggle->setToggleState(_processor.getAppTuningModel()->uiGetNPOOverrideEnable(), dontSendNotification);
@@ -214,6 +230,7 @@ void WilsonicKeyboardContainerComponent::paint(Graphics& g) {
         g.drawRect(_keyboardButton->getBounds());
         g.drawRect(_pitchWheelButton->getBounds());
         g.drawRect(_triadsButton->getBounds());
+        g.drawRect(_geometricTriadsButton->getBounds());
         g.drawRect(_pitchColorOffset01Slider.getBounds());
         g.drawRect(_octaveMiddleCSlider.getBounds());
         g.drawRect(_noteNumberMiddleCSlider.getBounds());
@@ -254,16 +271,18 @@ void WilsonicKeyboardContainerComponent::resized() {
     auto topArea3 = Rectangle<int>(static_cast<int>(x + 3 * nw), y, static_cast<int>(nw), h).withSizeKeepingCentre(nws, h); // +/- slider
     auto topArea4 = Rectangle<int>(static_cast<int>(x + 4 * nw), y, static_cast<int>(nw), h).withSizeKeepingCentre(nws, h); // +/- slider
 
-    // pitch wheel button and triads button
-    auto const ta0w = static_cast<int>(topArea0.getWidth() / 5.f); // five elements
+    // pitch wheel button, triads buttons
+    auto const ta0w = static_cast<int>(topArea0.getWidth() / 6.f); // six elements
     auto topArea0_l = topArea0.removeFromRight(ta0w);
     auto tba = topArea0.removeFromRight(ta0w);
+    auto gtba = topArea0.removeFromRight(ta0w);
     auto pwba = topArea0.removeFromRight(ta0w);
     auto ska = topArea0.removeFromRight(ta0w);
     auto mpba = topArea0.removeFromRight(ta0w);
     _midiPanicButton->setBounds(mpba);
     _keyboardButton->setBounds(ska);
     _pitchWheelButton->setBounds(pwba);
+    _geometricTriadsButton->setBounds(gtba);
     _triadsButton->setBounds(tba);
     _pitchColorOffset01Slider.setBounds(topArea0_l); // pitch color offset rotary slider
 
@@ -382,6 +401,16 @@ void WilsonicKeyboardContainerComponent::buttonClicked(Button* button) {
     if (tb == button) {
         auto const show = _processor.restoreShowProportionalTriads();
         _processor.saveShowProportionalTriads(!show);
+        _keyboardComponent.repaint();
+
+        return;
+    }
+
+    // Geometric Triads
+    auto gtb = dynamic_cast<Button*>(_geometricTriadsButton.get());
+    if (gtb == button) {
+        auto const show = _processor.restoreShowGeometricTriads();
+        _processor.saveShowGeometricTriads(!show);
         _keyboardComponent.repaint();
 
         return;
@@ -508,6 +537,41 @@ DrawableImage WilsonicKeyboardContainerComponent::_getTriadsHelper(float saturat
     g.drawEllipse(root, majory, dotR, dotR, outlineThickness);
     g.drawEllipse(majorx, majory, dotR, dotR, outlineThickness);
     g.drawEllipse(fifth, majory, dotR, dotR, outlineThickness);
+    auto normal = DrawableImage(image);
+
+    return normal;
+}
+
+// One row of three dots with the middle dot exactly centred: the geometric
+// mean is the midpoint in pitch (log-frequency) space, which is the axis the
+// keyboard draws along. The proportional/subcontrary icon offsets its middle
+// dots to 0.6/0.4 for the same reason.
+DrawableImage WilsonicKeyboardContainerComponent::_getGeometricTriadsHelper(float saturationMultiplier01, bool big) {
+    auto const lineThickness = 4;
+    auto const outlineThickness = 2;
+    auto const w = big ? 80 : 100;
+    auto const h = big ? 80 : 100;
+    auto const dotR = 12;
+    auto const inset = 14;
+    auto const root = inset;
+    auto const fifth = w - inset;
+    auto const middlex = 0.5f * (root + fifth);
+    auto const middley = 0.5f * h - 0.5f * dotR;
+    auto const geometricColour = _processor.getAppSkin().getGeometricTriadDotColour().withMultipliedSaturation(saturationMultiplier01);
+    auto const whiteColour = Colours::white.withBrightness(saturationMultiplier01);
+    Image image(Image::ARGB, w, h, true);
+    Graphics g(image);
+    g.setColour(geometricColour);
+    // draw line, cheat y offset so ellipses are centered
+    g.drawLine(root, middley + 0.5f*dotR, fifth, middley + 0.5f*dotR, lineThickness);
+    g.fillEllipse(root, middley, dotR, dotR);
+    g.fillEllipse(middlex, middley, dotR, dotR);
+    g.fillEllipse(fifth, middley, dotR, dotR);
+    // white outline
+    g.setColour(whiteColour);
+    g.drawEllipse(root, middley, dotR, dotR, outlineThickness);
+    g.drawEllipse(middlex, middley, dotR, dotR, outlineThickness);
+    g.drawEllipse(fifth, middley, dotR, dotR, outlineThickness);
     auto normal = DrawableImage(image);
 
     return normal;

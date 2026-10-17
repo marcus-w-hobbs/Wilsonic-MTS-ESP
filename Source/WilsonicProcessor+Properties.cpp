@@ -52,6 +52,11 @@
  */
 #define SHOW_PROPORTIONAL_TRIADS "showProportionalTriads"
 /**
+ * @def SHOW_GEOMETRIC_TRIADS
+ * @brief The key for the show geometric triads property.
+ */
+#define SHOW_GEOMETRIC_TRIADS "showGeometricTriads"
+/**
  * @def SHOW_LINEAR_KEYBOARD
  * @brief The key for the show linear keyboard property.
  */
@@ -238,6 +243,32 @@ bool WilsonicProcessor::restoreShowProportionalTriads()
     String val = _properties->getValue(SHOW_PROPORTIONAL_TRIADS, "1");
     int const val_int = val.getIntValue();
     bool const retVal =(val_int == 0) ? false : true;
+
+    return retVal;
+}
+
+/**
+ * @brief Saves the show geometric triads setting to the properties.
+ * @param should_show Whether geometric triads should be shown.
+ */
+void WilsonicProcessor::saveShowGeometricTriads(bool should_show)
+{
+    String show = String(should_show ? 1 : 0);
+    _properties->setValue(SHOW_GEOMETRIC_TRIADS, show);
+    _properties->saveIfNeeded();
+}
+
+/**
+ * @brief Restores the show geometric triads setting from the properties.
+ * Defaults to hidden so the keyboard looks exactly as it did before
+ * geometric triads were computed; the toggle opts in.
+ * @return Whether geometric triads should be shown.
+ */
+bool WilsonicProcessor::restoreShowGeometricTriads()
+{
+    String val = _properties->getValue(SHOW_GEOMETRIC_TRIADS, "0");
+    int const val_int = val.getIntValue();
+    bool const retVal = (val_int == 0) ? false : true;
 
     return retVal;
 }
