@@ -5297,3 +5297,191 @@ N = 33 to 34 segment. That is one silver coincidence at the lowest
 possible complexity, on one lattice, and I note it without reading it.
 
 **Kept.** Gate G-038.
+
+## 2026-10-17 — Note: Erv's 1994 "Scale-Tree (Peirce Sequence)" top sheet reproduced from the Stern-Brocot tree
+
+Not an experiment. A check of the noble enumeration against Erv's hand,
+before Fork B's first registration. The bottom row of the top sheet
+(32 decimals, transcribed from the scan Marcus shared 2026-10-14) is
+reproduced 32 of 32 to ten decimals by one rule: build the tree to depth
+5 from 0/1 and 1/0, and for each leaf interval a/b .. c/d write the
+golden limit (a + φc)/(b + φd), with the roles of the two ends swapped on
+the right-hand side of each parent. Examples: 0.2763932023 is
+(1 + 2φ)/(4 + 7φ) for the interval 1/4 .. 2/7, 0.4198212717 is
+(2 + 3φ)/(5 + 7φ) for 2/5 .. 3/7, 0.6180339887 is (3 + 5φ)/(5 + 8φ) for
+3/5 .. 5/8. So the sheet is the complexity-8 golden catalogue, laid out
+by Farey interval, and `gold002.nobles` agrees with it entry for entry.
+This is the vocabulary the scale-tree search will use: a golden generator
+is a leaf interval and an alternating path, not a decimal.
+
+## 2026-10-17 — DYNMOS-001 pre-registration (entry BEFORE any implementation or run)
+
+**Fork B, first experiment.** Marcus chose the dynamic MOS as the road
+less traveled (2026-10-16): one generator stays fixed, and the MOS level
+and the murchana change to fit the Euler-genus subset the player has
+selected. The design unit is the subset, and the structure is any
+Euler genus, with no theory of seeds required. This experiment measures,
+for a fixed list of generators and two seed sets, the smallest MOS level
+of each generator that keeps each subset playable, which window does it,
+and what a move between two dekanies costs.
+
+**Objects.** Two seed sets. The canonical eikosany 1·3·5·7·9·11 (20
+tones, 114 exact triads) and Marcus's 1·45·135·225·19·377 (20 distinct
+pitch classes, 30 exact triads, steps down to 8.9 cents). For each, the
+SUBSET-MEL-000 census of 72 subsets (30 hexanies, 6 + 6 dekanies, 15 + 15
+tetrads) with the exact proportional and subcontrary triads of each
+subset's own tones (`cpsfit001.exact_triads`, `cpsfit002.prep_triads`).
+A subset with zero exact triads is VACUOUS: it has no harmonic
+constraint, it is excluded from every coverage count, and it is reported
+on its own. On the canonical set no subset is vacuous. On Marcus's set 24
+are: 12 hexanies and 6 + 6 tetrads. Summed over subsets, the canonical
+set has 684 subset-triad incidences and Marcus's has 228.
+
+**Generators (fixed list, cents).** Marcus's two favourites, both Erv
+recurrences: 285.823 (0.238186, H[n−1] + 2H[n−3]) and 502.722 (0.418935,
+H[n−1] + 32H[n−4]). Two shallow goldens: 503.786 (2/3, 1/2) and 317.170
+(3/11, 1/4). Six SUBFIT-002 winners: 351.444, 497.774, 443.128, 483.278,
+175.378, 316.778. Two controls: 116.676 (miracle) and 193.908 (the
+hexany count optimum). Note that 316.778 and 317.170 are 0.39 cents
+apart and give almost the same results.
+
+**Predicate (the plugin-shaped candidate).** For a generator g, the MOS
+levels are the Farey levels of g/1200 up to 72 notes, at least 5 notes
+(`gold002.levels_of`). For a level N and a window of N consecutive chain
+degrees, each subset tone goes to its nearest degree inside the window.
+The window keeps the subset when every tone is within 20 cents of its
+degree and every exact triad of the subset survives the mirror predicate
+(deviation under 2 cents, separation at least 2 cents) at the assigned
+pitches. The subset's level N* is the smallest level with a keeping
+window. The window is the one with the smallest largest tone error, then
+the smaller mode number. The referee is the same search over every N
+from 5 to 72, not only levels.
+
+**Transition cost.** For every pair of dekanies that both have a level
+N*, the common tones are counted, and a common tone is KEPT when both
+windows give it the same chain degree k and RETUNED otherwise. A pair
+with no common tones is a contrast pair. A pair with common tones is an
+affinity pair. The level change is |N*a − N*b|.
+
+**Predictions (scratch 2026-10-17, `dynmos_sweep.py`, same predicate).**
+- **P-D1 (Marcus's generators).** 285.823 keeps no subset of either
+  structure at any N up to 72. 502.722 keeps no subset of the canonical
+  set at any level (one hexany at a non-level N), and on Marcus's set it
+  keeps 4 of the 18 non-vacuous hexanies, all at N = 43, and no dekany.
+- **P-D2 (canonical coverage at levels).** Hexanies / dekanies / tetrads
+  kept, and subset-triad incidences kept of 684: 503.786: 2 / 0 / 2 / 12.
+  317.170: 8 / 0 / 10 / 120. 351.444: 14 / 2 / 14 / 292, every kept tone
+  within 9.5 cents. 497.774: 16 / 2 / 16 / 220, within 4.2. 443.128: 12 /
+  2 / 12 / 222. 483.278: 20 / 4 / 20 / 310. 175.378: 12 / 0 / 22 / 220.
+  316.778: 18 / 2 / 19 / 311. 116.676: 12 / 0 / 15 / 123. 193.908: 12 / 2 /
+  15 / 279.
+- **P-D3 (how small a level a subset needs, canonical).** The smallest
+  level that keeps any hexany is 17 (351.444) and the smallest that keeps
+  any dekany is 41 (351.444 and 497.774). Hexany N* multisets: 351.444
+  {17 ×3, 24 ×3, 41 ×8}. 497.774 {29 ×6, 41 ×6, 53 ×4}. 316.778 {19, 34 ×6,
+  53 ×11}. 443.128 {19 ×2, 27, 46 ×9}. 483.278 {32, 37, 42 ×5, 52 ×3, 57 ×6,
+  62 ×2, 67 ×2}. 116.676 {31 ×9, 41 ×3}. Dekany N*: 351.444 {41, 41},
+  497.774 {41, 41}, 443.128 {46, 46}, 316.778 {53, 53}, 483.278 {62, 62,
+  67, 67}, 193.908 {68, 68}.
+- **P-D4 (Marcus's set at levels, with denominators 18 hexanies, 12 dekanies,
+  18 tetrads, 228 incidences).** 316.778: 14 / 7 / 18 / 193. 317.170: 14 /
+  6 / 18 / 178. 193.908: 15 / 6 / 17 / 179. 443.128: 12 / 6 / 15 / 171.
+  483.278: 16 / 5 / 17 / 169. 351.444: 12 / 4 / 17 / 149. 116.676: 12 / 5 /
+  12 / 75. 175.378: 6 / 2 / 16 / 76. 497.774: 7 / 2 / 11 / 55. 503.786: 6 /
+  4 / 6 / 30. The smallest level that keeps a dekany of this set is 15
+  (316.778), and hexanies are kept at 11 (316.778 and 317.170).
+- **P-D5 (transitions).** Canonical: only 483.278 has affinity pairs, 4 of
+  them at levels 62 and 67, with 0 of 20 common tones retuned. 351.444,
+  497.774, 443.128, 316.778 and 193.908 keep exactly 2 dekanies each,
+  which form 1 contrast pair and no affinity pair. Marcus's set: 316.778
+  has 18 affinity pairs with 36 of 90 common tones retuned and 3 contrast
+  pairs. 317.170: 12 pairs, 20 of 60. 443.128: 12 pairs, 25 of 60.
+  193.908: 12 pairs, 21 of 60. 483.278: 8 pairs, 11 of 40. 116.676: 8
+  pairs, 9 of 40. 351.444: 4 pairs, 9 of 20. 503.786: 4 pairs, 3 of 20.
+- **P-D6 (what the level restriction costs).** On the canonical set the
+  referee keeps the same hexany count as the levels for 497.774, 443.128,
+  483.278, 316.778, 116.676, 193.908 and 285.823, and more for 502.722 (1
+  vs 0), 503.786 (4 vs 2), 317.170 (12 vs 8), 351.444 (16 vs 14) and
+  175.378 (22 vs 12, and 4 dekanies vs 0).
+
+**What this already says, before the run.** Fork B makes a hexany of the
+canonical eikosany playable in 17 to 34 notes where Fork A needed 41 to
+72, and a dekany in 41. On Marcus's set the just structure itself has
+only 30 exact triads and 12 of its 30 hexanies have none. So the triad
+proxy has nothing to say about those 12, and the contrast Marcus hears
+in that set is at least partly something the proxy does not measure.
+That is the incompleteness case he predicted, stated as a count.
+
+**Deliverables.** `dynmos001.py` and `tests/test_dynmos001.py` green
+before the first run, receipts `results/dynmos001.jsonl` (one row per
+generator and seed set) and `results/dynmos001_summary.json`, Scala
+exports under `results/scl/dynmos001/`: the 17-note level of 351.444 with
+its canonical hexany, the 29-note level of 497.774 with its hexany, and
+the 15-note level of 316.778 with Marcus's dekany. A gate.
+
+## 2026-10-17 — DYNMOS-001 results + verdicts
+
+**Run:** `dynmos001.py` v1.0.1 (about ten seconds per run with 8 workers
+over 24 generator × seed-set tasks. Receipts `results/dynmos001.jsonl`,
+24 rows, and `results/dynmos001_summary.json`. Two runs bit-identical,
+`cmp` on both receipts and the three .scl.) Lattice suite 438/438 green
+before the first run (9 new tests). Version 1.0.1 fixed a verdict
+bookkeeping slip: P-D3 and P-D4 compared a registered generator set with
+a sorted measured tuple in registration order. No prediction or
+measurement changed. Both runs were repeated after the fix.
+
+**All six predictions KEPT.** As a reproduction of the scratch this was
+expected. The content is in the tables, which are the first numbers for
+Fork B.
+
+- **P-D1 — KEPT.** 285.823 keeps nothing at any N on either set. 502.722
+  keeps nothing of the canonical set at a level and 4 of 18 non-vacuous
+  hexanies of Marcus's set, all at 43 notes, no dekany.
+- **P-D2 — KEPT.** Canonical coverage at levels as registered.
+- **P-D3 — KEPT.** A canonical hexany is first playable at 17 notes
+  (351.444) and a canonical dekany at 41 (351.444 and 497.774). The level
+  multisets match.
+- **P-D4 — KEPT.** Marcus's set: 24 vacuous subsets, 30 exact triads,
+  coverage as registered, a dekany at 15 notes (316.778) and hexanies at
+  11 (316.778 and 317.170).
+- **P-D5 — KEPT.** Transition tables as registered.
+- **P-D6 — KEPT.** The level restriction costs nothing in hexanies for
+  seven of the twelve generators on the canonical set and costs 175.378
+  the most (12 vs 22 hexanies, 0 vs 4 dekanies).
+
+**What Fork B buys, in numbers (canonical eikosany).** Fork A needed 41
+notes for the first MOS that keeps 14 hexanies and 2 dekanies, and 72
+for 20 and 4. Under Fork B the same generators keep individual hexanies
+in 17 to 34 notes: 351.444 keeps three at 17 and three at 24, 497.774
+keeps six at 29, 316.778 keeps one at 19 and six at 34, 443.128 keeps
+two at 19. Dekanies still need 41 to 68 notes, because a dekany carries
+18 to 41 exact triads and the chain has to hold them all at once. So the
+dynamic MOS halves the melodic scale for a hexany and does nothing for a
+dekany. The transition tables say why contrast is cheap and affinity is
+not yet measured on the canonical set: each generator keeps exactly two
+dekanies and they are complements, so there is one contrast pair and no
+affinity pair, except 483.278, which keeps four dekanies at 62 and 67
+notes with every common tone kept at the same degree.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) A retuned
+common tone means the two windows gave the same just tone two different
+chain degrees, which is the per-subset version of the non-homomorphic
+finding of SUBFIT-002. On the canonical set 483.278 retunes nothing,
+which is consistent with its single val. On Marcus's set 316.778 retunes
+36 of 90 common tones across its 18 affinity pairs, so a player moving
+between those dekanies would hear 40 percent of the shared tones move.
+(2) Marcus's set is the incompleteness case stated as a count: 30 exact
+triads in the whole genus against 114, 12 of 30 hexanies with none, and
+steps of 8.9 and 12.3 cents between tones in the 3·5 cluster. The proxy
+is silent on 24 of its 72 subsets. The set's high coverage numbers
+(316.778 keeps 14 of 18 hexanies and 7 of 12 dekanies) are coverage of
+a smaller harmonic demand, and the ear gate decides what the near-unison
+pairs are doing. (3) 316.778 and 317.170 are 0.39 cents apart and give
+the same coverage to within one hexany, so the Erv golden is a free
+choice inside that generator's segment here too. (4) Marcus's two
+favourite generators do not fit either structure under this proxy. Both
+are Erv recurrences chosen for other scales and other reasons, and the
+right reading is that the proxy does not see what he hears in them,
+which is the charter's case, and not that the generators are wrong.
+
+**Kept.** Gate G-039.

@@ -164,6 +164,26 @@ footer { font-size: 12px; color: var(--muted); max-width: 72ch; }
 </section>
 
 <section class="station">
+  <div class="head"><h2>The sentence, one line at a time</h2></div>
+  <div class="prose">
+    <p><b>What a chain can play.</b> Every pitch in a generator chain is <em>k·g</em> + <em>m</em>·1200 cents, for integers k and m. That is the complete menu. The chain has no other pitches.</p>
+    <p><b>What a just interval is.</b> 1200·log<sub>2</sub>(3/2) equals 1200·log<sub>2</sub>(3) − 1200. 1200·log<sub>2</sub>(5/4) equals 1200·log<sub>2</sub>(5) − 2400. Every just interval is an integer combination of a few fixed irrational numbers, the logs of the primes, plus whole octaves.</p>
+    <p><b>What harmony demands.</b> "The chain plays 5/4" means this: there are integers k and m such that <em>k·g</em> + <em>m</em>·1200 is within ε of 1200·log<sub>2</sub>(5). The unknowns are integers. The constants are real numbers. An inequality of that shape is a Diophantine approximation. That is the full content of the sentence. The prime logs are the targets, and integer multiples of <em>g</em> must reach them.</p>
+    <p><b>An example you know.</b> Quarter-comma meantone has <em>g</em> = 696.578 cents. The table gives the integer k that reaches each prime, the octave count m, and the error.</p>
+    <div class="tablewrap"><table><thead><tr><th>prime</th><th class="num">target (cents)</th><th class="num">k</th><th class="num">m</th><th class="num">k·g + m·1200</th><th class="num">error</th></tr></thead><tbody>
+      <tr><td class="mono">3</td><td class="num">1901.96</td><td class="num">1</td><td class="num">1</td><td class="num">1896.58</td><td class="num">−5.38</td></tr>
+      <tr><td class="mono">5</td><td class="num">2786.31</td><td class="num">4</td><td class="num">0</td><td class="num">2786.31</td><td class="num">0.00</td></tr>
+      <tr><td class="mono">7</td><td class="num">3368.83</td><td class="num">10</td><td class="num">−3</td><td class="num">3365.78</td><td class="num">−3.05</td></tr>
+    </tbody></table></div>
+    <p>The three integers 1, 4, 10 are the val. They are the solution of the Diophantine problem. A comma is a place where two different solutions give the same pitch.</p>
+    <p><b>Nobility is the same question with a different target.</b> The continued fraction of <em>g</em>/1200 measures how close <em>k·g</em> ever comes to a whole number of octaves. That is a Diophantine question about <em>k·g</em> with the target 0. A generator whose chain almost closes at k = 12, 19 or 31 behaves like an equal temperament there. Its large and small steps become almost equal, and the MOS degenerates. A noble generator keeps its multiples as far from whole octaves as a number of that size can. Hurwitz's theorem names φ as the extreme case.</p>
+    <p><b>So the two halves share one left-hand side.</b> Harmony wants <em>k·g</em> near log<sub>2</sub> 3, log<sub>2</sub> 5 and log<sub>2</sub> 7. Nobility wants <em>k·g</em> far from 0. No arithmetic connects "far from 0" with "near 1.58496". The number 1.58496 is only the log of 3, and the continued fraction of <em>g</em> has no information about it. That is the full content of "no mechanism".</p>
+    <p><b>Why no one wrote it this way.</b> Erv had both halves. The scale tree is the continued fraction of <em>g</em>, so it is the nobility half. The lattices are the prime logs, so they are the harmony half. He kept them on separate sheets. The vocabulary for the harmony half as integer solutions, vals and kernels, came from regular temperament theory in the early 2000s. The vocabulary for the nobility half, badly approximable numbers, came from number theory. The sentence is what you get when you write both halves as one inequality.</p>
+    <p><b>Two consequences.</b> The targets do not have to be primes. Any set of just intervals works, which is why the target box on this page accepts ratios. And the triad analyzer adds one more layer in linear frequency, the sum and difference coincidences. The sentence covers the first layer only.</p>
+  </div>
+</section>
+
+<section class="station">
   <div class="head"><h2>What I think the sentence means</h2></div>
   <div class="prose">
     <p><b>The harmony half.</b> A generator chain plays the just interval p/q when some integer multiple of the generator falls within the tolerance of 1200·log<sub>2</sub>(p/q), modulo the octave. This is a simultaneous inhomogeneous Diophantine approximation. One real number <em>g</em> must approximate several fixed real targets with small integer multipliers. The multipliers are the val. The primes set the targets. This condition does not refer to the continued fraction of <em>g</em>.</p>

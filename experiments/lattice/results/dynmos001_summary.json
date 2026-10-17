@@ -1,0 +1,2087 @@
+{
+ "N_range": [
+  5,
+  72
+ ],
+ "epsilon_lock_cents": 2.0,
+ "experiment": "DYNMOS-001",
+ "generators": {
+  "breed193908": 193.908,
+  "gold317170": 317.17,
+  "gold503786": 503.786,
+  "marcus238186": 285.823,
+  "marcus418935": 502.722,
+  "miracle116676": 116.676,
+  "sub175378": 175.378,
+  "sub316778": 316.778,
+  "sub351444": 351.444,
+  "sub443128": 443.128,
+  "sub483278": 483.278,
+  "sub497774": 497.774
+ },
+ "genus": {
+  "canonical": {
+   "distinct_pc": 20,
+   "exact_triads": 114,
+   "max_step_cents": 102.04332462695922,
+   "min_step_cents": 31.194250239533403,
+   "n_tones": 20
+  },
+  "marcus": {
+   "distinct_pc": 20,
+   "exact_triads": 30,
+   "max_step_cents": 191.61242559656534,
+   "min_step_cents": 8.919557405744627,
+   "n_tones": 20
+  }
+ },
+ "runner_version": "1.0.1",
+ "scl_files": [
+  "dynmos001_canonical_sub351444_N17_hexany[in=5,out=7].scl",
+  "dynmos001_canonical_sub497774_N29_hexany[in=11,out=5].scl",
+  "dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none].scl"
+ ],
+ "scorer_version": "1.1.0",
+ "seedsets": {
+  "canonical": [
+   1,
+   3,
+   5,
+   7,
+   9,
+   11
+  ],
+  "marcus": [
+   1,
+   45,
+   135,
+   225,
+   19,
+   377
+  ]
+ },
+ "table": [
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {},
+    "hexany": [
+     0,
+     30
+    ],
+    "incidences": [
+     0,
+     684
+    ],
+    "max_err": null,
+    "tetrad": [
+     0,
+     30
+    ]
+   },
+   "g_cents": 285.823,
+   "generator": "marcus238186",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {},
+    "hexany": [
+     0,
+     30
+    ],
+    "incidences": [
+     0,
+     684
+    ],
+    "max_err": null,
+    "tetrad": [
+     0,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    9,
+    13,
+    17,
+    21,
+    25,
+    46,
+    67
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {},
+    "hexany": [
+     0,
+     18
+    ],
+    "incidences": [
+     0,
+     228
+    ],
+    "max_err": null,
+    "tetrad": [
+     0,
+     18
+    ]
+   },
+   "g_cents": 285.823,
+   "generator": "marcus238186",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {},
+    "hexany": [
+     0,
+     18
+    ],
+    "incidences": [
+     0,
+     228
+    ],
+    "max_err": null,
+    "tetrad": [
+     0,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    9,
+    13,
+    17,
+    21,
+    25,
+    46,
+    67
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "71": 1
+    },
+    "hexany": [
+     1,
+     30
+    ],
+    "incidences": [
+     6,
+     684
+    ],
+    "max_err": 10.490284404389968,
+    "tetrad": [
+     3,
+     30
+    ]
+   },
+   "g_cents": 502.722,
+   "generator": "marcus418935",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {},
+    "hexany": [
+     0,
+     30
+    ],
+    "incidences": [
+     0,
+     684
+    ],
+    "max_err": null,
+    "tetrad": [
+     0,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    19,
+    31,
+    43
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "44": 4
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "37": 2,
+     "38": 2,
+     "44": 2
+    },
+    "hexany": [
+     6,
+     18
+    ],
+    "incidences": [
+     30,
+     228
+    ],
+    "max_err": 14.875567943393207,
+    "tetrad": [
+     6,
+     18
+    ]
+   },
+   "g_cents": 502.722,
+   "generator": "marcus418935",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "43": 4
+    },
+    "hexany": [
+     4,
+     18
+    ],
+    "incidences": [
+     14,
+     228
+    ],
+    "max_err": 14.875567943393207,
+    "tetrad": [
+     6,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    19,
+    31,
+    43
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "27": 1,
+     "36": 1,
+     "63": 2
+    },
+    "hexany": [
+     4,
+     30
+    ],
+    "incidences": [
+     21,
+     684
+    ],
+    "max_err": 18.167908199899102,
+    "tetrad": [
+     5,
+     30
+    ]
+   },
+   "g_cents": 503.786,
+   "generator": "gold503786",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "31": 1,
+     "50": 1
+    },
+    "hexany": [
+     2,
+     30
+    ],
+    "incidences": [
+     12,
+     684
+    ],
+    "max_err": 18.167908199899102,
+    "tetrad": [
+     2,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    19,
+    31,
+    50
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "18": 1,
+     "21": 1,
+     "29": 1,
+     "30": 1
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "12": 2,
+     "18": 2,
+     "22": 1,
+     "26": 1
+    },
+    "hexany": [
+     6,
+     18
+    ],
+    "incidences": [
+     30,
+     228
+    ],
+    "max_err": 19.875301515143292,
+    "tetrad": [
+     6,
+     18
+    ]
+   },
+   "g_cents": 503.786,
+   "generator": "gold503786",
+   "level": {
+    "dekN": {
+     "19": 1,
+     "31": 3
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "12": 2,
+     "19": 2,
+     "31": 2
+    },
+    "hexany": [
+     6,
+     18
+    ],
+    "incidences": [
+     30,
+     228
+    ],
+    "max_err": 18.417587650308633,
+    "tetrad": [
+     6,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    19,
+    31,
+    50
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 4,
+    "common": 20,
+    "contrast_pairs": 2,
+    "levels_used": [
+     19,
+     31
+    ],
+    "retuned": 3
+   }
+  },
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "19": 1,
+     "22": 1,
+     "24": 2,
+     "39": 2,
+     "43": 1,
+     "44": 1,
+     "50": 1,
+     "51": 1,
+     "70": 2
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     148,
+     684
+    ],
+    "max_err": 19.414997403837333,
+    "tetrad": [
+     12,
+     30
+    ]
+   },
+   "g_cents": 317.17,
+   "generator": "gold317170",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "19": 1,
+     "34": 3,
+     "53": 4
+    },
+    "hexany": [
+     8,
+     30
+    ],
+    "incidences": [
+     120,
+     684
+    ],
+    "max_err": 17.77962033395943,
+    "tetrad": [
+     10,
+     30
+    ]
+   },
+   "levels": [
+    7,
+    11,
+    15,
+    19,
+    34,
+    53
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "20": 1,
+     "24": 1,
+     "25": 1,
+     "28": 3,
+     "61": 1
+    },
+    "dekany": [
+     7,
+     12
+    ],
+    "hexN": {
+     "11": 1,
+     "14": 1,
+     "15": 1,
+     "16": 1,
+     "19": 1,
+     "20": 2,
+     "24": 2,
+     "25": 1,
+     "27": 1,
+     "28": 3,
+     "48": 2,
+     "61": 2
+    },
+    "hexany": [
+     18,
+     18
+    ],
+    "incidences": [
+     189,
+     228
+    ],
+    "max_err": 19.08885494394599,
+    "tetrad": [
+     18,
+     18
+    ]
+   },
+   "g_cents": 317.17,
+   "generator": "gold317170",
+   "level": {
+    "dekN": {
+     "34": 6
+    },
+    "dekany": [
+     6,
+     12
+    ],
+    "hexN": {
+     "11": 1,
+     "15": 2,
+     "19": 2,
+     "34": 9
+    },
+    "hexany": [
+     14,
+     18
+    ],
+    "incidences": [
+     178,
+     228
+    ],
+    "max_err": 19.08885494394599,
+    "tetrad": [
+     18,
+     18
+    ]
+   },
+   "levels": [
+    7,
+    11,
+    15,
+    19,
+    34,
+    53
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 12,
+    "common": 60,
+    "contrast_pairs": 3,
+    "levels_used": [
+     34
+    ],
+    "retuned": 20
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "37": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "13": 1,
+     "15": 1,
+     "16": 1,
+     "19": 1,
+     "23": 2,
+     "28": 1,
+     "33": 1,
+     "35": 2,
+     "36": 2,
+     "37": 2,
+     "66": 2
+    },
+    "hexany": [
+     16,
+     30
+    ],
+    "incidences": [
+     304,
+     684
+    ],
+    "max_err": 9.47162033395989,
+    "tetrad": [
+     16,
+     30
+    ]
+   },
+   "g_cents": 351.444,
+   "generator": "sub351444",
+   "level": {
+    "dekN": {
+     "41": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "17": 3,
+     "24": 3,
+     "41": 8
+    },
+    "hexany": [
+     14,
+     30
+    ],
+    "incidences": [
+     292,
+     684
+    ],
+    "max_err": 9.47162033395989,
+    "tetrad": [
+     14,
+     30
+    ]
+   },
+   "levels": [
+    7,
+    10,
+    17,
+    24,
+    41,
+    58
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     41
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "27": 1,
+     "29": 1,
+     "36": 1,
+     "46": 1
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "17": 1,
+     "22": 1,
+     "23": 1,
+     "25": 1,
+     "26": 2,
+     "30": 1,
+     "36": 1,
+     "39": 1,
+     "40": 2,
+     "46": 1
+    },
+    "hexany": [
+     12,
+     18
+    ],
+    "incidences": [
+     149,
+     228
+    ],
+    "max_err": 19.987411484302356,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "g_cents": 351.444,
+   "generator": "sub351444",
+   "level": {
+    "dekN": {
+     "41": 3,
+     "58": 1
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "17": 1,
+     "24": 2,
+     "41": 8,
+     "58": 1
+    },
+    "hexany": [
+     12,
+     18
+    ],
+    "incidences": [
+     149,
+     228
+    ],
+    "max_err": 19.987411484302356,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "levels": [
+    7,
+    10,
+    17,
+    24,
+    41,
+    58
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 4,
+    "common": 20,
+    "contrast_pairs": 2,
+    "levels_used": [
+     41,
+     58
+    ],
+    "retuned": 9
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "40": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "23": 1,
+     "25": 2,
+     "26": 1,
+     "27": 2,
+     "39": 4,
+     "40": 2,
+     "46": 2,
+     "47": 2
+    },
+    "hexany": [
+     16,
+     30
+    ],
+    "incidences": [
+     220,
+     684
+    ],
+    "max_err": 12.845620333959232,
+    "tetrad": [
+     16,
+     30
+    ]
+   },
+   "g_cents": 497.774,
+   "generator": "sub497774",
+   "level": {
+    "dekN": {
+     "41": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "29": 6,
+     "41": 6,
+     "53": 4
+    },
+    "hexany": [
+     16,
+     30
+    ],
+    "incidences": [
+     220,
+     684
+    ],
+    "max_err": 4.241656229591172,
+    "tetrad": [
+     16,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    17,
+    29,
+    41,
+    53
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     41
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "23": 1,
+     "30": 1,
+     "56": 1,
+     "57": 1
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "14": 1,
+     "18": 1,
+     "21": 1,
+     "23": 1,
+     "27": 1,
+     "30": 1,
+     "53": 1,
+     "54": 3
+    },
+    "hexany": [
+     10,
+     18
+    ],
+    "incidences": [
+     67,
+     228
+    ],
+    "max_err": 19.8235679433933,
+    "tetrad": [
+     11,
+     18
+    ]
+   },
+   "g_cents": 497.774,
+   "generator": "sub497774",
+   "level": {
+    "dekN": {
+     "29": 1,
+     "41": 1
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "17": 1,
+     "29": 4,
+     "41": 1,
+     "53": 1
+    },
+    "hexany": [
+     7,
+     18
+    ],
+    "incidences": [
+     55,
+     228
+    ],
+    "max_err": 19.8235679433933,
+    "tetrad": [
+     11,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    17,
+    29,
+    41,
+    53
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     29,
+     41
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "39": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "17": 1,
+     "18": 1,
+     "27": 1,
+     "32": 3,
+     "36": 1,
+     "37": 3,
+     "39": 2
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     222,
+     684
+    ],
+    "max_err": 19.609002596162327,
+    "tetrad": [
+     12,
+     30
+    ]
+   },
+   "g_cents": 443.128,
+   "generator": "sub443128",
+   "level": {
+    "dekN": {
+     "46": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "19": 2,
+     "27": 1,
+     "46": 9
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     222,
+     684
+    ],
+    "max_err": 19.609002596162327,
+    "tetrad": [
+     12,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    8,
+    11,
+    19,
+    27,
+    46,
+    65
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     46
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "24": 1,
+     "26": 2,
+     "28": 1,
+     "33": 1,
+     "34": 1,
+     "35": 1
+    },
+    "dekany": [
+     7,
+     12
+    ],
+    "hexN": {
+     "14": 2,
+     "15": 1,
+     "19": 1,
+     "23": 1,
+     "24": 4,
+     "26": 1,
+     "30": 1,
+     "33": 1,
+     "34": 2
+    },
+    "hexany": [
+     14,
+     18
+    ],
+    "incidences": [
+     190,
+     228
+    ],
+    "max_err": 19.732138482950177,
+    "tetrad": [
+     15,
+     18
+    ]
+   },
+   "g_cents": 443.128,
+   "generator": "sub443128",
+   "level": {
+    "dekN": {
+     "27": 3,
+     "46": 3
+    },
+    "dekany": [
+     6,
+     12
+    ],
+    "hexN": {
+     "19": 4,
+     "27": 6,
+     "46": 2
+    },
+    "hexany": [
+     12,
+     18
+    ],
+    "incidences": [
+     171,
+     228
+    ],
+    "max_err": 19.493567943392918,
+    "tetrad": [
+     15,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    8,
+    11,
+    19,
+    27,
+    46,
+    65
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 12,
+    "common": 60,
+    "contrast_pairs": 3,
+    "levels_used": [
+     27,
+     46
+    ],
+    "retuned": 25
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "59": 2,
+     "65": 2
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "30": 1,
+     "36": 1,
+     "38": 2,
+     "40": 1,
+     "42": 2,
+     "48": 3,
+     "53": 2,
+     "57": 4,
+     "59": 2,
+     "65": 2
+    },
+    "hexany": [
+     20,
+     30
+    ],
+    "incidences": [
+     310,
+     684
+    ],
+    "max_err": 15.624151166117372,
+    "tetrad": [
+     20,
+     30
+    ]
+   },
+   "g_cents": 483.278,
+   "generator": "sub483278",
+   "level": {
+    "dekN": {
+     "62": 2,
+     "67": 2
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "32": 1,
+     "37": 1,
+     "42": 5,
+     "52": 3,
+     "57": 6,
+     "62": 2,
+     "67": 2
+    },
+    "hexany": [
+     20,
+     30
+    ],
+    "incidences": [
+     310,
+     684
+    ],
+    "max_err": 15.624151166117372,
+    "tetrad": [
+     20,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    17,
+    22,
+    27,
+    32,
+    37,
+    42,
+    47,
+    52,
+    57,
+    62,
+    67,
+    72
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 4,
+    "common": 20,
+    "contrast_pairs": 2,
+    "levels_used": [
+     62,
+     67
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "55": 1,
+     "60": 1,
+     "61": 1,
+     "66": 1,
+     "71": 1
+    },
+    "dekany": [
+     5,
+     12
+    ],
+    "hexN": {
+     "45": 1,
+     "46": 2,
+     "48": 4,
+     "50": 1,
+     "53": 1,
+     "54": 1,
+     "55": 1,
+     "57": 2,
+     "60": 1,
+     "61": 2
+    },
+    "hexany": [
+     16,
+     18
+    ],
+    "incidences": [
+     169,
+     228
+    ],
+    "max_err": 17.451872054699834,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "g_cents": 483.278,
+   "generator": "sub483278",
+   "level": {
+    "dekN": {
+     "57": 1,
+     "62": 2,
+     "67": 1,
+     "72": 1
+    },
+    "dekany": [
+     5,
+     12
+    ],
+    "hexN": {
+     "47": 3,
+     "52": 5,
+     "57": 5,
+     "62": 3
+    },
+    "hexany": [
+     16,
+     18
+    ],
+    "incidences": [
+     169,
+     228
+    ],
+    "max_err": 15.623999021547206,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    7,
+    12,
+    17,
+    22,
+    27,
+    32,
+    37,
+    42,
+    47,
+    52,
+    57,
+    62,
+    67,
+    72
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 8,
+    "common": 40,
+    "contrast_pairs": 2,
+    "levels_used": [
+     57,
+     62,
+     67,
+     72
+    ],
+    "retuned": 11
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "51": 2,
+     "60": 2
+    },
+    "dekany": [
+     4,
+     12
+    ],
+    "hexN": {
+     "15": 1,
+     "25": 1,
+     "28": 3,
+     "30": 1,
+     "45": 1,
+     "47": 3,
+     "48": 2,
+     "51": 2,
+     "52": 2,
+     "56": 2,
+     "60": 2,
+     "62": 2
+    },
+    "hexany": [
+     22,
+     30
+    ],
+    "incidences": [
+     434,
+     684
+    ],
+    "max_err": 11.521056769856841,
+    "tetrad": [
+     22,
+     30
+    ]
+   },
+   "g_cents": 175.378,
+   "generator": "sub175378",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "20": 1,
+     "27": 1,
+     "34": 4,
+     "48": 6
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     220,
+     684
+    ],
+    "max_err": 11.521056769856841,
+    "tetrad": [
+     22,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    13,
+    20,
+    27,
+    34,
+    41,
+    48
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "33": 1,
+     "34": 1
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "23": 1,
+     "25": 2,
+     "26": 1,
+     "27": 1,
+     "33": 1,
+     "51": 1,
+     "55": 1,
+     "64": 1
+    },
+    "hexany": [
+     9,
+     18
+    ],
+    "incidences": [
+     90,
+     228
+    ],
+    "max_err": 19.10956794339313,
+    "tetrad": [
+     18,
+     18
+    ]
+   },
+   "g_cents": 175.378,
+   "generator": "sub175378",
+   "level": {
+    "dekN": {
+     "34": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "27": 5,
+     "34": 1
+    },
+    "hexany": [
+     6,
+     18
+    ],
+    "incidences": [
+     76,
+     228
+    ],
+    "max_err": 19.10956794339313,
+    "tetrad": [
+     16,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    13,
+    20,
+    27,
+    34,
+    41,
+    48
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     34
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "40": 1,
+     "41": 1
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "17": 1,
+     "24": 2,
+     "27": 1,
+     "29": 1,
+     "33": 1,
+     "34": 1,
+     "35": 1,
+     "37": 1,
+     "39": 2,
+     "40": 2,
+     "41": 1,
+     "45": 2,
+     "50": 2
+    },
+    "hexany": [
+     18,
+     30
+    ],
+    "incidences": [
+     311,
+     684
+    ],
+    "max_err": 13.839056769855915,
+    "tetrad": [
+     19,
+     30
+    ]
+   },
+   "g_cents": 316.778,
+   "generator": "sub316778",
+   "level": {
+    "dekN": {
+     "53": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "19": 1,
+     "34": 6,
+     "53": 11
+    },
+    "hexany": [
+     18,
+     30
+    ],
+    "incidences": [
+     311,
+     684
+    ],
+    "max_err": 13.839056769855915,
+    "tetrad": [
+     19,
+     30
+    ]
+   },
+   "levels": [
+    7,
+    11,
+    15,
+    19,
+    34,
+    53,
+    72
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     53
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "13": 1,
+     "20": 1,
+     "24": 1,
+     "25": 1,
+     "31": 1,
+     "33": 1,
+     "42": 1
+    },
+    "dekany": [
+     7,
+     12
+    ],
+    "hexN": {
+     "11": 1,
+     "12": 3,
+     "13": 1,
+     "15": 1,
+     "19": 1,
+     "20": 1,
+     "24": 1,
+     "25": 1,
+     "28": 2,
+     "33": 1,
+     "42": 1
+    },
+    "hexany": [
+     14,
+     18
+    ],
+    "incidences": [
+     193,
+     228
+    ],
+    "max_err": 18.748551811090692,
+    "tetrad": [
+     18,
+     18
+    ]
+   },
+   "g_cents": 316.778,
+   "generator": "sub316778",
+   "level": {
+    "dekN": {
+     "15": 1,
+     "34": 5,
+     "53": 1
+    },
+    "dekany": [
+     7,
+     12
+    ],
+    "hexN": {
+     "11": 1,
+     "15": 5,
+     "19": 1,
+     "34": 6,
+     "53": 1
+    },
+    "hexany": [
+     14,
+     18
+    ],
+    "incidences": [
+     193,
+     228
+    ],
+    "max_err": 18.748551811090692,
+    "tetrad": [
+     18,
+     18
+    ]
+   },
+   "levels": [
+    7,
+    11,
+    15,
+    19,
+    34,
+    53,
+    72
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 18,
+    "common": 90,
+    "contrast_pairs": 3,
+    "levels_used": [
+     15,
+     34,
+     53
+    ],
+    "retuned": 36
+   }
+  },
+  {
+   "any": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "22": 1,
+     "24": 1,
+     "25": 1,
+     "26": 1,
+     "28": 2,
+     "29": 2,
+     "31": 1,
+     "32": 1,
+     "34": 2
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     123,
+     684
+    ],
+    "max_err": 13.20705676985608,
+    "tetrad": [
+     15,
+     30
+    ]
+   },
+   "g_cents": 116.676,
+   "generator": "miracle116676",
+   "level": {
+    "dekN": {},
+    "dekany": [
+     0,
+     12
+    ],
+    "hexN": {
+     "31": 9,
+     "41": 3
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     123,
+     684
+    ],
+    "max_err": 13.20705676985608,
+    "tetrad": [
+     15,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    21,
+    31,
+    41,
+    72
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 0,
+    "levels_used": [],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "28": 1,
+     "30": 1,
+     "37": 3
+    },
+    "dekany": [
+     5,
+     12
+    ],
+    "hexN": {
+     "16": 1,
+     "23": 2,
+     "26": 2,
+     "27": 1,
+     "30": 1,
+     "32": 1,
+     "35": 2,
+     "37": 2
+    },
+    "hexany": [
+     12,
+     18
+    ],
+    "incidences": [
+     75,
+     228
+    ],
+    "max_err": 18.632145921441406,
+    "tetrad": [
+     12,
+     18
+    ]
+   },
+   "g_cents": 116.676,
+   "generator": "miracle116676",
+   "level": {
+    "dekN": {
+     "31": 2,
+     "41": 3
+    },
+    "dekany": [
+     5,
+     12
+    ],
+    "hexN": {
+     "21": 1,
+     "31": 6,
+     "41": 5
+    },
+    "hexany": [
+     12,
+     18
+    ],
+    "incidences": [
+     75,
+     228
+    ],
+    "max_err": 18.632145921441406,
+    "tetrad": [
+     12,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    21,
+    31,
+    41,
+    72
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 8,
+    "common": 40,
+    "contrast_pairs": 2,
+    "levels_used": [
+     31,
+     41
+    ],
+    "retuned": 9
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "54": 1,
+     "58": 1
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "21": 1,
+     "23": 1,
+     "47": 1,
+     "49": 1,
+     "51": 2,
+     "54": 3,
+     "58": 3
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     286,
+     684
+    ],
+    "max_err": 17.47728353900311,
+    "tetrad": [
+     18,
+     30
+    ]
+   },
+   "g_cents": 193.908,
+   "generator": "breed193908",
+   "level": {
+    "dekN": {
+     "68": 2
+    },
+    "dekany": [
+     2,
+     12
+    ],
+    "hexN": {
+     "25": 2,
+     "68": 10
+    },
+    "hexany": [
+     12,
+     30
+    ],
+    "incidences": [
+     279,
+     684
+    ],
+    "max_err": 16.72094323014403,
+    "tetrad": [
+     15,
+     30
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    13,
+    19,
+    25,
+    31,
+    37,
+    68
+   ],
+   "seeds": "canonical",
+   "transitions": {
+    "affinity_pairs": 0,
+    "common": 0,
+    "contrast_pairs": 1,
+    "levels_used": [
+     68
+    ],
+    "retuned": 0
+   }
+  },
+  {
+   "any": {
+    "dekN": {
+     "30": 1,
+     "31": 1,
+     "37": 3,
+     "46": 1
+    },
+    "dekany": [
+     6,
+     12
+    ],
+    "hexN": {
+     "21": 2,
+     "22": 2,
+     "25": 1,
+     "29": 2,
+     "30": 2,
+     "31": 1,
+     "32": 2,
+     "35": 1,
+     "37": 2
+    },
+    "hexany": [
+     15,
+     18
+    ],
+    "incidences": [
+     179,
+     228
+    ],
+    "max_err": 17.725587650309535,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "g_cents": 193.908,
+   "generator": "breed193908",
+   "level": {
+    "dekN": {
+     "31": 2,
+     "37": 3,
+     "68": 1
+    },
+    "dekany": [
+     6,
+     12
+    ],
+    "hexN": {
+     "25": 5,
+     "31": 5,
+     "37": 5
+    },
+    "hexany": [
+     15,
+     18
+    ],
+    "incidences": [
+     179,
+     228
+    ],
+    "max_err": 17.725587650309535,
+    "tetrad": [
+     17,
+     18
+    ]
+   },
+   "levels": [
+    5,
+    6,
+    7,
+    13,
+    19,
+    25,
+    31,
+    37,
+    68
+   ],
+   "seeds": "marcus",
+   "transitions": {
+    "affinity_pairs": 12,
+    "common": 60,
+    "contrast_pairs": 3,
+    "levels_used": [
+     31,
+     37,
+     68
+    ],
+    "retuned": 21
+   }
+  }
+ ],
+ "tone_cap_cents": 20.0,
+ "verdicts": {
+  "P-D1": {
+   "failures": [],
+   "kept": true
+  },
+  "P-D2": {
+   "failures": [],
+   "kept": true
+  },
+  "P-D3": {
+   "failures": [],
+   "kept": true
+  },
+  "P-D4": {
+   "failures": [],
+   "kept": true
+  },
+  "P-D5": {
+   "failures": [],
+   "kept": true
+  },
+  "P-D6": {
+   "failures": [],
+   "kept": true
+  }
+ }
+}
