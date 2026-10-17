@@ -46,7 +46,7 @@ import subsetmel000 as sm  # noqa: E402
 from families.cps import cps_scale  # noqa: E402
 from scorer import SCORER_VERSION  # noqa: E402
 
-DYNMOS001_VERSION = "1.0.0"
+DYNMOS001_VERSION = "1.0.1"   # 1.0.1: P-D4 compares the registered generator set as a sorted tuple (bookkeeping fix, no prediction changed)
 EXPERIMENT = "DYNMOS-001"
 RESULTS_DIR = _HERE / "results"
 RESULTS = RESULTS_DIR / "dynmos001.jsonl"
@@ -274,7 +274,7 @@ def verdict_p_d3(rows) -> dict:
     dek_at = tuple(sorted(g for g, c in covs.items() if c["dekN"] and min(c["dekN"]) == min_dek))
     if min_hex != p["min_hex"]:
         fails.append(f"min hexany level {min_hex}")
-    if (min_dek, dek_at) != p["min_dek"]:
+    if (min_dek, dek_at) != (p["min_dek"][0], tuple(sorted(p["min_dek"][1]))):
         fails.append(f"min dekany level {min_dek} at {dek_at}")
     for g, want in p["hexN"].items():
         if covs[g]["hexN"] != want:
@@ -304,7 +304,7 @@ def verdict_p_d4(rows) -> dict:
         fails.append(f"min dekany level {min_dek}")
     min_hex = min(min(c["hexN"]) for c in covs.values() if c["hexN"])
     hex_at = tuple(sorted(g for g, c in covs.items() if c["hexN"] and min(c["hexN"]) == min_hex))
-    if (min_hex, hex_at) != p["min_hex"]:
+    if (min_hex, hex_at) != (p["min_hex"][0], tuple(sorted(p["min_hex"][1]))):
         fails.append(f"min hexany level {min_hex} at {hex_at}")
     return {"kept": not fails, "failures": fails}
 
