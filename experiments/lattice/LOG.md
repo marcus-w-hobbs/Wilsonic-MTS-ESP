@@ -5418,3 +5418,70 @@ generator and seed set) and `results/dynmos001_summary.json`, Scala
 exports under `results/scl/dynmos001/`: the 17-note level of 351.444 with
 its canonical hexany, the 29-note level of 497.774 with its hexany, and
 the 15-note level of 316.778 with Marcus's dekany. A gate.
+
+## 2026-10-17 — DYNMOS-001 results + verdicts
+
+**Run:** `dynmos001.py` v1.0.1 (about ten seconds per run with 8 workers
+over 24 generator × seed-set tasks. Receipts `results/dynmos001.jsonl`,
+24 rows, and `results/dynmos001_summary.json`. Two runs bit-identical,
+`cmp` on both receipts and the three .scl.) Lattice suite 438/438 green
+before the first run (9 new tests). Version 1.0.1 fixed a verdict
+bookkeeping slip: P-D3 and P-D4 compared a registered generator set with
+a sorted measured tuple in registration order. No prediction or
+measurement changed. Both runs were repeated after the fix.
+
+**All six predictions KEPT.** As a reproduction of the scratch this was
+expected. The content is in the tables, which are the first numbers for
+Fork B.
+
+- **P-D1 — KEPT.** 285.823 keeps nothing at any N on either set. 502.722
+  keeps nothing of the canonical set at a level and 4 of 18 non-vacuous
+  hexanies of Marcus's set, all at 43 notes, no dekany.
+- **P-D2 — KEPT.** Canonical coverage at levels as registered.
+- **P-D3 — KEPT.** A canonical hexany is first playable at 17 notes
+  (351.444) and a canonical dekany at 41 (351.444 and 497.774). The level
+  multisets match.
+- **P-D4 — KEPT.** Marcus's set: 24 vacuous subsets, 30 exact triads,
+  coverage as registered, a dekany at 15 notes (316.778) and hexanies at
+  11 (316.778 and 317.170).
+- **P-D5 — KEPT.** Transition tables as registered.
+- **P-D6 — KEPT.** The level restriction costs nothing in hexanies for
+  seven of the twelve generators on the canonical set and costs 175.378
+  the most (12 vs 22 hexanies, 0 vs 4 dekanies).
+
+**What Fork B buys, in numbers (canonical eikosany).** Fork A needed 41
+notes for the first MOS that keeps 14 hexanies and 2 dekanies, and 72
+for 20 and 4. Under Fork B the same generators keep individual hexanies
+in 17 to 34 notes: 351.444 keeps three at 17 and three at 24, 497.774
+keeps six at 29, 316.778 keeps one at 19 and six at 34, 443.128 keeps
+two at 19. Dekanies still need 41 to 68 notes, because a dekany carries
+18 to 41 exact triads and the chain has to hold them all at once. So the
+dynamic MOS halves the melodic scale for a hexany and does nothing for a
+dekany. The transition tables say why contrast is cheap and affinity is
+not yet measured on the canonical set: each generator keeps exactly two
+dekanies and they are complements, so there is one contrast pair and no
+affinity pair, except 483.278, which keeps four dekanies at 62 and 67
+notes with every common tone kept at the same degree.
+
+**Measured, not registered (post-hoc lenses, labelled).** (1) A retuned
+common tone means the two windows gave the same just tone two different
+chain degrees, which is the per-subset version of the non-homomorphic
+finding of SUBFIT-002. On the canonical set 483.278 retunes nothing,
+which is consistent with its single val. On Marcus's set 316.778 retunes
+36 of 90 common tones across its 18 affinity pairs, so a player moving
+between those dekanies would hear 40 percent of the shared tones move.
+(2) Marcus's set is the incompleteness case stated as a count: 30 exact
+triads in the whole genus against 114, 12 of 30 hexanies with none, and
+steps of 8.9 and 12.3 cents between tones in the 3·5 cluster. The proxy
+is silent on 24 of its 72 subsets. The set's high coverage numbers
+(316.778 keeps 14 of 18 hexanies and 7 of 12 dekanies) are coverage of
+a smaller harmonic demand, and the ear gate decides what the near-unison
+pairs are doing. (3) 316.778 and 317.170 are 0.39 cents apart and give
+the same coverage to within one hexany, so the Erv golden is a free
+choice inside that generator's segment here too. (4) Marcus's two
+favourite generators do not fit either structure under this proxy. Both
+are Erv recurrences chosen for other scales and other reasons, and the
+right reading is that the proxy does not see what he hears in them,
+which is the charter's case, and not that the generators are wrong.
+
+**Kept.** Gate G-039.

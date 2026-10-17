@@ -76,6 +76,16 @@ program. Path to the musician: Wilsonic (Scala export first).
    tone-optimal); extend val/kernel code to 11-limit; run the count fit on the
    eikosany (CPSFIT-004). Controls from G-032: tone-cap sweep (5, 10, 20¢) and
    a transposition-free fit. Geometric triads as a possible third class.
+2a. FORK B, dynamic MOS (Marcus's chosen road, 2026-10-16): generator fixed,
+   MOS level + murchana change per selected subset. DYNMOS-001 RAN
+   2026-10-17 (gate G-039): canonical hexanies playable at 17–34 notes
+   (vs 41–72 for the whole genus), dekanies still 41–68; transition cost
+   = retuned common tones (per-subset non-homomorphism) + level jump;
+   Marcus's seed set 1·45·135·225·19·377 has only 30 exact triads (12
+   hexanies with none) — the triad proxy's blind spot, reported not argued.
+   Octave period only. Morph is out of scope. Definition of done = runs in
+   the plugin (bounded, deterministic, APVTS); the level/window scan for a
+   fixed g IS plugin-shaped; the scale-tree walk is candidate algorithm #1.
 2. Eikosany + subsets jointly: RAN 2026-10-14 as SUBFIT-001 (gate G-036).
    One chain keeps at most 20/30 hexanies + 4/12 dekanies at N = 70; usable
    MOS today: 41-note level of 351.44¢ (14 + 2) and 53-note level of
