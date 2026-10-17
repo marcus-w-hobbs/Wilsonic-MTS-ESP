@@ -839,7 +839,7 @@ void ScalaTuningImp::_analyzeIntervals() {
 /**
  * @brief Analyzes the proportional triads of the tuning.
  *
- * This function analyzes the proportional triads of the tuning. It calculates the proportional (arithmetic mean), geometric (geometric mean), and subcontrary (harmonic mean) triads for each note in the tuning and stores them in the respective member variables; _allTriads holds them in that order.
+ * This function analyzes the proportional triads of the tuning. It calculates the proportional (arithmetic mean), geometric (geometric mean), and subcontrary (harmonic mean) triads for each note in the tuning and stores them in the respective member variables; _allTriads holds proportional, then subcontrary, then geometric.
  * The function also checks for duplicate triads and skips them. The function uses a tolerance value to determine if a note is part of a triad.
  *
  * Note that this method uses _processedArray, NOT _processedArrayNPO
@@ -864,6 +864,13 @@ void ScalaTuningImp::_analyzeProportionalTriads() {
     vector<PythagoreanMeans> geometricTriads;
     vector<PythagoreanMeans> subcontraryTriads;
     vector<PythagoreanMeans> allTriads;
+
+    // Clear the reported lists first so a scale that shrinks below three
+    // notes does not keep the previous scale's triads
+    _proportionalTriads.clear();
+    _geometricTriads.clear();
+    _subcontraryTriads.clear();
+    _allTriads.clear();
 
     // Trivial NOP
     if (npo < 3) {
@@ -940,10 +947,6 @@ void ScalaTuningImp::_analyzeProportionalTriads() {
     }
     
     // filter/transform by npo override
-    _proportionalTriads.clear();
-    _geometricTriads.clear();
-    _subcontraryTriads.clear();
-    _allTriads.clear();
 
     auto isTriadInNPOOverride = [&](auto& triad) -> bool {
         auto isDegreeInMap = [&](auto const degree) -> bool {

@@ -82,7 +82,7 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
         _triadsButton->setImages (&off_small, &off_big, &on_big,  &off_small,
                                   &on_small,  &on_big,  &off_big, &off_small);
         _triadsButton->setClickingTogglesState(true);
-        _triadsButton->setTooltip ("Toggle the display of triads on the keyboard.\nThis can improve performance.");
+        _triadsButton->setTooltip ("Toggle the display of proportional and subcontrary triads on the keyboard.\nThis can improve performance.");
         _triadsButton->setToggleState(_processor.restoreShowProportionalTriads(), dontSendNotification);
         _triadsButton->addListener(this);
         addAndMakeVisible (*_triadsButton);
@@ -98,7 +98,7 @@ WilsonicKeyboardContainerComponent::WilsonicKeyboardContainerComponent
         _geometricTriadsButton->setImages (&off_small, &off_big, &on_big,  &off_small,
                                            &on_small,  &on_big,  &off_big, &off_small);
         _geometricTriadsButton->setClickingTogglesState(true);
-        _geometricTriadsButton->setTooltip ("Toggle the display of geometric triads on the keyboard.\nThe middle tone is the geometric mean of the outer tones (b^2 = ac).");
+        _geometricTriadsButton->setTooltip ("Toggle the display of geometric triads on the keyboard.\nThe middle tone is the geometric mean of the outer tones (b^2 = ac).\nMOS and equal-tempered scales have many of these, so the rows get dense.");
         _geometricTriadsButton->setToggleState(_processor.restoreShowGeometricTriads(), dontSendNotification);
         _geometricTriadsButton->addListener(this);
         addAndMakeVisible (*_geometricTriadsButton);
@@ -409,8 +409,8 @@ void WilsonicKeyboardContainerComponent::buttonClicked(Button* button) {
     // Geometric Triads
     auto gtb = dynamic_cast<Button*>(_geometricTriadsButton.get());
     if (gtb == button) {
-        auto const show = _processor.restoreShowGeometricTriads();
-        _processor.saveShowGeometricTriads(!show);
+        // the button toggles its own state before this callback, so store what it shows
+        _processor.saveShowGeometricTriads(_geometricTriadsButton->getToggleState());
         _keyboardComponent.repaint();
 
         return;

@@ -283,6 +283,33 @@ void testAnalyzerGeometricJustChain()
     }
 }
 
+void testAnalyzerClearsBelowThreeNotes()
+{
+    // Found in review of #13: the analyzer returned early for npo < 3
+    // BEFORE clearing the triad lists, so the previous scale's triads
+    // survived. Invisible while ET had no triads at all; with geometric
+    // triads, 12-ET -> ET npo 2 would keep ten stale rows on a two-note
+    // keyboard. Every list must be empty after the shrink.
+    auto ma = MicrotoneArray();
+    for (int k = 0; k < 12; ++k) {
+        ma.addMicrotone(std::make_shared<Microtone>(
+            std::pow(2.f, static_cast<float>(k) / 12.f), "", Microtone::Space::Linear, 2.f));
+    }
+    TuningImp t;
+    t.setMicrotoneArray(ma);
+    CHECK_EQ_UL(t.getGeometricTriads().size(), 10UL);
+
+    auto two = MicrotoneArray();
+    two.addMicrotone(std::make_shared<Microtone>(1.f, "", Microtone::Space::Linear, 2.f));
+    two.addMicrotone(std::make_shared<Microtone>(1.5f, "", Microtone::Space::Linear, 2.f));
+    t.setMicrotoneArray(two);
+    CHECK_EQ_UL(t.getProcessedArrayCount(), 2UL);
+    CHECK_EQ_UL(t.getProportionalTriads().size(), 0UL);
+    CHECK_EQ_UL(t.getSubcontraryTriads().size(), 0UL);
+    CHECK_EQ_UL(t.getGeometricTriads().size(), 0UL);
+    CHECK_EQ_UL(t.getAllTriads().size(), 0UL);
+}
+
 void testAnalyzerGeometric6ET()
 {
     // Smallest ET with in-window geometric chains: 0-2-4 and 1-3-5 (ratio
@@ -351,6 +378,7 @@ int main()
     testAnalyzerGeometric12ET();
     testAnalyzerGeometricJustChain();
     testAnalyzerGeometric6ET();
+    testAnalyzerClearsBelowThreeNotes();
     testBrunZigzag();
     testBrunMosConstruction();
 

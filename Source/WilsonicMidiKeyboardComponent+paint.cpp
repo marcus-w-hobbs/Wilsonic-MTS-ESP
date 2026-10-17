@@ -145,11 +145,18 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
         auto const atm = _processor.getAppTuningModel();
         auto const tuning = atm->getTuning();
 
+        // One locked snapshot of the triads, used for both the row count and the
+        // drawing, so the two cannot disagree if the tuning is re-analyzed mid-paint
+        auto allTriads = tuning->getAllTriads();
+        size_t numGeometric = 0;
+        for (auto triad : allTriads) {
+            if (triad.getType() == PythagoreanMeans::Type::Geometric) {
+                ++numGeometric;
+            }
+        }
+        auto const numProportionalSubcontrary = allTriads.size() - numGeometric;
         // numTriads is the number of rows actually drawn, so the dots space evenly
-        auto const numProportionalSubcontrary = tuning->getProportionalTriads().size() + tuning->getSubcontraryTriads().size();
-        auto const numGeometric = tuning->getGeometricTriads().size();
-        jassert(numProportionalSubcontrary + numGeometric == tuning->getAllTriads().size());
-        auto const numTriads = (showProportionalSubcontrary ? numProportionalSubcontrary : 0UL) + (showGeometric ? numGeometric : 0UL);
+        auto const numTriads = (showProportionalSubcontrary ? numProportionalSubcontrary : size_t{0}) + (showGeometric ? numGeometric : size_t{0});
         if (numTriads < 1)
             return;
 
@@ -181,7 +188,7 @@ void WilsonicMidiKeyboardComponent::_paint_microtonal(Graphics& g) {
             // Initialize the triad number
             auto triadNum = 0;
             auto const lineThickness = 2.0f;
-            for (auto triad : atm->getTuning()->getAllTriads()) {
+            for (auto triad : allTriads) {
                 // Skip if the root, third, or fifth of the triad is out of the MIDI note range
                 if (nn60 + triad.getRoot()  >= WilsonicProcessorConstants::numMidiNotes) continue;
                 if (nn60 + triad.getThird() >= WilsonicProcessorConstants::numMidiNotes) continue;
