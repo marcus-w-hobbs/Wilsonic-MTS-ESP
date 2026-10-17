@@ -332,6 +332,71 @@ void testAnalyzerGeometric6ET()
     }
 }
 
+// A tuning whose degrees are given as cents offsets from exact float
+// frequencies; the analyzer sees whatever float32 Microtone stores.
+TuningImp tuningFromFrequencies(std::vector<float> const& freqs)
+{
+    auto ma = MicrotoneArray();
+    for (float f : freqs) {
+        ma.addMicrotone(std::make_shared<Microtone>(f, "", Microtone::Space::Linear, 2.f));
+    }
+    TuningImp t;
+    t.setMicrotoneArray(ma);
+    return t;
+}
+
+float centsOff(float f, float cents)
+{
+    return f * std::pow(2.f, cents / 1200.f);
+}
+
+void testAnalyzerToleranceIsRegisterIndependent()
+{
+    // Issue #12. The analyzer used to accept |mean - degree| < 0.0005 in
+    // linear frequency, which is ~0.865 cents for a degree at 1/1 but only
+    // ~0.509 cents for a degree at 1.7 and ~0.433 cents near 2/1. The
+    // tolerance is now 0.865 cents everywhere.
+    //
+    // High register: root 3/2, fifth 19/10, arithmetic mean 17/10. Nudge the
+    // third 0.7 cents sharp. In linear frequency that is a miss of ~0.00069
+    // (> 0.0005, so the old test rejected it); in cents it is 0.7 (< 0.865,
+    // accepted). The harmonic mean of 3/2 and 19/10 sits below the 9/8
+    // window edge and the geometric mean is ~12 cents from the third, so
+    // (P, S, G) = (1, 0, 0). Under the linear tolerance this read (0, 0, 0).
+    {
+        auto t = tuningFromFrequencies({1.f, 1.5f, centsOff(1.7f, 0.7f), 1.9f});
+        CHECK_EQ_UL(t.getProcessedArrayCount(), 4UL);
+        CHECK_EQ_UL(t.getProportionalTriads().size(), 1UL);
+        CHECK_EQ_UL(t.getSubcontraryTriads().size(), 0UL);
+        CHECK_EQ_UL(t.getGeometricTriads().size(), 0UL);
+        auto const prop = degreesOf(t.getProportionalTriads(), PythagoreanMeans::Type::Proportional);
+        if (prop.size() == 1) {
+            CHECK((prop[0] == std::array<unsigned long, 3>{1, 2, 3}));
+        }
+    }
+    // The same triad nudged 1.0 cents is outside the tolerance under both
+    // rules: the cents tolerance is not simply looser.
+    {
+        auto t = tuningFromFrequencies({1.f, 1.5f, centsOff(1.7f, 1.0f), 1.9f});
+        CHECK_EQ_UL(t.getProportionalTriads().size(), 0UL);
+        CHECK_EQ_UL(t.getAllTriads().size(), 0UL);
+    }
+    // Low register: 1, 5/4, 3/2 with the third nudged 0.6 cents. Both rules
+    // accept it (the old linear tolerance was ~0.69 cents at 5/4), so the
+    // bottom of the octave is unchanged for this case.
+    {
+        auto t = tuningFromFrequencies({1.f, centsOff(1.25f, 0.6f), 1.5f});
+        CHECK_EQ_UL(t.getProportionalTriads().size(), 1UL);
+        CHECK_EQ_UL(t.getSubcontraryTriads().size(), 0UL);
+        CHECK_EQ_UL(t.getGeometricTriads().size(), 0UL);
+    }
+    // Nudged 0.95 cents it is rejected under both rules.
+    {
+        auto t = tuningFromFrequencies({1.f, centsOff(1.25f, 0.95f), 1.5f});
+        CHECK_EQ_UL(t.getAllTriads().size(), 0UL);
+    }
+}
+
 void testBrunZigzag()
 {
     // Level -> cardinality for the fifth-like generator: the scale-tree
@@ -379,6 +444,7 @@ int main()
     testAnalyzerGeometricJustChain();
     testAnalyzerGeometric6ET();
     testAnalyzerClearsBelowThreeNotes();
+    testAnalyzerToleranceIsRegisterIndependent();
     testBrunZigzag();
     testBrunMosConstruction();
 

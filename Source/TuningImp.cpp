@@ -796,10 +796,23 @@ void TuningImp::_analyzeProportionalTriads() {
         return;
     }
 
+    // Tolerance for "this mean lands on a scale degree", in cents.
+    //
+    // Issue #12: this used to be |mean - degree| < 0.0005 in linear frequency.
+    // Pitch is logarithmic, so that was ~0.865 cents for a degree at 1/1 but
+    // only ~0.433 cents for one near 2/1: twice as strict at the top of the
+    // octave as at the bottom, which nothing in the theory motivates.
+    // Comparing in cents makes the test register-independent.
+    //
+    // 0.865 cents is the old linear tolerance evaluated at frequency 1, so the
+    // bottom of the octave keeps its behaviour and the upper register loosens
+    // to match. It is far below pitch discrimination (~5-10 cents): this is
+    // still an exactness test for just coincidences, not a perceptual threshold.
     // TODO: make this a continuous fn so that we ease in/out of the ui
-    //    auto const tolerance = 0.0001;
-    //    auto const tolerance = 0.001;
-    auto const tolerance = 0.0005;
+    constexpr float toleranceCents = 0.865f;
+    auto const isWithinTolerance = [toleranceCents](float mean, float degree) {
+        return fabsf(1200.f * log2f(mean / degree)) < toleranceCents;
+    };
 
     // i.e., Triad (i, k, j)
     for(unsigned long i = 0; i < npo; i++) { // root
@@ -826,7 +839,7 @@ void TuningImp::_analyzeProportionalTriads() {
                 auto const kmf = kfac * km->getFrequencyValue();
 
                 // major
-                if (majorInLimits && fabsf(major - kmf) < tolerance) {
+                if (majorInLimits && isWithinTolerance(major, kmf)) {
                     // dedup dedup
                     SUL mt = {i, ki, ji};
                     if (pmt.find(mt) == pmt.end()) {
@@ -838,7 +851,7 @@ void TuningImp::_analyzeProportionalTriads() {
                 }
 
                 // minor
-                if (minorInLimits && fabsf(minor - kmf) < tolerance) {
+                if (minorInLimits && isWithinTolerance(minor, kmf)) {
                     // dedup dedup
                     SUL mt = {i, ki, ji};
                     if (smt.find(mt) == smt.end()) {
@@ -850,7 +863,7 @@ void TuningImp::_analyzeProportionalTriads() {
                 }
 
                 // geometric
-                if (geometricInLimits && fabsf(geometric - kmf) < tolerance) {
+                if (geometricInLimits && isWithinTolerance(geometric, kmf)) {
                     // dedup dedup
                     SUL mt = {i, ki, ji};
                     if (gmt.find(mt) == gmt.end()) {
