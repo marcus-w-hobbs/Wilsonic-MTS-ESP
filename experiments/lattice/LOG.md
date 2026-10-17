@@ -5297,3 +5297,19 @@ N = 33 to 34 segment. That is one silver coincidence at the lowest
 possible complexity, on one lattice, and I note it without reading it.
 
 **Kept.** Gate G-038.
+
+## 2026-10-17 — Note: Erv's 1994 "Scale-Tree (Peirce Sequence)" top sheet reproduced from the Stern-Brocot tree
+
+Not an experiment. A check of the noble enumeration against Erv's hand,
+before Fork B's first registration. The bottom row of the top sheet
+(32 decimals, transcribed from the scan Marcus shared 2026-10-14) is
+reproduced 32 of 32 to ten decimals by one rule: build the tree to depth
+5 from 0/1 and 1/0, and for each leaf interval a/b .. c/d write the
+golden limit (a + φc)/(b + φd), with the roles of the two ends swapped on
+the right-hand side of each parent. Examples: 0.2763932023 is
+(1 + 2φ)/(4 + 7φ) for the interval 1/4 .. 2/7, 0.4198212717 is
+(2 + 3φ)/(5 + 7φ) for 2/5 .. 3/7, 0.6180339887 is (3 + 5φ)/(5 + 8φ) for
+3/5 .. 5/8. So the sheet is the complexity-8 golden catalogue, laid out
+by Farey interval, and `gold002.nobles` agrees with it entry for entry.
+This is the vocabulary the scale-tree search will use: a golden generator
+is a leaf interval and an alternating path, not a decimal.
