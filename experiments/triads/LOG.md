@@ -569,3 +569,43 @@ results give Marcus's own lock-loss thresholds. After that, the loose tiers
 become reporting tiers only behind a filter that collapses pitches closer
 than ε, applied in the report layer so the frozen scorer stays pinned.
 EPS-TIER-002 is queued as G-027 and waits on G-025.
+
+## 2026-10-17 — CROSSVAL-003: geometric triads, mirror vs the real analyzer
+
+**Context:** PR #59 (plugin lane, plugin/geometric-triads, head 8e1266b)
+made `_analyzeProportionalTriads` compute geometric triads (b² = ac via
+`sqrtf(imf * jmf)`, same 9/8..4/3 window, same 0.0005 linear tolerance,
+own dedup map, same NPO-map wrap-drop, appended after P and S) and gave
+tests/research_cli a `"geometric"` key. This entry extends the float32
+mirror (cpp_mirror.py, AnalyzerCounts gains `geometric`) and validates it
+against the compiled C++. The TuningImp.cpp line citations in the mirror
+were refreshed to the post-PR-59 numbering (function 767–912, tolerance
+802, window constants 816–817, means 813–815, NPO-map filter 869–911).
+
+**Hypothesis (written before the run):** the mirror's P, S and G counts
+equal the real analyzer's on every scale the CLI can express; every CPS
+scale reports G = 0 under the window (the claim carried from PR #59);
+12-ET reports 10, 6-ET 2, the 12-tone Pythagorean MOS 6.
+
+**Result:** 91 scales through the real C++ (70 odd-seed hexanies, the
+crossval002 MOS sweep of 15, and 6 ET-as-MOS scales: 5, 6, 7, 12, 19 and
+31-ET expressed as the plugin's own Brun MOS with generator p/N at the
+level whose zigzag denominator is N). 0 P/S/G count mismatches, hexany
+scales bit-exact, MOS scales at 0 ulp from the float32 simulation. The
+ET and Pythagorean expectations held (10, 2, 6). The CPS claim was
+REFUTED by one hexany: 3-5-9-15 reports G = 2 in the C++ and the mirror
+alike. Cause, derived and then checked on all 70: with odd seeds a
+hexany's pair-products can only form a geometric chain p1·p3 = p2² when
+the seed set has a multiplicative coincidence a·d = b·c, which is exactly
+the duplicated-tone case. 3·15 = 5·9 gives 27:45:75 with ratio 5/3 (6/5
+reduced, 315.6¢, inside the window) and the duplicated 45/32 makes two
+index sets, so G = 2. 1·15 = 3·5 gives 3:15:75 with ratio 5/4, also in
+the window, but that chain wraps the octave and the NPO-map filter drops
+it, so 1-3-5-15 reports 0 while its loop finds 2. The refined claim now
+enforced by crossval003.py: a hexany reports G > 0 only if its seeds
+have a duplicated product. The just chain 1 9/8 5/4 25/16 3/2 15/8
+(G = 1 at degrees 0, 2, 4) cannot be expressed through the CLI and is
+pinned in tests/test_cpp_mirror.py only.
+
+**Kept.** results/crossval003.json; suite 103 → 105/105; scorer v1.1.0
+untouched (crossval003 records the version but does not score).

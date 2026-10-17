@@ -21,19 +21,26 @@ Mirrored code, with sources:
   (CPSTuningBase.h:100-104). Float multiplication is bitwise commutative,
   so order is irrelevant for k=2 (hexany); for k>=3 associativity makes
   order matter and the mirror replicates the string sort.
-- TuningImp::_analyzeProportionalTriads   (Source/TuningImp.cpp:782-857)
-  with each of its three deviations from the exact scorer individually
-  toggleable so divergence can be attributed.
+- TuningImp::_analyzeProportionalTriads   (Source/TuningImp.cpp:767-912,
+  search loop 805-866, NPO-map filter 869-911; line numbers as of the
+  geometric-triads change, PR #59) with each of its three deviations from
+  the exact scorer individually toggleable so divergence can be
+  attributed. Proportional (arithmetic mean), subcontrary (harmonic mean)
+  and, since PR #59, geometric (sqrtf of the product) triads are all
+  mirrored and all three counts are cross-validated bit-for-bit against
+  the real compiled analyzer by crossval002.py (P, S) and crossval003.py
+  (P, S, G).
 """
 
 from __future__ import annotations
 
 import ctypes
+import math
 from dataclasses import dataclass
 from fractions import Fraction
 from typing import Optional, Sequence
 
-F32_TOLERANCE = 0.0005  # TuningImp.cpp:809 — double, absolute, linear frequency
+F32_TOLERANCE = 0.0005  # TuningImp.cpp:802 — double, absolute, linear frequency
 MAJOR_2ND = None  # set below: float(9.f/8.f)
 FOURTH = None  # set below: float(4.f/3.f)
 
@@ -43,8 +50,8 @@ def f32(x: float) -> float:
     return ctypes.c_float(x).value
 
 
-MAJOR_2ND = f32(9.0 / 8.0)  # TuningImp.cpp:822
-FOURTH = f32(4.0 / 3.0)  # TuningImp.cpp:823
+MAJOR_2ND = f32(9.0 / 8.0)  # TuningImp.cpp:816
+FOURTH = f32(4.0 / 3.0)  # TuningImp.cpp:817
 
 
 def microtone_octave_reduce_float(f: float, period: float = 2.0) -> float:
@@ -110,6 +117,10 @@ def hexany_frequencies_f32(seeds: Sequence[float]) -> tuple[float, ...]:
 class AnalyzerCounts:
     proportional: int
     subcontrary: int
+    geometric: int = 0
+
+    def as_tuple(self) -> tuple[int, int, int]:
+        return (self.proportional, self.subcontrary, self.geometric)
 
 
 def analyze_proportional_triads(
@@ -119,9 +130,10 @@ def analyze_proportional_triads(
     interval_filter: bool = True,
     npo_map_filter: bool = True,
 ) -> AnalyzerCounts:
-    """Mirror of TuningImp::_analyzeProportionalTriads (TuningImp.cpp:767-890
-    post paint-split; validated against the REAL compiled analyzer by
-    tests/test_tuning on 2026-07-20).
+    """Mirror of TuningImp::_analyzeProportionalTriads (TuningImp.cpp:767-912
+    after PR #59 added geometric triads; validated against the REAL compiled
+    analyzer by tests/test_tuning on 2026-07-20 for P and S, and by
+    crossval003.py on 2026-10-17 for P, S and G).
 
     frequencies: the _processedArray — octave-reduced float frequencies,
     sorted ascending (the analyzer assumes sorted input).
@@ -130,12 +142,21 @@ def analyze_proportional_triads(
     - i (root) over [0, npo); j (fifth) over [i+2, npo+2) wrapping one
       degree past the octave with a single octave factor; k (third)
       strictly between.
-    - major = (imf + jmf) / 2; minor = 2*(imf*jmf)/(imf+jmf), all float32.
-    - interval filter: mean/root strictly between 9/8 and 4/3 (float32).
+    - major = (imf + jmf) / 2; minor = 2*(imf*jmf)/(imf+jmf);
+      geometric = sqrtf(imf * jmf) (TuningImp.cpp:813-815), all float32.
+      The product imf*jmf is rounded to float32 first, then square-rooted.
+      Python's math.sqrt is the correctly rounded binary64 sqrt; rounding
+      that to binary32 gives the same bits as sqrtf of the float32 product
+      (binary64 carries 53 >= 2*24 + 2 significand bits, so this double
+      rounding is innocuous for float32 operands).
+    - interval filter: mean/root strictly between 9/8 and 4/3 (float32);
+      the same window gates all three means (TuningImp.cpp:819-821).
     - |mean - kmf| < 0.0005 (absolute, linear frequency, double compare).
     - dedup by unordered WRAPPED index set {i, k%npo, j%npo}, but the
       stored triad keeps the UNWRAPPED (i, k, j) of its FIRST discovery.
-    - npo-map filter (TuningImp.cpp:849-858 + MicrotoneArray::npoOverride):
+      Each type has its own dedup map (pmt, smt, gmt), so one index set
+      can be counted once as P, once as S and once as G.
+    - npo-map filter (TuningImp.cpp:869-911 + MicrotoneArray::npoOverride):
       the final triad lists keep only triads whose stored UNWRAPPED
       indices are all < npo — i.e. EVERY octave-wrapping triad the loop's
       wrap machinery finds is silently dropped. Discovered by executing
@@ -148,11 +169,12 @@ def analyze_proportional_triads(
     """
     npo = len(frequencies)
     if npo < 3:
-        return AnalyzerCounts(0, 0)
+        return AnalyzerCounts(0, 0, 0)
     freqs = [f32(f) for f in frequencies]
     octave = f32(octave)
     pmt: dict[frozenset, tuple[int, int]] = {}
     smt: dict[frozenset, tuple[int, int]] = {}
+    gmt: dict[frozenset, tuple[int, int]] = {}
     for i in range(npo):
         imf = freqs[i]
         for j in range(i + 2, npo + 2):
@@ -160,10 +182,13 @@ def analyze_proportional_triads(
             jfac = octave if ji < j else f32(1.0)
             jmf = f32(jfac * freqs[ji])
             major = f32(f32(imf + jmf) / f32(2.0))
+            geo = f32(math.sqrt(f32(imf * jmf)))
             minor = f32(f32(2.0 * f32(imf * jmf)) / f32(imf + jmf))
             major_ratio = f32(major / imf)
+            geo_ratio = f32(geo / imf)
             minor_ratio = f32(minor / imf)
             major_in = MAJOR_2ND < major_ratio < FOURTH if interval_filter else True
+            geo_in = MAJOR_2ND < geo_ratio < FOURTH if interval_filter else True
             minor_in = MAJOR_2ND < minor_ratio < FOURTH if interval_filter else True
             for k in range(i + 1, j):
                 ki = k % npo
@@ -177,10 +202,14 @@ def analyze_proportional_triads(
                     key = frozenset({i, ki, ji})
                     if key not in smt:
                         smt[key] = (k, j)
+                if geo_in and abs(f32(geo - kmf)) < tolerance:
+                    key = frozenset({i, ki, ji})
+                    if key not in gmt:
+                        gmt[key] = (k, j)
 
     def _count(found: dict) -> int:
         if not npo_map_filter:
             return len(found)
         return sum(1 for (k, j) in found.values() if k < npo and j < npo)
 
-    return AnalyzerCounts(_count(pmt), _count(smt))
+    return AnalyzerCounts(_count(pmt), _count(smt), _count(gmt))

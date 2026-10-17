@@ -1,5 +1,25 @@
 # Findings — dated, one paragraph each, linked to artifacts
 
+**2026-10-17 — Geometric triads in CPS scales come only from seed
+coincidences, and the mirror now covers them bit-for-bit.** PR #59 made the
+plugin analyzer compute geometric triads (b² = ac) under the same window,
+tolerance and wrap-drop as P and S, and stated that every CPS scale reports
+G = 0. Running the real compiled analyzer over 91 scales (70 odd-seed
+hexanies, 15 MOS, 6 ET-as-MOS; results/crossval003.json) agrees with the
+extended float32 mirror on every P, S and G count, but the G = 0 claim is
+too strong: 3-5-9-15 reports G = 2. With odd seeds a hexany's pair-products
+form a geometric chain only when a·d = b·c, the duplicated-tone case, and
+then the chains {ab, ad, cd} and {ac, ad, bd} have ratios d/b and d/c.
+3·15 = 5·9 gives 27:45:75 at ratio 5/3 (6/5 reduced, 315.6¢, inside the
+window), with the duplicate 45/32 making two index sets; 1·15 = 3·5 gives
+3:15:75 at ratio 5/4, also inside the window, but that chain wraps the
+octave and the NPO-map filter drops it, so 1-3-5-15 reports 0 while its
+search loop finds 2 — a third instance of the wrap-drop recorded on
+2026-07-21. Of the 70 hexanies exactly these two have a duplicated product.
+For ET the counts are large (12-ET 10, 19-ET 32, 31-ET 91) because every
+equal-step triad is geometric and the window keeps the step sizes between
+9/8 and 4/3; the Pythagorean 12-note MOS reports 6. Scorer v1.1.0 untouched.
+
 **2026-07-21 — The P = S diagonal is structural for every
 single-generator scale, and for CPS(n, k) with k = n/2.** All 29
 eikosanies (including the {1,45,135,225,19,377} calibration set) and
