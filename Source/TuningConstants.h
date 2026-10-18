@@ -28,4 +28,9 @@ public:
     // default frequency at C NN = 60
     static constexpr float middleCFrequency = 261.6255653006f;
     static constexpr unsigned long middleCNoteNumber = 60;
+
+    // playable band for the output stage (TuningOutput.h), aligned with Ableton Live 12:
+    // 4 Hz .. 21 kHz inclusive. Keys outside it are filtered (default) or passed through.
+    static constexpr double kPlayableMinHz = 4.0;
+    static constexpr double kPlayableMaxHz = 21000.0;
 };

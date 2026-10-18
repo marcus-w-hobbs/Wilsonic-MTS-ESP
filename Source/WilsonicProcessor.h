@@ -18,6 +18,7 @@
 #include "VoiceStates.h"
 #include "WilsonicAppSkin.h"
 #include "WilsonicProcessorConstants.h"
+#include "TuningOutput.h"
 
 // ADD NEW SCALE DESIGN HERE
 // forward declarations
@@ -180,6 +181,8 @@ public:
     bool restoreShowGeometricTriads();
     void saveKeyboardVisible(bool should_show);
     bool restoreKeyboardVisible();
+    void saveOutOfBandPolicy(OutOfBandPolicy policy);
+    OutOfBandPolicy restoreOutOfBandPolicy();
     void saveFavoritesStoreNPOOverride(bool should_store);
     bool restoreFavoritesStoreNPOOverride();
     void saveFavoritesStorePeriodMiddleC(bool should_store);

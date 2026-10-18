@@ -35,6 +35,11 @@ AppTuningModel::AppTuningModel(WilsonicProcessor& processor)
     // default pointer
     _targetTuning = _defaultTuning12ET;
 
+    // the synth may ask for output frequencies before setApvts runs _updateTuning.
+    // The processor's PropertiesFile does not exist yet (DesignsModel builds this
+    // model in the processor's initializer list), so start from the default policy.
+    _computeOutputTable(OutOfBandPolicy::Filter);
+
     // _pitchColorOffset01 is initialized in setApvts
 
     // cannot call update until apvts is set
@@ -53,6 +58,7 @@ void AppTuningModel::setApvts(shared_ptr<AudioProcessorValueTreeState> apvts) {
     
     // can't call this in constructor
     _pitchColorOffset01 = _processor.restorePitchColorOffset();
+    _outOfBandPolicy.store(static_cast<int>(_processor.restoreOutOfBandPolicy()));
 }
 
 String AppTuningModel::getGroupID() {
@@ -221,10 +227,45 @@ shared_ptr<Tuning> AppTuningModel::getTuning() {
     return _targetTuning;
 }
 
+// The output stage. The tuning table stays raw (Morph, the analyses and the
+// .ascl exporter read it as computed); this is the one place the per-machine
+// out-of-band policy is applied, and every consumer (MTS-ESP, SynthVoice,
+// OscData, the keyboard colours) reads the result.
+TuningOutput AppTuningModel::_computeOutputTable(OutOfBandPolicy policy) {
+    const ScopedLock sl(_lock);
+    float raw[WilsonicProcessorConstants::numMidiNotes];
+    for(unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
+        raw[nn] = _targetTuning->getTuningTableFrequency(nn);
+    }
+
+    // a key filtered by either source is filtered: the output stage, or the
+    // microtone's own getFilterNote() flag (reserved for designs that map
+    // nothing to a key; nothing sets it today, but the path stays live).
+    // Unmapped keys never stand in for their neighbours.
+    bool unmapped[WilsonicProcessorConstants::numMidiNotes];
+    for(unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
+        auto microtone = _targetTuning->microtoneAtNoteNumber(nn);
+        unmapped[nn] = (microtone != nullptr) && microtone->getFilterNote();
+    }
+
+    // compute the whole table first: the neighbour rule needs every key
+    auto const output = computeTuningOutput(raw, policy, unmapped);
+    for(unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
+        _outputHz[nn].store(static_cast<float>(output.hz[nn]));
+        _outputFiltered[nn].store(output.filtered[nn]);
+    }
+
+    return output;
+}
+
 void AppTuningModel::_updateTuning() {
     const ScopedLock sl(_lock);
     bool const registered_as_mts_esp_source = _processor.getMtsEspStatus() == WilsonicProcessor::MTS_ESP_Status::Registered;
     auto const tuningName = _targetTuning->getTuningName();
+
+    // output stage, under the cached per-machine policy
+    auto const output = _computeOutputTable(getOutOfBandPolicy());
+
     if(registered_as_mts_esp_source) {
 #if JUCE_IOS || JUCE_ANDROID
         //NOP
@@ -232,25 +273,24 @@ void AppTuningModel::_updateTuning() {
         auto const tuningNameCstr = tuningName.c_str();
         MTS_SetScaleName(tuningNameCstr);
         MTS_ClearNoteFilter();
+
+        // every key gets a frequency, filtered or not: clients need not honour
+        // filtering, so a filtered key carries the neighbour-rule stand-in
+        MTS_SetNoteTunings(output.hz); // both synth and midi efx
+
+        // then tell clients which keys to ignore, on all channels
+        for(unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
+            if(output.filtered[nn]) {
+                MTS_FilterNote(true, static_cast<char>(nn), static_cast<char>(-1));
+            }
+        }
 #endif
     }
 
-    // MTS frequencies
+    // descriptions and colours
     for(unsigned long nn = 0; nn < WilsonicProcessorConstants::numMidiNotes; nn++) {
         // microtone at this note number
         auto microtone = _targetTuning->microtoneAtNoteNumber(nn);
-        if(registered_as_mts_esp_source) {
-#if JUCE_IOS || JUCE_ANDROID
-            // NOP
-#else
-            auto const cnn = static_cast<char>(nn);
-            auto const f = _targetTuning->getTuningTableFrequency(nn);
-            MTS_SetNoteTuning(f, cnn); // both synth and midi efx
-            if(microtone->getFilterNote()) {
-                MTS_FilterNote(true, cnn, 0);
-            }
-#endif
-        }
 
         // descriptions
         auto shortDescription = microtone->getShortDescriptionText();
@@ -260,9 +300,9 @@ void AppTuningModel::_updateTuning() {
         auto centsDescription = microtone->getCentsValueDescription();
         _setTuningTableCentsDescription(centsDescription, nn);
         
-        // color
+        // color: grey for filtered notes (out of band, or the microtone's own flag)
         auto const p01 = microtone->getPitchValue01();
-        auto color = microtone->getFilterNote() ? Colours::grey : colorForPitch01(p01); // grey for filtered notes
+        auto color = output.filtered[nn] ? Colours::grey : colorForPitch01(p01);
         _setTuningTableColor(color, nn);
     }
     
@@ -382,6 +422,31 @@ int AppTuningModel::noteNumberToKeyboardSlot(int noteNumber) {
 float AppTuningModel::getTuningTableFrequency(unsigned long nn) {
     jassert(nn < WilsonicProcessorConstants::numMidiNotes);
     return _targetTuning->getTuningTableFrequency(nn);
+}
+
+// output stage
+
+bool AppTuningModel::isKeyFiltered(unsigned long nn) {
+    jassert(nn < WilsonicProcessorConstants::numMidiNotes);
+    nn = jmin(nn, WilsonicProcessorConstants::numMidiNotes - 1); // OscData pitch offsets can overshoot
+    return _outputFiltered[nn].load();
+}
+
+float AppTuningModel::getOutputFrequency(unsigned long nn) {
+    jassert(nn < WilsonicProcessorConstants::numMidiNotes);
+    nn = jmin(nn, WilsonicProcessorConstants::numMidiNotes - 1); // OscData pitch offsets can overshoot
+    return _outputHz[nn].load();
+}
+
+OutOfBandPolicy AppTuningModel::getOutOfBandPolicy() {
+    return static_cast<OutOfBandPolicy>(_outOfBandPolicy.load());
+}
+
+void AppTuningModel::setOutOfBandPolicy(OutOfBandPolicy policy) {
+    _processor.saveOutOfBandPolicy(policy); // per-machine PropertiesFile
+    _outOfBandPolicy.store(static_cast<int>(policy));
+    _updateTuning(); // re-sends MTS-ESP and recolours the keys under the new policy
+    uiNeedsUpdate();
 }
 
 // NPO
