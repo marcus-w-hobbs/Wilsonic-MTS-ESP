@@ -8,6 +8,7 @@
  ==============================================================================
  */
 
+#include <algorithm>
 #include "CPS.h"
 #include "TuningConstants.h"
 
@@ -71,6 +72,12 @@ CPSTuningClassMap CPS::__cpsTuningClassMap =
 
 
 // private helpers
+string CPS::_sortedLetters(string letters)
+{
+    sort(letters.begin(), letters.end());
+    return letters;
+}
+
 Microtone_p CPS::_X(float f, string sd)
 {
     Microtone_p retVal = make_shared<Microtone>(f, sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
@@ -102,6 +109,7 @@ Microtone_p CPS::AB(Microtone_p A,
     auto ab_fd = A->getFrequencyValueDescription() + "*" + B->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(ab_fd);
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
+    retVal->setDegreeName(_sortedLetters(ab_sd));
     
     return retVal;
 }
@@ -116,6 +124,7 @@ Microtone_p CPS::ABC(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abc_f, abc_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abc_fd = mtAB->getShortDescriptionText2() + "*" + C->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abc_fd);
+    retVal->setDegreeName(_sortedLetters(abc_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;
@@ -132,6 +141,7 @@ Microtone_p CPS::ABCD(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abcd_f, abcd_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abcd_fd = mtABC->getShortDescriptionText2() + "*" + D->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abcd_fd);
+    retVal->setDegreeName(_sortedLetters(abcd_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;
@@ -149,6 +159,7 @@ Microtone_p CPS::ABCDE(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abcde_f, abcde_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abcde_fd = mtABCD->getShortDescriptionText2() + "*" + E->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abcde_fd);
+    retVal->setDegreeName(_sortedLetters(abcde_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;
@@ -167,6 +178,7 @@ Microtone_p CPS::ABCDEF(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abcdef_f, abcdef_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abcdef_fd = mtABCDE->getShortDescriptionText2() + "*" + F->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abcdef_fd);
+    retVal->setDegreeName(_sortedLetters(abcdef_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;
@@ -186,6 +198,7 @@ Microtone_p CPS::ABCDEFG(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abcdefg_f, abcdefg_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abcdefg_fd = mtABCDEF->getShortDescriptionText2() + "*" + G->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abcdefg_fd);
+    retVal->setDegreeName(_sortedLetters(abcdefg_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;
@@ -206,6 +219,7 @@ Microtone_p CPS::ABCDEFGH(Microtone_p A,
     Microtone_p retVal = make_shared<Microtone>(abcdefg_f, abcdefg_sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     auto abcdefgh_fd = mtABCDEFG->getShortDescriptionText2() + "*" + H->getFrequencyValueDescription();
     retVal->setShortDescriptionText2(abcdefgh_fd);
+    retVal->setDegreeName(_sortedLetters(abcdefg_sd));
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
     
     return retVal;

@@ -500,6 +500,7 @@ void TuningImp::_update() {
     if (_canUniquify && _uniquify) {
         _processedArray = _processedArray.uniquify();
     }
+    _assignDegreeNames();
     
     auto const count = (_canNPOOverride && _npoOverrideEnable) ? static_cast<unsigned long>(_npoOverride) : _processedArray.count();
     auto [processedArrayNPO, processedArrayNPOMap] = _processedArray.npoOverride(static_cast<int>(count));
@@ -552,6 +553,12 @@ void TuningImp::_update() {
 
     // Call the completion block
     callOnTuningUpdate();
+}
+
+// Default: designs name their degrees when they build the microtone array
+// (CPS letters, ET k\N). Subclasses whose names depend on the processed
+// order (MOS scale degree) override this.
+void TuningImp::_assignDegreeNames() {
 }
 
 // block will be called after microtones are processed, but before onTuningUpdate

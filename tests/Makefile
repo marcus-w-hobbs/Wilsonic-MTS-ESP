@@ -10,7 +10,7 @@
 CXX = g++
 SRC = ../Source
 CXXFLAGS = -std=c++17 -I. -I$(SRC) -DJucePlugin_IsSynth=1 -Wall -Wextra
-TARGETS = test_wilsonicmath test_tuning
+TARGETS = test_wilsonicmath test_tuning test_ascl
 RESEARCH_CLI = research_cli
 
 CORE_SRCS = \
@@ -22,6 +22,7 @@ CORE_SRCS = \
 	$(SRC)/WilsonicMath.cpp \
 	$(SRC)/MicrotoneArray.cpp \
 	$(SRC)/TuningImp.cpp \
+	$(SRC)/AbletonAscl.cpp \
 	$(SRC)/TuningTableImp.cpp \
 	$(SRC)/PythagoreanMeans.cpp \
 	$(SRC)/BrunMicrotone.cpp \
@@ -54,6 +55,12 @@ build/BrunGral_verbatim.cpp: $(SRC)/Brun+Gral.cpp
 test_tuning: test_tuning.cpp $(CORE_SRCS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+# Ableton Live .ascl export: a reader applying Live 12's rules (checked first
+# against Ableton's own 11-EDO / 22-EDO files) replays each export and must
+# land on Wilsonic's tuning table for all 128 keys.
+test_ascl: test_ascl.cpp $(CORE_SRCS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
 # Headless research tool (built on demand, not part of `run`): emits real
 # scale generation + analyzer counts as JSON for experiments/triads/.
 $(RESEARCH_CLI): research_cli.cpp $(CORE_SRCS)
@@ -62,6 +69,7 @@ $(RESEARCH_CLI): research_cli.cpp $(CORE_SRCS)
 run: $(TARGETS)
 	./test_wilsonicmath
 	./test_tuning
+	./test_ascl
 
 clean:
 	rm -rf $(TARGETS) $(RESEARCH_CLI) build

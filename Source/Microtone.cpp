@@ -106,6 +106,7 @@ Microtone::Microtone(const Microtone& other) {
     _shortDescriptionText = other._shortDescriptionText;
     _shortDescriptionText2 = other._shortDescriptionText2;
     _shortDescriptionText3 = other._shortDescriptionText3;
+    _degreeName = other._degreeName;
     _doFilter = other._doFilter;
     _shouldRender = other._shouldRender;
 }
@@ -130,6 +131,14 @@ const string& Microtone::getShortDescriptionText() {
 
 void Microtone::setShortDescriptionText(string desc) {
     _shortDescriptionText = string {desc}; // copy
+}
+
+const string& Microtone::getDegreeName() {
+    return _degreeName;
+}
+
+void Microtone::setDegreeName(string name) {
+    _degreeName = string {name}; // copy
 }
 
 const string& Microtone::getShortDescriptionText2() {

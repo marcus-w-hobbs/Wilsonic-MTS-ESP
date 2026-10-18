@@ -138,6 +138,7 @@ void EqualTemperament::_updateET()
     for (auto i = 0UL; i < _npo; i++)
     {
         auto mt = make_shared<Microtone>(static_cast<float>(i) / static_cast<float>(_npo), to_string(i), Microtone::Space::LogPeriod, getOctave());
+        mt->setDegreeName(to_string(i) + "\\" + to_string(_npo)); // "3\12", as in Ableton's EDO files
         ma.addMicrotone(mt);
     }
     setMicrotoneArray(ma); // calls TuningImp::update()

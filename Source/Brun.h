@@ -133,6 +133,7 @@ private:
     shared_ptr<vector<int>> _gral_column_pattern; // A pointer to a vector representing the column pattern of the Gral display.
     
     // private methods
+    void _assignDegreeNames() override; // MOS degree names "0".."N-1" by processed-array index (tonic = 0)
     void _brunUpdate(); // Updates gral after a change in parameters, before TuningImp::update
     MicrotoneArray _microtoneArrayBrun(unsigned long level, float generator, unsigned long murchana); // Returns a MicrotoneArray representing a Brun array for a given level, generator, and Murchana.
     void _paintCartesian(WilsonicProcessor& processor, Graphics& g, Rectangle<int> bounds); // Paints the Brun object in Cartesian coordinates.

@@ -35,6 +35,7 @@ public:
 
 protected:
     void _update() override;
+    virtual void _assignDegreeNames(); // hook: runs on _processedArray after reduce/sort/uniquify, before NPO override
     void _analyzeIntervals();
     void _analyzeProportionalTriads();
     void _paintHelper(WilsonicProcessor& processor, Graphics& g, Rectangle<int> bounds);
