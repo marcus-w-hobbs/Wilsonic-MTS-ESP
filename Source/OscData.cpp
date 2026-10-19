@@ -38,6 +38,7 @@ void OscData::prepareToPlay(double sampleRate, int samplesPerBlock, int outputCh
     prepare (spec);
     fmOsc.prepare (spec);
     gain.prepare (spec);    
+    _sampleRate = sampleRate;
 }
 
 void OscData::setType(const int oscSelection)
@@ -71,31 +72,47 @@ void OscData::setGain(const float levelInDecibels)
     gain.setGainDecibels(levelInDecibels);
 }
 
+// Output stage (TuningOutput.h). The key that actually sounds is the note
+// plus the oscillator pitch offset, so the filter and Nyquist gates are
+// re-evaluated here, which setParams reaches every block, not only at note-on.
+// The offset can push the index past either end of the table; clamp in int.
+void OscData::_updateFrequencyForKey()
+{
+    auto const key = static_cast<unsigned long>(jlimit(0, static_cast<int>(WilsonicProcessorConstants::numMidiNotes) - 1, lastMidiNote + lastPitch));
+    auto const atm = _processor.getAppTuningModel();
+    auto const f = atm->getOutputFrequency (key);
+    bool const atOrAboveNyquist = _sampleRate > 0.0 && static_cast<double>(f) >= 0.5 * _sampleRate;
+    _silent = atm->isKeyFiltered (key) || atOrAboveNyquist;
+    setFrequency (f + fmModulator);
+}
+
 void OscData::setOscPitch(const int pitch)
 {
-    lastPitch = static_cast<unsigned long>(pitch);
-    auto const f = _processor.getAppTuningModel()->getTuningTableFrequency (lastMidiNote + lastPitch);
-    setFrequency (f + fmModulator);
+    lastPitch = pitch;
+    _updateFrequencyForKey();
 }
 
 void OscData::setFreq(const int midiNoteNumber)
 {
-    auto const f = _processor.getAppTuningModel()->getTuningTableFrequency (static_cast<unsigned long>(midiNoteNumber) + lastPitch);
-    setFrequency (f + fmModulator);
-    lastMidiNote = static_cast<unsigned long>(midiNoteNumber);
+    lastMidiNote = midiNoteNumber;
+    _updateFrequencyForKey();
 }
 
 void OscData::setFmOsc(const float freq, const float depth)
 {
     fmDepth = depth;
     fmOsc.setFrequency(freq);
-    auto const f = _processor.getAppTuningModel()->getTuningTableFrequency (lastMidiNote + lastPitch);
-    setFrequency(f + fmModulator);
+    _updateFrequencyForKey();
 }
 
 void OscData::renderNextBlock(dsp::AudioBlock<float>& audioBlock)
 {
     jassert(audioBlock.getNumSamples() > 0);
+    if (_silent)
+    {
+        audioBlock.clear();
+        return;
+    }
     process(dsp::ProcessContextReplacing<float>(audioBlock));
     gain.process(dsp::ProcessContextReplacing<float>(audioBlock));
 }
@@ -103,6 +120,10 @@ void OscData::renderNextBlock(dsp::AudioBlock<float>& audioBlock)
 float OscData::processNextSample(float input)
 {
     fmModulator = fmOsc.processSample(input) * fmDepth;
+    if (_silent)
+    {
+        return 0.f;
+    }
     return gain.processSample(processSample(input));
 }
 

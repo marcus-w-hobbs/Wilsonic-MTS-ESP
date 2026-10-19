@@ -34,13 +34,17 @@ public:
     float processNextSample(float input);
     void setParams(const int oscChoice, const float oscGain, const int oscPitch, const float fmFreq, const float fmDepth);
     void resetAll();
+    bool isSilent() const { return _silent; } // output stage: the sounding key is filtered or at/above Nyquist
 
 private:
     WilsonicProcessor& _processor;
     dsp::Oscillator<float> fmOsc { [](float x) { return sinf (x); }};
     dsp::Gain<float> gain;
-    unsigned long lastPitch { 0 };
-    unsigned long lastMidiNote { 0 };
+    int lastPitch { 0 };
+    int lastMidiNote { 0 };
     float fmDepth { 0.0f };
     float fmModulator { 0.0f };
+    double _sampleRate { 0.0 };
+    bool _silent { false };
+    void _updateFrequencyForKey();
 };

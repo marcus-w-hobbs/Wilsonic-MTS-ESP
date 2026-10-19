@@ -61,6 +61,12 @@
  * @brief The key for the show linear keyboard property.
  */
 #define SHOW_LINEAR_KEYBOARD "showLinearKeyboard"
+/**
+ * @def OUT_OF_BAND_POLICY
+ * @brief The key for the out-of-band policy property (TuningOutput.h).
+ * Stored as the OutOfBandPolicy int: 0 = Filter (mute, Live-aligned), 1 = Pass through.
+ */
+#define OUT_OF_BAND_POLICY "outOfBandPolicy"
 
 #define FAVORITES_STORE_NPO_OVERRIDE       "favoritesStoreNPOOverride"
 #define FAVORITES_STORE_PERIOD_MIDDLE_C    "favoritesStorePeriodMiddleC"
@@ -295,6 +301,34 @@ bool WilsonicProcessor::restoreKeyboardVisible()
     bool const retVal =(val_int == 0) ? false : true;
 
     return retVal;
+}
+
+/**
+ * @brief Saves the out-of-band policy to the properties (per machine, not APVTS).
+ * @param policy What to do with keys below 4 Hz or above 21 kHz.
+ */
+void WilsonicProcessor::saveOutOfBandPolicy(OutOfBandPolicy policy)
+{
+    String val = String(static_cast<int>(policy));
+    _properties->setValue(OUT_OF_BAND_POLICY, val);
+    _properties->saveIfNeeded();
+}
+
+/**
+ * @brief Restores the out-of-band policy from the properties.
+ * Defaults to Filter, the Ableton Live-aligned behaviour; any unknown
+ * stored value also reads as Filter.
+ * @return The out-of-band policy.
+ */
+OutOfBandPolicy WilsonicProcessor::restoreOutOfBandPolicy()
+{
+    String val = _properties->getValue(OUT_OF_BAND_POLICY, "0");
+    int const val_int = val.getIntValue();
+    if (val_int == static_cast<int>(OutOfBandPolicy::PassThrough)) {
+        return OutOfBandPolicy::PassThrough;
+    }
+
+    return OutOfBandPolicy::Filter;
 }
 
 void WilsonicProcessor::saveFavoritesStoreNPOOverride(bool should_store)

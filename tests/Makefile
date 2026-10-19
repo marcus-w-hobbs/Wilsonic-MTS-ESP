@@ -10,7 +10,7 @@
 CXX = g++
 SRC = ../Source
 CXXFLAGS = -std=c++17 -I. -I$(SRC) -DJucePlugin_IsSynth=1 -Wall -Wextra
-TARGETS = test_wilsonicmath test_tuning
+TARGETS = test_wilsonicmath test_tuning test_outofband
 RESEARCH_CLI = research_cli
 
 CORE_SRCS = \
@@ -54,6 +54,11 @@ build/BrunGral_verbatim.cpp: $(SRC)/Brun+Gral.cpp
 test_tuning: test_tuning.cpp $(CORE_SRCS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+# Out-of-band output stage (JUCE-free Source/TuningOutput.cpp) plus a real
+# TuningImp / Brun pushed through it end to end.
+test_outofband: test_outofband.cpp $(SRC)/TuningOutput.cpp $(CORE_SRCS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
 # Headless research tool (built on demand, not part of `run`): emits real
 # scale generation + analyzer counts as JSON for experiments/triads/.
 $(RESEARCH_CLI): research_cli.cpp $(CORE_SRCS)
@@ -62,6 +67,7 @@ $(RESEARCH_CLI): research_cli.cpp $(CORE_SRCS)
 run: $(TARGETS)
 	./test_wilsonicmath
 	./test_tuning
+	./test_outofband
 
 clean:
 	rm -rf $(TARGETS) $(RESEARCH_CLI) build
