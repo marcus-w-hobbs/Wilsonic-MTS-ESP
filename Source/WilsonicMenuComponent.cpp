@@ -252,7 +252,9 @@ void WilsonicMenuComponent::_popupMenuHelper()
     int const disabledID = -1;
     int const registerMtsEspID = 1;
     int const documentationID = 2;
-    int const exportAsclID = 3;
+    int const outOfBandMuteID = 3;
+    int const outOfBandPlayID = 4;
+    int const exportAsclID = 5;
 
     // version
     String appName = AppVersion::getAppName();
@@ -300,6 +302,18 @@ void WilsonicMenuComponent::_popupMenuHelper()
 
     _menu.addSeparator();
 
+    // Out-of-range keys: per-machine preference (WilsonicProcessor+Properties.cpp),
+    // applied by the output stage (TuningOutput.h) to MTS-ESP, the synth and the keyboard
+    {
+        auto const policy = _processor.getAppTuningModel()->getOutOfBandPolicy();
+        PopupMenu outOfBandMenu;
+        outOfBandMenu.addItem(outOfBandMuteID, "Mute", true, policy == OutOfBandPolicy::Filter);
+        outOfBandMenu.addItem(outOfBandPlayID, "Play anyway", true, policy == OutOfBandPolicy::PassThrough);
+        _menu.addSubMenu("Out-of-range keys (below 4 Hz or above 21 kHz)", outOfBandMenu);
+    }
+
+    _menu.addSeparator();
+
     // --
     // Simple Synth (check)
     // Synth One (check)
@@ -340,6 +354,11 @@ void WilsonicMenuComponent::_popupMenuHelper()
             {
                 DBG("error opening documentation url");
             }
+        }
+        else if(selectedID == outOfBandMuteID || selectedID == outOfBandPlayID)
+        {
+            auto const policy = (selectedID == outOfBandMuteID) ? OutOfBandPolicy::Filter : OutOfBandPolicy::PassThrough;
+            _processor.getAppTuningModel()->setOutOfBandPolicy(policy);
         }
         else if(selectedID == disabledID)
         {

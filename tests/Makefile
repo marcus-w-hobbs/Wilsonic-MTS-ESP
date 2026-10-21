@@ -10,7 +10,7 @@
 CXX = g++
 SRC = ../Source
 CXXFLAGS = -std=c++17 -I. -I$(SRC) -DJucePlugin_IsSynth=1 -Wall -Wextra
-TARGETS = test_wilsonicmath test_tuning test_ascl
+TARGETS = test_wilsonicmath test_tuning test_outofband test_ascl
 RESEARCH_CLI = research_cli
 
 CORE_SRCS = \
@@ -55,6 +55,11 @@ build/BrunGral_verbatim.cpp: $(SRC)/Brun+Gral.cpp
 test_tuning: test_tuning.cpp $(CORE_SRCS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+# Out-of-band output stage (JUCE-free Source/TuningOutput.cpp) plus a real
+# TuningImp / Brun pushed through it end to end.
+test_outofband: test_outofband.cpp $(SRC)/TuningOutput.cpp $(CORE_SRCS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
 # Ableton Live .ascl export: a reader applying Live 12's rules (checked first
 # against Ableton's own 11-EDO / 22-EDO files) replays each export and must
 # land on Wilsonic's tuning table for all 128 keys.
@@ -69,6 +74,7 @@ $(RESEARCH_CLI): research_cli.cpp $(CORE_SRCS)
 run: $(TARGETS)
 	./test_wilsonicmath
 	./test_tuning
+	./test_outofband
 	./test_ascl
 
 clean:

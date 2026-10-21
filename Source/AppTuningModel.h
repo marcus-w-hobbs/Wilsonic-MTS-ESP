@@ -14,6 +14,7 @@
 #include "AppVersion.h"
 #include "PresetsModel.h"
 #include "TuningImp.h"
+#include "TuningOutput.h"
 #include "TuningTableImp.h"
 #include "Tuning_Include.h"
 
@@ -70,8 +71,18 @@ public:
     void setTuning(shared_ptr<Tuning> inputTuning);
     shared_ptr<Tuning> getTuning() override;
 
-    // frequency
+    // frequency (raw: unclamped, as the tuning computed it)
     float getTuningTableFrequency(unsigned long index);
+
+    // output stage (TuningOutput.h): what MTS-ESP, the built-in synth and the
+    // keyboard get for each key. A key is filtered when its raw frequency is
+    // outside 4 Hz .. 21 kHz under the Filter policy, or when its microtone is
+    // flagged getFilterNote(). The frequency is the raw value for an in-band
+    // key, otherwise the stand-in from the MTS-ESP neighbour rule.
+    bool isKeyFiltered(unsigned long index);
+    float getOutputFrequency(unsigned long index);
+    OutOfBandPolicy getOutOfBandPolicy();
+    void setOutOfBandPolicy(OutOfBandPolicy policy); // saves the per-machine setting and re-runs the output stage
 
     // NPO
     unsigned long getTuningTableNPO();
@@ -149,6 +160,14 @@ private:
     static constexpr int _interpolationTimerHz = 80; // 48000 samples per second / 512 sample per render block
     TuningTableImp _interpolatedTable {};
     void _updateTuning();
+
+    // output stage: read on the audio thread (SynthVoice, OscData), written under _lock.
+    // The policy is cached here because _updateTuning can run from parameterChanged
+    // on the host's automation thread, and the PropertiesFile lock covers disk writes.
+    atomic<int> _outOfBandPolicy { static_cast<int>(OutOfBandPolicy::Filter) };
+    array<atomic<float>, WilsonicProcessorConstants::numMidiNotes> _outputHz {};
+    array<atomic<bool>, WilsonicProcessorConstants::numMidiNotes> _outputFiltered {};
+    TuningOutput _computeOutputTable(OutOfBandPolicy policy); // fills the atomics; returns the table with getFilterNote() folded in
 
     // Genus Space keyboard mapping
     vector<string> _keyboardSubsetDescriptions {};

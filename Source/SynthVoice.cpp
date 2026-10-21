@@ -32,6 +32,21 @@ bool SynthVoice::canPlaySound(SynthesiserSound* sound)
 
 void SynthVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound */*sound*/, int )
 {
+    // output stage (TuningOutput.h): a filtered key is silent, as it would be on
+    // an MTS-ESP client that honours note filtering. In BOTH policies never
+    // start a voice at or above Nyquist: the 21 kHz cap clears it at 44.1 and
+    // 48 kHz but not below 42 kHz, and Pass through has no cap at all.
+    auto const nn = static_cast<unsigned long>(jlimit(0, static_cast<int>(WilsonicProcessorConstants::numMidiNotes) - 1, midiNoteNumber));
+    auto const atm = _processor.getAppTuningModel();
+    auto const outputFrequency = atm->getOutputFrequency(nn);
+    auto const sampleRate = getSampleRate();
+    bool const atOrAboveNyquist = sampleRate > 0.0 && static_cast<double>(outputFrequency) >= 0.5 * sampleRate;
+    if (atm->isKeyFiltered(nn) || atOrAboveNyquist)
+    {
+        clearCurrentNote(); // the voice stays free; renderNextBlock sees it inactive
+        return;
+    }
+
     for (unsigned long i = 0; i < WilsonicProcessorConstants::numChannelsToProcess; i++)
     {
         _osc1[i].setFreq(midiNoteNumber);
@@ -42,8 +57,8 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound 
     _filterAdsr.noteOn();
 
     // update voice state
-    _voiceState.nn = static_cast<unsigned long>(midiNoteNumber);
-    _voiceState.frequency = _processor.getAppTuningModel()->getTuningTableFrequency(static_cast<unsigned long>(midiNoteNumber));
+    _voiceState.nn = nn;
+    _voiceState.frequency = outputFrequency;
     _voiceState.velocity = velocity;
 }
 
