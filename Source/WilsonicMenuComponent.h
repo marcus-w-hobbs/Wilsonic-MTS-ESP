@@ -56,12 +56,14 @@ private:
     Image _yellowWarningImage;
     Image _greenImage;
     PopupMenu _menu {};
+    unique_ptr<FileChooser> _asclFileChooser; // Export for Ableton Live (.ascl)
 
     // private methods
     static void _resetMtsEspModalCallback(int modalResult, WilsonicMenuComponent* t);
     void _showResetMtsEspAlert();
     void _mtsEspHelper();
     void _popupMenuHelper();
+    void _exportAscl(); // desktop only: save the current tuning as an Ableton Live .ascl file
     void actionListenerCallback(const String& message) override;
     void buttonClicked(Button*) override;
 };

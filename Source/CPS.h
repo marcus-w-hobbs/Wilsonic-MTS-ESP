@@ -152,4 +152,5 @@ private:
     // private helper
     
     static Microtone_p _X(float f, string sd);
+    static string _sortedLetters(string letters); // degree name helper: "CA" -> "AC"
 };

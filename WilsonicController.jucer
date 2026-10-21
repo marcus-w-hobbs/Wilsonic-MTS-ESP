@@ -45,6 +45,8 @@
                 file="Source/MicrotoneArray.cpp"/>
           <FILE id="eSVsaN" name="Fraction.h" compile="0" resource="0" file="Source/Fraction.h"/>
           <FILE id="o4n7yi" name="Fraction.cpp" compile="1" resource="0" file="Source/Fraction.cpp"/>
+          <FILE id="aScLh2" name="AbletonAscl.h" compile="0" resource="0" file="Source/AbletonAscl.h"/>
+          <FILE id="aScLc2" name="AbletonAscl.cpp" compile="1" resource="0" file="Source/AbletonAscl.cpp"/>
         </GROUP>
         <FILE id="RXQZGt" name="AppExperiments.h" compile="0" resource="0"
               file="Source/AppExperiments.h"/>

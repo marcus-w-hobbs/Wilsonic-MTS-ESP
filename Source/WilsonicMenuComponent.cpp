@@ -9,6 +9,7 @@
  */
 
 #include <JuceHeader.h>
+#include "AbletonAscl.h"
 #include "AppExperiments.h"
 #include "AppVersion.h"
 #include "DesignsModel.h"
@@ -253,6 +254,7 @@ void WilsonicMenuComponent::_popupMenuHelper()
     int const documentationID = 2;
     int const outOfBandMuteID = 3;
     int const outOfBandPlayID = 4;
+    int const exportAsclID = 5;
 
     // version
     String appName = AppVersion::getAppName();
@@ -323,6 +325,13 @@ void WilsonicMenuComponent::_popupMenuHelper()
     _menu.addItem(documentationID, "Documentation", true, false);
     _menu.addItem(disabledID, "(opens in your browser)", false, false);
 
+#if ! (JUCE_IOS || JUCE_ANDROID)
+    // Export the current tuning as an Ableton Live 12 tuning file (no MTS-ESP needed in Live)
+    _menu.addSeparator();
+    _menu.addItem(exportAsclID, "Export for Ableton Live (.ascl)" + String(CharPointer_UTF8("\xe2\x80\xa6")), true, false);
+    _menu.addItem(disabledID, "(snapshot of the current tuning for a Live Set without MTS-ESP)", false, false);
+#endif
+
     //
     auto callback = [&](int selectedID)
     {
@@ -332,6 +341,10 @@ void WilsonicMenuComponent::_popupMenuHelper()
             {
                 _showResetMtsEspAlert();
             }
+        }
+        else if(selectedID == exportAsclID)
+        {
+            _exportAscl();
         }
         else if(selectedID == documentationID)
         {
@@ -362,6 +375,100 @@ void WilsonicMenuComponent::_popupMenuHelper()
     };
 
     _menu.showMenuAsync(PopupMenu::Options{}.withTargetComponent(*_mtsEspStatusIndicator), callback);
+}
+
+#pragma mark - Export for Ableton Live (.ascl)
+
+// Writes the current tuning as a Live 12 .ascl file: every MIDI key 0-127 at the
+// frequency Wilsonic's tuning table gives it, with Wilsonic degree names in the
+// piano roll. The file is a snapshot; MTS-ESP behaviour is untouched.
+void WilsonicMenuComponent::_exportAscl()
+{
+#if JUCE_IOS || JUCE_ANDROID
+    return;
+#else
+    auto tuning = _processor.getAppTuningModel()->getTuning();
+    if(tuning == nullptr)
+    {
+        jassertfalse;
+        return;
+    }
+
+    // design name from the Scale Design combo box; the tuning's own name as fallback
+    auto const designNames = _processor.getDesignsModel()->getDesignsNames();
+    auto const designIndex = _scaleDesignComboBox->getSelectedItemIndex();
+    auto const designName = (designIndex >= 0 && designIndex < designNames.size())
+        ? designNames[designIndex].toStdString()
+        : tuning->getTuningName();
+    auto const defaultName = AbletonAscl::defaultFileName(designName, tuning->getParameterDescription());
+    auto const startFile = File::getSpecialLocation(File::userDocumentsDirectory).getChildFile(String(defaultName));
+    _asclFileChooser = make_unique<FileChooser>("Export for Ableton Live (.ascl)", startFile, "*.ascl");
+    auto const flags = FileBrowserComponent::saveMode
+                     | FileBrowserComponent::canSelectFiles
+                     | FileBrowserComponent::warnAboutOverwriting;
+    _asclFileChooser->launchAsync(flags, [tuning, designName](const FileChooser& chooser)
+    {
+        auto file = chooser.getResult();
+        if(file == File())
+        {
+            return; // cancelled
+        }
+        if(! file.hasFileExtension("ascl"))
+        {
+            file = file.withFileExtension("ascl");
+        }
+
+        AsclOptions options;
+        options.fileName = file.getFileName().toStdString();
+        options.exportDate = Time::getCurrentTime().toISO8601(false).substring(0, 10).toStdString();
+        options.designName = designName;
+        options.appVersion = AppVersion::getAppVersion();
+        options.linkUrl = AppVersion::getProjectURL().toStdString();
+        options.includeScaleDirectives = false; // SCALE directives are undocumented and untested in Live
+
+        vector<string> warnings;
+        auto const text = AbletonAscl::makeAscl(*tuning, options, warnings);
+        String details;
+        for(auto const& w : warnings)
+        {
+            details += String(CharPointer_UTF8("\xe2\x80\xa2 ")) + String::fromUTF8(w.c_str()) + "\n";
+        }
+
+        if(text.empty())
+        {
+            WilsonicMenuComponentMessageBus::getInstance().broadcastMessage("Ableton export failed");
+            NativeMessageBox::showAsync(MessageBoxOptions()
+                                        .withIconType(MessageBoxIconType::WarningIcon)
+                                        .withTitle("Export for Ableton Live failed")
+                                        .withMessage(details)
+                                        .withButton("OK"), nullptr);
+            return;
+        }
+
+        // UTF-8, no BOM, LF line endings (text already uses LF; pass it through unchanged)
+        auto const ok = file.replaceWithText(String::fromUTF8(text.c_str()), false, false, "\n");
+        if(! ok)
+        {
+            WilsonicMenuComponentMessageBus::getInstance().broadcastMessage("Ableton export failed: could not write " + file.getFileName());
+            NativeMessageBox::showAsync(MessageBoxOptions()
+                                        .withIconType(MessageBoxIconType::WarningIcon)
+                                        .withTitle("Export for Ableton Live failed")
+                                        .withMessage("Could not write " + file.getFullPathName())
+                                        .withButton("OK"), nullptr);
+            return;
+        }
+
+        WilsonicMenuComponentMessageBus::getInstance().broadcastMessage("Exported " + file.getFileName() + (warnings.empty() ? "" : " with warnings"));
+        if(! warnings.empty())
+        {
+            NativeMessageBox::showAsync(MessageBoxOptions()
+                                        .withIconType(MessageBoxIconType::InfoIcon)
+                                        .withTitle("Exported " + file.getFileName() + " with warnings")
+                                        .withMessage(details)
+                                        .withButton("OK"), nullptr);
+        }
+    });
+#endif
 }
 
 #pragma mark - Alert

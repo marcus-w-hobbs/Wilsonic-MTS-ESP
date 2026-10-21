@@ -70,6 +70,15 @@ String Brun::scalaComments() {
 
 #pragma mark - Update
 
+// MOS degree names: the 0-based scale degree in the processed (reduced, sorted)
+// array, so the tonic is "0". Runs before NPO override, so repeated degrees
+// keep their source name. Consumed by the Ableton .ascl export (AbletonAscl).
+void Brun::_assignDegreeNames() {
+    auto const count = _processedArray.count();
+    for (unsigned long i = 0; i < count; i++) {
+        _processedArray.microtoneAtIndex(i)->setDegreeName(to_string(i));
+    }
+}
 
 // Function to reduce a pitch value to the range [0, 1)
 float Brun::_octaveReduceP01(float p) {

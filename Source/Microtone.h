@@ -50,6 +50,12 @@ public:
     bool isRational(); /**< Returns true if the microtone is rational. */
     const string& getShortDescriptionText();
     void setShortDescriptionText(string desc);
+    /** Stable per-degree display name (e.g. "AB", "5/4", "3\\12", "0"). Designs set it;
+        it survives octave reduction, sort, uniquify and NPO override via clone().
+        Empty means "derive a fallback" (see AbletonAscl::degreeName). Never
+        overwritten by updateShortDescriptionText(). */
+    const string& getDegreeName();
+    void setDegreeName(string name);
     const string& getShortDescriptionText2();
     void setShortDescriptionText2(string desc);
     const string& getShortDescriptionText3();
@@ -96,6 +102,7 @@ protected:
     string _shortDescriptionText { "" };
     string _shortDescriptionText2 { "" };
     string _shortDescriptionText3 { "" };
+    string _degreeName { "" };
 
 private:
     Space _space = Space::Linear;

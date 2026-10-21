@@ -3,3 +3,4 @@ test_tuning
 research_cli
 build/
 test_outofband
+test_ascl

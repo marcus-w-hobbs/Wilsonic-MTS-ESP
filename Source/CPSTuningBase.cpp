@@ -120,6 +120,7 @@ Microtone_p CPSTuningBase::multiplyByCommonTones(vector<Microtone_p> inputTones)
     Microtone_p retVal = make_shared<Microtone>(f, sd, Microtone::Space::Linear, TuningConstants::defaultPeriod);
     retVal->setShortDescriptionText2(sd2);
     retVal->setShortDescriptionText3(retVal->getFrequencyValueDescription());
+    retVal->setDegreeName(sd); // seed letters, sorted (less_than_key sorted by short description above)
     
     return retVal;
 }

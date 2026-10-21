@@ -5,6 +5,7 @@
  * @brief This file contains the implementation of the MicrotoneArray class.
  */
 
+#include <algorithm>
 #include "MicrotoneArray.h"
 #include "Tuning.h"
 
@@ -435,6 +436,20 @@ MicrotoneArray MicrotoneArray::uniquify() {
     const ScopedLock sl(_lock);
     // use map/dictionary to uniquify
     auto unique = map<float, Microtone_p>();
+
+    // degree names of merged duplicates are joined with "|" in array order
+    // (Ableton's own files write "C♯|D♭"); equal names are not repeated.
+    auto mergedNames = map<float, vector<string>>();
+    for(auto const& m : _array) {
+        auto const& name = m->getDegreeName();
+        if(name.empty()) {
+            continue;
+        }
+        auto& names = mergedNames[m->getFrequencyValue()];
+        if(std::find(names.begin(), names.end(), name) == names.end()) {
+            names.push_back(name);
+        }
+    }
     
     // iterate through array
     auto rit = _array.rbegin();
@@ -448,6 +463,14 @@ MicrotoneArray MicrotoneArray::uniquify() {
     for(pair<float, Microtone_p> element : unique) {
         auto m = element.second;
         auto deep_copy = m->clone();
+        auto const names = mergedNames.find(element.first);
+        if(names != mergedNames.end() && names->second.size() > 1) {
+            string joined;
+            for(auto const& n : names->second) {
+                joined += (joined.empty() ? "" : "|") + n;
+            }
+            deep_copy->setDegreeName(joined);
+        }
         retVal.addMicrotone(deep_copy);
     }
     

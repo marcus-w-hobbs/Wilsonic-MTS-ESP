@@ -60,4 +60,10 @@ public:
     {
         return String ("https://wilsonic.co/documentation/documentation-mts-esp/");
     }
+
+    // project repository (written into exported tuning files as the LINK directive)
+    static const String getProjectURL()
+    {
+        return String ("https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP");
+    }
 };
