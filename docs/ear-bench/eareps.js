@@ -39,6 +39,7 @@ const Eareps = (() => {
         </header>
         ${current ? `
         <p class="hint">Hold the chord for at least 5 seconds, release, hold again. Replay as often as you like. Space bar holds it too. Once you commit a verdict it stays committed.</p>
+        ${Synth.struck ? `<p class="warn">The protocol asks for a sustained, steady patch. A plucked or struck timbre decays while you hold the chord, so switch to Reed or Organ for this sitting.</p>` : ""}
         <div class="row">
           <button class="btn primary big" id="eps-hold" aria-describedby="eps-hold-hint">Hold chord</button>
           <button class="btn" id="eps-five">Play 5 s</button>
@@ -59,7 +60,7 @@ const Eareps = (() => {
         <label class="label" for="eps-notes">Notes</label>
         <textarea id="eps-notes" rows="2" placeholder="Anything you heard">${ctx.escape(draft.notes || "")}</textarea>
         <div class="row">
-          <button class="btn primary" id="eps-commit" ${draft.verdict && !Store.readOnly ? "" : "disabled"}>Commit and go to next rung</button>
+          <button class="btn primary" id="eps-commit" ${draft.verdict && !Store.readOnly && !Synth.struck ? "" : "disabled"}>Commit and go to next rung</button>
           ${sitting.synth_patch && sitting.synth_patch !== Synth.describe()
             ? `<span class="warn">The sitting started on "${ctx.escape(sitting.synth_patch)}". The protocol asks for the same patch on every rung.</span>` : ""}
         </div>` : `

@@ -597,9 +597,13 @@
 
   function bindHeader() {
     const timbre = $("#timbre");
-    timbre.innerHTML = Object.entries(Synth.TIMBRES).map(([k, t]) => `<option value="${k}">${t.label}</option>`).join("");
+    const opts = (set) => Object.entries(set).map(([k, t]) => `<option value="${k}">${t.label}</option>`).join("");
+    timbre.innerHTML = `<optgroup label="Sustained">${opts(Timbres.SUSTAINED)}</optgroup><optgroup label="Plucked and struck">${opts(Timbres.STRUCK)}</optgroup>`;
     timbre.value = Synth.timbre;
-    timbre.onchange = () => Synth.setTimbre(timbre.value);
+    timbre.onchange = () => {
+      Synth.setTimbre(timbre.value);
+      if (currentGroup() && currentGroup().scales.some((s) => s.protocol === "eareps")) renderEps();
+    };
     $("#drive").oninput = (e) => { Synth.setDrive(Number(e.target.value)); $("#drive-v").textContent = Number(e.target.value) ? Number(e.target.value).toFixed(1) : "off"; };
     $("#vol").oninput = (e) => Synth.setVolume(Number(e.target.value));
     $("#base").onchange = (e) => {

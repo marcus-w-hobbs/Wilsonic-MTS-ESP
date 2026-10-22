@@ -1,16 +1,11 @@
-// Ear Bench synth: steady additive voices (no vibrato, chorus or detune, per
-// the EAR-eps protocol), an optional ear-nonlinearity stage that makes sum
-// and difference tones audible, and a compressor to keep chords from clipping.
+// Ear Bench synth: steady or struck additive voices (no vibrato, chorus or
+// detune), an optional ear-nonlinearity stage that makes sum and difference
+// tones audible, and a compressor to keep chords from clipping.
 "use strict";
 
 const Synth = (() => {
-  const TIMBRES = {
-    reed: { label: "Reed (all partials, 1/n)", partials: Array.from({ length: 16 }, (_, i) => 1 / (i + 1)) },
-    organ: { label: "Organ (drawbars 1-2-3-4-6-8)", partials: [1, 0.7, 0.5, 0.35, 0, 0.25, 0, 0.18] },
-    clarinet: { label: "Clarinet (odd partials)", partials: Array.from({ length: 15 }, (_, i) => (i % 2 === 0 ? 1 / (i + 1) : 0)) },
-    sine: { label: "Sine (control: hides combination tones)", partials: [1] },
-  };
   const VOICE_GAIN = 0.16;
+  const STRUCK_GAIN = 0.2;
   const ATTACK = 0.02;
   const RELEASE = 0.28;
 
@@ -35,13 +30,16 @@ const Synth = (() => {
     return curve;
   }
 
-  function buildWave() {
-    const amps = TIMBRES[timbre].partials;
+  function waveFor(c) {
+    const t = Timbres.SUSTAINED[timbre];
+    if (!t) return null;
+    const amps = t.partials;
     const real = new Float32Array(amps.length + 1);
     const imag = new Float32Array(amps.length + 1);
     amps.forEach((a, i) => { imag[i + 1] = a; });
-    wave = ctx.createPeriodicWave(real, imag);
+    return c.createPeriodicWave(real, imag);
   }
+  function buildWave() { wave = waveFor(ctx); }
 
   async function start() {
     if (!ctx) {
@@ -63,52 +61,97 @@ const Synth = (() => {
   }
 
   const running = () => !!ctx && ctx.state === "running";
+  const safeStop = (osc, t) => { try { osc.stop(t); } catch (e) { /* already stopped */ } };
+
+  // A held, steady voice: one periodic wave at a constant level.
+  function sustainedVoice(c, dest, hz, t) {
+    const osc = c.createOscillator();
+    osc.setPeriodicWave(c === ctx ? wave : waveFor(c));
+    osc.frequency.setValueAtTime(hz, t);
+    const env = c.createGain();
+    env.gain.setValueAtTime(0, t);
+    env.gain.linearRampToValueAtTime(VOICE_GAIN, t + ATTACK);
+    osc.connect(env).connect(dest);
+    osc.start(t);
+    return {
+      stop(at) {
+        env.gain.cancelScheduledValues(at);
+        // .value reads the param's default (1) until the audio thread runs, so
+        // clamp it: a release scheduled ahead must never jump above the voice level.
+        env.gain.setValueAtTime(Math.min(env.gain.value, VOICE_GAIN), at);
+        env.gain.linearRampToValueAtTime(0, at + RELEASE);
+        safeStop(osc, at + RELEASE + 0.05);
+      },
+    };
+  }
+
+  // A plucked or hammered voice: one sine per partial, each decaying on its
+  // own time constant; releasing the key damps the whole string.
+  function struckVoice(c, dest, hz, t) {
+    const spec = Timbres.STRUCK[timbre];
+    const partials = spec.partials(hz);
+    const norm = STRUCK_GAIN / Math.sqrt(partials.reduce((s, p) => s + p.amp * p.amp, 0));
+    const damper = c.createGain();
+    damper.connect(dest);
+    const oscs = partials.map((p) => {
+      const osc = c.createOscillator();
+      osc.frequency.setValueAtTime(hz * p.ratio, t);
+      const g = c.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(p.amp * norm, t + spec.attack);
+      g.gain.setTargetAtTime(0, t + spec.attack, p.tau);
+      osc.connect(g).connect(damper);
+      osc.start(t);
+      safeStop(osc, t + spec.attack + 7 * p.tau);
+      return osc;
+    });
+    return {
+      stop(at) {
+        damper.gain.setTargetAtTime(0, at, spec.damp);
+        oscs.forEach((o) => safeStop(o, at + 6 * spec.damp));
+      },
+    };
+  }
+
+  function makeVoice(hz, t, c = ctx, dest = bus) {
+    return Timbres.isStruck(timbre) ? struckVoice(c, dest, hz, t) : sustainedVoice(c, dest, hz, t);
+  }
+
+  // One note of the current timbre rendered offline, dry (no shaper or
+  // compressor): the hook the timbre measurements use.
+  async function renderNote(hz, seconds, holdSeconds, sampleRate = 48000) {
+    const off = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
+    makeVoice(hz, 0, off, off.destination).stop(holdSeconds);
+    return { samples: (await off.startRendering()).getChannelData(0), sampleRate };
+  }
 
   function noteOn(key, hz, when = 0) {
     if (!ctx) return;
     noteOff(key);
     const t = Math.max(ctx.currentTime, when || ctx.currentTime);
-    const osc = ctx.createOscillator();
-    osc.setPeriodicWave(wave);
-    osc.frequency.setValueAtTime(hz, t);
-    const env = ctx.createGain();
-    env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(VOICE_GAIN, t + ATTACK);
-    osc.connect(env).connect(bus);
-    osc.start(t);
-    voices.set(key, { osc, env });
+    voices.set(key, makeVoice(hz, t));
   }
 
   function noteOff(key, when = 0) {
     const v = voices.get(key);
     if (!v || !ctx) return;
     voices.delete(key);
-    const t = Math.max(ctx.currentTime, when || ctx.currentTime);
-    v.env.gain.cancelScheduledValues(t);
-    v.env.gain.setValueAtTime(v.env.gain.value, t);
-    v.env.gain.linearRampToValueAtTime(0, t + RELEASE);
-    v.osc.stop(t + RELEASE + 0.05);
+    v.stop(Math.max(ctx.currentTime, when || ctx.currentTime));
   }
 
   function allOff() { [...voices.keys()].forEach((k) => noteOff(k)); }
 
   // Fire-and-forget scheduled note (sequences, chords).
   function blip(hz, startAt, dur) {
-    const key = `blip:${Math.random()}`;
-    noteOn(key, hz, startAt);
-    const v = voices.get(key);
-    voices.delete(key);
-    const end = startAt + dur;
-    v.env.gain.setValueAtTime(VOICE_GAIN, end);
-    v.env.gain.linearRampToValueAtTime(0, end + RELEASE);
-    v.osc.stop(end + RELEASE + 0.05);
-    return key;
+    if (!ctx) return;
+    // Struck notes ring a little past a short sequence step, as a played string would.
+    makeVoice(hz, startAt).stop(startAt + (Timbres.isStruck(timbre) ? Math.max(dur, 0.9) : dur));
   }
 
   const now = () => (ctx ? ctx.currentTime : 0);
 
   function setTimbre(name) {
-    if (!TIMBRES[name]) return;
+    if (!Timbres.ALL[name]) return;
     timbre = name;
     if (ctx) buildWave();
   }
@@ -120,8 +163,9 @@ const Synth = (() => {
     volume = v;
     if (out) out.gain.setTargetAtTime(v, ctx.currentTime, 0.02);
   }
-  const describe = () => `${TIMBRES[timbre].label}; nonlinearity ${drive ? drive.toFixed(1) : "off"}`;
+  const describe = () => `${Timbres.ALL[timbre].label}; nonlinearity ${drive ? drive.toFixed(1) : "off"}`;
 
-  return { TIMBRES, start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, describe,
-    get timbre() { return timbre; } };
+  return { start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, describe, renderNote,
+    get timbre() { return timbre; },
+    get struck() { return Timbres.isStruck(timbre); } };
 })();
