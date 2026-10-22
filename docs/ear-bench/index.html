@@ -232,8 +232,8 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 </header>
 
 <div class="midi-help" id="midi-help" role="status" hidden>
-  <p><strong>This copy of the bench can't reach MIDI devices.</strong> It runs inside claude.ai, which keeps pages away from USB and MIDI hardware.
-  For a LinnStrument or any controller, open the local bench in <strong>Chrome</strong> (Safari has no Web MIDI):</p>
+  <p><strong>This browser view can't reach MIDI devices.</strong> <span id="midi-why"></span>
+  For a LinnStrument or any controller, open the local bench in <strong>Google Chrome</strong>:</p>
   <div class="row"><code id="midi-url">http://localhost:8765/</code><button class="btn sm" id="midi-copy">Copy link</button><button class="btn sm" id="midi-close">Close</button></div>
   <p class="hint">The local bench needs its server running, from the repo: <code>python3 experiments/ear_bench/serve.py</code>. Verdicts you save there go to <code>experiments/ear_bench/results/verdicts.json</code>, where any session reads them.</p>
 </div>

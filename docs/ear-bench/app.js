@@ -644,6 +644,10 @@
     const box = $("#midi-help");
     const url = `http://localhost:8765/${location.hash || ""}`;
     box.hidden = false;
+    const local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    $("#midi-why").textContent = local
+      ? "The browser showing this page did not grant MIDI access. The Claude app's built-in browser pane and Safari never do."
+      : "It runs inside claude.ai, which keeps pages away from USB and MIDI hardware.";
     $("#midi-url").textContent = url;
     $("#midi-copy").onclick = async () => {
       try { await navigator.clipboard.writeText(url); $("#midi-copy").textContent = "Copied"; }
