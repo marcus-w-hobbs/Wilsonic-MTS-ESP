@@ -19,7 +19,10 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   4. Save a verdict on the Ear Bench (https://claude.ai/artifact/XNptx9B3t9yXGgDvmJeVbf,
      source docs/ear-bench/). Sessions read its database with ArtifactData
      (`gates/<G-NNN>`, `scales/<id>`, `comparisons/<id>`, `eareps/responses`)
-     and treat a saved Pass/Fail as the decision. Rebuild its scale bundle with
+     and treat a saved Pass/Fail as the decision. For MIDI controllers the bench
+     runs locally (`python experiments/ear_bench/serve.py`, Chrome), and saves to
+     `experiments/ear_bench/results/verdicts.json` instead; sessions read both.
+     Rebuild its scale bundle with
      `python experiments/ear_bench/bundle.py` whenever a gate adds `.scl` files.
 - **Statuses:** `PENDING` (waiting on Marcus — the loop is stopped here),
   `QUEUED` (will become PENDING when its prerequisites land), `PASS`, `FAIL`

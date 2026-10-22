@@ -233,8 +233,10 @@
     const v = Store.get("gates", g.id) || {};
     const choices = [["pass", "Pass"], ["fail", "Fail"], ["again", "Listen again"]];
     const status = v.updatedAt ? `Saved ${new Date(v.updatedAt).toLocaleString()}` : "Nothing saved yet";
-    const where = Store.mode === "db" ? "Saved to this page's database. The next Claude session reads it and updates the ledger."
-      : "Saved in this browser only. Use Copy verdicts to send them to a session.";
+    const where = {
+      db: "Saved to this page's database. The next Claude session reads it and updates the ledger.",
+      server: "Saved to experiments/ear_bench/results/verdicts.json by the local server. Any session reads it there.",
+    }[Store.mode] || "Saved in this browser only. Use Copy verdicts to send them to a session.";
     if (!full && box.querySelector("textarea") === document.activeElement) {
       $("#verdict-status").textContent = status;
       return;
@@ -635,13 +637,17 @@
       chip.classList.add("on");
     } catch (err) {
       chip.textContent = "MIDI blocked in this view";
-      chip.title = "Browsers allow MIDI on a local copy: python3 -m http.server -d docs/ear-bench 8765";
+      chip.title = "Run python3 experiments/ear_bench/serve.py and open http://localhost:8765 in Chrome";
     }
   }
   async function onMidi(msg) {
     const [st, d1, d2] = msg.data;
     const cmd = st & 0xf0;
-    if (cmd === 0x90 && d2 > 0) { await ensureAudio(); playDegree(`midi${d1}`, d1 - 60); }
+    if (cmd === 0x90 && d2 > 0) {
+      await ensureAudio();
+      playDegree(`midi${d1}`, d1 - 60);
+      $("#midi").textContent = `MIDI: note ${d1} → degree ${d1 - 60}`;
+    }
     else if (cmd === 0x80 || (cmd === 0x90 && d2 === 0)) release(`midi${d1}`);
     else if (cmd === 0xb0 && d1 === 64) {
       state.sustain = d2 >= 64;
@@ -683,7 +689,7 @@
 
   function onStore(info) {
     if (info.error) { $("#store-msg").textContent = info.error; $("#store-msg").hidden = false; }
-    if (info.mode) $("#store-mode").textContent = Store.mode === "db" ? "Verdicts save to this page" : "Verdicts save in this browser";
+    if (info.mode) $("#store-mode").textContent = { db: "Verdicts save to this page", server: "Verdicts save to the repo (local server)" }[Store.mode] || "Verdicts save in this browser";
     renderSidebar();
     if (!state.groupId) return;
     if (info.mode && !currentGroup().scales.some((s) => s.protocol === "eareps")) { renderMain(); return; }

@@ -1,7 +1,9 @@
 // Ear Bench verdict store. On claude.ai the page's shared database holds every
 // verdict, so a later Claude session can read them and update GATES.md.
-// Anywhere else (a local copy of docs/) it falls back to this browser's
-// localStorage, with a copy-as-JSON export.
+// Served by experiments/ear_bench/serve.py (the local copy, for MIDI) it
+// saves through that server to experiments/ear_bench/results/verdicts.json.
+// Anywhere else it falls back to this browser's localStorage, with a
+// copy-as-JSON export.
 //
 // Documents:
 //   gates/<G-NNN>              {verdict, notes, updatedAt}
@@ -54,6 +56,8 @@ const Store = (() => {
       const user = await window.claude.use("user").catch(() => null);
       if (user && user.can) readOnly = (await user.can("data.write")) === false;
       ["gates", "scales", "comparisons", "eareps"].forEach(subscribe);
+    } else if (await loadFromServer()) {
+      mode = "server";
     } else {
       mode = "local";
     }
@@ -61,11 +65,34 @@ const Store = (() => {
     return mode;
   }
 
+  async function loadFromServer() {
+    try {
+      const res = await fetch("api/verdicts", { cache: "no-store" });
+      if (!res.ok) return false;
+      const data = await res.json();
+      ["gates", "scales", "comparisons", "eareps"].forEach((c) => { cache[c] = data[c] || {}; });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function persist(collection, id, body) {
+    if (mode === "db") return db.doc(`${collection}/${id}`).set(body);
+    const res = await fetch("api/verdicts", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ collection, id, body }),
+    });
+    if (!res.ok) throw { code: res.status === 400 ? "invalid_argument" : "unavailable" };
+    return undefined;
+  }
+
   // One write in flight per document; the latest body wins.
   function write(collection, id, body) {
     cache[collection] = { ...cache[collection], [id]: body };
     emit({ collection, saving: true });
-    if (mode !== "db") { saveLocal(); emit({ collection, saved: true }); return Promise.resolve(); }
+    if (mode === "local") { saveLocal(); emit({ collection, saved: true }); return Promise.resolve(); }
     const key = `${collection}/${id}`;
     const q = queues.get(key) || { busy: false, next: null };
     queues.set(key, q);
@@ -77,11 +104,11 @@ const Store = (() => {
         const payload = q.next;
         q.next = null;
         try {
-          await db.doc(key).set(payload);
+          await persist(collection, id, payload);
           emit({ collection, saved: true });
         } catch (err) {
-          if (err.code === "invalid_argument") readOnly = true;
-          emit({ error: err.code === "invalid_argument"
+          if (err.code === "invalid_argument" && mode === "db") readOnly = true;
+          emit({ error: err.code === "invalid_argument" && mode === "db"
             ? "This view can't save verdicts (read-only access)."
             : `Not saved (${err.code}). Your text is still here; change it again to retry.` });
         }
