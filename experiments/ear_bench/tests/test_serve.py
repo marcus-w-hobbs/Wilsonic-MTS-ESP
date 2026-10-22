@@ -48,5 +48,16 @@ class TestLoadSave(unittest.TestCase):
             self.assertEqual(serve.load(path), serve.empty_store())
 
 
+class TestBuildId(unittest.TestCase):
+    def test_changes_when_a_page_file_changes(self):
+        import os
+        with tempfile.TemporaryDirectory() as tmp:
+            page = Path(tmp)
+            (page / "app.js").write_text("a")
+            first = serve.build_id(page)
+            os.utime(page / "app.js", ns=(1, 10**18))
+            self.assertNotEqual(serve.build_id(page), first)
+
+
 if __name__ == "__main__":
     unittest.main()

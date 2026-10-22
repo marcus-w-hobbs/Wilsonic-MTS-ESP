@@ -18,6 +18,7 @@ import argparse
 import json
 import re
 import threading
+import time
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -25,12 +26,23 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 PAGE_DIR = REPO / "docs" / "ear-bench"
 VERDICTS = Path(__file__).resolve().parent / "results" / "verdicts.json"
+# Live page diagnostics (audio, MIDI, errors) so a session can see what the
+# open bench is doing without screenshots. Not committed.
+STATUS = Path(__file__).resolve().parent / "results" / "status.json"
+STATUS_API = "/api/status"
+_status: dict = {}
 
 COLLECTIONS = ("gates", "scales", "comparisons", "eareps")
 DOC_ID = re.compile(r"^[A-Za-z0-9_\-.~:@+]{1,200}$")
 MAX_BODY = 256 * 1024
 API = "/api/verdicts"
 _lock = threading.Lock()
+
+
+def build_id(page_dir: Path = PAGE_DIR) -> str:
+    """Changes whenever any page file changes, so open pages can reload themselves."""
+    stamps = [f.stat().st_mtime_ns for f in page_dir.iterdir() if f.is_file()]
+    return format(max(stamps, default=0), "x")
 
 
 def empty_store() -> dict:
@@ -82,11 +94,40 @@ class Handler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_GET(self) -> None:  # noqa: N802 (http.server API)
+        if self.path == STATUS_API:
+            with _lock:
+                self._json(200, _status)
+            return
         if self.path == API:
             with _lock:
                 self._json(200, load())
             return
         super().do_GET()
+
+    def do_POST(self) -> None:  # noqa: N802
+        if self.path != STATUS_API:
+            self._json(404, {"error": "not found"})
+            return
+        length = int(self.headers.get("Content-Length") or 0)
+        if length <= 0 or length > MAX_BODY:
+            self._json(413, {"error": "body missing or too large"})
+            return
+        try:
+            report = json.loads(self.rfile.read(length))
+            client = report.get("client") if isinstance(report, dict) else None
+            if not isinstance(client, str) or not DOC_ID.match(client):
+                raise ValueError("report needs a client id")
+            with _lock:
+                _status[client] = {**report, "receivedAt": time.strftime("%Y-%m-%dT%H:%M:%S")}
+                save(_status, STATUS)
+        except (ValueError, json.JSONDecodeError) as err:
+            self._json(400, {"error": str(err)})
+            return
+        self._json(200, {"ok": True, "build": build_id()})
+
+    def log_message(self, fmt: str, *args) -> None:
+        if STATUS_API not in (args[0] if args else ""):
+            super().log_message(fmt, *args)
 
     def do_PUT(self) -> None:  # noqa: N802
         if self.path != API:

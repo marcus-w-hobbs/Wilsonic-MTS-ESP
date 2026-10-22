@@ -622,10 +622,10 @@
   });
   window.addEventListener("blur", () => { Synth.allOff(); state.held.clear(); });
 
-  async function connectMidi() {
+  async function connectMidi(fromClick = true) {
     const chip = $("#midi");
-    // This click is a user gesture, so it can also start audio: MIDI notes alone never can.
-    await ensureAudio();
+    // A click is a user gesture, so it can also start audio: MIDI notes alone never can.
+    if (fromClick) await ensureAudio();
     if (!navigator.requestMIDIAccess) { chip.textContent = "MIDI: open the local bench in Chrome"; showMidiHelp(); return; }
     try {
       const access = await navigator.requestMIDIAccess();
@@ -633,12 +633,14 @@
         const names = [];
         access.inputs.forEach((input) => { names.push(input.name); input.onmidimessage = onMidi; });
         chip.textContent = names.length ? `MIDI: ${names.join(", ")}` : "MIDI on, no inputs yet";
+        Diag.setMidi({ inputs: names, error: null });
       };
       access.onstatechange = bind;
       bind();
       chip.classList.add("on");
       $("#midi-help").hidden = true;
     } catch (err) {
+      Diag.setMidi({ error: String(err && err.message ? err.message : err) });
       chip.textContent = "MIDI: open the local bench";
       showMidiHelp();
     }
@@ -663,7 +665,9 @@
     const [st, d1, d2] = msg.data;
     const cmd = st & 0xf0;
     if (cmd === 0x90 && d2 > 0) {
-      if (!(await ensureAudio())) {
+      const sounding = await ensureAudio();
+      Diag.noteIn(d1, sounding);
+      if (!sounding) {
         $("#midi").textContent = `MIDI note ${d1} arrived. Click Start audio to hear it`;
         $("#audio").classList.add("rec");
         return;
@@ -695,7 +699,7 @@
       if (v >= 20 && v <= 2000) { state.baseHz = v; renderTable(); } else e.target.value = state.baseHz;
     };
     $("#audio").onclick = ensureAudio;
-    $("#midi").onclick = connectMidi;
+    $("#midi").onclick = () => connectMidi(true);
     $("#copy").onclick = async () => {
       const text = Store.exportAll();
       try { await navigator.clipboard.writeText(text); $("#copy").textContent = "Copied"; }
@@ -735,6 +739,7 @@
   }
 
   function showError(err) {
+    Diag.error(err && err.message ? err.message : err);
     const msg = $("#store-msg");
     msg.textContent = `Something broke: ${err && err.message ? err.message : err}. Reload the page; if it repeats, tell Claude this message.`;
     msg.hidden = false;
@@ -758,7 +763,18 @@
     const hash = decodeURIComponent((location.hash || "").slice(1));
     const gs = groups();
     selectGroup(gs.some((g) => g.id === hash) ? hash : (gs.find((g) => g.kind === "gate" && g.gate.state === "PENDING" && !g.scales.some((s) => s.protocol)) || gs[0]).id);
-    Store.init();
+    Store.init().then(async (mode) => {
+      if (mode !== "server") return;
+      Diag.start(() => ({
+        audio: Synth.running() ? "running" : "off", timbre: Synth.timbre, baseHz: state.baseHz,
+        gate: state.groupId, a: state.a, b: state.b, slot: state.slot, store: Store.mode,
+      }));
+      // Reconnect MIDI on every load once Chrome has granted it, so a reload needs no click.
+      try {
+        const perm = navigator.permissions && await navigator.permissions.query({ name: "midi" });
+        if (perm && perm.state === "granted") connectMidi(false);
+      } catch (e) { /* permissions API without midi: wait for the button */ }
+    });
     window.addEventListener("hashchange", () => {
       const id = decodeURIComponent(location.hash.slice(1));
       if (id && id !== state.groupId && groups().some((g) => g.id === id)) selectGroup(id);

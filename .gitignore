@@ -348,3 +348,6 @@ windows_installer_64.iss
 Wilsonic-MTS-ESP_installer/
 tests/test_wilsonicmath
 experiments/archive/catalog.jsonl
+
+# Ear Bench live page diagnostics (local server)
+experiments/ear_bench/results/status.json

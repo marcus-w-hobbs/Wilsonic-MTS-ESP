@@ -56,7 +56,8 @@ const Synth = (() => {
       shaper.curve = shaperCurve(drive);
       buildWave();
     }
-    if (ctx.state !== "running") await ctx.resume();
+    // Without a user gesture resume() can stay pending forever; never let a caller hang on it.
+    if (ctx.state !== "running") await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 250))]);
     return ctx.state === "running";
   }
 
