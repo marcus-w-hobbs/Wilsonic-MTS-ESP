@@ -624,6 +624,8 @@
 
   async function connectMidi() {
     const chip = $("#midi");
+    // This click is a user gesture, so it can also start audio: MIDI notes alone never can.
+    await ensureAudio();
     if (!navigator.requestMIDIAccess) { chip.textContent = "MIDI: open the local bench in Chrome"; showMidiHelp(); return; }
     try {
       const access = await navigator.requestMIDIAccess();
@@ -635,6 +637,7 @@
       access.onstatechange = bind;
       bind();
       chip.classList.add("on");
+      $("#midi-help").hidden = true;
     } catch (err) {
       chip.textContent = "MIDI: open the local bench";
       showMidiHelp();
@@ -660,7 +663,12 @@
     const [st, d1, d2] = msg.data;
     const cmd = st & 0xf0;
     if (cmd === 0x90 && d2 > 0) {
-      await ensureAudio();
+      if (!(await ensureAudio())) {
+        $("#midi").textContent = `MIDI note ${d1} arrived. Click Start audio to hear it`;
+        $("#audio").classList.add("rec");
+        return;
+      }
+      $("#audio").classList.remove("rec");
       playDegree(`midi${d1}`, d1 - 60);
       $("#midi").textContent = `MIDI: note ${d1} → degree ${d1 - 60}`;
     }
