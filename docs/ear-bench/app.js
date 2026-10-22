@@ -726,7 +726,24 @@
     if (info.collection === "comparisons") { renderActions(); renderCompare(); }
   }
 
+  function armAudioOnFirstGesture() {
+    // Browsers only start audio from a gesture on the page; MIDI notes never count.
+    // So the first click or key anywhere starts it, and Start audio is never a trap.
+    const start = () => { ensureAudio().catch(showError); };
+    document.addEventListener("pointerdown", start, { once: true, capture: true });
+    document.addEventListener("keydown", start, { once: true, capture: true });
+  }
+
+  function showError(err) {
+    const msg = $("#store-msg");
+    msg.textContent = `Something broke: ${err && err.message ? err.message : err}. Reload the page; if it repeats, tell Claude this message.`;
+    msg.hidden = false;
+  }
+
   async function boot() {
+    window.addEventListener("error", (e) => showError(e.error || e.message));
+    window.addEventListener("unhandledrejection", (e) => showError(e.reason));
+    armAudioOnFirstGesture();
     bindHeader();
     Store.onChange(onStore);
     try {
