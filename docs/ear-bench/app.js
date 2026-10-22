@@ -624,7 +624,7 @@
 
   async function connectMidi() {
     const chip = $("#midi");
-    if (!navigator.requestMIDIAccess) { chip.textContent = "MIDI not available in this browser"; return; }
+    if (!navigator.requestMIDIAccess) { chip.textContent = "MIDI: open the local bench in Chrome"; showMidiHelp(); return; }
     try {
       const access = await navigator.requestMIDIAccess();
       const bind = () => {
@@ -636,10 +636,22 @@
       bind();
       chip.classList.add("on");
     } catch (err) {
-      chip.textContent = "MIDI blocked in this view";
-      chip.title = "Run python3 experiments/ear_bench/serve.py and open http://localhost:8765 in Chrome";
+      chip.textContent = "MIDI: open the local bench";
+      showMidiHelp();
     }
   }
+  function showMidiHelp() {
+    const box = $("#midi-help");
+    const url = `http://localhost:8765/${location.hash || ""}`;
+    box.hidden = false;
+    $("#midi-url").textContent = url;
+    $("#midi-copy").onclick = async () => {
+      try { await navigator.clipboard.writeText(url); $("#midi-copy").textContent = "Copied"; }
+      catch (e) { const r = document.createRange(); r.selectNodeContents($("#midi-url")); getSelection().removeAllRanges(); getSelection().addRange(r); $("#midi-copy").textContent = "Selected, press ⌘C"; }
+    };
+    $("#midi-close").onclick = () => { box.hidden = true; };
+  }
+
   async function onMidi(msg) {
     const [st, d1, d2] = msg.data;
     const cmd = st & 0xf0;
