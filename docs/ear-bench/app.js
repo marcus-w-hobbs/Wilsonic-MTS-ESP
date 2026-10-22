@@ -84,16 +84,20 @@
     const t = Synth.now() + 0.05;
     centsList.forEach((c, i) => Synth.blip(hz(c), t + i * step, hold));
   }
-  function runScale() {
-    const m = Tuning.model(active());
+  function runScale(s = active(), t0 = Synth.now() + 0.05) {
+    const m = Tuning.model(s);
     const up = Array.from({ length: m.n + 1 }, (_, d) => Tuning.degreeCents(m, d));
-    sequence([...up, ...up.slice(0, -1).reverse()]);
+    const notes = [...up, ...up.slice(0, -1).reverse()];
+    notes.forEach((c, i) => Synth.blip(hz(c), t0 + i * 0.3, 0.28));
+    return t0 + notes.length * 0.3 + 0.8;
   }
-  function playTriad(tr, t = Synth.now() + 0.05) {
+  function playTriad(tr, t = Synth.now() + 0.05, hold = 1.5) {
     tr.cents.forEach((c, i) => Synth.blip(hz(c), t + i * 0.22, 0.2));
-    tr.cents.forEach((c) => Synth.blip(hz(c), t + 0.75, 1.5));
-    return t + 2.6;
+    tr.cents.forEach((c) => Synth.blip(hz(c), t + 0.75, hold));
+    return t + 0.75 + hold + 0.35;
   }
+  function runAThenB() { runScale(scaleOf(state.b), runScale(scaleOf(state.a))); }
+  function phraseAThenB() { replayOn(state.b, replayOn(state.a)); }
   function playAllTriads() {
     let t = Synth.now() + 0.05;
     visibleTriads().slice(0, 24).forEach((tr) => { t = playTriad(tr, t); });
@@ -115,12 +119,13 @@
     open.forEach((on) => notes.push({ start: on.t, dur: 0.4, cents: on.cents }));
     return notes;
   }
-  function replayOn(id) {
+  function replayOn(id, t = Synth.now() + 0.05) {
     const s = scaleOf(id);
-    if (!s) return;
+    if (!s) return t;
     const m = Tuning.model(s);
-    const t = Synth.now() + 0.05;
-    phraseNotes().forEach((n) => Synth.blip(hz(Tuning.degreeCents(m, Tuning.nearestDegree(m, n.cents))), t + n.start, Math.max(0.08, n.dur)));
+    const notes = phraseNotes();
+    notes.forEach((n) => Synth.blip(hz(Tuning.degreeCents(m, Tuning.nearestDegree(m, n.cents))), t + n.start, Math.max(0.08, n.dur)));
+    return t + notes.reduce((e, n) => Math.max(e, n.start + n.dur), 0) + 0.8;
   }
 
   // ---------- triads ----------
@@ -169,8 +174,9 @@
     state.blindNames = false;
     state.spaceHold = null;
     const playable = g.scales.filter((s) => s.protocol !== "eareps");
-    state.a = playable[0] ? playable[0].id : null;
-    state.b = playable[1] ? playable[1].id : null;
+    const pair = g.gate && g.gate.pair && g.gate.pair.every((id) => state.byId.has(id)) ? g.gate.pair : null;
+    state.a = pair ? pair[0] : playable[0] ? playable[0].id : null;
+    state.b = pair ? pair[1] : playable[1] ? playable[1].id : null;
     state.slot = "a";
     renderSidebar();
     renderMain();
@@ -186,6 +192,7 @@
         <h2>${escape(g.title)}</h2>
         ${g.kind === "gate" ? `<p class="gate-text">${escape(g.gate.gate)}</p><p class="ledger">${escape(g.gate.status)}</p>` : ""}
       </header>
+      ${isEps ? "" : `<section class="card compare" id="compare" hidden></section>`}
       ${g.kind === "gate" && !isEps ? `<section class="card verdict" id="verdict"></section>` : ""}
       ${isEps ? `<div id="eps"></div>` : `
       <section class="card instrument" id="instrument">
@@ -258,7 +265,20 @@
   }
 
   // ----- instrument -----
+  function renderCompare() {
+    const box = $("#compare");
+    if (!box) return;
+    const g = currentGroup();
+    Compare.render(box, {
+      a: scaleOf(state.a), b: scaleOf(state.b), scaleOf, escape, fmt, ensureAudio, playTriad, runAThenB, phraseAThenB,
+      tol: () => state.tol, hasPhrase: () => state.phrase.length > 0, readOnly: Store.readOnly,
+      saved: () => Store.get("comparisons", comparisonId()),
+      save: (body) => Store.saveComparison(comparisonId(), { gate: g.kind === "gate" ? g.id : null, a: state.a, b: state.b, ...body }),
+    });
+  }
+
   function renderInstrument() {
+    renderCompare();
     renderInstrumentBar();
     renderStrip();
     renderActions();
@@ -398,12 +418,14 @@
       state.recording = !state.recording;
       if (state.recording) { state.phrase = []; state.t0 = Synth.now(); }
       renderActions();
+      renderCompare();
     };
     $("#rep-a").onclick = async () => { await ensureAudio(); replayOn(state.a); };
     $("#rep-b").onclick = async () => { await ensureAudio(); replayOn(state.b); };
     $("#stop").onclick = () => { stopAll(); renderActions(); };
     box.querySelectorAll("[data-prefer]").forEach((b) => b.addEventListener("click", () => {
-      Store.saveComparison(comparisonId(), { gate: g.id, a: state.a, b: state.b, prefer: b.dataset.prefer });
+      const cur = Store.get("comparisons", comparisonId()) || {};
+      Store.saveComparison(comparisonId(), { picks: cur.picks || {}, gate: g.id, a: state.a, b: state.b, prefer: cur.prefer === b.dataset.prefer ? null : b.dataset.prefer });
       renderActions();
     }));
   }
@@ -671,7 +693,7 @@
     }
     if (info.collection === "gates") renderVerdict(false);
     if (info.collection === "scales") renderScales();
-    if (info.collection === "comparisons") renderActions();
+    if (info.collection === "comparisons") { renderActions(); renderCompare(); }
   }
 
   async function boot() {

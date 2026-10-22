@@ -161,6 +161,14 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .t-play { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: baseline; border-radius: 4px; padding: 2px 4px; }
 .t-play:hover, .t-play:focus-visible { background: var(--accent-soft); }
 .t-dev.ok { color: var(--ok); } .t-dev.bad { color: var(--bad); font-weight: 600; }
+.compare { border-color: var(--accent); }
+.c-head { display: flex; flex-direction: column; gap: 4px; }
+.c-table { display: flex; flex-direction: column; gap: 2px; overflow-x: auto; }
+.c-row { display: grid; grid-template-columns: minmax(130px, 1fr) 72px 72px 220px 160px; gap: 10px; align-items: center; padding: 6px 8px; border-radius: 4px; min-width: 620px; }
+.c-row > span { text-align: left; justify-self: start; }
+.c-row:nth-child(even) { background: var(--paper); }
+.c-th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.05em; }
+.c-melody { padding-top: 8px; border-top: 1px dashed var(--rule); }
 .bpick { margin-top: 8px; } .bpick select { max-width: 100%; min-width: 0; flex: 1 1 260px; }
 .t-form { color: var(--ink-2); font-family: var(--f-mono); font-size: 0.8rem; }
 .t-dev { color: var(--ink-2); }
@@ -237,5 +245,6 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 <script src="audio.js"></script>
 <script src="store.js"></script>
 <script src="targets.js"></script>
+<script src="compare.js"></script>
 <script src="eareps.js"></script>
 <script src="app.js"></script>

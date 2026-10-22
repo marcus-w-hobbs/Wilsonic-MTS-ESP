@@ -73,6 +73,10 @@
    "state": "PENDING",
    "folders": [
     "cpsfit002"
+   ],
+   "pair": [
+    "lattice.cpsfit002.cpsfit002_hexany_N22_g193.908",
+    "lattice.cpsfit001.cpsfit001_hexany_N22_g193.79"
    ]
   },
   {
@@ -83,6 +87,10 @@
    "state": "PENDING",
    "folders": [
     "cpsfit003"
+   ],
+   "pair": [
+    "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676",
+    "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818"
    ]
   },
   {

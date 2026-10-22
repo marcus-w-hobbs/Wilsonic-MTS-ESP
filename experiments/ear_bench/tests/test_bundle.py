@@ -138,6 +138,28 @@ class TestCollect(unittest.TestCase):
         self.assertTrue(by_name["eareps_A_01"]["blind"])
         self.assertEqual(by_name["eareps_A_01"]["protocol"], "eareps")
         self.assertEqual({g["id"] for g in result["gates"]}, {"G-028"})
+        self.assertNotIn("pair", result["gates"][0])
+
+    def test_pair_attached_only_when_both_scales_exist(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            meru = root / "lattice" / "results" / "scl" / "meru001"
+            meru.mkdir(parents=True)
+            (meru / "a.scl").write_text(CENTS_SCL)
+            (meru / "b.scl").write_text(CENTS_SCL)
+            gates_md = root / "GATES.md"
+            gates_md.write_text(LEDGER)
+            pairs = {"G-028": ("lattice.meru001.a", "lattice.meru001.b")}
+            original = bundle.GATE_PAIRS
+            try:
+                bundle.GATE_PAIRS = pairs
+                ok = bundle.build_bundle(root, gates_md)
+                bundle.GATE_PAIRS = {"G-028": ("lattice.meru001.a", "lattice.meru001.missing")}
+                missing = bundle.build_bundle(root, gates_md)
+            finally:
+                bundle.GATE_PAIRS = original
+        self.assertEqual(ok["gates"][0]["pair"], ["lattice.meru001.a", "lattice.meru001.b"])
+        self.assertNotIn("pair", missing["gates"][0])
 
 
 if __name__ == "__main__":

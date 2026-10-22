@@ -52,6 +52,11 @@ FOLDER_PROTOCOLS = {"eareps": "eareps"}
 HEXANY_1357 = "triads.triads.CPS_4_2_N6_1-3-5-7"
 DEKANY_13579 = "triads.triads.CPS_5_2_N10_1-3-5-7-9"
 EIKOSANY_CANONICAL = "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
+# Default A/B for gates whose question compares two specific chains.
+GATE_PAIRS = {
+    "G-031": ("lattice.cpsfit002.cpsfit002_hexany_N22_g193.908", "lattice.cpsfit001.cpsfit001_hexany_N22_g193.79"),
+    "G-032": ("lattice.cpsfit003.cpsfit003_hexany_N16_g116.676", "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818"),
+}
 SUBSET_TAG = re.compile(r"hexany\[in=(\d+),out=(\d+)\]")
 
 GATE_ROW = re.compile(r"^\|\s*(G-\d{3})\s*\|\s*([^|]*)\|(.*)\|\s*([^|]*)\|\s*$")
@@ -194,6 +199,8 @@ def build_bundle(experiments: Path = EXPERIMENTS, gates_md: Path = GATES_MD) -> 
     ids = {s["id"] for s in scales}
     scales = [{**s, "reference": ref if (ref := reference_for(s, ids)) in ids else None} for s in scales]
     used = {s["gate"] for s in scales if s["gate"]}
+    gates = [{**g, "pair": list(GATE_PAIRS[g["id"]])} if g["id"] in GATE_PAIRS and set(GATE_PAIRS[g["id"]]) <= ids else g
+             for g in gates]
     return {
         "version": BUNDLE_VERSION,
         "gates": [g for g in gates if g["id"] in used],
