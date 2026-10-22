@@ -101,5 +101,46 @@ const Tuning = (() => {
     return m.tones.map((t, i) => (i + 1 < m.n ? m.tones[i + 1] : m.period) - t);
   }
 
-  return { centsOf, model, degreeCents, nearestDegree, approxRatio, integerForm, findTriads, stepSizes };
+  // Place a JI reference inside a chain: try every transposition that puts a
+  // reference tone on a chain tone, keep the one whose tones land closest
+  // (errors capped at 30c, so a chain that holds only part of the reference
+  // still aligns on the part it holds).
+  function alignReference(chain, ref) {
+    let best = null;
+    for (const t of chain.tones) {
+      for (const r of ref.tones) {
+        const off = t - r;
+        let score = 0;
+        let worst = 0;
+        for (const rc of ref.tones) {
+          const c = rc + off;
+          const err = Math.abs(degreeCents(chain, nearestDegree(chain, c)) - c);
+          score += Math.min(err, 30);
+          worst = Math.max(worst, err);
+        }
+        if (!best || score < best.score - 1e-9) best = { off, score, worst };
+      }
+    }
+    return best;
+  }
+
+  // The reference's exact triads, re-voiced on the nearest chain tones.
+  // dev: how far the chain's middle tone sits from the outer tones' mean;
+  // toneErr: the worst of the three chain tones against JI.
+  function targetTriads(chain, ref, align) {
+    return findTriads(ref, 0.01).map((tr) => {
+      const ji = tr.cents.map((c) => c + align.off);
+      const degrees = ji.map((c) => nearestDegree(chain, c));
+      const cents = degrees.map((d) => degreeCents(chain, d));
+      const r = Math.pow(2, (cents[2] - cents[0]) / 1200);
+      const mean = tr.kind === "P" ? (1 + r) / 2 : (2 * r) / (1 + r);
+      return {
+        kind: tr.kind, form: tr.form, ji, degrees, cents,
+        dev: cents[1] - (cents[0] + centsOf(mean)),
+        toneErr: Math.max(...cents.map((c, i) => Math.abs(c - ji[i]))),
+      };
+    }).sort((x, y) => Math.abs(x.dev) - Math.abs(y.dev));
+  }
+
+  return { centsOf, model, degreeCents, nearestDegree, approxRatio, integerForm, findTriads, stepSizes, alignReference, targetTriads };
 })();

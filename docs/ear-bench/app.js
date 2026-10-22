@@ -18,7 +18,7 @@
   const state = {
     data: null, byId: new Map(), groupId: null,
     a: null, b: null, slot: "a",
-    tol: 2, kinds: "PS", offset: -HOME_INDEX, stripOct: 0, baseHz: 261.6256,
+    tol: 2, kinds: "PS", triadView: "target", offset: -HOME_INDEX, stripOct: 0, baseHz: 261.6256,
     blindNames: false, shuffle: null, drone: false,
     recording: false, phrase: [], t0: 0, held: new Map(), sustain: false, sustained: new Set(),
     epsDraft: { verdict: null, fusion: null, notes: "" }, spaceHold: null,
@@ -277,8 +277,23 @@
         <span class="slot-n">${s ? escape(label(s)).replace(/_/g, "_<wbr>") : "Set a B from the list"}</span>
         <span class="slot-m">${s ? `${Tuning.model(s).n} tones` : ""}</span>
       </button>`;
-    bar.innerHTML = `<div class="slots">${slotBtn("a", a)}${slotBtn("b", b)}</div>`;
+    const folders = new Map();
+    state.data.scales.filter((x) => !x.blind && x.protocol !== "eareps").forEach((x) => {
+      const k = `${x.module}/${x.folder}`;
+      folders.set(k, [...(folders.get(k) || []), x]);
+    });
+    const picker = [...folders.entries()].map(([k, xs]) => `<optgroup label="${escape(k)}">${xs.map((x) =>
+      `<option value="${x.id}" ${x.id === state.b ? "selected" : ""}>${escape(x.name)}</option>`).join("")}</optgroup>`).join("");
+    bar.innerHTML = `<div class="slots">${slotBtn("a", a)}${slotBtn("b", b)}</div>
+      <div class="row bpick"><label class="label" for="bpick">B from any gate or the library</label>
+        <select id="bpick"><option value="">(none)</option>${picker}</select></div>`;
     bar.querySelectorAll("[data-slot]").forEach((el) => el.addEventListener("click", () => setSlot(el.dataset.slot)));
+    $("#bpick").addEventListener("change", (e) => {
+      state.b = e.target.value && e.target.value !== state.a ? e.target.value : null;
+      state.slot = state.b ? "b" : "a";
+      renderInstrument();
+      renderScales();
+    });
   }
 
   function setSlot(slot) {
@@ -406,6 +421,32 @@
     const s = active();
     if (!box) return;
     if (!s || s.blind) { box.innerHTML = `<h3>Triads</h3><p class="hint">Hidden: this set is blinded.</p>`; return; }
+    const ref = s.reference ? scaleOf(s.reference) : null;
+    const viewToggle = () => (ref ? `<div class="seg sm" role="group" aria-label="Triad view">
+      ${[["target", "Target triads"], ["all", "All in this scale"]].map(([k, l]) => `<button class="btn sm ${state.triadView === k ? "on" : ""}" data-view="${k}">${l}</button>`).join("")}</div>` : "");
+    const controls = () => `
+      <div class="row">
+        <label class="label" for="tol">Tolerance</label>
+        <input type="range" id="tol" min="0.25" max="12" step="0.25" value="${state.tol}">
+        <span class="mono" id="tol-v">${state.tol.toFixed(2)}¢</span>
+        <div class="seg sm" role="group" aria-label="Triad kinds">
+          ${[["PS", "Both"], ["P", "P"], ["S", "S"]].map(([k, l]) => `<button class="btn sm ${state.kinds === k ? "on" : ""}" data-kinds="${k}">${l}</button>`).join("")}
+        </div>
+      </div>`;
+    const bindControls = (root) => {
+      const tol = $("#tol", root);
+      tol.addEventListener("input", () => { state.tol = Number(tol.value); $("#tol-v", root).textContent = `${state.tol.toFixed(2)}¢`; });
+      tol.addEventListener("change", renderTriads);
+      root.querySelectorAll("[data-kinds]").forEach((b) => b.addEventListener("click", () => { state.kinds = b.dataset.kinds; renderTriads(); }));
+      root.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => { state.triadView = b.dataset.view; renderTriads(); }));
+    };
+    if (ref && state.triadView === "target") {
+      Targets.render(box, s, ref, {
+        escape, fmt, label, ensureAudio, playTriad, markStrip, viewToggle, controls, bindControls,
+        tol: () => state.tol, kinds: () => state.kinds,
+      });
+      return;
+    }
     const all = triadsFor(s);
     const shown = all.filter((t) => state.kinds.includes(t.kind));
     const nP = all.filter((t) => t.kind === "P").length;
@@ -413,16 +454,10 @@
     box.innerHTML = `
       <div class="t-head">
         <h3>Triads in ${escape(label(s))}</h3>
+        ${viewToggle()}
         <p class="hint"><span class="k-P">${nP} proportional</span> · <span class="k-S">${nS} subcontrary</span> within ${state.tol.toFixed(2)}¢ of the arithmetic or harmonic mean</p>
       </div>
-      <div class="row">
-        <label class="label" for="tol">Tolerance</label>
-        <input type="range" id="tol" min="0.25" max="12" step="0.25" value="${state.tol}">
-        <span class="mono">${state.tol.toFixed(2)}¢</span>
-        <div class="seg sm" role="group" aria-label="Triad kinds">
-          ${[["PS", "Both"], ["P", "P"], ["S", "S"]].map(([k, l]) => `<button class="btn sm ${state.kinds === k ? "on" : ""}" data-kinds="${k}">${l}</button>`).join("")}
-        </div>
-      </div>
+      ${controls()}
       <div class="t-list" role="list">
         ${shown.slice(0, TRIAD_ROW_LIMIT).map((t, i) => `
           <button class="t-row" role="listitem" data-tri="${i}">
@@ -433,10 +468,7 @@
           </button>`).join("") || `<p class="hint">None at this tolerance. Widen it to see near-misses.</p>`}
         ${shown.length > TRIAD_ROW_LIMIT ? `<p class="hint">Showing the ${TRIAD_ROW_LIMIT} closest of ${shown.length}.</p>` : ""}
       </div>`;
-    const tol = $("#tol");
-    tol.addEventListener("input", () => { state.tol = Number(tol.value); box.querySelector(".row .mono").textContent = `${state.tol.toFixed(2)}¢`; });
-    tol.addEventListener("change", renderTriads);
-    box.querySelectorAll("[data-kinds]").forEach((b) => b.addEventListener("click", () => { state.kinds = b.dataset.kinds; renderTriads(); }));
+    bindControls(box);
     const n = Tuning.model(s).n;
     box.querySelectorAll("[data-tri]").forEach((row) => {
       const t = shown[Number(row.dataset.tri)];

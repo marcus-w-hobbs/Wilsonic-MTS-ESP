@@ -156,6 +156,12 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .t-list { display: flex; flex-direction: column; gap: 2px; max-height: 520px; overflow-y: auto; }
 .t-row { display: grid; grid-template-columns: 26px minmax(70px, auto) 1fr auto; gap: 10px; align-items: center; text-align: left; padding: 6px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--ink); cursor: pointer; font: inherit; font-size: 0.85rem; }
 .t-row:hover, .t-row:focus-visible { background: var(--paper); }
+.t-row.target { grid-template-columns: 26px 1fr auto auto; cursor: default; }
+.t-row.target.miss { background: var(--paper); }
+.t-play { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: baseline; border-radius: 4px; padding: 2px 4px; }
+.t-play:hover, .t-play:focus-visible { background: var(--accent-soft); }
+.t-dev.ok { color: var(--ok); } .t-dev.bad { color: var(--bad); font-weight: 600; }
+.bpick { margin-top: 8px; } .bpick select { max-width: 100%; min-width: 0; flex: 1 1 260px; }
 .t-form { color: var(--ink-2); font-family: var(--f-mono); font-size: 0.8rem; }
 .t-dev { color: var(--ink-2); }
 .kchip { font: 700 0.72rem/1 var(--f-mono); width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 4px; }
@@ -230,5 +236,6 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 <script src="timbres.js"></script>
 <script src="audio.js"></script>
 <script src="store.js"></script>
+<script src="targets.js"></script>
 <script src="eareps.js"></script>
 <script src="app.js"></script>

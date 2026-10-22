@@ -47,6 +47,13 @@ BLIND_FOLDERS = {"eareps", "g006"}
 # Listening protocols the page knows how to run for a folder.
 FOLDER_PROTOCOLS = {"eareps": "eareps"}
 
+# JI references the page aligns a chain against to show the lattice's own
+# triads inside it. Ids are scale_id() values of scales in the bundle.
+HEXANY_1357 = "triads.triads.CPS_4_2_N6_1-3-5-7"
+DEKANY_13579 = "triads.triads.CPS_5_2_N10_1-3-5-7-9"
+EIKOSANY_CANONICAL = "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
+SUBSET_TAG = re.compile(r"hexany\[in=(\d+),out=(\d+)\]")
+
 GATE_ROW = re.compile(r"^\|\s*(G-\d{3})\s*\|\s*([^|]*)\|(.*)\|\s*([^|]*)\|\s*$")
 SCL_FOLDER_REF = re.compile(r"results/scl/([a-z0-9_]+)")
 MD_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
@@ -159,10 +166,33 @@ def collect_scales(experiments: Path, gate_of: dict[str, str]) -> list[dict]:
     return scales
 
 
+def reference_for(scale: dict, names: set[str]) -> str | None:
+    """The JI scale a fitted chain approximates, when the bundle holds it."""
+    name, desc, folder = scale["name"], scale["description"], scale["folder"]
+    if scale["module"] != "lattice" or folder in BLIND_FOLDERS or folder in {"g012", "subsetmel000"}:
+        return None
+    if "marcus" in name:
+        return None
+    subset = SUBSET_TAG.search(name)
+    if subset and "canonical" in name:
+        prefix = f"lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in{subset[1]}_out{subset[2]}_"
+        match = sorted(n for n in names if n.startswith(prefix))
+        return match[0] if match else EIKOSANY_CANONICAL
+    if "eikosany" in name:
+        return EIKOSANY_CANONICAL
+    if "dek52" in name:
+        return DEKANY_13579
+    if "hexany" in name or "hexany seeds" in desc:
+        return HEXANY_1357
+    return None
+
+
 def build_bundle(experiments: Path = EXPERIMENTS, gates_md: Path = GATES_MD) -> dict:
     gates = parse_gates(gates_md.read_text(encoding="utf-8"))
     gate_of = folder_gate_map(gates)
     scales = collect_scales(experiments, gate_of)
+    ids = {s["id"] for s in scales}
+    scales = [{**s, "reference": ref if (ref := reference_for(s, ids)) in ids else None} for s in scales]
     used = {s["gate"] for s in scales if s["gate"]}
     return {
         "version": BUNDLE_VERSION,

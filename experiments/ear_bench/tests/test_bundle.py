@@ -95,6 +95,30 @@ class TestScaleId(unittest.TestCase):
         self.assertEqual(sid, "lattice.dynmos001.x_hexany_in_5_out_7_")
 
 
+class TestReference(unittest.TestCase):
+    def ref(self, name, desc="", folder="cpsfit001", module="lattice", names=()):
+        scale = {"name": name, "description": desc, "folder": folder, "module": module}
+        return bundle.reference_for(scale, set(names))
+
+    def test_hexany_dekany_eikosany(self):
+        self.assertEqual(self.ref("cpsfit001_hexany_N22_g193.79"), bundle.HEXANY_1357)
+        self.assertEqual(self.ref("meru001_fib_LIFT_W7_n018_lock", "Fibonacci; hexany seeds; window"), bundle.HEXANY_1357)
+        self.assertEqual(self.ref("cpsfit003_dek52_N26_g498.066"), bundle.DEKANY_13579)
+        self.assertEqual(self.ref("subfit002_eikosany_cap20_N41_mos_g351.444"), bundle.EIKOSANY_CANONICAL)
+
+    def test_subset_hexany_prefers_census_scale(self):
+        census = "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1"
+        got = self.ref("dynmos001_canonical_sub351444_N17_hexany[in=5,out=7]", folder="dynmos001", names=[census])
+        self.assertEqual(got, census)
+        missing = self.ref("dynmos001_canonical_sub497774_N29_hexany[in=11,out=5]", folder="dynmos001")
+        self.assertEqual(missing, bundle.EIKOSANY_CANONICAL)
+
+    def test_no_reference_for_other_seeds_or_library(self):
+        self.assertIsNone(self.ref("dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none]", folder="dynmos001"))
+        self.assertIsNone(self.ref("CPS_4_2_N6_1-3-5-7", folder="triads", module="triads"))
+        self.assertIsNone(self.ref("eareps_A_01", folder="eareps"))
+
+
 class TestCollect(unittest.TestCase):
     def test_tree_walk_links_gate_and_blind(self):
         with tempfile.TemporaryDirectory() as tmp:

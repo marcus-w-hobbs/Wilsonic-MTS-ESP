@@ -167,7 +167,8 @@
     1165.675697,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.cpsfit001.cpsfit001_hexany_N22_g193.79",
@@ -206,7 +207,8 @@
     1162.720336,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.cpsfit002.cpsfit002_hexany_N22_g193.908",
@@ -245,7 +247,8 @@
     1163.449859,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.cpsfit003.cpsfit003_dek52_N26_g498.066",
@@ -288,7 +291,8 @@
     1176.794297,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_5_2_N10_1-3-5-7-9"
   },
   {
    "id": "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676",
@@ -321,7 +325,8 @@
     1083.324456,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818",
@@ -356,7 +361,8 @@
     1122.182276,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.dynmos001.dynmos001_canonical_sub351444_N17_hexany_in_5_out_7_",
@@ -390,7 +396,8 @@
     1139.892,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1"
   },
   {
    "id": "lattice.dynmos001.dynmos001_canonical_sub497774_N29_hexany_in_11_out_5_",
@@ -436,7 +443,8 @@
     1137.842,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.dynmos001.dynmos001_marcus_sub316778_N15_dekany_in_in_1_out_none_",
@@ -468,7 +476,8 @@
     1084.558,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_01",
@@ -489,7 +498,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_02",
@@ -510,7 +520,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_03",
@@ -531,7 +542,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_04",
@@ -552,7 +564,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_05",
@@ -573,7 +586,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_06",
@@ -594,7 +608,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_07",
@@ -615,7 +630,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_08",
@@ -636,7 +652,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_09",
@@ -657,7 +674,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_10",
@@ -678,7 +696,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_11",
@@ -699,7 +718,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_12",
@@ -720,7 +740,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_13",
@@ -741,7 +762,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_14",
@@ -762,7 +784,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_A_15",
@@ -783,7 +806,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_01",
@@ -803,7 +827,8 @@
     709.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_02",
@@ -823,7 +848,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_03",
@@ -843,7 +869,8 @@
     700.0,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_04",
@@ -863,7 +890,8 @@
     702.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_05",
@@ -883,7 +911,8 @@
     703.91,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_06",
@@ -903,7 +932,8 @@
     704.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_07",
@@ -923,7 +953,8 @@
     693.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_08",
@@ -943,7 +974,8 @@
     700.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_09",
@@ -963,7 +995,8 @@
     696.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_10",
@@ -983,7 +1016,8 @@
     698.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_B_11",
@@ -1003,7 +1037,8 @@
     706.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_01",
@@ -1024,7 +1059,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_02",
@@ -1045,7 +1081,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_03",
@@ -1066,7 +1103,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_04",
@@ -1087,7 +1125,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_05",
@@ -1108,7 +1147,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_06",
@@ -1129,7 +1169,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_07",
@@ -1150,7 +1191,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_08",
@@ -1171,7 +1213,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_09",
@@ -1192,7 +1235,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_10",
@@ -1213,7 +1257,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_11",
@@ -1234,7 +1279,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_12",
@@ -1255,7 +1301,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_13",
@@ -1276,7 +1323,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_14",
@@ -1297,7 +1345,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_C_15",
@@ -1318,7 +1367,8 @@
     701.955,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_D_01",
@@ -1338,7 +1388,8 @@
     700.0,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_D_02",
@@ -1359,7 +1410,8 @@
     700.0,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.eareps.eareps_D_03",
@@ -1380,7 +1432,8 @@
     700.0,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p1_a",
@@ -1413,7 +1466,8 @@
     "8/5",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p1_b",
@@ -1446,7 +1500,8 @@
     "16/11",
     "56/33",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p2_a",
@@ -1479,7 +1534,8 @@
     "4/3",
     "56/39",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p2_b",
@@ -1512,7 +1568,8 @@
     "3/2",
     "5/3",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p3_a",
@@ -1545,7 +1602,8 @@
     "4/3",
     "10/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p3_b",
@@ -1578,7 +1636,8 @@
     "8/5",
     "24/13",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p4_a",
@@ -1611,7 +1670,8 @@
     "8/5",
     "112/65",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p4_b",
@@ -1644,7 +1704,8 @@
     "3/2",
     "18/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p5_a",
@@ -1677,7 +1738,8 @@
     "8/5",
     "9/5",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p5_b",
@@ -1710,7 +1772,8 @@
     "3/2",
     "13/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p6_a",
@@ -1743,7 +1806,8 @@
     "8/5",
     "22/13",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p6_b",
@@ -1776,7 +1840,8 @@
     "16/11",
     "52/33",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p7_a",
@@ -1801,7 +1866,8 @@
     1143.2,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p7_b",
@@ -1826,7 +1892,8 @@
     1024.9149,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p8_a",
@@ -1859,7 +1926,8 @@
     1143.2,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.g006.g006_p8_b",
@@ -1892,7 +1960,8 @@
     1133.1064,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": null
   },
   {
    "id": "lattice.g012.canonical_eikosany_1_3_5_7_9_11",
@@ -1952,7 +2021,8 @@
     "15/8",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g012.cseik_flagship_1_7_9_11_15_29",
@@ -2013,7 +2083,8 @@
     "15/8",
     "56/29",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.g012.cseik_max_margin_13_17_21_23_25_27",
@@ -2073,7 +2144,8 @@
     "225/119",
     "234/119",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.gold001.gold001_hexany_golden_c11_N15_g317.170",
@@ -2105,7 +2177,8 @@
     1088.872157,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.gold001.gold001_hexany_silver_Q20_N29_g316.827",
@@ -2151,7 +2224,8 @@
     1152.405889,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n011_seed",
@@ -2175,7 +2249,8 @@
     950.697636,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n012_lock",
@@ -2199,7 +2274,8 @@
     1120.416364,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n135_last",
@@ -2223,7 +2299,8 @@
     1005.443209,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n011_seed",
@@ -2247,7 +2324,8 @@
     909.601288,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n018_lock",
@@ -2271,7 +2349,8 @@
     940.760578,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n135_last",
@@ -2295,7 +2374,8 @@
     932.361185,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n011_seed",
@@ -2319,7 +2399,8 @@
     1025.592764,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n021_lock",
@@ -2343,7 +2424,8 @@
     1084.289262,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n135_last",
@@ -2367,7 +2449,8 @@
     1078.152187,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n012",
@@ -2391,7 +2474,8 @@
     1120.416364,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n040",
@@ -2415,7 +2499,8 @@
     993.022423,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n100",
@@ -2439,7 +2524,8 @@
     1005.43765,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n012",
@@ -2463,7 +2549,8 @@
     959.385091,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n040",
@@ -2487,7 +2574,8 @@
     962.795424,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n100",
@@ -2511,7 +2599,8 @@
     1004.991058,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.rank3001.rank3001_dek52_N29_g498.26_27.05",
@@ -2557,7 +2646,8 @@
     1172.952988,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_5_2_N10_1-3-5-7-9"
   },
   {
    "id": "lattice.rank3001.rank3001_hexany_N19_g1002.86_385.84",
@@ -2593,7 +2683,8 @@
     1087.798819,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.rank3001.rank3001_hexany_N21_g350.98_231.29",
@@ -2631,7 +2722,8 @@
     1115.773206,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N26_free_g350.748",
@@ -2674,7 +2766,8 @@
     1162.716,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N45_free_g351.444",
@@ -2736,7 +2829,8 @@
     1165.344,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N46_mos_g443.128",
@@ -2799,7 +2893,8 @@
     1164.456,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N49_free_g497.774",
@@ -2865,7 +2960,8 @@
     1173.288,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N53_mos_g497.774",
@@ -2935,7 +3031,8 @@
     1173.288,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit001.subfit001_eikosany_N70_free_g175.378",
@@ -3022,7 +3119,8 @@
     1172.354,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N37_free_g350.756",
@@ -3076,7 +3174,8 @@
     1162.852,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N41_mos_g351.444",
@@ -3134,7 +3233,8 @@
     1165.344,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N72_mos_g483.278",
@@ -3223,7 +3323,8 @@
     1183.61,
     1200.0
    ],
-   "ratios": null
+   "ratios": null,
+   "reference": "lattice.g012.canonical_eikosany_1_3_5_7_9_11"
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_dekany_in_in1_outnone_melodic+cs",
@@ -3279,7 +3380,8 @@
     "225/176",
     "117/88",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_dekany_in_in25_outnone_harmonic",
@@ -3335,7 +3437,8 @@
     "16/9",
     "24/13",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_hexany_in1_out11_melodic1",
@@ -3382,7 +3485,8 @@
     "9/8",
     "117/100",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_hexany_in1_out13_melodic2",
@@ -3429,7 +3533,8 @@
     "27/22",
     "225/176",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_dekany_in_in13_outnone_harmonic",
@@ -3485,7 +3590,8 @@
     "575/336",
     "25/14",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_dekany_in_in1_outnone_melodic+cs",
@@ -3541,7 +3647,8 @@
     "46/25",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_hexany_in23_out25_melodic1",
@@ -3588,7 +3695,8 @@
     "13/8",
     "7/4",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_hexany_in25_out3_melodic2",
@@ -3635,7 +3743,8 @@
     "13/8",
     "299/168",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in11_outnone_harmonic",
@@ -3691,7 +3800,8 @@
     "7/4",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs",
@@ -3747,7 +3857,8 @@
     "20/11",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in5_outnone_melodic",
@@ -3803,7 +3914,8 @@
     "16/9",
     "11/6",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in1_out3_melodic2",
@@ -3850,7 +3962,8 @@
     "11/7",
     "9/5",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1",
@@ -3897,7 +4010,8 @@
     "16/9",
     "11/6",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_dekany_in_in29_outnone_melodic+cs",
@@ -3953,7 +4067,8 @@
     "7/4",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_dekany_out_innone_out29_harmonic",
@@ -4009,7 +4124,8 @@
     "7/4",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_hexany_in15_out29_melodic2",
@@ -4056,7 +4172,8 @@
     "14/9",
     "7/4",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_hexany_in1_out29_melodic1",
@@ -4103,7 +4220,8 @@
     "14/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_dekany_in_in13_outnone_melodic+cs",
@@ -4159,7 +4277,8 @@
     "46/27",
     "46/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_dekany_in_in27_outnone_harmonic",
@@ -4215,7 +4334,8 @@
     "23/13",
     "46/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_hexany_in13_out23_melodic1",
@@ -4262,7 +4382,8 @@
     "14/9",
     "42/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_hexany_in13_out25_melodic2",
@@ -4309,7 +4430,8 @@
     "27/17",
     "207/119",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_4_2_N5_3-5-9-15",
@@ -4349,7 +4471,8 @@
     "8/5",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_4_2_N6_1-3-5-7",
@@ -4391,7 +4514,8 @@
     "8/5",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_4_2_N6_1-3-5-9",
@@ -4433,7 +4557,8 @@
     "3/2",
     "5/3",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N10_1-3-5-7-9",
@@ -4484,7 +4609,8 @@
     "12/7",
     "9/5",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N10_3-5-15-21-45",
@@ -4535,7 +4661,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N10_7-9-15-21-63",
@@ -4586,7 +4713,8 @@
     "7/4",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N7_1-3-9-27-81",
@@ -4631,7 +4759,8 @@
     "128/81",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N8_1-3-5-9-15",
@@ -4678,7 +4807,8 @@
     "8/5",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N9_3-5-9-15-75",
@@ -4727,7 +4857,8 @@
     "5/3",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_2_N9_3-7-9-15-21",
@@ -4776,7 +4907,8 @@
     "8/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N10_1-3-5-7-9",
@@ -4827,7 +4959,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N10_3-5-15-21-45",
@@ -4878,7 +5011,8 @@
     "8/5",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N10_7-9-15-21-63",
@@ -4929,7 +5063,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N7_1-3-9-27-81",
@@ -4974,7 +5109,8 @@
     "128/81",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N8_1-3-5-9-15",
@@ -5021,7 +5157,8 @@
     "5/3",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N8_3-5-9-15-45",
@@ -5068,7 +5205,8 @@
     "5/3",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N9_3-5-9-15-75",
@@ -5117,7 +5255,8 @@
     "5/3",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_5_3_N9_3-7-9-15-21",
@@ -5166,7 +5305,8 @@
     "8/5",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N11_1-3-5-9-15-45",
@@ -5219,7 +5359,8 @@
     "5/3",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N12_3-5-7-9-15-21",
@@ -5274,7 +5415,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N13_1-3-5-7-9-15",
@@ -5331,7 +5473,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N13_3-5-7-9-15-35",
@@ -5388,7 +5531,8 @@
     "28/15",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N13_5-7-15-21-35-45",
@@ -5445,7 +5589,8 @@
     "9/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N13_7-9-21-35-63-105",
@@ -5502,7 +5647,8 @@
     "16/9",
     "64/35",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N14_1-5-7-9-15-21",
@@ -5561,7 +5707,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N14_3-5-15-21-35-45",
@@ -5620,7 +5767,8 @@
     "64/35",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N14_3-5-7-9-15-63",
@@ -5679,7 +5827,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N14_3-7-15-21-35-63",
@@ -5738,7 +5887,8 @@
     "28/15",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N15_1-3-5-7-9-11",
@@ -5799,7 +5949,8 @@
     "20/11",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N15_1-7-15-21-35-63",
@@ -5860,7 +6011,8 @@
     "28/15",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N15_3-5-7-21-63-315",
@@ -5921,7 +6073,8 @@
     "256/147",
     "64/35",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N15_5-9-15-19-21-45",
@@ -5982,7 +6135,8 @@
     "5/3",
     "7/4",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_2_N15_5-9-15-33-45-63",
@@ -6043,7 +6197,8 @@
     "20/11",
     "40/21",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N12_1-3-5-15-25-75",
@@ -6098,7 +6253,8 @@
     "128/75",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N13_1-3-5-9-15-25",
@@ -6155,7 +6311,8 @@
     "16/9",
     "50/27",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N13_1-3-9-15-45-225",
@@ -6212,7 +6369,8 @@
     "225/128",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N14_1-3-5-9-15-27",
@@ -6271,7 +6429,8 @@
     "9/5",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N14_1-3-5-9-15-75",
@@ -6330,7 +6489,8 @@
     "16/9",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N15_1-3-5-9-15-225",
@@ -6391,7 +6551,8 @@
     "2048/1125",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N15_1-3-5-9-15-81",
@@ -6452,7 +6613,8 @@
     "16/9",
     "9/5",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N16_1-3-5-7-9-15",
@@ -6515,7 +6677,8 @@
     "64/35",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N17_1-3-9-15-21-105",
@@ -6580,7 +6743,8 @@
     "64/35",
     "1024/525",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N17_1-3-9-15-25-125",
@@ -6645,7 +6809,8 @@
     "128/75",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N17_1-5-7-9-15-21",
@@ -6710,7 +6875,8 @@
     "9/5",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N18_1-3-5-7-9-27",
@@ -6777,7 +6943,8 @@
     "9/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N18_1-3-7-9-15-27",
@@ -6844,7 +7011,8 @@
     "9/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N19_1-3-5-7-9-105",
@@ -6913,7 +7081,8 @@
     "64/35",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N20_1-3-5-7-9-11",
@@ -6984,7 +7153,8 @@
     "15/8",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N20_1-45-135-225-19-377",
@@ -7055,7 +7225,8 @@
     "57/32",
     "675/377",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_3_N20_1-5-7-9-15-25",
@@ -7126,7 +7297,8 @@
     "40/21",
     "48/25",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N11_1-3-5-9-15-45",
@@ -7179,7 +7351,8 @@
     "225/128",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N12_3-5-7-9-15-21",
@@ -7234,7 +7407,8 @@
     "28/15",
     "40/21",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N13_1-3-5-7-9-15",
@@ -7291,7 +7465,8 @@
     "9/5",
     "27/14",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N13_3-5-7-9-15-35",
@@ -7348,7 +7523,8 @@
     "40/21",
     "96/49",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N13_5-7-15-21-35-45",
@@ -7405,7 +7581,8 @@
     "25/14",
     "15/8",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N13_7-9-21-35-63-105",
@@ -7462,7 +7639,8 @@
     "9/5",
     "27/14",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N14_1-5-7-9-15-21",
@@ -7521,7 +7699,8 @@
     "27/16",
     "9/5",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N14_3-5-15-21-35-45",
@@ -7580,7 +7759,8 @@
     "15/8",
     "40/21",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N14_3-5-7-9-15-63",
@@ -7639,7 +7819,8 @@
     "64/35",
     "96/49",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N14_3-7-15-21-35-63",
@@ -7698,7 +7879,8 @@
     "9/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N15_1-3-5-7-9-11",
@@ -7759,7 +7941,8 @@
     "20/11",
     "40/21",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N15_1-7-15-21-35-63",
@@ -7820,7 +8003,8 @@
     "16/9",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N15_3-5-7-21-63-315",
@@ -7881,7 +8065,8 @@
     "7/4",
     "63/32",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N15_5-9-15-19-21-45",
@@ -7942,7 +8127,8 @@
     "36/19",
     "40/21",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.CPS_6_4_N15_5-9-15-33-45-63",
@@ -8003,7 +8189,8 @@
     "20/11",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.eik_1-3-5-7-9-11",
@@ -8074,7 +8261,8 @@
     "15/8",
     "21/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.eik_1-45-135-225-19-377",
@@ -8145,7 +8333,8 @@
     "57/32",
     "675/377",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-5-11",
@@ -8187,7 +8376,8 @@
     "5/3",
     "20/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-5-13",
@@ -8229,7 +8419,8 @@
     "8/5",
     "24/13",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-5-7",
@@ -8271,7 +8462,8 @@
     "8/5",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-5-9",
@@ -8313,7 +8505,8 @@
     "3/2",
     "5/3",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-7-9",
@@ -8355,7 +8548,8 @@
     "14/9",
     "7/4",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-9-11",
@@ -8397,7 +8591,8 @@
     "3/2",
     "18/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-3-9-15",
@@ -8439,7 +8634,8 @@
     "8/5",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_1-5-9-15",
@@ -8481,7 +8677,8 @@
     "4/3",
     "16/9",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_3-5-11-15",
@@ -8523,7 +8720,8 @@
     "5/3",
     "20/11",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_3-5-13-15",
@@ -8565,7 +8763,8 @@
     "3/2",
     "24/13",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_3-5-7-15",
@@ -8607,7 +8806,8 @@
     "3/2",
     "12/7",
     "2/1"
-   ]
+   ],
+   "reference": null
   },
   {
    "id": "triads.triads.hex_3-7-9-15",
@@ -8649,7 +8849,8 @@
     "8/5",
     "28/15",
     "2/1"
-   ]
+   ],
+   "reference": null
   }
  ]
 }
