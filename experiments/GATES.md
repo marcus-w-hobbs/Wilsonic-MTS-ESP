@@ -16,6 +16,11 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   2. Merge or close the linked PR on GitHub. Merging a PR **implies passing**
      every gate attached to it; the next session back-fills this ledger.
   3. Edit this file directly and push; sessions treat your edit as the decision.
+  4. Save a verdict on the Ear Bench (https://claude.ai/artifact/XNptx9B3t9yXGgDvmJeVbf,
+     source docs/ear-bench/). Sessions read its database with ArtifactData
+     (`gates/<G-NNN>`, `scales/<id>`, `comparisons/<id>`, `eareps/responses`)
+     and treat a saved Pass/Fail as the decision. Rebuild its scale bundle with
+     `python experiments/ear_bench/bundle.py` whenever a gate adds `.scl` files.
 - **Statuses:** `PENDING` (waiting on Marcus — the loop is stopped here),
   `QUEUED` (will become PENDING when its prerequisites land), `PASS`, `FAIL`
   (both dated, with notes).
