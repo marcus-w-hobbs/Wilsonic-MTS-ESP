@@ -16,11 +16,27 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   2. Merge or close the linked PR on GitHub. Merging a PR **implies passing**
      every gate attached to it; the next session back-fills this ledger.
   3. Edit this file directly and push; sessions treat your edit as the decision.
+  4. Save a verdict on the Ear Bench (https://claude.ai/artifact/XNptx9B3t9yXGgDvmJeVbf,
+     source docs/ear-bench/). Sessions read its database with ArtifactData
+     (`gates/<G-NNN>`, `scales/<id>`, `comparisons/<id>`, `eareps/responses`)
+     and treat a saved Pass/Fail as the decision. For MIDI controllers the bench
+     runs locally (`python experiments/ear_bench/serve.py`, Chrome), and saves to
+     `experiments/ear_bench/results/verdicts.json` instead; sessions read both.
+     Rebuild its scale bundle with
+     `python experiments/ear_bench/bundle.py` whenever a gate adds `.scl` files.
 - **Statuses:** `PENDING` (waiting on Marcus — the loop is stopped here),
   `QUEUED` (will become PENDING when its prerequisites land), `PASS`, `FAIL`
   (both dated, with notes).
 - Ear checks are standing gates: any `.scl` export offered for listening is
   implicitly PENDING until Marcus reports back.
+- **Every experiment that emits scales ships an Ear Bench audition** (charter,
+  Marcus 2026-10-22): its `.scl` files go under `results/scl/<folder>/`, its gate
+  row names that folder, and a chain-vs-chain comparison registers its JI
+  reference and default A/B pair in `experiments/ear_bench/bundle.py`, so the
+  blind passages work with nothing extra. Marcus judges on the bench; before a
+  session records a decision it runs `experiments/ear_bench/export_judgments.py`,
+  and the judgments are released in `experiments/ear_bench/judgments/` per
+  `experiments/ear_bench/JUDGING.md`.
 
 ## Ledger
 

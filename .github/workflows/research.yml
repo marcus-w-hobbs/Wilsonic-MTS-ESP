@@ -57,3 +57,6 @@ jobs:
             echo "experiments/lattice/tests not present on this ref — skipping"
           fi
         working-directory: experiments/lattice
+      - name: Ear Bench bundler and server tests
+        run: python -m unittest discover -s tests -v
+        working-directory: experiments/ear_bench
