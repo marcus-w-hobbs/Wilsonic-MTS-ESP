@@ -105,10 +105,15 @@ const Composer = (() => {
         over: [...chorale(chords, 0.55), ...tune(chain, chords)],
       };
     };
-    return { chords: order.length, a: forChain(a, aBy, A.align), b: forChain(b, bBy, B.align) };
+    // Chord identities in playing order (same for both chains, so naming them stays blind).
+    const chordNames = order.map((k) => {
+      const t = aBy.get(k);
+      return { kind: t.kind, form: t.form };
+    });
+    return { chords: order.length, chordNames, a: forChain(a, aBy, A.align), b: forChain(b, bBy, B.align) };
   }
 
   const length = (events) => events.reduce((m, e) => Math.max(m, e.t + e.dur), 0);
 
-  return { compose, length, progression, SLOT };
+  return { compose, length, progression, SLOT, STEP };
 })();

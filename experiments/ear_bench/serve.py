@@ -118,7 +118,10 @@ class Handler(SimpleHTTPRequestHandler):
             if not isinstance(client, str) or not DOC_ID.match(client):
                 raise ValueError("report needs a client id")
             with _lock:
-                _status[client] = {**report, "receivedAt": time.strftime("%Y-%m-%dT%H:%M:%S")}
+                _status[client] = {**report, "receivedAt": time.strftime("%Y-%m-%dT%H:%M:%S"), "_t": time.time()}
+                # Each reload is a new client: keep only pages heard from in the last 10 minutes.
+                for stale in [k for k, v in _status.items() if time.time() - v.get("_t", 0) > 600]:
+                    del _status[stale]
                 save(_status, STATUS)
         except (ValueError, json.JSONDecodeError) as err:
             self._json(400, {"error": str(err)})

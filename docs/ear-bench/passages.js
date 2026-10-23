@@ -12,8 +12,71 @@ const Passages = (() => {
     ["over", "Tune over chorale", "Melody and harmony together: the tune above a softer chorale."],
   ];
   const PAUSE = 1.2;
+  const CHORDAL = new Set(["tune", "chorale", "over"]);
   let blind = {};
   let blindFor = "";
+  // What is sounding now: {id, title, segs: [{label, t0, t1}], chordNames, notes}.
+  // Only X/Y labels are ever shown, never which scale they are.
+  let playing = null;
+  let raf = 0;
+
+  const clock = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+
+  function where(p, seg, into) {
+    if (CHORDAL.has(p.id) && p.chordNames.length) {
+      const i = Math.min(p.chordNames.length - 1, Math.floor(into / Composer.SLOT));
+      const c = p.chordNames[i];
+      return `chord ${i + 1} of ${p.chordNames.length} · ${c.form || "?"} (${c.kind === "P" ? "proportional" : "subcontrary"})`;
+    }
+    const n = Math.min(p.notes, Math.floor(into / Composer.STEP) + 1);
+    return `note ${n} of ${p.notes} · ${n <= Math.ceil(p.notes / 2) ? "going up" : "coming down"}`;
+  }
+
+  function paintNow() {
+    const el = document.getElementById("p-now");
+    if (!el) { raf = 0; return; }
+    document.querySelectorAll(".p-row").forEach((r) => r.classList.toggle("playing", !!playing && !playing.done && r.dataset.row === playing.id));
+    if (!playing) {
+      el.innerHTML = `<span class="hint">Nothing playing. Press <strong>Play X then Y</strong> on a passage.</span>`;
+      raf = 0;
+      return;
+    }
+    const t = Synth.now();
+    const total = playing.segs[playing.segs.length - 1].t1 - playing.segs[0].t0;
+    const active = playing.segs.find((sg) => t >= sg.t0 && t < sg.t1);
+    const next = playing.segs.find((sg) => t < sg.t0);
+    const finished = t >= playing.segs[playing.segs.length - 1].t1;
+    const lane = (label) => {
+      const sg = playing.segs.find((x) => x.label === label);
+      if (!sg) return `<div class="p-lane off"><span class="p-letter">${label}</span><span class="hint">not in this play</span></div>`;
+      const frac = Math.max(0, Math.min(1, (t - sg.t0) / (sg.t1 - sg.t0)));
+      const state = t < sg.t0 ? "waiting" : t < sg.t1 ? "sounding" : "done";
+      return `<div class="p-lane ${state}"><span class="p-letter">${label}</span>
+        <span class="p-bar"><span style="width:${(frac * 100).toFixed(1)}%"></span></span>
+        <span class="mono p-time">${state === "sounding" ? `${clock(t - sg.t0)} / ${clock(sg.t1 - sg.t0)}` : state}</span></div>`;
+    };
+    const status = finished
+      ? `<strong>Finished: ${playing.title}.</strong> Pick X, Y or Same.`
+      : active
+        ? `<strong>${active.label} is sounding</strong> · ${playing.title} · ${where(playing, active, t - active.t0)}`
+        : `<strong>Pause</strong> · ${next ? `${next.label} next` : ""}`;
+    el.innerHTML = `<div class="p-lanes">${lane("X")}${lane("Y")}</div>
+      <div class="p-status">${status} <span class="hint mono">${clock(Math.min(total, Math.max(0, t - playing.segs[0].t0)))} / ${clock(total)}</span></div>`;
+    if (finished) { playing = { ...playing, done: true }; raf = 0; return; }
+    raf = requestAnimationFrame(paintNow);
+  }
+
+  function startNow(p) {
+    playing = p;
+    if (!raf) raf = requestAnimationFrame(paintNow);
+  }
+
+  function stopNow() {
+    playing = null;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    paintNow();
+  }
 
   function shuffle(pairKey) {
     if (blindFor === pairKey) return;
@@ -37,6 +100,7 @@ const Passages = (() => {
     box.innerHTML = `
       <p class="hint">Each passage plays twice, once in each scale, as <strong>X</strong> then <strong>Y</strong>. Which is A and which is B is hidden until you pick, and drawn fresh each time the page loads.
       The ${music.chords} chords come from <span class="mono">${ctx.escape(ref.name)}</span>, so both scales play the same music.</p>
+      <div class="p-now" id="p-now" role="status"></div>
       <div class="p-list">
         ${LIST.map(([id, title, desc]) => {
           const pick = saved[`passage:${id}`];
@@ -45,7 +109,7 @@ const Passages = (() => {
             ? `<span class="p-result">You chose ${pick.pick === "same" ? "Same" : pick.pick.toUpperCase()}: ${pick.preferred === "same" ? "no preference" : `prefer ${name(pick.preferred)}`}. X was ${name(x)}, Y was ${name(other(x))}.</span>`
             : "";
           return `
-          <div class="p-row">
+          <div class="p-row" data-row="${id}">
             <div class="p-text"><strong>${title}</strong><span class="hint">${desc} ${Math.round(Composer.length(music.a[id]))} s each.</span></div>
             <div class="seg">
               <button class="btn sm" data-pplay="xy" data-id="${id}">Play X then Y</button>
@@ -73,11 +137,15 @@ const Passages = (() => {
       const id = btn.dataset.id;
       const t0 = Synth.now() + 0.1;
       const mode = btn.dataset.pplay;
+      const title = LIST.find(([k]) => k === id)[1];
+      const base = { id, title, chordNames: music.chordNames, notes: music.a[id].length };
       if (mode === "xy") {
         const end = schedule(music[slotOf(id, "x")][id], t0, ctx.hz);
-        schedule(music[slotOf(id, "y")][id], end + PAUSE, ctx.hz);
+        const end2 = schedule(music[slotOf(id, "y")][id], end + PAUSE, ctx.hz);
+        startNow({ ...base, segs: [{ label: "X", t0, t1: end }, { label: "Y", t0: end + PAUSE, t1: end2 }] });
       } else {
-        schedule(music[slotOf(id, mode)][id], t0, ctx.hz);
+        const end = schedule(music[slotOf(id, mode)][id], t0, ctx.hz);
+        startNow({ ...base, segs: [{ label: mode.toUpperCase(), t0, t1: end }] });
       }
     }));
     box.querySelectorAll("[data-ppick]").forEach((btn) => btn.addEventListener("click", () => {
@@ -89,8 +157,10 @@ const Passages = (() => {
       ctx.save({ prefer: cur.prefer || null, picks: { ...(cur.picks || {}), [`passage:${id}`]: { x, pick: pickV, preferred, at: new Date().toISOString() } } });
       render(box, ctx);
     }));
-    box.querySelector("#p-stop").addEventListener("click", () => Synth.allOff());
+    box.querySelector("#p-stop").addEventListener("click", () => { Synth.allOff(); stopNow(); });
+    paintNow();
+    if (playing && !playing.done && !raf) raf = requestAnimationFrame(paintNow);
   }
 
-  return { render, LIST };
+  return { render, LIST, stopNow };
 })();

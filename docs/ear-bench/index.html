@@ -167,6 +167,20 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .explore > :not(summary) { margin-top: 16px; }
 .explore-key { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
 .compare { border-color: var(--accent); }
+.p-now { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--top-h, 64px) + 8px); z-index: 4; display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--accent); background: var(--panel); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.p-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.p-lane { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--rule); background: var(--paper); }
+.p-lane .p-letter { font: 800 1.9rem/1 var(--f-display); font-stretch: 75%; color: var(--ink-2); text-align: center; }
+.p-lane.sounding { border-color: var(--accent); background: var(--accent-soft); }
+.p-lane.sounding .p-letter { color: var(--accent); }
+.p-lane.done { opacity: 0.7; }
+.p-lane.off { opacity: 0.45; grid-template-columns: 44px 1fr; }
+.p-bar { height: 8px; border-radius: 99px; background: var(--rule); overflow: hidden; }
+.p-bar span { display: block; height: 100%; background: var(--accent); }
+.p-time { font-size: 0.8rem; color: var(--ink-2); min-width: 92px; text-align: right; }
+.p-status { font-size: 0.92rem; }
+.p-row.playing { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+@media (max-width: 760px) { .p-lanes { grid-template-columns: 1fr; } .p-now { top: 0; } }
 .p-list { display: flex; flex-direction: column; gap: 8px; }
 .p-row { display: grid; grid-template-columns: minmax(200px, 1fr) auto auto; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
 .p-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }

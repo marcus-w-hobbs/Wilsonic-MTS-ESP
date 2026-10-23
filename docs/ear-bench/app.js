@@ -271,7 +271,9 @@
       <p class="hint"><span id="verdict-status">${status}</span> · ${where}</p>`;
     box.querySelectorAll("[data-verdict]").forEach((b) => b.addEventListener("click", () => {
       const cur = Store.get("gates", g.id) || {};
-      Store.saveGate(g.id, { verdict: cur.verdict === b.dataset.verdict ? null : b.dataset.verdict, notes: $("#verdict-notes").value });
+      // Set, never toggle: clicking the verdict that is already saved must not clear it.
+      if (cur.verdict === b.dataset.verdict) return;
+      Store.saveGate(g.id, { verdict: b.dataset.verdict, notes: $("#verdict-notes").value });
       renderVerdict(true);
     }));
     $("#verdict-notes").addEventListener("input", (e) => {
@@ -618,7 +620,7 @@
 
   window.addEventListener("keydown", async (e) => {
     if (typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.code === "Escape") { stopAll(); renderActions(); return; }
+    if (e.code === "Escape") { stopAll(); renderActions(); Passages.stopNow(); return; }
     if (e.code === "Space" && state.spaceHold) { e.preventDefault(); if (!e.repeat) state.spaceHold.on(); return; }
     if (!active()) return;
     if (e.code === "Backquote") { setSlot(state.slot === "a" ? "b" : "a"); return; }
@@ -767,6 +769,10 @@
     window.addEventListener("error", (e) => showError(e.error || e.message));
     window.addEventListener("unhandledrejection", (e) => showError(e.reason));
     armAudioOnFirstGesture();
+    // The sticky now-playing strip sits just under the sticky top bar, whose height wraps with width.
+    const topH = () => document.documentElement.style.setProperty("--top-h", `${document.querySelector(".top").offsetHeight}px`);
+    topH();
+    window.addEventListener("resize", topH);
     bindHeader();
     Store.onChange(onStore);
     try {
