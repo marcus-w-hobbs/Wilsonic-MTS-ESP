@@ -171,7 +171,16 @@ For developers: See [CLAUDE.md](./CLAUDE.md) for detailed technical documentatio
 
 ## License
 
-Wilsonic is released under the [MIT License](LICENSE).
+The code in this repository is released under the [MIT License](LICENSE).
+
+My listening judgments from the Ear Bench, the files in
+`experiments/ear_bench/judgments/`, are released under the
+[Creative Commons Attribution 4.0 International licence](LICENSES/CC-BY-4.0.txt).
+You can reuse and adapt them for any purpose, commercial work included, as long
+as you credit Marcus Hobbs and link back to this repository.
+
+Third-party code this project uses or includes (JUCE, MTS-ESP, and Björn
+Ottosson's Oklab colour code) keeps its own licence.
 
 ## Acknowledgements
 

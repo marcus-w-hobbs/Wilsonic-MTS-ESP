@@ -50,6 +50,7 @@ Non-negotiables for agents:
 3. **Choke points are serialized**: before touching `WilsonicProcessor+Params.cpp`, `DesignsModel.*`, `*.jucer`, or `all_tunings.json`, check `gh pr list` for another open PR touching them. Append-only ordering rules apply (see "Adding New Scale Designs" below).
 4. **Worktrees**: `scripts/worktree.sh new <lane> <topic>` creates `.claude/worktrees/<lane>-<topic>` on branch `<lane>/<topic>`; `list` flags name/branch drift; `done <name>` is the only sanctioned teardown (stash-safe, refuses unmerged work). If a session auto-created a `claude/*` branch, rename to the lane prefix before opening the PR.
 5. **One running Wilsonic instance at a time** when testing tuning output — MTS-ESP allows one master per machine, and a second worktree's build silently loses the master slot.
+6. **Licences are separate by artefact**: all code is MIT, Ear Bench judgments (`experiments/ear_bench/judgments/`) are CC BY 4.0, and JUCE's licence applies only to distributing a built plugin binary. Research code must never depend on the real JUCE framework (the research seam builds against stub `JuceHeader.h` files). Details: CONTRIBUTING.md, "Licences: three separate questions".
 
 ## Architecture Overview
 

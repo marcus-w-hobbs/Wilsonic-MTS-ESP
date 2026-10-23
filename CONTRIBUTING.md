@@ -30,6 +30,29 @@ Rules that make parallelism safe:
    (`check_freeze.sh`). If your change fails the freeze check, revert it —
    don't update the pin.
 
+## Licences: three separate questions
+
+The repository answers three licence questions, and they do not overlap.
+
+| What | Licence | What it governs |
+|---|---|---|
+| All code here: plugin source, research Python, the Ear Bench page, scripts | MIT ([`LICENSE`](LICENSE)) | copying, changing and redistributing the source |
+| Ear Bench judgments in `experiments/ear_bench/judgments/` | CC BY 4.0 ([`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt)) | reusing the data, with credit to the judge and a link back |
+| A built Wilsonic plugin binary | JUCE's licence, plus MTS-ESP's terms | distributing the compiled plugin, because it links the JUCE framework |
+
+Research work never links JUCE. The Python harness and the Ear Bench (plain
+HTML and JavaScript) have no JUCE in them, and the research seam
+(`tests/research_cli.cpp`, `experiments/triads/cpp_receipts/`) compiles the
+real `Source/` tuning code against stub `JuceHeader.h` files instead of the
+framework. So JUCE's terms reach only the plugin binary, never research code
+or data. Keep it that way:
+
+- Research-lane code must not add a dependency on the real JUCE framework.
+- A plugin-lane change that would make the seam need real JUCE breaks this
+  separation; raise it with the maintainer before merging.
+- Adding your own `judgments/<your-name>.jsonl` releases it under CC BY 4.0,
+  credited to you.
+
 ## Worktrees: how to work in parallel
 
 The lane contract lives in the **branch name**; the worktree directory is a
