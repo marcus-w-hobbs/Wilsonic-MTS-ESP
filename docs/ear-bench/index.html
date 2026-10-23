@@ -161,6 +161,11 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .t-play { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: baseline; border-radius: 4px; padding: 2px 4px; }
 .t-play:hover, .t-play:focus-visible { background: var(--accent-soft); }
 .t-dev.ok { color: var(--ok); } .t-dev.bad { color: var(--bad); font-weight: 600; }
+.explore { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--rule); padding-top: 12px; }
+.explore[open] { gap: 16px; }
+.explore > summary { padding: 4px 0; }
+.explore > :not(summary) { margin-top: 16px; }
+.explore-key { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
 .compare { border-color: var(--accent); }
 .c-head { display: flex; flex-direction: column; gap: 4px; }
 .c-table { display: flex; flex-direction: column; gap: 2px; overflow-x: auto; }

@@ -195,16 +195,28 @@
       ${isEps ? "" : `<section class="card compare" id="compare" hidden></section>`}
       ${g.kind === "gate" && !isEps ? `<section class="card verdict" id="verdict"></section>` : ""}
       ${isEps ? `<div id="eps"></div>` : `
-      <section class="card instrument" id="instrument">
-        <div id="inst-bar"></div>
-        <div class="strip-wrap" id="strip-wrap"></div>
-        <div id="inst-actions"></div>
-      </section>
-      <div class="cols">
-        <section class="card" id="scales"></section>
-        <section class="card" id="triads"></section>
-      </div>
-      <section class="card" id="table"></section>`}`;
+      <details class="explore" id="explore" ${g.kind === "gate" ? "" : "open"}>
+        <summary>
+          <h3>Explore on your own</h3>
+          <span class="hint">${g.kind === "gate" ? "Optional. The two cards above are all a verdict needs." : "Play, compare and inspect the scales in this folder."}</span>
+        </summary>
+        <ul class="explore-key">
+          <li><strong>Instrument:</strong> play either scale yourself (computer keys, MIDI, or click the bars), record a phrase and replay it on A or B.</li>
+          <li><strong>Scales:</strong> every scale in this gate's folder. Choose which is A and B, and rate or note any of them.</li>
+          <li><strong>Triads:</strong> one scale at a time, either the reference's own triads in it (Target) or every triad it contains (All).</li>
+          <li><strong>Tuning:</strong> the numbers: cents, ratios, steps and Hz.</li>
+        </ul>
+        <section class="card instrument" id="instrument">
+          <div id="inst-bar"></div>
+          <div class="strip-wrap" id="strip-wrap"></div>
+          <div id="inst-actions"></div>
+        </section>
+        <div class="cols">
+          <section class="card" id="scales"></section>
+          <section class="card" id="triads"></section>
+        </div>
+        <section class="card" id="table"></section>
+      </details>`}`;
     if (isEps) renderEps();
     else {
       if (g.kind === "gate") renderVerdict(true);
@@ -232,13 +244,19 @@
     if (!box || g.kind !== "gate") return;
     const v = Store.get("gates", g.id) || {};
     const choices = [["pass", "Pass"], ["fail", "Fail"], ["again", "Listen again"]];
-    const status = v.updatedAt ? `Saved ${new Date(v.updatedAt).toLocaleString()}` : "Nothing saved yet";
+    const label = { pass: "Pass", fail: "Fail", again: "Listen again" }[v.verdict] || "none yet";
+    const status = v.updatedAt ? `Saved ${new Date(v.updatedAt).toLocaleString()} · verdict: ${label}` : "Nothing saved yet";
     const where = {
       db: "Saved to this page's database. The next Claude session reads it and updates the ledger.",
       server: "Saved to experiments/ear_bench/results/verdicts.json by the local server. Any session reads it there.",
     }[Store.mode] || "Saved in this browser only. Use Copy verdicts to send them to a session.";
     if (!full && box.querySelector("textarea") === document.activeElement) {
+      // Keep typing undisturbed, but never let the buttons show a verdict the store doesn't hold.
       $("#verdict-status").textContent = status;
+      box.querySelectorAll("[data-verdict]").forEach((btn) => {
+        const k = btn.dataset.verdict;
+        btn.className = `btn ${v.verdict === k ? `on v-${k}` : ""}`;
+      });
       return;
     }
     box.innerHTML = `

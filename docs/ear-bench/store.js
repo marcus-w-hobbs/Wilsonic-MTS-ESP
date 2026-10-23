@@ -37,8 +37,17 @@ const Store = (() => {
   function subscribe(collection) {
     db.collection(collection).onSnapshot(
       (snap) => {
+        // A snapshot can echo an older write of ours after a newer local change
+        // (a verdict click between two note saves). Keep whichever copy is newer,
+        // or the next save would write the stale verdict back.
+        const mine = cache[collection];
         const next = {};
-        snap.docs.forEach((d) => { next[d.id] = d.data(); });
+        snap.docs.forEach((d) => {
+          const theirs = d.data();
+          const local = mine[d.id];
+          next[d.id] = local && local.updatedAt && theirs.updatedAt && local.updatedAt > theirs.updatedAt ? local : theirs;
+        });
+        Object.keys(mine).forEach((id) => { if (!(id in next) && queues.has(`${collection}/${id}`)) next[id] = mine[id]; });
         cache[collection] = next;
         emit({ collection });
       },
