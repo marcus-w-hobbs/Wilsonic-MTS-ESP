@@ -167,6 +167,13 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .explore > :not(summary) { margin-top: 16px; }
 .explore-key { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
 .compare { border-color: var(--accent); }
+.p-list { display: flex; flex-direction: column; gap: 8px; }
+.p-row { display: grid; grid-template-columns: minmax(200px, 1fr) auto auto; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+.p-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.p-result { grid-column: 1 / -1; font-size: 0.85rem; color: var(--ok); }
+.c-detail > summary { cursor: pointer; padding: 6px 0; }
+.c-detail[open] > summary { margin-bottom: 8px; }
+@media (max-width: 760px) { .p-row { grid-template-columns: minmax(0, 1fr); } }
 .c-head { display: flex; flex-direction: column; gap: 4px; }
 .c-table { display: flex; flex-direction: column; gap: 2px; overflow-x: auto; }
 .c-row { display: grid; grid-template-columns: minmax(130px, 1fr) 72px 72px 220px 160px; gap: 10px; align-items: center; padding: 6px 8px; border-radius: 4px; min-width: 620px; }
@@ -260,6 +267,8 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 <script src="store.js"></script>
 <script src="diag.js"></script>
 <script src="targets.js"></script>
+<script src="compose.js"></script>
+<script src="passages.js"></script>
 <script src="compare.js"></script>
 <script src="eareps.js"></script>
 <script src="app.js"></script>

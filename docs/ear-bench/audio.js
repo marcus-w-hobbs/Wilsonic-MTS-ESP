@@ -65,13 +65,14 @@ const Synth = (() => {
   const safeStop = (osc, t) => { try { osc.stop(t); } catch (e) { /* already stopped */ } };
 
   // A held, steady voice: one periodic wave at a constant level.
-  function sustainedVoice(c, dest, hz, t) {
+  function sustainedVoice(c, dest, hz, t, level = 1) {
+    const peak = VOICE_GAIN * level;
     const osc = c.createOscillator();
     osc.setPeriodicWave(c === ctx ? wave : waveFor(c));
     osc.frequency.setValueAtTime(hz, t);
     const env = c.createGain();
     env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(VOICE_GAIN, t + ATTACK);
+    env.gain.linearRampToValueAtTime(peak, t + ATTACK);
     osc.connect(env).connect(dest);
     osc.start(t);
     return {
@@ -79,7 +80,7 @@ const Synth = (() => {
         env.gain.cancelScheduledValues(at);
         // .value reads the param's default (1) until the audio thread runs, so
         // clamp it: a release scheduled ahead must never jump above the voice level.
-        env.gain.setValueAtTime(Math.min(env.gain.value, VOICE_GAIN), at);
+        env.gain.setValueAtTime(Math.min(env.gain.value, peak), at);
         env.gain.linearRampToValueAtTime(0, at + RELEASE);
         safeStop(osc, at + RELEASE + 0.05);
       },
@@ -88,10 +89,10 @@ const Synth = (() => {
 
   // A plucked or hammered voice: one sine per partial, each decaying on its
   // own time constant; releasing the key damps the whole string.
-  function struckVoice(c, dest, hz, t) {
+  function struckVoice(c, dest, hz, t, level = 1) {
     const spec = Timbres.STRUCK[timbre];
     const partials = spec.partials(hz);
-    const norm = STRUCK_GAIN / Math.sqrt(partials.reduce((s, p) => s + p.amp * p.amp, 0));
+    const norm = (level * STRUCK_GAIN) / Math.sqrt(partials.reduce((s, p) => s + p.amp * p.amp, 0));
     const damper = c.createGain();
     damper.connect(dest);
     const oscs = partials.map((p) => {
@@ -114,8 +115,8 @@ const Synth = (() => {
     };
   }
 
-  function makeVoice(hz, t, c = ctx, dest = bus) {
-    return Timbres.isStruck(timbre) ? struckVoice(c, dest, hz, t) : sustainedVoice(c, dest, hz, t);
+  function makeVoice(hz, t, c = ctx, dest = bus, level = 1) {
+    return Timbres.isStruck(timbre) ? struckVoice(c, dest, hz, t, level) : sustainedVoice(c, dest, hz, t, level);
   }
 
   // One note of the current timbre rendered offline, dry (no shaper or
@@ -140,13 +141,24 @@ const Synth = (() => {
     v.stop(Math.max(ctx.currentTime, when || ctx.currentTime));
   }
 
-  function allOff() { [...voices.keys()].forEach((k) => noteOff(k)); }
+  // Scheduled notes (sequences, chords, passages) stay stoppable until they end.
+  let scheduled = [];
 
-  // Fire-and-forget scheduled note (sequences, chords).
-  function blip(hz, startAt, dur) {
+  function allOff() {
+    [...voices.keys()].forEach((k) => noteOff(k));
+    const t = ctx ? ctx.currentTime : 0;
+    scheduled.filter((s) => s.end > t).forEach((s) => s.voice.stop(t));
+    scheduled = [];
+  }
+
+  function blip(hz, startAt, dur, level = 1) {
     if (!ctx) return;
     // Struck notes ring a little past a short sequence step, as a played string would.
-    makeVoice(hz, startAt).stop(startAt + (Timbres.isStruck(timbre) ? Math.max(dur, 0.9) : dur));
+    const end = startAt + (Timbres.isStruck(timbre) ? Math.max(dur, 0.9) : dur);
+    const voice = makeVoice(hz, startAt, ctx, bus, level);
+    voice.stop(end);
+    const t = ctx.currentTime;
+    scheduled = [...scheduled.filter((s) => s.end > t), { voice, end }];
   }
 
   const now = () => (ctx ? ctx.currentTime : 0);

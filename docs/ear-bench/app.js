@@ -290,7 +290,7 @@
     if (!box) return;
     const g = currentGroup();
     Compare.render(box, {
-      a: scaleOf(state.a), b: scaleOf(state.b), scaleOf, escape, fmt, ensureAudio, playTriad, runAThenB, phraseAThenB,
+      a: scaleOf(state.a), b: scaleOf(state.b), scaleOf, escape, fmt, hz, ensureAudio, playTriad, runAThenB, phraseAThenB,
       tol: () => state.tol, hasPhrase: () => state.phrase.length > 0, readOnly: Store.readOnly,
       saved: () => Store.get("comparisons", comparisonId()),
       save: (body) => Store.saveComparison(comparisonId(), { gate: g.kind === "gate" ? g.id : null, a: state.a, b: state.b, ...body }),

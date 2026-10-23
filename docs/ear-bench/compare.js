@@ -32,12 +32,14 @@ const Compare = (() => {
       `<button class="btn sm ${picks[key] === v ? "on" : ""}" data-pick="${v}" data-key="${ctx.escape(key)}" ${ctx.readOnly ? "disabled" : ""}>${l}</button>`).join("");
     const inA = list.filter((r) => Math.abs(r.a.dev) <= tol).length;
     const inB = list.filter((r) => Math.abs(r.b.dev) <= tol).length;
+    const wasOpen = !!(box.querySelector(".c-detail") && box.querySelector(".c-detail").open);
     box.innerHTML = `
-      <div class="c-head">
-        <h3>Hear A against B</h3>
-        <p class="hint">Each row is one chord of <span class="mono">${ctx.escape(ref.name)}</span>, played in both chains. The rows where A and B differ most come first, so the decision is usually in the top few.
+      <div class="c-head"><h3>Listening passages</h3></div>
+      <div id="passages"></div>
+      <details class="c-detail" ${wasOpen ? "open" : ""}>
+      <summary><strong>Chord by chord</strong> <span class="hint">(not blind: A and B are named)</span></summary>
+      <p class="hint">Each row is one chord of <span class="mono">${ctx.escape(ref.name)}</span>, played in both chains. The rows where A and B differ most come first.
         A keeps ${inA} of ${list.length} within ${tol.toFixed(2)}¢, B keeps ${inB}. Chords hold ${HOLD} s so slow beats have time to show.</p>
-      </div>
       <div class="c-table" role="table" aria-label="Chords in A and B">
         <div class="c-row c-th" role="row"><span>Chord</span><span>A</span><span>B</span><span>Play</span><span>Which locks better?</span></div>
         ${list.map((r, i) => `
@@ -61,8 +63,10 @@ const Compare = (() => {
         <span class="sep"></span>
         <span class="label">Overall</span>
         ${[["a", "A"], ["b", "B"], ["same", "Same to me"]].map(([v, l]) => `<button class="btn sm ${saved.prefer === v ? "on" : ""}" data-overall="${v}" ${ctx.readOnly ? "disabled" : ""}>${l}</button>`).join("")}
-      </div>`;
+      </div>
+      </details>`;
 
+    Passages.render(box.querySelector("#passages"), { ...ctx, ref, pairKey: `${a.id}|${b.id}` });
     const chord = (slot, r) => (slot === "a" ? r.a : r.b);
     box.querySelectorAll("[data-play]").forEach((btn) => btn.addEventListener("click", async () => {
       await ctx.ensureAudio();
