@@ -5485,3 +5485,48 @@ right reading is that the proxy does not see what he hears in them,
 which is the charter's case, and not that the generators are wrong.
 
 **Kept.** Gate G-039.
+
+## 2026-10-23 — G-031 decided on the Ear Bench (first gate judged there)
+
+**What was compared.** CPSFIT-002's triad-minimax chain (A: 193.908¢, N = 22,
+all 12 hexany triads within 2¢, worst 1.16¢, one tone 2.22¢ off with 1/1
+pinned) against CPSFIT-001's tone-minimax chain (B: 193.787¢, N = 22, 10 of
+12 within 2¢, worst 2.08¢ on 4:5:6 and 10:12:15, every tone within 1.37¢).
+Same val and the same step pattern from 1/1 (LsssLsssLsssLssLssLsss); the
+steps differ by at most 2.4¢, and B's large and small steps are a little
+more even (2.20 against 2.30).
+
+**How.** Ear Bench v1.2.0, local copy, reed timbre, nonlinearity off,
+1/1 = 261.6256 Hz. Four passages composed from the hexany's triads, each
+played as X then Y with the order hidden and drawn per page load:
+
+| Passage | Tests | Preferred |
+|---|---|---|
+| Scale run | melody | B (tone fit) |
+| Tune | melody shaped by the harmony | A (triad fit) |
+| Chorale (all 12 triads, common-tone voice leading, bass) | harmony | A (triad fit) |
+| Tune over chorale | both | B (tone fit) |
+
+Verdict: **Pass.** Marcus: "I hear a lot of good triads in both. the
+biggest differences to me are how good the melody is." His earlier sighted
+note (2026-10-22, arpeggios only) said B was clearly the more melodic and
+that an arpeggio cannot answer a harmonic question, which is why the
+passages were built.
+
+**Reading, with its limits.** Each passage is one blind binary trial, so
+the four picks are not a statistic. What they do say: in harmony alone the
+ear went with the chain that holds all twelve triads, which is what the
+worst-triad objective was built to buy, and in Marcus's words the triads
+are good in both and the melody is where they differ. So the gate's
+question ("the worst triad or the number of good ones?") has no audible
+answer at this level of fit, 10 against 12 triads within 2¢, and the
+deciding axis is melodic. That supports the joint melody-and-harmony
+objective Marcus asked for on 2026-10-22: a fitter that already keeps the
+triads should break ties on a melodic measure (the frozen melodic.py
+v0.1.0 is one candidate) rather than on a finer triad bound. Not
+registered as a prediction; it is the brief for whichever fit experiment
+comes next.
+
+**Kept.** Judgments (8 records, including the cleared-then-restored Pass
+from the bench's save bug on 2026-10-22) in
+`experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-031 PASS.
