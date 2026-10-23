@@ -351,3 +351,5 @@ experiments/archive/catalog.jsonl
 
 # Ear Bench live page diagnostics (local server)
 experiments/ear_bench/results/status.json
+# Ear Bench local working store; the released record is experiments/ear_bench/judgments/
+experiments/ear_bench/results/verdicts.json

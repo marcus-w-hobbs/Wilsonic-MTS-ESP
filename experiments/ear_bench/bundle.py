@@ -21,6 +21,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -32,7 +33,7 @@ EXPERIMENTS = REPO / "experiments"
 GATES_MD = EXPERIMENTS / "GATES.md"
 DEFAULT_OUT = REPO / "docs" / "ear-bench" / "data.json"
 
-BUNDLE_VERSION = "1.0.0"
+BUNDLE_VERSION = "1.1.0"
 
 # Folders whose gate row does not spell out results/scl/<folder>.
 EXTRA_FOLDER_GATES = {
@@ -155,11 +156,13 @@ def collect_scales(experiments: Path, gate_of: dict[str, str]) -> list[dict]:
         module = rel.parts[0]
         folder_parts = rel.parts[3:-1]
         folder = "/".join(folder_parts) if folder_parts else module
-        parsed = parse_scl(path.read_text(encoding="utf-8", errors="replace"))
+        raw = path.read_bytes()
+        parsed = parse_scl(raw.decode("utf-8", errors="replace"))
         blind = folder in BLIND_FOLDERS
         scales.append({
             "id": scale_id(module, folder.replace("/", "."), path.stem),
             "file": f"experiments/{rel.as_posix()}",
+            "sha256": hashlib.sha256(raw).hexdigest(),
             "name": path.stem,
             "module": module,
             "folder": folder,

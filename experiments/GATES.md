@@ -29,6 +29,14 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   (both dated, with notes).
 - Ear checks are standing gates: any `.scl` export offered for listening is
   implicitly PENDING until Marcus reports back.
+- **Every experiment that emits scales ships an Ear Bench audition** (charter,
+  Marcus 2026-10-22): its `.scl` files go under `results/scl/<folder>/`, its gate
+  row names that folder, and a chain-vs-chain comparison registers its JI
+  reference and default A/B pair in `experiments/ear_bench/bundle.py`, so the
+  blind passages work with nothing extra. Marcus judges on the bench; before a
+  session records a decision it runs `experiments/ear_bench/export_judgments.py`,
+  and the judgments are released in `experiments/ear_bench/judgments/` per
+  `experiments/ear_bench/JUDGING.md`.
 
 ## Ledger
 

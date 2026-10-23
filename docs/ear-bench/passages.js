@@ -154,7 +154,7 @@ const Passages = (() => {
       const x = slotOf(id, "x");
       const preferred = pickV === "same" ? "same" : pickV === "x" ? x : other(x);
       const cur = ctx.saved() || {};
-      ctx.save({ prefer: cur.prefer || null, picks: { ...(cur.picks || {}), [`passage:${id}`]: { x, pick: pickV, preferred, at: new Date().toISOString() } } });
+      ctx.save({ prefer: cur.prefer || null, picks: { ...(cur.picks || {}), [`passage:${id}`]: { x, pick: pickV, preferred, at: new Date().toISOString(), context: ctx.context() } } });
       render(box, ctx);
     }));
     box.querySelector("#p-stop").addEventListener("click", () => { Synth.allOff(); stopNow(); });

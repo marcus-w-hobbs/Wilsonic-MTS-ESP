@@ -14,6 +14,7 @@
   const KEY_INDEX = new Map(KEY_ROWS.flat().map((code, i) => [code, i]));
   const HOME_INDEX = KEY_INDEX.get("KeyA");
   const TRIAD_ROW_LIMIT = 120;
+  const BENCH_VERSION = "1.2.0";
 
   const state = {
     data: null, byId: new Map(), groupId: null,
@@ -25,6 +26,12 @@
   };
 
   // ---------- helpers ----------
+  // What the listener heard a judgment under; saved with every pick and verdict
+  // so the released judgments carry their listening conditions.
+  const listeningContext = () => ({
+    timbre: Synth.timbre, sound: Synth.describe(), baseHz: state.baseHz,
+    store: Store.mode, bundle: state.data ? state.data.version : null, bench: BENCH_VERSION,
+  });
   const hz = (cents) => state.baseHz * Math.pow(2, cents / 1200);
   const scaleOf = (id) => state.byId.get(id);
   const active = () => scaleOf(state.slot === "b" && state.b ? state.b : state.a);
@@ -273,7 +280,7 @@
       const cur = Store.get("gates", g.id) || {};
       // Set, never toggle: clicking the verdict that is already saved must not clear it.
       if (cur.verdict === b.dataset.verdict) return;
-      Store.saveGate(g.id, { verdict: b.dataset.verdict, notes: $("#verdict-notes").value });
+      Store.saveGate(g.id, { verdict: b.dataset.verdict, notes: $("#verdict-notes").value, context: listeningContext() });
       renderVerdict(true);
     }));
     $("#verdict-notes").addEventListener("input", (e) => {
@@ -293,6 +300,7 @@
     const g = currentGroup();
     Compare.render(box, {
       a: scaleOf(state.a), b: scaleOf(state.b), scaleOf, escape, fmt, hz, ensureAudio, playTriad, runAThenB, phraseAThenB,
+      context: listeningContext,
       tol: () => state.tol, hasPhrase: () => state.phrase.length > 0, readOnly: Store.readOnly,
       saved: () => Store.get("comparisons", comparisonId()),
       save: (body) => Store.saveComparison(comparisonId(), { gate: g.kind === "gate" ? g.id : null, a: state.a, b: state.b, ...body }),

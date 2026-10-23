@@ -1,5 +1,5 @@
 {
- "version": "1.0.0",
+ "version": "1.1.0",
  "gates": [
   {
    "id": "G-006",
@@ -148,6 +148,7 @@
   {
    "id": "lattice.cpsfit001.cpsfit001_hexany_N15_g502.86",
    "file": "experiments/lattice/results/scl/cpsfit001/cpsfit001_hexany_N15_g502.86.scl",
+   "sha256": "9353bda7c2bb70c0b39bac82a925146522c41d616da8062a957f3116f4ad2704",
    "name": "cpsfit001_hexany_N15_g502.86",
    "module": "lattice",
    "folder": "cpsfit001",
@@ -181,6 +182,7 @@
   {
    "id": "lattice.cpsfit001.cpsfit001_hexany_N22_g193.79",
    "file": "experiments/lattice/results/scl/cpsfit001/cpsfit001_hexany_N22_g193.79.scl",
+   "sha256": "77ef23bd4b8e9c2eaced6079238e3fa3fac580188ac0ffbbb96789bca377dc38",
    "name": "cpsfit001_hexany_N22_g193.79",
    "module": "lattice",
    "folder": "cpsfit001",
@@ -221,6 +223,7 @@
   {
    "id": "lattice.cpsfit002.cpsfit002_hexany_N22_g193.908",
    "file": "experiments/lattice/results/scl/cpsfit002/cpsfit002_hexany_N22_g193.908.scl",
+   "sha256": "fc0ffe6b43156b05e01e2c4e436272979388a31d5c989675de7b02b4e16f84cb",
    "name": "cpsfit002_hexany_N22_g193.908",
    "module": "lattice",
    "folder": "cpsfit002",
@@ -261,6 +264,7 @@
   {
    "id": "lattice.cpsfit003.cpsfit003_dek52_N26_g498.066",
    "file": "experiments/lattice/results/scl/cpsfit003/cpsfit003_dek52_N26_g498.066.scl",
+   "sha256": "0ed5ae03cc404d3dd1bdf43a32f5d10f870a41479646da426122aae8ed536845",
    "name": "cpsfit003_dek52_N26_g498.066",
    "module": "lattice",
    "folder": "cpsfit003",
@@ -305,6 +309,7 @@
   {
    "id": "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676",
    "file": "experiments/lattice/results/scl/cpsfit003/cpsfit003_hexany_N16_g116.676.scl",
+   "sha256": "9b28c73a2b2b104397417e423a3a4a782ed7f8e842211a1fe366b42d70859ff8",
    "name": "cpsfit003_hexany_N16_g116.676",
    "module": "lattice",
    "folder": "cpsfit003",
@@ -339,6 +344,7 @@
   {
    "id": "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818",
    "file": "experiments/lattice/results/scl/cpsfit003/cpsfit003_hexany_N18_g77.818.scl",
+   "sha256": "dbf2a107721004070761e90f364dbb0faaeef65b97676ede7163b1fe3a4fe6cf",
    "name": "cpsfit003_hexany_N18_g77.818",
    "module": "lattice",
    "folder": "cpsfit003",
@@ -375,6 +381,7 @@
   {
    "id": "lattice.dynmos001.dynmos001_canonical_sub351444_N17_hexany_in_5_out_7_",
    "file": "experiments/lattice/results/scl/dynmos001/dynmos001_canonical_sub351444_N17_hexany[in=5,out=7].scl",
+   "sha256": "5ca4c0104e1805482cca3a65a23eea21a1ee71369535d2f6893397be40ed6dea",
    "name": "dynmos001_canonical_sub351444_N17_hexany[in=5,out=7]",
    "module": "lattice",
    "folder": "dynmos001",
@@ -410,6 +417,7 @@
   {
    "id": "lattice.dynmos001.dynmos001_canonical_sub497774_N29_hexany_in_11_out_5_",
    "file": "experiments/lattice/results/scl/dynmos001/dynmos001_canonical_sub497774_N29_hexany[in=11,out=5].scl",
+   "sha256": "bbb6e405ebb594f82044db730ab3a9c9f8e16e2c8b799bd9c1ef05d013571ccb",
    "name": "dynmos001_canonical_sub497774_N29_hexany[in=11,out=5]",
    "module": "lattice",
    "folder": "dynmos001",
@@ -457,6 +465,7 @@
   {
    "id": "lattice.dynmos001.dynmos001_marcus_sub316778_N15_dekany_in_in_1_out_none_",
    "file": "experiments/lattice/results/scl/dynmos001/dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none].scl",
+   "sha256": "57adbd9a351265a668b261b56165ce28a1c8968528a8526cd29e793a4f658dd5",
    "name": "dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none]",
    "module": "lattice",
    "folder": "dynmos001",
@@ -490,6 +499,7 @@
   {
    "id": "lattice.eareps.eareps_A_01",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_01.scl",
+   "sha256": "07f99dd68b77c02b6b9b403a42b3a312d435347699615bb0d0f75948e7e728dc",
    "name": "eareps_A_01",
    "module": "lattice",
    "folder": "eareps",
@@ -512,6 +522,7 @@
   {
    "id": "lattice.eareps.eareps_A_02",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_02.scl",
+   "sha256": "7d1e10b5abcecf07969a812f81497848db67840ea8c16bb93244eb739512a197",
    "name": "eareps_A_02",
    "module": "lattice",
    "folder": "eareps",
@@ -534,6 +545,7 @@
   {
    "id": "lattice.eareps.eareps_A_03",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_03.scl",
+   "sha256": "365f6a78c05ac23235c5d797639834c80c927f4d14e1c27a23ba4f6c63cd2cbb",
    "name": "eareps_A_03",
    "module": "lattice",
    "folder": "eareps",
@@ -556,6 +568,7 @@
   {
    "id": "lattice.eareps.eareps_A_04",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_04.scl",
+   "sha256": "b2b617d4751feb0fb922b9c3af4a75a9a91ba57fa9a9a88baa0676402976d57f",
    "name": "eareps_A_04",
    "module": "lattice",
    "folder": "eareps",
@@ -578,6 +591,7 @@
   {
    "id": "lattice.eareps.eareps_A_05",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_05.scl",
+   "sha256": "18f35ed05ff00cf7c73c176f377cc0092de130988bf6821467fbc2b0791062c1",
    "name": "eareps_A_05",
    "module": "lattice",
    "folder": "eareps",
@@ -600,6 +614,7 @@
   {
    "id": "lattice.eareps.eareps_A_06",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_06.scl",
+   "sha256": "a95f2f4065406c38dec0aa896109da45d5e2d9ec98eebb394aecf9787f8926fd",
    "name": "eareps_A_06",
    "module": "lattice",
    "folder": "eareps",
@@ -622,6 +637,7 @@
   {
    "id": "lattice.eareps.eareps_A_07",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_07.scl",
+   "sha256": "0a61e719526601e3870a7c21645e6e8fe159d5ac1929d924918451c49c061db1",
    "name": "eareps_A_07",
    "module": "lattice",
    "folder": "eareps",
@@ -644,6 +660,7 @@
   {
    "id": "lattice.eareps.eareps_A_08",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_08.scl",
+   "sha256": "42d31bd9ab38207d27d75cb6b837ff1844ab2b9f53ce41d2e3c8d63d8eb773f4",
    "name": "eareps_A_08",
    "module": "lattice",
    "folder": "eareps",
@@ -666,6 +683,7 @@
   {
    "id": "lattice.eareps.eareps_A_09",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_09.scl",
+   "sha256": "74fd3db89307cdab178bd92adb165c40897ffdd71162d42aee81bf17ffd5bda9",
    "name": "eareps_A_09",
    "module": "lattice",
    "folder": "eareps",
@@ -688,6 +706,7 @@
   {
    "id": "lattice.eareps.eareps_A_10",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_10.scl",
+   "sha256": "951d9b3828f13e6599c50c5809115576343dc8e8bff4463749202c78045b321c",
    "name": "eareps_A_10",
    "module": "lattice",
    "folder": "eareps",
@@ -710,6 +729,7 @@
   {
    "id": "lattice.eareps.eareps_A_11",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_11.scl",
+   "sha256": "17c3f8f1b39f3dabfa840382f96a801fbbe7c50594a0bae6322c5ea813f3cd26",
    "name": "eareps_A_11",
    "module": "lattice",
    "folder": "eareps",
@@ -732,6 +752,7 @@
   {
    "id": "lattice.eareps.eareps_A_12",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_12.scl",
+   "sha256": "d9e6d97019e8f87e6e773275fb7ca9d55079ce871c994b8f0a920cac2f83e011",
    "name": "eareps_A_12",
    "module": "lattice",
    "folder": "eareps",
@@ -754,6 +775,7 @@
   {
    "id": "lattice.eareps.eareps_A_13",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_13.scl",
+   "sha256": "9d9970c1eebb7a059d772f19718b1215706a9089211641a89ef79235ba087cb4",
    "name": "eareps_A_13",
    "module": "lattice",
    "folder": "eareps",
@@ -776,6 +798,7 @@
   {
    "id": "lattice.eareps.eareps_A_14",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_14.scl",
+   "sha256": "9301ae9e1620ff641515d698942337d3667a65920f34e3cd411a269721a0499b",
    "name": "eareps_A_14",
    "module": "lattice",
    "folder": "eareps",
@@ -798,6 +821,7 @@
   {
    "id": "lattice.eareps.eareps_A_15",
    "file": "experiments/lattice/results/scl/eareps/eareps_A_15.scl",
+   "sha256": "e97aeb7166df7478b823484ddb41c57c5227a34a6314e890219e1167ba6b13b8",
    "name": "eareps_A_15",
    "module": "lattice",
    "folder": "eareps",
@@ -820,6 +844,7 @@
   {
    "id": "lattice.eareps.eareps_B_01",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_01.scl",
+   "sha256": "7ecec0c84e3e086f6afe2c32b46958beba27acf254e7ef295375a9e37e98038b",
    "name": "eareps_B_01",
    "module": "lattice",
    "folder": "eareps",
@@ -841,6 +866,7 @@
   {
    "id": "lattice.eareps.eareps_B_02",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_02.scl",
+   "sha256": "591d6ff8a1947caf077294239dd644a67f6e5a0fd6bf3f64796726b7403d3596",
    "name": "eareps_B_02",
    "module": "lattice",
    "folder": "eareps",
@@ -862,6 +888,7 @@
   {
    "id": "lattice.eareps.eareps_B_03",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_03.scl",
+   "sha256": "4221543363018cd5bf7b62371a78df06bb60abad68bca12fb8b92240082a9041",
    "name": "eareps_B_03",
    "module": "lattice",
    "folder": "eareps",
@@ -883,6 +910,7 @@
   {
    "id": "lattice.eareps.eareps_B_04",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_04.scl",
+   "sha256": "1bc257527e1d84867c275c74f2f18759135a71cc737956b037cf35be44c04bde",
    "name": "eareps_B_04",
    "module": "lattice",
    "folder": "eareps",
@@ -904,6 +932,7 @@
   {
    "id": "lattice.eareps.eareps_B_05",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_05.scl",
+   "sha256": "65ee06ed3f15d94cb2fb067b1219422d68665bd17ab493f8c9172c4b22e1e75b",
    "name": "eareps_B_05",
    "module": "lattice",
    "folder": "eareps",
@@ -925,6 +954,7 @@
   {
    "id": "lattice.eareps.eareps_B_06",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_06.scl",
+   "sha256": "160db33e1154e561f7b07d37aa4cc291c3e24a108c6977eb3eed4becbcfffc2a",
    "name": "eareps_B_06",
    "module": "lattice",
    "folder": "eareps",
@@ -946,6 +976,7 @@
   {
    "id": "lattice.eareps.eareps_B_07",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_07.scl",
+   "sha256": "ddab846f5777e1b0e7992899016c5475a9b0f164988a9439bfa9adcffc5d914f",
    "name": "eareps_B_07",
    "module": "lattice",
    "folder": "eareps",
@@ -967,6 +998,7 @@
   {
    "id": "lattice.eareps.eareps_B_08",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_08.scl",
+   "sha256": "f59cd7e6edc0b9297eafde61122ff72e12d04fdf7d71f1e67a10eec80878a724",
    "name": "eareps_B_08",
    "module": "lattice",
    "folder": "eareps",
@@ -988,6 +1020,7 @@
   {
    "id": "lattice.eareps.eareps_B_09",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_09.scl",
+   "sha256": "3a10db4908ede530a24e1a4535911755aeadd4883df0ae60cb5adeeaeb4b9f2f",
    "name": "eareps_B_09",
    "module": "lattice",
    "folder": "eareps",
@@ -1009,6 +1042,7 @@
   {
    "id": "lattice.eareps.eareps_B_10",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_10.scl",
+   "sha256": "b76666978b80f96afd8719faa1b2ea19b0a258169a1589a18a3cec473598f994",
    "name": "eareps_B_10",
    "module": "lattice",
    "folder": "eareps",
@@ -1030,6 +1064,7 @@
   {
    "id": "lattice.eareps.eareps_B_11",
    "file": "experiments/lattice/results/scl/eareps/eareps_B_11.scl",
+   "sha256": "b8bfde0ecbb5cb898bce01c510ec338d35ff28d9b6bc33d7fbbc09309ee26857",
    "name": "eareps_B_11",
    "module": "lattice",
    "folder": "eareps",
@@ -1051,6 +1086,7 @@
   {
    "id": "lattice.eareps.eareps_C_01",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_01.scl",
+   "sha256": "28b591432de70c4ff479b714f9e67b2995d27eb86a55798c5d3443175159dc43",
    "name": "eareps_C_01",
    "module": "lattice",
    "folder": "eareps",
@@ -1073,6 +1109,7 @@
   {
    "id": "lattice.eareps.eareps_C_02",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_02.scl",
+   "sha256": "3d2c314d46a9a09bec310a53dcaf07966b1319eb030b73118a2e47f79b25ee3c",
    "name": "eareps_C_02",
    "module": "lattice",
    "folder": "eareps",
@@ -1095,6 +1132,7 @@
   {
    "id": "lattice.eareps.eareps_C_03",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_03.scl",
+   "sha256": "e2b32d93aa8c9c75857c9142aabdfd65e89d036037ae6e3a4df15867ccac3698",
    "name": "eareps_C_03",
    "module": "lattice",
    "folder": "eareps",
@@ -1117,6 +1155,7 @@
   {
    "id": "lattice.eareps.eareps_C_04",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_04.scl",
+   "sha256": "c8199855c73435db95d17eab3e14f8a67a4cd191763693c990e6c783cb7b561d",
    "name": "eareps_C_04",
    "module": "lattice",
    "folder": "eareps",
@@ -1139,6 +1178,7 @@
   {
    "id": "lattice.eareps.eareps_C_05",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_05.scl",
+   "sha256": "50374a50a18931ad0c4e9f9da92ae8dbd1fb13a837966eddfe25a8e8311177fa",
    "name": "eareps_C_05",
    "module": "lattice",
    "folder": "eareps",
@@ -1161,6 +1201,7 @@
   {
    "id": "lattice.eareps.eareps_C_06",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_06.scl",
+   "sha256": "e1da812812d0157b32dfff1aded84c10fd8440e5287324f77b3ccc565143545d",
    "name": "eareps_C_06",
    "module": "lattice",
    "folder": "eareps",
@@ -1183,6 +1224,7 @@
   {
    "id": "lattice.eareps.eareps_C_07",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_07.scl",
+   "sha256": "6d9265578a57bb602260dc1dde983bcf9dac6a2db0abfe1c7fb88e4acbf8ada1",
    "name": "eareps_C_07",
    "module": "lattice",
    "folder": "eareps",
@@ -1205,6 +1247,7 @@
   {
    "id": "lattice.eareps.eareps_C_08",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_08.scl",
+   "sha256": "4e0515e4768add9bee645c240e5d0511a0c14dcb3efe5bc8dd88bf013ecbfc3a",
    "name": "eareps_C_08",
    "module": "lattice",
    "folder": "eareps",
@@ -1227,6 +1270,7 @@
   {
    "id": "lattice.eareps.eareps_C_09",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_09.scl",
+   "sha256": "62cbd1a3332849dfd9c60df4fa676b90bcc00d5635b564b9a2d113d313f0310f",
    "name": "eareps_C_09",
    "module": "lattice",
    "folder": "eareps",
@@ -1249,6 +1293,7 @@
   {
    "id": "lattice.eareps.eareps_C_10",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_10.scl",
+   "sha256": "0487531aa753ea61a67b901ef2486964a2b1d8a0057aff9827900d3b6cdf110c",
    "name": "eareps_C_10",
    "module": "lattice",
    "folder": "eareps",
@@ -1271,6 +1316,7 @@
   {
    "id": "lattice.eareps.eareps_C_11",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_11.scl",
+   "sha256": "f551f10d09774edc504312c26a9dbbeaea3178adf8c3afaca946758d4184f3a5",
    "name": "eareps_C_11",
    "module": "lattice",
    "folder": "eareps",
@@ -1293,6 +1339,7 @@
   {
    "id": "lattice.eareps.eareps_C_12",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_12.scl",
+   "sha256": "ae7f3963a4552b1fbadc448c910c362646f3f07270d1d476d8dc33cdd50806d6",
    "name": "eareps_C_12",
    "module": "lattice",
    "folder": "eareps",
@@ -1315,6 +1362,7 @@
   {
    "id": "lattice.eareps.eareps_C_13",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_13.scl",
+   "sha256": "2fa3ed0ec92c5a3512bc5013b02ba680914ece8b08506fe7c33912283e535573",
    "name": "eareps_C_13",
    "module": "lattice",
    "folder": "eareps",
@@ -1337,6 +1385,7 @@
   {
    "id": "lattice.eareps.eareps_C_14",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_14.scl",
+   "sha256": "3aee5efeae256ceeeb26c938d703983898c2262c03f2988556bedeeb22c0d10c",
    "name": "eareps_C_14",
    "module": "lattice",
    "folder": "eareps",
@@ -1359,6 +1408,7 @@
   {
    "id": "lattice.eareps.eareps_C_15",
    "file": "experiments/lattice/results/scl/eareps/eareps_C_15.scl",
+   "sha256": "c19705837c7928108b401aea774cf476c78f65b46973b8336216e22f7547b797",
    "name": "eareps_C_15",
    "module": "lattice",
    "folder": "eareps",
@@ -1381,6 +1431,7 @@
   {
    "id": "lattice.eareps.eareps_D_01",
    "file": "experiments/lattice/results/scl/eareps/eareps_D_01.scl",
+   "sha256": "a38a9bd7791b75a59f649056bff69d291d8e0d28d4ca7e47cdb06e5a05928582",
    "name": "eareps_D_01",
    "module": "lattice",
    "folder": "eareps",
@@ -1402,6 +1453,7 @@
   {
    "id": "lattice.eareps.eareps_D_02",
    "file": "experiments/lattice/results/scl/eareps/eareps_D_02.scl",
+   "sha256": "fbc5b6605ead50aca407369dcd1156fb2d9c62f1e7756470ea3facfafc06ecc2",
    "name": "eareps_D_02",
    "module": "lattice",
    "folder": "eareps",
@@ -1424,6 +1476,7 @@
   {
    "id": "lattice.eareps.eareps_D_03",
    "file": "experiments/lattice/results/scl/eareps/eareps_D_03.scl",
+   "sha256": "5570886f40e317365d97f518feff0df553665dcbaa9d439eaa5682d026171217",
    "name": "eareps_D_03",
    "module": "lattice",
    "folder": "eareps",
@@ -1446,6 +1499,7 @@
   {
    "id": "lattice.g006.g006_p1_a",
    "file": "experiments/lattice/results/scl/g006/g006_p1_a.scl",
+   "sha256": "1110d476c456257b1c8b7989970cea58f7abf0479251c618b4ddd21f49ee93a2",
    "name": "g006_p1_a",
    "module": "lattice",
    "folder": "g006",
@@ -1480,6 +1534,7 @@
   {
    "id": "lattice.g006.g006_p1_b",
    "file": "experiments/lattice/results/scl/g006/g006_p1_b.scl",
+   "sha256": "a1358f7bda69241c3371e97946866d80002e5587bd92d6acfa8cf2a03666a06c",
    "name": "g006_p1_b",
    "module": "lattice",
    "folder": "g006",
@@ -1514,6 +1569,7 @@
   {
    "id": "lattice.g006.g006_p2_a",
    "file": "experiments/lattice/results/scl/g006/g006_p2_a.scl",
+   "sha256": "df0c226f8e958b1c01f66406795ef4845f3a069982b676797bc7639b817bc094",
    "name": "g006_p2_a",
    "module": "lattice",
    "folder": "g006",
@@ -1548,6 +1604,7 @@
   {
    "id": "lattice.g006.g006_p2_b",
    "file": "experiments/lattice/results/scl/g006/g006_p2_b.scl",
+   "sha256": "f716d84584224f8ff51c97b938cd97a23cecf05b52401aaa429da3a49644b236",
    "name": "g006_p2_b",
    "module": "lattice",
    "folder": "g006",
@@ -1582,6 +1639,7 @@
   {
    "id": "lattice.g006.g006_p3_a",
    "file": "experiments/lattice/results/scl/g006/g006_p3_a.scl",
+   "sha256": "6717096b85b5b98591afa72b8664065bfccffd68ce704c00da794d615c815a4c",
    "name": "g006_p3_a",
    "module": "lattice",
    "folder": "g006",
@@ -1616,6 +1674,7 @@
   {
    "id": "lattice.g006.g006_p3_b",
    "file": "experiments/lattice/results/scl/g006/g006_p3_b.scl",
+   "sha256": "b14eff2866146e9615a00d9e548d83bccc5707f953dcce5f3a2cc204eb8bdd1e",
    "name": "g006_p3_b",
    "module": "lattice",
    "folder": "g006",
@@ -1650,6 +1709,7 @@
   {
    "id": "lattice.g006.g006_p4_a",
    "file": "experiments/lattice/results/scl/g006/g006_p4_a.scl",
+   "sha256": "7adc262c94299f8f37cf67b3339099b0e93d5508afccd7e400d5cbd3b55de940",
    "name": "g006_p4_a",
    "module": "lattice",
    "folder": "g006",
@@ -1684,6 +1744,7 @@
   {
    "id": "lattice.g006.g006_p4_b",
    "file": "experiments/lattice/results/scl/g006/g006_p4_b.scl",
+   "sha256": "e25a4a607ddd3c7d26357053a35c2bc03ccab05b3dade6b3c9a0a4f7163df2d0",
    "name": "g006_p4_b",
    "module": "lattice",
    "folder": "g006",
@@ -1718,6 +1779,7 @@
   {
    "id": "lattice.g006.g006_p5_a",
    "file": "experiments/lattice/results/scl/g006/g006_p5_a.scl",
+   "sha256": "907422155fdcd41ebe659a75312365d0a2684f8d68a8fa7bb634125adc670678",
    "name": "g006_p5_a",
    "module": "lattice",
    "folder": "g006",
@@ -1752,6 +1814,7 @@
   {
    "id": "lattice.g006.g006_p5_b",
    "file": "experiments/lattice/results/scl/g006/g006_p5_b.scl",
+   "sha256": "f706e760d118a1c3d00a071fea8ad126db1081c4e75c0b7d09152d067e08b101",
    "name": "g006_p5_b",
    "module": "lattice",
    "folder": "g006",
@@ -1786,6 +1849,7 @@
   {
    "id": "lattice.g006.g006_p6_a",
    "file": "experiments/lattice/results/scl/g006/g006_p6_a.scl",
+   "sha256": "0181510ae893501eeeaebf61b5aea7973e92d8eafc8538097c09c9a20fffc355",
    "name": "g006_p6_a",
    "module": "lattice",
    "folder": "g006",
@@ -1820,6 +1884,7 @@
   {
    "id": "lattice.g006.g006_p6_b",
    "file": "experiments/lattice/results/scl/g006/g006_p6_b.scl",
+   "sha256": "c7eb9e696326ef022333da1a71aa5fa5c13f79bfba2d32dfc5e3129703f4212b",
    "name": "g006_p6_b",
    "module": "lattice",
    "folder": "g006",
@@ -1854,6 +1919,7 @@
   {
    "id": "lattice.g006.g006_p7_a",
    "file": "experiments/lattice/results/scl/g006/g006_p7_a.scl",
+   "sha256": "d1d5c0051503d3e1fcecd61b1f9351bbc04323278053a133630b6901717d9896",
    "name": "g006_p7_a",
    "module": "lattice",
    "folder": "g006",
@@ -1880,6 +1946,7 @@
   {
    "id": "lattice.g006.g006_p7_b",
    "file": "experiments/lattice/results/scl/g006/g006_p7_b.scl",
+   "sha256": "c12c5c53a07b088e388b185a7af98383a05ccf6c18c291672871be64c7d7ad57",
    "name": "g006_p7_b",
    "module": "lattice",
    "folder": "g006",
@@ -1906,6 +1973,7 @@
   {
    "id": "lattice.g006.g006_p8_a",
    "file": "experiments/lattice/results/scl/g006/g006_p8_a.scl",
+   "sha256": "ca84f5e3a3eac0fb3c7876736773ee9ac9ed68cfef51b6973dd59e06e0bd729a",
    "name": "g006_p8_a",
    "module": "lattice",
    "folder": "g006",
@@ -1940,6 +2008,7 @@
   {
    "id": "lattice.g006.g006_p8_b",
    "file": "experiments/lattice/results/scl/g006/g006_p8_b.scl",
+   "sha256": "80fcab9405da533d2f4890e6811e6fbd6bbbf10114176a93f5fe54d716266356",
    "name": "g006_p8_b",
    "module": "lattice",
    "folder": "g006",
@@ -1974,6 +2043,7 @@
   {
    "id": "lattice.g012.canonical_eikosany_1_3_5_7_9_11",
    "file": "experiments/lattice/results/scl/g012/canonical_eikosany_1_3_5_7_9_11.scl",
+   "sha256": "771beee75dcf5c774185f5295e28cd3891c5affc00f88209c621092b45fe9807",
    "name": "canonical_eikosany_1_3_5_7_9_11",
    "module": "lattice",
    "folder": "g012",
@@ -2035,6 +2105,7 @@
   {
    "id": "lattice.g012.cseik_flagship_1_7_9_11_15_29",
    "file": "experiments/lattice/results/scl/g012/cseik_flagship_1_7_9_11_15_29.scl",
+   "sha256": "cee3c771380693c3da15e7900e3e8109f043d91cbba1da8d4179a6aec3775ed0",
    "name": "cseik_flagship_1_7_9_11_15_29",
    "module": "lattice",
    "folder": "g012",
@@ -2097,6 +2168,7 @@
   {
    "id": "lattice.g012.cseik_max_margin_13_17_21_23_25_27",
    "file": "experiments/lattice/results/scl/g012/cseik_max_margin_13_17_21_23_25_27.scl",
+   "sha256": "94bb67622bf2ffd4243a475a98d95362773a6e9d6b773c8b5482063135c3344e",
    "name": "cseik_max_margin_13_17_21_23_25_27",
    "module": "lattice",
    "folder": "g012",
@@ -2158,6 +2230,7 @@
   {
    "id": "lattice.gold001.gold001_hexany_golden_c11_N15_g317.170",
    "file": "experiments/lattice/results/scl/gold001/gold001_hexany_golden_c11_N15_g317.170.scl",
+   "sha256": "826d4a1e896523f2f375e333cb0c793fe77eeffb5b5a1605d5a74b9a00116419",
    "name": "gold001_hexany_golden_c11_N15_g317.170",
    "module": "lattice",
    "folder": "gold001",
@@ -2191,6 +2264,7 @@
   {
    "id": "lattice.gold001.gold001_hexany_silver_Q20_N29_g316.827",
    "file": "experiments/lattice/results/scl/gold001/gold001_hexany_silver_Q20_N29_g316.827.scl",
+   "sha256": "2e15c981c0b008c3358ece9b236bd84116fbbc0f637e9a532624b6479bbc7c5e",
    "name": "gold001_hexany_silver_Q20_N29_g316.827",
    "module": "lattice",
    "folder": "gold001",
@@ -2238,6 +2312,7 @@
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n011_seed",
    "file": "experiments/lattice/results/scl/meru001/meru001_erv418935_LIFT_W7_n011_seed.scl",
+   "sha256": "edf424b008ba9c356b40e910f3473753e0a2a54c6730d620b3e2c607433c3eb5",
    "name": "meru001_erv418935_LIFT_W7_n011_seed",
    "module": "lattice",
    "folder": "meru001",
@@ -2263,6 +2338,7 @@
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n012_lock",
    "file": "experiments/lattice/results/scl/meru001/meru001_erv418935_LIFT_W7_n012_lock.scl",
+   "sha256": "ccdddaa25d5460e756fbadbf765a496ceac256119cfd527e7f8a6402768b3470",
    "name": "meru001_erv418935_LIFT_W7_n012_lock",
    "module": "lattice",
    "folder": "meru001",
@@ -2288,6 +2364,7 @@
   {
    "id": "lattice.meru001.meru001_erv418935_LIFT_W7_n135_last",
    "file": "experiments/lattice/results/scl/meru001/meru001_erv418935_LIFT_W7_n135_last.scl",
+   "sha256": "ead83ea8962bcc99cb3e1406be10142441c00fcf652ae28f10d66f1de3c1f931",
    "name": "meru001_erv418935_LIFT_W7_n135_last",
    "module": "lattice",
    "folder": "meru001",
@@ -2313,6 +2390,7 @@
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n011_seed",
    "file": "experiments/lattice/results/scl/meru001/meru001_fib_LIFT_W7_n011_seed.scl",
+   "sha256": "dbaed172f896b7af24c9ba85aa1e2fa2675c1f91593ad828bbbdb8352180e1d9",
    "name": "meru001_fib_LIFT_W7_n011_seed",
    "module": "lattice",
    "folder": "meru001",
@@ -2338,6 +2416,7 @@
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n018_lock",
    "file": "experiments/lattice/results/scl/meru001/meru001_fib_LIFT_W7_n018_lock.scl",
+   "sha256": "f322b0c4035ac5ae732c9b4c53b7251bb6cfddc2f3415f7ce24e056196d98e39",
    "name": "meru001_fib_LIFT_W7_n018_lock",
    "module": "lattice",
    "folder": "meru001",
@@ -2363,6 +2442,7 @@
   {
    "id": "lattice.meru001.meru001_fib_LIFT_W7_n135_last",
    "file": "experiments/lattice/results/scl/meru001/meru001_fib_LIFT_W7_n135_last.scl",
+   "sha256": "1029f48d468bc60ada08c159166bb807c6606e640aa9638866d711c3605b76f5",
    "name": "meru001_fib_LIFT_W7_n135_last",
    "module": "lattice",
    "folder": "meru001",
@@ -2388,6 +2468,7 @@
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n011_seed",
    "file": "experiments/lattice/results/scl/meru001/meru001_metameantone_LIFT_W7_n011_seed.scl",
+   "sha256": "777141dbf541be4e3ddcb6178479da8f86c6b58728e54ad016d19f183d4f0b2e",
    "name": "meru001_metameantone_LIFT_W7_n011_seed",
    "module": "lattice",
    "folder": "meru001",
@@ -2413,6 +2494,7 @@
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n021_lock",
    "file": "experiments/lattice/results/scl/meru001/meru001_metameantone_LIFT_W7_n021_lock.scl",
+   "sha256": "fb49726b21ef3cbd7d1a0c104c27d87bbeb9b13bd7e37e6549ae304bc039c8a0",
    "name": "meru001_metameantone_LIFT_W7_n021_lock",
    "module": "lattice",
    "folder": "meru001",
@@ -2438,6 +2520,7 @@
   {
    "id": "lattice.meru001.meru001_metameantone_LIFT_W7_n135_last",
    "file": "experiments/lattice/results/scl/meru001/meru001_metameantone_LIFT_W7_n135_last.scl",
+   "sha256": "69a436b351a81a3081c668bf5b340248460468b1ab2ce0cd5306588b1893f717",
    "name": "meru001_metameantone_LIFT_W7_n135_last",
    "module": "lattice",
    "folder": "meru001",
@@ -2463,6 +2546,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n012",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho1-1_W7_n012.scl",
+   "sha256": "0be0eb4132fd7e3cd654637a9b67736e365c302fd0eadaed1066f9a8f8675166",
    "name": "meru002_erv418935_rho1-1_W7_n012",
    "module": "lattice",
    "folder": "meru002",
@@ -2488,6 +2572,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n040",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho1-1_W7_n040.scl",
+   "sha256": "e0db19bc2a2a392d71fb87587ba18dbd63e085eee507ac12325430b42c29f070",
    "name": "meru002_erv418935_rho1-1_W7_n040",
    "module": "lattice",
    "folder": "meru002",
@@ -2513,6 +2598,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho1-1_W7_n100",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho1-1_W7_n100.scl",
+   "sha256": "93ed32ef543b4213e9dba2965708d350f4cf4f002d8d2681d263be1dd3340b23",
    "name": "meru002_erv418935_rho1-1_W7_n100",
    "module": "lattice",
    "folder": "meru002",
@@ -2538,6 +2624,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n012",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho5-2_W7_n012.scl",
+   "sha256": "ca31fb22c1678ad968e83923c326adaac127d10a05b317b97705fb53dc8ef1c6",
    "name": "meru002_erv418935_rho5-2_W7_n012",
    "module": "lattice",
    "folder": "meru002",
@@ -2563,6 +2650,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n040",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho5-2_W7_n040.scl",
+   "sha256": "64835c4c3364dcd835876e83e5a5dd196299f01cd44cc32b01b9f97d3f5af9f1",
    "name": "meru002_erv418935_rho5-2_W7_n040",
    "module": "lattice",
    "folder": "meru002",
@@ -2588,6 +2676,7 @@
   {
    "id": "lattice.meru002.meru002_erv418935_rho5-2_W7_n100",
    "file": "experiments/lattice/results/scl/meru002/meru002_erv418935_rho5-2_W7_n100.scl",
+   "sha256": "634b799ee242b7ab372aaa2072cf0af32f18b512f3131e4eb1a3ed41c89575f6",
    "name": "meru002_erv418935_rho5-2_W7_n100",
    "module": "lattice",
    "folder": "meru002",
@@ -2613,6 +2702,7 @@
   {
    "id": "lattice.rank3001.rank3001_dek52_N29_g498.26_27.05",
    "file": "experiments/lattice/results/scl/rank3001/rank3001_dek52_N29_g498.26_27.05.scl",
+   "sha256": "feeac4b58540d4eb374ce9a0bc533363717c1f2b8a109af255f3658374666c08",
    "name": "rank3001_dek52_N29_g498.26_27.05",
    "module": "lattice",
    "folder": "rank3001",
@@ -2660,6 +2750,7 @@
   {
    "id": "lattice.rank3001.rank3001_hexany_N19_g1002.86_385.84",
    "file": "experiments/lattice/results/scl/rank3001/rank3001_hexany_N19_g1002.86_385.84.scl",
+   "sha256": "02ad33ccc0cac7fdb79cd381aeba33ab2408b4fe82eb1505a8f3f0eb00b71a5c",
    "name": "rank3001_hexany_N19_g1002.86_385.84",
    "module": "lattice",
    "folder": "rank3001",
@@ -2697,6 +2788,7 @@
   {
    "id": "lattice.rank3001.rank3001_hexany_N21_g350.98_231.29",
    "file": "experiments/lattice/results/scl/rank3001/rank3001_hexany_N21_g350.98_231.29.scl",
+   "sha256": "8599de4228b2a2420ef33508617a3d5dd11b31e4ebce58e853ee9e7403921538",
    "name": "rank3001_hexany_N21_g350.98_231.29",
    "module": "lattice",
    "folder": "rank3001",
@@ -2736,6 +2828,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N26_free_g350.748",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N26_free_g350.748.scl",
+   "sha256": "26dc7edb9fc8de34cbc5591ebee7b049b63dd3d771a72b936e97dee366b8f1ca",
    "name": "subfit001_eikosany_N26_free_g350.748",
    "module": "lattice",
    "folder": "subfit001",
@@ -2780,6 +2873,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N45_free_g351.444",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N45_free_g351.444.scl",
+   "sha256": "b751fd208551f7a1ed1fa466d3e50233612fede39d442ad995592b314340b68a",
    "name": "subfit001_eikosany_N45_free_g351.444",
    "module": "lattice",
    "folder": "subfit001",
@@ -2843,6 +2937,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N46_mos_g443.128",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N46_mos_g443.128.scl",
+   "sha256": "ea8c10f19a255d910c0543d298cc973869aa0ed8bc9a22dc23d04fdf786276eb",
    "name": "subfit001_eikosany_N46_mos_g443.128",
    "module": "lattice",
    "folder": "subfit001",
@@ -2907,6 +3002,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N49_free_g497.774",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N49_free_g497.774.scl",
+   "sha256": "7e589802df66a0370b10e9a7d115fdcb389dd18683cbd58d074b94d4849d9a27",
    "name": "subfit001_eikosany_N49_free_g497.774",
    "module": "lattice",
    "folder": "subfit001",
@@ -2974,6 +3070,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N53_mos_g497.774",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N53_mos_g497.774.scl",
+   "sha256": "ab5ead14cc2014bc70cca1d5272f01c592db347281e318d8c889c2a65bba963a",
    "name": "subfit001_eikosany_N53_mos_g497.774",
    "module": "lattice",
    "folder": "subfit001",
@@ -3045,6 +3142,7 @@
   {
    "id": "lattice.subfit001.subfit001_eikosany_N70_free_g175.378",
    "file": "experiments/lattice/results/scl/subfit001/subfit001_eikosany_N70_free_g175.378.scl",
+   "sha256": "4a6f1ac62267a838b58f891f8cb76dd1df28e3b90a3a82e94e2a033242b7f571",
    "name": "subfit001_eikosany_N70_free_g175.378",
    "module": "lattice",
    "folder": "subfit001",
@@ -3133,6 +3231,7 @@
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N37_free_g350.756",
    "file": "experiments/lattice/results/scl/subfit002/subfit002_eikosany_cap20_N37_free_g350.756.scl",
+   "sha256": "4c3a0a0675f4fd672b978b0a79ce1a012d488989e5a4fdc8a45ab74ca2da6a07",
    "name": "subfit002_eikosany_cap20_N37_free_g350.756",
    "module": "lattice",
    "folder": "subfit002",
@@ -3188,6 +3287,7 @@
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N41_mos_g351.444",
    "file": "experiments/lattice/results/scl/subfit002/subfit002_eikosany_cap20_N41_mos_g351.444.scl",
+   "sha256": "dfd5de62ca6860e15aa701789a0402b2deb33da0bb9a08ba1c612f867cc239b5",
    "name": "subfit002_eikosany_cap20_N41_mos_g351.444",
    "module": "lattice",
    "folder": "subfit002",
@@ -3247,6 +3347,7 @@
   {
    "id": "lattice.subfit002.subfit002_eikosany_cap20_N72_mos_g483.278",
    "file": "experiments/lattice/results/scl/subfit002/subfit002_eikosany_cap20_N72_mos_g483.278.scl",
+   "sha256": "40f5efede9389bb1c6e9ed6e8f84c5c38c78bc771546040373355f99d1f0dd38",
    "name": "subfit002_eikosany_cap20_N72_mos_g483.278",
    "module": "lattice",
    "folder": "subfit002",
@@ -3337,6 +3438,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_dekany_in_in1_outnone_melodic+cs",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-11-13-25-27_dekany_in_in1_outnone_melodic+cs.scl",
+   "sha256": "9681b30d751befaca603730ab714de947a4b5b0ca2991154bfb9553f913484bb",
    "name": "sm000_1-3-11-13-25-27_dekany_in_in1_outnone_melodic+cs",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3394,6 +3496,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_dekany_in_in25_outnone_harmonic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-11-13-25-27_dekany_in_in25_outnone_harmonic.scl",
+   "sha256": "3dd8d55142750a87f5d7ebc9e2c49412a845b1d54f77e42a29ddf228cff239f2",
    "name": "sm000_1-3-11-13-25-27_dekany_in_in25_outnone_harmonic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3451,6 +3554,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_hexany_in1_out11_melodic1",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-11-13-25-27_hexany_in1_out11_melodic1.scl",
+   "sha256": "fb360e0dca80f51f2ac9c14e0f94f772954d9d1117dc430a2ec75cda50bd0b2a",
    "name": "sm000_1-3-11-13-25-27_hexany_in1_out11_melodic1",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3499,6 +3603,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-11-13-25-27_hexany_in1_out13_melodic2",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-11-13-25-27_hexany_in1_out13_melodic2.scl",
+   "sha256": "8d74498f8103ac08fca93ea1fd1489e457f1f401f5be3f5cd329ed283b030741",
    "name": "sm000_1-3-11-13-25-27_hexany_in1_out13_melodic2",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3547,6 +3652,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_dekany_in_in13_outnone_harmonic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-13-21-23-25_dekany_in_in13_outnone_harmonic.scl",
+   "sha256": "0216468fa118c6c158ba9f7f786ef2f52b45974b9538de576f9458a691cbf0b2",
    "name": "sm000_1-3-13-21-23-25_dekany_in_in13_outnone_harmonic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3604,6 +3710,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_dekany_in_in1_outnone_melodic+cs",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-13-21-23-25_dekany_in_in1_outnone_melodic+cs.scl",
+   "sha256": "afb5594926f922aeb9e6b40e9256fd0cd73f168ed000734c072fac14ecfb0316",
    "name": "sm000_1-3-13-21-23-25_dekany_in_in1_outnone_melodic+cs",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3661,6 +3768,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_hexany_in23_out25_melodic1",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-13-21-23-25_hexany_in23_out25_melodic1.scl",
+   "sha256": "95d79ed700e9f606fa0408fd3025fb62f231bc3eabae4373bac0d98c5f8d2445",
    "name": "sm000_1-3-13-21-23-25_hexany_in23_out25_melodic1",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3709,6 +3817,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-13-21-23-25_hexany_in25_out3_melodic2",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-13-21-23-25_hexany_in25_out3_melodic2.scl",
+   "sha256": "461cae7bc4120fb43a8dcf6a50bf847e3daab4b7fb8cfbc297d68aa1a1a9e18b",
    "name": "sm000_1-3-13-21-23-25_hexany_in25_out3_melodic2",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3757,6 +3866,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in11_outnone_harmonic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-5-7-9-11_dekany_in_in11_outnone_harmonic.scl",
+   "sha256": "61a3c2bfa188910e990fddc04452496e3a032becadaf85dfe4d3c19fbf9565e5",
    "name": "sm000_1-3-5-7-9-11_dekany_in_in11_outnone_harmonic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3814,6 +3924,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs.scl",
+   "sha256": "9d32b17afa13cd1ca9f54124f20bdbb0e5b02641a83a39bed114bbf8b2fade38",
    "name": "sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3871,6 +3982,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in5_outnone_melodic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-5-7-9-11_dekany_in_in5_outnone_melodic.scl",
+   "sha256": "d31cfa726787e2581f29da29ef3eba15204fd79b989c837d907dadf986b6275d",
    "name": "sm000_1-3-5-7-9-11_dekany_in_in5_outnone_melodic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3928,6 +4040,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in1_out3_melodic2",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-5-7-9-11_hexany_in1_out3_melodic2.scl",
+   "sha256": "eaced23b6b4d3f353f00dfb657ad79e090b875ab985da3259336fb0023f8c7c3",
    "name": "sm000_1-3-5-7-9-11_hexany_in1_out3_melodic2",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -3976,6 +4089,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1.scl",
+   "sha256": "f9c7198036984e26088e2a7be7c5a8cf3dc3f65982567cbf421133ff7505ed91",
    "name": "sm000_1-3-5-7-9-11_hexany_in5_out7_melodic1",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4024,6 +4138,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_dekany_in_in29_outnone_melodic+cs",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-7-9-11-15-29_dekany_in_in29_outnone_melodic+cs.scl",
+   "sha256": "fd2985b900a9dcdddd8d7fd0f1a1fbec0e61a27d57aadfc545cfd5c5124bd87d",
    "name": "sm000_1-7-9-11-15-29_dekany_in_in29_outnone_melodic+cs",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4081,6 +4196,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_dekany_out_innone_out29_harmonic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-7-9-11-15-29_dekany_out_innone_out29_harmonic.scl",
+   "sha256": "1ab0f71d2a0d507c26f5331f6acb99377999d53b80c8be6db30575182855f6fe",
    "name": "sm000_1-7-9-11-15-29_dekany_out_innone_out29_harmonic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4138,6 +4254,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_hexany_in15_out29_melodic2",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-7-9-11-15-29_hexany_in15_out29_melodic2.scl",
+   "sha256": "e8dda50f597b5018af1f4f5036a2a22e92cbfa46b610ec4f4d26124f447e9f49",
    "name": "sm000_1-7-9-11-15-29_hexany_in15_out29_melodic2",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4186,6 +4303,7 @@
   {
    "id": "lattice.subsetmel000.sm000_1-7-9-11-15-29_hexany_in1_out29_melodic1",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_1-7-9-11-15-29_hexany_in1_out29_melodic1.scl",
+   "sha256": "b1508e6ed5156e48ef76422fa1d3387168af07cb6fc7e903273c1a57b18d1112",
    "name": "sm000_1-7-9-11-15-29_hexany_in1_out29_melodic1",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4234,6 +4352,7 @@
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_dekany_in_in13_outnone_melodic+cs",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_13-17-21-23-25-27_dekany_in_in13_outnone_melodic+cs.scl",
+   "sha256": "ca3c0cd21b953ced39cafd92cac0499bd5b5db8c3d26bb83d568af54f4db661b",
    "name": "sm000_13-17-21-23-25-27_dekany_in_in13_outnone_melodic+cs",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4291,6 +4410,7 @@
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_dekany_in_in27_outnone_harmonic",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_13-17-21-23-25-27_dekany_in_in27_outnone_harmonic.scl",
+   "sha256": "af2b5e4fade56abbe21cc673743d326f83c1d5b14831876b9b1f60d19962a457",
    "name": "sm000_13-17-21-23-25-27_dekany_in_in27_outnone_harmonic",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4348,6 +4468,7 @@
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_hexany_in13_out23_melodic1",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_13-17-21-23-25-27_hexany_in13_out23_melodic1.scl",
+   "sha256": "a4639a92114597afdbeab6ed77c2d241a652e35d5f5a1a024d7c65e53f1abb87",
    "name": "sm000_13-17-21-23-25-27_hexany_in13_out23_melodic1",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4396,6 +4517,7 @@
   {
    "id": "lattice.subsetmel000.sm000_13-17-21-23-25-27_hexany_in13_out25_melodic2",
    "file": "experiments/lattice/results/scl/subsetmel000/sm000_13-17-21-23-25-27_hexany_in13_out25_melodic2.scl",
+   "sha256": "4579c41d7c14294c3076760659d89d9f085b11b1c10361c54e32fb759697a7ac",
    "name": "sm000_13-17-21-23-25-27_hexany_in13_out25_melodic2",
    "module": "lattice",
    "folder": "subsetmel000",
@@ -4444,6 +4566,7 @@
   {
    "id": "triads.triads.CPS_4_2_N5_3-5-9-15",
    "file": "experiments/triads/results/scl/CPS_4_2_N5_3-5-9-15.scl",
+   "sha256": "860e71572a7b1b618709f62b8f2c31d88923991d6f0503754cd1b885ccce6ddb",
    "name": "CPS_4_2_N5_3-5-9-15",
    "module": "triads",
    "folder": "triads",
@@ -4485,6 +4608,7 @@
   {
    "id": "triads.triads.CPS_4_2_N6_1-3-5-7",
    "file": "experiments/triads/results/scl/CPS_4_2_N6_1-3-5-7.scl",
+   "sha256": "b14a5cf8c0f7eee0e16d2b09f64ece9b4a725e143c4dbd20748a07a007627f7f",
    "name": "CPS_4_2_N6_1-3-5-7",
    "module": "triads",
    "folder": "triads",
@@ -4528,6 +4652,7 @@
   {
    "id": "triads.triads.CPS_4_2_N6_1-3-5-9",
    "file": "experiments/triads/results/scl/CPS_4_2_N6_1-3-5-9.scl",
+   "sha256": "0466fc0e13be7072ffdd2b0b867c6d2035601f12dd78b45acb70a404d7cba366",
    "name": "CPS_4_2_N6_1-3-5-9",
    "module": "triads",
    "folder": "triads",
@@ -4571,6 +4696,7 @@
   {
    "id": "triads.triads.CPS_5_2_N10_1-3-5-7-9",
    "file": "experiments/triads/results/scl/CPS_5_2_N10_1-3-5-7-9.scl",
+   "sha256": "c4d3c8d6d0b11e5290d49e680b4ea3626ad9e304a77bd3400d1aff908d81268a",
    "name": "CPS_5_2_N10_1-3-5-7-9",
    "module": "triads",
    "folder": "triads",
@@ -4623,6 +4749,7 @@
   {
    "id": "triads.triads.CPS_5_2_N10_3-5-15-21-45",
    "file": "experiments/triads/results/scl/CPS_5_2_N10_3-5-15-21-45.scl",
+   "sha256": "6402ea5c8b6ae66f6757715043ec739d255d7c73d4bcc53f0cedb6c4ce403978",
    "name": "CPS_5_2_N10_3-5-15-21-45",
    "module": "triads",
    "folder": "triads",
@@ -4675,6 +4802,7 @@
   {
    "id": "triads.triads.CPS_5_2_N10_7-9-15-21-63",
    "file": "experiments/triads/results/scl/CPS_5_2_N10_7-9-15-21-63.scl",
+   "sha256": "c71406c97187c60129eb2bccaba9c49f9e404ae281d791c982a32119a69484e5",
    "name": "CPS_5_2_N10_7-9-15-21-63",
    "module": "triads",
    "folder": "triads",
@@ -4727,6 +4855,7 @@
   {
    "id": "triads.triads.CPS_5_2_N7_1-3-9-27-81",
    "file": "experiments/triads/results/scl/CPS_5_2_N7_1-3-9-27-81.scl",
+   "sha256": "8c9b8be584a5ad5cf39052308323ca0ef9d17a6b3c07dc50ea4c063008b22b12",
    "name": "CPS_5_2_N7_1-3-9-27-81",
    "module": "triads",
    "folder": "triads",
@@ -4773,6 +4902,7 @@
   {
    "id": "triads.triads.CPS_5_2_N8_1-3-5-9-15",
    "file": "experiments/triads/results/scl/CPS_5_2_N8_1-3-5-9-15.scl",
+   "sha256": "ba9064a0a57ee818809255476de9d98abba704f2f51a1532dfe3e91b7621a890",
    "name": "CPS_5_2_N8_1-3-5-9-15",
    "module": "triads",
    "folder": "triads",
@@ -4821,6 +4951,7 @@
   {
    "id": "triads.triads.CPS_5_2_N9_3-5-9-15-75",
    "file": "experiments/triads/results/scl/CPS_5_2_N9_3-5-9-15-75.scl",
+   "sha256": "f0194106947bf347e0e05a092515258ad8ad969c0544449c79104018c579f60b",
    "name": "CPS_5_2_N9_3-5-9-15-75",
    "module": "triads",
    "folder": "triads",
@@ -4871,6 +5002,7 @@
   {
    "id": "triads.triads.CPS_5_2_N9_3-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_5_2_N9_3-7-9-15-21.scl",
+   "sha256": "c1bce84f8e95a79a022765dd8ba6d084ebb2847c7198a1c1220d79ef83483da6",
    "name": "CPS_5_2_N9_3-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -4921,6 +5053,7 @@
   {
    "id": "triads.triads.CPS_5_3_N10_1-3-5-7-9",
    "file": "experiments/triads/results/scl/CPS_5_3_N10_1-3-5-7-9.scl",
+   "sha256": "6ef6da7cdb0a913ba2c8cbb65a3bc8cec5acbfda23e5d93828cb192e3253a2f6",
    "name": "CPS_5_3_N10_1-3-5-7-9",
    "module": "triads",
    "folder": "triads",
@@ -4973,6 +5106,7 @@
   {
    "id": "triads.triads.CPS_5_3_N10_3-5-15-21-45",
    "file": "experiments/triads/results/scl/CPS_5_3_N10_3-5-15-21-45.scl",
+   "sha256": "9d9f74ad0cee0a73fe967bb05fcae38d76c19560000ad6ee55bd47e7f35d6cd5",
    "name": "CPS_5_3_N10_3-5-15-21-45",
    "module": "triads",
    "folder": "triads",
@@ -5025,6 +5159,7 @@
   {
    "id": "triads.triads.CPS_5_3_N10_7-9-15-21-63",
    "file": "experiments/triads/results/scl/CPS_5_3_N10_7-9-15-21-63.scl",
+   "sha256": "038af648dc74930c75f73f489981e032c16282a416190d84eb9acfb9c6881a7a",
    "name": "CPS_5_3_N10_7-9-15-21-63",
    "module": "triads",
    "folder": "triads",
@@ -5077,6 +5212,7 @@
   {
    "id": "triads.triads.CPS_5_3_N7_1-3-9-27-81",
    "file": "experiments/triads/results/scl/CPS_5_3_N7_1-3-9-27-81.scl",
+   "sha256": "f49ea99830ea4564dabccecc7fccf4f6caf1596670305b82e3944f275897dbd5",
    "name": "CPS_5_3_N7_1-3-9-27-81",
    "module": "triads",
    "folder": "triads",
@@ -5123,6 +5259,7 @@
   {
    "id": "triads.triads.CPS_5_3_N8_1-3-5-9-15",
    "file": "experiments/triads/results/scl/CPS_5_3_N8_1-3-5-9-15.scl",
+   "sha256": "902761af657f9cb59f250f675aeda67221aed7f8c58e260465e6f38a693c42d0",
    "name": "CPS_5_3_N8_1-3-5-9-15",
    "module": "triads",
    "folder": "triads",
@@ -5171,6 +5308,7 @@
   {
    "id": "triads.triads.CPS_5_3_N8_3-5-9-15-45",
    "file": "experiments/triads/results/scl/CPS_5_3_N8_3-5-9-15-45.scl",
+   "sha256": "6587614f71e78ec1458bf60798bbb53e33be2ba18f433898b1491e126114728e",
    "name": "CPS_5_3_N8_3-5-9-15-45",
    "module": "triads",
    "folder": "triads",
@@ -5219,6 +5357,7 @@
   {
    "id": "triads.triads.CPS_5_3_N9_3-5-9-15-75",
    "file": "experiments/triads/results/scl/CPS_5_3_N9_3-5-9-15-75.scl",
+   "sha256": "9e92de887013ee9298908e78d8511a41f46a9d5146143b05f0a0e24931fa4fe7",
    "name": "CPS_5_3_N9_3-5-9-15-75",
    "module": "triads",
    "folder": "triads",
@@ -5269,6 +5408,7 @@
   {
    "id": "triads.triads.CPS_5_3_N9_3-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_5_3_N9_3-7-9-15-21.scl",
+   "sha256": "f267a50c388777bb12a3a5601407ddc5c04b6e29522298dc6cafc41b3a2c0d6c",
    "name": "CPS_5_3_N9_3-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -5319,6 +5459,7 @@
   {
    "id": "triads.triads.CPS_6_2_N11_1-3-5-9-15-45",
    "file": "experiments/triads/results/scl/CPS_6_2_N11_1-3-5-9-15-45.scl",
+   "sha256": "16047e44069dc2c7b13450bdba383c04ac439770f1fa465deec42e4b39fd3d55",
    "name": "CPS_6_2_N11_1-3-5-9-15-45",
    "module": "triads",
    "folder": "triads",
@@ -5373,6 +5514,7 @@
   {
    "id": "triads.triads.CPS_6_2_N12_3-5-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_6_2_N12_3-5-7-9-15-21.scl",
+   "sha256": "5ea1fd449811fa0b056dd0b81a1280b3dfb4a0a859f33b1ade882d39a7546f0e",
    "name": "CPS_6_2_N12_3-5-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -5429,6 +5571,7 @@
   {
    "id": "triads.triads.CPS_6_2_N13_1-3-5-7-9-15",
    "file": "experiments/triads/results/scl/CPS_6_2_N13_1-3-5-7-9-15.scl",
+   "sha256": "22c6a136042ea552ffc081926b39c1a9486a98a3d87ada2bde0e267aa3db1b83",
    "name": "CPS_6_2_N13_1-3-5-7-9-15",
    "module": "triads",
    "folder": "triads",
@@ -5487,6 +5630,7 @@
   {
    "id": "triads.triads.CPS_6_2_N13_3-5-7-9-15-35",
    "file": "experiments/triads/results/scl/CPS_6_2_N13_3-5-7-9-15-35.scl",
+   "sha256": "ea4c45882555b09f6d8cd10339c53e3ca582c4c6087dcb4a8526dc5e2e0bc9d4",
    "name": "CPS_6_2_N13_3-5-7-9-15-35",
    "module": "triads",
    "folder": "triads",
@@ -5545,6 +5689,7 @@
   {
    "id": "triads.triads.CPS_6_2_N13_5-7-15-21-35-45",
    "file": "experiments/triads/results/scl/CPS_6_2_N13_5-7-15-21-35-45.scl",
+   "sha256": "3767a051c669adc5f80d2c3538fce2f2b8fbb6d0c2b53fec0567e1a5a109ca48",
    "name": "CPS_6_2_N13_5-7-15-21-35-45",
    "module": "triads",
    "folder": "triads",
@@ -5603,6 +5748,7 @@
   {
    "id": "triads.triads.CPS_6_2_N13_7-9-21-35-63-105",
    "file": "experiments/triads/results/scl/CPS_6_2_N13_7-9-21-35-63-105.scl",
+   "sha256": "845d7bf0b90a59ec9b2417ef5bca914551f46f9459ed50499ee5b086b0645edd",
    "name": "CPS_6_2_N13_7-9-21-35-63-105",
    "module": "triads",
    "folder": "triads",
@@ -5661,6 +5807,7 @@
   {
    "id": "triads.triads.CPS_6_2_N14_1-5-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_6_2_N14_1-5-7-9-15-21.scl",
+   "sha256": "7c3e8932e690b9df5db33009f301e92725dec672a63b58ad8ac5867ba28f82ad",
    "name": "CPS_6_2_N14_1-5-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -5721,6 +5868,7 @@
   {
    "id": "triads.triads.CPS_6_2_N14_3-5-15-21-35-45",
    "file": "experiments/triads/results/scl/CPS_6_2_N14_3-5-15-21-35-45.scl",
+   "sha256": "ead3fd12743cd106ae7a02cea5171240d11d7fe5fef47f1d0b62bd64f7ff6a99",
    "name": "CPS_6_2_N14_3-5-15-21-35-45",
    "module": "triads",
    "folder": "triads",
@@ -5781,6 +5929,7 @@
   {
    "id": "triads.triads.CPS_6_2_N14_3-5-7-9-15-63",
    "file": "experiments/triads/results/scl/CPS_6_2_N14_3-5-7-9-15-63.scl",
+   "sha256": "bd273575da59120ce30f271c9f51773377f7b7834c38c012102a2b3d15f05829",
    "name": "CPS_6_2_N14_3-5-7-9-15-63",
    "module": "triads",
    "folder": "triads",
@@ -5841,6 +5990,7 @@
   {
    "id": "triads.triads.CPS_6_2_N14_3-7-15-21-35-63",
    "file": "experiments/triads/results/scl/CPS_6_2_N14_3-7-15-21-35-63.scl",
+   "sha256": "2a6d8bc173712cbec2e25b905d94b7797df8b5d3d47bf62bdf64f571900987d3",
    "name": "CPS_6_2_N14_3-7-15-21-35-63",
    "module": "triads",
    "folder": "triads",
@@ -5901,6 +6051,7 @@
   {
    "id": "triads.triads.CPS_6_2_N15_1-3-5-7-9-11",
    "file": "experiments/triads/results/scl/CPS_6_2_N15_1-3-5-7-9-11.scl",
+   "sha256": "dd50044c1c3789d9b10f8ed2dd3235c5c7c1ab4eeb4a77882a850e73c8c139eb",
    "name": "CPS_6_2_N15_1-3-5-7-9-11",
    "module": "triads",
    "folder": "triads",
@@ -5963,6 +6114,7 @@
   {
    "id": "triads.triads.CPS_6_2_N15_1-7-15-21-35-63",
    "file": "experiments/triads/results/scl/CPS_6_2_N15_1-7-15-21-35-63.scl",
+   "sha256": "4d9bd5da89121abf22da07328a8d754901d84fe548966f159dc60f2f37354d01",
    "name": "CPS_6_2_N15_1-7-15-21-35-63",
    "module": "triads",
    "folder": "triads",
@@ -6025,6 +6177,7 @@
   {
    "id": "triads.triads.CPS_6_2_N15_3-5-7-21-63-315",
    "file": "experiments/triads/results/scl/CPS_6_2_N15_3-5-7-21-63-315.scl",
+   "sha256": "e261c97ae91b111fa54fe92d478ac59c5ae0d16d725580fa40e74cde80af179a",
    "name": "CPS_6_2_N15_3-5-7-21-63-315",
    "module": "triads",
    "folder": "triads",
@@ -6087,6 +6240,7 @@
   {
    "id": "triads.triads.CPS_6_2_N15_5-9-15-19-21-45",
    "file": "experiments/triads/results/scl/CPS_6_2_N15_5-9-15-19-21-45.scl",
+   "sha256": "a3327d5eb6e1d92d7ab6f3883f6524ec4bc0d25140ba754ea9627ff8ce64e2fe",
    "name": "CPS_6_2_N15_5-9-15-19-21-45",
    "module": "triads",
    "folder": "triads",
@@ -6149,6 +6303,7 @@
   {
    "id": "triads.triads.CPS_6_2_N15_5-9-15-33-45-63",
    "file": "experiments/triads/results/scl/CPS_6_2_N15_5-9-15-33-45-63.scl",
+   "sha256": "88b990cd9f0643a48bfbdaa5a373c797bb6333cc662b11619772d6fe7e38a244",
    "name": "CPS_6_2_N15_5-9-15-33-45-63",
    "module": "triads",
    "folder": "triads",
@@ -6211,6 +6366,7 @@
   {
    "id": "triads.triads.CPS_6_3_N12_1-3-5-15-25-75",
    "file": "experiments/triads/results/scl/CPS_6_3_N12_1-3-5-15-25-75.scl",
+   "sha256": "80991427c59401c2867bd31dbc1ebb7c705e8470315b65ef01013369b437eac9",
    "name": "CPS_6_3_N12_1-3-5-15-25-75",
    "module": "triads",
    "folder": "triads",
@@ -6267,6 +6423,7 @@
   {
    "id": "triads.triads.CPS_6_3_N13_1-3-5-9-15-25",
    "file": "experiments/triads/results/scl/CPS_6_3_N13_1-3-5-9-15-25.scl",
+   "sha256": "531a0bdc74c566834f6ff00106c568cb9683a5c3010a62d8ebe8b2801e5fe206",
    "name": "CPS_6_3_N13_1-3-5-9-15-25",
    "module": "triads",
    "folder": "triads",
@@ -6325,6 +6482,7 @@
   {
    "id": "triads.triads.CPS_6_3_N13_1-3-9-15-45-225",
    "file": "experiments/triads/results/scl/CPS_6_3_N13_1-3-9-15-45-225.scl",
+   "sha256": "b97001d14f92834dfe82bc69acb6cd9cd2bd1b06154232e9fdebd3d0ee0a2ed9",
    "name": "CPS_6_3_N13_1-3-9-15-45-225",
    "module": "triads",
    "folder": "triads",
@@ -6383,6 +6541,7 @@
   {
    "id": "triads.triads.CPS_6_3_N14_1-3-5-9-15-27",
    "file": "experiments/triads/results/scl/CPS_6_3_N14_1-3-5-9-15-27.scl",
+   "sha256": "bfa84ffc645a5a2f957a58d78d519154b8be7be25a9aa809c3f3faeb4e2c1503",
    "name": "CPS_6_3_N14_1-3-5-9-15-27",
    "module": "triads",
    "folder": "triads",
@@ -6443,6 +6602,7 @@
   {
    "id": "triads.triads.CPS_6_3_N14_1-3-5-9-15-75",
    "file": "experiments/triads/results/scl/CPS_6_3_N14_1-3-5-9-15-75.scl",
+   "sha256": "e2dc1841f74590dc0abd0539481ba12c88d80c3769eae80c827d3603820e1e3a",
    "name": "CPS_6_3_N14_1-3-5-9-15-75",
    "module": "triads",
    "folder": "triads",
@@ -6503,6 +6663,7 @@
   {
    "id": "triads.triads.CPS_6_3_N15_1-3-5-9-15-225",
    "file": "experiments/triads/results/scl/CPS_6_3_N15_1-3-5-9-15-225.scl",
+   "sha256": "a27a9c7c58029e4134d9fc5342cefaec94c7a9255d2d8e7aa93ec7cb49b6fef7",
    "name": "CPS_6_3_N15_1-3-5-9-15-225",
    "module": "triads",
    "folder": "triads",
@@ -6565,6 +6726,7 @@
   {
    "id": "triads.triads.CPS_6_3_N15_1-3-5-9-15-81",
    "file": "experiments/triads/results/scl/CPS_6_3_N15_1-3-5-9-15-81.scl",
+   "sha256": "f3f651addedaa114d1cc8831906a6b52dd61fff0b397622dd4fdb73b97831df8",
    "name": "CPS_6_3_N15_1-3-5-9-15-81",
    "module": "triads",
    "folder": "triads",
@@ -6627,6 +6789,7 @@
   {
    "id": "triads.triads.CPS_6_3_N16_1-3-5-7-9-15",
    "file": "experiments/triads/results/scl/CPS_6_3_N16_1-3-5-7-9-15.scl",
+   "sha256": "686c6240194da545a44df709e5c402bb200c6d2aaad282e8de353dd2d647a3dc",
    "name": "CPS_6_3_N16_1-3-5-7-9-15",
    "module": "triads",
    "folder": "triads",
@@ -6691,6 +6854,7 @@
   {
    "id": "triads.triads.CPS_6_3_N17_1-3-9-15-21-105",
    "file": "experiments/triads/results/scl/CPS_6_3_N17_1-3-9-15-21-105.scl",
+   "sha256": "1cbf660127f5355e0e620f9896421409b8e827b752cf4413997ed9dc942365f3",
    "name": "CPS_6_3_N17_1-3-9-15-21-105",
    "module": "triads",
    "folder": "triads",
@@ -6757,6 +6921,7 @@
   {
    "id": "triads.triads.CPS_6_3_N17_1-3-9-15-25-125",
    "file": "experiments/triads/results/scl/CPS_6_3_N17_1-3-9-15-25-125.scl",
+   "sha256": "0983b42ac3a33c2b34bba3b30c2e2785f86ef674dfb8551cc94b22f1a3d37e4f",
    "name": "CPS_6_3_N17_1-3-9-15-25-125",
    "module": "triads",
    "folder": "triads",
@@ -6823,6 +6988,7 @@
   {
    "id": "triads.triads.CPS_6_3_N17_1-5-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_6_3_N17_1-5-7-9-15-21.scl",
+   "sha256": "4dac9a6806e7b7030d6d0209cb7a5e4eb656de8f6b59748272f3ba0b4042e4fb",
    "name": "CPS_6_3_N17_1-5-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -6889,6 +7055,7 @@
   {
    "id": "triads.triads.CPS_6_3_N18_1-3-5-7-9-27",
    "file": "experiments/triads/results/scl/CPS_6_3_N18_1-3-5-7-9-27.scl",
+   "sha256": "96ee5b0ffb8d7c4ffdceccaf3459e8d289aba72c004011050d74364b68e3a3a2",
    "name": "CPS_6_3_N18_1-3-5-7-9-27",
    "module": "triads",
    "folder": "triads",
@@ -6957,6 +7124,7 @@
   {
    "id": "triads.triads.CPS_6_3_N18_1-3-7-9-15-27",
    "file": "experiments/triads/results/scl/CPS_6_3_N18_1-3-7-9-15-27.scl",
+   "sha256": "d2c7dc09d116b9d5b79491d041e71fa4e1bc88db6a71e872252e11456cf4ff88",
    "name": "CPS_6_3_N18_1-3-7-9-15-27",
    "module": "triads",
    "folder": "triads",
@@ -7025,6 +7193,7 @@
   {
    "id": "triads.triads.CPS_6_3_N19_1-3-5-7-9-105",
    "file": "experiments/triads/results/scl/CPS_6_3_N19_1-3-5-7-9-105.scl",
+   "sha256": "681bd99fcaacab42892e4fea362694984e4286f40315844994a91d1d3b7fad2d",
    "name": "CPS_6_3_N19_1-3-5-7-9-105",
    "module": "triads",
    "folder": "triads",
@@ -7095,6 +7264,7 @@
   {
    "id": "triads.triads.CPS_6_3_N20_1-3-5-7-9-11",
    "file": "experiments/triads/results/scl/CPS_6_3_N20_1-3-5-7-9-11.scl",
+   "sha256": "66ac2b99e4e47fc6bc2348b0717abaedbb12c77e5742320da52d89da0703d8e1",
    "name": "CPS_6_3_N20_1-3-5-7-9-11",
    "module": "triads",
    "folder": "triads",
@@ -7167,6 +7337,7 @@
   {
    "id": "triads.triads.CPS_6_3_N20_1-45-135-225-19-377",
    "file": "experiments/triads/results/scl/CPS_6_3_N20_1-45-135-225-19-377.scl",
+   "sha256": "93968bdd216000e5bcdf7970f629b2e4bbf067ec43eb6dcae3146c10cfd295ee",
    "name": "CPS_6_3_N20_1-45-135-225-19-377",
    "module": "triads",
    "folder": "triads",
@@ -7239,6 +7410,7 @@
   {
    "id": "triads.triads.CPS_6_3_N20_1-5-7-9-15-25",
    "file": "experiments/triads/results/scl/CPS_6_3_N20_1-5-7-9-15-25.scl",
+   "sha256": "9b522a6476b2ef6d2c21ef932cf3e2007978178d97e22b9e1f2cddb10d8de89e",
    "name": "CPS_6_3_N20_1-5-7-9-15-25",
    "module": "triads",
    "folder": "triads",
@@ -7311,6 +7483,7 @@
   {
    "id": "triads.triads.CPS_6_4_N11_1-3-5-9-15-45",
    "file": "experiments/triads/results/scl/CPS_6_4_N11_1-3-5-9-15-45.scl",
+   "sha256": "c475bb98c18aee1eabca9e83a20f55b0599d5dfdfa89fca579474825d0b6de2e",
    "name": "CPS_6_4_N11_1-3-5-9-15-45",
    "module": "triads",
    "folder": "triads",
@@ -7365,6 +7538,7 @@
   {
    "id": "triads.triads.CPS_6_4_N12_3-5-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_6_4_N12_3-5-7-9-15-21.scl",
+   "sha256": "f68716c3eaf9c14d094770b1897274da056fd886f893d22049fa513ae8340d6d",
    "name": "CPS_6_4_N12_3-5-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -7421,6 +7595,7 @@
   {
    "id": "triads.triads.CPS_6_4_N13_1-3-5-7-9-15",
    "file": "experiments/triads/results/scl/CPS_6_4_N13_1-3-5-7-9-15.scl",
+   "sha256": "a266ec8eaa92a9bebf97561f0440340c9a93ac0f4ff1ee0dea8b998a710642ec",
    "name": "CPS_6_4_N13_1-3-5-7-9-15",
    "module": "triads",
    "folder": "triads",
@@ -7479,6 +7654,7 @@
   {
    "id": "triads.triads.CPS_6_4_N13_3-5-7-9-15-35",
    "file": "experiments/triads/results/scl/CPS_6_4_N13_3-5-7-9-15-35.scl",
+   "sha256": "9f8c7544480507d2937d4085d7a91509237b997d2ec6dee49c436bb44a1c74bb",
    "name": "CPS_6_4_N13_3-5-7-9-15-35",
    "module": "triads",
    "folder": "triads",
@@ -7537,6 +7713,7 @@
   {
    "id": "triads.triads.CPS_6_4_N13_5-7-15-21-35-45",
    "file": "experiments/triads/results/scl/CPS_6_4_N13_5-7-15-21-35-45.scl",
+   "sha256": "5ce912c643f826808766f85f9aa6dbc4ecc331baf37bf6b38188f9255f1123f6",
    "name": "CPS_6_4_N13_5-7-15-21-35-45",
    "module": "triads",
    "folder": "triads",
@@ -7595,6 +7772,7 @@
   {
    "id": "triads.triads.CPS_6_4_N13_7-9-21-35-63-105",
    "file": "experiments/triads/results/scl/CPS_6_4_N13_7-9-21-35-63-105.scl",
+   "sha256": "520b69e7e6841ec5fe555947264839249a0ab332e2f9c5739833d3c5e48252d0",
    "name": "CPS_6_4_N13_7-9-21-35-63-105",
    "module": "triads",
    "folder": "triads",
@@ -7653,6 +7831,7 @@
   {
    "id": "triads.triads.CPS_6_4_N14_1-5-7-9-15-21",
    "file": "experiments/triads/results/scl/CPS_6_4_N14_1-5-7-9-15-21.scl",
+   "sha256": "e3ad8b036f7f8ddec18667621caf955649b7075b7a020d1ecbe65cc2738be158",
    "name": "CPS_6_4_N14_1-5-7-9-15-21",
    "module": "triads",
    "folder": "triads",
@@ -7713,6 +7892,7 @@
   {
    "id": "triads.triads.CPS_6_4_N14_3-5-15-21-35-45",
    "file": "experiments/triads/results/scl/CPS_6_4_N14_3-5-15-21-35-45.scl",
+   "sha256": "f055cffa6c3a0bdd5d468e63d0cdfdee1d6711be90246ca1e548072d61205768",
    "name": "CPS_6_4_N14_3-5-15-21-35-45",
    "module": "triads",
    "folder": "triads",
@@ -7773,6 +7953,7 @@
   {
    "id": "triads.triads.CPS_6_4_N14_3-5-7-9-15-63",
    "file": "experiments/triads/results/scl/CPS_6_4_N14_3-5-7-9-15-63.scl",
+   "sha256": "f3d1efb7956b42d74dfcc90831d0b41733bb6c12935a4799f9fe6ee2ff85b269",
    "name": "CPS_6_4_N14_3-5-7-9-15-63",
    "module": "triads",
    "folder": "triads",
@@ -7833,6 +8014,7 @@
   {
    "id": "triads.triads.CPS_6_4_N14_3-7-15-21-35-63",
    "file": "experiments/triads/results/scl/CPS_6_4_N14_3-7-15-21-35-63.scl",
+   "sha256": "8fa12fb0dd3376e6328c5d27cb3d1aeea59afb8828911901b24416b04e6bbe55",
    "name": "CPS_6_4_N14_3-7-15-21-35-63",
    "module": "triads",
    "folder": "triads",
@@ -7893,6 +8075,7 @@
   {
    "id": "triads.triads.CPS_6_4_N15_1-3-5-7-9-11",
    "file": "experiments/triads/results/scl/CPS_6_4_N15_1-3-5-7-9-11.scl",
+   "sha256": "3d7df1a0311f5f6fb043d9a8c27320a8cd11c8110f40708622b1c5d61c5fab93",
    "name": "CPS_6_4_N15_1-3-5-7-9-11",
    "module": "triads",
    "folder": "triads",
@@ -7955,6 +8138,7 @@
   {
    "id": "triads.triads.CPS_6_4_N15_1-7-15-21-35-63",
    "file": "experiments/triads/results/scl/CPS_6_4_N15_1-7-15-21-35-63.scl",
+   "sha256": "acc129d84d015f6b61686f37be05d4e8abff3dd8a9add0a52862f284b37ed985",
    "name": "CPS_6_4_N15_1-7-15-21-35-63",
    "module": "triads",
    "folder": "triads",
@@ -8017,6 +8201,7 @@
   {
    "id": "triads.triads.CPS_6_4_N15_3-5-7-21-63-315",
    "file": "experiments/triads/results/scl/CPS_6_4_N15_3-5-7-21-63-315.scl",
+   "sha256": "bf3267b2f15efdde71ddf99024d85bba2f493ee7eac7dbb78ab4e8f527df96bf",
    "name": "CPS_6_4_N15_3-5-7-21-63-315",
    "module": "triads",
    "folder": "triads",
@@ -8079,6 +8264,7 @@
   {
    "id": "triads.triads.CPS_6_4_N15_5-9-15-19-21-45",
    "file": "experiments/triads/results/scl/CPS_6_4_N15_5-9-15-19-21-45.scl",
+   "sha256": "499c67d7d15552eece6e07ff7e32c288490c3a748fe0946318dfbb1225257ab7",
    "name": "CPS_6_4_N15_5-9-15-19-21-45",
    "module": "triads",
    "folder": "triads",
@@ -8141,6 +8327,7 @@
   {
    "id": "triads.triads.CPS_6_4_N15_5-9-15-33-45-63",
    "file": "experiments/triads/results/scl/CPS_6_4_N15_5-9-15-33-45-63.scl",
+   "sha256": "2d06fb60598d08d0da76f2365bd51a2bbd89bc58e52eb7af78d63491459b9c82",
    "name": "CPS_6_4_N15_5-9-15-33-45-63",
    "module": "triads",
    "folder": "triads",
@@ -8203,6 +8390,7 @@
   {
    "id": "triads.triads.eik_1-3-5-7-9-11",
    "file": "experiments/triads/results/scl/eik_1-3-5-7-9-11.scl",
+   "sha256": "1fda0880c7057a1ff89d64bde3adbe0e4d8bc4e69a3a2b5fc612c428cee482af",
    "name": "eik_1-3-5-7-9-11",
    "module": "triads",
    "folder": "triads",
@@ -8275,6 +8463,7 @@
   {
    "id": "triads.triads.eik_1-45-135-225-19-377",
    "file": "experiments/triads/results/scl/eik_1-45-135-225-19-377.scl",
+   "sha256": "0fdbd17a9e73b25cbbc13b594c532b7e1645c0cf26c8946525f1d9bffb09600f",
    "name": "eik_1-45-135-225-19-377",
    "module": "triads",
    "folder": "triads",
@@ -8347,6 +8536,7 @@
   {
    "id": "triads.triads.hex_1-3-5-11",
    "file": "experiments/triads/results/scl/hex_1-3-5-11.scl",
+   "sha256": "d069eb085510a6f913ce120d4d711b87fec0c2e906bd5b1bcd4617bf87924bde",
    "name": "hex_1-3-5-11",
    "module": "triads",
    "folder": "triads",
@@ -8390,6 +8580,7 @@
   {
    "id": "triads.triads.hex_1-3-5-13",
    "file": "experiments/triads/results/scl/hex_1-3-5-13.scl",
+   "sha256": "988ff516701ff94d19e098cba582b4175cf1ec295c34f5ef65bef1ef1adf1975",
    "name": "hex_1-3-5-13",
    "module": "triads",
    "folder": "triads",
@@ -8433,6 +8624,7 @@
   {
    "id": "triads.triads.hex_1-3-5-7",
    "file": "experiments/triads/results/scl/hex_1-3-5-7.scl",
+   "sha256": "4903765ec17a06450852c76ce739f7b3c1cfa94fd0eb518919d2afb3f14cd336",
    "name": "hex_1-3-5-7",
    "module": "triads",
    "folder": "triads",
@@ -8476,6 +8668,7 @@
   {
    "id": "triads.triads.hex_1-3-5-9",
    "file": "experiments/triads/results/scl/hex_1-3-5-9.scl",
+   "sha256": "9fc42e39ba71b8e09eb08129ceace035bf07f50c109e970e68891bb2b157c8bf",
    "name": "hex_1-3-5-9",
    "module": "triads",
    "folder": "triads",
@@ -8519,6 +8712,7 @@
   {
    "id": "triads.triads.hex_1-3-7-9",
    "file": "experiments/triads/results/scl/hex_1-3-7-9.scl",
+   "sha256": "0c853ef5f5bf1c6d5fefe2aaf295c18b34c9f19bcadbe2d4ff1e0109bb12ea33",
    "name": "hex_1-3-7-9",
    "module": "triads",
    "folder": "triads",
@@ -8562,6 +8756,7 @@
   {
    "id": "triads.triads.hex_1-3-9-11",
    "file": "experiments/triads/results/scl/hex_1-3-9-11.scl",
+   "sha256": "8b07540419bd2dde88c84a32bd3eabe79718b05bf58edd4c863fc057dbbad669",
    "name": "hex_1-3-9-11",
    "module": "triads",
    "folder": "triads",
@@ -8605,6 +8800,7 @@
   {
    "id": "triads.triads.hex_1-3-9-15",
    "file": "experiments/triads/results/scl/hex_1-3-9-15.scl",
+   "sha256": "a3129e8e9b8aafb183c3251d0c1f9a8dda908b7c5f0f71fe09813431ed592888",
    "name": "hex_1-3-9-15",
    "module": "triads",
    "folder": "triads",
@@ -8648,6 +8844,7 @@
   {
    "id": "triads.triads.hex_1-5-9-15",
    "file": "experiments/triads/results/scl/hex_1-5-9-15.scl",
+   "sha256": "ba37c507afe7f59e5a78187a0b87fc71b134d51594050d79c375ca8aff34b863",
    "name": "hex_1-5-9-15",
    "module": "triads",
    "folder": "triads",
@@ -8691,6 +8888,7 @@
   {
    "id": "triads.triads.hex_3-5-11-15",
    "file": "experiments/triads/results/scl/hex_3-5-11-15.scl",
+   "sha256": "8b867641713313b090400b244a64a3cb2ceace91935d4598ba156cfbf9af551e",
    "name": "hex_3-5-11-15",
    "module": "triads",
    "folder": "triads",
@@ -8734,6 +8932,7 @@
   {
    "id": "triads.triads.hex_3-5-13-15",
    "file": "experiments/triads/results/scl/hex_3-5-13-15.scl",
+   "sha256": "3360b81b5d6067a9a70f00722f2d6b125d30b08376aac7b482f1d62132417402",
    "name": "hex_3-5-13-15",
    "module": "triads",
    "folder": "triads",
@@ -8777,6 +8976,7 @@
   {
    "id": "triads.triads.hex_3-5-7-15",
    "file": "experiments/triads/results/scl/hex_3-5-7-15.scl",
+   "sha256": "7204776c362613f6344264e027b2f3d3280beb3ff05724bb5a057bcc1cf3fabb",
    "name": "hex_3-5-7-15",
    "module": "triads",
    "folder": "triads",
@@ -8820,6 +9020,7 @@
   {
    "id": "triads.triads.hex_3-7-9-15",
    "file": "experiments/triads/results/scl/hex_3-7-9-15.scl",
+   "sha256": "817187a46e6a0892eac24f7757ca9e7f3c5eaca230f118aa8bcf159db6fd19ec",
    "name": "hex_3-7-9-15",
    "module": "triads",
    "folder": "triads",
