@@ -87,6 +87,14 @@ python experiments/ear_bench/export_judgments.py --judge marcus-w-hobbs --dump <
 which appends only the records that are new. The same judgment saved in both
 places counts once.
 
+## Licence
+
+My judgments in `judgments/` are released under the Creative Commons
+Attribution 4.0 International licence (`LICENSES/CC-BY-4.0.txt` at the root of
+the repository). You can reuse and adapt them for any purpose, commercial work
+included, as long as you credit Marcus Hobbs and link back to this repository.
+The code that produces and exports them is MIT, like the rest of the code here.
+
 ## Other judges
 
 Anyone can judge these scales. Run the bench (the published page, or
