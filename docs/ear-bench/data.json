@@ -69,10 +69,17 @@
    "id": "G-031",
    "opened": "2026-10-10",
    "gate": "CPSFIT-002 review: minimizing the worst hexany triad instead of the worst tone brings full 2\u00a2 survival from N = 31 down to N = 22 (193.908\u00a2, one tone at 2.22\u00a2); EG4 from 31 to 23; but the worst-triad objective loses to the count at N = 18\u201321 (miracle 6/12 vs orwell 8/12); ear check of results/scl/cpsfit002/ (N = 22 at 193.908 vs CPSFIT-001 at 193.787)",
-   "status": "PENDING \u2014 which do you hear, the worst triad or the number of good ones? Decide whether CPSFIT-003 maximizes the frozen survival count",
-   "state": "PENDING",
+   "status": "PASS 2026-10-23 \u2014 first gate decided on the Ear Bench (blind X/Y passages, reed, 1/1 = 261.63 Hz): chorale and tune preferred the triad fit 193.908, scale run and tune-over-chorale preferred the tone fit 193.787; Marcus: \"I hear a lot of good triads in both. the biggest differences to me are how good the melody is.\" The worst-triad objective stands (both chains carry the triads; melody separates them); the count objective already ran as CPSFIT-003 (G-032). Judgments: experiments/ear_bench/judgments/marcus-w-hobbs.jsonl; log: experiments/lattice/LOG.md 2026-10-23",
+   "state": "PASS",
    "folders": [
     "cpsfit002"
+   ],
+   "pairs": [
+    {
+     "label": "Triad fit vs tone fit, N = 22",
+     "a": "lattice.cpsfit002.cpsfit002_hexany_N22_g193.908",
+     "b": "lattice.cpsfit001.cpsfit001_hexany_N22_g193.79"
+    }
    ],
    "pair": [
     "lattice.cpsfit002.cpsfit002_hexany_N22_g193.908",
@@ -88,9 +95,21 @@
    "folders": [
     "cpsfit003"
    ],
+   "pairs": [
+    {
+     "label": "N = 16: count (10 of 12) vs worst triad (6 of 12)",
+     "a": "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676",
+     "b": "lattice.cpsfit002.cpsfit002_hexany_N16_g116.588"
+    },
+    {
+     "label": "N = 18: count (10 of 12) vs worst triad (6 of 12)",
+     "a": "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818",
+     "b": "lattice.cpsfit002.cpsfit002_hexany_N18_g116.588"
+    }
+   ],
    "pair": [
     "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676",
-    "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818"
+    "lattice.cpsfit002.cpsfit002_hexany_N16_g116.588"
    ]
   },
   {
@@ -215,6 +234,78 @@
     1088.161008,
     1125.440672,
     1162.720336,
+    1200.0
+   ],
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
+  },
+  {
+   "id": "lattice.cpsfit002.cpsfit002_hexany_N16_g116.588",
+   "file": "experiments/lattice/results/scl/cpsfit002/cpsfit002_hexany_N16_g116.588.scl",
+   "sha256": "909c02fe119591891e292e2c71f47654657bbbce943f2c436c17aba0fd52cab3",
+   "name": "cpsfit002_hexany_N16_g116.588",
+   "module": "lattice",
+   "folder": "cpsfit002",
+   "gate": "G-031",
+   "blind": false,
+   "protocol": null,
+   "description": "CPSFIT-002 hexany triad-minimax chain, N = 16, g = 116.588c; 6 of 12 hexany triads within 2.0c, worst tone 4.86c; 1/1 = chain degree 0; post-hoc audition file for G-032 (cpsfit002_audition.py)",
+   "comments": [
+    "cpsfit002_hexany_N16_g116.588.scl"
+   ],
+   "cents": [
+    116.587791,
+    150.709878,
+    233.175583,
+    267.29767,
+    349.763374,
+    383.885461,
+    466.351165,
+    500.473252,
+    582.938957,
+    617.061043,
+    699.526748,
+    733.648835,
+    850.236626,
+    966.824417,
+    1083.412209,
+    1200.0
+   ],
+   "ratios": null,
+   "reference": "triads.triads.CPS_4_2_N6_1-3-5-7"
+  },
+  {
+   "id": "lattice.cpsfit002.cpsfit002_hexany_N18_g116.588",
+   "file": "experiments/lattice/results/scl/cpsfit002/cpsfit002_hexany_N18_g116.588.scl",
+   "sha256": "f179c42ff1ccb2dad4789efaada42116ae42105887e3eb5306b89b2628cc5167",
+   "name": "cpsfit002_hexany_N18_g116.588",
+   "module": "lattice",
+   "folder": "cpsfit002",
+   "gate": "G-031",
+   "blind": false,
+   "protocol": null,
+   "description": "CPSFIT-002 hexany triad-minimax chain, N = 18, g = 116.588c; 6 of 12 hexany triads within 2.0c, worst tone 4.86c; 1/1 = chain degree 0; post-hoc audition file for G-032 (cpsfit002_audition.py)",
+   "comments": [
+    "cpsfit002_hexany_N18_g116.588.scl"
+   ],
+   "cents": [
+    34.122087,
+    116.587791,
+    150.709878,
+    233.175583,
+    267.29767,
+    349.763374,
+    383.885461,
+    466.351165,
+    500.473252,
+    582.938957,
+    617.061043,
+    699.526748,
+    733.648835,
+    850.236626,
+    966.824417,
+    1083.412209,
+    1117.534296,
     1200.0
    ],
    "ratios": null,

@@ -199,7 +199,7 @@
         <h2>${escape(g.title)}</h2>
         ${g.kind === "gate" ? `<p class="gate-text">${escape(g.gate.gate)}</p><p class="ledger">${escape(g.gate.status)}</p>` : ""}
       </header>
-      ${isEps ? "" : `<section class="card compare" id="compare" hidden></section>`}
+      ${isEps ? "" : `<div class="pairs" id="pairs" hidden></div><section class="card compare" id="compare" hidden></section>`}
       ${g.kind === "gate" && !isEps ? `<section class="card verdict" id="verdict"></section>` : ""}
       ${isEps ? `<div id="eps"></div>` : `
       <details class="explore" id="explore" ${g.kind === "gate" ? "" : "open"}>
@@ -294,7 +294,28 @@
   }
 
   // ----- instrument -----
+  // A gate whose question names several comparisons offers each as a tab.
+  function renderPairs() {
+    const box = $("#pairs");
+    const g = currentGroup();
+    const list = (g && g.gate && g.gate.pairs) || [];
+    if (!box) return;
+    box.hidden = list.length < 2;
+    if (box.hidden) return;
+    box.innerHTML = `<span class="label">Comparisons in this gate</span>
+      <div class="seg" role="tablist">${list.map((p, i) => `<button class="btn sm ${p.a === state.a && p.b === state.b ? "on" : ""}" role="tab" data-pair="${i}">${escape(p.label)}</button>`).join("")}</div>`;
+    box.querySelectorAll("[data-pair]").forEach((b) => b.addEventListener("click", () => {
+      const p = list[Number(b.dataset.pair)];
+      state.a = p.a;
+      state.b = p.b;
+      state.slot = "a";
+      renderInstrument();
+      renderScales();
+    }));
+  }
+
   function renderCompare() {
+    renderPairs();
     const box = $("#compare");
     if (!box) return;
     const g = currentGroup();
