@@ -29,7 +29,7 @@
   // What the listener heard a judgment under; saved with every pick and verdict
   // so the released judgments carry their listening conditions.
   const listeningContext = () => ({
-    timbre: Synth.timbre, sound: Synth.describe(), baseHz: state.baseHz,
+    timbre: Synth.timbre, sound: Synth.describe(), baseHz: state.baseHz, octave: Synth.octave,
     store: Store.mode, bundle: state.data ? state.data.version : null, bench: BENCH_VERSION,
   });
   const hz = (cents) => state.baseHz * Math.pow(2, cents / 1200);
@@ -742,11 +742,30 @@
       if (currentGroup() && currentGroup().scales.some((s) => s.protocol === "eareps")) renderEps();
       else renderCompare(); // picks and blind draws are per timbre
     };
-    $("#drive").oninput = (e) => { Synth.setDrive(Number(e.target.value)); $("#drive-v").textContent = Number(e.target.value) ? Number(e.target.value).toFixed(1) : "off"; };
-    $("#vol").oninput = (e) => Synth.setVolume(Number(e.target.value));
+    Knob.create($("#drive-knob"), {
+      min: 0, max: 3, step: 0.1, value: 0, label: "Nonlinearity",
+      format: (v) => (v ? v.toFixed(1) : "off"), onInput: (v) => Synth.setDrive(v),
+    });
+    Knob.create($("#vol-knob"), {
+      min: 0, max: 1, step: 0.01, value: 0.8, label: "Volume",
+      format: (v) => `${Math.round(v * 100)}%`, onInput: (v) => Synth.setVolume(v),
+    });
+    // Octave steps move everything sounding, scheduled or held, immediately.
+    const showOctave = () => {
+      const n = Synth.octave;
+      const label = $("#reg-v");
+      label.textContent = `oct ${n > 0 ? "+" : ""}${n}`;
+      label.classList.toggle("shifted", n !== 0);
+      label.title = `1/1 now sounds at ${(state.baseHz * Math.pow(2, n)).toFixed(2)} Hz`;
+      $("#reg-dn").disabled = n <= -Synth.OCTAVE_RANGE;
+      $("#reg-up").disabled = n >= Synth.OCTAVE_RANGE;
+    };
+    $("#reg-dn").onclick = () => { Synth.setOctave(Synth.octave - 1); showOctave(); };
+    $("#reg-up").onclick = () => { Synth.setOctave(Synth.octave + 1); showOctave(); };
+    showOctave();
     $("#base").onchange = (e) => {
       const v = Number(e.target.value);
-      if (v >= 20 && v <= 2000) { state.baseHz = v; renderTable(); } else e.target.value = state.baseHz;
+      if (v >= 20 && v <= 2000) { state.baseHz = v; renderTable(); showOctave(); } else e.target.value = state.baseHz;
     };
     $("#audio").onclick = ensureAudio;
     $("#midi").onclick = () => connectMidi(true);
