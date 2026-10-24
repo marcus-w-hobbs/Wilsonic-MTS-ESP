@@ -5582,3 +5582,50 @@ fitted scale should be offered with.
 `experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-032 PASS on
 the listening question; the floating-origin and cap-sweep design questions
 stay open.
+
+## 2026-10-24 — G-029 decided on the Ear Bench: Erv's 15-note chain wins the harmony
+
+**What was compared.** CPSFIT-001's two exported chains for the 1·3·5·7
+hexany. A: the 15-note chain of 502.860¢, Erv's 0.418935 recurrence (a
+septimal meantone), whose hexany triads sit 0.40¢ (3:4:5, 12:15:20), 4.63¢
+(6:7:8, 21:24:28), 4.82¢ (2:3:4, 3:4:6), 5.13¢ (4:5:6, 10:12:15) and 7.25¢
+(5:6:7, 30:35:42) from just, so 2 of 12 within 2¢, median 4.8¢. B: the
+22-note chain of 193.787¢, 10 of 12 within 2¢, worst 2.08¢.
+
+**How.** Ear Bench, local copy, electric piano (the judging standard),
+one octave down (1/1 sounding at 130.81 Hz), nonlinearity off, blind X/Y:
+
+| Passage | Preferred |
+|---|---|
+| Scale run | B (22-note) |
+| Tune | A (Erv's 15-note) |
+| Chorale | A (Erv's 15-note) |
+| Tune over chorale | A (Erv's 15-note) |
+
+Verdict: **Pass**, no notes.
+
+**Reading, with its limits.** One blind trial per passage. The two scales
+have different sizes, so the run and the tune give away which is which
+(15 notes against 22); the chorale plays the same twelve chords in both and
+stays blind. In that chorale the ear preferred the chain whose triads are
+off by a median of 4.8¢ and up to 7.25¢ over the chain that holds them
+within 2.1¢. Two conditions were in play and both matter. The electric
+piano has few sustained upper partials, so small errors make little
+beating (see the G-032 entry), and one octave down every beat rate halves.
+Under the judging standard, then, 5 to 7¢ triad errors were not heard as
+a defect, and something else about the 15-note chain won. The 2¢ LOCK
+tier that CPSFIT-001 to 003 optimise is far stricter than this listening
+needed. That is a measurement for EAR-ε (G-025) to make properly, and its
+pre-registered prediction already expects the major third to lose its lock
+somewhere between 6 and 12¢.
+
+**Post-hoc implication (not registered).** If the ear tolerates about 5¢ on
+the hexany's triads under the electric piano, the fits have been paying
+notes for precision this listening does not use: the 22-note chain exists
+to get under 2¢. A fit objective with a looser, ear-calibrated tolerance
+would favour smaller scales, and Erv's 0.418935 at 15 notes is exactly
+such a scale. This argues for running EAR-ε before the next fit
+experiment, so that the tolerance the fits use is one Marcus's ear has
+measured.
+
+**Kept.** 18 judgment records. Gate G-029 PASS.

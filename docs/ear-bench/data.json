@@ -49,8 +49,8 @@
    "id": "G-029",
    "opened": "2026-10-10",
    "gate": "CPSFIT-001 review: hexany inside a 22-note chain at 1.37\u00a2 (no ET < 73 does it), N = 15 fit is Erv's 0.418935 (septimal meantone), survival non-monotone in tone error; ear check of results/scl/cpsfit001/ (N = 15 and N = 22 chains); decide whether CPSFIT-002 optimizes triad deviation instead of tone error",
-   "status": "PENDING",
-   "state": "PENDING",
+   "status": "PASS 2026-10-24 \u2014 judged on the Ear Bench (electric piano, one octave down, 1/1 = 130.81 Hz sounding): Erv's 15-note chain (502.86\u00a2, 0.418935, 2 of 12 triads within 2\u00a2, median 4.8\u00a2, worst 7.25\u00a2) was preferred over the 22-note chain (193.79\u00a2, 10 of 12, worst 2.08\u00a2) in the chorale, the tune and the tune over the chorale; the 22-note chain won the scale run. The ear accepted 5 to 7\u00a2 triad errors in this condition, far looser than the 2\u00a2 LOCK tier the fits optimise; the triad-deviation follow-up the gate asked for already ran as CPSFIT-002 (G-031). Log: experiments/lattice/LOG.md 2026-10-24 (G-029)",
+   "state": "PASS",
    "folders": [
     "cpsfit001"
    ]
@@ -90,8 +90,8 @@
    "id": "G-032",
    "opened": "2026-10-11",
    "gate": "CPSFIT-003 review: the count objective beats both prior objectives at every N \u2264 21 on the hexany and EG4 (hexany 10/12 at N = 16 by the miracle val moved 0.17\u00a2, 10/12 at N = 18 by (9, 5, \u22123) at 77.818\u00a2 where miracle/orwell gave 6 and 8) and on the dekanies from N = 19 (32/41 at N = 26 on a schismatic fourth chain); the frozen referee counts created triads (one row where it ranks the chains the other way); the inversion theorem is exact for the reflection and false for the transposed partner CPS(5,3) (page fact corrected); ear check of results/scl/cpsfit003/ (hexany N = 16 and 18, dekany N = 26)",
-   "status": "PENDING \u2014 do ten of twelve triads with one tone out at 5\u00a2 sound better than six at 4.8\u00a2 (G-031's question from the other side)? Decide whether the fit should let the chain origin float (transposition-free), which restores the CPS(n,k)/CPS(n,n\u2212k) symmetry, and whether the 20\u00a2 tone cap should be swept (5, 10, 20) as a control",
-   "state": "PENDING",
+   "status": "PASS 2026-10-24 \u2014 judged on the Ear Bench at N = 16 (count 116.676, 10 of 12, one tone 5.2\u00a2 out, against worst-triad 116.588, 6 of 12, worst tone 4.86\u00a2): the count chain was preferred in the chorale, the tune over the chorale and the scale run, the worst-triad chain in the tune; mixed timbres (run under reed, the rest under electric piano) and Marcus notes the timbre matters (\"I prefer the electric piano timbre, but I could easily score differently with a different timbre such as reed\"). Ten good triads with one tone out beat six at 4.8\u00a2; the count objective stands. Not settled by this listening and still open: the floating chain origin and the 5/10/20\u00a2 cap sweep. N = 18 comparison not yet judged. Log: experiments/lattice/LOG.md 2026-10-24",
+   "state": "PASS",
    "folders": [
     "cpsfit003"
    ],
