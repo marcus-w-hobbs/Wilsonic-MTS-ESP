@@ -123,6 +123,7 @@ const Passages = (() => {
     box.innerHTML = `
       <p class="hint">Each passage plays twice, once in each scale, as <strong>X</strong> then <strong>Y</strong>. Which is A and which is B is hidden until you pick, and drawn fresh each time the page loads.
       Picks are kept separately for each timbre; you are judging under <strong>${ctx.escape((Timbres.ALL[Synth.timbre] || {}).label || Synth.timbre)}</strong>.
+      ${Synth.timbre !== Timbres.JUDGING ? `<span class="warn">The judging standard is ${ctx.escape(Timbres.ALL[Timbres.JUDGING].label)}. Picks under this timbre are kept, but they sit outside the standard.</span>` : ""}
       The ${music.chords} chords come from <span class="mono">${ctx.escape(ref.name)}</span>, so both scales play the same music.</p>
       <div class="p-now" id="p-now" role="status"></div>
       <div class="p-list">

@@ -734,7 +734,7 @@
 
   function bindHeader() {
     const timbre = $("#timbre");
-    const opts = (set) => Object.entries(set).map(([k, t]) => `<option value="${k}">${t.label}</option>`).join("");
+    const opts = (set) => Object.entries(set).map(([k, t]) => `<option value="${k}">${t.label}${k === Timbres.JUDGING ? " · judging standard" : ""}</option>`).join("");
     timbre.innerHTML = `<optgroup label="Sustained">${opts(Timbres.SUSTAINED)}</optgroup><optgroup label="Plucked and struck">${opts(Timbres.STRUCK)}</optgroup>`;
     timbre.value = Synth.timbre;
     timbre.onchange = () => {

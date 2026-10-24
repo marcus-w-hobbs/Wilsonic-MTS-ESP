@@ -36,7 +36,9 @@ this file; sessions read it at start-up to know what is and isn't authorized.
   blind passages work with nothing extra. Marcus judges on the bench; before a
   session records a decision it runs `experiments/ear_bench/export_judgments.py`,
   and the judgments are released in `experiments/ear_bench/judgments/` per
-  `experiments/ear_bench/JUDGING.md`.
+  `experiments/ear_bench/JUDGING.md`. **Standard timbre: electric piano**
+  (Marcus 2026-10-24, one timbre to keep listening time down; EAR-ε excepted,
+  it needs a sustained tone).
 
 ## Ledger
 

@@ -14,7 +14,7 @@ const Synth = (() => {
   let shaper = null;
   let out = null;
   let wave = null;
-  let timbre = "reed";
+  let timbre = Timbres.JUDGING;
   let drive = 0;
   let volume = 0.8;
   const voices = new Map();

@@ -43,6 +43,16 @@ fresh every time the page loads. I pick X, Y or Same, and only then does the
 bench show me which was which. A live strip shows which of X and Y is
 sounding and which chord is being held, so I always know what I am hearing.
 
+I judge every gate under one timbre, the electric piano, because judging
+under two would double the listening time. The cost of that choice is that a
+timbre with many sustained harmonics, like the bench's reed, makes small
+tuning errors beat audibly, and the electric piano, with few upper partials
+and a tine that dies quickly, hides some of them. So my verdicts are verdicts
+about a scale heard on the electric piano, every record says so, and a pick
+I make under another timbre is kept but marked as outside the standard. The
+EAR-ε sitting is the exception, because its protocol needs a steady
+sustained tone.
+
 After the passages I make the gate's call (Pass, Fail or Listen again) and
 write what I heard in my own words. Those notes matter as much as the picks,
 because they are where a new experiment usually comes from.
