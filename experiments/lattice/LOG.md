@@ -5530,3 +5530,55 @@ comes next.
 **Kept.** Judgments (8 records, including the cleared-then-restored Pass
 from the bench's save bug on 2026-10-22) in
 `experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-031 PASS.
+
+## 2026-10-24 — G-032 decided on the Ear Bench; timbre becomes a judged factor
+
+**What was compared (N = 16, both on the miracle val).** CPSFIT-003's count
+chain (A: 116.676¢, 10 of the hexany's 12 triads within 2¢, one tone 5.22¢
+out) against CPSFIT-002's worst-triad chain (B: 116.588¢, 6 of 12, worst
+tone 4.86¢). The worst-triad chains at N = 16 and 18 had never been
+exported; `cpsfit002_audition.py` wrote them from the recorded rows on
+2026-10-23 without re-running anything. The N = 18 comparison (count
+77.818¢ against worst-triad 116.588¢) is on the bench and not yet judged.
+
+**How.** Ear Bench v1.2.0, local copy, 1/1 = 261.6256 Hz, blind X/Y:
+
+| Passage | Timbre | Preferred |
+|---|---|---|
+| Scale run | reed | A (count) |
+| Tune | electric piano | B (worst triad) |
+| Chorale | electric piano | A (count) |
+| Tune over chorale | electric piano | A (count) |
+
+Verdict: **Pass**, set under the electric piano. Marcus: "the timbre is
+very important. I prefer the electric piano timbre, but I could easily
+score differently with a different timbre such as reed."
+
+**Reading, with its limits.** One blind trial per passage, and the picks
+were made under two timbres, so the four are not one condition. In the
+harmonic passages (chorale, tune over chorale) the ear went with the chain
+that keeps ten triads and pays for it with one tone 5¢ out, which answers
+the gate's question for this pair and leaves the count objective as the
+default. The tune went the other way, as in G-031 where the melodic
+passages split, so melody keeps acting as the axis that the triad
+objectives do not see.
+
+**Post-hoc observation (not registered): why timbre should move the
+verdict.** The two timbres expose mistuning differently. The reed is 16
+sustained harmonics at 1/n, so a 2¢ triad error shows up as beating among
+many coinciding upper partials. The electric piano is mostly harmonics 1
+to 4 with a fast-decaying tine at 7 and 11, so after the attack there are
+few coinciding partials left to beat, and small triad errors are much
+harder to hear. That is the tuning and timbre relationship (Sethares):
+the same chains are being heard through two different sieves. The
+consequence for the program is that a verdict is a verdict about a chain
+and a timbre together. The bench now keeps picks per timbre, with a fresh
+blind draw for each, and every judgment carries its timbre, so the
+dataset can show where the ear's verdict depends on the instrument. Where
+it does, that is itself a design result for Wilsonic: which timbres a
+fitted scale should be offered with.
+
+**Kept.** 13 judgment records in
+`experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-032 PASS on
+the listening question; the floating-origin and cap-sweep design questions
+stay open.

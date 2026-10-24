@@ -740,6 +740,7 @@
     timbre.onchange = () => {
       Synth.setTimbre(timbre.value);
       if (currentGroup() && currentGroup().scales.some((s) => s.protocol === "eareps")) renderEps();
+      else renderCompare(); // picks and blind draws are per timbre
     };
     $("#drive").oninput = (e) => { Synth.setDrive(Number(e.target.value)); $("#drive-v").textContent = Number(e.target.value) ? Number(e.target.value).toFixed(1) : "off"; };
     $("#vol").oninput = (e) => Synth.setVolume(Number(e.target.value));

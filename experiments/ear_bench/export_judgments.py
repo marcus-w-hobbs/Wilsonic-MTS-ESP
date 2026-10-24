@@ -86,9 +86,11 @@ def records(store: dict, source: str, judge: str, scales: dict) -> list[dict]:
             add("overall_preference", doc.get("gate"), cid, doc.get("updatedAt"),
                 {**pair, "blind": False, "preferred": doc["prefer"]})
         for key, pick in (doc.get("picks") or {}).items():
-            if isinstance(pick, dict):  # a blind passage pick
+            if isinstance(pick, dict):  # a blind passage pick: "passage:<id>" or "passage:<id>@<timbre>"
+                passage, _, timbre = key.split(":", 1)[-1].partition("@")
                 add("blind_preference", doc.get("gate"), f"{cid}|{key}", pick.get("at"), {
-                    **pair, "blind": True, "passage": key.split(":", 1)[-1], "x_was": pick.get("x"),
+                    **pair, "blind": True, "passage": passage,
+                    "timbre": timbre or (pick.get("context") or {}).get("timbre"), "x_was": pick.get("x"),
                     "pick": pick.get("pick"), "preferred": pick.get("preferred"), "context": pick.get("context"),
                 })
             elif pick:  # a named chord-by-chord pick (no time of its own)

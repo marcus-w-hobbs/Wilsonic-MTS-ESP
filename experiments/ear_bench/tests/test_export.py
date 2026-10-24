@@ -28,6 +28,8 @@ STORE = {
             "picks": {
                 "passage:run": {"x": "a", "pick": "y", "preferred": "b", "at": "2026-10-23T04:36:59Z",
                                 "context": {"timbre": "organ", "baseHz": 261.6256}},
+                "passage:chorale@epiano": {"x": "b", "pick": "y", "preferred": "a", "at": "2026-10-24T21:31:18Z",
+                                           "context": {"timbre": "epiano"}},
                 "P:231.2,546.8,813.7": "a",
                 "S:0.0,1.0,2.0": None,
             },
@@ -50,12 +52,17 @@ class TestRecords(unittest.TestCase):
         self.assertEqual(len(self.by_kind["chord_preference"]), 1)
 
     def test_blind_pick_keeps_mapping_context_and_scale_hashes(self):
-        (r,) = self.by_kind["blind_preference"]
+        r = next(x for x in self.by_kind["blind_preference"] if x["passage"] == "run")
         self.assertEqual((r["passage"], r["x_was"], r["pick"], r["preferred"]), ("run", "a", "y", "b"))
         self.assertTrue(r["blind"])
         self.assertEqual(r["context"]["timbre"], "organ")
         self.assertEqual(r["a"]["sha256"], "aa")
         self.assertEqual(r["b"]["file"], "experiments/x/b.scl")
+
+    def test_timbre_keyed_pick_names_passage_and_timbre(self):
+        picks = {r["passage"]: r for r in self.by_kind["blind_preference"]}
+        self.assertEqual(picks["chorale"]["timbre"], "epiano")
+        self.assertEqual(picks["run"]["timbre"], "organ")  # legacy key: timbre from context
 
     def test_ids_are_stable(self):
         again = ex.records(STORE, "claude.ai", "marcus-w-hobbs", SCALES)
