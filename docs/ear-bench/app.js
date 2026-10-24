@@ -582,6 +582,14 @@
     const g = currentGroup();
     const list = g.scales;
     const ordered = state.blindNames && state.shuffle ? [...list].sort((x, y) => state.shuffle.get(x.id) - state.shuffle.get(y.id)) : list;
+    // The list is redrawn on every click; keep its scroll position and the
+    // focused button, so exploring a long folder never jumps back to the top.
+    const prevList = box.querySelector(".s-list");
+    const keepScroll = prevList ? prevList.scrollTop : 0;
+    const active = document.activeElement;
+    const keepFocus = active && box.contains(active) && active.dataset && active.dataset.id
+      ? `[data-id="${CSS.escape(active.dataset.id)}"]${active.dataset.as ? `[data-as="${active.dataset.as}"]` : ""}${active.dataset.rate ? `[data-rate="${active.dataset.rate}"]` : ""}`
+      : null;
     box.innerHTML = `
       <div class="s-head">
         <h3>Scales <span class="hint">${list.length}</span></h3>
@@ -609,6 +617,11 @@
           </article>`;
         }).join("")}
       </div>`;
+    box.querySelector(".s-list").scrollTop = keepScroll;
+    if (keepFocus) {
+      const el = box.querySelector(keepFocus);
+      if (el) el.focus({ preventScroll: true });
+    }
     const blindBtn = $("#blind");
     if (blindBtn) blindBtn.onclick = () => {
       state.blindNames = !state.blindNames;
