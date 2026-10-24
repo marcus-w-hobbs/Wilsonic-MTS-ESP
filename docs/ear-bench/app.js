@@ -29,7 +29,7 @@
   // What the listener heard a judgment under; saved with every pick and verdict
   // so the released judgments carry their listening conditions.
   const listeningContext = () => ({
-    timbre: Synth.timbre, sound: Synth.describe(), baseHz: state.baseHz,
+    timbre: Synth.timbre, sound: Synth.describe(), baseHz: state.baseHz, octave: Synth.octave,
     store: Store.mode, bundle: state.data ? state.data.version : null, bench: BENCH_VERSION,
   });
   const hz = (cents) => state.baseHz * Math.pow(2, cents / 1200);
@@ -199,7 +199,7 @@
         <h2>${escape(g.title)}</h2>
         ${g.kind === "gate" ? `<p class="gate-text">${escape(g.gate.gate)}</p><p class="ledger">${escape(g.gate.status)}</p>` : ""}
       </header>
-      ${isEps ? "" : `<section class="card compare" id="compare" hidden></section>`}
+      ${isEps ? "" : `<div class="pairs" id="pairs" hidden></div><section class="card compare" id="compare" hidden></section>`}
       ${g.kind === "gate" && !isEps ? `<section class="card verdict" id="verdict"></section>` : ""}
       ${isEps ? `<div id="eps"></div>` : `
       <details class="explore" id="explore" ${g.kind === "gate" ? "" : "open"}>
@@ -294,7 +294,28 @@
   }
 
   // ----- instrument -----
+  // A gate whose question names several comparisons offers each as a tab.
+  function renderPairs() {
+    const box = $("#pairs");
+    const g = currentGroup();
+    const list = (g && g.gate && g.gate.pairs) || [];
+    if (!box) return;
+    box.hidden = list.length < 2;
+    if (box.hidden) return;
+    box.innerHTML = `<span class="label">Comparisons in this gate</span>
+      <div class="seg" role="tablist">${list.map((p, i) => `<button class="btn sm ${p.a === state.a && p.b === state.b ? "on" : ""}" role="tab" data-pair="${i}">${escape(p.label)}</button>`).join("")}</div>`;
+    box.querySelectorAll("[data-pair]").forEach((b) => b.addEventListener("click", () => {
+      const p = list[Number(b.dataset.pair)];
+      state.a = p.a;
+      state.b = p.b;
+      state.slot = "a";
+      renderInstrument();
+      renderScales();
+    }));
+  }
+
   function renderCompare() {
+    renderPairs();
     const box = $("#compare");
     if (!box) return;
     const g = currentGroup();
@@ -561,6 +582,14 @@
     const g = currentGroup();
     const list = g.scales;
     const ordered = state.blindNames && state.shuffle ? [...list].sort((x, y) => state.shuffle.get(x.id) - state.shuffle.get(y.id)) : list;
+    // The list is redrawn on every click; keep its scroll position and the
+    // focused button, so exploring a long folder never jumps back to the top.
+    const prevList = box.querySelector(".s-list");
+    const keepScroll = prevList ? prevList.scrollTop : 0;
+    const active = document.activeElement;
+    const keepFocus = active && box.contains(active) && active.dataset && active.dataset.id
+      ? `[data-id="${CSS.escape(active.dataset.id)}"]${active.dataset.as ? `[data-as="${active.dataset.as}"]` : ""}${active.dataset.rate ? `[data-rate="${active.dataset.rate}"]` : ""}`
+      : null;
     box.innerHTML = `
       <div class="s-head">
         <h3>Scales <span class="hint">${list.length}</span></h3>
@@ -588,6 +617,11 @@
           </article>`;
         }).join("")}
       </div>`;
+    box.querySelector(".s-list").scrollTop = keepScroll;
+    if (keepFocus) {
+      const el = box.querySelector(keepFocus);
+      if (el) el.focus({ preventScroll: true });
+    }
     const blindBtn = $("#blind");
     if (blindBtn) blindBtn.onclick = () => {
       state.blindNames = !state.blindNames;
@@ -713,18 +747,38 @@
 
   function bindHeader() {
     const timbre = $("#timbre");
-    const opts = (set) => Object.entries(set).map(([k, t]) => `<option value="${k}">${t.label}</option>`).join("");
+    const opts = (set) => Object.entries(set).map(([k, t]) => `<option value="${k}">${t.label}${k === Timbres.JUDGING ? " · judging standard" : ""}</option>`).join("");
     timbre.innerHTML = `<optgroup label="Sustained">${opts(Timbres.SUSTAINED)}</optgroup><optgroup label="Plucked and struck">${opts(Timbres.STRUCK)}</optgroup>`;
     timbre.value = Synth.timbre;
     timbre.onchange = () => {
       Synth.setTimbre(timbre.value);
       if (currentGroup() && currentGroup().scales.some((s) => s.protocol === "eareps")) renderEps();
+      else renderCompare(); // picks and blind draws are per timbre
     };
-    $("#drive").oninput = (e) => { Synth.setDrive(Number(e.target.value)); $("#drive-v").textContent = Number(e.target.value) ? Number(e.target.value).toFixed(1) : "off"; };
-    $("#vol").oninput = (e) => Synth.setVolume(Number(e.target.value));
+    Knob.create($("#drive-knob"), {
+      min: 0, max: 3, step: 0.1, value: 0, label: "Nonlinearity",
+      format: (v) => (v ? v.toFixed(1) : "off"), onInput: (v) => Synth.setDrive(v),
+    });
+    Knob.create($("#vol-knob"), {
+      min: 0, max: 1, step: 0.01, value: 0.8, label: "Volume",
+      format: (v) => `${Math.round(v * 100)}%`, onInput: (v) => Synth.setVolume(v),
+    });
+    // Octave steps move everything sounding, scheduled or held, immediately.
+    const showOctave = () => {
+      const n = Synth.octave;
+      const label = $("#reg-v");
+      label.textContent = `oct ${n > 0 ? "+" : ""}${n}`;
+      label.classList.toggle("shifted", n !== 0);
+      label.title = `1/1 now sounds at ${(state.baseHz * Math.pow(2, n)).toFixed(2)} Hz`;
+      $("#reg-dn").disabled = n <= -Synth.OCTAVE_RANGE;
+      $("#reg-up").disabled = n >= Synth.OCTAVE_RANGE;
+    };
+    $("#reg-dn").onclick = () => { Synth.setOctave(Synth.octave - 1); showOctave(); };
+    $("#reg-up").onclick = () => { Synth.setOctave(Synth.octave + 1); showOctave(); };
+    showOctave();
     $("#base").onchange = (e) => {
       const v = Number(e.target.value);
-      if (v >= 20 && v <= 2000) { state.baseHz = v; renderTable(); } else e.target.value = state.baseHz;
+      if (v >= 20 && v <= 2000) { state.baseHz = v; renderTable(); showOctave(); } else e.target.value = state.baseHz;
     };
     $("#audio").onclick = ensureAudio;
     $("#midi").onclick = () => connectMidi(true);

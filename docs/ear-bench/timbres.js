@@ -63,7 +63,10 @@ const Timbres = (() => {
   };
 
   const ALL = { ...SUSTAINED, ...STRUCK };
+  // The judging standard (Marcus, 2026-10-24): one timbre for every gate, to
+  // keep listening time down; every judgment still records its timbre.
+  const JUDGING = "epiano";
   const isStruck = (name) => Object.prototype.hasOwnProperty.call(STRUCK, name);
 
-  return { SUSTAINED, STRUCK, ALL, isStruck };
+  return { SUSTAINED, STRUCK, ALL, isStruck, JUDGING };
 })();

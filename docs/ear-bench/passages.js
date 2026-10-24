@@ -78,10 +78,33 @@ const Passages = (() => {
     paintNow();
   }
 
+  // One hidden X/Y draw per passage per timbre, so judging the same passage
+  // under another timbre is a fresh blind trial.
   function shuffle(pairKey) {
     if (blindFor === pairKey) return;
     blindFor = pairKey;
-    blind = Object.fromEntries(LIST.map(([id]) => [id, Math.random() < 0.5 ? "a" : "b"]));
+    blind = {};
+  }
+  function blindOf(id) {
+    const k = `${id}@${Synth.timbre}`;
+    if (!blind[k]) blind = { ...blind, [k]: Math.random() < 0.5 ? "a" : "b" };
+    return blind[k];
+  }
+
+  // Picks are kept per timbre: "passage:<id>@<timbre>". Older picks saved as
+  // "passage:<id>" count for the timbre they were made under (reed before
+  // listening context was recorded).
+  const pickKey = (id, timbre = Synth.timbre) => `passage:${id}@${timbre}`;
+  const legacyTimbre = (pick) => (pick && pick.context && pick.context.timbre) || "reed";
+  function pickFor(saved, id, timbre = Synth.timbre) {
+    const legacy = saved[`passage:${id}`];
+    return saved[pickKey(id, timbre)] || (legacy && legacyTimbre(legacy) === timbre ? legacy : null);
+  }
+  function otherTimbrePicks(saved, id) {
+    return Object.entries(saved)
+      .filter(([k, v]) => v && typeof v === "object" && (k.startsWith(`passage:${id}@`) || k === `passage:${id}`))
+      .map(([k, v]) => ({ timbre: k.includes("@") ? k.split("@")[1] : legacyTimbre(v), pick: v }))
+      .filter((x) => x.timbre !== Synth.timbre);
   }
 
   function schedule(events, t0, hz) {
@@ -99,12 +122,15 @@ const Passages = (() => {
 
     box.innerHTML = `
       <p class="hint">Each passage plays twice, once in each scale, as <strong>X</strong> then <strong>Y</strong>. Which is A and which is B is hidden until you pick, and drawn fresh each time the page loads.
+      Picks are kept separately for each timbre; you are judging under <strong>${ctx.escape((Timbres.ALL[Synth.timbre] || {}).label || Synth.timbre)}</strong>.
+      ${Synth.timbre !== Timbres.JUDGING ? `<span class="warn">The judging standard is ${ctx.escape(Timbres.ALL[Timbres.JUDGING].label)}. Picks under this timbre are kept, but they sit outside the standard.</span>` : ""}
       The ${music.chords} chords come from <span class="mono">${ctx.escape(ref.name)}</span>, so both scales play the same music.</p>
       <div class="p-now" id="p-now" role="status"></div>
       <div class="p-list">
         ${LIST.map(([id, title, desc]) => {
-          const pick = saved[`passage:${id}`];
-          const x = pick ? pick.x : blind[id];
+          const pick = pickFor(saved, id);
+          const x = pick ? pick.x : blindOf(id);
+          const others = otherTimbrePicks(saved, id).map((o) => `${(Timbres.ALL[o.timbre] || {}).label ? Timbres.ALL[o.timbre].label.split(" (")[0] : o.timbre}: ${o.pick.preferred === "same" ? "same" : `prefer ${name(o.pick.preferred)}`}`);
           const verdict = pick
             ? `<span class="p-result">You chose ${pick.pick === "same" ? "Same" : pick.pick.toUpperCase()}: ${pick.preferred === "same" ? "no preference" : `prefer ${name(pick.preferred)}`}. X was ${name(x)}, Y was ${name(other(x))}.</span>`
             : "";
@@ -121,14 +147,15 @@ const Passages = (() => {
               ${[["x", "X"], ["y", "Y"], ["same", "Same"]].map(([v, l]) => `<button class="btn sm ${pick && pick.pick === v ? "on" : ""}" data-ppick="${v}" data-id="${id}" ${ctx.readOnly ? "disabled" : ""}>${l}</button>`).join("")}
             </div>
             ${verdict}
+            ${others.length ? `<span class="p-others hint">Other timbres: ${others.join(" · ")}</span>` : ""}
           </div>`;
         }).join("")}
       </div>
       <div class="row"><button class="btn sm" id="p-stop">Stop</button><span class="hint">Esc also stops.</span></div>`;
 
     const slotOf = (id, which) => {
-      const pick = saved[`passage:${id}`];
-      const x = pick ? pick.x : blind[id];
+      const pick = pickFor(saved, id);
+      const x = pick ? pick.x : blindOf(id);
       return which === "x" ? x : other(x);
     };
     box.querySelectorAll("[data-pplay]").forEach((btn) => btn.addEventListener("click", async () => {
@@ -154,7 +181,7 @@ const Passages = (() => {
       const x = slotOf(id, "x");
       const preferred = pickV === "same" ? "same" : pickV === "x" ? x : other(x);
       const cur = ctx.saved() || {};
-      ctx.save({ prefer: cur.prefer || null, picks: { ...(cur.picks || {}), [`passage:${id}`]: { x, pick: pickV, preferred, at: new Date().toISOString(), context: ctx.context() } } });
+      ctx.save({ prefer: cur.prefer || null, picks: { ...(cur.picks || {}), [pickKey(id)]: { x, pick: pickV, preferred, at: new Date().toISOString(), context: ctx.context() } } });
       render(box, ctx);
     }));
     box.querySelector("#p-stop").addEventListener("click", () => { Synth.allOff(); stopNow(); });

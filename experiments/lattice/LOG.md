@@ -5485,3 +5485,147 @@ right reading is that the proxy does not see what he hears in them,
 which is the charter's case, and not that the generators are wrong.
 
 **Kept.** Gate G-039.
+
+## 2026-10-23 — G-031 decided on the Ear Bench (first gate judged there)
+
+**What was compared.** CPSFIT-002's triad-minimax chain (A: 193.908¢, N = 22,
+all 12 hexany triads within 2¢, worst 1.16¢, one tone 2.22¢ off with 1/1
+pinned) against CPSFIT-001's tone-minimax chain (B: 193.787¢, N = 22, 10 of
+12 within 2¢, worst 2.08¢ on 4:5:6 and 10:12:15, every tone within 1.37¢).
+Same val and the same step pattern from 1/1 (LsssLsssLsssLssLssLsss); the
+steps differ by at most 2.4¢, and B's large and small steps are a little
+more even (2.20 against 2.30).
+
+**How.** Ear Bench v1.2.0, local copy, reed timbre, nonlinearity off,
+1/1 = 261.6256 Hz. Four passages composed from the hexany's triads, each
+played as X then Y with the order hidden and drawn per page load:
+
+| Passage | Tests | Preferred |
+|---|---|---|
+| Scale run | melody | B (tone fit) |
+| Tune | melody shaped by the harmony | A (triad fit) |
+| Chorale (all 12 triads, common-tone voice leading, bass) | harmony | A (triad fit) |
+| Tune over chorale | both | B (tone fit) |
+
+Verdict: **Pass.** Marcus: "I hear a lot of good triads in both. the
+biggest differences to me are how good the melody is." His earlier sighted
+note (2026-10-22, arpeggios only) said B was clearly the more melodic and
+that an arpeggio cannot answer a harmonic question, which is why the
+passages were built.
+
+**Reading, with its limits.** Each passage is one blind binary trial, so
+the four picks are not a statistic. What they do say: in harmony alone the
+ear went with the chain that holds all twelve triads, which is what the
+worst-triad objective was built to buy, and in Marcus's words the triads
+are good in both and the melody is where they differ. So the gate's
+question ("the worst triad or the number of good ones?") has no audible
+answer at this level of fit, 10 against 12 triads within 2¢, and the
+deciding axis is melodic. That supports the joint melody-and-harmony
+objective Marcus asked for on 2026-10-22: a fitter that already keeps the
+triads should break ties on a melodic measure (the frozen melodic.py
+v0.1.0 is one candidate) rather than on a finer triad bound. Not
+registered as a prediction; it is the brief for whichever fit experiment
+comes next.
+
+**Kept.** Judgments (8 records, including the cleared-then-restored Pass
+from the bench's save bug on 2026-10-22) in
+`experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-031 PASS.
+
+## 2026-10-24 — G-032 decided on the Ear Bench; timbre becomes a judged factor
+
+**What was compared (N = 16, both on the miracle val).** CPSFIT-003's count
+chain (A: 116.676¢, 10 of the hexany's 12 triads within 2¢, one tone 5.22¢
+out) against CPSFIT-002's worst-triad chain (B: 116.588¢, 6 of 12, worst
+tone 4.86¢). The worst-triad chains at N = 16 and 18 had never been
+exported; `cpsfit002_audition.py` wrote them from the recorded rows on
+2026-10-23 without re-running anything. The N = 18 comparison (count
+77.818¢ against worst-triad 116.588¢) is on the bench and not yet judged.
+
+**How.** Ear Bench v1.2.0, local copy, 1/1 = 261.6256 Hz, blind X/Y:
+
+| Passage | Timbre | Preferred |
+|---|---|---|
+| Scale run | reed | A (count) |
+| Tune | electric piano | B (worst triad) |
+| Chorale | electric piano | A (count) |
+| Tune over chorale | electric piano | A (count) |
+
+Verdict: **Pass**, set under the electric piano. Marcus: "the timbre is
+very important. I prefer the electric piano timbre, but I could easily
+score differently with a different timbre such as reed."
+
+**Reading, with its limits.** One blind trial per passage, and the picks
+were made under two timbres, so the four are not one condition. In the
+harmonic passages (chorale, tune over chorale) the ear went with the chain
+that keeps ten triads and pays for it with one tone 5¢ out, which answers
+the gate's question for this pair and leaves the count objective as the
+default. The tune went the other way, as in G-031 where the melodic
+passages split, so melody keeps acting as the axis that the triad
+objectives do not see.
+
+**Post-hoc observation (not registered): why timbre should move the
+verdict.** The two timbres expose mistuning differently. The reed is 16
+sustained harmonics at 1/n, so a 2¢ triad error shows up as beating among
+many coinciding upper partials. The electric piano is mostly harmonics 1
+to 4 with a fast-decaying tine at 7 and 11, so after the attack there are
+few coinciding partials left to beat, and small triad errors are much
+harder to hear. That is the tuning and timbre relationship (Sethares):
+the same chains are being heard through two different sieves. The
+consequence for the program is that a verdict is a verdict about a chain
+and a timbre together. The bench now keeps picks per timbre, with a fresh
+blind draw for each, and every judgment carries its timbre, so the
+dataset can show where the ear's verdict depends on the instrument. Where
+it does, that is itself a design result for Wilsonic: which timbres a
+fitted scale should be offered with.
+
+**Kept.** 13 judgment records in
+`experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`. Gate G-032 PASS on
+the listening question; the floating-origin and cap-sweep design questions
+stay open.
+
+## 2026-10-24 — G-029 decided on the Ear Bench: Erv's 15-note chain wins the harmony
+
+**What was compared.** CPSFIT-001's two exported chains for the 1·3·5·7
+hexany. A: the 15-note chain of 502.860¢, Erv's 0.418935 recurrence (a
+septimal meantone), whose hexany triads sit 0.40¢ (3:4:5, 12:15:20), 4.63¢
+(6:7:8, 21:24:28), 4.82¢ (2:3:4, 3:4:6), 5.13¢ (4:5:6, 10:12:15) and 7.25¢
+(5:6:7, 30:35:42) from just, so 2 of 12 within 2¢, median 4.8¢. B: the
+22-note chain of 193.787¢, 10 of 12 within 2¢, worst 2.08¢.
+
+**How.** Ear Bench, local copy, electric piano (the judging standard),
+one octave down (1/1 sounding at 130.81 Hz), nonlinearity off, blind X/Y:
+
+| Passage | Preferred |
+|---|---|
+| Scale run | B (22-note) |
+| Tune | A (Erv's 15-note) |
+| Chorale | A (Erv's 15-note) |
+| Tune over chorale | A (Erv's 15-note) |
+
+Verdict: **Pass**, no notes.
+
+**Reading, with its limits.** One blind trial per passage. The two scales
+have different sizes, so the run and the tune give away which is which
+(15 notes against 22); the chorale plays the same twelve chords in both and
+stays blind. In that chorale the ear preferred the chain whose triads are
+off by a median of 4.8¢ and up to 7.25¢ over the chain that holds them
+within 2.1¢. Two conditions were in play and both matter. The electric
+piano has few sustained upper partials, so small errors make little
+beating (see the G-032 entry), and one octave down every beat rate halves.
+Under the judging standard, then, 5 to 7¢ triad errors were not heard as
+a defect, and something else about the 15-note chain won. The 2¢ LOCK
+tier that CPSFIT-001 to 003 optimise is far stricter than this listening
+needed. That is a measurement for EAR-ε (G-025) to make properly, and its
+pre-registered prediction already expects the major third to lose its lock
+somewhere between 6 and 12¢.
+
+**Post-hoc implication (not registered).** If the ear tolerates about 5¢ on
+the hexany's triads under the electric piano, the fits have been paying
+notes for precision this listening does not use: the 22-note chain exists
+to get under 2¢. A fit objective with a looser, ear-calibrated tolerance
+would favour smaller scales, and Erv's 0.418935 at 15 notes is exactly
+such a scale. This argues for running EAR-ε before the next fit
+experiment, so that the tolerance the fits use is one Marcus's ear has
+measured.
+
+**Kept.** 18 judgment records. Gate G-029 PASS.

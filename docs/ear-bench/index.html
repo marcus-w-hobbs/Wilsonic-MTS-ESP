@@ -71,6 +71,19 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 select, input[type=number], textarea { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; }
 textarea { width: 100%; resize: vertical; line-height: 1.4; }
 input[type=range] { accent-color: var(--accent); width: 110px; }
+.pitch { gap: 8px; }
+#timbre { max-width: 240px; }
+.oct { display: inline-flex; align-items: center; gap: 4px; }
+.oct .mono { min-width: 46px; text-align: center; color: var(--ink); }
+.oct .mono.shifted { color: var(--accent); font-weight: 600; }
+.knob { display: inline-flex; align-items: center; gap: 6px; cursor: ns-resize; touch-action: none; user-select: none; border-radius: 8px; padding: 2px 6px 2px 2px; }
+.knob:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.knob .k-track { fill: none; stroke: var(--rule); stroke-width: 4; stroke-linecap: round; }
+.knob .k-fill { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; }
+.knob .k-ptr { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+.knob .k-text { display: flex; flex-direction: column; line-height: 1.15; }
+.knob .k-label { font-size: 0.72rem; color: var(--ink-2); }
+.knob .k-val { font-size: 0.8rem; color: var(--ink); }
 
 /* buttons */
 .btn { font: 500 0.85rem/1 var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; cursor: pointer; }
@@ -166,6 +179,7 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .explore > summary { padding: 4px 0; }
 .explore > :not(summary) { margin-top: 16px; }
 .explore-key { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
+.pairs { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .compare { border-color: var(--accent); }
 .p-now { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--top-h, 64px) + 8px); z-index: 4; display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--accent); background: var(--panel); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
 .p-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -184,6 +198,7 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .p-list { display: flex; flex-direction: column; gap: 8px; }
 .p-row { display: grid; grid-template-columns: minmax(200px, 1fr) auto auto; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
 .p-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.p-others { grid-column: 1 / -1; }
 .p-result { grid-column: 1 / -1; font-size: 0.85rem; color: var(--ok); }
 .c-detail > summary { cursor: pointer; padding: 6px 0; }
 .c-detail[open] > summary { margin-bottom: 8px; }
@@ -251,9 +266,17 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
   </div>
   <button class="btn" id="audio">Start audio</button>
   <label class="ctl" for="timbre">Timbre <select id="timbre"></select></label>
-  <label class="ctl" for="drive">Ear nonlinearity <input type="range" id="drive" min="0" max="3" step="0.1" value="0"> <span class="mono" id="drive-v">off</span></label>
-  <label class="ctl" for="base">1/1 Hz <input type="number" id="base" min="20" max="2000" step="0.01" value="261.6256"></label>
-  <label class="ctl" for="vol">Volume <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8"></label>
+  <div class="ctl pitch">
+    <label for="base">1/1 Hz</label>
+    <input type="number" id="base" min="20" max="2000" step="0.01" value="261.6256">
+    <div class="oct" role="group" aria-label="Octave">
+      <button class="btn sm" id="reg-dn" aria-label="Octave down">−</button>
+      <span class="mono" id="reg-v" aria-live="polite">oct 0</span>
+      <button class="btn sm" id="reg-up" aria-label="Octave up">+</button>
+    </div>
+  </div>
+  <div id="drive-knob" title="Ear nonlinearity: makes sum and difference tones audible"></div>
+  <div id="vol-knob"></div>
   <button class="btn" id="midi">Connect MIDI</button>
 </header>
 
@@ -276,6 +299,7 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 </footer>
 
 <script src="tuning.js"></script>
+<script src="knob.js"></script>
 <script src="timbres.js"></script>
 <script src="audio.js"></script>
 <script src="store.js"></script>

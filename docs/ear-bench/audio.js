@@ -14,9 +14,14 @@ const Synth = (() => {
   let shaper = null;
   let out = null;
   let wave = null;
-  let timbre = "reed";
+  let timbre = Timbres.JUDGING;
   let drive = 0;
   let volume = 0.8;
+  let octave = 0;
+  // Shared transposition (cents) wired into every live oscillator's detune, so
+  // an octave step moves sounding and already-scheduled notes at once.
+  let transposer = null;
+  const OCTAVE_RANGE = 3;
   const voices = new Map();
 
   function shaperCurve(k) {
@@ -55,6 +60,9 @@ const Synth = (() => {
       bus.connect(shaper).connect(comp).connect(out).connect(ctx.destination);
       shaper.curve = shaperCurve(drive);
       buildWave();
+      transposer = ctx.createConstantSource();
+      transposer.offset.value = octave * 1200;
+      transposer.start();
     }
     // Without a user gesture resume() can stay pending forever; never let a caller hang on it.
     if (ctx.state !== "running") await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 250))]);
@@ -69,6 +77,7 @@ const Synth = (() => {
     const peak = VOICE_GAIN * level;
     const osc = c.createOscillator();
     osc.setPeriodicWave(c === ctx ? wave : waveFor(c));
+    if (c === ctx && transposer) transposer.connect(osc.detune);
     osc.frequency.setValueAtTime(hz, t);
     const env = c.createGain();
     env.gain.setValueAtTime(0, t);
@@ -91,13 +100,17 @@ const Synth = (() => {
   // own time constant; releasing the key damps the whole string.
   function struckVoice(c, dest, hz, t, level = 1) {
     const spec = Timbres.STRUCK[timbre];
-    const partials = spec.partials(hz);
+    // Leave headroom for one live octave step up, so partials stay below Nyquist.
+    const top = 20000 / (hz * Math.pow(2, Math.max(0, octave + 1)));
+    const all = spec.partials(hz);
+    const partials = all.filter((p, i) => i === 0 || p.ratio <= top);
     const norm = (level * STRUCK_GAIN) / Math.sqrt(partials.reduce((s, p) => s + p.amp * p.amp, 0));
     const damper = c.createGain();
     damper.connect(dest);
     const oscs = partials.map((p) => {
       const osc = c.createOscillator();
       osc.frequency.setValueAtTime(hz * p.ratio, t);
+      if (c === ctx && transposer) transposer.connect(osc.detune);
       const g = c.createGain();
       g.gain.setValueAtTime(0, t);
       g.gain.linearRampToValueAtTime(p.amp * norm, t + spec.attack);
@@ -172,13 +185,19 @@ const Synth = (() => {
     drive = k;
     if (shaper) shaper.curve = shaperCurve(k);
   }
+  function setOctave(n) {
+    octave = Math.max(-OCTAVE_RANGE, Math.min(OCTAVE_RANGE, Math.round(n)));
+    if (transposer) transposer.offset.setTargetAtTime(octave * 1200, ctx.currentTime, 0.008);
+    return octave;
+  }
   function setVolume(v) {
     volume = v;
     if (out) out.gain.setTargetAtTime(v, ctx.currentTime, 0.02);
   }
   const describe = () => `${Timbres.ALL[timbre].label}; nonlinearity ${drive ? drive.toFixed(1) : "off"}`;
 
-  return { start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, describe, renderNote,
+  return { start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, setOctave, describe, renderNote, OCTAVE_RANGE,
+    get octave() { return octave; },
     get timbre() { return timbre; },
     get struck() { return Timbres.isStruck(timbre); } };
 })();

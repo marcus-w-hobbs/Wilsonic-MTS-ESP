@@ -149,16 +149,18 @@ class TestCollect(unittest.TestCase):
             (meru / "b.scl").write_text(CENTS_SCL)
             gates_md = root / "GATES.md"
             gates_md.write_text(LEDGER)
-            pairs = {"G-028": ("lattice.meru001.a", "lattice.meru001.b")}
+            pairs = {"G-028": [("first", "lattice.meru001.a", "lattice.meru001.b"),
+                               ("gone", "lattice.meru001.a", "lattice.meru001.missing")]}
             original = bundle.GATE_PAIRS
             try:
                 bundle.GATE_PAIRS = pairs
                 ok = bundle.build_bundle(root, gates_md)
-                bundle.GATE_PAIRS = {"G-028": ("lattice.meru001.a", "lattice.meru001.missing")}
+                bundle.GATE_PAIRS = {"G-028": [("gone", "lattice.meru001.a", "lattice.meru001.missing")]}
                 missing = bundle.build_bundle(root, gates_md)
             finally:
                 bundle.GATE_PAIRS = original
         self.assertEqual(ok["gates"][0]["pair"], ["lattice.meru001.a", "lattice.meru001.b"])
+        self.assertEqual([p["label"] for p in ok["gates"][0]["pairs"]], ["first"])
         self.assertNotIn("pair", missing["gates"][0])
 
 
