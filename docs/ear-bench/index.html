@@ -146,6 +146,9 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .strip .bar text { fill: var(--ink-2); font: 10px var(--f-mono); text-anchor: middle; }
 .strip .bar:hover rect, .strip .bar:focus-visible rect { stroke: var(--accent); }
 .strip .bar.held rect { fill: var(--accent); stroke: var(--accent); }
+.strip .bar.playing rect { fill: var(--accent); stroke: var(--accent); }
+.strip .bar.playing line { stroke: var(--accent-ink); }
+.t-row.playing { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
 .strip .bar.held line { stroke: var(--accent-ink); }
 .strip .bar.hl-P rect { fill: var(--prop-soft); stroke: var(--prop); }
 .strip .bar.hl-S rect { fill: var(--sub-soft); stroke: var(--sub); }

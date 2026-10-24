@@ -34,7 +34,7 @@ const Targets = (() => {
         ${shown.map((t, i) => {
           const ok = Math.abs(t.dev) <= ctx.tol();
           return `
-          <div class="t-row target ${ok ? "" : "miss"}" role="listitem">
+          <div class="t-row target ${ok ? "" : "miss"}" role="listitem" data-tri="${i}">
             <span class="kchip k-${t.kind}">${t.kind}</span>
             <button class="t-play" data-tt="${i}" aria-label="Play ${t.form || "triad"} in the chain"><span class="t-form">${t.form || "?"}</span> <span class="mono">${t.degrees.join("·")}</span></button>
             <span class="mono t-dev ${ok ? "ok" : "bad"}">${ctx.fmt(t.dev)}¢</span>
