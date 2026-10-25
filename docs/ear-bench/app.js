@@ -21,7 +21,7 @@
     a: null, b: null, slot: "a",
     tol: 2, kinds: "PS", triadView: "target", offset: -HOME_INDEX, stripOct: 0, baseHz: 261.6256,
     blindNames: false, shuffle: null, drone: false,
-    recording: false, phrase: [], t0: 0, held: new Map(), sustain: false, sustained: new Set(),
+    recording: false, phrase: [], t0: 0, held: new Map(), heldDeg: new Map(), sustain: false, sustained: new Set(),
     epsDraft: { verdict: null, fusion: null, notes: "" }, spaceHold: null,
   };
 
@@ -85,7 +85,21 @@
   }
   function playDegree(key, d) {
     const s = active();
-    if (s) play(key, Tuning.degreeCents(Tuning.model(s), d));
+    if (!s) return;
+    state.heldDeg.set(key, d);
+    play(key, Tuning.degreeCents(Tuning.model(s), d));
+  }
+  // Held keys and MIDI notes follow a change of scale at once (live retargeting).
+  function retuneHeld() {
+    const s = active();
+    if (!s || !state.heldDeg.size) return;
+    const m = Tuning.model(s);
+    state.heldDeg.forEach((d, key) => {
+      if (!state.held.has(key)) { state.heldDeg.delete(key); return; }
+      const c = Tuning.degreeCents(m, d);
+      Synth.retuneKey(key, hz(c));
+      state.held.set(key, c);
+    });
   }
 
   function sequence(centsList, step = 0.3, hold = 0.28) {
@@ -422,6 +436,7 @@
   }
 
   function renderInstrument() {
+    retuneHeld();
     renderCompare();
     renderInstrumentBar();
     renderStrip();

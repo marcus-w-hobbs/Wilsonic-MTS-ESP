@@ -85,6 +85,11 @@ const Synth = (() => {
     osc.connect(env).connect(dest);
     osc.start(t);
     return {
+      // Live retargeting: jump to a new pitch now (or on a note not yet started, from its start).
+      setHz(next, at) {
+        osc.frequency.cancelScheduledValues(at);
+        osc.frequency.setValueAtTime(next, at);
+      },
       stop(at) {
         env.gain.cancelScheduledValues(at);
         // .value reads the param's default (1) until the audio thread runs, so
@@ -121,6 +126,12 @@ const Synth = (() => {
       return osc;
     });
     return {
+      setHz(next, at) {
+        oscs.forEach((o, i) => {
+          o.frequency.cancelScheduledValues(at);
+          o.frequency.setValueAtTime(next * partials[i].ratio, at);
+        });
+      },
       stop(at) {
         damper.gain.setTargetAtTime(0, at, spec.damp);
         oscs.forEach((o) => safeStop(o, at + 6 * spec.damp));
@@ -164,14 +175,50 @@ const Synth = (() => {
     scheduled = [];
   }
 
-  function blip(hz, startAt, dur, level = 1) {
+  // `tag` names what the note is musically (chord i voice v, tune step, ...),
+  // so a live switch can say what the same note becomes under new settings.
+  function blip(hz, startAt, dur, level = 1, tag = null) {
     if (!ctx) return;
     // Struck notes ring a little past a short sequence step, as a played string would.
     const end = startAt + (Timbres.isStruck(timbre) ? Math.max(dur, 0.9) : dur);
     const voice = makeVoice(hz, startAt, ctx, bus, level);
     voice.stop(end);
     const t = ctx.currentTime;
-    scheduled = [...scheduled.filter((s) => s.end > t), { voice, end }];
+    scheduled = [...scheduled.filter((s) => s.end > t), { voice, start: startAt, end, hz, tag }];
+  }
+
+  // Live retargeting. `map(note)` returns the new frequency for a sounding
+  // tagged note, or null to leave it. The jump is immediate, by design: Ear
+  // Bench measures the change, it does not smooth it.
+  function retuneSounding(map) {
+    if (!ctx) return 0;
+    const t = ctx.currentTime;
+    let moved = 0;
+    scheduled = scheduled.map((s) => {
+      if (!(s.start <= t && s.end > t && s.tag)) return s;
+      const next = map(s);
+      if (!next) return s;
+      s.voice.setHz(next, t);
+      moved += 1;
+      return { ...s, hz: next };
+    });
+    return moved;
+  }
+
+  // Drop tagged notes that have not started yet; the caller reschedules.
+  function cancelPending() {
+    if (!ctx) return 0;
+    const t = ctx.currentTime;
+    const pending = scheduled.filter((s) => s.start > t && s.tag);
+    pending.forEach((s) => s.voice.stop(t));
+    scheduled = scheduled.filter((s) => !(s.start > t && s.tag));
+    return pending.length;
+  }
+
+  // A held key or MIDI note follows a new scale.
+  function retuneKey(key, next) {
+    const v = voices.get(key);
+    if (v && ctx) v.setHz(next, ctx.currentTime);
   }
 
   const now = () => (ctx ? ctx.currentTime : 0);
@@ -197,6 +244,7 @@ const Synth = (() => {
   const describe = () => `${Timbres.ALL[timbre].label}; nonlinearity ${drive ? drive.toFixed(1) : "off"}`;
 
   return { start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, setOctave, describe, renderNote, OCTAVE_RANGE,
+    retuneSounding, cancelPending, retuneKey,
     get octave() { return octave; },
     get timbre() { return timbre; },
     get struck() { return Timbres.isStruck(timbre); } };
