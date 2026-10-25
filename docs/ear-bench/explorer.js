@@ -18,8 +18,13 @@ const Explorer = (() => {
 
   let palette = null;
   let input = { gen: "0.418", preset: "eik", seeds: "1, 3, 5, 7, 9, 11", k: 3, band: 1 };
-  let selected = null; // {row, n}
+  let selected = null; // {row, n}, or {row, nearN} while a switch is resolving
   const cache = new Map();
+  // What the explorer is playing now: {pid, t0, end, scaleId}. While it plays,
+  // clicking a level, typing a generator or choosing a structure moves the
+  // sounding and remaining notes there at once (live retargeting).
+  let live = null;
+  const isLive = () => !!live && Synth.now() < live.end;
 
   try { input = { ...input, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch (e) { /* storage blocked */ }
   const remember = () => { try { localStorage.setItem(KEY, JSON.stringify(input)); } catch (e) { /* ignore */ } };
@@ -106,6 +111,12 @@ const Explorer = (() => {
     const band = Math.min(bands.length - 1, Math.max(0, input.band));
     const ok = g && spec.seeds.length >= 2 && spec.k >= 1 && spec.k < spec.seeds.length;
     const data = ok ? compute(g, spec) : null;
+    if (data && selected && selected.nearN) {
+      const row = Math.min(selected.row, data.rows.length - 1);
+      const levels = data.rows[row].levels;
+      const near = levels.length ? levels.reduce((b, l) => (Math.abs(l.n - selected.nearN) < Math.abs(b.n - selected.nearN) ? l : b)) : null;
+      selected = near ? { row, n: near.n } : null;
+    }
 
     box.innerHTML = `
       <div class="x-controls">
@@ -135,13 +146,16 @@ const Explorer = (() => {
       <div class="x-detail" id="x-detail"></div>` : ""}`;
 
     const rerender = () => { remember(); paint(box, ctx); };
+    // While something plays, a new generator or structure keeps the selection
+    // on the same row and the nearest level, so the music moves there.
+    const carry = () => (isLive() && selected && selected.n ? { row: selected.row, nearN: selected.n } : null);
     const gen = box.querySelector("#x-gen");
-    gen.addEventListener("change", () => { input = { ...input, gen: gen.value }; selected = null; rerender(); });
-    box.querySelector("#x-preset").addEventListener("change", (e) => { input = { ...input, preset: e.target.value }; selected = null; rerender(); });
+    gen.addEventListener("change", () => { input = { ...input, gen: gen.value }; selected = carry(); rerender(); });
+    box.querySelector("#x-preset").addEventListener("change", (e) => { input = { ...input, preset: e.target.value }; selected = carry(); rerender(); });
     const seeds = box.querySelector("#x-seeds");
-    if (seeds) seeds.addEventListener("change", () => { input = { ...input, seeds: seeds.value }; selected = null; rerender(); });
+    if (seeds) seeds.addEventListener("change", () => { input = { ...input, seeds: seeds.value }; selected = carry(); rerender(); });
     const k = box.querySelector("#x-k");
-    if (k) k.addEventListener("change", () => { input = { ...input, k: Number(k.value) }; selected = null; rerender(); });
+    if (k) k.addEventListener("change", () => { input = { ...input, k: Number(k.value) }; selected = carry(); rerender(); });
     box.querySelectorAll("[data-band]").forEach((b) => b.addEventListener("click", () => { input = { ...input, band: Number(b.dataset.band) }; rerender(); }));
     box.querySelectorAll(".x-cell").forEach((c) => c.addEventListener("click", () => {
       selected = { row: Number(c.dataset.row), n: Number(c.dataset.n) };
@@ -157,9 +171,11 @@ const Explorer = (() => {
     const id = registerLevel(ctx, spec, data.structure, row.noble, level);
     const scale = ctx.scaleOf(id);
     const ref = ctx.scaleOf(scale.reference);
-    const music = Composer.compose(scale, scale, ref);
+    const music = Composer.compose(scale, scale, ref, { anchor: true });
     const saved = ctx.savedScale(id) || {};
+    if (isLive() && live.scaleId !== id) retarget(ctx, id);
     el.innerHTML = `
+      ${isLive() ? `<p class="x-live"><strong>Live:</strong> ${ctx.escape(Passages.LIST.find(([k]) => k === live.pid)[1])} is playing here. Click another level, type a generator or choose a structure and the sounding notes jump there at once.</p>` : ""}
       <div class="x-sum">
         <h4 class="mono">${row.noble.g.toFixed(6)} · ${level.n} notes</h4>
         <span class="hint">golden noble ${ctx.escape(row.noble.seeds)}, complexity ${row.noble.complexity} · steps ${level.large.toFixed(2)} and ${level.small.toFixed(2)}¢ (ratio ${level.ratio.toFixed(2)}) · tones ${level.tones} of ${level.totalTones} within 20¢ (worst ${level.worstTone === null ? "–" : level.worstTone.toFixed(2)}¢) · triads within ${bands.join("/")}¢: ${level.held.join("/")} of ${level.totalTriads} (worst ${level.worstTriad === null ? "–" : level.worstTriad.toFixed(2)}¢) · ${level.singleVal ? "single val" : level.singleVal === false ? "not a single val" : "val not checked"}</span>
@@ -181,9 +197,12 @@ const Explorer = (() => {
       await ctx.ensureAudio();
       Synth.allOff();
       const t0 = Synth.now() + 0.1;
-      music.a[b.dataset.xplay].forEach((e) => Synth.blip(ctx.hz(e.cents), t0 + e.t, e.dur, e.level));
+      const events = music.a[b.dataset.xplay];
+      events.forEach((e) => Synth.blip(ctx.hz(e.cents), t0 + e.t, e.dur, e.level, { ...e.tag, cents: e.cents }));
+      live = { pid: b.dataset.xplay, t0, end: t0 + Composer.length(events) + 0.5, scaleId: id };
+      detail(el, ctx, spec, data, bands);
     }));
-    el.querySelector("#x-stop").addEventListener("click", () => Synth.allOff());
+    el.querySelector("#x-stop").addEventListener("click", () => { Synth.allOff(); live = null; detail(el, ctx, spec, data, bands); });
     el.querySelector("#x-a").addEventListener("click", () => { ctx.setA(id); detail(el, ctx, spec, data, bands); });
     el.querySelector("#x-b").addEventListener("click", () => { ctx.setB(id); detail(el, ctx, spec, data, bands); });
     el.querySelectorAll("[data-xrate]").forEach((b) => b.addEventListener("click", () => {
@@ -196,6 +215,30 @@ const Explorer = (() => {
       const cur = ctx.savedScale(id) || {};
       ctx.saveScale(id, { gate: null, rating: cur.rating || null, note: e.target.value, stimulus: scale.stimulus, context: ctx.context() });
     });
+  }
+
+  // Move what is playing onto another level (another generator, number of
+  // notes or structure). A sounding note becomes the note with the same role
+  // (chord voice, bass, tune or run) sounding at this moment in the new
+  // music, or else the nearest tone of the new scale; notes not yet started
+  // are dropped and the new music is scheduled from this moment on.
+  function retarget(ctx, toId) {
+    const scale = ctx.scaleOf(toId);
+    const ref = scale && ctx.scaleOf(scale.reference);
+    if (!scale || !ref) return;
+    const events = Composer.compose(scale, scale, ref, { anchor: true }).a[live.pid];
+    const now = Synth.now();
+    const elapsed = now - live.t0;
+    const sounding = events.filter((e) => e.t <= elapsed && elapsed < e.t + e.dur);
+    const model = Tuning.model(scale);
+    Synth.retuneSounding((note) => {
+      const same = sounding.find((e) => e.tag.role === note.tag.role && e.tag.v === note.tag.v);
+      const cents = same ? same.cents : Tuning.degreeCents(model, Tuning.nearestDegree(model, note.tag.cents));
+      return ctx.hz(cents);
+    });
+    Synth.cancelPending();
+    events.filter((e) => e.t > elapsed).forEach((e) => Synth.blip(ctx.hz(e.cents), live.t0 + e.t, e.dur, e.level, { ...e.tag, cents: e.cents }));
+    live = { ...live, scaleId: toId, end: live.t0 + Composer.length(events) + 0.5 };
   }
 
   return { render, parseGenerator };

@@ -50,8 +50,8 @@ const Composer = (() => {
 
   function chorale(chords, level = 1) {
     return chords.flatMap(({ cents, shift }, i) => [
-      ...cents.map((c) => ({ t: i * SLOT, dur: CHORD, cents: c + shift, level })),
-      { t: i * SLOT, dur: CHORD, cents: cents[0] + shift - 1200, level: level * 0.8 },
+      ...cents.map((c, v) => ({ t: i * SLOT, dur: CHORD, cents: c + shift, level, tag: { role: "chord", i, v } })),
+      { t: i * SLOT, dur: CHORD, cents: cents[0] + shift - 1200, level: level * 0.8, tag: { role: "bass", i, v: 0 } },
     ]);
   }
 
@@ -74,7 +74,7 @@ const Composer = (() => {
       }
       path.forEach((d, j) => {
         const last = j === path.length - 1;
-        events.push({ t: i * SLOT + j * STEP, dur: last ? SLOT - j * STEP - 0.05 : STEP * 0.95, cents: Tuning.degreeCents(chain, d), level: 1 });
+        events.push({ t: i * SLOT + j * STEP, dur: last ? SLOT - j * STEP - 0.05 : STEP * 0.95, cents: Tuning.degreeCents(chain, d), level: 1, tag: { role: "tune", i, v: 0 } });
       });
       cur = target;
     });
@@ -83,11 +83,15 @@ const Composer = (() => {
 
   function run(chain) {
     const up = Array.from({ length: chain.n + 1 }, (_, d) => Tuning.degreeCents(chain, d));
-    return [...up, ...up.slice(0, -1).reverse()].map((c, i) => ({ t: i * STEP, dur: STEP * 0.95, cents: c, level: 1 }));
+    return [...up, ...up.slice(0, -1).reverse()].map((c, i) => ({ t: i * STEP, dur: STEP * 0.95, cents: c, level: 1, tag: { role: "run", i, v: 0 } }));
   }
 
   // Both chains' passages from one reference progression.
-  function compose(a, b, ref) {
+  // anchor: play the structure at its own pitch (its 1/1 on the bench's 1/1)
+  // whatever chain carries it, so switching generator or level changes only
+  // the tuning and never transposes the music. Chord notes are already in A's
+  // frame; run and tune notes are in their own chain's frame.
+  function compose(a, b, ref, { anchor = false } = {}) {
     const A = Targets.compute(a, ref);
     const B = Targets.compute(b, ref);
     const aBy = new Map(A.triads.map((t) => [keyOf(t, A.align.off), t]));
@@ -98,11 +102,14 @@ const Composer = (() => {
       const chain = Tuning.model(scale);
       // Same register in both chains: shift by the reference, measured from each chain's own alignment.
       const chords = order.map((k, i) => ({ cents: by.get(k).cents, shift: shiftA[i] - align.off + A.align.off }));
+      const place = (events) => (anchor
+        ? events.map((e) => ({ ...e, cents: e.cents - (e.tag.role === "chord" || e.tag.role === "bass" ? A.align.off : align.off) }))
+        : events);
       return {
-        run: run(chain),
-        chorale: chorale(chords),
-        tune: tune(chain, chords),
-        over: [...chorale(chords, 0.55), ...tune(chain, chords)],
+        run: place(run(chain)),
+        chorale: place(chorale(chords)),
+        tune: place(tune(chain, chords)),
+        over: place([...chorale(chords, 0.55), ...tune(chain, chords)]),
       };
     };
     // Chord identities in playing order (same for both chains, so naming them stays blind).
