@@ -144,3 +144,5 @@ const Tuning = (() => {
 
   return { centsOf, model, degreeCents, nearestDegree, approxRatio, integerForm, findTriads, stepSizes, alignReference, targetTriads };
 })();
+
+if (typeof module !== "undefined") module.exports = Tuning;
