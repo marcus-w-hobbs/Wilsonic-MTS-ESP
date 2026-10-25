@@ -129,23 +129,43 @@ const Explorer = (() => {
           <label class="ctl" for="x-k">k <input id="x-k" type="number" min="1" max="8" value="${input.k}" style="width:56px"></label>` : ""}
         <div class="ctl"><span>Count triads within</span><div class="seg">${bands.map((b, i) => `<button class="btn sm ${i === band ? "on" : ""}" data-band="${i}">${b}¢</button>`).join("")}</div></div>
       </div>
-      <p class="hint">${ok ? `The ${NEIGHBOURS} golden nobles nearest ${g.toFixed(6)} (${(g * 1200).toFixed(3)}¢), each at its MOS levels from ${data.structure.tones.length} to ${MAX_N} notes. Each cell shows how many of the ${data.structure.triads.length} exact triads of ${ctx.escape(spec.label)} the level holds within ${bands[band]}¢; a ring marks each row's smallest level holding its best count. 2¢ is the registered tier; 5¢ and 10¢ are listening bands from G-029, provisional until EAR-ε. Nearby nobles can differ sharply at high levels: nobility says nothing about harmony.` : "Type a generator as a fraction of the octave (0.418) or in cents (502.7c), and a CPS with at least two seeds."}</p>
-      ${ok ? `<div class="x-grid" role="grid">${data.rows.map((row, ri) => {
+      <details class="x-guide" id="x-guide" ${input.guideOpen === false ? "" : "open"}>
+        <summary><strong>How to use the explorer</strong></summary>
+        <ol>
+          <li><strong>Choose a generator.</strong> Type a fraction of the octave (0.418) or cents (502.7c). The grid lists the ${NEIGHBOURS} golden nobles nearest it, one per row; Erv's optimised generators all sit close to one of them.</li>
+          <li><strong>Choose a structure.</strong> A preset combination product set, or Custom CPS with your own seeds and k.</li>
+          <li><strong>Read a row left to right.</strong> Each cell is one scale that generator makes (a MOS level): its number of notes, and how many of the structure's triads it holds within the band you chose. Darker cells hold more; the green ring is the smallest scale that reaches the row's best count; a dot means the placement is a single val. Hover a cell for every number.</li>
+          <li><strong>Click a cell, then use Hear it.</strong> While it plays, click other cells, type another generator or pick another structure, and the sounding notes jump there. The structure stays at its own pitch, so you hear only the tuning change; turn up Nonlinearity to hear the difference tones move.</li>
+          <li><strong>Judge.</strong> Rate a scale 1 to 5 (does it work musically?), or press Set as A and Set as B on two scales to compare them blind in the listening passages above.</li>
+        </ol>
+        <p class="hint">Bands: 2¢ is the registered research tier; 5¢ and 10¢ come from what you accepted on G-029, provisional until EAR-ε. Neighbouring nobles can differ sharply at large sizes, because a generator's nobility says nothing about its harmony.</p>
+      </details>
+      ${ok ? `<div class="x-legend" aria-hidden="true">
+        <span class="label">${ctx.escape(spec.label)} · ${data.structure.tones.length} tones · ${data.structure.triads.length} exact triads · counting within ${bands[band]}¢</span>
+        <span class="x-swatch" style="background:${cellColour(0.1)}"></span><span class="hint">few</span>
+        <span class="x-swatch" style="background:${cellColour(0.9)}"></span><span class="hint">many triads held</span>
+        <span class="x-swatch ring"></span><span class="hint">smallest best scale</span>
+        <span class="x-dotkey">•</span><span class="hint">single val</span>
+      </div>` : `<p class="hint">Type a generator as a fraction of the octave (0.418) or in cents (502.7c), and a CPS with at least two seeds.</p>`}
+      ${ok ? `<div class="x-grid" role="grid">
+        <div class="x-row x-cols" role="row"><span class="label" role="columnheader">Generator (golden noble)</span><span class="label" role="columnheader">Scales it makes, smallest first · each cell: notes, triads held</span></div>
+        ${data.rows.map((row, ri) => {
         const best = Math.max(0, ...row.levels.map((l) => l.held[band]));
         const floor = row.levels.find((l) => l.held[band] === best && best > 0);
         return `<div class="x-row" role="row">
-          <div class="x-head" role="rowheader"><span class="mono">${row.noble.g.toFixed(6)}</span><span class="hint mono">${row.noble.cents.toFixed(3)}¢ · c${row.noble.complexity}</span></div>
+          <div class="x-head" role="rowheader"><span class="mono">${row.noble.g.toFixed(6)}</span><span class="hint mono">${row.noble.cents.toFixed(3)}¢</span><span class="hint">complexity ${row.noble.complexity}</span></div>
           <div class="x-cells">${row.levels.map((l) => {
             const isSel = selected && selected.row === ri && selected.n === l.n;
             const frac = l.totalTriads ? l.held[band] / l.totalTriads : 0;
             const tip = `${l.n} notes · tones ${l.tones}/${l.totalTones} within 20¢ · triads within 2/5/10¢: ${l.held.join("/")} of ${l.totalTriads} · worst triad ${l.worstTriad === null ? "–" : l.worstTriad.toFixed(2) + "¢"} · worst tone ${l.worstTone === null ? "–" : l.worstTone.toFixed(2) + "¢"} · steps ${l.large.toFixed(1)}/${l.small.toFixed(1)}¢ · ${l.singleVal ? "single val" : l.singleVal === false ? "not a single val" : ""}`;
             return `<button class="x-cell ${isSel ? "sel" : ""} ${floor && floor.n === l.n ? "floor" : ""}" role="gridcell" data-row="${ri}" data-n="${l.n}" title="${tip}" style="background:${cellColour(frac)}">
-              <span class="x-n">${l.n}</span><span class="x-held mono">${l.held[band]}/${l.totalTriads}</span>${l.singleVal ? `<span class="x-val" aria-label="single val">•</span>` : ""}</button>`;
+              <span class="x-n">${l.n} <span class="x-unit">notes</span></span><span class="x-held mono">${l.held[band]}/${l.totalTriads} triads</span>${l.singleVal ? `<span class="x-val" aria-label="single val">•</span>` : ""}</button>`;
           }).join("") || `<span class="hint">no MOS level between ${data.structure.tones.length} and ${MAX_N} notes</span>`}</div></div>`;
       }).join("")}</div>
       <div class="x-detail" id="x-detail"></div>` : ""}`;
 
     const rerender = () => { remember(); paint(box, ctx); };
+    box.querySelector("#x-guide").addEventListener("toggle", (e) => { input = { ...input, guideOpen: e.target.open }; remember(); });
     // While something plays, a new generator or structure keeps the selection
     // on the same row and the nearest level, so the music moves there.
     const carry = () => (isLive() && selected && selected.n ? { row: selected.row, nearN: selected.n } : null);
