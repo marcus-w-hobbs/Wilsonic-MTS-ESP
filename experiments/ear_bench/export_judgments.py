@@ -53,6 +53,14 @@ def scale_ref(scales: dict, scale_id: str | None) -> dict | None:
     return {"id": scale_id, "file": s["file"], "sha256": s.get("sha256")} if s else {"id": scale_id}
 
 
+def with_stimulus(ref: dict | None, stimulus: dict | None) -> dict | None:
+    """A generator-explorer level is not a file: its stimulus (generator,
+    notes, window, CPS, measured triad fit) is what identifies it."""
+    if ref is None or not stimulus:
+        return ref
+    return {**ref, "stimulus": stimulus}
+
+
 def record_id(rec: dict) -> str:
     key = json.dumps({k: rec[k] for k in ("judge", "kind", "gate", "subject", "at")}, sort_keys=True)
     return hashlib.sha256(key.encode()).hexdigest()[:16]
@@ -78,10 +86,12 @@ def records(store: dict, source: str, judge: str, scales: dict) -> list[dict]:
     for sid, doc in store["scales"].items():
         if doc.get("rating") or (doc.get("note") or "").strip():
             add("scale_rating", doc.get("gate"), sid, doc.get("updatedAt"), {
-                "scale": scale_ref(scales, sid), "rating": doc.get("rating"), "note": doc.get("note", ""),
+                "scale": with_stimulus(scale_ref(scales, sid), doc.get("stimulus")),
+                "rating": doc.get("rating"), "note": doc.get("note", ""), "context": doc.get("context"),
             })
     for cid, doc in store["comparisons"].items():
-        pair = {"a": scale_ref(scales, doc.get("a")), "b": scale_ref(scales, doc.get("b"))}
+        pair = {"a": with_stimulus(scale_ref(scales, doc.get("a")), doc.get("a_stimulus")),
+                "b": with_stimulus(scale_ref(scales, doc.get("b")), doc.get("b_stimulus"))}
         if doc.get("prefer"):
             add("overall_preference", doc.get("gate"), cid, doc.get("updatedAt"),
                 {**pair, "blind": False, "preferred": doc["prefer"]})
