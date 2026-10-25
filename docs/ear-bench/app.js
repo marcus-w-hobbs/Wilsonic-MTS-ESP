@@ -38,7 +38,7 @@
   const fmt = (x, d = 2) => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(d);
   const shortGate = (g) => g.gate.split(/[:;]/)[0].replace(/ review$/, "");
   const groups = () => {
-    const out = [];
+    const out = [{ id: "generator-explorer", kind: "explorer", title: "Generator explorer", scales: [] }];
     const { gates, scales } = state.data;
     gates.forEach((g) => out.push({ id: g.id, kind: "gate", gate: g, title: shortGate(g), scales: scales.filter((s) => s.gate === g.id) }));
     const folders = [...new Set(scales.filter((s) => !s.gate).map((s) => `${s.module}/${s.folder}`))];
@@ -227,14 +227,16 @@
     };
     const item = (g) => `
       <a class="q-item ${g.id === state.groupId ? "on" : ""}" href="#${g.id}" data-group="${g.id}">
-        <span class="q-id">${g.kind === "gate" ? g.id : "Library"}</span>
+        <span class="q-id">${g.kind === "gate" ? g.id : g.kind === "explorer" ? "Explore" : "Library"}</span>
         <span class="q-title">${escape(g.title)}</span>
         <span class="q-meta">${g.scales.length} scale${g.scales.length === 1 ? "" : "s"} ${verdictChip(g)}</span>
       </a>`;
     const pending = gs.filter((g) => g.kind === "gate" && g.gate.state === "PENDING");
     const decided = gs.filter((g) => g.kind === "gate" && g.gate.state !== "PENDING");
     const library = gs.filter((g) => g.kind === "library");
+    const explorer = gs.filter((g) => g.kind === "explorer");
     $("#queue").innerHTML = `
+      <p class="eyebrow">Choose a generator</p>${explorer.map(item).join("")}
       <p class="eyebrow">Waiting on your ear · ${pending.length}</p>${pending.map(item).join("")}
       <p class="eyebrow">Decided, still playable</p>${decided.map(item).join("")}
       <p class="eyebrow">Library</p>${library.map(item).join("")}`;
@@ -250,12 +252,29 @@
     state.spaceHold = null;
     const playable = g.scales.filter((s) => s.protocol !== "eareps");
     const pair = g.gate && g.gate.pair && g.gate.pair.every((id) => state.byId.has(id)) ? g.gate.pair : null;
-    state.a = pair ? pair[0] : playable[0] ? playable[0].id : null;
-    state.b = pair ? pair[1] : playable[1] ? playable[1].id : null;
+    if (g.kind === "explorer") {
+      state.a = state.genA || null;
+      state.b = state.genB || null;
+    } else {
+      state.a = pair ? pair[0] : playable[0] ? playable[0].id : null;
+      state.b = pair ? pair[1] : playable[1] ? playable[1].id : null;
+    }
     state.slot = "a";
     renderSidebar();
     renderMain();
     window.scrollTo(0, 0);
+  }
+
+  function explorerCtx() {
+    return {
+      escape, hz, ensureAudio, scaleOf, context: listeningContext,
+      register: (scale) => state.byId.set(scale.id, scale),
+      isA: (id) => state.a === id, isB: (id) => state.b === id,
+      setA: (id) => { state.a = id; state.genA = id; if (state.b === id) { state.b = null; state.genB = null; } state.slot = "a"; renderInstrument(); },
+      setB: (id) => { state.b = id; state.genB = id; if (state.a === id) { state.a = null; state.genA = null; } state.slot = "b"; renderInstrument(); },
+      savedScale: (id) => Store.get("scales", id),
+      saveScale: (id, body) => Store.saveScale(id, body),
+    };
   }
 
   function renderMain() {
@@ -263,10 +282,12 @@
     const isEps = g.scales.some((s) => s.protocol === "eareps");
     $("#main").innerHTML = `
       <header class="g-head">
-        <p class="eyebrow">${g.kind === "gate" ? `${g.id} · opened ${g.gate.opened} · ${g.gate.state}` : "Library · no gate"}</p>
+        <p class="eyebrow">${g.kind === "gate" ? `${g.id} · opened ${g.gate.opened} · ${g.gate.state}` : g.kind === "explorer" ? "Generator first · any CPS" : "Library · no gate"}</p>
         <h2>${escape(g.title)}</h2>
         ${g.kind === "gate" ? `<p class="gate-text">${escape(g.gate.gate)}</p><p class="ledger">${escape(g.gate.status)}</p>` : ""}
+        ${g.kind === "explorer" ? `<p class="gate-text">Choose the generator first, for its melodic character, the way you choose a timbre. Then choose any combination product set and see how its triads sit on that generator's MOS levels, with the nearest golden nobles beside it. Click a level to hear it; set two levels as A and B for the blind passages.</p>` : ""}
       </header>
+      ${g.kind === "explorer" ? `<section class="card" id="explorer"></section>` : ""}
       ${isEps ? "" : `<div class="pairs" id="pairs" hidden></div><section class="card compare" id="compare" hidden></section>`}
       ${g.kind === "gate" && !isEps ? `<section class="card verdict" id="verdict"></section>` : ""}
       ${isEps ? `<div id="eps"></div>` : `
@@ -294,6 +315,7 @@
       </details>`}`;
     if (isEps) renderEps();
     else {
+      if (g.kind === "explorer") Explorer.render($("#explorer"), explorerCtx());
       if (g.kind === "gate") renderVerdict(true);
       renderInstrument();
       renderScales();
@@ -392,7 +414,10 @@
       context: listeningContext,
       tol: () => state.tol, hasPhrase: () => state.phrase.length > 0, readOnly: Store.readOnly,
       saved: () => Store.get("comparisons", comparisonId()),
-      save: (body) => Store.saveComparison(comparisonId(), { gate: g.kind === "gate" ? g.id : null, a: state.a, b: state.b, ...body }),
+      save: (body) => Store.saveComparison(comparisonId(), {
+        gate: g.kind === "gate" ? g.id : null, a: state.a, b: state.b,
+        a_stimulus: (scaleOf(state.a) || {}).stimulus || null, b_stimulus: (scaleOf(state.b) || {}).stimulus || null, ...body,
+      }),
     });
   }
 

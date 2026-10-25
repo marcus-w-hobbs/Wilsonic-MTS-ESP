@@ -5629,3 +5629,37 @@ experiment, so that the tolerance the fits use is one Marcus's ear has
 measured.
 
 **Kept.** 18 judgment records. Gate G-029 PASS.
+
+## 2026-10-24 — Note: generator-first exploration on the Ear Bench, and a single-val discrepancy at 351.444¢
+
+**Why.** Marcus: the generator is an aesthetic choice made up front, like
+the timbre, and the question is how any combination product set's triads and
+melodies sit on it; the fitting results stay valuable, above all "optimise
+for triads, because melody is forgiving". The Ear Bench now has a generator
+explorer: a palette of 1,028 golden nobles (complexity at most 58, GOLD-002's
+enumerator, `experiments/ear_bench/palette.py`), and `docs/ear-bench/
+generator.js`, which places any CPS on any generator's MOS levels.
+
+**Learnings carried into it.** Triads held rank the levels (the count
+objective, G-032) and melody facts only describe them (G-031); bands at 2¢
+(LOCK) and 5 and 10¢ (G-029's listening, provisional until EAR-ε); the 20¢
+tone cap, with a triad counted only when its three tones are present; window
+and transposition both float (G-032's open floating-origin question, taken
+as yes here); a prime-based single-val flag on every placement (SUBFIT-002);
+no ranking by complexity (nobility and harmony are independent).
+
+**Cross-check.** `experiments/ear_bench/tests/generator_check.js` reproduces
+every registered count it was given: CPSFIT-001 (10 and 2 of 12), CPSFIT-002
+(6 and 12), CPSFIT-003 (10, 10, and 32 of 41 on the dekany), DYNMOS-001 (8),
+and SUBFIT-002's hexanies kept (14, 12, 16, 20 at 41, 46, 53, 72 notes).
+
+**Discrepancy, open.** The same placement of the canonical eikosany on the
+41-note level of 351.444¢ (all 20 tones within 4.48¢, 14 hexanies kept) is a
+single val: 3, 5, 7 and 11 map to 2, 25, 13 and 5 generators, with prime
+errors +0.93, −0.21, −0.05 and +5.90¢, and every tone's chain position
+follows from it. SUBFIT-002's post-hoc solve reported this level as not a
+homomorphic image of the lattice, and G-037 asks whether the design must be
+one val, which would move the floors to 46, 53 and 72 notes. Before G-037 is
+decided, SUBFIT-002's val solve should be rerun against this val to find
+which reading is right (a narrower mapping range in the solve is one
+possible cause). Nothing registered changes here.

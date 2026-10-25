@@ -57,6 +57,35 @@ After the passages I make the gate's call (Pass, Fail or Listen again) and
 write what I heard in my own words. Those notes matter as much as the picks,
 because they are where a new experiment usually comes from.
 
+## Choosing the generator first
+
+The fitting experiments searched for the generator that holds a structure's
+triads best. That taught me a great deal, and the main lesson carries over:
+optimise for the triads, because melody is forgiving. But when I compose, the
+generator is a choice I make up front, for the way its melodies move, in the
+same way I choose a timbre. By the time I play 0.418 I have already chosen
+it for that reason, so the question I bring to the bench is how well a given
+combination product set sits on it, and how to play that set there.
+
+So the bench has a generator explorer. I type a generator as a fraction of
+the octave or in cents, choose any combination product set, and the bench
+shows the eight golden nobles nearest my number (Erv's optimised generators
+all sit very close to golden nobles), each at its MOS levels, with how many of
+the set's exact triads every level holds within 2, 5 and 10 cents. The
+lessons from the experiments are built into it. Levels are ranked by triads
+held; the tone cap stays at 20 cents; the window and transposition float;
+every level says whether its placement is a single val; and nothing is ranked
+by how simple the noble is, because nobility says nothing about harmony. The
+2 cent band is the registered tier and the 5 and 10 cent bands come from what
+I heard in G-029, until the EAR-ε sitting measures my own thresholds.
+
+In the explorer the generator and the timbre are the conditions, and what I
+judge is the level and how it plays: a rating of whether it works musically,
+or a blind A/B between two levels. Each of those judgments records the full
+stimulus (the noble, its complexity, the number of notes, the window, the
+set, and the triad fit the bench measured), so the record reads as "for this
+set, on this generator, this level worked".
+
 ## What gets recorded
 
 Every judgment becomes one line in `judgments/<judge>.jsonl`. Mine are in

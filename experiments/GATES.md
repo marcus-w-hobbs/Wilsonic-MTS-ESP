@@ -86,6 +86,7 @@ this file; sessions read it at start-up to know what is and isn't authorized.
 
 ## Currently blocked by gates
 
+- 2026-10-24: Before G-037 is decided: the generator explorer finds the 41-note level of 351.444¢ on one val (3, 5, 7, 11 -> 2, 25, 13, 5), where SUBFIT-002 reported none; rerun its val solve first (LOG.md 2026-10-24).
 - 2026-10-24: G-029 PASS on the bench: Erv's 15-note meantone chain preferred in the harmonic passages despite 5–7¢ triad errors.
 - 2026-10-24: G-032 PASS on the bench (count objective preferred at N = 16); timbre is now a judged factor (picks kept per timbre).
 - 2026-10-23: G-031 PASS, the first gate judged on the Ear Bench: with both 22-note chains carrying the hexany's triads, Marcus heard the difference in the melody. Next on the bench: G-029, G-032.

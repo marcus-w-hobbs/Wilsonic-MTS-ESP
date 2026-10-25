@@ -69,6 +69,26 @@ class TestRecords(unittest.TestCase):
         self.assertEqual([r["id"] for r in self.recs], [r["id"] for r in again])
 
 
+class TestStimulus(unittest.TestCase):
+    def test_explorer_levels_carry_their_stimulus(self):
+        stim = {"family": "golden", "generator": 0.418836, "notes": 31, "cps": {"seeds": [1, 3, 5, 7], "k": 2}}
+        store = {
+            "gates": {},
+            "scales": {"gen.0.418836000.31.cps.2.1-3-5-7": {"gate": None, "rating": 4, "note": "", "stimulus": stim,
+                                                             "updatedAt": "2026-10-24T22:00:00Z"}},
+            "comparisons": {"generator-explorer__x__y": {
+                "gate": None, "a": "x", "b": "y", "a_stimulus": stim, "b_stimulus": None, "updatedAt": "t",
+                "picks": {"passage:chorale@epiano": {"x": "a", "pick": "x", "preferred": "a", "at": "2026-10-24T22:01:00Z"}},
+            }},
+        }
+        recs = ex.records(store, "local", "j", SCALES)
+        rating = next(r for r in recs if r["kind"] == "scale_rating")
+        pick = next(r for r in recs if r["kind"] == "blind_preference")
+        self.assertEqual(rating["scale"]["stimulus"]["generator"], 0.418836)
+        self.assertEqual(pick["a"]["stimulus"]["notes"], 31)
+        self.assertNotIn("stimulus", pick["b"])
+
+
 class TestMerge(unittest.TestCase):
     def test_dedupes_and_never_rewrites(self):
         a = ex.records(STORE, "claude.ai", "j", SCALES)
