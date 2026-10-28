@@ -60,7 +60,7 @@ import meru001 as mr  # noqa: E402
 from families.cps import cps_scale  # noqa: E402
 from scorer import SCORER_VERSION, score_tempered  # noqa: E402
 
-GAPFILL001_VERSION = "1.0.0"
+GAPFILL001_VERSION = "1.0.1"   # 1.0.1: search CS test uses M2's cluster-start rule exactly (was chained linkage); 2 flagship MOS rows move, no prediction changes
 EXPERIMENT = "GAPFILL-001"
 RESULTS_DIR = _HERE / "results"
 RESULTS = RESULTS_DIR / "gapfill001.jsonl"
@@ -140,19 +140,19 @@ def clear_of(c: float, cs: list[float]) -> bool:
 
 
 def is_cs(cs: list[float]) -> bool:
-    """Search-time CS test with the frozen M2 semantics: interval sizes are
-    single-linkage clustered at CS_EPS cents, and a cluster subtended by two
-    step counts is a violation. M2 itself is the verdict in the receipt."""
+    """Search-time CS test with the frozen M2 semantics: sorted interval sizes
+    join the open cluster while within CS_EPS cents of its first member, and
+    a cluster subtended by two step counts is a violation. M2 itself is the
+    verdict in the receipt."""
     n = len(cs)
     ivs = sorted(((cs[(i + k) % n] - cs[i]) % CENTS, k) for k in range(1, n) for i in range(n))
-    spans, prev = set(), None
+    spans, first = set(), None
     for v, k in ivs:
-        if prev is not None and v - prev > CS_EPS:
-            spans = set()
+        if first is None or v - first > CS_EPS:
+            spans, first = set(), v
         spans.add(k)
         if len(spans) > 1:
             return False
-        prev = v
     return True
 
 

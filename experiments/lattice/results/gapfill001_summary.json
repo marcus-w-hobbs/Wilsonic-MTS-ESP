@@ -367,7 +367,7 @@
    "cs": 22,
    "cs_search_disagreements": 0,
    "filled": 22,
-   "mean_PS_gain": 10.045,
+   "mean_PS_gain": 9.955,
    "mean_added": 5.273,
    "mean_max_tenney": 0.0,
    "mean_n": 11.455,
@@ -379,7 +379,7 @@
    "all_added_in_eikosany": 0,
    "budget_exhausted": 0,
    "cs": 13,
-   "cs_search_disagreements": 1,
+   "cs_search_disagreements": 0,
    "filled": 22,
    "mean_PS_gain": 10.5,
    "mean_added": 5.5,
@@ -1060,5 +1060,5 @@
    "subsets": 42
   }
  },
- "version": "1.0.0"
+ "version": "1.0.1"
 }

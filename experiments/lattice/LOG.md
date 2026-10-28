@@ -5819,3 +5819,14 @@ with CAP and MIN_STEP (Marcus's set is the obvious case); and the ear.
 
 **Gate.** G-040 asks Marcus to audition the 24 showcase fills on the Ear
 Bench.
+
+## 2026-10-27 — Note: GAPFILL-001 1.0.1 (search CS test matches M2 exactly)
+
+The CS search in 1.0.0 grouped interval sizes by chained linkage, while the
+frozen M2 groups a size with the open cluster only while it stays within
+0.5 cents of the cluster's first member. The receipt verdict was always M2,
+so this only changes which scales the search accepts. One row in 1.0.0 had
+the two tests disagree (flagship hexany 11 in 15 out, MOS-GREEDY). In 1.0.1
+the search uses M2's rule, and two rows move: that hexany's MOS-GREEDY row
+now agrees with M2, and its MOS-CS fill gains 3 triads instead of 5. No
+registered prediction, coverage count or showcase scale changes.
