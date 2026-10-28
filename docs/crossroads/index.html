@@ -1,0 +1,807 @@
+<meta charset="utf-8">
+<title>Wilsonic Crossroads</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a research notebook on graph paper. A workbench (controls | pitch circle + method table) on top,
+   then the registered results, Erv's reasoning, and the crossroads map. Same token family as the other
+   Wilsonic playgrounds: harmony amber, melody teal, tempered violet. */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;
+  --accent-soft: rgba(12, 111, 104, 0.12);
+  --harm: #b2671a;
+  --harm-soft: rgba(178, 103, 26, 0.14);
+  --temp: #7a4fb5;
+  --temp-soft: rgba(122, 79, 181, 0.14);
+  --ok: #2d7a3a;
+  --warn: #a8402f;
+  --warn-soft: rgba(168, 64, 47, 0.14);
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180, 210, 220, 0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79, 195, 182, 0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224, 160, 90, 0.16);
+    --temp: #a88ad8; --temp-soft: rgba(168, 138, 216, 0.16);
+    --ok: #6cc77a; --warn: #ef8a78; --warn-soft: rgba(239, 138, 120, 0.16); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180, 210, 220, 0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79, 195, 182, 0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224, 160, 90, 0.16);
+  --temp: #a88ad8; --temp-soft: rgba(168, 138, 216, 0.16);
+  --ok: #6cc77a; --warn: #ef8a78; --warn-soft: rgba(239, 138, 120, 0.16); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 14px 48px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 18px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; text-wrap: balance; }
+h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0; font-weight: 600; }
+h4 { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 70ch; }
+a { color: var(--accent); }
+.lede { color: var(--muted); max-width: 72ch; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font: 600 12px var(--font-mono); letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.thesis { font-family: var(--font-display); font-size: clamp(18px, 2.1vw, 22px); line-height: 1.3; max-width: 44em; padding: 12px 16px; border-left: 3px solid var(--harm); background: var(--paper); }
+.thesis .h { color: var(--harm); } .thesis .m { color: var(--accent); }
+section { display: grid; gap: 12px; scroll-margin-top: 12px; }
+.panel { background: var(--paper); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 12px; min-width: 0; }
+.bench { display: grid; grid-template-columns: minmax(250px, 300px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.bench > * { min-width: 0; }
+@media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.controls { display: grid; gap: 14px; }
+.ctl { display: grid; gap: 5px; }
+.ctl > label, .ctl > .lab { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.ctl > label b, .ctl > .lab b { font-family: var(--font-mono); font-weight: 500; color: var(--fg); }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+input[type=text], select { font: 13px var(--font-mono); padding: 6px 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); width: 100%; min-width: 0; }
+button { font: 13px var(--font-body); padding: 6px 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.on { background: var(--accent-soft); border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+button:disabled { opacity: 0.5; cursor: default; }
+.row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.seedchip { font: 13px var(--font-mono); min-width: 54px; display: grid; gap: 0; text-align: center; padding: 4px 8px; }
+.seedchip small { font: 10px var(--font-body); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.seedchip.in { background: var(--harm-soft); border-color: var(--harm); }
+.seedchip.out { background: var(--bg); border-style: dashed; color: var(--muted); }
+.pill { display: inline-block; font: 600 11px var(--font-body); padding: 2px 7px; border-radius: 99px; letter-spacing: 0.03em; white-space: nowrap; }
+.pill.ok { background: var(--accent-soft); color: var(--accent); }
+.pill.no { background: var(--warn-soft); color: var(--warn); }
+.pill.harm { background: var(--harm-soft); color: var(--harm); }
+.pill.temp { background: var(--temp-soft); color: var(--temp); }
+.pill.plain { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.viz { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1060px) { .viz { grid-template-columns: minmax(0, 1fr); } }
+.viz > * { min-width: 0; }
+svg text { fill: var(--fg); font-family: var(--font-mono); }
+.circle svg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.fact { border: 1px solid var(--line); background: var(--bg); padding: 8px 10px; display: grid; gap: 2px; }
+.fact b { font: 500 18px var(--font-mono); font-variant-numeric: tabular-nums; }
+.fact span { font-size: 12px; color: var(--muted); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); white-space: nowrap; }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+#mtable td:first-child { min-width: 230px; }
+#mtable { min-width: 860px; }
+tbody tr.sel { background: var(--accent-soft); }
+tbody tr.method { cursor: pointer; }
+tbody tr.method:hover { background: var(--bg); }
+tbody tr.method:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.mname { font: 500 13px var(--font-mono); white-space: nowrap; }
+.why { font-size: 12px; color: var(--muted); }
+.strip svg { width: 100%; height: 46px; display: block; }
+.status { font-size: 13px; color: var(--muted); min-height: 20px; }
+.addlist { font: 13px var(--font-mono); overflow-wrap: anywhere; }
+.scatter svg { width: 100%; height: auto; display: block; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.grid3 > * { min-width: 0; }
+.card { background: var(--paper); border: 1px solid var(--line); padding: 12px 14px; display: grid; gap: 8px; align-content: start; }
+.card .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.card .fam { font: 500 11px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.card p { font-size: 14px; }
+.card .q { color: var(--muted); font-size: 13px; }
+details > summary { cursor: pointer; font-size: 13px; color: var(--accent); }
+details[open] > summary { margin-bottom: 6px; }
+dl.persp { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0; font-size: 13px; }
+dl.persp dt { font-weight: 600; color: var(--muted); }
+dl.persp dd { margin: 0; }
+.reason { display: grid; grid-template-columns: minmax(130px, 170px) minmax(0, 1fr); gap: 8px 14px; margin: 0; }
+.reason dt { font: 600 12px var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding-top: 2px; }
+.reason dd { margin: 0; max-width: 72ch; }
+@media (max-width: 600px) { .reason { grid-template-columns: minmax(0, 1fr); } .reason dd { margin-bottom: 6px; } }
+.pools td:first-child { font: 500 13px var(--font-mono); white-space: nowrap; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.decision ol { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 2px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.note { border-left: 3px solid var(--line); padding: 4px 10px; font-size: 13px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Wilsonic research · checkpoint 2026-10-27</div>
+  <h1>Wilsonic Crossroads</h1>
+  <p class="thesis"><span class="h">Keep the just harmony exact.</span> <span class="m">Fill the melodic gaps</span> with every method the program has found, see what each one costs, and choose where to go next.</p>
+  <p class="lede">Pick a just structure (a combination product set or an Euler genus, on any seeds), choose a subset, and fill its gaps. Every method from GAPFILL-001 runs live in this page: tones from the parent structure, from the genus, from epimoric division, from Erv's recurrences, and from a fixed-generator MOS. Below the workbench are the registered numbers, the reasoning behind Erv and Kraig's hand-made fills, and a map of every research direction with the decisions that are open.</p>
+  <nav class="toc" aria-label="Sections">
+    <a href="#bench">Workbench</a><a href="#pools">The methods</a><a href="#found">What GAPFILL-001 found</a><a href="#erv">Erv's reasoning, derived</a><a href="#map">Research map</a><a href="#decide">Decisions open</a>
+  </nav>
+</header>
+
+<section id="bench" aria-labelledby="bench-h">
+  <h2 id="bench-h">Workbench</h2>
+  <div class="bench">
+    <div class="panel controls" aria-label="Structure and settings">
+      <div class="ctl">
+        <label for="preset">Start from</label>
+        <select id="preset"></select>
+      </div>
+      <div class="ctl">
+        <label for="seeds">Seeds <span>2 to 7 whole numbers</span></label>
+        <input type="text" id="seeds" value="1, 3, 5, 7, 9, 11" spellcheck="false">
+        <div class="why" id="seed-msg" role="status"></div>
+      </div>
+      <div class="ctl">
+        <span class="lab">Structure</span>
+        <div class="row">
+          <select id="stype" aria-label="Structure type" style="width:auto">
+            <option value="cps">Combination product set</option>
+            <option value="genus">Euler genus</option>
+          </select>
+          <label for="kval" class="small muted" id="k-lab">k</label>
+          <select id="kval" style="width:auto"></select>
+        </div>
+        <div class="why" id="struct-msg"></div>
+      </div>
+      <div class="ctl">
+        <span class="lab">Subset <b id="sub-name"></b></span>
+        <div class="chips" id="seedchips" aria-label="Click a seed to cycle it: free, always in, always out"></div>
+        <div class="why">Click a seed to fix it in (always used) or out (never used). Fixing seeds walks down Pascal's triangle: an eikosany with one seed in gives a dekany, with one in and one out a hexany.</div>
+      </div>
+      <div class="ctl">
+        <label for="cap">Widest step allowed <b id="cap-v">160¢</b></label>
+        <input type="range" id="cap" min="90" max="300" step="5" value="160">
+      </div>
+      <div class="ctl">
+        <label for="minstep">Closest an added tone may sit <b id="min-v">20¢</b></label>
+        <input type="range" id="minstep" min="0" max="45" step="1" value="20">
+      </div>
+      <div class="row">
+        <button id="registered" title="CAP 160¢, MIN_STEP 20¢, search up to 24 notes">Registered settings</button>
+        <span class="why" id="reg-msg"></span>
+      </div>
+      <div class="ctl">
+        <span class="lab">Sound</span>
+        <div class="row">
+          <button id="audio">Start audio</button>
+          <button id="play-sub" disabled>Subset</button>
+          <button id="play-fill" disabled>Filled scale</button>
+          <button id="play-tri" disabled>Its triads</button>
+          <button id="stop" disabled>Stop</button>
+        </div>
+        <div class="why">1/1 = 261.63 Hz. Click any dot on the circle to hear that tone.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="gap:14px">
+      <div class="facts" id="facts" aria-live="polite"></div>
+      <div class="viz">
+        <div class="circle">
+          <svg id="circle" viewBox="-200 -200 400 400" role="img" aria-label="Pitch circle of the subset and the chosen fill"></svg>
+          <div class="legend">
+            <span><i style="background:var(--harm)"></i>subset (exact)</span>
+            <span><i style="border:2px solid var(--accent)"></i>added, exact</span>
+            <span><i style="border:2px solid var(--temp)"></i>added, tempered</span>
+            <span><i style="background:var(--line)"></i>rest of the structure</span>
+            <span><i style="background:var(--warn)"></i>subset gap wider than allowed</span>
+          </div>
+        </div>
+        <div style="display:grid;gap:10px;min-width:0">
+          <div>
+            <h3 id="sel-h">Chosen fill</h3>
+            <p class="small" id="sel-desc"></p>
+          </div>
+          <div class="strip"><svg id="strip" viewBox="0 0 1200 46" preserveAspectRatio="none" role="img" aria-label="Steps of the filled scale"></svg></div>
+          <div class="addlist" id="addlist"></div>
+          <div class="scatter">
+            <h3>Trade-off: triads gained against the size of the new ratios</h3>
+            <svg id="scatter" viewBox="0 0 560 270" role="img" aria-label="Scatter of methods"></svg>
+            <div class="legend"><span>● strictly proper</span><span>◆ proper</span><span>▲ improper</span><span>filled = constant structure, hollow = not</span><span>MOS-PURE retunes the subset and is left off</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="status" id="status" role="status"></div>
+      <div class="tbl">
+        <table id="mtable">
+          <thead><tr>
+            <th>Method</th><th>Pool · selector</th><th class="num">Notes</th><th class="num">Widest</th><th>CS</th><th>Propriety</th>
+            <th class="num">Triads</th><th class="num">Gained</th><th>New tones</th><th class="num">Largest new ratio</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="why">Triad counts mirror the frozen triad scorer (v1.1.0, 2¢, middle-anchored, octave span). CS and propriety mirror the frozen melodic scorer (v0.1.0). I checked this page's engine against all 1,512 rows of the GAPFILL-001 receipts: every added tone, triad count, CS and propriety verdict matches. Settings other than the registered ones are exploration and have no receipt.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pools" aria-labelledby="pools-h">
+  <h2 id="pools-h">The methods, and what each one costs</h2>
+  <p class="lede">Each method is a pool (where the new tones come from) and a selector (how they are picked). The numbers are the registered means on the canonical eikosany 1·3·5·7·9·11, 42 hexanies and dekanies, widest step 160¢.</p>
+  <div class="panel tbl">
+    <table class="pools">
+      <thead><tr><th>Pool</th><th>Where the new tones come from</th><th>Harmony</th><th>Melody</th><th>Just intonation</th><th>In the plugin</th></tr></thead>
+      <tbody>
+        <tr><td>PARENT</td><td>The structure's own tones, so every added tone is a common tone.</td><td>Most triads gained (+23.6).</td><td>CS on 36 of 42; none proper, so these are the spicy scales.</td><td>Simplest ratios (about 16 bits).</td><td>At most 2<sup>14</sup> supersets to check; fast.</td></tr>
+        <tr><td>GENUS</td><td>Any product of the seeds, inside or outside the structure.</td><td>+17.1 with the CS search; greedy gains more (+28.7) but only 6 of 42 are CS.</td><td>CS on 36 of 42, 5 proper.</td><td>Same primes as the seeds (about 18 bits).</td><td>Bounded search with a node budget.</td></tr>
+        <tr><td>EPI · AM, HM</td><td>Split each wide gap at the arithmetic or harmonic mean of its two ends (Ptolemy's division).</td><td>+16.5; each split makes a proportional (AM) or subcontrary (HM) triad by construction.</td><td>CS on 26 of 42 and 14 strictly proper, the most of any just method.</td><td>Brings in new primes (18 to 20 bits).</td><td>A formula, no search. Equal gaps always split the same way.</td></tr>
+        <tr><td>EPI · MED</td><td>Split at the mediant of the two ratios (Archytas, Stern–Brocot).</td><td>+21.4 where it fills.</td><td>Often breaks the 20¢ rule; CS on 6 of 42.</td><td>Smallest new ratios of the epimoric family.</td><td>A formula, no search.</td></tr>
+        <tr><td>REC</td><td>Terms of one of Erv's recurrences seeded with the subset.</td><td>+10.4 greedy, +8.6 with the CS search.</td><td>CS on 40 of 42 with the search, the most of any method.</td><td>Exact in name only: the search's ratios average 95 bits.</td><td>16 recurrences, 130 terms each; fast.</td></tr>
+        <tr><td>MOS</td><td>Tempered degrees of a fixed-generator window (DYNMOS-001), with the subset kept exact.</td><td>+7.9; tempered passing tones add almost nothing.</td><td>CS on 38 of 42 with the search, 10 proper.</td><td>Tempered fill tones.</td><td>Needs a generator; the window is already computed in Fork B.</td></tr>
+        <tr><td>MOS-PURE</td><td>The window itself, with the subset retuned to it (the reference).</td><td>Tempered; the subset's triads survive within 2¢.</td><td>Always CS (a MOS); 37.5 notes on average.</td><td>Nothing stays exact.</td><td>What Fork B already plays.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The arithmetic and harmonic fills are mirror images. Inversion swaps the two means, and every hexany or dekany has its inversion partner in the same family, so the AM fill of a subset is the HM fill of its partner turned upside down, with proportional and subcontrary counts swapped. It held on 126 of 126 pairs. The meta-slendro recurrence H[n−2] + H[n−3] is iterated arithmetic division too, because a power-of-two recurrence makes each new term the arithmetic mean of two earlier ones. On the 1·3·5·7 hexany it agrees with Ptolemy's division on three of four tones.</p>
+</section>
+
+<section id="found" aria-labelledby="found-h">
+  <h2 id="found-h">What GAPFILL-001 found</h2>
+  <p class="lede">The registered run: 126 subsets × 12 methods, receipts in <span class="mono">experiments/lattice/results/gapfill001.jsonl</span>, gate G-040 on the Ear Bench.</p>
+  <div class="panel">
+    <div class="tabs" id="found-tabs" role="tablist" aria-label="Seed set"></div>
+    <div class="facts" id="found-facts"></div>
+    <div class="tbl"><table id="found-table"><thead><tr>
+      <th>Method</th><th class="num">Filled</th><th class="num">CS</th><th class="num">Proper</th><th class="num">Mean notes</th><th class="num">Mean triads gained</th><th class="num">Mean largest ratio (bits)</th><th class="num">Tempered rows</th>
+    </tr></thead><tbody></tbody></table></div>
+    <div id="found-holdouts" class="small"></div>
+  </div>
+</section>
+
+<section id="erv" aria-labelledby="erv-h">
+  <h2 id="erv-h">Erv's reasoning, derived</h2>
+  <div class="panel">
+    <h4>The 14-tone dekanies of Erv Wilson and Kraig Grady</h4>
+    <dl class="reason">
+      <dt>Result as recorded</dt><dd>Wilson and Grady's 14-tone constant structure joins the 2)5 and 3)5 dekanies of 1·3·5·7·9 (Scala archive, "Wilson-Grady 1-3-5-7-9 doubledekany"). Kraig told Marcus that the 1·3·7·9·15 dekany is not a constant structure by itself and needs 4 added tones.</dd>
+      <dt>Reasoning derived</dt><dd>Fill one level of Pascal's triangle with tones from the neighbouring level of the same genus. With 1 among the seeds the two dekanies share six tones, so their union has 14, and the 4 tones each dekany is missing come from the other one.</dd>
+      <dt>Verified</dt><dd>The machine search agrees. Each 1·3·5·7·9 dekany needs exactly 4 genus tones to become a CS, no 3-tone fill exists, and one of the two minimal fills is the other dekany. Kraig's 1·3·7·9·15 dekany needs 4 tones too, but no fill of 4 or fewer comes from its genus. Both facts are pinned in the tests.</dd>
+      <dt>Still a guess</dt><dd>Which 4 tones Kraig actually added to 1·3·7·9·15. I have not found them in the scans, and the machine's fills bring in 13, 17 or 19.</dd>
+      <dt>Boundary</dt><dd>The neighbouring-level method works only while the genus has tones in the right places. Where it does not (Kraig's dekany, the canonical dekanies fixing 3 or 7), the fill has to come from outside the genus: epimoric division, a recurrence or a MOS. Erv did this by hand, one structure at a time. A machine can try every method on every subset, which is what the workbench does.</dd>
+    </dl>
+    <h4>Archytas's enharmonic</h4>
+    <dl class="reason">
+      <dt>Result as recorded</dt><dd>Archytas (about 400 BCE) divided the fourth as 5/4 · 36/35 · 28/27.</dd>
+      <dt>Reasoning derived</dt><dd>Wilson's two-step mediant cascade. The mediant of 1/1 and 4/3 is 5/4, and the mediant of 5/4 and 4/3 is 9/7. Neighbours on the Stern–Brocot tree always differ by an epimoric ratio (n+1)/n.</dd>
+      <dt>Verified</dt><dd>Exact rationals, pinned in the tests. Of eight classical genera, only Archytas's enharmonic is a mediant cascade. Ptolemy's come from arithmetic division instead.</dd>
+      <dt>Still a guess</dt><dd>Whether Erv derived his mediant cascades from Archytas or found the same tree on his own through the scale tree.</dd>
+      <dt>Boundary</dt><dd>Archytas's theorem: an epimore has no rational half, so every just split of an epimoric gap is lopsided. This is also why geometric triads are rare in a CPS.</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="map" aria-labelledby="map-h">
+  <h2 id="map-h">Research map</h2>
+  <p class="lede" id="map-lede"></p>
+  <div class="filters" id="fam-filters" aria-label="Filter by family"></div>
+  <div class="filters" id="status-filters" aria-label="Filter by status"></div>
+  <div class="grid3" id="cards"></div>
+</section>
+
+<section id="decide" aria-labelledby="decide-h">
+  <h2 id="decide-h">Decisions open at the crossroads</h2>
+  <div class="grid3" id="decisions"></div>
+  <div class="panel">
+    <h3>Gates waiting on the ear</h3>
+    <div class="tbl"><table id="gates"><thead><tr><th>Gate</th><th>Opened</th><th>What it asks</th><th>Blocks</th></tr></thead><tbody></tbody></table></div>
+    <p class="small">Listen and decide on the <a href="https://claude.ai/artifact/XNptx9B3t9yXGgDvmJeVbf" target="_blank" rel="noopener">Ear Bench</a>.</p>
+  </div>
+  <div class="panel">
+    <h3>Where the sources disagree</h3>
+    <ul id="conflicts" class="small" style="margin:0;padding-left:18px;display:grid;gap:4px"></ul>
+  </div>
+</section>
+</div>
+
+<script src="data.js"></script>
+<script src="engine.js"></script>
+<script>
+"use strict";
+(() => {
+const E = window.Engine, D = window.CROSSROADS_DATA;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = (x, d = 1) => (x === null || x === undefined ? "–" : Number(x).toFixed(d));
+const REG = { cap: 160, minStep: 20 };
+const PRESETS = [
+  { label: "Eikosany 1·3·5·7·9·11 · hexany 9 in, 11 out (the 1·3·5·7 hexany)", seeds: [1, 3, 5, 7, 9, 11], type: "cps", k: 3, roles: { 9: "in", 11: "out" }, method: "EPI-AM" },
+  { label: "Eikosany 1·3·5·7·9·11 · dekany 1 in", seeds: [1, 3, 5, 7, 9, 11], type: "cps", k: 3, roles: { 1: "in" }, method: "PARENT-CS" },
+  { label: "Eikosany 1·3·5·7·9·11 · dekany 7 in (only retuning makes it a CS)", seeds: [1, 3, 5, 7, 9, 11], type: "cps", k: 3, roles: { 7: "in" }, method: "MOS-PURE" },
+  { label: "Eikosany 1·3·5·7·9·11 · dekany 3 in (epimoric rescues it)", seeds: [1, 3, 5, 7, 9, 11], type: "cps", k: 3, roles: { 3: "in" }, method: "EPI-CS" },
+  { label: "CS eikosany 1·7·9·11·15·29 · hexany 11 in, 9 out", seeds: [1, 7, 9, 11, 15, 29], type: "cps", k: 3, roles: { 11: "in", 9: "out" }, method: "EPI-AM" },
+  { label: "Marcus's eikosany 1·45·135·225·19·377 · hexany 1 in, 135 out", seeds: [1, 45, 135, 225, 19, 377], type: "cps", k: 3, roles: { 1: "in", 135: "out" }, method: "EPI-AM" },
+  { label: "Hexany 1·3·5·7 on its own", seeds: [1, 3, 5, 7], type: "cps", k: 2, roles: {}, method: "EPI-AM" },
+  { label: "Dekany 1·3·5·7·9, 3)5 (Wilson and Grady)", seeds: [1, 3, 5, 7, 9], type: "cps", k: 3, roles: {}, method: "GENUS-CS" },
+  { label: "Euler genus 1·3·5·7 · its hexany level", seeds: [1, 3, 5, 7], type: "genus", k: 2, roles: {}, method: "PARENT-CS" },
+];
+const state = { seeds: [], type: "cps", k: 3, roles: {}, cap: 160, minStep: 20, method: "EPI-AM", results: {}, running: false, sub: null };
+let worker = null, job = 0;
+try { const saved = JSON.parse(localStorage.getItem("crossroads.v1") || "null"); if (saved && saved.preset !== undefined) state.presetIdx = saved.preset; } catch (e) { /* storage blocked */ }
+
+// ------------------------------------------------------------------ inputs
+function parseSeeds(text) {
+  const xs = String(text).split(/[\s,·;]+/).filter(Boolean).map(Number);
+  if (xs.some((x) => !Number.isInteger(x) || x < 1 || x > 100000)) return { err: "Use whole numbers from 1 to 100000." };
+  const u = [...new Set(xs)];
+  if (u.length !== xs.length) return { err: "Each seed may appear once." };
+  if (u.length < 2 || u.length > 7) return { err: "Use 2 to 7 seeds." };
+  return { seeds: u };
+}
+function fillPresets() {
+  $("#preset").innerHTML = PRESETS.map((p, i) => `<option value="${i}">${esc(p.label)}</option>`).join("") + `<option value="custom">Your own seeds</option>`;
+}
+function applyPreset(i) {
+  const p = PRESETS[i];
+  if (!p) return;
+  Object.assign(state, { seeds: p.seeds.slice(), type: p.type, k: p.k, roles: { ...p.roles }, method: p.method });
+  $("#seeds").value = p.seeds.join(", ");
+  $("#stype").value = p.type;
+  try { localStorage.setItem("crossroads.v1", JSON.stringify({ preset: i })); } catch (e) { /* ignore */ }
+  refresh();
+}
+function kOptions() {
+  const n = state.seeds.length;
+  const lo = state.type === "cps" ? 1 : 0, hi = state.type === "cps" ? n - 1 : n;
+  state.k = Math.min(Math.max(state.k, lo), hi);
+  $("#kval").innerHTML = Array.from({ length: hi - lo + 1 }, (_, t) => t + lo).map((k) => `<option value="${k}" ${k === state.k ? "selected" : ""}>${state.type === "cps" ? `CPS(${n},${k})` : `level ${k}`}</option>`).join("");
+  $("#k-lab").textContent = state.type === "cps" ? "k" : "subset level";
+}
+const NAMES = { 1: "", 4: "tetrad", 6: "hexany", 10: "dekany", 15: "pentadekad", 20: "eikosany", 35: "tetrakaitriakontad", 70: "" };
+function structure() {
+  const seeds = state.seeds;
+  const parent = state.type === "cps" ? E.cps(seeds, state.k) : E.genus(seeds);
+  const inS = seeds.filter((s) => state.roles[s] === "in"), outS = seeds.filter((s) => state.roles[s] === "out");
+  const free = seeds.filter((s) => !inS.includes(s) && !outS.includes(s));
+  const kk = state.k - inS.length;
+  const tones = E.subCps(seeds, state.k, inS, outS);
+  const isWhole = state.type === "cps" && !inS.length && !outS.length;
+  let label;
+  if (kk < 0 || kk > free.length || !tones.length) label = "empty: fix fewer seeds in or out";
+  else {
+    const nm = NAMES[tones.length] ?? "";
+    label = `${inS.length ? inS.join("·") + " × " : ""}CPS(${free.length},${kk}) of ${free.join("·")} · ${tones.length} tones${nm ? " · " + nm : ""}`;
+  }
+  return { parent, tones, genus: E.genus(seeds), inS, outS, label, isWhole };
+}
+function seedChips() {
+  $("#seedchips").innerHTML = state.seeds.map((s) => {
+    const r = state.roles[s] || "free";
+    return `<button class="seedchip ${r}" data-seed="${s}" aria-label="seed ${s}: ${r}">${s}<small>${r}</small></button>`;
+  }).join("");
+  document.querySelectorAll("[data-seed]").forEach((b) => b.addEventListener("click", () => {
+    const s = Number(b.dataset.seed), r = state.roles[s] || "free";
+    state.roles = { ...state.roles, [s]: r === "free" ? "in" : r === "in" ? "out" : "free" };
+    if (state.roles[s] === "free") delete state.roles[s];
+    $("#preset").value = "custom";
+    refresh();
+  }));
+}
+
+// ------------------------------------------------------------------ run
+function startWorker() {
+  try { return new Worker("worker.js"); } catch (e) { return null; }
+}
+function refresh() {
+  kOptions();
+  seedChips();
+  $("#cap-v").textContent = `${state.cap}¢`;
+  $("#min-v").textContent = `${state.minStep}¢`;
+  $("#cap").value = state.cap; $("#minstep").value = state.minStep;
+  const reg = state.cap === REG.cap && state.minStep === REG.minStep;
+  $("#reg-msg").textContent = reg ? "These match the registered run." : "Exploring: these settings have no receipt.";
+  const st = structure();
+  state.sub = st;
+  $("#sub-name").textContent = st.label;
+  $("#struct-msg").textContent = state.type === "cps" ? `${st.parent.length} tones in the structure` : `${st.parent.length} distinct tones in the genus; the subset is a level inside it`;
+  state.results = {};
+  renderAll();
+  if (!st.tones.length) { $("#status").textContent = "The subset is empty. Free one of the fixed seeds."; return; }
+  run(st);
+}
+function run(st) {
+  job += 1;
+  const my = job;
+  if (worker) worker.terminate();
+  worker = startWorker();
+  const methods = E.METHODS.map((m) => m.id);
+  const opts = { cap: state.cap, minStep: state.minStep, nSearchMax: Math.max(24, st.tones.length + 8) };
+  state.running = true;
+  $("#status").textContent = "Filling the gaps…";
+  const t0 = performance.now();
+  const onRes = (res) => { Object.assign(state.results, res); renderAll(); };
+  const finish = () => {
+    state.running = false;
+    const n = Object.values(state.results).filter((r) => r.ok).length;
+    $("#status").textContent = `${n} of ${E.METHODS.length} methods produced a fill in ${((performance.now() - t0) / 1000).toFixed(1)} s.`;
+    renderAll();
+  };
+  if (worker) {
+    worker.onmessage = (e) => {
+      if (e.data.job !== my) return;
+      if (e.data.res) onRes(e.data.res);
+      if (e.data.error) $("#status").textContent = `A method stopped with an error: ${e.data.error}`;
+      if (e.data.done) finish();
+    };
+    worker.onerror = () => { worker = null; runInline(st, opts, methods, my, onRes, finish); };
+    worker.postMessage({ job: my, tones: st.tones, parent: st.parent, genus: st.genus, opts, methods });
+  } else runInline(st, opts, methods, my, onRes, finish);
+}
+function runInline(st, opts, methods, my, onRes, finish) {
+  const fams = [["PARENT-CS"], ["EPI-AM", "EPI-HM", "EPI-MED", "EPI-CS"], ["GENUS-GREEDY", "GENUS-CS"], ["MOS-GREEDY", "MOS-CS", "MOS-PURE"], ["REC-GREEDY", "REC-CS"]];
+  let i = 0;
+  const step = () => {
+    if (my !== job) return;
+    if (i >= fams.length) { finish(); return; }
+    onRes(E.fillAll(st.tones, st.parent, st.genus, opts, fams[i++]));
+    setTimeout(step, 0);
+  };
+  setTimeout(step, 0);
+}
+
+// ------------------------------------------------------------------ render
+const METHOD_INFO = {
+  "PARENT-CS": "Smallest constant structure made only from the structure's own tones.",
+  "GENUS-GREEDY": "Fill the widest gap with the simplest genus tone, repeat.",
+  "GENUS-CS": "Smallest constant structure from any product of the seeds.",
+  "EPI-AM": "Split each wide gap at the arithmetic mean of its ends (a proportional triad each time).",
+  "EPI-HM": "Split each wide gap at the harmonic mean (a subcontrary triad each time).",
+  "EPI-MED": "Split each wide gap at the mediant of its two ratios (Stern–Brocot).",
+  "EPI-CS": "Smallest constant structure from all arithmetic, harmonic and mediant split points.",
+  "REC-GREEDY": "Seed Erv's recurrences with the subset and add terms, in order, that land in a wide gap.",
+  "REC-CS": "Smallest constant structure from the best recurrence's first 60 terms.",
+  "MOS-GREEDY": "Keep the subset exact and add tempered degrees of a fixed-generator window.",
+  "MOS-CS": "Smallest constant structure from that window's free degrees.",
+  "MOS-PURE": "Retune the subset to the window itself (the reference, nothing stays exact).",
+};
+const propPill = (p) => (p === "strictly_proper" ? `<span class="pill ok">strictly proper</span>` : p === "proper" ? `<span class="pill ok">proper</span>` : `<span class="pill plain">improper</span>`);
+function renderAll() {
+  renderFacts(); renderTable(); renderCircle(); renderSelected(); renderScatter();
+  const r = state.results[state.method];
+  $("#play-fill").disabled = $("#play-tri").disabled = !(audio && r && r.ok);
+  $("#play-sub").disabled = !(audio && state.sub && state.sub.tones.length);
+}
+function subsetStats() {
+  const st = state.sub;
+  if (!st || !st.tones.length) return null;
+  const tc = st.tones.map(E.centsOf).sort((a, b) => a - b);
+  const tri = E.triads(tc), mel = E.melodic(tc);
+  return { n: tc.length, widest: E.maxStep(tc), P: tri.P, S: tri.S, G: tri.G, cs: mel.cs, propriety: mel.propriety };
+}
+function renderFacts() {
+  const s = subsetStats();
+  if (!s) { $("#facts").innerHTML = ""; return; }
+  const ok = Object.values(state.results).filter((r) => r.ok && r.cs).length;
+  $("#facts").innerHTML = [
+    [s.n, "tones in the subset"], [`${fmt(s.widest, 0)}¢`, "widest step before filling"],
+    [`${s.P} · ${s.S}`, "proportional · subcontrary triads"], [s.cs ? "yes" : "no", "subset is a constant structure"],
+    [`${ok}`, "methods giving a CS fill"],
+  ].map(([b, t]) => `<div class="fact"><b>${esc(b)}</b><span>${esc(t)}</span></div>`).join("");
+}
+function newTonesCell(r) {
+  if (!r.ok) return "";
+  if (r.retuned) return `<span class="pill temp">subset retuned</span>`;
+  const parts = [];
+  if (r.exactAdded) parts.push(`<span class="pill harm">${r.exactAdded} exact</span>`);
+  if (r.temperedAdded) parts.push(`<span class="pill temp">${r.temperedAdded} tempered</span>`);
+  if (r.exactAdded && state.type === "cps" && r.inParent) parts.push(`<span class="why">${r.inParent} from the structure</span>`);
+  return parts.join(" ") || "none";
+}
+function largestCell(r) {
+  if (!r.ok || !r.exactAdded) return "–";
+  const p = r.maxPrime ? `, prime ${r.maxPrime}` : "";
+  return `${fmt(r.maxTenney, 1)} bits${p}`;
+}
+function renderTable() {
+  const tb = $("#mtable tbody");
+  tb.innerHTML = E.METHODS.map((m) => {
+    const r = state.results[m.id];
+    const sel = m.id === state.method ? "sel" : "";
+    const head = `<td><div class="mname">${m.id}</div><div class="why">${esc(METHOD_INFO[m.id])}</div></td><td class="small">${m.pool} · ${m.selector}${r && r.via ? `<div class="why">via ${esc(r.via)}${r.level ? ` · ${r.level} notes` : ""}</div>` : ""}</td>`;
+    if (!r) return `<tr class="method ${sel}" data-m="${m.id}" tabindex="0">${head}<td colspan="8" class="why">${state.running ? "working…" : ""}</td></tr>`;
+    if (!r.ok) return `<tr class="method ${sel}" data-m="${m.id}" tabindex="0">${head}<td colspan="8"><span class="pill no">no fill</span> <span class="why">${esc(r.reason || (r.exhausted ? "the search ran out of budget" : "nothing in this pool fills every gap under these settings"))}</span></td></tr>`;
+    return `<tr class="method ${sel}" data-m="${m.id}" tabindex="0">${head}
+      <td class="num">${r.n}</td><td class="num">${fmt(r.maxStep, 0)}¢</td>
+      <td>${r.cs ? `<span class="pill ok">CS</span>` : `<span class="pill plain">no</span>`}</td><td>${propPill(r.propriety)}</td>
+      <td class="num">${r.P} · ${r.S}</td><td class="num">${r.PSgain >= 0 ? "+" : ""}${r.PSgain}</td>
+      <td>${newTonesCell(r)}</td><td class="num">${largestCell(r)}</td></tr>`;
+  }).join("");
+  tb.querySelectorAll("tr.method").forEach((tr) => {
+    const pick = () => { state.method = tr.dataset.m; renderAll(); };
+    tr.addEventListener("click", pick);
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+  });
+}
+const pol = (c, r) => { const a = (c / 1200) * 2 * Math.PI - Math.PI / 2; return [r * Math.cos(a), r * Math.sin(a)]; };
+function arc(c0, c1, r) {
+  const [x0, y0] = pol(c0, r), [x1, y1] = pol(c1, r);
+  return `M${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${c1 - c0 > 600 ? 1 : 0} 1 ${x1.toFixed(2)},${y1.toFixed(2)}`;
+}
+let playingTriad = null, playingTone = null;
+function renderCircle() {
+  const svg = $("#circle"), st = state.sub;
+  if (!st) return;
+  const R0 = 140;
+  const subC = st.tones.map((t) => ({ c: E.centsOf(t), lab: E.str(t) }));
+  const subKeys = new Set(st.tones.map(E.key));
+  const rest = st.parent.filter((t) => !subKeys.has(E.key(t))).map(E.centsOf);
+  const r = state.results[state.method];
+  let parts = [`<circle cx="0" cy="0" r="${R0}" fill="none" stroke="var(--line)" stroke-width="1.5"/>`];
+  for (let c = 0; c < 1200; c += 100) { const [x0, y0] = pol(c, R0 - 5), [x1, y1] = pol(c, R0 + 5); parts.push(`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--line)"/>`); }
+  const sc = subC.map((x) => x.c).sort((a, b) => a - b);
+  sc.forEach((a, i) => { const b = i < sc.length - 1 ? sc[i + 1] : sc[0] + 1200; if (b - a > state.cap) parts.push(`<path d="${arc(a, b, R0 - 16)}" fill="none" stroke="var(--warn)" stroke-width="5" opacity="0.55"/>`); });
+  if (playingTriad) {
+    const pts = [playingTriad.a, playingTriad.b, playingTriad.c].map((c) => pol(((c % 1200) + 1200) % 1200, R0));
+    parts.push(`<polygon points="${pts.map((p) => p.join(",")).join(" ")}" fill="${playingTriad.kind === "P" ? "var(--harm-soft)" : "var(--accent-soft)"}" stroke="${playingTriad.kind === "P" ? "var(--harm)" : "var(--accent)"}" stroke-width="1.5"/>`);
+  }
+  rest.forEach((c) => { const [x, y] = pol(c, R0); parts.push(`<circle cx="${x}" cy="${y}" r="3" fill="var(--line)"><title>${fmt(c, 2)}¢ (in the structure)</title></circle>`); });
+  if (r && r.ok && !r.retuned) r.addedTones.forEach((a) => {
+    const exact = Array.isArray(a), c = exact ? E.centsOf(a) : a;
+    const [x, y] = pol(c, R0);
+    parts.push(`<circle class="tone" data-c="${c}" cx="${x}" cy="${y}" r="6.5" fill="var(--paper)" stroke="${exact ? "var(--accent)" : "var(--temp)"}" stroke-width="2.5" style="cursor:pointer"><title>${exact ? E.str(a) + " · " : ""}${fmt(c, 2)}¢ (added by ${state.method})</title></circle>`);
+  });
+  if (r && r.ok && r.retuned) r.scale.forEach((c) => { const [x, y] = pol(c, R0 - 22); parts.push(`<circle class="tone" data-c="${c}" cx="${x}" cy="${y}" r="3.2" fill="var(--temp)" style="cursor:pointer"><title>${fmt(c, 2)}¢ (chain degree)</title></circle>`); });
+  const showLabels = subC.length <= 22;
+  subC.forEach(({ c, lab }) => {
+    const [x, y] = pol(c, R0), [lx, ly] = pol(c, R0 + 24);
+    const hot = playingTone !== null && Math.abs(playingTone - c) < 0.01;
+    parts.push(`<circle class="tone" data-c="${c}" cx="${x}" cy="${y}" r="${hot ? 8.5 : 6.5}" fill="var(--harm)" style="cursor:pointer"><title>${lab} · ${fmt(c, 2)}¢</title></circle>`);
+    if (showLabels) parts.push(`<text x="${lx}" y="${ly}" font-size="10.5" text-anchor="middle" dominant-baseline="middle">${esc(lab)}</text>`);
+  });
+  parts.push(`<text x="0" y="-6" font-size="13" text-anchor="middle">${r && r.ok ? r.n : st.tones.length} notes</text>`);
+  parts.push(`<text x="0" y="12" font-size="10.5" text-anchor="middle" style="fill:var(--muted)">${esc(r && r.ok ? state.method : "subset")}</text>`);
+  svg.innerHTML = parts.join("");
+  svg.querySelectorAll(".tone").forEach((el) => el.addEventListener("click", () => { if (audio) tone(Number(el.dataset.c)); }));
+}
+function renderSelected() {
+  const r = state.results[state.method];
+  $("#sel-h").textContent = `Chosen fill · ${state.method}`;
+  if (!r) { $("#sel-desc").textContent = state.running ? "Working…" : ""; $("#strip").innerHTML = ""; $("#addlist").innerHTML = ""; return; }
+  if (!r.ok) { $("#sel-desc").textContent = `${METHOD_INFO[state.method]} It gives no fill here.`; $("#strip").innerHTML = ""; $("#addlist").innerHTML = ""; return; }
+  $("#sel-desc").textContent = `${METHOD_INFO[state.method]} ${r.n} notes, widest step ${fmt(r.maxStep, 1)}¢, ${r.cs ? "a constant structure" : "not a constant structure"}, ${r.propriety.replace("_", " ")}, ${r.P} proportional and ${r.S} subcontrary triads (${r.PSgain >= 0 ? "+" : ""}${r.PSgain} over the bare subset).`;
+  const cs = r.scale.slice().sort((a, b) => a - b);
+  const subSet = state.sub.tones.map(E.centsOf);
+  const isSub = (c) => !r.retuned && subSet.some((x) => Math.abs(x - c) < 1e-6);
+  const parts = [];
+  cs.forEach((a, i) => {
+    const b = i < cs.length - 1 ? cs[i + 1] : cs[0] + 1200, w = b - a;
+    const both = isSub(a) && isSub(((b % 1200) + 1200) % 1200);
+    const fill = w > state.cap ? "var(--warn-soft)" : both ? "var(--harm-soft)" : r.retuned || r.temperedAdded ? "var(--temp-soft)" : "var(--accent-soft)";
+    parts.push(`<rect x="${a}" y="4" width="${Math.max(0, w - 1.5)}" height="30" fill="${fill}" stroke="var(--line)" vector-effect="non-scaling-stroke"/>`);
+    if (w > 48) parts.push(`<text x="${a + w / 2}" y="24" font-size="11" text-anchor="middle" transform="scale(1,1)">${Math.round(w)}</text>`);
+  });
+  $("#strip").innerHTML = parts.join("");
+  const list = r.retuned ? `chain degrees: ${cs.map((c) => fmt(c, 1)).join(" ")}` : r.addedTones.length ? `added: ${r.addedTones.map((a) => (Array.isArray(a) ? E.str(a) : `${fmt(a, 2)}¢`)).join("  ")}` : "nothing added (the subset already meets the settings)";
+  $("#addlist").textContent = list;
+}
+function renderScatter() {
+  const svg = $("#scatter");
+  const pts = E.METHODS.map((m) => ({ m, r: state.results[m.id] })).filter((p) => p.r && p.r.ok && p.m.id !== "MOS-PURE");
+  const W = 560, H = 270, L = 48, B = 34, T = 18, Rr = 16;
+  const gains = pts.map((p) => p.r.PSgain), bits = pts.filter((p) => p.r.exactAdded).map((p) => p.r.maxTenney);
+  const gx0 = Math.min(0, ...gains), gx1 = Math.max(10, ...gains);
+  const by1 = Math.max(20, ...bits);
+  const X = (g) => L + ((g - gx0) / (gx1 - gx0 || 1)) * (W - L - Rr);
+  const bandY = T + 10;
+  const Y = (b) => T + 34 + (1 - b / by1) * (H - B - T - 34);
+  const parts = [];
+  parts.push(`<rect x="${L}" y="${T}" width="${W - L - Rr}" height="22" fill="var(--temp-soft)"/><text x="${W - Rr - 6}" y="${T + 15}" font-size="10.5" text-anchor="end" style="fill:var(--temp)">tempered fill tones</text>`);
+  for (let t = 0; t <= 4; t++) {
+    const b = (by1 * t) / 4, y = Y(b);
+    parts.push(`<line x1="${L}" x2="${W - Rr}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="2 4"/><text x="${L - 6}" y="${y + 4}" font-size="10" text-anchor="end" style="fill:var(--muted)">${Math.round(b)}</text>`);
+  }
+  const step = Math.max(1, Math.ceil((gx1 - gx0) / 6));
+  for (let g = Math.ceil(gx0 / step) * step; g <= gx1; g += step) parts.push(`<text x="${X(g)}" y="${H - B + 16}" font-size="10" text-anchor="middle" style="fill:var(--muted)">${g}</text>`);
+  parts.push(`<line x1="${L}" x2="${W - Rr}" y1="${H - B}" y2="${H - B}" stroke="var(--line)"/>`);
+  parts.push(`<text x="${(L + W) / 2}" y="${H - 4}" font-size="11" text-anchor="middle" style="fill:var(--muted)">triads gained over the bare subset →</text>`);
+  parts.push(`<text x="12" y="${(T + H) / 2}" font-size="11" text-anchor="middle" transform="rotate(-90 12 ${(T + H) / 2})" style="fill:var(--muted)">largest new ratio (Tenney bits)</text>`);
+  const placed = [];
+  pts.forEach(({ m, r }) => {
+    const x = X(r.PSgain), y = r.exactAdded ? Y(r.maxTenney) : bandY + 2;
+    const col = r.exactAdded ? (m.pool === "REC" ? "var(--temp)" : "var(--accent)") : "var(--temp)";
+    const fill = r.cs ? col : "var(--paper)";
+    const sel = m.id === state.method;
+    const sz = sel ? 8 : 6;
+    let shape;
+    if (r.propriety === "strictly_proper") shape = `<circle cx="${x}" cy="${y}" r="${sz}"/>`;
+    else if (r.propriety === "proper") shape = `<polygon points="${x},${y - sz} ${x + sz},${y} ${x},${y + sz} ${x - sz},${y}"/>`;
+    else shape = `<polygon points="${x},${y - sz} ${x + sz},${y + sz * 0.8} ${x - sz},${y + sz * 0.8}"/>`;
+    const hit = (hx, hy) => placed.some((p) => Math.abs(p.x - hx) < 54 && Math.abs(p.y - hy) < 12);
+    let lx = x, ly, anchor = "middle";
+    if (!r.exactAdded) { anchor = "start"; lx = x + sz + 4; ly = y + 4; while (hit(lx + 20, ly)) lx += 46; }
+    else {
+      const tries = [y - sz - 4, y + sz + 12, y - sz - 15, y + sz + 23];
+      ly = tries.find((v) => !hit(lx, v)) ?? tries[0];
+    }
+    if (anchor === "middle" && lx > W - Rr - 26) { anchor = "end"; lx = x + sz; }
+    placed.push({ x: anchor === "start" ? lx + 20 : anchor === "end" ? lx - 20 : lx, y: ly });
+    parts.push(`<g class="pt" data-m="${m.id}" style="cursor:pointer" fill="${fill}" stroke="${col}" stroke-width="${sel ? 2.5 : 1.8}">${shape}<title>${m.id}: +${r.PSgain} triads, ${r.exactAdded ? fmt(r.maxTenney, 1) + " bits" : "tempered"}, ${r.cs ? "CS" : "not CS"}, ${r.propriety.replace("_", " ")}</title></g>`);
+    parts.push(`<text x="${lx}" y="${ly}" font-size="9.5" text-anchor="${anchor}" style="fill:${sel ? "var(--fg)" : "var(--muted)"}">${m.id.replace("-GREEDY", "-G")}</text>`);
+  });
+  if (!pts.length) parts.push(`<text x="${W / 2}" y="${H / 2}" font-size="12" text-anchor="middle" style="fill:var(--muted)">${state.running ? "Working…" : "No fills to compare yet."}</text>`);
+  svg.innerHTML = parts.join("");
+  svg.querySelectorAll(".pt").forEach((g) => g.addEventListener("click", () => { state.method = g.dataset.m; renderAll(); }));
+}
+
+// ------------------------------------------------------------------ audio
+let audio = null, master = null, wave = null, timers = [];
+const BASE = 261.6256;
+function startAudio() {
+  if (audio) return;
+  try {
+    audio = new (window.AudioContext || window.webkitAudioContext)();
+    master = audio.createGain(); master.gain.value = 0.22; master.connect(audio.destination);
+    wave = audio.createPeriodicWave(new Float32Array([0, 1, 0.42, 0.22, 0.12, 0.06]), new Float32Array(6));
+    $("#audio").textContent = "Audio on"; $("#audio").classList.add("on");
+    $("#stop").disabled = false;
+    renderAll();
+  } catch (e) { $("#audio").textContent = "Audio unavailable"; }
+}
+function voice(c, t, dur, vel = 0.5) {
+  const o = audio.createOscillator(), g = audio.createGain();
+  o.setPeriodicWave(wave); o.frequency.value = BASE * 2 ** (c / 1200);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vel, t + 0.02); g.gain.setTargetAtTime(vel * 0.55, t + 0.05, 0.25); g.gain.setTargetAtTime(0, t + dur, 0.08);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.6);
+}
+function stopAll() { timers.forEach(clearTimeout); timers = []; playingTriad = null; playingTone = null; if (master) { master.disconnect(); master = audio.createGain(); master.gain.value = 0.22; master.connect(audio.destination); } renderCircle(); }
+function tone(c) { voice(c, audio.currentTime + 0.01, 0.6, 0.55); }
+function playScale(cents) {
+  stopAll();
+  const cs = cents.slice().sort((a, b) => a - b), seq = cs.concat([1200], cs.slice().reverse());
+  const t0 = audio.currentTime + 0.08, dt = cs.length > 16 ? 0.17 : 0.26;
+  seq.forEach((c, i) => {
+    voice(c, t0 + i * dt, dt * 1.6, 0.45);
+    timers.push(setTimeout(() => { playingTone = ((c % 1200) + 1200) % 1200; renderCircle(); }, (0.08 + i * dt) * 1000));
+  });
+  timers.push(setTimeout(() => { playingTone = null; renderCircle(); }, (0.08 + seq.length * dt + 0.3) * 1000));
+}
+function playTriads(cents) {
+  stopAll();
+  const list = E.triads(cents.slice().sort((a, b) => a - b), 2, 1200, true).list.slice(0, 24);
+  const t0 = audio.currentTime + 0.08, dt = 1.25;
+  list.forEach((tr, i) => {
+    [tr.a, tr.b, tr.c].forEach((c, j) => voice(c, t0 + i * dt + j * 0.06, dt * 0.85, 0.32));
+    timers.push(setTimeout(() => { playingTriad = tr; renderCircle(); }, (0.08 + i * dt) * 1000));
+  });
+  timers.push(setTimeout(() => { playingTriad = null; renderCircle(); }, (0.08 + list.length * dt) * 1000));
+  $("#status").textContent = `Playing ${list.length} of the filled scale's triads (amber = proportional, teal = subcontrary).`;
+}
+
+// ------------------------------------------------------------------ registered results
+function renderFound(set) {
+  const S = D.gapfill.summary;
+  $("#found-tabs").innerHTML = Object.keys(D.gapfill.seedsets).map((s) => `<button role="tab" aria-selected="${s === set}" class="${s === set ? "on" : ""}" data-set="${s}">${s} · ${D.gapfill.seedsets[s].join("·")}</button>`).join("");
+  document.querySelectorAll("[data-set]").forEach((b) => b.addEventListener("click", () => renderFound(b.dataset.set)));
+  const cov = S[`${set}/coverage`];
+  $("#found-facts").innerHTML = [
+    [`${cov.cs_parent}/${cov.subsets}`, "CS from the parent alone"], [`${cov.cs_exact_ji_low_height}/${cov.subsets}`, "CS from simple just methods"],
+    [`${cov.cs_any}/${cov.subsets}`, "CS from some method"], [`${S.am_hm_mirror.steps_mirrored}/${S.am_hm_mirror.pairs}`, "AM fills mirror HM fills"],
+  ].map(([b, t]) => `<div class="fact"><b>${b}</b><span>${t}</span></div>`).join("");
+  $("#found-table tbody").innerHTML = E.METHODS.map((m) => {
+    const v = S[`${set}/${m.id}`];
+    return `<tr><td class="mname">${m.id}</td><td class="num">${v.filled}/${v.subsets}</td><td class="num">${v.cs}</td><td class="num">${v.proper}</td><td class="num">${fmt(v.mean_n, 1)}</td><td class="num">${v.mean_PS_gain === null ? "–" : (v.mean_PS_gain >= 0 ? "+" : "") + fmt(v.mean_PS_gain, 1)}</td><td class="num">${v.mean_max_tenney ? fmt(v.mean_max_tenney, 1) : "–"}</td><td class="num">${v.tempered_rows}</td></tr>`;
+  }).join("");
+  const hold = Object.entries(cov.holdouts_rescued_by);
+  $("#found-holdouts").innerHTML = hold.length ? `<h3 style="margin-bottom:4px">Subsets the parent cannot fill, and what rescues them</h3>` + (hold.length > 12 ? `<p class="small">${hold.length} subsets. On this seed set the 20¢ rule keeps almost every parent tone out, because its tones sit close together.</p>` : `<ul style="margin:0;padding-left:18px">${hold.map(([s, ms]) => `<li><span class="mono">${esc(s)}</span>: ${ms.length ? ms.map((x) => `<span class="mono">${x}</span>`).join(", ") : "nothing"}</li>`).join("")}</ul>`) : "";
+}
+
+// ------------------------------------------------------------------ research map
+const STATUS_CLASS = { "decided": "ok", "merged into plugin": "ok", "ran, gate pending": "harm", "in review (PR open)": "harm", "earmarked": "plain", "open idea": "plain", "grew into GAPFILL-001": "temp" };
+const mapFilter = { fam: null, status: null };
+function renderMap() {
+  const dirs = D.survey.directions;
+  const fams = [...new Set(dirs.map((d) => d.family))], stats = [...new Set(dirs.map((d) => d.status))];
+  const count = (k, v) => dirs.filter((d) => d[k] === v).length;
+  $("#map-lede").textContent = `${dirs.length} directions from the gate ledger, the experiment log and the project notes. ${count("status", "ran, gate pending")} have run and wait on a gate, ${count("status", "decided")} are decided, and ${dirs.filter((d) => d.status === "earmarked" || d.status === "open idea").length} are ideas not yet run.`;
+  const chip = (kind, v, n) => `<button class="${mapFilter[kind] === v ? "on" : ""}" data-f="${kind}" data-v="${esc(v)}">${esc(v)} <span class="muted mono">${n}</span></button>`;
+  $("#fam-filters").innerHTML = `<button class="${!mapFilter.fam ? "on" : ""}" data-f="fam" data-v="">All families</button>` + fams.map((f) => chip("fam", f, count("family", f))).join("");
+  $("#status-filters").innerHTML = `<button class="${!mapFilter.status ? "on" : ""}" data-f="status" data-v="">Any status</button>` + stats.map((s) => chip("status", s, count("status", s))).join("");
+  document.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { mapFilter[b.dataset.f] = b.dataset.v || null; renderMap(); }));
+  const shown = dirs.filter((d) => (!mapFilter.fam || d.family === mapFilter.fam) && (!mapFilter.status || d.status === mapFilter.status));
+  $("#cards").innerHTML = shown.map((d) => `<article class="card">
+    <div class="top"><span class="fam">${esc(d.family)}</span><span class="pill ${STATUS_CLASS[d.status] || "plain"}">${esc(d.status)}</span></div>
+    <h4>${esc(d.title)}</h4>
+    <p class="q">${esc(d.question)}</p>
+    <p>${esc(d.finding)}</p>
+    ${d.gates && d.gates.length ? `<div class="chips">${d.gates.map((g) => `<span class="pill ${/PASS/.test(g.status) ? "ok" : /FAIL/.test(g.status) ? "no" : "harm"}" title="${esc(g.what)}">${esc(g.id)} ${esc(g.status.split(" ")[0])}</span>`).join("")}</div>` : ""}
+    <details><summary>Three perspectives, next step, sources</summary>
+      <dl class="persp"><dt>Research</dt><dd>${esc(d.tradeoffs.researcher)}</dd><dt>Plugin</dt><dd>${esc(d.tradeoffs.plugin)}</dd><dt>Musician</dt><dd>${esc(d.tradeoffs.musician)}</dd>${d.next ? `<dt>Next</dt><dd>${esc(d.next)}</dd>` : ""}</dl>
+      <p class="why" style="margin-top:6px">${esc((d.experiments || []).join(", "))}${d.experiments && d.experiments.length ? " · " : ""}${esc(d.sources.join("; "))}</p>
+    </details>
+  </article>`).join("") || `<p class="muted">No direction matches both filters.</p>`;
+}
+function renderDecisions() {
+  $("#decisions").innerHTML = D.survey.crossroads.map((c) => `<article class="card decision">
+    <h4>${esc(c.choice)}</h4>
+    <ol>${c.options.map((o) => `<li>${esc(o)}</li>`).join("")}</ol>
+    <p class="small muted">${esc(c.evidence)}</p>
+    <p class="why">${esc(c.sources.join("; "))}</p>
+  </article>`).join("");
+  $("#gates tbody").innerHTML = D.survey.open_gates.map((g) => `<tr><td class="mono">${esc(g.id)}</td><td class="mono">${esc(g.opened)}</td><td>${esc(g.what)}</td><td class="small">${esc(g.blocks || "")}</td></tr>`).join("");
+  $("#conflicts").innerHTML = (D.survey.meta.conflicts_noted || []).map((c) => `<li>${esc(c)}</li>`).join("");
+}
+
+// ------------------------------------------------------------------ wiring
+fillPresets();
+$("#preset").addEventListener("change", (e) => { if (e.target.value !== "custom") applyPreset(Number(e.target.value)); });
+let seedTimer = null;
+$("#seeds").addEventListener("input", (e) => {
+  clearTimeout(seedTimer);
+  seedTimer = setTimeout(() => {
+    const p = parseSeeds(e.target.value);
+    $("#seed-msg").textContent = p.err || "";
+    if (p.err) return;
+    state.seeds = p.seeds; state.roles = Object.fromEntries(Object.entries(state.roles).filter(([s]) => p.seeds.includes(Number(s))));
+    if (state.type === "genus" && state.seeds.length > 7) state.type = "cps";
+    $("#preset").value = "custom";
+    refresh();
+  }, 450);
+});
+$("#stype").addEventListener("change", (e) => { state.type = e.target.value; state.roles = {}; $("#preset").value = "custom"; refresh(); });
+$("#kval").addEventListener("change", (e) => { state.k = Number(e.target.value); state.roles = {}; $("#preset").value = "custom"; refresh(); });
+let sliderTimer = null;
+const slider = (id, keyName) => $(id).addEventListener("input", (e) => {
+  state[keyName] = Number(e.target.value);
+  $("#cap-v").textContent = `${state.cap}¢`; $("#min-v").textContent = `${state.minStep}¢`;
+  clearTimeout(sliderTimer); sliderTimer = setTimeout(refresh, 350);
+});
+slider("#cap", "cap"); slider("#minstep", "minStep");
+$("#registered").addEventListener("click", () => { state.cap = REG.cap; state.minStep = REG.minStep; refresh(); });
+$("#audio").addEventListener("click", startAudio);
+$("#stop").addEventListener("click", stopAll);
+$("#play-sub").addEventListener("click", () => playScale(state.sub.tones.map(E.centsOf)));
+$("#play-fill").addEventListener("click", () => { const r = state.results[state.method]; if (r && r.ok) playScale(r.scale); });
+$("#play-tri").addEventListener("click", () => { const r = state.results[state.method]; if (r && r.ok) playTriads(r.scale); });
+
+const start = Number.isInteger(state.presetIdx) && PRESETS[state.presetIdx] ? state.presetIdx : 0;
+$("#preset").value = String(start);
+applyPreset(start);
+renderFound("canonical");
+renderMap();
+renderDecisions();
+})();
+</script>
