@@ -5772,3 +5772,50 @@ green), receipts `results/gapfill001.jsonl` (one row per seed set × subset
 `results/scl/gapfill001/`: every method's fill of the canonical 1-3-5-7
 hexany (9 in, 11 out) and of the canonical dekany in 1. A gate for
 Marcus's ear on the Ear Bench.
+
+## 2026-10-27 — GAPFILL-001 results + verdicts
+
+**Run.** `gapfill001.py`, 126 subsets × 12 methods, about 100 seconds on 8
+workers. The registered run reproduced the development receipts bit for
+bit (SHA-1 match on `gapfill001.jsonl` and `gapfill001_summary.json`).
+Frozen scorers untouched (both pins verified); 449 research tests green.
+
+**Verdicts.** P-GF1 through P-GF5 are KEPT, all by reproduction, since the
+predictions are the development run of the same code. The one independent
+check inside them is P-GF1, where the machine search agrees with what
+Wilson, Grady and Kraig found by hand.
+
+**What the run shows.**
+- The methods are complementary. On every seed set some subsets are filled
+  as a CS only by the parent, some only by epimoric division, and some only
+  by a MOS. The union reaches 42/42 everywhere, and no low-height exact
+  method alone does.
+- Harmony and evenness pull apart. The fills that add the most triads with
+  the simplest tones (PARENT-CS, GENUS) are almost never proper, which is
+  the improper-but-valid spice of G-006. The fills that come out strictly
+  proper come from arithmetic or harmonic division, recurrences and MOS
+  windows.
+- On the canonical 1-3-5-7 hexany (9 in, 11 out) EPI-AM gives a 10-note CS
+  that is strictly proper, with the largest step 138.6 cents and 13 more
+  triads than the bare hexany. The added tones are 117/64, 585/512,
+  405/256 and 675/512, which bring in the prime 13. REC-GREEDY (meta-slendro,
+  H[n−2] + H[n−3]) gives another 10-note strictly proper CS with 18 more
+  triads, and it agrees with EPI-AM on three of its four tones (585/512,
+  405/256, 675/512). MERU-001's registered law says why: with power-of-two
+  coefficients each new term, octave-reduced, is the arithmetic mean of two
+  earlier terms, so this recurrence is iterated arithmetic division. The
+  recurrence program and Ptolemy's genera meet here.
+- MOS fills keep the subset exact and add tempered passing tones. They are
+  melodically clean (the 351.444-cent window gives the same hexany a
+  strictly proper 10-note CS) but add almost no triads (+2).
+- REC-CS heights (64 to 150 bits on the showcase rows) mean those tones are
+  exact rationals that no ear could hear as just, so the REC-CS row belongs
+  with the tempered methods when JI harmony is the goal.
+
+**Not measured here.** Whether the fills of different subsets share tones
+(the parent fills do, through the 8 completions found in the 2026-10-27
+probe, and nothing here checks the other methods); how the results move
+with CAP and MIN_STEP (Marcus's set is the obvious case); and the ear.
+
+**Gate.** G-040 asks Marcus to audition the 24 showcase fills on the Ear
+Bench.
