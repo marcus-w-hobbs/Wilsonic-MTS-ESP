@@ -28,8 +28,8 @@ I want the search to learn from.
 ## How a judgment is made
 
 For two scales that approximate the same just structure (a hexany, a dekany,
-the eikosany), the bench composes four passages from the structure's own
-triads and plays each one in both scales:
+the eikosany), the bench composes five passages and plays each one in both
+scales. The first four come from the structure's own triads:
 
 1. **Scale run**: the scale up and down one octave. Melody alone.
 2. **Tune**: a melody in the scale's own steps that walks from chord tone to
@@ -37,6 +37,13 @@ triads and plays each one in both scales:
 3. **Chorale**: every triad of the just structure, held, each moving to the
    next by common tones, with a bass an octave below. Harmony alone.
 4. **Tune over chorale**: both at once.
+5. **Added harmony**: the triads each scale has that the just structure does
+   not, held and moving by common tones like the chorale, at most sixteen of
+   them, closest first. Here X and Y play different chords, because the
+   question is which scale grows the better new harmony. I added it for the
+   gap fills of GAPFILL-001, which keep every tone of the structure exactly,
+   so their chorales are identical and the only harmony that can differ is
+   the harmony the filled-in tones create.
 
 Each passage plays as X then Y. Which scale is X is hidden from me and drawn
 fresh every time the page loads. I pick X, Y or Same, and only then does the

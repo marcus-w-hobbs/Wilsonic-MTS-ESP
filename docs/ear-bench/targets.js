@@ -64,3 +64,5 @@ const Targets = (() => {
 
   return { render, compute };
 })();
+
+if (typeof module !== "undefined") module.exports = Targets;
