@@ -10,9 +10,12 @@ const Passages = (() => {
     ["tune", "Tune", "Melody alone: a line in the scale's own steps, walking from chord tone to chord tone."],
     ["chorale", "Chorale", "Harmony alone: every triad of the reference, held, moving by common tones, with a bass."],
     ["over", "Tune over chorale", "Melody and harmony together: the tune above a softer chorale."],
+    ["added", "Added harmony", "Harmony the scale grows: its own triads that the reference does not have, held, moving by common tones, with a bass. X and Y play different chords."],
   ];
   const PAUSE = 1.2;
-  const CHORDAL = new Set(["tune", "chorale", "over"]);
+  const CHORDAL = new Set(["tune", "chorale", "over", "added"]);
+  // A side with no added chords still gets a short silent turn, so X then Y keeps its shape.
+  const EMPTY = 1.5;
   let blind = {};
   let blindFor = "";
   // What is sounding now: {id, title, segs: [{label, t0, t1}], chordNames, notes}.
@@ -23,10 +26,12 @@ const Passages = (() => {
   const clock = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
 
   function where(p, seg, into) {
-    if (CHORDAL.has(p.id) && p.chordNames.length) {
-      const i = Math.min(p.chordNames.length - 1, Math.floor(into / Composer.SLOT));
-      const c = p.chordNames[i];
-      return `chord ${i + 1} of ${p.chordNames.length} · ${c.form || "?"} (${c.kind === "P" ? "proportional" : "subcontrary"})`;
+    const names = seg.names || p.chordNames;
+    if (seg.empty) return "no chords beyond the reference's";
+    if (CHORDAL.has(p.id) && names.length) {
+      const i = Math.min(names.length - 1, Math.floor(into / Composer.SLOT));
+      const c = names[i];
+      return `chord ${i + 1} of ${names.length} · ${c.form || "?"} (${c.kind === "P" ? "proportional" : "subcontrary"})`;
     }
     const n = Math.min(p.notes, Math.floor(into / Composer.STEP) + 1);
     return `note ${n} of ${p.notes} · ${n <= Math.ceil(p.notes / 2) ? "going up" : "coming down"}`;
@@ -109,7 +114,26 @@ const Passages = (() => {
 
   function schedule(events, t0, hz) {
     events.forEach((e) => Synth.blip(hz(e.cents), t0 + e.t, e.dur, e.level));
-    return t0 + Composer.length(events);
+    return t0 + (events.length ? Composer.length(events) : EMPTY);
+  }
+
+  // The chorale is the same in both scales when both hold the reference's
+  // tones exactly (gap fills do): then only the added harmony can differ.
+  const sameEvents = (x, y) => x.length === y.length && x.every((e, i) => Math.abs(e.cents - y[i].cents) < 0.01);
+
+  function seconds(music, id) {
+    const [p, q] = [Composer.length(music.a[id]), Composer.length(music.b[id])].map(Math.round).sort((u, v) => u - v);
+    return p === q ? `${p} s each.` : `${p} s or ${q} s.`;
+  }
+
+  function note(music, id, ctx) {
+    if (id === "chorale" && sameEvents(music.a.chorale, music.b.chorale)) {
+      return `<span class="warn">Identical in both scales: they hold the reference's tones exactly, so judge their harmony with Added harmony.</span>`;
+    }
+    if (id !== "added") return "";
+    const totals = [music.a.addedTotal, music.b.addedTotal].sort((u, v) => u - v);
+    const capped = totals[1] > Composer.MAX_ADDED ? ` A scale with more plays its ${Composer.MAX_ADDED} closest.` : "";
+    return `<span class="hint">The two scales add ${totals[0] === totals[1] ? `${totals[0]} chords each` : `${totals[0]} and ${totals[1]} chords`} (triads within 2¢ that the reference lacks).${capped}</span>`;
   }
 
   function render(box, ctx) {
@@ -136,7 +160,7 @@ const Passages = (() => {
             : "";
           return `
           <div class="p-row" data-row="${id}">
-            <div class="p-text"><strong>${title}</strong><span class="hint">${desc} ${Math.round(Composer.length(music.a[id]))} s each.</span></div>
+            <div class="p-text"><strong>${title}</strong><span class="hint">${desc} ${seconds(music, id)}</span>${note(music, id, ctx)}</div>
             <div class="seg">
               <button class="btn sm" data-pplay="xy" data-id="${id}">Play X then Y</button>
               <button class="btn sm" data-pplay="x" data-id="${id}">X</button>
@@ -166,13 +190,21 @@ const Passages = (() => {
       const mode = btn.dataset.pplay;
       const title = LIST.find(([k]) => k === id)[1];
       const base = { id, title, chordNames: music.chordNames, notes: music.a[id].length };
+      // Each side's own chord names (only the added chords differ between sides).
+      const seg = (label, slot, start, end) => ({
+        label, t0: start, t1: end,
+        names: id === "added" ? music[slot].addedNames : null,
+        empty: music[slot][id].length === 0,
+      });
       if (mode === "xy") {
-        const end = schedule(music[slotOf(id, "x")][id], t0, ctx.hz);
-        const end2 = schedule(music[slotOf(id, "y")][id], end + PAUSE, ctx.hz);
-        startNow({ ...base, segs: [{ label: "X", t0, t1: end }, { label: "Y", t0: end + PAUSE, t1: end2 }] });
+        const [sx, sy] = [slotOf(id, "x"), slotOf(id, "y")];
+        const end = schedule(music[sx][id], t0, ctx.hz);
+        const end2 = schedule(music[sy][id], end + PAUSE, ctx.hz);
+        startNow({ ...base, segs: [seg("X", sx, t0, end), seg("Y", sy, end + PAUSE, end2)] });
       } else {
-        const end = schedule(music[slotOf(id, mode)][id], t0, ctx.hz);
-        startNow({ ...base, segs: [{ label: mode.toUpperCase(), t0, t1: end }] });
+        const slot = slotOf(id, mode);
+        const end = schedule(music[slot][id], t0, ctx.hz);
+        startNow({ ...base, segs: [seg(mode.toUpperCase(), slot, t0, end)] });
       }
     }));
     box.querySelectorAll("[data-ppick]").forEach((btn) => btn.addEventListener("click", () => {

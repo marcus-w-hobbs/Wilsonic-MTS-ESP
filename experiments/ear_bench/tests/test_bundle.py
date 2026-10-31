@@ -113,6 +113,14 @@ class TestReference(unittest.TestCase):
         missing = self.ref("dynmos001_canonical_sub497774_N29_hexany[in=11,out=5]", folder="dynmos001")
         self.assertEqual(missing, bundle.EIKOSANY_CANONICAL)
 
+    def test_gap_fill_reference_is_its_subset(self):
+        census = "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
+        got = self.ref("canonical_dekany_in_in1_outnone_EPI-AM", folder="gapfill001", names=[census])
+        self.assertEqual(got, census)
+        self.assertIsNone(self.ref("canonical_dekany_in_in5_outnone_EPI-AM", folder="gapfill001", names=[census]))
+        hexany = self.ref("canonical_hexany_in9_out11_REC-CS", folder="gapfill001")
+        self.assertEqual(hexany, bundle.HEXANY_1357)
+
     def test_no_reference_for_other_seeds_or_library(self):
         self.assertIsNone(self.ref("dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none]", folder="dynmos001"))
         self.assertIsNone(self.ref("CPS_4_2_N6_1-3-5-7", folder="triads", module="triads"))

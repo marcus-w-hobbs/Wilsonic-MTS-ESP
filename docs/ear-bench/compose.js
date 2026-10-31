@@ -6,8 +6,11 @@
 //   tune    a melody in the chain's own steps that walks from chord tone to
 //           chord tone, one chord's time per target
 //   over    the tune above a softer chorale
+//   added   the chain's own triads that the reference does not have (the
+//           harmony a gap fill grows), held, by common tones, with a bass
 // The progression is fixed by the reference (identical in both chains); the
-// pitches are each chain's nearest tones. Pure functions: events only.
+// pitches are each chain's nearest tones. The added chords are each chain's
+// own, so X and Y play different chords there. Pure functions: events only.
 "use strict";
 
 const Composer = (() => {
@@ -16,6 +19,10 @@ const Composer = (() => {
   const STEP = 0.22;
   const SLOT = CHORD + GAP;
   const CENTER = 700;
+  // Added harmony: the page's triad finder at the triad scorer's 2c, capped so
+  // a dense chain still plays in well under a minute (closest chords first).
+  const ADDED_TOL = 2;
+  const MAX_ADDED = 16;
 
   const pc = (c) => ((Math.round(c * 10) / 10) % 1200 + 1200) % 1200;
   const sameTone = (x, y) => Math.min(Math.abs(x - y), 1200 - Math.abs(x - y)) < 1;
@@ -46,6 +53,32 @@ const Composer = (() => {
       const mid = t.ji[1] - off;
       return 1200 * Math.round((CENTER - mid) / 1200);
     });
+  }
+
+  // A triad's shape on the chain: root degree class, then the other two
+  // degrees above it, so a reference triad and the same chord found in the
+  // chain compare equal wherever their octaves sit.
+  const shapeOf = (t, n) => `${t.kind}:${((t.degrees[0] % n) + n) % n}:${t.degrees[1] - t.degrees[0]}:${t.degrees[2] - t.degrees[0]}`;
+
+  // The chain's own triads that are not the reference's (in chain order: the
+  // finder lists the closest first), at most MAX_ADDED of them.
+  function addedTriads(chain, targets) {
+    const have = new Set(targets.map((t) => shapeOf(t, chain.n)));
+    const found = Tuning.findTriads(chain, ADDED_TOL).filter((t) => !have.has(shapeOf(t, chain.n)));
+    return { total: found.length, triads: found.slice(0, MAX_ADDED) };
+  }
+
+  // The added chords as a chorale of their own: common-tone order, each
+  // chord's middle near CENTER cents above the chain's 1/1.
+  function addedChords(triads) {
+    const items = triads.map((t) => ({ ...t, ji: t.cents }));
+    const by = new Map(items.map((t) => [keyOf(t, 0), t]));
+    const order = progression(items, 0);
+    const shift = shifts(order, by, 0);
+    return {
+      chords: order.map((k, i) => ({ cents: by.get(k).cents, shift: shift[i] })),
+      names: order.map((k) => ({ kind: by.get(k).kind, form: by.get(k).form })),
+    };
   }
 
   function chorale(chords, level = 1) {
@@ -102,6 +135,8 @@ const Composer = (() => {
       const chain = Tuning.model(scale);
       // Same register in both chains: shift by the reference, measured from each chain's own alignment.
       const chords = order.map((k, i) => ({ cents: by.get(k).cents, shift: shiftA[i] - align.off + A.align.off }));
+      const extra = addedTriads(chain, [...by.values()]);
+      const grown = addedChords(extra.triads);
       const place = (events) => (anchor
         ? events.map((e) => ({ ...e, cents: e.cents - (e.tag.role === "chord" || e.tag.role === "bass" ? A.align.off : align.off) }))
         : events);
@@ -110,6 +145,10 @@ const Composer = (() => {
         chorale: place(chorale(chords)),
         tune: place(tune(chain, chords)),
         over: place([...chorale(chords, 0.55), ...tune(chain, chords)]),
+        // Added chords are the chain's own, so anchoring removes its own offset.
+        added: anchor ? chorale(grown.chords).map((e) => ({ ...e, cents: e.cents - align.off })) : chorale(grown.chords),
+        addedNames: grown.names,
+        addedTotal: extra.total,
       };
     };
     // Chord identities in playing order (same for both chains, so naming them stays blind).
@@ -122,5 +161,7 @@ const Composer = (() => {
 
   const length = (events) => events.reduce((m, e) => Math.max(m, e.t + e.dur), 0);
 
-  return { compose, length, progression, SLOT, STEP };
+  return { compose, length, progression, addedTriads, SLOT, STEP, MAX_ADDED };
 })();
+
+if (typeof module !== "undefined") module.exports = Composer;

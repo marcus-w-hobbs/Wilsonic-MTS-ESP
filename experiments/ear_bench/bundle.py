@@ -33,7 +33,7 @@ EXPERIMENTS = REPO / "experiments"
 GATES_MD = EXPERIMENTS / "GATES.md"
 DEFAULT_OUT = REPO / "docs" / "ear-bench" / "data.json"
 
-BUNDLE_VERSION = "1.1.0"
+BUNDLE_VERSION = "1.2.0"
 
 # Folders whose gate row does not spell out results/scl/<folder>.
 EXTRA_FOLDER_GATES = {
@@ -62,8 +62,24 @@ GATE_PAIRS = {
                "lattice.cpsfit003.cpsfit003_hexany_N16_g116.676", "lattice.cpsfit002.cpsfit002_hexany_N16_g116.588"),
               ("N = 18: count (10 of 12) vs worst triad (6 of 12)",
                "lattice.cpsfit003.cpsfit003_hexany_N18_g77.818", "lattice.cpsfit002.cpsfit002_hexany_N18_g116.588")],
+    "G-040": [("Hexany: arithmetic division vs parent tones (strictly proper vs most common tones)",
+               "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM", "lattice.gapfill001.canonical_hexany_in9_out11_PARENT-CS"),
+              ("Hexany: arithmetic vs harmonic division (the inversion mirror)",
+               "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM", "lattice.gapfill001.canonical_hexany_in9_out11_EPI-HM"),
+              ("Hexany: arithmetic division vs recurrence (agree on 3 of 4 tones)",
+               "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM", "lattice.gapfill001.canonical_hexany_in9_out11_REC-GREEDY"),
+              ("Hexany: just fill vs MOS-window fill",
+               "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM", "lattice.gapfill001.canonical_hexany_in9_out11_MOS-CS"),
+              ("Dekany: parent tones vs arithmetic division",
+               "lattice.gapfill001.canonical_dekany_in_in1_outnone_PARENT-CS", "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-AM"),
+              ("Dekany: mediant vs MOS-window fill",
+               "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-MED", "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-CS")],
 }
 SUBSET_TAG = re.compile(r"hexany\[in=(\d+),out=(\d+)\]")
+# GAPFILL-001 names its canonical subsets kind_in<x>_out<y>; the subset census
+# (SUBSETMEL-000) holds the same subsets as plain JI scales.
+GAPFILL_TAG = re.compile(r"^canonical_(hexany|dekany_in|dekany_out)_in(\w+?)_out(\w+?)_")
+CENSUS_PREFIX = "lattice.subsetmel000.sm000_1-3-5-7-9-11_{kind}_in{inn}_out{out}_"
 
 GATE_ROW = re.compile(r"^\|\s*(G-\d{3})\s*\|\s*([^|]*)\|(.*)\|\s*([^|]*)\|\s*$")
 SCL_FOLDER_REF = re.compile(r"results/scl/([a-z0-9_]+)")
@@ -179,6 +195,12 @@ def collect_scales(experiments: Path, gate_of: dict[str, str]) -> list[dict]:
     return scales
 
 
+def census_scale(names: set[str], kind: str, inn: str, out: str) -> str | None:
+    prefix = CENSUS_PREFIX.format(kind=kind, inn=inn, out=out)
+    match = sorted(n for n in names if n.startswith(prefix))
+    return match[0] if match else None
+
+
 def reference_for(scale: dict, names: set[str]) -> str | None:
     """The JI scale a fitted chain approximates, when the bundle holds it."""
     name, desc, folder = scale["name"], scale["description"], scale["folder"]
@@ -188,9 +210,14 @@ def reference_for(scale: dict, names: set[str]) -> str | None:
         return None
     subset = SUBSET_TAG.search(name)
     if subset and "canonical" in name:
-        prefix = f"lattice.subsetmel000.sm000_1-3-5-7-9-11_hexany_in{subset[1]}_out{subset[2]}_"
-        match = sorted(n for n in names if n.startswith(prefix))
-        return match[0] if match else EIKOSANY_CANONICAL
+        match = census_scale(names, "hexany", subset[1], subset[2])
+        return match or EIKOSANY_CANONICAL
+    gapfill = GAPFILL_TAG.match(name)
+    if gapfill:
+        # A gap fill keeps its subset exactly: the subset itself is the reference,
+        # and a hexany missing from the census is the 1-3-5-7 hexany transposed.
+        match = census_scale(names, *gapfill.groups())
+        return match or (HEXANY_1357 if gapfill[1] == "hexany" else None)
     if "eikosany" in name:
         return EIKOSANY_CANONICAL
     if "dek52" in name:

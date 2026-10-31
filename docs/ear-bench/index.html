@@ -184,6 +184,17 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .explore-key { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; max-width: 80ch; }
 .pairs { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .compare { border-color: var(--accent); }
+.x-guide { border: 1px solid var(--rule); border-radius: 8px; padding: 8px 12px; background: var(--paper); }
+.x-guide > summary { cursor: pointer; }
+.x-guide ol { margin: 8px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 90ch; font-size: 0.9rem; }
+.x-guide .hint { max-width: 90ch; }
+.x-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.x-legend .label { margin-right: 8px; }
+.x-swatch { width: 18px; height: 14px; border-radius: 3px; border: 1px solid var(--rule); display: inline-block; }
+.x-swatch.ring { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ok); }
+.x-dotkey { color: var(--ok); font-weight: 700; }
+.x-cols { min-height: 0; }
+.x-unit { font: 500 0.7rem var(--f-body); color: var(--ink-2); font-stretch: normal; }
 .x-controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
 .x-grid { display: flex; flex-direction: column; gap: 6px; overflow-x: auto; }
 .x-row { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: center; min-width: 560px; }

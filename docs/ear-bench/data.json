@@ -1,5 +1,5 @@
 {
- "version": "1.1.0",
+ "version": "1.2.0",
  "gates": [
   {
    "id": "G-006",
@@ -170,6 +170,42 @@
    "state": "PENDING",
    "folders": [
     "gapfill001"
+   ],
+   "pairs": [
+    {
+     "label": "Hexany: arithmetic division vs parent tones (strictly proper vs most common tones)",
+     "a": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
+     "b": "lattice.gapfill001.canonical_hexany_in9_out11_PARENT-CS"
+    },
+    {
+     "label": "Hexany: arithmetic vs harmonic division (the inversion mirror)",
+     "a": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
+     "b": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-HM"
+    },
+    {
+     "label": "Hexany: arithmetic division vs recurrence (agree on 3 of 4 tones)",
+     "a": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
+     "b": "lattice.gapfill001.canonical_hexany_in9_out11_REC-GREEDY"
+    },
+    {
+     "label": "Hexany: just fill vs MOS-window fill",
+     "a": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
+     "b": "lattice.gapfill001.canonical_hexany_in9_out11_MOS-CS"
+    },
+    {
+     "label": "Dekany: parent tones vs arithmetic division",
+     "a": "lattice.gapfill001.canonical_dekany_in_in1_outnone_PARENT-CS",
+     "b": "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-AM"
+    },
+    {
+     "label": "Dekany: mediant vs MOS-window fill",
+     "a": "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-MED",
+     "b": "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-CS"
+    }
+   ],
+   "pair": [
+    "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
+    "lattice.gapfill001.canonical_hexany_in9_out11_PARENT-CS"
    ]
   }
  ],
@@ -2358,7 +2394,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-CS",
@@ -2390,7 +2426,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-HM",
@@ -2422,7 +2458,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-MED",
@@ -2454,7 +2490,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_GENUS-CS",
@@ -2486,7 +2522,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_GENUS-GREEDY",
@@ -2518,7 +2554,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-CS",
@@ -2550,7 +2586,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-GREEDY",
@@ -2582,7 +2618,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-PURE",
@@ -2668,7 +2704,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_PARENT-CS",
@@ -2700,7 +2736,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_REC-CS",
@@ -2732,7 +2768,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_dekany_in_in1_outnone_REC-GREEDY",
@@ -2764,7 +2800,7 @@
     1200.0
    ],
    "ratios": null,
-   "reference": null
+   "reference": "lattice.subsetmel000.sm000_1-3-5-7-9-11_dekany_in_in1_outnone_cs"
   },
   {
    "id": "lattice.gapfill001.canonical_hexany_in9_out11_EPI-AM",
