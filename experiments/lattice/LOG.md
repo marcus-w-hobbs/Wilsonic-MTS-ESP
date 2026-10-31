@@ -5830,3 +5830,81 @@ the two tests disagree (flagship hexany 11 in 15 out, MOS-GREEDY). In 1.0.1
 the search uses M2's rule, and two rows move: that hexany's MOS-GREEDY row
 now agrees with M2, and its MOS-CS fill gains 3 triads instead of 5. No
 registered prediction, coverage count or showcase scale changes.
+
+## 2026-10-31 — GAPFILL-002 pre-registration (entry before the registered run)
+
+**Why.** GAPFILL-001 filled every subset on its own, and the fills that give
+the best melody share almost nothing across subsets: on the canonical set
+the 132 arithmetic-division tones are 78 distinct pitches, the 86
+recurrence tones are 84, the 178 MOS-CS tones are 131, while the 200 parent
+tones are 19. A composer moving hexany to hexany would meet new tones every
+time. Marcus (2026-10-31) chose the one-table framing: one small set F of
+added tones such that every subset finds its constant-structure completion
+inside F. The instrument is then one fixed tuning table, the eikosany plus F,
+with each subset selecting its keys, which is the shape of the EG6
+root-mapping spec.
+
+**Method.** Two stages. (1) For each subset, the inclusion-minimal CS
+completions (every step ≤ CAP = 160 cents, MIN_STEP = 20 cents, frozen M2
+semantics) with at most 2 tones more than its smallest, listed by
+GAPFILL-001's gap-directed search run to enumerate, from the subset's own
+GAPFILL-001 pool and from the whole table's pool (tones shared by more
+subsets tried first), 60 000 nodes and 200 completions per list. (2) The
+smallest F such that every coverable subset has a listed completion inside
+F, by branch and bound (greedy upper bound, starts from the component
+tables for a combined table, lower bound from disjoint shortfalls, 50 000
+nodes). A table that is not proven optimal reports its root lower bound.
+Optimality is over the listed completions, never over all completions.
+
+**Tables.** PARENT (eikosany tones), GENUS (all seed products), EPI-AM and
+EPI-HM (every subset's arithmetic or harmonic split points), EPI (both plus
+mediants), EXACT (PARENT + GENUS + EPI), MOS (one generator's chain: the one
+GAPFILL-001's MOS-CS chose most often on that seed set), EXACT+MOS. Arm C:
+the smallest CS superset of the eikosany itself from the EXACT pool (at
+most 40 tones, 200 000 nodes), and whether eikosany + F is CS as a whole for
+each table. Each subset plays its smallest completion inside F (ties: more
+P + S) and is scored with the frozen scorers through gapfill001.score.
+Common tones are counted between every pair of covered subsets that share
+a tone, in the bare subsets and in the filled scales.
+
+**What was seen before this entry, stated plainly.** A probe (canonical
+only, an earlier lister without own-pool seeding) printed the PARENT table
+(12 tones) and, after the predictions below were written, the GENUS table
+(17 tones). A development run of an earlier build (no component starts)
+then ran the canonical set in full: PARENT 12, GENUS 17, EPI-AM 22, EPI-HM
+22, EPI 47, EXACT 37, MOS 23, EXACT+MOS 46 (the last four not proven, and
+larger than their components, which is why the component starts were
+added), no top-first superset found, no whole table CS. So the canonical
+verdicts on P-GF6 to P-GF11 are not blind; the flagship and Marcus's set
+have not been run by any build, and P-GF12 to P-GF14 are written for them
+before they run.
+
+**Predictions written blind** (scratch file timestamped 2026-10-31T20:26:57Z,
+before any table size was seen; copied verbatim, numbering added):
+- **P-GF6.** GENUS table (canonical): |F| ≤ 16 tones covers all 36
+  GENUS-coverable subsets.
+- **P-GF7.** EPI table: |F| < half the per-subset minima summed (recurring
+  gaps share split points).
+- **P-GF8.** Mixed exact table (PARENT+GENUS+EPI): covers ≥ 40/42
+  canonical, |F| ≤ GENUS table + 4.
+- **P-GF9.** Top-first: no CS superset of the canonical eikosany with ≤ 40
+  tones from the exact pools within budget.
+- **P-GF10.** No table as a whole (eikosany + F) is itself CS.
+- **P-GF11.** AM-only and HM-only tables have equal |F| on every seed set
+  (inversion mirror).
+
+**Predictions for the seed sets not yet run** (flagship 1·7·9·11·15·29,
+Marcus's 1·45·135·225·19·377):
+- **P-GF12 (sharing pays everywhere).** On both, every exact table that
+  covers anything needs fewer than half as many tones as its per-subset
+  minima summed.
+- **P-GF13 (affinity).** On both, every table raises the mean common tones
+  between neighbouring subsets above the bare subsets' mean.
+- **P-GF14 (Marcus's set).** PARENT covers 0 subsets (as in GAPFILL-001),
+  and the GENUS table covers at least 34 with |F| ≤ 20.
+
+**Deliverables.** `gapfill002.py` and `tests/test_gapfill002.py` (7 tests,
+green), receipts `results/gapfill002.jsonl` (seed set × table × subset) and
+`results/gapfill002_summary.json`, and one Scala file per canonical table
+under `results/scl/gapfill002/` (the whole instrument, eikosany + F), plus a
+gate for Marcus's ear on the Ear Bench.
