@@ -1,0 +1,12 @@
+{
+  "$comment": "Post list for the research blog, rendered at wilsonic.co/blog. The website fetches this file, so publishing a post is one PR here: add the markdown under docs/ and list it below with a unique slug. path is relative to the repository root. The site sorts newest-first by date.",
+  "posts": [
+    {
+      "slug": "tunings-that-ring",
+      "title": "The Tunings That Ring",
+      "description": "I describe the open research program I run on Erv Wilson's scale designs, disclose the scoring function and the experiment queue in full, and ask for your help improving both.",
+      "date": "2026-07-25",
+      "path": "docs/research-blog-001.md"
+    }
+  ]
+}
