@@ -1,0 +1,36 @@
+# Rebuilds wilsonic.co when documentation or research content merges to main.
+#
+# The website renders docs/manual, docs/blog, and the research notes directly
+# from this repository with a one-hour ISR cache; this hook turns that hour
+# into about a minute by triggering a Vercel production rebuild on merge.
+#
+# One-time setup (requires the Vercel account owner):
+#   1. Vercel dashboard → wilsonic-website project → Settings → Git →
+#      Deploy Hooks → create a hook (any name, branch: main) and copy its URL.
+#   2. This repository → Settings → Secrets and variables → Actions →
+#      new repository secret named VERCEL_DEPLOY_HOOK_URL with that URL.
+# Until the secret exists, this workflow runs and skips harmlessly.
+
+name: Website deploy hook
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "README.md"
+
+jobs:
+  trigger-website-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel production rebuild
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL secret is not set; skipping website rebuild."
+            exit 0
+          fi
+          curl --silent --fail --show-error -X POST "$DEPLOY_HOOK_URL" > /dev/null
+          echo "Triggered wilsonic.co production rebuild."
