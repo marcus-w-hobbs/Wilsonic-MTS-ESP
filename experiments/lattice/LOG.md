@@ -5663,3 +5663,170 @@ one val, which would move the floors to 46, 53 and 72 notes. Before G-037 is
 decided, SUBFIT-002's val solve should be rerun against this val to find
 which reading is right (a narrower mapping range in the solve is one
 possible cause). Nothing registered changes here.
+
+## 2026-10-27 — GAPFILL-001 pre-registration (entry before the registered run)
+
+**Why.** Marcus (2026-10-27), after the Greek tetrachord spike: "let's
+accumulate methods for filling in gaps, explore the tradeoffs. the goal is
+to embrace the JI harmony and create amazing melodies." Constant-structure
+gap-filling of the top structure would be good, but the complete musical
+answer is a CS fill for every subset. This experiment puts the methods the
+program already has side by side on the same subsets and the same axes,
+and it is built so that a new method is one new pool.
+
+**Lineage.** Archytas's enharmonic (5/4 · 36/35 · 28/27) is Wilson's
+two-step mediant cascade from 1/1 to 4/3, and Farey neighbours always differ
+by an epimore. Ptolemy's genera come from arithmetic division of epimores
+(n : n+1 : n+2), which is the proportional-triad condition in linear
+frequency, and harmonic division is the subcontrary one. Archytas's theorem
+that no epimore has a rational half is why every just fill of an epimoric
+gap is asymmetric. The Wilson–Grady 14-tone 1-3-5-7-9 double dekany and
+Kraig's note that the 1-3-7-9-15 dekany needs 4 added tones to be CS
+(archive `dekany_14_tone_constant_structure/`, cited in the SUBSET-MEL-000
+entry) are by-hand gap fills, and they are the test cases.
+
+**Objects.** Three seed sets: canonical 1·3·5·7·9·11, the CS-EIK-001
+flagship 1·7·9·11·15·29, and Marcus's 1·45·135·225·19·377. For each, the
+30 hexanies and 12 dekanies of the SUBSET-MEL-000 census (126 subsets).
+Each subset keeps its exact tones (except MOS-PURE), and a method adds
+tones until no step is wider than CAP = 160 cents. An added tone stays at
+least MIN_STEP = 20 cents from every tone already there.
+
+**Methods (pool × selector).**
+- PARENT-CS: exact tones of the parent eikosany, smallest CS superset.
+- GENUS-GREEDY / GENUS-CS: exact tones of the whole Euler genus (all seed
+  products); greedy takes the simplest tone (Tenney height) in the widest
+  gap.
+- EPI-AM / EPI-HM / EPI-MED: split the widest gap over CAP at the
+  arithmetic mean, the harmonic mean, or the mediant of its endpoints,
+  recursively (constructive, no search). EPI-CS: smallest CS superset from
+  the union of all three split sets.
+- REC-GREEDY / REC-CS: the 16 MERU-001 recurrences seeded with the subset
+  (exact rational terms); greedy adds terms in order when they land in a
+  gap over CAP, best recurrence = fewest added tones; the CS search gets
+  the best recurrence's first 60 terms.
+- MOS-GREEDY / MOS-CS: the DYNMOS-001 window (12 fixed generators, smallest
+  keeping level per generator), subset exact and the unassigned window
+  degrees as tempered fills; greedy takes the degree nearest the centre of
+  the widest gap, best generator = fewest added tones.
+- MOS-PURE: the DYNMOS-001 window itself with the subset retuned (the
+  reference, not a fill).
+
+The CS selector is gap-directed iterative deepening (branch only on pool
+tones inside the widest gap over CAP, prune by the lower bound on tones
+still needed), at most 24 tones, budget 200 000 nodes, with the frozen M2
+semantics (single-linkage at 0.5 cents) as the search test.
+
+**Axes.** Frozen triads v1.1.0 (score_tempered at 2 cents) for P + S and
+the gain over the bare subset; frozen melodic v0.1.0 for CS (M2 at 0.5
+cents, the verdict), propriety (M3) and gap classes (M1); size; exact vs
+tempered added tones; Tenney height of exact added tones; membership of
+added tones in the eikosany and the genus.
+
+**How the predictions were made.** The runner and its tests were written
+and run in development before this entry, so the predictions below are the
+numbers of that development run of the same code. The registered run must
+reproduce them bit for bit (the receipts carry no wall-clock fields; two
+development runs already matched by hash).
+
+**Predictions.**
+- **P-GF1 (by-hand fills reproduced).** The 1-3-5-7-9 CPS(5,2) and CPS(5,3)
+  dekanies each need exactly 4 genus tones to become CS, with no 3-tone
+  fill, and the other dekany is one of the minimal fills, giving the
+  14-tone Wilson–Grady union. Kraig's 1-3-7-9-15 dekany has no genus fill
+  of 4 or fewer tones. (Pinned in tests.)
+- **P-GF2 (parent coverage).** CS from the parent eikosany alone: canonical
+  36/42 (8 of 12 dekanies, 28 of 30 hexanies; the holdouts are the four
+  dekanies in or out of 3 and 7, and hexany 3 in 7 out with its partner),
+  flagship 40/42, Marcus's set 0/42. On Marcus's set the 0 comes partly
+  from the MIN_STEP rule: his eikosany's tones sit close together, and with
+  the rule off the search exhausts its budget on 34 subsets and finds
+  nothing on 8.
+- **P-GF3 (no method alone, all methods together).** No single method
+  reaches CS on every subset of the canonical set or Marcus's set (the best
+  is REC-CS at 40/42 on both). On the flagship REC-CS does reach 42/42, at
+  a mean largest Tenney height of 90 bits. The union of methods reaches
+  CS on 42/42 subsets for all three. Restricted to exact low-height methods
+  (PARENT, GENUS, EPI), the union reaches 40/42 canonical, 42/42 flagship,
+  34/42 Marcus. The canonical dekanies in or out of 7 reach CS only through
+  MOS-PURE (retuning).
+- **P-GF4 (the AM/HM mirror).** Inversion swaps arithmetic and harmonic
+  means, and every hexany or dekany has its inversion partner in the same
+  family, so the EPI-AM fill of a subset is the mirror image of the EPI-HM
+  fill of its partner, with P and S swapped and the same CS and propriety
+  verdicts: 126 of 126 pairs.
+- **P-GF5 (the trade, canonical).** Of the methods whose fills are all CS,
+  PARENT-CS gains the most triads (mean +23.6 P+S at 12.4 notes) with the
+  simplest new tones (mean largest Tenney height 15.9 bits), every added
+  tone a common tone, and none of its 36 fills proper. GENUS-GREEDY gains
+  more (+28.7) but only 6 of its 42 fills are CS. EPI-AM and EPI-HM fill all 42 with
+  no search, 26 CS and 14 proper, gain +16.5, new primes at Tenney 18–20.
+  REC-CS reaches CS most often (40/42) but its tones average 95 bits of
+  Tenney height, so they are exact in name only. MOS-CS reaches 38/42 with
+  tempered fills and the smallest gain (+7.9). MOS-PURE needs 37.5 notes on
+  average.
+
+**Deliverables.** `gapfill001.py` and `tests/test_gapfill001.py` (11 tests,
+green), receipts `results/gapfill001.jsonl` (one row per seed set × subset
+× method) and `results/gapfill001_summary.json`, and 24 Scala files under
+`results/scl/gapfill001/`: every method's fill of the canonical 1-3-5-7
+hexany (9 in, 11 out) and of the canonical dekany in 1. A gate for
+Marcus's ear on the Ear Bench.
+
+## 2026-10-27 — GAPFILL-001 results + verdicts
+
+**Run.** `gapfill001.py`, 126 subsets × 12 methods, about 100 seconds on 8
+workers. The registered run reproduced the development receipts bit for
+bit (SHA-1 match on `gapfill001.jsonl` and `gapfill001_summary.json`).
+Frozen scorers untouched (both pins verified); 449 research tests green.
+
+**Verdicts.** P-GF1 through P-GF5 are KEPT, all by reproduction, since the
+predictions are the development run of the same code. The one independent
+check inside them is P-GF1, where the machine search agrees with what
+Wilson, Grady and Kraig found by hand.
+
+**What the run shows.**
+- The methods are complementary. On every seed set some subsets are filled
+  as a CS only by the parent, some only by epimoric division, and some only
+  by a MOS. The union reaches 42/42 everywhere, and no low-height exact
+  method alone does.
+- Harmony and evenness pull apart. The fills that add the most triads with
+  the simplest tones (PARENT-CS, GENUS) are almost never proper, which is
+  the improper-but-valid spice of G-006. The fills that come out strictly
+  proper come from arithmetic or harmonic division, recurrences and MOS
+  windows.
+- On the canonical 1-3-5-7 hexany (9 in, 11 out) EPI-AM gives a 10-note CS
+  that is strictly proper, with the largest step 138.6 cents and 13 more
+  triads than the bare hexany. The added tones are 117/64, 585/512,
+  405/256 and 675/512, which bring in the prime 13. REC-GREEDY (meta-slendro,
+  H[n−2] + H[n−3]) gives another 10-note strictly proper CS with 18 more
+  triads, and it agrees with EPI-AM on three of its four tones (585/512,
+  405/256, 675/512). MERU-001's registered law says why: with power-of-two
+  coefficients each new term, octave-reduced, is the arithmetic mean of two
+  earlier terms, so this recurrence is iterated arithmetic division. The
+  recurrence program and Ptolemy's genera meet here.
+- MOS fills keep the subset exact and add tempered passing tones. They are
+  melodically clean (the 351.444-cent window gives the same hexany a
+  strictly proper 10-note CS) but add almost no triads (+2).
+- REC-CS heights (64 to 150 bits on the showcase rows) mean those tones are
+  exact rationals that no ear could hear as just, so the REC-CS row belongs
+  with the tempered methods when JI harmony is the goal.
+
+**Not measured here.** Whether the fills of different subsets share tones
+(the parent fills do, through the 8 completions found in the 2026-10-27
+probe, and nothing here checks the other methods); how the results move
+with CAP and MIN_STEP (Marcus's set is the obvious case); and the ear.
+
+**Gate.** G-040 asks Marcus to audition the 24 showcase fills on the Ear
+Bench.
+
+## 2026-10-27 — Note: GAPFILL-001 1.0.1 (search CS test matches M2 exactly)
+
+The CS search in 1.0.0 grouped interval sizes by chained linkage, while the
+frozen M2 groups a size with the open cluster only while it stays within
+0.5 cents of the cluster's first member. The receipt verdict was always M2,
+so this only changes which scales the search accepts. One row in 1.0.0 had
+the two tests disagree (flagship hexany 11 in 15 out, MOS-GREEDY). In 1.0.1
+the search uses M2's rule, and two rows move: that hexany's MOS-GREEDY row
+now agrees with M2, and its MOS-CS fill gains 3 triads instead of 5. No
+registered prediction, coverage count or showcase scale changes.
