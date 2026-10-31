@@ -77,7 +77,7 @@ Raga Scales."
 
 ## Combination Product Sets
 
-![A Combination Product Set with its seeds](images/cps.jpg)
+![A Combination Product Set with its seeds](images/cps.png)
 
 A Combination Product Set (CPS) takes a master set of harmonics and builds
 a scale from the products of its combinations. These structures are among
@@ -148,7 +148,7 @@ The final scale is sorted as if octave-reduced, and the period is 2.
 
 ## Equal Temperament
 
-![Equal temperament with the EDO control](images/equal-temperament.jpg)
+![Equal temperament with the EDO control](images/equal-temperament.png)
 
 1. Select **Equal Temperament** from the Scale Design menu.
 2. Select an ET ("EDO") from 1 to 128 notes per octave.
