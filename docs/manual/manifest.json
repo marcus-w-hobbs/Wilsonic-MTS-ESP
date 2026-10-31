@@ -1,0 +1,40 @@
+{
+  "$comment": "Chapter list for the Wilsonic MTS-ESP manual, in reading order. The website (wilsonic.co/documentation) fetches this file, so adding a chapter here plus its <slug>.md is all it takes to publish one. Each slug maps to docs/manual/<slug>.md.",
+  "chapters": [
+    {
+      "slug": "quick-start",
+      "title": "Quick Start",
+      "description": "I walk you from install to hearing one of Erv Wilson's scales in about a minute, including the checklist I use when the app seems silent."
+    },
+    {
+      "slug": "which-wilsonic",
+      "title": "Which Wilsonic Is Which",
+      "description": "I explain the difference between Wilsonic, WilsonicController, and Wilsonic for iOS, and which of them makes sound by itself."
+    },
+    {
+      "slug": "installation",
+      "title": "Installation",
+      "description": "I cover installing on macOS and Windows, running as a plugin or standalone, reading the MTS-ESP status indicator, and clean-installing the MTS-ESP library."
+    },
+    {
+      "slug": "daw-setup",
+      "title": "MTS-ESP and Your DAW",
+      "description": "I explain what MTS-ESP is, how one Wilsonic instance retunes every compatible synth in your session, and the pitch-bend fallback for synths without native support."
+    },
+    {
+      "slug": "interface",
+      "title": "The Interface",
+      "description": "I tour the microtonal keyboard, the global tuning controls, the pitch wheel, and Favorites — the parts every scale design shares."
+    },
+    {
+      "slug": "scale-designs",
+      "title": "Scale Designs",
+      "description": "I walk through all thirteen scale designs, from Wilson's Garden to Partch, with screenshots and links to the papers behind them."
+    },
+    {
+      "slug": "troubleshooting",
+      "title": "Troubleshooting",
+      "description": "I answer the questions I get most, starting with why the app seems to make no sound."
+    }
+  ]
+}
