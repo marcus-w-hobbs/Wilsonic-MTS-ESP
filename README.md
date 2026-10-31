@@ -151,7 +151,7 @@ The harness also cross-validates its Python mirror against the compiled C++
 
 ## Usage
 
-Refer to the [User Manual](https://drive.google.com/file/d/1BrTWlS9N4a0xTRUzwLxwr5R5JJ2RvF8n) for detailed instructions on how to use Wilsonic.
+The end-user manual lives in this repository at [docs/manual](docs/manual/README.md), and the website renders the same pages at [wilsonic.co/documentation](https://www.wilsonic.co/documentation). Start with the [Quick Start](docs/manual/quick-start.md), and if the app seems silent, read [Which Wilsonic Is Which](docs/manual/which-wilsonic.md).
 
 ## Design Philosophy
 
