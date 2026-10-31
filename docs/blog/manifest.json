@@ -7,6 +7,13 @@
       "description": "I describe the open research program I run on Erv Wilson's scale designs, disclose the scoring function and the experiment queue in full, and ask for your help improving both.",
       "date": "2026-07-25",
       "path": "docs/research-blog-001.md"
+    },
+    {
+      "slug": "machine-keeps-deriving-wilson",
+      "title": "The Machine Keeps Deriving Wilson",
+      "description": "I tell three episodes in which exhaustive searches re-derived Erv Wilson's hand results, from the 1975 D'Alessandro template and its pitch-just addressing trick to the 1993 golden-generator table, with every number linked to its receipt.",
+      "date": "2026-08-18",
+      "path": "docs/research-blog-002.md"
     }
   ]
 }
