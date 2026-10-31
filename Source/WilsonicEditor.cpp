@@ -1,6 +1,7 @@
 // This file contains the basic framework code for a JUCE plugin editor.
 
 #include "WilsonicEditor.h"
+#include "SnapshotMode.h"
 #include "WilsonicMidiKeyboardComponent.h"
 #include "WilsonicProcessor.h"
 #include <juce_audio_plugin_client/Standalone/juce_StandaloneFilterWindow.h>
@@ -43,11 +44,20 @@ WilsonicEditor::WilsonicEditor(WilsonicProcessor& in_processor)
         // Set the default size of the window
         setSize(_processor.getAppSkin().getWindowWidth(), _processor.getAppSkin().getWindowHeight());
     }
+
+    // Standalone only: when launched as `Wilsonic --snapshot <manifest.json>
+    // <output-dir>`, render one PNG per manifest entry and exit. A NOP for
+    // normal launches and plugin builds.
+    SnapshotMode::startIfRequested(_processor, *this);
 }
 
 WilsonicEditor::~WilsonicEditor() {
     __bubbleMessageComponent = nullptr;
-    _processor.saveWindowBounds(getTopLevelComponent()->getBounds());
+    // Snapshot mode forces its own window size; don't persist it as the
+    // user's preferred bounds.
+    if (!SnapshotMode::isActive()) {
+        _processor.saveWindowBounds(getTopLevelComponent()->getBounds());
+    }
 }
 
 #pragma mark - drawing
