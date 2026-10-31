@@ -5908,3 +5908,120 @@ green), receipts `results/gapfill002.jsonl` (seed set × table × subset) and
 `results/gapfill002_summary.json`, and one Scala file per canonical table
 under `results/scl/gapfill002/` (the whole instrument, eikosany + F), plus a
 gate for Marcus's ear on the Ear Bench.
+
+## 2026-10-31 — GAPFILL-002 results + verdicts
+
+**Run.** `gapfill002.py`, 3 seed sets × 8 tables × 42 subsets, about 45
+minutes on 8 workers; a second run reproduced both receipts bit for bit
+(SHA-1 match). Frozen scorers untouched; 456 lattice tests green. The
+canonical numbers match the development run except where the component
+starts were added (EPI 47 → 25, EXACT 37 → 24, EXACT+MOS 46 → 24), which
+is the change the pre-registration describes.
+
+**The tables** (|F| = shared added tones; summed = the same subsets' own
+smallest fills added up; common = mean common tones between neighbouring
+subsets, bare → filled; proven = optimal over the listed completions):
+
+| seed set | table | \|F\| | lower bound | proven | covered | summed | strictly proper | mean +P+S | common |
+|---|---|---|---|---|---|---|---|---|---|
+| canonical | PARENT | 12 | 8 | yes | 36 | 200 | 1 | +24.1 | 3.0 → 9.3 |
+| canonical | GENUS | 17 | 6 | yes | 36 | 172 | 2 | +17.8 | 3.0 → 5.9 |
+| canonical | EPI-AM | 22 | 7 | no | 38 | 179 | 9 | +13.9 | 3.0 → 4.8 |
+| canonical | EPI-HM | 22 | 7 | no | 38 | 179 | 10 | +14.1 | 3.0 → 4.7 |
+| canonical | EPI | 25 | 7 | no | 40 | 190 | 9 | +14.6 | 3.1 → 4.9 |
+| canonical | EXACT | 24 | 7 | no | 40 | 190 | 3 | +18.4 | 3.1 → 5.7 |
+| canonical | MOS (351.444¢) | 23 | 7 | no | 39 | 183 | 7 | +15.2 | 3.1 → 4.5 |
+| canonical | EXACT+MOS | 24 | 7 | no | 40 | 190 | 3 | +18.4 | 3.1 → 5.7 |
+| flagship | PARENT | 17 | 8 | yes | 38 | 206 | 3 | +16.9 | 3.1 → 8.9 |
+| flagship | GENUS | 18 | 8 | yes | 38 | 188 | 6 | +13.3 | 3.1 → 7.3 |
+| flagship | EPI-AM | 33 | 6 | no | 41 | 184 | 4 | +9.3 | 3.1 → 4.2 |
+| flagship | EPI-HM | 35 | 17 | no | 41 | 184 | 4 | +9.7 | 3.1 → 3.9 |
+| flagship | EPI | 35 | 10 | no | 42 | 188 | 4 | +9.0 | 3.2 → 4.0 |
+| flagship | EXACT | 28 | 10 | no | 42 | 188 | 4 | +12.8 | 3.2 → 6.6 |
+| flagship | MOS (351.444¢) | 27 | 6 | no | 42 | 193 | 5 | +11.0 | 3.2 → 4.3 |
+| flagship | EXACT+MOS | 27 | 6 | no | 42 | 188 | 5 | +11.0 | 3.2 → 4.3 |
+| Marcus | PARENT | 0 | 0 | yes | 0 | 0 | 0 | — | — |
+| Marcus | GENUS | 18 | 6 | yes | 34 | 182 | 4 | +11.3 | 2.7 → 6.4 |
+| Marcus | EPI-AM | 26 | 10 | no | 31 | 137 | 2 | +10.0 | 2.6 → 3.6 |
+| Marcus | EPI-HM | 26 | 6 | no | 32 | 142 | 3 | +10.1 | 2.7 → 3.7 |
+| Marcus | EPI | 27 | 6 | no | 33 | 143 | 4 | +9.7 | 2.7 → 3.6 |
+| Marcus | EXACT | 18 | 6 | no | 34 | 148 | 4 | +11.3 | 2.7 → 6.4 |
+| Marcus | MOS (443.128¢) | 25 | 10 | no | 37 | 172 | 3 | +12.2 | 2.9 → 4.2 |
+| Marcus | EXACT+MOS | 25 | 9 | no | 37 | 166 | 3 | +12.2 | 2.9 → 4.2 |
+
+Every covered subset is a CS (by construction, confirmed by M2 in every
+row). Arm C: the canonical eikosany is not CS (largest step 102.0¢) and no
+CS superset of 40 tones or fewer was found within 200 000 nodes; Marcus's
+eikosany is not CS (largest step 191.6¢) and none was found either; the
+flagship eikosany is already CS (largest step 84.5¢), which is why
+CS-EIK-001 chose it. No eikosany + F is CS as a whole except the flagship
+PARENT table, whose F lies inside the eikosany.
+
+**Verdicts.**
+- **P-GF6 REFUTED** (not blind for the size, see the pre-registration).
+  The canonical GENUS table needs 17 tones, proven over the listed
+  completions; the prediction said 16 or fewer.
+- **P-GF7 KEPT.** The EPI table is 25 tones against 190 summed (canonical),
+  35 against 188 (flagship), 27 against 143 (Marcus).
+- **P-GF8 REFUTED as registered.** EXACT covers 40/42 canonical, as
+  predicted, but needs 24 tones, not 21 or fewer. It is not proven (lower
+  bound 7), so the true optimum may be smaller.
+- **P-GF9 KEPT** on the canonical set (budget exhausted, nothing found).
+- **P-GF10 REFUTED** by the flagship PARENT table. The prediction forgot
+  that the flagship eikosany is itself CS, and its PARENT table adds no
+  tone outside it. Every table that adds a tone outside the eikosany is not
+  CS as a whole.
+- **P-GF11 REFUTED.** AM and HM tables are equal on the canonical set (22
+  and 22) and on Marcus's (26 and 26) but not on the flagship (33 and 35).
+  Neither flagship cover is proven, and their lower bounds differ (6 and
+  17), so the listed completions themselves are not mirror images: the
+  lister breaks ties by ascending cents and caps each list at 200, and
+  neither rule is inversion-symmetric. The mirror theorem of GAPFILL-001
+  still holds fill by fill; this run cannot test it table by table.
+- **P-GF12 KEPT** (blind). On the flagship and Marcus's set every exact
+  table that covers anything needs fewer than half its summed minima; the
+  largest ratio is the flagship EPI-HM table, 35 of 184.
+- **P-GF13 KEPT** (blind), with one vacuous case: every table raises the
+  mean common tones on both seed sets, except Marcus's PARENT table, which
+  covers nothing.
+- **P-GF14 KEPT** (blind). Marcus's PARENT covers 0; GENUS covers 34 with
+  18 tones, proven.
+
+**What the run shows.**
+- Sharing is nearly free in tones. On every seed set, one table of 12 to 35
+  added tones serves 31 to 42 subsets whose own smallest fills add up to
+  137 to 206 tones. The price shows up instead in each subset's choice: in
+  the canonical EXACT table the 40 subsets use 10 more tones in total than
+  their own smallest fills, and on Marcus's set 36 more.
+- Sharing changes which fill a subset gets. The canonical 1-3-5-7 hexany
+  (9 in, 11 out) keeps a 10-note strictly proper CS in the EPI-AM table,
+  but the table hands it 147/128, 1323/1024, 405/256 and 935/512 instead of
+  its own best fill (117/64, 585/512, 405/256, 675/512), and its triad gain
+  drops from +13 to +8. The shared table serves the genus, and a single
+  subset can lose some of what it would have had alone.
+- The common-tone tables give the affinity strategy. PARENT triples the
+  common tones between neighbouring subsets on the canonical set (3.0 →
+  9.3) and the flagship (3.1 → 8.9), and GENUS doubles them. The division
+  and MOS tables raise them less (to about 4 to 5), because their tones
+  are spread across more pitches.
+- Smallest table and most melodic table pull apart again. Minimising |F|
+  favours genus and parent tones, so EXACT ends up with 3 strictly proper
+  subsets on the canonical set while EPI-AM, with two fewer subsets
+  covered, has 9. The cover objective is |F|; a cover that weighed
+  propriety would choose differently, and that is a choice for the ear.
+- The whole instrument is not a CS. Except for the flagship, whose
+  eikosany already is one, a top-first CS was not found and no table makes
+  eikosany + F a CS. In this run, CS for every subset and CS for the whole
+  instrument are separate properties, and the shared table gives only the
+  first.
+
+**Limits.** Optimality is over listed completions (at most 200 per subset,
+at most 2 tones above the smallest), and 18 of 24 covers are not proven;
+their lower bounds are far below the found tables, so the true minima are
+open. The mirror failure is an artefact of the lister, so a symmetric lister
+should come before any claim about AM and HM tables.
+
+**Deliverables.** Receipts `results/gapfill002.jsonl`,
+`results/gapfill002_summary.json`; 8 Scala files under
+`results/scl/gapfill002/` (each canonical table as one instrument,
+eikosany + F); gate G-041.
