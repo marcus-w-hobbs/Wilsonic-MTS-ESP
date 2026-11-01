@@ -609,3 +609,69 @@ pinned in tests/test_cpp_mirror.py only.
 
 **Kept.** results/crossval003.json; suite 103 → 105/105; scorer v1.1.0
 untouched (crossval003 records the version but does not score).
+
+## 2026-11-01 — EPS-TIER-002 pre-registration (G-027; entry BEFORE any code or run)
+
+**Why now.** G-026's decision (2026-09-29) held every tier above LOCK 2¢
+until Marcus's own lock-loss thresholds existed, and asked for a report
+filter that collapses pitches closer than ε, so loose tiers stop rewarding
+near-ETs whose chroma is smaller than ε. G-025 passed today with sitting 2
+of EAR-ε (`../lattice/results/eareps_results.json`): major third 10.0¢
+sharp / 8.43¢ flat, minor third 7.43¢ sharp / 13.5¢ flat, fifth broken at
+−8¢ (T = 4.0¢) and never broken sharp to +8¢, all heard under the strict
+case (Reed, all 16 partials, middle C).
+
+**Tiers (derived in code from the EAR-ε receipt, not typed in).** Each tier
+is a pair (ε_P, ε_S); the frozen scorer is called once per distinct ε and P
+is read from the ε_P call, S from the ε_S call.
+- LOCK (2.00, 2.00): the scorer default.
+- **EAR (8.43, 7.43), primary:** ε_P = the stricter side of the major
+  third (family A, whose detuned tone is exactly the P deviation), ε_S =
+  the stricter side of the minor third (family C, the S deviation). Agreed
+  with Marcus in chat before this entry.
+- EAR5 (4.00, 4.00), sensitivity only: the scorer's P class also contains
+  power-chord shapes (2:3:4), and the fifth's stricter threshold is 4.0¢.
+  Reported beside EAR; it does not decide anything.
+- ET5 (14.86) and ET7 (32.01): EPS-TIER-001's tiers, re-run for continuity.
+
+**Collapse filter (report layer; scorer.py untouched, pin checked before
+and after).** For a tier's ε, the scale's pitch classes are sorted and
+merged single-linkage wherever consecutive pitches are closer than ε,
+including across the octave wrap; each cluster is represented by its
+lowest member, and a cluster containing the root by 0. The collapsed scale
+is scored at that ε. Raw and collapsed counts are both reported, with
+N_eff.
+
+**Part A: EPS-TIER-001's sweep at the new tiers.** Every MOS on the 1¢
+generator grid, N = 5..22 (3006 rows), and the 70 hexanies of HEX-001
+(cents path), at all five tiers, raw and collapsed.
+
+**Part B: an "at your ε" lens on the seven gates waiting on Marcus's ear.**
+Every audition .scl of G-028 (meru001, 9), G-030 (meru002, 6), G-033
+(rank3001, 3), G-035 (gold001, 2), G-036 (subfit001, 6), G-037 (subfit002,
+3) and G-039 (dynmos001, 3), 32 files, scored as whole scales at LOCK and
+EAR (raw and collapsed) and EAR5. This is a whole-scale lens; it does not
+re-run those experiments' subset-survival measures, which a later entry
+would have to register separately.
+
+**Predictions (committed now).**
+- **F1 (collapse removes the near-ET degeneracy).** At ET7, collapse
+  changes the per-N winner by P in at least 14 of the 18 cardinalities
+  (EPS-TIER-001 found 16 of 18 ET7 winners were near-ETs with chroma < ε).
+- **F2 (the ear tier sits nearer LOCK than ET5 does).** The median over N
+  of Spearman ρ of P across generators, LOCK vs EAR (collapsed), is above
+  EPS-TIER-001's LOCK vs ET5 median of 0.155.
+- **F3 (collapse rarely bites at the ear tier in the MOS grid).** Fewer than
+  10% of MOS rows have any step smaller than ε_P = 8.43¢.
+- **F4 (hexanies gain little at the ear tier).** At EAR (collapsed), at most
+  20 of the 70 hexanies gain P + S beyond their exact rational count
+  (EPS-TIER-001: 33 at ET5).
+- **F5 (the lens moves some gate leaders).** In at least 2 of the 7 gates,
+  the top audition scale by P + S changes between LOCK and EAR (collapsed).
+
+**Machinery.** Runner `epstier002.py`, python3.12 stdlib only, no
+randomness and no wall-clock fields, so two runs must be bit-identical;
+tests `tests/test_epstier002.py` green before the first run; receipts
+`results/epstier002.jsonl` and `results/epstier002_summary.json`. The gate
+is G-027; its row gets the results and Marcus decides whether EAR becomes
+the reporting tier.
