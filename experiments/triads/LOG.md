@@ -675,3 +675,67 @@ tests `tests/test_epstier002.py` green before the first run; receipts
 `results/epstier002.jsonl` and `results/epstier002_summary.json`. The gate
 is G-027; its row gets the results and Marcus decides whether EAR becomes
 the reporting tier.
+
+## 2026-11-01 — EPS-TIER-002 results (G-027)
+
+**Run.** `epstier002.py` 1.0.0, receipts `results/epstier002.jsonl` (sha1
+bd89688f…) and `results/epstier002_summary.json` (sha1 7685a942…),
+bit-identical across two runs. Tiers read from the EAR-ε receipt: EAR =
+(8.43 P, 7.43 S), EAR5 = 4.0, plus LOCK 2.00, ET5 14.86, ET7 32.01. Freeze
+check A passes before and after (scorer 1a840af9…); 12 new tests, triads
+suite green.
+
+**Verdicts.**
+- **F1 KEPT.** At ET7 the collapse filter changes the per-N winner in 16
+  of 18 cardinalities, exactly the 16 near-ET winners EPS-TIER-001 flagged.
+  The filter does what G-026 asked for.
+- **F2 KEPT.** Median ρ of P across generators, LOCK vs EAR (collapsed), is
+  0.268, above LOCK vs ET5's 0.155 (and LOCK vs ET5 collapsed is 0.234,
+  LOCK vs ET7 collapsed 0.181). The ear tier reorders generators less than
+  the 12-ET tier does, but it still reorders them a lot: a winner at LOCK is
+  mostly not the winner at the ear.
+- **F3 KEPT.** 184 of 3006 MOS rows (6.1%) have a step smaller than 8.43¢;
+  7.4% collapse at EAR, against 11.9% at ET5 and 27.9% at ET7.
+- **F4 REFUTED.** 26 of 70 hexanies gain P + S beyond their exact rational
+  count at EAR (predicted at most 20; ET5 gives 33). The 1-3-5-7 hexany is
+  6 + 6 at every tier up to ET5.
+- **F5 KEPT by the runner's rule, cleanly in one gate.** In G-028 the leader
+  really changes: Fibonacci's last window (14 at LOCK, still 14) falls
+  behind 0.418935's and meta-meantone's last windows, which both rise from
+  6 to 24 and tie. In G-030 the LOCK leader (ρ = 1, n = 40, 14) rises to 24
+  and ties with two others; the runner's filename tie-break names another
+  scale. So one gate changes leader outright and one gains co-leaders.
+
+**Scorer facts the numbers carry.** Counts are not monotone in ε. The
+degeneracy guard drops triples whose outer separation sits inside the
+window, so raising ε can lose triads: P falls from LOCK to EAR in 299 of
+3006 MOS rows, and two audition scales lose one triad (0.418935's n = 12
+lock window, which appears in both G-028 and G-030). 12-EDO at N = 12 is
+24 P / 12 S at EAR, against 12 / 12 at LOCK: its 7.84¢ triads count as
+proportional under ε_P = 8.43 but not as subcontrary under ε_S = 7.43, so
+the lopsided thresholds show up as P ≠ S on a scale where they are
+otherwise equal.
+
+**Part B, the seven gates (whole-scale P + S, LOCK → EAR collapsed).**
+- G-028: last windows 0.418935 6 → 24, meta-meantone 6 → 24, Fibonacci
+  14 → 14; the Fibonacci seed window (a 1.8¢ step) collapses to 6 notes.
+- G-030: ρ = 1 n = 40 14 → 24, n = 100 6 → 24; ρ = 5/2 n = 100 6 → 24,
+  n = 12 1 → 7, n = 40 1 → 8.
+- G-033: all three about double; the N = 29 dekany fit stays on top
+  (242 → 500).
+- G-035: silver N = 29 290 → 522, golden N = 15 76 → 82; silver stays on top.
+- G-036: smallest steps 8.7–9.5¢, just above ε_P, so nothing collapses;
+  counts rise 2.5–3.4×; N = 70 stays on top. The 41/45-note 351.444¢ level
+  quoted "within 9.5¢" has a worst triad outside both ear thresholds; the
+  53-note 497.774¢ level "within 4.2¢" is inside both.
+- G-037: N = 72 483.278¢ stays on top (2344 → 7939); "within 8.0¢" is
+  inside ε_P and outside ε_S.
+- G-039: N = 29 497.774¢ stays on top (190 → 481); the 17-note 351.444¢
+  hexany window and Marcus's 15-note dekany window barely move (90 → 123,
+  74 → 80).
+
+This is a whole-scale lens. It does not re-run any experiment's subset
+survival, and it does not change any audition.
+
+**G-027.** Pending Marcus's decision: adopt EAR (8.43 P / 7.43 S, collapse
+on) as the reporting tier beside LOCK, with EAR5 as its sensitivity check.
