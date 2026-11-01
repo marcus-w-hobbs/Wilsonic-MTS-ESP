@@ -131,6 +131,10 @@
               file="Source/WilsonicEditor.h"/>
         <FILE id="tH3Knx" name="WilsonicEditor.cpp" compile="1" resource="0"
               file="Source/WilsonicEditor.cpp"/>
+        <FILE id="SnapMH" name="SnapshotMode.h" compile="0" resource="0"
+              file="Source/SnapshotMode.h"/>
+        <FILE id="SnapMC" name="SnapshotMode.cpp" compile="1" resource="0"
+              file="Source/SnapshotMode.cpp"/>
         <FILE id="XswEUZ" name="AppRootComponent.h" compile="0" resource="0"
               file="Source/AppRootComponent.h"/>
         <FILE id="xsR291" name="AppRootComponent.cpp" compile="1" resource="0"

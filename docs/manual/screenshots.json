@@ -1,0 +1,32 @@
+{
+  "comment": "Manifest for the standalone's offscreen screenshot mode. Run scripts/regenerate_manual_screenshots.sh, or directly: Wilsonic --snapshot docs/manual/screenshots.json docs/manual/images. Each entry names an output PNG, a scale design (a DESIGNS choice name), and APVTS parameter values (the same parameter IDs the research harness records in its RECREATE IN WILSONIC blocks). Logical size defaults to 1024x709 captured at 2x, matching the manual's existing 2048px-wide captures.",
+  "defaults": {
+    "width": 1024,
+    "height": 709,
+    "scale": 2.0,
+    "settleMs": 1500
+  },
+  "entries": [
+    {
+      "output": "equal-temperament.png",
+      "design": "Equal Temperament",
+      "params": {
+        "EQUALTEMPERAMENTNPO": 13,
+        "EQUALTEMPERAMENTPERIOD": 3.0,
+        "APPTUNINGNOTENUMBERMIDDLEC": 60
+      }
+    },
+    {
+      "output": "cps.png",
+      "design": "Combination Product Sets",
+      "params": {
+        "CPSCALE": "4_2",
+        "CPSA": 1,
+        "CPSB": 3,
+        "CPSC": 5,
+        "CPSD": 7,
+        "APPTUNINGNOTENUMBERMIDDLEC": 52
+      }
+    }
+  ]
+}
