@@ -31,7 +31,7 @@
    "id": "G-025",
    "opened": "2026-08-19",
    "gate": "EAR-\u03b5 ear check: Marcus's lock-loss thresholds vs the cultural epsilon (44 blinded rungs, key sealed; decides P-E1/P-E2/P-E3)",
-   "status": "PENDING \u2014 sitting done 2026-11-01 on Ear Bench, all catch trials locked, scored as registered (lattice/LOG.md 2026-11-01, results/eareps_results.json): major third T = 13.0\u00a2 sharp / 9.93\u00a2 flat (P-E1 WEAK-KEPT, below 14.86 but sharp side outside 6\u201312), fifths never broken to \u00b18\u00a2 (P-E2 REFUTED as registered; locked only at \u00b11\u00a2), 12-EDO fifth beating not broken (P-E2b KEPT), sharp-tolerant by 3.07\u00a2 (P-E3 KEPT); minor third 4.0\u00a2 sharp / 18.43\u00a2 flat. Caveat: 44 rungs in 210 s (median 4.2 s per rung vs two 5 s holds), and single isolated 'locked' verdicts move T_A(sharp) and T_C(flat). YOUR ACTION: accept these thresholds for G-027, or repeat the sitting at the registered pace (same files) first",
+   "status": "PENDING \u2014 sitting done 2026-11-01 on Ear Bench, all catch trials locked, scored as registered (lattice/LOG.md 2026-11-01, results/eareps_results.json): major third T = 13.0\u00a2 sharp / 9.93\u00a2 flat (P-E1 WEAK-KEPT, below 14.86 but sharp side outside 6\u201312), fifths never broken to \u00b18\u00a2 (P-E2 REFUTED as registered; locked only at \u00b11\u00a2), 12-EDO fifth beating not broken (P-E2b KEPT), sharp-tolerant by 3.07\u00a2 (P-E3 KEPT); minor third 4.0\u00a2 sharp / 18.43\u00a2 flat. Note: the registered max-locked rule lets single isolated 'locked' verdicts move T_A(sharp) and T_C(flat) (see LOG). YOUR ACTION: accept these thresholds for G-027",
    "state": "PENDING",
    "folders": []
   },

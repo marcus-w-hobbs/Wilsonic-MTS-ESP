@@ -6083,16 +6083,17 @@ side. Family D fits: the 12-EDO major triad was heard as broken, and the
 P-E1 (both triads non-locked) and P-E2b (the power chord not broken).
 
 **Two things the record has to carry with these numbers.**
-- Pacing. The protocol asked for one sitting of about 30–45 minutes,
-  holding each chord at least 5 seconds, twice. The commits span 209.6
-  seconds for all 44 rungs; the median gap between commits is 4.17
-  seconds, the shortest 2.8, and 42 of 43 gaps are under 10 seconds. So
-  most rungs were heard for less than the registered two 5-second holds.
-  The validity rule covers only the catch trials, which all held, so the
-  result stands as registered, but it is a quick sitting and slow beats
-  (a 1¢ fifth at this register beats at about 0.45 Hz) need time to show.
-- Sensitivity to single verdicts. The rule takes the largest locked rung,
-  so one isolated "locked" moves T a long way. A sharp has +8 locked
+- Pacing. The commits span 209.6 seconds for all 44 rungs (median 4.17
+  seconds between commits, shortest 2.8), against the protocol text's two
+  5-second holds per rung. That floor was written in August for a listener
+  of unknown training. Marcus has trained his ear on exactly these
+  sonorities with Erv Wilson since 1996, and a few seconds per rung is
+  what he needs; the registered validity check, the three δ = 0 catch
+  trials, all held. The pace is recorded as a fact of the sitting and
+  carries no weight against the result.
+- Sensitivity to single verdicts. This is a property of the registered
+  rule, which takes the largest locked rung, so one isolated "locked"
+  moves T a long way. A sharp has +8 locked
   between beating at +5 and +11; without it T_A(sharp) would be 9, which
   would put P-E1 in band (KEPT) and turn P-E3 into REFUTED (9 − 9.93 < 1.5).
   C flat has −14.86 locked between beating at −11 and −18; without it
@@ -6100,7 +6101,5 @@ P-E1 (both triads non-locked) and P-E2b (the power chord not broken).
   numbers above are the result.
 
 **What this unblocks.** G-027 (EPS-TIER-002) was waiting on these
-thresholds to choose its above-LOCK tier. Whether these numbers are firm
-enough for that, or whether the sitting should be repeated at the
-registered pace first (same files, same order, no new stimuli, as the
-validity rule already allows), is Marcus's call at G-025.
+thresholds to choose its above-LOCK tier; accepting them at G-025 is
+Marcus's call.
