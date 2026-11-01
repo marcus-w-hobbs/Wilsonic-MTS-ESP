@@ -31,7 +31,7 @@
    "id": "G-025",
    "opened": "2026-08-19",
    "gate": "EAR-\u03b5 ear check: Marcus's lock-loss thresholds vs the cultural epsilon (44 blinded rungs, key sealed; decides P-E1/P-E2/P-E3)",
-   "status": "PENDING \u2014 sitting 2 (Marcus's choice, \"I want a clean output\"): same 44 files and order, registered in lattice/LOG.md 2026-11-01 before listening; sitting 2 decides P-E1/P-E2/P-E3, sitting 1 stays on record (results/eareps_results_sitting1.json: major third 13.0\u00a2 sharp / 9.93\u00a2 flat, fifths never broken to \u00b18\u00a2, minor third 4.0\u00a2 / 18.43\u00a2). YOUR ACTION: sit EAR-\u03b5 again on Ear Bench (G-025); don't open the key or manifest",
+   "status": "PENDING \u2014 sitting 2 scored as registered (lattice/LOG.md 2026-11-01, results/eareps_results.json): major third T = 10.0\u00a2 sharp / 8.43\u00a2 flat (P-E1 KEPT, in band), fifths beat from \u00b11\u00a2, +8\u00a2 never broken, \u22128\u00a2 broken (P-E2 REFUTED), 12-EDO fifth beating not broken (P-E2b KEPT), sharp-tolerant by 1.57\u00a2 (P-E3 KEPT at the edge); minor third 7.43\u00a2 / 13.5\u00a2; 31/44 verdicts match sitting 1 (results/eareps_results_sitting1.json), none moved two steps. YOUR ACTION: accept these thresholds for G-027",
    "state": "PENDING",
    "folders": []
   },

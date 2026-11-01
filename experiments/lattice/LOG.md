@@ -6137,3 +6137,80 @@ over; that is a known limit of the registered re-run design.
 `eareps/sitting1` in Ear Bench and `eareps/responses` is cleared, so the
 page opens on B_01. Sitting 2 is transcribed to
 `results/eareps_responses.json` and scored to `results/eareps_results.json`.
+
+## 2026-11-01 — EAR-ε results, sitting 2 (primary for G-025, as registered)
+
+**Sitting.** Same 44 files in the same order, Reed patch (all partials,
+1/n), nonlinearity off, 1/1 = 261.63 Hz, on the Ear Bench sitting page
+with the 5-second play button. Transcribed verbatim from Ear Bench
+(eareps/responses, version 89) to `results/eareps_responses.json`, scored
+by `eareps_analysis.py` 1.0.0 to `results/eareps_results.json` (sha1
+89d14e07…, bit-identical across two runs). Marcus left notes on 11 rungs
+this time, all kept in the responses file. Commits span 569.8 seconds.
+
+**Validity.** No catch trial was heard as broken: A_15 and B_02 locked,
+C_12 beating, so every block is valid under the registered rule.
+
+**Thresholds, sitting 2 beside sitting 1.**
+
+| family-direction | sitting 1 T | sitting 2 T | sitting 2 last locked → first broken |
+|---|---|---|---|
+| A sharp (major third) | 13.0¢ | 10.0¢ | 2 → 18 |
+| A flat | 9.93¢ | 8.43¢ | 2 → 14.86 |
+| B sharp (fifth) | > 8¢ | > 8¢ | 0 → none |
+| B flat | > 8¢ | 4.0¢ | 0 → 8 |
+| C sharp (minor third) | 4.0¢ | 7.43¢ | 0 → 14.86 |
+| C flat | 18.43¢ | 13.5¢ | 5 → 22 |
+
+No broken rung sits below a locked one, so nothing is non-monotone.
+
+**Verdicts (sitting 2 decides, as registered).**
+- **P-E1 KEPT.** Both major-third thresholds are below 14.86¢ and inside
+  the committed band: 10.0¢ sharp and 8.43¢ flat.
+- **P-E2 REFUTED.** No sharp fifth was heard as broken up to +8¢
+  (censored above 8¢), and the flat side breaks at −8¢ (T = 4.0¢); both
+  exceed the committed 3¢. This time even ±1¢ was heard as beating; only
+  the exact fifth stayed locked.
+- **P-E2b KEPT.** The 12-EDO fifth (−1.955) and its sharp mirror were
+  heard as beating, not broken.
+- **P-E3 KEPT, at the edge.** T_A(sharp) − T_A(flat) = 1.57¢ against the
+  1.5¢ line. Both sides last locked at 2¢, so the whole gap comes from
+  where "broken" starts (+18 against −14.86), and the ladder has no rung
+  between 14.86 and 18. A one-rung change on either side would flip it.
+
+**Exploratory.** The minor third is still flat-tolerant, less extremely:
+7.43¢ sharp against 13.5¢ flat (sitting 1: 4.0 against 18.43). Family D:
+12-EDO major triad broken (both sittings), minor triad beating (both),
+power chord locked (sitting 1: beating).
+
+**Agreement between sittings.** 31 of 44 rungs got the same verdict. Of
+the 13 that changed, 7 moved one step stricter and 6 one step looser; no
+verdict moved two steps (locked ↔ broken). The registered rule's
+predictions agree across sittings on P-E2, P-E2b and P-E3; P-E1 moves
+from WEAK-KEPT to KEPT because the sharp threshold came down from 13.0
+to 10.0, mostly through sitting 1's isolated +8¢ "locked" becoming
+"beating".
+
+**What Marcus's notes say about "locked".** Several notes describe a
+working tolerance: −2¢ major "not actually locked, but it's within what
+i think is a reasonable tolerance. like if we were playing fast chords
+it'd feel locked"; +2¢ and the exact chord "technically beating, but
+within a reasonable locked tolerance"; −5¢ minor the same. So in this
+sitting "locked" partly means "inside the tolerance I would accept in
+playing", which is the threshold G-027 needs, and the notes mark where
+it differs from strict fusion.
+
+**Instrument check (mine, prompted by the δ = 0 notes).** The exact
+chords were rendered offline through the same synth chain (Reed, 16
+partials 1/n, compressor −10 dB 4:1, output gain 0.8, 48 kHz, Chrome) and
+the loudness envelope measured over whole common periods: exact 4:5:6,
+10:12:15 and 2:3:4 vary by 0.054–0.068%, against 2.6–3.2% for ±2–5¢
+thirds and 7.6% for a +1¢ fifth. So the synth adds no beating at δ = 0.
+What remains audible in an exact chord with 16 harmonics is roughness
+between partials that do not coincide (for example the root's 7th
+harmonic and the third's 6th, about 52 Hz apart in the minor), which is
+a property of the timbre, not of the tuning. The check ran in Chrome,
+not on the iPhone.
+
+**G-025.** Sitting 2 is the primary result as registered. Accepting these
+thresholds for G-027 is Marcus's call.

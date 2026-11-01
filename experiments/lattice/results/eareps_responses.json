@@ -1,0 +1,273 @@
+{
+ "_source": "Transcribed verbatim from Ear Bench (claude.ai artifact XNptx9B3t9yXGgDvmJeVbf), database document eareps/responses, version 89 (sitting 2; sitting 1 is archived as eareps/sitting1). Marcus committed each verdict as he went; committedAt is the page's timestamp for each commit.",
+ "sitting": 2,
+ "sitting_date": "2026-11-01",
+ "synth_patch": "Reed (all partials, 1/n); nonlinearity off",
+ "playback_chain": "Ear Bench browser synth, 1/1 = 261.63 Hz",
+ "responses": {
+  "eareps_B_01": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:13:27.853Z"
+  },
+  "eareps_B_02": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:13:41.524Z"
+  },
+  "eareps_B_03": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:13:52.217Z"
+  },
+  "eareps_B_04": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:04.692Z"
+  },
+  "eareps_B_05": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:14.080Z"
+  },
+  "eareps_B_06": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:24.509Z"
+  },
+  "eareps_B_07": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:33.543Z"
+  },
+  "eareps_B_08": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:42.330Z"
+  },
+  "eareps_B_09": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:14:50.953Z"
+  },
+  "eareps_B_10": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:00.942Z"
+  },
+  "eareps_B_11": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:09.226Z"
+  },
+  "eareps_A_01": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:18.107Z"
+  },
+  "eareps_A_02": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:26.698Z"
+  },
+  "eareps_A_03": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:35.192Z"
+  },
+  "eareps_A_04": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "oof that's ugly",
+   "committedAt": "2026-11-01T17:15:49.287Z"
+  },
+  "eareps_A_05": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:15:57.498Z"
+  },
+  "eareps_A_06": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:16:06.440Z"
+  },
+  "eareps_A_07": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:16:19.310Z"
+  },
+  "eareps_A_08": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "yuck",
+   "committedAt": "2026-11-01T17:16:31.192Z"
+  },
+  "eareps_A_09": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:16:39.952Z"
+  },
+  "eareps_A_10": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "this is close to locked, but not quite",
+   "committedAt": "2026-11-01T17:17:06.510Z"
+  },
+  "eareps_A_11": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "close to locked, but not quite",
+   "committedAt": "2026-11-01T17:17:26.664Z"
+  },
+  "eareps_A_12": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "okay this is not actually locked, but it's within what i think is a reasonable tolerance.  like if we were playing fast chords it'd feel locked",
+   "committedAt": "2026-11-01T17:18:16.577Z"
+  },
+  "eareps_A_13": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:18:27.056Z"
+  },
+  "eareps_A_14": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "technically not locked, but within a reasonable tolerance",
+   "committedAt": "2026-11-01T17:18:49.038Z"
+  },
+  "eareps_A_15": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "again, technically beating, but within a reasonable locked tolerance",
+   "committedAt": "2026-11-01T17:19:11.541Z"
+  },
+  "eareps_C_01": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:19:26.469Z"
+  },
+  "eareps_C_02": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:19:35.110Z"
+  },
+  "eareps_C_03": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:19:46.717Z"
+  },
+  "eareps_C_04": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:19:56.233Z"
+  },
+  "eareps_C_05": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "beating, but very close to broken",
+   "committedAt": "2026-11-01T17:20:16.443Z"
+  },
+  "eareps_C_06": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:20:30.760Z"
+  },
+  "eareps_C_07": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:20:37.559Z"
+  },
+  "eareps_C_08": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:20:46.460Z"
+  },
+  "eareps_C_09": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "close to beating, but it crossed the line into broken for me",
+   "committedAt": "2026-11-01T17:21:12.703Z"
+  },
+  "eareps_C_10": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "technically beating, but within reasonable tolerance of locked.",
+   "committedAt": "2026-11-01T17:21:36.311Z"
+  },
+  "eareps_C_11": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:21:44.895Z"
+  },
+  "eareps_C_12": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:21:54.178Z"
+  },
+  "eareps_C_13": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "i'll give it a beating, but it's close to broken territory",
+   "committedAt": "2026-11-01T17:22:15.194Z"
+  },
+  "eareps_C_14": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:22:23.855Z"
+  },
+  "eareps_C_15": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:22:32.882Z"
+  },
+  "eareps_D_01": {
+   "verdict": "locked",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:22:41.544Z"
+  },
+  "eareps_D_02": {
+   "verdict": "broken",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:22:49.485Z"
+  },
+  "eareps_D_03": {
+   "verdict": "beating",
+   "fusion_1to5": null,
+   "notes": "",
+   "committedAt": "2026-11-01T17:22:57.629Z"
+  }
+ }
+}
