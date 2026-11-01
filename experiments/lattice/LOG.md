@@ -6212,5 +6212,19 @@ harmonic and the third's 6th, about 52 Hz apart in the minor), which is
 a property of the timbre, not of the tuning. The check ran in Chrome,
 not on the iPhone.
 
+**Listening conditions: the strict end (Marcus's framing).** Marcus
+points out that both sittings were heard under the worst case for
+hiding a mistuning: a Reed timbre with all 16 harmonics at 1/n, at the
+middle-C register. Every harmonic present means the most coinciding
+partial pairs to beat, and at this register the beats of these
+detunings fall where they are slowest and easiest to follow: the major
+third's 4th-harmonic/5th-harmonic coincidence beats at 0.76 Hz at 1¢,
+1.51 Hz at 2¢, 3.78 Hz at 5¢, 6.06 Hz at 8¢ and 8.34 Hz at 11¢. So these
+thresholds are the tight end of his tolerance; a softer timbre (fewer or
+weaker upper partials), or performance conditions such as fast chord
+changes, should loosen them, which is how his "reasonable tolerance"
+notes read. Measuring how far they loosen would be a separate sitting
+with its own registration.
+
 **G-025.** Sitting 2 is the primary result as registered. Accepting these
 thresholds for G-027 is Marcus's call.
