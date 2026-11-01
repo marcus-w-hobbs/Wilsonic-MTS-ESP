@@ -6025,3 +6025,82 @@ should come before any claim about AM and HM tables.
 `results/gapfill002_summary.json`; 8 Scala files under
 `results/scl/gapfill002/` (each canonical table as one instrument,
 eikosany + F); gate G-041.
+
+## 2026-11-01 — EAR-ε results: Marcus's sitting scored as registered (G-025)
+
+**Sitting.** Marcus listened on 2026-11-01 in the Ear Bench EAR-ε sitting
+(docs/ear-bench/eareps.js), Reed patch (all partials, 1/n), nonlinearity
+off, 1/1 = 261.63 Hz, blocks B, A, C, D in numbered order, every verdict
+committed as he went. His responses are transcribed verbatim from the
+Ear Bench database (eareps/responses, version 44) into
+`results/eareps_responses.json`, with each commit's timestamp. The key was
+opened only after that, and the analysis is `eareps_analysis.py` 1.0.0,
+which executes the 2026-08-19 rule and nothing else (receipt
+`results/eareps_results.json`, sha1 916ab518…, bit-identical across two
+runs; 10 new tests pin the rule, the censoring, the non-monotone flag, the
+catch trials and the decision lines).
+
+**Validity.** All three δ = 0 catch trials were heard as locked (A_15,
+B_02, C_12), so every block is valid.
+
+**Thresholds (T = midpoint of the last locked and the first broken).**
+
+| family-direction | last locked | first broken | T | between them (beating) |
+|---|---|---|---|---|
+| A sharp (major third) | 8 | 18 | 13.0¢ | 2, 5, 11, 14.86 |
+| A flat | 5 | 14.86 | 9.93¢ | 8, 11 |
+| B sharp (fifth) | 1 | none | > 8¢ (censored) | 1.955, 3, 5, 8 |
+| B flat | 1 | none | > 8¢ (censored) | 1.955, 3, 5, 8 |
+| C sharp (minor third) | 0 | 8 | 4.0¢ | 2, 5 |
+| C flat | 14.86 | 22 | 18.43¢ | 2, 5, 8, 11, 18 |
+
+No broken rung sits below a locked one, so nothing is flagged as
+non-monotone under the registered definition.
+
+**Verdicts.**
+- **P-E1 WEAK-KEPT.** Both major-third thresholds are below the cultural
+  epsilon (13.0 and 9.93 < 14.86), so the 12-EDO third lies outside the
+  lock in both directions, but the sharp side falls outside the committed
+  6–12¢ band.
+- **P-E2 REFUTED as registered.** No fifth was ever heard as broken, up to
+  ±8¢, so both fifth thresholds are right-censored above 8¢ against a
+  committed ≤ 3¢. What the fifths do show is that the lock itself goes
+  early: only ±1¢ stayed locked, and from ±1.955¢ on every fifth was
+  beating. On a three-way scale whose last category is "broken", a
+  detuned fifth keeps reading as the chord long after it stops being
+  steady.
+- **P-E2b KEPT.** The 12-EDO fifth (−1.955) and its sharp mirror were both
+  heard as beating, not broken.
+- **P-E3 KEPT.** T_A(sharp) − T_A(flat) = 3.07¢ ≥ 1.5, sharp-tolerant, the
+  direction the acculturation account predicted.
+
+**Exploratory (no commitment).** The minor third is far more lopsided than
+the major: T_C(sharp) = 4.0¢ against T_C(flat) = 18.43¢. 12-EDO's minor
+third is 15.64¢ flat of 6/5, so a flat-tolerant minor third is the same
+acculturation story as the sharp-tolerant major third, seen from the other
+side. Family D fits: the 12-EDO major triad was heard as broken, and the
+12-EDO minor triad and power chord as beating, which is consistent with
+P-E1 (both triads non-locked) and P-E2b (the power chord not broken).
+
+**Two things the record has to carry with these numbers.**
+- Pacing. The protocol asked for one sitting of about 30–45 minutes,
+  holding each chord at least 5 seconds, twice. The commits span 209.6
+  seconds for all 44 rungs; the median gap between commits is 4.17
+  seconds, the shortest 2.8, and 42 of 43 gaps are under 10 seconds. So
+  most rungs were heard for less than the registered two 5-second holds.
+  The validity rule covers only the catch trials, which all held, so the
+  result stands as registered, but it is a quick sitting and slow beats
+  (a 1¢ fifth at this register beats at about 0.45 Hz) need time to show.
+- Sensitivity to single verdicts. The rule takes the largest locked rung,
+  so one isolated "locked" moves T a long way. A sharp has +8 locked
+  between beating at +5 and +11; without it T_A(sharp) would be 9, which
+  would put P-E1 in band (KEPT) and turn P-E3 into REFUTED (9 − 9.93 < 1.5).
+  C flat has −14.86 locked between beating at −11 and −18; without it
+  T_C(flat) would be 11. These are descriptive only; the registered
+  numbers above are the result.
+
+**What this unblocks.** G-027 (EPS-TIER-002) was waiting on these
+thresholds to choose its above-LOCK tier. Whether these numbers are firm
+enough for that, or whether the sitting should be repeated at the
+registered pace first (same files, same order, no new stimuli, as the
+validity rule already allows), is Marcus's call at G-025.
