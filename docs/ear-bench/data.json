@@ -31,8 +31,8 @@
    "id": "G-025",
    "opened": "2026-08-19",
    "gate": "EAR-\u03b5 ear check: Marcus's lock-loss thresholds vs the cultural epsilon (44 blinded rungs, key sealed; decides P-E1/P-E2/P-E3)",
-   "status": "PENDING \u2014 ladder + blinded protocol built (PR #48, stacked on #38); YOUR ACTION: listen per EAREPS_PROTOCOL.md, save results/eareps_responses.json, then unseal the key; predictions committed: third lock-loss 6\u201312\u00a2 < 14.86, fifth \u22643\u00a2 (12-EDO fifth survives), sharp-tolerant \u22651.5\u00a2",
-   "state": "PENDING",
+   "status": "PASS 2026-11-01 \u2014 Marcus accepted the sitting-2 thresholds for G-027 (\"Accept\"): major third 10.0\u00a2 sharp / 8.43\u00a2 flat, fifths beat from \u00b11\u00a2 (\u22128\u00a2 broken, +8\u00a2 not), minor third 7.43\u00a2 / 13.5\u00a2, all under the strict case (Reed, 16 partials, middle C); P-E1 KEPT, P-E2 REFUTED, P-E2b KEPT, P-E3 KEPT at the edge; 31/44 match sitting 1 (lattice/LOG.md 2026-11-01, results/eareps_results.json)",
+   "state": "PASS",
    "folders": []
   },
   {

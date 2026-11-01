@@ -1,0 +1,343 @@
+{
+ "analysis_version": "1.0.0",
+ "catch_trials": {
+  "A": {
+   "rung": "eareps_A_15",
+   "valid": true,
+   "verdict": "locked"
+  },
+  "B": {
+   "rung": "eareps_B_02",
+   "valid": true,
+   "verdict": "locked"
+  },
+  "C": {
+   "rung": "eareps_C_12",
+   "valid": true,
+   "verdict": "beating"
+  }
+ },
+ "experiment": "EAR-eps",
+ "exploratory": {
+  "T_C_flat": 13.5,
+  "T_C_sharp": 7.43,
+  "family_D": {
+   "12-EDO major triad 0-400-700": "broken",
+   "12-EDO minor triad 0-300-700": "beating",
+   "12-EDO power chord 0-700-1200": "locked"
+  }
+ },
+ "gate": "G-025",
+ "pacing": {
+  "gaps": 43,
+  "gaps_under_10s": 23,
+  "median_gap_seconds": 9.52,
+  "min_gap_seconds": 6.8,
+  "rungs_timed": 44,
+  "sitting_seconds": 569.8
+ },
+ "predictions": {
+  "P-E1": {
+   "T_A_flat": 8.43,
+   "T_A_sharp": 10.0,
+   "band": [
+    6.0,
+    12.0
+   ],
+   "line": 14.86,
+   "verdict": "KEPT"
+  },
+  "P-E2": {
+   "T_B_flat": 4.0,
+   "T_B_sharp": "T > 8",
+   "limit": 3.0,
+   "verdict": "REFUTED"
+  },
+  "P-E2b": {
+   "rungs": {
+    "eareps_B_03": "beating",
+    "eareps_B_05": "beating"
+   },
+   "verdict": "KEPT"
+  },
+  "P-E3": {
+   "gap_sharp_minus_flat": 1.57,
+   "min": 1.5,
+   "verdict": "KEPT"
+  }
+ },
+ "sitting": {
+  "playback_chain": "Ear Bench browser synth, 1/1 = 261.63 Hz",
+  "sitting_date": "2026-11-01",
+  "synth_patch": "Reed (all partials, 1/n); nonlinearity off"
+ },
+ "thresholds": {
+  "A-flat": {
+   "K": 14.86,
+   "L": 2.0,
+   "T": 8.43,
+   "censored": null,
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 2.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 11.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 14.86,
+     "verdict": "broken"
+    },
+    {
+     "abs_delta": 18.0,
+     "verdict": "broken"
+    },
+    {
+     "abs_delta": 22.0,
+     "verdict": "broken"
+    }
+   ],
+   "transition_band": [
+    5.0,
+    8.0,
+    11.0
+   ]
+  },
+  "A-sharp": {
+   "K": 18.0,
+   "L": 2.0,
+   "T": 10.0,
+   "censored": null,
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 2.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 11.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 14.86,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 18.0,
+     "verdict": "broken"
+    },
+    {
+     "abs_delta": 22.0,
+     "verdict": "beating"
+    }
+   ],
+   "transition_band": [
+    5.0,
+    8.0,
+    11.0,
+    14.86
+   ]
+  },
+  "B-flat": {
+   "K": 8.0,
+   "L": 0.0,
+   "T": 4.0,
+   "censored": null,
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 1.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 1.955001,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 3.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "broken"
+    }
+   ],
+   "transition_band": [
+    1.0,
+    1.955001,
+    3.0,
+    5.0
+   ]
+  },
+  "B-sharp": {
+   "K": null,
+   "L": 0.0,
+   "T": null,
+   "censored": "T > 8",
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 1.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 1.955001,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 3.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "beating"
+    }
+   ],
+   "transition_band": [
+    1.0,
+    1.955001,
+    3.0,
+    5.0,
+    8.0
+   ]
+  },
+  "C-flat": {
+   "K": 22.0,
+   "L": 5.0,
+   "T": 13.5,
+   "censored": null,
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 2.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "locked"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 11.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 14.86,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 18.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 22.0,
+     "verdict": "broken"
+    }
+   ],
+   "transition_band": [
+    2.0,
+    8.0,
+    11.0,
+    14.86,
+    18.0
+   ]
+  },
+  "C-sharp": {
+   "K": 14.86,
+   "L": 0.0,
+   "T": 7.43,
+   "censored": null,
+   "non_monotone": false,
+   "rungs": [
+    {
+     "abs_delta": 0.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 2.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 5.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 8.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 11.0,
+     "verdict": "beating"
+    },
+    {
+     "abs_delta": 14.86,
+     "verdict": "broken"
+    },
+    {
+     "abs_delta": 18.0,
+     "verdict": "broken"
+    },
+    {
+     "abs_delta": 22.0,
+     "verdict": "broken"
+    }
+   ],
+   "transition_band": [
+    2.0,
+    5.0,
+    8.0,
+    11.0
+   ]
+  }
+ }
+}
