@@ -6228,3 +6228,10 @@ with its own registration.
 
 **G-025.** Sitting 2 is the primary result as registered. Accepting these
 thresholds for G-027 is Marcus's call.
+
+## 2026-11-01 — G-025 decided: PASS
+
+Marcus accepted the sitting-2 thresholds for G-027 ("Accept"). G-025 is
+PASS; G-027 (EPS-TIER-002) is unblocked and reads its above-LOCK tier from
+`results/eareps_results.json`.
+
