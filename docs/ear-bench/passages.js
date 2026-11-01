@@ -113,7 +113,7 @@ const Passages = (() => {
   }
 
   function schedule(events, t0, hz) {
-    events.forEach((e) => Synth.blip(hz(e.cents), t0 + e.t, e.dur, e.level));
+    Synth.stream(events.map((e) => ({ hz: hz(e.cents), start: t0 + e.t, dur: e.dur, level: e.level })));
     return t0 + (events.length ? Composer.length(events) : EMPTY);
   }
 
