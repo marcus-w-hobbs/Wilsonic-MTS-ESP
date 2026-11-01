@@ -38,11 +38,11 @@ const Eareps = (() => {
           </div>
         </header>
         ${current ? `
-        <p class="hint">Hold the chord for at least 5 seconds, release, hold again. Replay as often as you like. Space bar holds it too. Once you commit a verdict it stays committed.</p>
+        <p class="hint">Hold the chord for at least 5 seconds, release, hold again, or tap Play 5 s twice. Replay as often as you like. Space bar holds it too. Once you commit a verdict it stays committed.</p>
         ${Synth.struck ? `<p class="warn">The protocol asks for a sustained, steady patch. A plucked or struck timbre decays while you hold the chord, so switch to Reed or Organ for this sitting.</p>` : ""}
         <div class="row">
           <button class="btn primary big" id="eps-hold" aria-describedby="eps-hold-hint">Hold chord</button>
-          <button class="btn" id="eps-five">Play 5 s</button>
+          <button class="btn primary big" id="eps-five">Play 5 s</button>
           <span class="hint" id="eps-hold-hint">keys 60-61-62 of ${current.name}</span>
         </div>
         <fieldset class="verdicts">
@@ -83,10 +83,25 @@ const Eareps = (() => {
     hold.addEventListener("pointerup", off);
     hold.addEventListener("pointercancel", off);
     ctx.setSpaceHold(on, off);
-    root.querySelector("#eps-five").addEventListener("click", async () => {
+    // One tap sounds the chord for exactly 5 s and counts down on the button.
+    const five = root.querySelector("#eps-five");
+    five.addEventListener("click", async () => {
+      if (five.disabled) return;
       await ctx.ensureAudio();
       const t = Synth.now() + 0.05;
       chord().forEach((hz) => Synth.blip(hz, t, 5));
+      five.disabled = true;
+      five.classList.add("down");
+      let left = 5;
+      five.textContent = `Playing… ${left}`;
+      const tick = setInterval(() => {
+        left -= 1;
+        if (left > 0) { five.textContent = `Playing… ${left}`; return; }
+        clearInterval(tick);
+        five.disabled = false;
+        five.classList.remove("down");
+        five.textContent = "Play 5 s";
+      }, 1000);
     });
     root.querySelectorAll("input[name=eps-verdict]").forEach((el) =>
       el.addEventListener("change", () => ctx.setDraft({ ...ctx.draft, verdict: el.value })));
