@@ -739,3 +739,14 @@ survival, and it does not change any audition.
 
 **G-027.** Pending Marcus's decision: adopt EAR (8.43 P / 7.43 S, collapse
 on) as the reporting tier beside LOCK, with EAR5 as its sensitivity check.
+
+## 2026-11-01 — DECISION: G-027 PASS, EAR becomes the reporting tier (Marcus)
+
+Marcus adopted the EAR tier ("YES"): from here on, triad counts are
+reported at LOCK 2¢ AND at EAR (8.43¢ P / 7.43¢ S, derived from the EAR-ε
+receipt) with the collapse filter on, and EAR5 (4.0¢) beside it as the
+sensitivity check. The frozen scorer stays pinned at v1.1.0 with LOCK as
+its default; EAR lives in the report layer (`epstier002.tiers`,
+`epstier002.collapse`, `epstier002.score_tier`). New experiments should
+import those rather than retype the numbers.
+
