@@ -796,6 +796,7 @@
     const chip = $("#midi");
     // A click is a user gesture, so it can also start audio: MIDI notes alone never can.
     if (fromClick) await ensureAudio();
+    if (!navigator.requestMIDIAccess && !fromClick) return;
     if (!navigator.requestMIDIAccess) { chip.textContent = "MIDI: open the local bench in Chrome"; showMidiHelp(); return; }
     try {
       const access = await navigator.requestMIDIAccess();

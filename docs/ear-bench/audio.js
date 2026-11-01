@@ -48,6 +48,8 @@ const Synth = (() => {
 
   async function start() {
     if (!ctx) {
+      // iOS mutes Web Audio under the silent switch unless the page asks for a playback session (Safari 17+).
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* older Safari */ }
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       bus = ctx.createGain();
       shaper = ctx.createWaveShaper();
