@@ -74,6 +74,10 @@ GATE_PAIRS = {
                "lattice.gapfill001.canonical_dekany_in_in1_outnone_PARENT-CS", "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-AM"),
               ("Dekany: mediant vs MOS-window fill",
                "lattice.gapfill001.canonical_dekany_in_in1_outnone_EPI-MED", "lattice.gapfill001.canonical_dekany_in_in1_outnone_MOS-CS")],
+    "G-041": [("Shared division table vs shared genus table (more strictly proper subsets vs more common tones)",
+               "lattice.gapfill002.canonical_eikosany_table_EPI-AM", "lattice.gapfill002.canonical_eikosany_table_GENUS"),
+              ("All exact pools vs one MOS chain (351.444c)",
+               "lattice.gapfill002.canonical_eikosany_table_EXACT", "lattice.gapfill002.canonical_eikosany_table_MOS")],
 }
 SUBSET_TAG = re.compile(r"hexany\[in=(\d+),out=(\d+)\]")
 # GAPFILL-001 names its canonical subsets kind_in<x>_out<y>; the subset census
