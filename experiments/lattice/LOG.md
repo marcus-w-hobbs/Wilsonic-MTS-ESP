@@ -6235,3 +6235,15 @@ Marcus accepted the sitting-2 thresholds for G-027 ("Accept"). G-025 is
 PASS; G-027 (EPS-TIER-002) is unblocked and reads its above-LOCK tier from
 `results/eareps_results.json`.
 
+## 2026-11-01 — G-040 and G-041 decided: PASS (Ear Bench picks)
+
+Marcus marked both gates Pass on Ear Bench (e-piano, nonlinearity off).
+G-040: on the Added harmony passage he picked arithmetic division
+(EPI-AM) over parent tones (PARENT-CS) for the 1-3-5-7 hexany, "prefer x
+for sure". G-041: he picked the shared genus table (GENUS, 17 added
+tones) over the shared division table (EPI-AM, 22) on both Scale run and
+Added harmony. The other default pairs were not judged. Read together,
+for a single subset the division fill's added harmony won, and for the
+whole genus the smaller common-tone table won on melody and on harmony.
+Records appended to `experiments/ear_bench/judgments/marcus-w-hobbs.jsonl`.
+
