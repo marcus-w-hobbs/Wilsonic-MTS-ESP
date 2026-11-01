@@ -48,6 +48,8 @@ const Synth = (() => {
 
   async function start() {
     if (!ctx) {
+      // iOS mutes Web Audio under the silent switch unless the page asks for a playback session (Safari 17+).
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* older Safari */ }
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       bus = ctx.createGain();
       shaper = ctx.createWaveShaper();
@@ -168,7 +170,39 @@ const Synth = (() => {
   // Scheduled notes (sequences, chords, passages) stay stoppable until they end.
   let scheduled = [];
 
+  // Long passages (a whole eikosany's chorale is ~2000 notes, ~10 oscillators
+  // each) are fed to the graph a little ahead of the playhead: building them
+  // all on the tap stalls a phone past the first notes' start times, and the
+  // audio thread then carries tens of thousands of waiting voices.
+  const AHEAD = 2;
+  let streams = [];
+  let pump = 0;
+
+  function feed() {
+    if (!ctx) return;
+    const until = ctx.currentTime + AHEAD;
+    streams = streams.map((s) => {
+      let i = s.next;
+      for (; i < s.notes.length && s.notes[i].start < until; i++) {
+        const n = s.notes[i];
+        blip(n.hz, n.start, n.dur, n.level, n.tag);
+      }
+      return { ...s, next: i };
+    }).filter((s) => s.next < s.notes.length);
+    if (!streams.length && pump) { clearInterval(pump); pump = 0; }
+  }
+
+  // notes: [{ hz, start, dur, level, tag }] in context time; stopped by allOff.
+  function stream(notes) {
+    if (!ctx || !notes.length) return;
+    streams = [...streams, { notes: [...notes].sort((p, q) => p.start - q.start), next: 0 }];
+    feed();
+    if (streams.length && !pump) pump = setInterval(feed, 250);
+  }
+
   function allOff() {
+    streams = [];
+    if (pump) { clearInterval(pump); pump = 0; }
     [...voices.keys()].forEach((k) => noteOff(k));
     const t = ctx ? ctx.currentTime : 0;
     scheduled.filter((s) => s.end > t).forEach((s) => s.voice.stop(t));
@@ -243,7 +277,7 @@ const Synth = (() => {
   }
   const describe = () => `${Timbres.ALL[timbre].label}; nonlinearity ${drive ? drive.toFixed(1) : "off"}`;
 
-  return { start, running, noteOn, noteOff, allOff, blip, now, setTimbre, setDrive, setVolume, setOctave, describe, renderNote, OCTAVE_RANGE,
+  return { start, running, noteOn, noteOff, allOff, blip, stream, now, setTimbre, setDrive, setVolume, setOctave, describe, renderNote, OCTAVE_RANGE,
     retuneSounding, cancelPending, retuneKey,
     get octave() { return octave; },
     get timbre() { return timbre; },

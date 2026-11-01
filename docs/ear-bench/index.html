@@ -224,7 +224,8 @@ input[type=range] { accent-color: var(--accent); width: 110px; }
 .p-time { font-size: 0.8rem; color: var(--ink-2); min-width: 92px; text-align: right; }
 .p-status { font-size: 0.92rem; }
 .p-row.playing { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
-@media (max-width: 760px) { .p-lanes { grid-template-columns: 1fr; } .p-now { top: 0; } }
+@media (max-width: 760px) { .p-lanes { grid-template-columns: 1fr; } .p-now { top: env(safe-area-inset-top, 0px); } }
+@media (max-width: 760px) and (pointer: coarse) { #midi { display: none; } }
 .p-list { display: flex; flex-direction: column; gap: 8px; }
 .p-row { display: grid; grid-template-columns: minmax(200px, 1fr) auto auto; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
 .p-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -279,6 +280,9 @@ th { font: 600 0.72rem var(--f-body); color: var(--ink-2); text-transform: upper
 
 @media (max-width: 960px) { .cols { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 760px) {
+  /* On a phone the wrapped top bar is half the screen: let it scroll away (audio arms on any tap). */
+  .top { position: static; }
+  .top .hint { display: none; }
   .frame { grid-template-columns: minmax(0, 1fr); }
   #queue { border-right: 0; border-bottom: 1px solid var(--rule); max-height: 260px; overflow-y: auto; padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   #main { padding-left: max(16px, env(safe-area-inset-left, 0px)); }
