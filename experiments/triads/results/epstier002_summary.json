@@ -1,0 +1,1332 @@
+{
+ "EAR_winners_collapsed": {
+  "5": 490.0,
+  "6": 164.0,
+  "7": 502.0,
+  "8": 150.0,
+  "9": 124.0,
+  "10": 124.0,
+  "11": 236.0,
+  "12": 503.0,
+  "13": 268.0,
+  "14": 425.0,
+  "15": 322.0,
+  "16": 518.0,
+  "17": 353.0,
+  "18": 339.0,
+  "19": 242.0,
+  "20": 419.0,
+  "21": 238.0,
+  "22": 482.0
+ },
+ "ET7_winners": {
+  "collapsed": {
+   "5": 236.0,
+   "6": 224.0,
+   "7": 495.0,
+   "8": 472.0,
+   "9": 121.0,
+   "10": 386.0,
+   "11": 411.0,
+   "12": 495.0,
+   "13": 389.0,
+   "14": 411.0,
+   "15": 312.0,
+   "16": 389.0,
+   "17": 411.0,
+   "18": 472.0,
+   "19": 389.0,
+   "20": 411.0,
+   "21": 288.0,
+   "22": 389.0
+  },
+  "raw": {
+   "5": 236.0,
+   "6": 236.0,
+   "7": 481.0,
+   "8": 479.0,
+   "9": 241.0,
+   "10": 386.0,
+   "11": 239.0,
+   "12": 481.0,
+   "13": 479.0,
+   "14": 241.0,
+   "15": 301.0,
+   "16": 239.0,
+   "17": 481.0,
+   "18": 479.0,
+   "19": 241.0,
+   "20": 407.0,
+   "21": 239.0,
+   "22": 481.0
+  }
+ },
+ "LOCK_winners": {
+  "5": 497.0,
+  "6": 59.0,
+  "7": 367.0,
+  "8": 83.0,
+  "9": 566.0,
+  "10": 368.0,
+  "11": 317.0,
+  "12": 486.0,
+  "13": 368.0,
+  "14": 425.0,
+  "15": 317.0,
+  "16": 377.0,
+  "17": 562.0,
+  "18": 331.0,
+  "19": 317.0,
+  "20": 184.0,
+  "21": 286.0,
+  "22": 486.0
+ },
+ "collapsed_share_mos": {
+  "EAR": 0.0742,
+  "EAR5": 0.0366,
+  "ET5": 0.1194,
+  "ET7": 0.2788,
+  "LOCK": 0.019
+ },
+ "edo12_N12": {
+  "EAR": {
+   "collapsed": [
+    24,
+    12,
+    60
+   ],
+   "raw": [
+    24,
+    12,
+    60
+   ]
+  },
+  "EAR5": {
+   "collapsed": [
+    24,
+    24,
+    72
+   ],
+   "raw": [
+    24,
+    24,
+    72
+   ]
+  },
+  "ET5": {
+   "collapsed": [
+    48,
+    48,
+    60
+   ],
+   "raw": [
+    48,
+    48,
+    60
+   ]
+  },
+  "ET7": {
+   "collapsed": [
+    60,
+    60,
+    48
+   ],
+   "raw": [
+    60,
+    60,
+    48
+   ]
+  },
+  "LOCK": {
+   "collapsed": [
+    12,
+    12,
+    72
+   ],
+   "raw": [
+    12,
+    12,
+    72
+   ]
+  }
+ },
+ "experiment": "EPS-TIER-002",
+ "gate": "G-027",
+ "gates": {
+  "G-028": {
+   "changed": true,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      2,
+      2,
+      0
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      3,
+      3,
+      3
+     ],
+     "EAR_raw": [
+      3,
+      3,
+      3
+     ],
+     "LOCK": [
+      2,
+      1,
+      0
+     ],
+     "N": 7,
+     "file": "meru001_erv418935_LIFT_W7_n011_seed.scl",
+     "min_step": 45.275961
+    },
+    {
+     "EAR5_collapsed": [
+      5,
+      1,
+      1
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      4,
+      1,
+      2
+     ],
+     "EAR_raw": [
+      4,
+      1,
+      2
+     ],
+     "LOCK": [
+      5,
+      1,
+      0
+     ],
+     "N": 7,
+     "file": "meru001_erv418935_LIFT_W7_n012_lock.scl",
+     "min_step": 79.583636
+    },
+    {
+     "EAR5_collapsed": [
+      3,
+      3,
+      9
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      12,
+      12,
+      9
+     ],
+     "EAR_raw": [
+      12,
+      12,
+      9
+     ],
+     "LOCK": [
+      3,
+      3,
+      9
+     ],
+     "N": 7,
+     "file": "meru001_erv418935_LIFT_W7_n135_last.scl",
+     "min_step": 113.607966
+    },
+    {
+     "EAR5_collapsed": [
+      2,
+      0,
+      2
+     ],
+     "EAR_N_eff": [
+      6,
+      6
+     ],
+     "EAR_collapsed": [
+      3,
+      2,
+      2
+     ],
+     "EAR_raw": [
+      4,
+      3,
+      3
+     ],
+     "LOCK": [
+      1,
+      0,
+      2
+     ],
+     "N": 7,
+     "file": "meru001_fib_LIFT_W7_n011_seed.scl",
+     "min_step": 1.80243
+    },
+    {
+     "EAR5_collapsed": [
+      7,
+      5,
+      4
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      6,
+      6,
+      7
+     ],
+     "EAR_raw": [
+      6,
+      6,
+      7
+     ],
+     "LOCK": [
+      7,
+      3,
+      3
+     ],
+     "N": 7,
+     "file": "meru001_fib_LIFT_W7_n018_lock.scl",
+     "min_step": 96.706513
+    },
+    {
+     "EAR5_collapsed": [
+      8,
+      8,
+      9
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      7,
+      7,
+      8
+     ],
+     "EAR_raw": [
+      7,
+      7,
+      8
+     ],
+     "LOCK": [
+      7,
+      7,
+      9
+     ],
+     "N": 7,
+     "file": "meru001_fib_LIFT_W7_n135_last.scl",
+     "min_step": 99.270889
+    },
+    {
+     "EAR5_collapsed": [
+      4,
+      0,
+      1
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      6,
+      1,
+      2
+     ],
+     "EAR_raw": [
+      6,
+      1,
+      2
+     ],
+     "LOCK": [
+      4,
+      0,
+      0
+     ],
+     "N": 7,
+     "file": "meru001_metameantone_LIFT_W7_n011_seed.scl",
+     "min_step": 74.131437
+    },
+    {
+     "EAR5_collapsed": [
+      5,
+      2,
+      1
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      6,
+      4,
+      1
+     ],
+     "EAR_raw": [
+      6,
+      4,
+      1
+     ],
+     "LOCK": [
+      3,
+      1,
+      1
+     ],
+     "N": 7,
+     "file": "meru001_metameantone_LIFT_W7_n021_lock.scl",
+     "min_step": 88.233176
+    },
+    {
+     "EAR5_collapsed": [
+      3,
+      3,
+      9
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      12,
+      12,
+      9
+     ],
+     "EAR_raw": [
+      12,
+      12,
+      9
+     ],
+     "LOCK": [
+      3,
+      3,
+      9
+     ],
+     "N": 7,
+     "file": "meru001_metameantone_LIFT_W7_n135_last.scl",
+     "min_step": 121.847813
+    }
+   ],
+   "top_EAR_collapsed": "meru001_metameantone_LIFT_W7_n135_last.scl",
+   "top_LOCK": "meru001_fib_LIFT_W7_n135_last.scl"
+  },
+  "G-030": {
+   "changed": true,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      5,
+      1,
+      1
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      4,
+      1,
+      2
+     ],
+     "EAR_raw": [
+      4,
+      1,
+      2
+     ],
+     "LOCK": [
+      5,
+      1,
+      0
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho1-1_W7_n012.scl",
+     "min_step": 79.583636
+    },
+    {
+     "EAR5_collapsed": [
+      9,
+      7,
+      2
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      13,
+      11,
+      4
+     ],
+     "EAR_raw": [
+      13,
+      11,
+      4
+     ],
+     "LOCK": [
+      8,
+      6,
+      0
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho1-1_W7_n040.scl",
+     "min_step": 106.059307
+    },
+    {
+     "EAR5_collapsed": [
+      3,
+      3,
+      9
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      12,
+      12,
+      9
+     ],
+     "EAR_raw": [
+      12,
+      12,
+      9
+     ],
+     "LOCK": [
+      3,
+      3,
+      9
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho1-1_W7_n100.scl",
+     "min_step": 113.604458
+    },
+    {
+     "EAR5_collapsed": [
+      0,
+      4,
+      0
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      2,
+      5,
+      2
+     ],
+     "EAR_raw": [
+      2,
+      5,
+      2
+     ],
+     "LOCK": [
+      0,
+      1,
+      0
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho5-2_W7_n012.scl",
+     "min_step": 16.868484
+    },
+    {
+     "EAR5_collapsed": [
+      3,
+      0,
+      1
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      6,
+      2,
+      2
+     ],
+     "EAR_raw": [
+      6,
+      2,
+      2
+     ],
+     "LOCK": [
+      1,
+      0,
+      1
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho5-2_W7_n040.scl",
+     "min_step": 19.0269
+    },
+    {
+     "EAR5_collapsed": [
+      6,
+      6,
+      9
+     ],
+     "EAR_N_eff": [
+      7,
+      7
+     ],
+     "EAR_collapsed": [
+      12,
+      12,
+      9
+     ],
+     "EAR_raw": [
+      12,
+      12,
+      9
+     ],
+     "LOCK": [
+      3,
+      3,
+      9
+     ],
+     "N": 7,
+     "file": "meru002_erv418935_rho5-2_W7_n100.scl",
+     "min_step": 111.995157
+    }
+   ],
+   "top_EAR_collapsed": "meru002_erv418935_rho5-2_W7_n100.scl",
+   "top_LOCK": "meru002_erv418935_rho1-1_W7_n040.scl"
+  },
+  "G-033": {
+   "changed": false,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      167,
+      178,
+      94
+     ],
+     "EAR_N_eff": [
+      29,
+      29
+     ],
+     "EAR_collapsed": [
+      253,
+      247,
+      163
+     ],
+     "EAR_raw": [
+      253,
+      247,
+      163
+     ],
+     "LOCK": [
+      115,
+      127,
+      94
+     ],
+     "N": 29,
+     "file": "rank3001_dek52_N29_g498.26_27.05.scl",
+     "min_step": 20.855049
+    },
+    {
+     "EAR5_collapsed": [
+      48,
+      48,
+      38
+     ],
+     "EAR_N_eff": [
+      19,
+      19
+     ],
+     "EAR_collapsed": [
+      82,
+      79,
+      50
+     ],
+     "EAR_raw": [
+      82,
+      79,
+      50
+     ],
+     "LOCK": [
+      26,
+      26,
+      38
+     ],
+     "N": 19,
+     "file": "rank3001_hexany_N19_g1002.86_385.84.scl",
+     "min_step": 34.035824
+    },
+    {
+     "EAR5_collapsed": [
+      65,
+      65,
+      48
+     ],
+     "EAR_N_eff": [
+      21,
+      21
+     ],
+     "EAR_collapsed": [
+      102,
+      102,
+      80
+     ],
+     "EAR_raw": [
+      102,
+      102,
+      80
+     ],
+     "LOCK": [
+      51,
+      53,
+      48
+     ],
+     "N": 21,
+     "file": "rank3001_hexany_N21_g350.98_231.29.scl",
+     "min_step": 27.384291
+    }
+   ],
+   "top_EAR_collapsed": "rank3001_dek52_N29_g498.26_27.05.scl",
+   "top_LOCK": "rank3001_dek52_N29_g498.26_27.05.scl"
+  },
+  "G-035": {
+   "changed": false,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      34,
+      34,
+      42
+     ],
+     "EAR_N_eff": [
+      15,
+      15
+     ],
+     "EAR_collapsed": [
+      41,
+      41,
+      42
+     ],
+     "EAR_raw": [
+      41,
+      41,
+      42
+     ],
+     "LOCK": [
+      38,
+      38,
+      49
+     ],
+     "N": 15,
+     "file": "gold001_hexany_golden_c11_N15_g317.170.scl",
+     "min_step": 68.680784
+    },
+    {
+     "EAR5_collapsed": [
+      171,
+      171,
+      175
+     ],
+     "EAR_N_eff": [
+      29,
+      29
+     ],
+     "EAR_collapsed": [
+      273,
+      249,
+      174
+     ],
+     "EAR_raw": [
+      273,
+      249,
+      174
+     ],
+     "LOCK": [
+      145,
+      145,
+      196
+     ],
+     "N": 29,
+     "file": "gold001_hexany_silver_Q20_N29_g316.827.scl",
+     "min_step": 19.714126
+    }
+   ],
+   "top_EAR_collapsed": "gold001_hexany_silver_Q20_N29_g316.827.scl",
+   "top_LOCK": "gold001_hexany_silver_Q20_N29_g316.827.scl"
+  },
+  "G-036": {
+   "changed": false,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      129,
+      129,
+      144
+     ],
+     "EAR_N_eff": [
+      26,
+      26
+     ],
+     "EAR_collapsed": [
+      218,
+      195,
+      138
+     ],
+     "EAR_raw": [
+      218,
+      195,
+      138
+     ],
+     "LOCK": [
+      80,
+      80,
+      144
+     ],
+     "N": 26,
+     "file": "subfit001_eikosany_N26_free_g350.748.scl",
+     "min_step": 17.952
+    },
+    {
+     "EAR5_collapsed": [
+      555,
+      555,
+      442
+     ],
+     "EAR_N_eff": [
+      45,
+      45
+     ],
+     "EAR_collapsed": [
+      996,
+      926,
+      400
+     ],
+     "EAR_raw": [
+      996,
+      926,
+      400
+     ],
+     "LOCK": [
+      400,
+      400,
+      473
+     ],
+     "N": 45,
+     "file": "subfit001_eikosany_N45_free_g351.444.scl",
+     "min_step": 9.204
+    },
+    {
+     "EAR5_collapsed": [
+      581,
+      581,
+      610
+     ],
+     "EAR_N_eff": [
+      46,
+      46
+     ],
+     "EAR_collapsed": [
+      1043,
+      999,
+      574
+     ],
+     "EAR_raw": [
+      1043,
+      999,
+      574
+     ],
+     "LOCK": [
+      364,
+      364,
+      468
+     ],
+     "N": 46,
+     "file": "subfit001_eikosany_N46_mos_g443.128.scl",
+     "min_step": 19.432
+    },
+    {
+     "EAR5_collapsed": [
+      714,
+      714,
+      535
+     ],
+     "EAR_N_eff": [
+      49,
+      49
+     ],
+     "EAR_collapsed": [
+      1224,
+      1157,
+      461
+     ],
+     "EAR_raw": [
+      1224,
+      1157,
+      461
+     ],
+     "LOCK": [
+      383,
+      383,
+      550
+     ],
+     "N": 49,
+     "file": "subfit001_eikosany_N49_free_g497.774.scl",
+     "min_step": 8.734
+    },
+    {
+     "EAR5_collapsed": [
+      893,
+      893,
+      623
+     ],
+     "EAR_N_eff": [
+      53,
+      53
+     ],
+     "EAR_collapsed": [
+      1566,
+      1474,
+      541
+     ],
+     "EAR_raw": [
+      1566,
+      1474,
+      541
+     ],
+     "LOCK": [
+      484,
+      484,
+      642
+     ],
+     "N": 53,
+     "file": "subfit001_eikosany_N53_mos_g497.774.scl",
+     "min_step": 8.734
+    },
+    {
+     "EAR5_collapsed": [
+      2018,
+      2018,
+      1072
+     ],
+     "EAR_N_eff": [
+      70,
+      70
+     ],
+     "EAR_collapsed": [
+      3764,
+      3352,
+      982
+     ],
+     "EAR_raw": [
+      3764,
+      3352,
+      982
+     ],
+     "LOCK": [
+      1046,
+      1046,
+      1120
+     ],
+     "N": 70,
+     "file": "subfit001_eikosany_N70_free_g175.378.scl",
+     "min_step": 9.502
+    }
+   ],
+   "top_EAR_collapsed": "subfit001_eikosany_N70_free_g175.378.scl",
+   "top_LOCK": "subfit001_eikosany_N70_free_g175.378.scl"
+  },
+  "G-037": {
+   "changed": false,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      325,
+      325,
+      312
+     ],
+     "EAR_N_eff": [
+      37,
+      37
+     ],
+     "EAR_collapsed": [
+      591,
+      539,
+      286
+     ],
+     "EAR_raw": [
+      591,
+      539,
+      286
+     ],
+     "LOCK": [
+      194,
+      194,
+      318
+     ],
+     "N": 37,
+     "file": "subfit002_eikosany_cap20_N37_free_g350.756.scl",
+     "min_step": 18.144
+    },
+    {
+     "EAR5_collapsed": [
+      430,
+      430,
+      366
+     ],
+     "EAR_N_eff": [
+      41,
+      41
+     ],
+     "EAR_collapsed": [
+      751,
+      704,
+      332
+     ],
+     "EAR_raw": [
+      751,
+      704,
+      332
+     ],
+     "LOCK": [
+      326,
+      326,
+      393
+     ],
+     "N": 41,
+     "file": "subfit002_eikosany_cap20_N41_mos_g351.444.scl",
+     "min_step": 25.452
+    },
+    {
+     "EAR5_collapsed": [
+      2236,
+      2236,
+      2282
+     ],
+     "EAR_N_eff": [
+      72,
+      72
+     ],
+     "EAR_collapsed": [
+      4155,
+      3784,
+      2088
+     ],
+     "EAR_raw": [
+      4155,
+      3784,
+      2088
+     ],
+     "LOCK": [
+      1172,
+      1172,
+      1104
+     ],
+     "N": 72,
+     "file": "subfit002_eikosany_cap20_N72_mos_g483.278.scl",
+     "min_step": 16.39
+    }
+   ],
+   "top_EAR_collapsed": "subfit002_eikosany_cap20_N72_mos_g483.278.scl",
+   "top_LOCK": "subfit002_eikosany_cap20_N72_mos_g483.278.scl"
+  },
+  "G-039": {
+   "changed": false,
+   "scales": [
+    {
+     "EAR5_collapsed": [
+      44,
+      44,
+      61
+     ],
+     "EAR_N_eff": [
+      17,
+      17
+     ],
+     "EAR_collapsed": [
+      63,
+      60,
+      61
+     ],
+     "EAR_raw": [
+      63,
+      60,
+      61
+     ],
+     "LOCK": [
+      45,
+      45,
+      64
+     ],
+     "N": 17,
+     "file": "dynmos001_canonical_sub351444_N17_hexany[in=5,out=7].scl",
+     "min_step": 60.108
+    },
+    {
+     "EAR5_collapsed": [
+      189,
+      189,
+      191
+     ],
+     "EAR_N_eff": [
+      29,
+      29
+     ],
+     "EAR_collapsed": [
+      237,
+      244,
+      157
+     ],
+     "EAR_raw": [
+      237,
+      244,
+      157
+     ],
+     "LOCK": [
+      95,
+      95,
+      191
+     ],
+     "N": 29,
+     "file": "dynmos001_canonical_sub497774_N29_hexany[in=11,out=5].scl",
+     "min_step": 26.712
+    },
+    {
+     "EAR5_collapsed": [
+      33,
+      33,
+      42
+     ],
+     "EAR_N_eff": [
+      15,
+      15
+     ],
+     "EAR_collapsed": [
+      42,
+      38,
+      42
+     ],
+     "EAR_raw": [
+      42,
+      38,
+      42
+     ],
+     "LOCK": [
+      37,
+      37,
+      49
+     ],
+     "N": 15,
+     "file": "dynmos001_marcus_sub316778_N15_dekany_in[in=1,out=none].scl",
+     "min_step": 67.112
+    }
+   ],
+   "top_EAR_collapsed": "dynmos001_canonical_sub497774_N29_hexany[in=11,out=5].scl",
+   "top_LOCK": "dynmos001_canonical_sub497774_N29_hexany[in=11,out=5].scl"
+  }
+ },
+ "hexanies_gaining_triads": {
+  "EAR": {
+   "collapsed": 26,
+   "raw": 26
+  },
+  "EAR5": {
+   "collapsed": 2,
+   "raw": 2
+  },
+  "ET5": {
+   "collapsed": 33,
+   "raw": 33
+  },
+  "ET7": {
+   "collapsed": 57,
+   "raw": 59
+  },
+  "LOCK": {
+   "collapsed": 0,
+   "raw": 0
+  }
+ },
+ "hexany_1357": {
+  "EAR": [
+   6,
+   6,
+   0
+  ],
+  "EAR5": [
+   6,
+   6,
+   0
+  ],
+  "ET5": [
+   6,
+   6,
+   0
+  ],
+  "ET7": [
+   11,
+   11,
+   0
+  ],
+  "LOCK": [
+   6,
+   6,
+   0
+  ]
+ },
+ "predictions": {
+  "F1": {
+   "ET7_winners_changed_by_collapse": 16,
+   "of": 18,
+   "verdict": "KEPT"
+  },
+  "F2": {
+   "line": 0.155,
+   "median_rho_LOCK_vs_EAR": 0.268,
+   "verdict": "KEPT"
+  },
+  "F3": {
+   "mos_rows_with_step_below_eps_P": 184,
+   "share": 0.0612,
+   "verdict": "KEPT"
+  },
+  "F4": {
+   "hexanies_gaining_at_EAR_collapsed": 26,
+   "verdict": "REFUTED"
+  },
+  "F5": {
+   "gates_whose_top_changed": 2,
+   "verdict": "KEPT"
+  }
+ },
+ "rows": {
+  "audition": 32,
+  "hexany": 70,
+  "mos": 3006
+ },
+ "scorer_sha256": "1a840af9b0ac2b145926c29f85bd1946a24fff4ac08d524cfc5ae88539d9b592",
+ "scorer_version": "1.1.0",
+ "spearman_P": {
+  "LOCK_vs_EAR5_collapsed": {
+   "median": 0.437,
+   "per_N": {
+    "5": 0.193,
+    "6": -0.067,
+    "7": 0.144,
+    "8": -0.028,
+    "9": 0.051,
+    "10": -0.018,
+    "11": 0.52,
+    "12": 0.602,
+    "13": 0.457,
+    "14": 0.387,
+    "15": 0.562,
+    "16": 0.417,
+    "17": 0.597,
+    "18": 0.652,
+    "19": 0.534,
+    "20": 0.567,
+    "21": 0.523,
+    "22": 0.387
+   }
+  },
+  "LOCK_vs_EAR_collapsed": {
+   "median": 0.268,
+   "per_N": {
+    "5": 0.267,
+    "6": 0.219,
+    "7": 0.161,
+    "8": 0.17,
+    "9": 0.249,
+    "10": 0.231,
+    "11": 0.398,
+    "12": 0.342,
+    "13": 0.455,
+    "14": 0.266,
+    "15": 0.36,
+    "16": 0.37,
+    "17": 0.423,
+    "18": 0.307,
+    "19": 0.27,
+    "20": -0.02,
+    "21": 0.174,
+    "22": 0.33
+   }
+  },
+  "LOCK_vs_ET5_collapsed": {
+   "median": 0.234,
+   "per_N": {
+    "5": 0.037,
+    "6": -0.185,
+    "7": 0.04,
+    "8": 0.026,
+    "9": 0.086,
+    "10": 0.051,
+    "11": 0.337,
+    "12": 0.071,
+    "13": 0.366,
+    "14": 0.505,
+    "15": 0.403,
+    "16": 0.401,
+    "17": 0.389,
+    "18": 0.25,
+    "19": 0.286,
+    "20": 0.122,
+    "21": 0.218,
+    "22": 0.311
+   }
+  },
+  "LOCK_vs_ET7_collapsed": {
+   "median": 0.181,
+   "per_N": {
+    "5": -0.063,
+    "6": -0.267,
+    "7": -0.027,
+    "8": -0.037,
+    "9": -0.014,
+    "10": 0.062,
+    "11": 0.245,
+    "12": 0.049,
+    "13": 0.323,
+    "14": 0.194,
+    "15": 0.47,
+    "16": 0.315,
+    "17": 0.381,
+    "18": 0.145,
+    "19": 0.266,
+    "20": 0.191,
+    "21": 0.239,
+    "22": 0.171
+   }
+  }
+ },
+ "tiers": {
+  "EAR": [
+   8.43,
+   7.43
+  ],
+  "EAR5": [
+   4.0,
+   4.0
+  ],
+  "ET5": [
+   14.86,
+   14.86
+  ],
+  "ET7": [
+   32.01,
+   32.01
+  ],
+  "LOCK": [
+   2.0,
+   2.0
+  ]
+ },
+ "version": "1.0.0"
+}

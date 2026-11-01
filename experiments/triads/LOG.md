@@ -609,3 +609,144 @@ pinned in tests/test_cpp_mirror.py only.
 
 **Kept.** results/crossval003.json; suite 103 → 105/105; scorer v1.1.0
 untouched (crossval003 records the version but does not score).
+
+## 2026-11-01 — EPS-TIER-002 pre-registration (G-027; entry BEFORE any code or run)
+
+**Why now.** G-026's decision (2026-09-29) held every tier above LOCK 2¢
+until Marcus's own lock-loss thresholds existed, and asked for a report
+filter that collapses pitches closer than ε, so loose tiers stop rewarding
+near-ETs whose chroma is smaller than ε. G-025 passed today with sitting 2
+of EAR-ε (`../lattice/results/eareps_results.json`): major third 10.0¢
+sharp / 8.43¢ flat, minor third 7.43¢ sharp / 13.5¢ flat, fifth broken at
+−8¢ (T = 4.0¢) and never broken sharp to +8¢, all heard under the strict
+case (Reed, all 16 partials, middle C).
+
+**Tiers (derived in code from the EAR-ε receipt, not typed in).** Each tier
+is a pair (ε_P, ε_S); the frozen scorer is called once per distinct ε and P
+is read from the ε_P call, S from the ε_S call.
+- LOCK (2.00, 2.00): the scorer default.
+- **EAR (8.43, 7.43), primary:** ε_P = the stricter side of the major
+  third (family A, whose detuned tone is exactly the P deviation), ε_S =
+  the stricter side of the minor third (family C, the S deviation). Agreed
+  with Marcus in chat before this entry.
+- EAR5 (4.00, 4.00), sensitivity only: the scorer's P class also contains
+  power-chord shapes (2:3:4), and the fifth's stricter threshold is 4.0¢.
+  Reported beside EAR; it does not decide anything.
+- ET5 (14.86) and ET7 (32.01): EPS-TIER-001's tiers, re-run for continuity.
+
+**Collapse filter (report layer; scorer.py untouched, pin checked before
+and after).** For a tier's ε, the scale's pitch classes are sorted and
+merged single-linkage wherever consecutive pitches are closer than ε,
+including across the octave wrap; each cluster is represented by its
+lowest member, and a cluster containing the root by 0. The collapsed scale
+is scored at that ε. Raw and collapsed counts are both reported, with
+N_eff.
+
+**Part A: EPS-TIER-001's sweep at the new tiers.** Every MOS on the 1¢
+generator grid, N = 5..22 (3006 rows), and the 70 hexanies of HEX-001
+(cents path), at all five tiers, raw and collapsed.
+
+**Part B: an "at your ε" lens on the seven gates waiting on Marcus's ear.**
+Every audition .scl of G-028 (meru001, 9), G-030 (meru002, 6), G-033
+(rank3001, 3), G-035 (gold001, 2), G-036 (subfit001, 6), G-037 (subfit002,
+3) and G-039 (dynmos001, 3), 32 files, scored as whole scales at LOCK and
+EAR (raw and collapsed) and EAR5. This is a whole-scale lens; it does not
+re-run those experiments' subset-survival measures, which a later entry
+would have to register separately.
+
+**Predictions (committed now).**
+- **F1 (collapse removes the near-ET degeneracy).** At ET7, collapse
+  changes the per-N winner by P in at least 14 of the 18 cardinalities
+  (EPS-TIER-001 found 16 of 18 ET7 winners were near-ETs with chroma < ε).
+- **F2 (the ear tier sits nearer LOCK than ET5 does).** The median over N
+  of Spearman ρ of P across generators, LOCK vs EAR (collapsed), is above
+  EPS-TIER-001's LOCK vs ET5 median of 0.155.
+- **F3 (collapse rarely bites at the ear tier in the MOS grid).** Fewer than
+  10% of MOS rows have any step smaller than ε_P = 8.43¢.
+- **F4 (hexanies gain little at the ear tier).** At EAR (collapsed), at most
+  20 of the 70 hexanies gain P + S beyond their exact rational count
+  (EPS-TIER-001: 33 at ET5).
+- **F5 (the lens moves some gate leaders).** In at least 2 of the 7 gates,
+  the top audition scale by P + S changes between LOCK and EAR (collapsed).
+
+**Machinery.** Runner `epstier002.py`, python3.12 stdlib only, no
+randomness and no wall-clock fields, so two runs must be bit-identical;
+tests `tests/test_epstier002.py` green before the first run; receipts
+`results/epstier002.jsonl` and `results/epstier002_summary.json`. The gate
+is G-027; its row gets the results and Marcus decides whether EAR becomes
+the reporting tier.
+
+## 2026-11-01 — EPS-TIER-002 results (G-027)
+
+**Run.** `epstier002.py` 1.0.0, receipts `results/epstier002.jsonl` (sha1
+bd89688f…) and `results/epstier002_summary.json` (sha1 7685a942…),
+bit-identical across two runs. Tiers read from the EAR-ε receipt: EAR =
+(8.43 P, 7.43 S), EAR5 = 4.0, plus LOCK 2.00, ET5 14.86, ET7 32.01. Freeze
+check A passes before and after (scorer 1a840af9…); 12 new tests, triads
+suite green.
+
+**Verdicts.**
+- **F1 KEPT.** At ET7 the collapse filter changes the per-N winner in 16
+  of 18 cardinalities, exactly the 16 near-ET winners EPS-TIER-001 flagged.
+  The filter does what G-026 asked for.
+- **F2 KEPT.** Median ρ of P across generators, LOCK vs EAR (collapsed), is
+  0.268, above LOCK vs ET5's 0.155 (and LOCK vs ET5 collapsed is 0.234,
+  LOCK vs ET7 collapsed 0.181). The ear tier reorders generators less than
+  the 12-ET tier does, but it still reorders them a lot: a winner at LOCK is
+  mostly not the winner at the ear.
+- **F3 KEPT.** 184 of 3006 MOS rows (6.1%) have a step smaller than 8.43¢;
+  7.4% collapse at EAR, against 11.9% at ET5 and 27.9% at ET7.
+- **F4 REFUTED.** 26 of 70 hexanies gain P + S beyond their exact rational
+  count at EAR (predicted at most 20; ET5 gives 33). The 1-3-5-7 hexany is
+  6 + 6 at every tier up to ET5.
+- **F5 KEPT by the runner's rule, cleanly in one gate.** In G-028 the leader
+  really changes: Fibonacci's last window (14 at LOCK, still 14) falls
+  behind 0.418935's and meta-meantone's last windows, which both rise from
+  6 to 24 and tie. In G-030 the LOCK leader (ρ = 1, n = 40, 14) rises to 24
+  and ties with two others; the runner's filename tie-break names another
+  scale. So one gate changes leader outright and one gains co-leaders.
+
+**Scorer facts the numbers carry.** Counts are not monotone in ε. The
+degeneracy guard drops triples whose outer separation sits inside the
+window, so raising ε can lose triads: P falls from LOCK to EAR in 299 of
+3006 MOS rows, and two audition scales lose one triad (0.418935's n = 12
+lock window, which appears in both G-028 and G-030). 12-EDO at N = 12 is
+24 P / 12 S at EAR, against 12 / 12 at LOCK: its 7.84¢ triads count as
+proportional under ε_P = 8.43 but not as subcontrary under ε_S = 7.43, so
+the lopsided thresholds show up as P ≠ S on a scale where they are
+otherwise equal.
+
+**Part B, the seven gates (whole-scale P + S, LOCK → EAR collapsed).**
+- G-028: last windows 0.418935 6 → 24, meta-meantone 6 → 24, Fibonacci
+  14 → 14; the Fibonacci seed window (a 1.8¢ step) collapses to 6 notes.
+- G-030: ρ = 1 n = 40 14 → 24, n = 100 6 → 24; ρ = 5/2 n = 100 6 → 24,
+  n = 12 1 → 7, n = 40 1 → 8.
+- G-033: all three about double; the N = 29 dekany fit stays on top
+  (242 → 500).
+- G-035: silver N = 29 290 → 522, golden N = 15 76 → 82; silver stays on top.
+- G-036: smallest steps 8.7–9.5¢, just above ε_P, so nothing collapses;
+  counts rise 2.5–3.4×; N = 70 stays on top. The 41/45-note 351.444¢ level
+  quoted "within 9.5¢" has a worst triad outside both ear thresholds; the
+  53-note 497.774¢ level "within 4.2¢" is inside both.
+- G-037: N = 72 483.278¢ stays on top (2344 → 7939); "within 8.0¢" is
+  inside ε_P and outside ε_S.
+- G-039: N = 29 497.774¢ stays on top (190 → 481); the 17-note 351.444¢
+  hexany window and Marcus's 15-note dekany window barely move (90 → 123,
+  74 → 80).
+
+This is a whole-scale lens. It does not re-run any experiment's subset
+survival, and it does not change any audition.
+
+**G-027.** Pending Marcus's decision: adopt EAR (8.43 P / 7.43 S, collapse
+on) as the reporting tier beside LOCK, with EAR5 as its sensitivity check.
+
+## 2026-11-01 — DECISION: G-027 PASS, EAR becomes the reporting tier (Marcus)
+
+Marcus adopted the EAR tier ("YES"): from here on, triad counts are
+reported at LOCK 2¢ AND at EAR (8.43¢ P / 7.43¢ S, derived from the EAR-ε
+receipt) with the collapse filter on, and EAR5 (4.0¢) beside it as the
+sensitivity check. The frozen scorer stays pinned at v1.1.0 with LOCK as
+its default; EAR lives in the report layer (`epstier002.tiers`,
+`epstier002.collapse`, `epstier002.score_tier`). New experiments should
+import those rather than retype the numbers.
+
