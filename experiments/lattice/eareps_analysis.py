@@ -15,13 +15,15 @@ Inputs: results/eareps_responses.json (Marcus's sitting) and the unsealed
 results/eareps_key.json. Output: results/eareps_results.json.
 Stdlib only, deterministic, no wall-clock fields.
 
-Run from experiments/lattice/:
-    python3.12 eareps_analysis.py
+Run from experiments/lattice/ (sitting 1 is on record as
+results/eareps_responses_sitting1.json -> results/eareps_results_sitting1.json):
+    python3.12 eareps_analysis.py [responses.json] [results.json]
 """
 
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from statistics import median
 
@@ -157,9 +159,11 @@ def analyse(key: dict, sitting: dict) -> dict:
 
 def main() -> None:
     key = json.loads((RESULTS / "eareps_key.json").read_text())["rungs"]
-    sitting = json.loads((RESULTS / "eareps_responses.json").read_text())
+    src = Path(sys.argv[1]) if len(sys.argv) > 1 else RESULTS / "eareps_responses.json"
+    dst = Path(sys.argv[2]) if len(sys.argv) > 2 else RESULTS / "eareps_results.json"
+    sitting = json.loads(src.read_text())
     out = analyse(key, sitting)
-    (RESULTS / "eareps_results.json").write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
+    dst.write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
     for name, t in out["thresholds"].items():
         print(f"{name:8s} L={t['L']:<7g} K={t['K']!s:<7} T={t['T'] if t['T'] is not None else t['censored']}"
               f"{'  NON-MONOTONE' if t['non_monotone'] else ''}")

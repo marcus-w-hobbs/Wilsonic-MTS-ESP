@@ -6026,17 +6026,17 @@ should come before any claim about AM and HM tables.
 `results/scl/gapfill002/` (each canonical table as one instrument,
 eikosany + F); gate G-041.
 
-## 2026-11-01 — EAR-ε results: Marcus's sitting scored as registered (G-025)
+## 2026-11-01 — EAR-ε results, sitting 1: Marcus's sitting scored as registered (G-025)
 
 **Sitting.** Marcus listened on 2026-11-01 in the Ear Bench EAR-ε sitting
 (docs/ear-bench/eareps.js), Reed patch (all partials, 1/n), nonlinearity
 off, 1/1 = 261.63 Hz, blocks B, A, C, D in numbered order, every verdict
 committed as he went. His responses are transcribed verbatim from the
 Ear Bench database (eareps/responses, version 44) into
-`results/eareps_responses.json`, with each commit's timestamp. The key was
+`results/eareps_responses_sitting1.json`, with each commit's timestamp. The key was
 opened only after that, and the analysis is `eareps_analysis.py` 1.0.0,
 which executes the 2026-08-19 rule and nothing else (receipt
-`results/eareps_results.json`, sha1 916ab518…, bit-identical across two
+`results/eareps_results_sitting1.json`, sha1 916ab518…, bit-identical across two
 runs; 10 new tests pin the rule, the censoring, the non-monotone flag, the
 catch trials and the decision lines).
 
@@ -6101,5 +6101,39 @@ P-E1 (both triads non-locked) and P-E2b (the power chord not broken).
   numbers above are the result.
 
 **What this unblocks.** G-027 (EPS-TIER-002) was waiting on these
-thresholds to choose its above-LOCK tier; accepting them at G-025 is
-Marcus's call.
+thresholds to choose its above-LOCK tier. Marcus chose to re-sit before
+accepting them (next entry).
+
+## 2026-11-01 — EAR-ε sitting 2 pre-registration (entry BEFORE the second sitting)
+
+**Why.** After reading sitting 1's scored result, Marcus chose to sit
+EAR-ε again: "I want a clean output". This is a voluntary repeat, not the
+validity rule's re-run (sitting 1's catch trials all held).
+
+**What stays the same.** The same 44 files in the same presentation order
+(blocks B, A, C, D, numbered order), the same protocol
+(EAREPS_PROTOCOL.md), the same Ear Bench sitting page, and the same
+analysis, `eareps_analysis.py` 1.0.0, unchanged in its rule. No new
+stimuli. Patch and pace are Marcus's choice and are recorded, as in
+sitting 1.
+
+**What counts.** Sitting 2 is the primary result for G-025 and decides
+P-E1, P-E2, P-E2b and P-E3 by the 2026-08-19 lines. Sitting 1 stays on
+record (`results/eareps_responses_sitting1.json`,
+`results/eareps_results_sitting1.json`) and is reported beside it.
+Agreement between the two sittings is reported descriptively: the number
+of rungs given the same verdict out of 44, and each threshold side by
+side. Nothing is pooled or averaged across sittings.
+
+**Blinding, stated plainly.** Before sitting 2 Marcus has seen sitting
+1's thresholds and the δ values behind two single verdicts (+8¢ major
+third locked, −14.86¢ minor third locked). He has not seen the key that
+maps rung ids to δ, and he must not open `results/eareps_key.json`,
+`results/eareps_manifest.json` or the .scl text until sitting 2 is
+saved. Because the order is fixed, a memory of sitting 1 could carry
+over; that is a known limit of the registered re-run design.
+
+**Mechanics.** Sitting 1's database document is archived to
+`eareps/sitting1` in Ear Bench and `eareps/responses` is cleared, so the
+page opens on B_01. Sitting 2 is transcribed to
+`results/eareps_responses.json` and scored to `results/eareps_results.json`.
