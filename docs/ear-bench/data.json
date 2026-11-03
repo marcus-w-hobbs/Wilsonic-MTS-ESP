@@ -39,7 +39,7 @@
    "id": "G-028",
    "opened": "2026-10-10",
    "gate": "MERU-001 review: the power-of-two recurrence law (P-M1/P-M2 kept), crossover law refuted-as-registered on 1/12; ear check of nine .scl windows under results/scl/meru001/ (0.418935, Fibonacci, meta-meantone: seed, lock, last)",
-   "status": "PENDING \u2014 does the lock window sound like the seed window's harmony arriving at the chain, or like a new chord?",
+   "status": "PENDING \u2014 does the lock window sound like the seed window's harmony arriving at the chain, or like a new chord? At your \u03b5 (EPS-TIER-002, whole scale, LOCK \u2192 EAR): the 0.418935 and meta-meantone last windows rise 6 \u2192 24 and overtake Fibonacci's (14 \u2192 14).",
    "state": "PENDING",
    "folders": [
     "meru001"
@@ -59,7 +59,7 @@
    "id": "G-030",
    "opened": "2026-10-10",
    "gate": "MERU-002 review: the \u03c1 knob of the order lift buys no harmony (P-R3 kept; mean P@2\u00a2 falls with \u03c1), chain step follows max(\u03c1, \u03bb\u2082) (P-R2 held on 30/31 rows), lock step follows \u03c1 (P-R1 refuted as registered: wrong lock definition in the scratch); ear check of six .scl under results/scl/meru002/ (0.418935 at \u03c1 = 1 vs 5/2; n = 12, 40, 100)",
-   "status": "PENDING \u2014 does the long \u03c1 = 5/2 transient at n = 40 sound like anything, or like a scale drifting? Decide whether \u03c1 stays a playground control or is dropped as a research knob",
+   "status": "PENDING \u2014 does the long \u03c1 = 5/2 transient at n = 40 sound like anything, or like a scale drifting? Decide whether \u03c1 stays a playground control or is dropped as a research knob At your \u03b5 (EPS-TIER-002): \u03c1 = 1 n = 40 rises 14 \u2192 24 and ties with \u03c1 = 1 n = 100 and \u03c1 = 5/2 n = 100 (both 6 \u2192 24).",
    "state": "PENDING",
    "folders": [
     "meru002"
@@ -116,7 +116,7 @@
    "id": "G-033",
    "opened": "2026-10-12",
    "gate": "RANK3-001 review: two generators (iOS Brun3, ported) hold the hexany at N = 19 within 0.47\u00a2 with all 12 triads (rank 2 needed 31) and the dekany with 9 at N = 29 within 0.65\u00a2 with all 41 (rank 2 never did); each rank buys one comma (ET: none up to 72 and the page computes 130; rank 2: 22; rank 3: 19; JI: 6, for the hexany at 2\u00a2); the eikosany needs a third generator; ear check of results/scl/rank3001/ (hexany N = 19 at 65625/65536, N = 21 at 2401/2400, dekany N = 29 schismatic)",
-   "status": "PENDING \u2014 does a three-step scale with every hexany triad inside sound like the hexany or like a new scale with the hexany in it? Decide: (a) rank-3 count objective next, (b) three generators (Brun four-term) for the eikosany, (c) a Brun3 design in Wilsonic MTS-ESP (plugin lane, end of the designs list), (d) a rank-3 station on the page",
+   "status": "PENDING \u2014 does a three-step scale with every hexany triad inside sound like the hexany or like a new scale with the hexany in it? Decide: (a) rank-3 count objective next, (b) three generators (Brun four-term) for the eikosany, (c) a Brun3 design in Wilsonic MTS-ESP (plugin lane, end of the designs list), (d) a rank-3 station on the page At your \u03b5 (EPS-TIER-002): all three fits about double; the N = 29 dekany fit stays on top (242 \u2192 500).",
    "state": "PENDING",
    "folders": [
     "rank3001"
@@ -126,7 +126,7 @@
    "id": "G-035",
    "opened": "2026-10-13",
    "gate": "GOLD-001 review: the family selector's price measured \u2014 golden at complexity \u2264 20 loses triads to the free optimum on every lattice (hexany stuck at 8/12 where free reaches 12), silver loses fewer (hexany 12/12 at N = 29, dekany \u2265 golden-60 from N = 23), the MOS-level constraint costs more than either (first pure MOS with all 12 hexany triads: N = 25); CPSFIT-003's dekany rows N = 13\u201318 beaten (16 at 249.263\u00a2); ear check of results/scl/gold001/ (hexany 15-note golden level, 29-note silver chain)",
-   "status": "PENDING \u2014 decide the selector: free / golden / silver / Erv's list / ET, each with triad cost and N shown; and whether 25 notes with a Gral is the hexany's design floor",
+   "status": "PENDING \u2014 decide the selector: free / golden / silver / Erv's list / ET, each with triad cost and N shown; and whether 25 notes with a Gral is the hexany's design floor At your \u03b5 (EPS-TIER-002): silver N = 29 290 \u2192 522, golden N = 15 76 \u2192 82.",
    "state": "PENDING",
    "folders": [
     "gold001"
@@ -136,7 +136,7 @@
    "id": "G-036",
    "opened": "2026-10-14",
    "gate": "SUBFIT-001 review: one generator chain keeps at most 20/30 hexanies + 4/12 dekanies of the eikosany at N = 70; usable MOS today: 41-note level of 351.44\u00a2 (14 + 2, within 9.5\u00a2) and 53-note level of 497.77\u00a2 (16 + 2, within 4.2\u00a2); the cap-free predicate counted chain coincidences below N = 37 (all five predictions refuted as registered; SUBFIT-002 adds a per-tone cap); ear check of results/scl/subfit001/ N = 49, 53, 70",
-   "status": "PENDING \u2014 is 41 or 53 notes on a Gral the eikosany's design floor, and which cap (10\u00a2 or 20\u00a2) defines \"the subset is still there\" for SUBFIT-002?",
+   "status": "PENDING \u2014 is 41 or 53 notes on a Gral the eikosany's design floor, and which cap (10\u00a2 or 20\u00a2) defines \"the subset is still there\" for SUBFIT-002? At your \u03b5 (EPS-TIER-002): counts rise 2.5\u20133.4\u00d7, nothing collapses; the 351.444\u00a2 level's worst triad (9.5\u00a2) is outside both ear thresholds, the 53-note 497.774\u00a2 level (4.2\u00a2) inside.",
    "state": "PENDING",
    "folders": [
     "subfit001"
@@ -146,7 +146,7 @@
    "id": "G-037",
    "opened": "2026-10-14",
    "gate": "SUBFIT-002 review: with a per-tone cap (20\u00a2 and 10\u00a2) the eikosany subset staircase agrees from N = 38 up, so the design numbers stand on either cap (41-note 351.444\u00a2 level 14 + 2 within 9.5\u00a2; 53-note 497.774\u00a2 level 16 + 2 within 4.2\u00a2; 72-note 483.278\u00a2 level 20 + 4 within 8.0\u00a2; all six predictions kept); post-hoc: the 351.444\u00a2 winner and its 41/58-note levels are NOT homomorphic (no single 11-limit val), the homomorphic level floors are 46 notes (443.128\u00a2, 12 + 2), 53 (16 + 2) and 72 (20 + 4); ear check of results/scl/subfit002/ (37-note cap-20 chain, 41- and 72-note levels; library IDs 83\u201385)",
-   "status": "PENDING \u2014 (a) which cap, 10\u00a2 or 20\u00a2, defines \"the subset is still there\" (they only disagree below 38 notes); (b) must the design's fit be one val (homomorphic), which drops the 41-note level and makes 46/53/72 the floors, or is a non-temperament assignment acceptable when every kept triad is within the cap?",
+   "status": "PENDING \u2014 (a) which cap, 10\u00a2 or 20\u00a2, defines \"the subset is still there\" (they only disagree below 38 notes); (b) must the design's fit be one val (homomorphic), which drops the 41-note level and makes 46/53/72 the floors, or is a non-temperament assignment acceptable when every kept triad is within the cap? At your \u03b5 (EPS-TIER-002): N = 72 stays on top; \"within 8.0\u00a2\" is inside 8.43 P and outside 7.43 S, 9.5\u00a2 outside both, 4.2\u00a2 inside.",
    "state": "PENDING",
    "folders": [
     "subfit002"
@@ -156,7 +156,7 @@
    "id": "G-039",
    "opened": "2026-10-17",
    "gate": "DYNMOS-001 review (Fork B, dynamic MOS, generator fixed, level + window per subset): canonical hexanies playable at 17\u201334 notes (351.444\u00a2 at 17/24, 497.774\u00a2 at 29 within 4.2\u00a2, 443.128\u00a2 at 19) vs 41\u201372 for the whole genus; dekanies still 41\u201368; 483.278\u00a2 keeps 4 dekanies at 62/67 with all common tones kept; every other generator keeps 2 complementary dekanies (contrast only); Marcus's 0.238186 and 0.418935 keep nothing of the canonical set; Marcus's 1\u00b745\u00b7135\u00b7225\u00b719\u00b7377 has 30 exact triads and 12 triad-free hexanies (the proxy's blind spot); all six predictions kept; ear check of results/scl/dynmos001/ (library IDs 86\u201388)",
-   "status": "PENDING \u2014 (a) is a 17- to 34-note hexany scale with the generator fixed the right melodic unit for Fork B; (b) which transition cost matters, retuned common tones or the level jump; (c) what do you hear in the 1\u00b745\u00b7135\u00b7225\u00b719\u00b7377 near-unison pairs that the triad proxy cannot see; (d) are 0.238186 and 0.418935 generators for other structures, and which?",
+   "status": "PENDING \u2014 (a) is a 17- to 34-note hexany scale with the generator fixed the right melodic unit for Fork B; (b) which transition cost matters, retuned common tones or the level jump; (c) what do you hear in the 1\u00b745\u00b7135\u00b7225\u00b719\u00b7377 near-unison pairs that the triad proxy cannot see; (d) are 0.238186 and 0.418935 generators for other structures, and which? At your \u03b5 (EPS-TIER-002): N = 29 497.774\u00a2 stays on top (190 \u2192 481); the 17-note and 15-note windows barely move.",
    "state": "PENDING",
    "folders": [
     "dynmos001"
