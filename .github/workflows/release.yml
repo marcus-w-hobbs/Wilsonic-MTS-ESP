@@ -160,17 +160,25 @@ jobs:
       # line wins over the project setting and makes it an ordinary -O3 link.
       # Xcode builds on a developer Mac still use LTO. Revisit with YES_THIN or
       # a larger runner once this plain build has a known duration.
+      #
+      # The generic destination matters too. Without it a scheme build picks
+      # "My Mac" as its destination, which sets ONLY_ACTIVE_ARCH=YES and
+      # produces arm64-only bundles (run 43001616208 did exactly that). The
+      # generic macOS destination honours the project's ARCHS, arm64 and
+      # x86_64, so the plugins are universal like libMTS.dylib.
       - name: Build Wilsonic (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX
           xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' \
-            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
+            -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
 
       - name: Build WilsonicController (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX-WilsonicController
           xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' \
-            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
+            -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
 
       - name: Build the installer
         # SIGNING comes from prepare, which is 0 on pull_request without
