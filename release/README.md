@@ -119,14 +119,24 @@ twice over, once per architecture, through a monolithic LTO link that is
 slow and hungry for memory. On GitHub's three-core macOS runners the first
 two workflow runs spent more than six hours inside the Wilsonic build step
 and were cancelled by the job limit, so the workflow passes `LLVM_LTO=NO`
-on the `xcodebuild` command line, where it wins over the project setting,
-and the job has a four-hour timeout so a stuck build fails instead of
-waiting out the limit. A Release build made in Xcode on my own machine
-still uses LTO, so the CI binary is an ordinary `-O3` build rather than an
-LTO one. Without LTO an arm64-only Wilsonic build took 27 minutes on the
-runner and the WilsonicController build 26, and the universal build compiles
-everything twice, so expect roughly double that. I would like to try
+on the `xcodebuild` command line, where it wins over the project setting.
+A Release build made in Xcode on my own machine still uses LTO, so the CI
+binary is an ordinary `-O3` build rather than an LTO one. Without LTO an
+arm64-only Wilsonic build took 27 minutes on the runner and the
+WilsonicController build 26. I expected the universal build to take about
+twice that, because it compiles everything twice, and it took four times:
+106 minutes for Wilsonic and 116 for WilsonicController, so the whole job
+runs about three and three quarter hours. Compiling both architectures took
+44 of the Wilsonic minutes; the rest was `dsymutil` writing the universal
+dSYM for the VST3, a single step that ran for an hour on the three-core
+runner. The job has a timeout of five and a half hours so a stuck build
+still fails before GitHub's limit, and I would like to try
 `LLVM_LTO=YES_THIN` next and see what it costs.
+
+The dSYMs are also why the job moves them into `release/dsyms` instead of
+copying them, and deletes Xcode's `DerivedData` before uploading. The
+universal dSYMs run to a few gigabytes, and the first universal run filled
+the runner disk while `ditto` was copying them.
 
 One more runner detail. The Release configurations in both `.jucer` files
 set a VST3 and an AU binary location, so the exported projects finish with
