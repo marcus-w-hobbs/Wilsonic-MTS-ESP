@@ -13,9 +13,9 @@ rules below are written to be equally binding on humans and agents.
 
 | Lane | Branch prefix | You may touch | CI gate |
 |---|---|---|---|
-| **Plugin** | `plugin/` | `Source/`, `tests/`, `*.jucer`, `version.h`, `Resources/`, `Tunings/` | `plugin.yml`: Linux + macOS builds, C++ unit tests |
+| **Plugin** | `plugin/` | `Source/`, `tests/`, `*.jucer`, `Resources/`, `Tunings/` | `plugin.yml`: Linux + macOS builds, C++ unit tests |
 | **Research** | `research/` | `experiments/`, `plans/`, `prompts/`, `docs/` | `research.yml`: scorer freeze check + Python suite |
-| **Chore** | `chore/` | Everything else: README, CONTRIBUTING, CLAUDE.md, `.github/`, `scripts/` | Whichever workflows the touched paths trigger |
+| **Chore** | `chore/` | Everything else: README, CONTRIBUTING, CLAUDE.md, `.github/`, `scripts/`, `VERSION.txt` (which regenerates `version.h` and the `.jucer` version attribute via `scripts/set-version.sh`) | Whichever workflows the touched paths trigger, plus `version.yml` |
 
 Rules that make parallelism safe:
 
