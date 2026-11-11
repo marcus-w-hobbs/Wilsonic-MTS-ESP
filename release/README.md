@@ -122,8 +122,16 @@ on the `xcodebuild` command line, where it wins over the project setting,
 and the job has a four-hour timeout so a stuck build fails instead of
 waiting out the limit. A Release build made in Xcode on my own machine
 still uses LTO, so the CI binary is an ordinary `-O3` build rather than an
-LTO one. I would like to try `LLVM_LTO=YES_THIN` once I know how long the
-plain build takes.
+LTO one. Without LTO the Wilsonic build takes 27 minutes on the runner and
+the WilsonicController build 26, so the whole `mac` job finishes in just
+under an hour. I would like to try `LLVM_LTO=YES_THIN` next and see what it
+costs.
+
+One more runner detail. The Release configurations in both `.jucer` files
+set a VST3 and an AU binary location, so the exported projects finish with
+an install phase that copies each plugin into `/Library/Audio/Plug-Ins`.
+The runner user cannot write there, so the job creates those folders and
+hands them to that user with `sudo` before building.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
 in Phase 5. Nothing in the workflow reads a secret yet.
