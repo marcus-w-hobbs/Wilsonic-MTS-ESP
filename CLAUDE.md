@@ -35,6 +35,27 @@ make -C tests
 Builds/VisualStudio2022/Wilsonic.sln
 ```
 
+## Versioning
+
+`VERSION.txt` at the repo root is the single source of the version
+(`MAJOR.MINOR.PATCH[-PRERELEASE]`, e.g. `0.45.0-beta`). Never edit `version.h`
+or the `version="x.y.z"` attribute in the `.jucer` files by hand.
+
+```bash
+scripts/set-version.sh 0.45.0-beta   # writes VERSION.txt, version.h, both .jucer, resaves if Projucer is found
+scripts/check-version.sh             # CI runs this; fails on any drift
+scripts/test-version-scripts.sh      # tests for the two scripts above
+```
+
+`version.h` keeps `VER_NUM` as a numeric `major.minor` literal because
+`AppVersion.h` passes it through `std::to_string`. `VERSION_HINT` feeds JUCE
+`ParameterID` version hints and must only increase; it is derived as
+`major*1000+minor`. A release tag must equal `v$(cat VERSION.txt)`; the
+`version` workflow enforces this. The file is not named `VERSION` because that
+name shadows the C++ `<version>` header when the repo root is on the include
+path, which the `.jucer` files put there. Full release design:
+`plans/release-pipeline.md`.
+
 ## Parallel Development: Lanes and Worktrees
 
 Work flows in three lanes — full contract in [CONTRIBUTING.md](CONTRIBUTING.md):

@@ -1,7 +1,7 @@
 # Release pipeline design
 
 Status: draft for Marcus to approve. Written 2026-11-10 from a Q&A session.
-Lane: chore. Touches `.github/`, `scripts/`, a new `release/` folder, `VERSION`.
+Lane: chore. Touches `.github/`, `scripts/`, a new `release/` folder, `VERSION.txt`.
 
 ## Goal
 
@@ -24,7 +24,7 @@ No build step runs on M1, M2, or claw. M1 is for testing only.
 | 6 | Where the pipeline lives | This repo, under `release/`. The installer repo is archived after migration. |
 | 7 | macOS packager | `pkgbuild` + `productbuild`. The Packages.app project is retired. |
 | 8 | Trigger | Tag push `v*`, plus manual `workflow_dispatch` for test builds |
-| 9 | Version source | One `VERSION` file at the repo root. A script writes the other files. |
+| 9 | Version source | One `VERSION.txt` file at the repo root. A script writes the other files. |
 | 10 | Next version | `0.45.0-beta` |
 | 11 | Test gate | CI creates a draft pre-release. Marcus tests on M1, then publishes by hand. |
 | 12 | WilsonicController | Ships inside the same installer |
@@ -65,7 +65,7 @@ No build step runs on M1, M2, or claw. M1 is for testing only.
 ## Repository layout after the change
 
 ```
-VERSION                          # 0.45.0-beta
+VERSION.txt                      # 0.45.0-beta (not "VERSION": that name shadows the C++ <version> header on macOS)
 release/
   README.md                      # how to cut a release, one page
   mac/
@@ -73,7 +73,7 @@ release/
     distribution.xml             # title, hostArchitectures, choices, pkg-refs
     entitlements.plist           # hardened runtime entitlements for the standalone
   windows/
-    wilsonic.iss                 # Inno Setup, paths relative to repo root, version from VERSION
+    wilsonic.iss                 # Inno Setup, paths relative to repo root, version from VERSION.txt
   mts-esp/
     PIN                          # ODDSound commit sha, libMTS version, sha256 of each binary
     LICENSE                      # ODDSound 0BSD text
@@ -82,9 +82,9 @@ release/
     Win/64bit/LIBMTS.dll
     Win/32bit/LIBMTS.dll         # kept for parity with ODDSound; not installed
 scripts/
-  set-version.sh                 # VERSION -> version.h, both .jucer, nothing else
-  check-version.sh               # fails if VERSION, version.h, .jucer, and git tag disagree
-  check-release-docs.sh          # fails if README or docs/manual name a version other than VERSION
+  set-version.sh                 # VERSION.txt -> version.h, both .jucer, nothing else
+  check-version.sh               # fails if VERSION.txt, version.h, .jucer, and git tag disagree
+  check-release-docs.sh          # fails if README or docs/manual name a version other than VERSION.txt
 .github/
   release.yml                    # categories for generated release notes, by PR label
   workflows/
@@ -98,20 +98,20 @@ The installer repo keeps them as history and is archived.
 
 ## Version handling
 
-`VERSION` holds a semver string such as `0.45.0-beta`. The rules:
+`VERSION.txt` holds a semver string such as `0.45.0-beta`. The rules:
 
-1. `scripts/set-version.sh` reads `VERSION` and writes:
+1. `scripts/set-version.sh` reads `VERSION.txt` and writes:
    - `version.h`: `VERSION_MAJOR 0`, `VERSION_MINOR 45`, `VERSION_PATCH 0`,
      `VER_NUM 0.45.0`, `VERSION_STRING "0.45.0-beta"`, `BETA 1` when the
      string has a `-` suffix, else `0`.
    - both `.jucer` files: `version="0.45.0"`. Projucer wants numeric fields.
    - Then it runs `Projucer --resave` on both projects when Projucer is present.
 2. `scripts/check-version.sh` runs in CI on every PR and on tag push. On tag
-   push it also checks `v$(cat VERSION)` equals the tag.
+   push it also checks `v$(cat VERSION.txt)` equals the tag.
 3. Marcus bumps a version with one command, then commits and tags:
 
 ```bash
-echo 0.45.0-beta > VERSION && scripts/set-version.sh
+echo 0.45.0-beta > VERSION.txt && scripts/set-version.sh
 git commit -am "chore: bump version to 0.45.0-beta"
 git tag v0.45.0-beta && git push && git push --tags
 ```
@@ -301,7 +301,7 @@ Design:
 | Phase | Deliverable | Verify by |
 |-------|-------------|-----------|
 | 0 | Apple secrets in place | `security find-identity` inside a manual workflow run lists both Developer ID certs |
-| 1 | `VERSION`, `set-version.sh`, `check-version.sh`, CI check on PRs | A PR that edits `version.h` by hand fails CI |
+| 1 | `VERSION.txt`, `set-version.sh`, `check-version.sh`, CI check on PRs | A PR that edits `version.h` by hand fails CI |
 | 2 | `release/mac/*`, `mac` job, manual run unsigned | `.pkg` artifact installs on M2 with `SIGNING=0` semantics |
 | 3 | `mac` job signed and notarized | `spctl --assess --type install` passes on the downloaded `.pkg` |
 | 4 | `release/windows/*`, `windows` job | `.exe` artifact installs on claw or a Windows VM |

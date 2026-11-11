@@ -1,0 +1,41 @@
+name: version
+run-name: version check
+# Keeps VERSION.txt, version.h and both .jucer files in agreement (see
+# plans/release-pipeline.md, Phase 1). On a release tag it also requires
+# the tag to equal v$(cat VERSION.txt). Runs the shell test suite for the
+# version scripts so a change to them cannot pass silently.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'VERSION.txt'
+      - 'version.h'
+      - '*.jucer'
+      - 'scripts/version-lib.sh'
+      - 'scripts/set-version.sh'
+      - 'scripts/check-version.sh'
+      - 'scripts/test-version-scripts.sh'
+      - '.github/workflows/version-check.yml'
+  pull_request:
+    paths:
+      - 'VERSION.txt'
+      - 'version.h'
+      - '*.jucer'
+      - 'scripts/version-lib.sh'
+      - 'scripts/set-version.sh'
+      - 'scripts/check-version.sh'
+      - 'scripts/test-version-scripts.sh'
+      - '.github/workflows/version-check.yml'
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test the version scripts
+        run: scripts/test-version-scripts.sh
+      - name: Check version consistency
+        run: scripts/check-version.sh
+      - name: Check tag matches VERSION.txt
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: scripts/check-version.sh --tag "${GITHUB_REF_NAME}"
