@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Distribution for the Wilsonic macOS installer. release/mac/build-pkg.sh
+  copies this file, replaces __VERSION__, and hands it to productbuild, which
+  fills in the version and size attributes of each pkg-ref from the component
+  packages it finds in its package path.
+
+  hostArchitectures matches the v0.43 installer. The minimum OS below must
+  equal macOSDeploymentTarget in Wilsonic.jucer; build-pkg.sh checks that.
+  Installer presents the error from allowed-os-versions on older machines
+  instead of installing plugins that will not load.
+-->
+<installer-gui-script minSpecVersion="2">
+    <title>Wilsonic __VERSION__</title>
+    <options customize="allow" require-scripts="false" rootVolumeOnly="true" hostArchitectures="x86_64,arm64"/>
+    <domains enable_localSystem="true" enable_currentUserHome="false" enable_anywhere="false"/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="10.13"/>
+        </allowed-os-versions>
+    </volume-check>
+
+    <choices-outline>
+        <line choice="wilsonic.standalone"/>
+        <line choice="wilsonic.component"/>
+        <line choice="wilsonic.vst3"/>
+        <line choice="controller.standalone"/>
+        <line choice="controller.component"/>
+        <line choice="controller.vst3"/>
+        <line choice="mts-esp"/>
+    </choices-outline>
+
+    <choice id="wilsonic.standalone" title="Wilsonic Standalone" description="Wilsonic.app in /Applications.">
+        <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.standalone"/>
+    </choice>
+    <choice id="wilsonic.component" title="Wilsonic AU" description="Audio Unit in /Library/Audio/Plug-Ins/Components.">
+        <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.component"/>
+    </choice>
+    <choice id="wilsonic.vst3" title="Wilsonic VST3" description="VST3 in /Library/Audio/Plug-Ins/VST3.">
+        <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.vst3"/>
+    </choice>
+    <choice id="controller.standalone" title="WilsonicController Standalone" description="WilsonicController.app in /Applications.">
+        <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.standalone"/>
+    </choice>
+    <choice id="controller.component" title="WilsonicController AU" description="Audio Unit in /Library/Audio/Plug-Ins/Components.">
+        <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.component"/>
+    </choice>
+    <choice id="controller.vst3" title="WilsonicController VST3" description="VST3 in /Library/Audio/Plug-Ins/VST3.">
+        <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.vst3"/>
+    </choice>
+    <choice id="mts-esp" title="MTS-ESP Support" description="ODDSound libMTS and MTS-ESP.conf in /Library/Application Support/MTS-ESP. Required for Wilsonic to tune other plugins.">
+        <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.MTS-ESP-support"/>
+    </choice>
+
+    <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.standalone">com.marcussatellite.Wilsonic-MTS-ESP.standalone.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.component">com.marcussatellite.Wilsonic-MTS-ESP.component.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.vst3">com.marcussatellite.Wilsonic-MTS-ESP.vst3.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.standalone">com.marcussatellite.WilsonicController-MTS-ESP.standalone.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.component">com.marcussatellite.WilsonicController-MTS-ESP.component.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.WilsonicController-MTS-ESP.vst3">com.marcussatellite.WilsonicController-MTS-ESP.vst3.pkg</pkg-ref>
+    <pkg-ref id="com.marcussatellite.Wilsonic-MTS-ESP.MTS-ESP-support">com.marcussatellite.Wilsonic-MTS-ESP.MTS-ESP-support.pkg</pkg-ref>
+</installer-gui-script>
