@@ -1,0 +1,14 @@
+# Pin for the ODDSound libMTS files vendored in this folder.
+# Written 2026-11-10 from a download of the commit below; release/mac/build-pkg.sh
+# verifies the sha256 lines before it stages libMTS. Keep the key=value lines
+# and the hash lines in this exact shape: the hash block is fed to `shasum -c`.
+source=https://github.com/ODDSound/MTS-ESP
+commit=f214739b8832e7f297cb9970d0c0efbf783f1462
+commit_date=2026-02-04
+libmts_version=1.03
+libmts_release_date=2025-09-04
+license=0BSD
+8f124daf075e246b1e4ada2a1e1619c06d208ace5f215bdf1361fe45b6e1aed0  Mac/libMTS.dylib
+13d00d7c6dfa82af941529178bde2a140359987b18a3aee59f77681812b14a93  Win/64bit/LIBMTS.dll
+eb5647d589fd4ee6ccb8fe1661775a6264a871415ccd30d6edc535003fa29e84  Win/32bit/LIBMTS.dll
+bf8561828501bf24bec206145890982d3ce5d52cfeb2d3f1681ed3917d8d4a98  MTS-ESP.conf
