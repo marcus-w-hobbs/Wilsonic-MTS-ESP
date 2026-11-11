@@ -140,6 +140,17 @@ jobs:
           "$PROJUCER" --resave Wilsonic.jucer
           "$PROJUCER" --resave WilsonicController.jucer
 
+      # The Release configurations of both .jucer files set vst3BinaryLocation
+      # and auBinaryLocation, so the exported Xcode projects end with an
+      # "Install Target" phase that copies each plugin into
+      # /Library/Audio/Plug-Ins. The runner user cannot write there and the
+      # build fails with "ditto: Permission denied". The folders are empty on
+      # a fresh runner, so hand them to the runner user before building.
+      - name: Make the system plug-in folders writable
+        run: |
+          sudo mkdir -p /Library/Audio/Plug-Ins/Components /Library/Audio/Plug-Ins/VST3
+          sudo chown -R "$(id -un)" /Library/Audio/Plug-Ins
+
       # The Projucer turns full link-time optimisation on for every Release
       # configuration (LLVM_LTO=YES is its default for non-debug builds, and
       # neither .jucer overrides it). On GitHub's 3-core macOS runners that is
