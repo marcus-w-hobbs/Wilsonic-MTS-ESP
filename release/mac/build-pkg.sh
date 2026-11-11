@@ -107,6 +107,27 @@ if [ -n "$missing" ]; then
     exit 1
 fi
 
+# Every product must be a universal binary. A scheme build that lets Xcode
+# pick "My Mac" as the destination sets ONLY_ACTIVE_ARCH=YES and quietly
+# produces arm64-only bundles, which this installer would then offer to
+# Intel Macs. The architectures come back sorted so the order lipo prints
+# them in does not matter.
+archs_of() { # path -> "arm64 x86_64" or whatever lipo found, or "not a Mach-O binary"
+    lipo -archs "$1" 2>/dev/null | tr ' ' '\n' | sort | tr '\n' ' ' | sed 's/ $//' | grep . || echo "not a Mach-O binary"
+}
+single_arch="$(echo "$PRODUCTS" | while IFS='|' read -r name src _ _; do
+    exe="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$src/$name/Contents/Info.plist" 2>/dev/null || true)"
+    bin="$src/$name/Contents/MacOS/${exe:-${name%.*}}"
+    archs="$(archs_of "$bin")"
+    [ "$archs" = "arm64 x86_64" ] || echo "$bin ($archs)"
+done)"
+if [ -n "$single_arch" ]; then
+    echo "build-pkg.sh: products are not universal arm64 x86_64 binaries:" >&2
+    echo "$single_arch" | sed 's/^/  /' >&2
+    exit 1
+fi
+log "all six products are universal arm64 x86_64 binaries"
+
 # libMTS must be the pinned bytes before it goes anywhere near a package.
 PIN="$MTS_ESP_DIR/PIN"
 [ -f "$PIN" ] || die "$PIN not found"
@@ -117,8 +138,8 @@ fi
 for f in Mac/libMTS.dylib MTS-ESP.conf; do
     [ -f "$MTS_ESP_DIR/$f" ] || die "$MTS_ESP_DIR/$f not found"
 done
-archs="$(lipo -archs "$MTS_ESP_DIR/Mac/libMTS.dylib")"
-[ "$archs" = "x86_64 arm64" ] || die "libMTS.dylib is '$archs', expected a universal 'x86_64 arm64' binary"
+archs="$(archs_of "$MTS_ESP_DIR/Mac/libMTS.dylib")"
+[ "$archs" = "arm64 x86_64" ] || die "libMTS.dylib is '$archs', expected a universal arm64 x86_64 binary"
 log "libMTS $(sed -n 's/^libmts_version=//p' "$PIN") matches PIN ($archs)"
 
 # The minimum OS in distribution.xml must be the deployment target the plugin
