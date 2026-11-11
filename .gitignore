@@ -53,6 +53,10 @@ xcuserdata/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+# The release tooling lives in /release (plans/release-pipeline.md); only the
+# Visual Studio output folders named Release are meant to be ignored above.
+!/release/
+/release/out/
 x64/
 x86/
 bld/
