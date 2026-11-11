@@ -28,11 +28,22 @@ expect_eq() { # desc actual expected
 }
 
 # A fake bundle: enough Info.plist for pkgbuild --analyze to see it as a
-# bundle, plus a placeholder executable so the payload is not empty.
+# bundle, plus a real Mach-O executable, because build-pkg.sh refuses any
+# product that is not a universal arm64 x86_64 binary. The stubs are compiled
+# once per run with the system C compiler, which comes with pkgbuild.
+make_stub() { # out archs...
+    local out="$1"; shift
+    local flags=""
+    for a in "$@"; do flags="$flags -arch $a"; done
+    # shellcheck disable=SC2086
+    echo 'int main(void) { return 0; }' > "$out.c"
+    cc $flags -o "$out" "$out.c" \
+        || { echo "test-build-pkg.sh: cannot compile a stub for $*" >&2; exit 1; }
+}
 make_bundle() { # dir name type(APPL|BNDL) bundle-id
     local dir="$1" name="$2" type="$3" id="$4"
     mkdir -p "$dir/Contents/MacOS"
-    printf '#!/bin/sh\necho %s\n' "$name" > "$dir/Contents/MacOS/$name"
+    cp "$STUB_UNIVERSAL" "$dir/Contents/MacOS/$name"
     chmod +x "$dir/Contents/MacOS/$name"
     cat > "$dir/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -54,6 +65,10 @@ WBUILD="$SANDBOX/Builds/MacOSX/build/Release"
 CBUILD="$SANDBOX/Builds/MacOSX-WilsonicController/build/Release"
 OUT="$SANDBOX/out"
 mkdir -p "$WBUILD" "$CBUILD"
+STUB_UNIVERSAL="$SANDBOX/stub-universal"
+STUB_ARM64="$SANDBOX/stub-arm64"
+make_stub "$STUB_UNIVERSAL" arm64 x86_64
+make_stub "$STUB_ARM64" arm64
 make_bundle "$WBUILD/Wilsonic.app"       Wilsonic APPL com.marcussatellite.Wilsonic
 make_bundle "$WBUILD/Wilsonic.component" Wilsonic BNDL com.marcussatellite.Wilsonic.component
 make_bundle "$WBUILD/Wilsonic.vst3"      Wilsonic BNDL com.marcussatellite.Wilsonic.vst3
@@ -72,6 +87,7 @@ SIGNING=0 "$BUILD" \
     --controller-build "$CBUILD" \
     --out "$OUT" > "$SANDBOX/build.log" 2>&1 || rc=$?
 if [ "$rc" -eq 0 ]; then ok "exit status 0"; else bad "exit status $rc"; sed 's/^/    | /' "$SANDBOX/build.log"; fi
+expect_grep "checked that the products are universal" "universal arm64 x86_64" "$SANDBOX/build.log"
 
 PKG="$OUT/Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg"
 expect_file "product named Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg" "$PKG"
@@ -143,6 +159,22 @@ if [ "$rc" -ne 0 ]; then ok "non-zero exit on PIN mismatch"; else bad "accepted 
 expect_grep "names the PIN in the error" "PIN" "$SANDBOX/tampered.log"
 [ -e "$SANDBOX/out-tampered/Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg" ] \
     && bad "wrote a pkg despite the PIN mismatch" || ok "wrote no pkg"
+
+echo "build-pkg.sh refuses a product that is not universal"
+SINGLE="$SANDBOX/single"
+ditto "$WBUILD" "$SINGLE"
+cp "$STUB_ARM64" "$SINGLE/Wilsonic.vst3/Contents/MacOS/Wilsonic"
+rc=0
+SIGNING=0 "$BUILD" \
+    --version "$TEST_VERSION" \
+    --wilsonic-build "$SINGLE" \
+    --controller-build "$CBUILD" \
+    --out "$SANDBOX/out-single" > "$SANDBOX/single.log" 2>&1 || rc=$?
+if [ "$rc" -ne 0 ]; then ok "non-zero exit on an arm64-only product"; else bad "packaged an arm64-only product"; fi
+expect_grep "names the single-arch product" "Wilsonic.vst3" "$SANDBOX/single.log"
+expect_grep "reports what lipo found" "(arm64)" "$SANDBOX/single.log"
+[ -e "$SANDBOX/out-single/Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg" ] \
+    && bad "wrote a pkg despite the single-arch product" || ok "wrote no pkg"
 
 echo "build-pkg.sh refuses a missing product"
 rm -rf "$CBUILD/WilsonicController.vst3"
