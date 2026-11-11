@@ -153,7 +153,9 @@ run on `pull_request`.
    Apple account is sorted.
 4. `xcodebuild` Release for `Wilsonic - All` and `WilsonicController - All`
    with `CODE_SIGN_IDENTITY="Developer ID Application: Perfect Buzz Music (LXFXL9GS49)"`,
-   hardened runtime on, timestamp on. Outputs land in
+   hardened runtime on, timestamp on, and `LLVM_LTO=NO` on the command line,
+   because the Projucer's Release default of full LTO ran the Wilsonic build
+   past the six-hour job limit on the hosted runners. Outputs land in
    `Builds/MacOSX/build/Release` and `Builds/MacOSX-WilsonicController/build/Release`.
 5. `release/mac/build-pkg.sh`:
    - stage each product into its own root

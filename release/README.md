@@ -107,9 +107,23 @@ today:
 2. `mac` on `macos-15` runs the packaging test, clones JUCE 9.0.1, restores
    the Projucer build from a cache keyed on the JUCE tag or builds it on a
    miss, resaves both `.jucer` files, builds both projects in Release with
-   `CODE_SIGN_IDENTITY="-"`, runs `build-pkg.sh` with `SIGNING=0`, and
-   uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the dSYM bundles as
-   workflow artifacts.
+   `CODE_SIGN_IDENTITY="-"` and `LLVM_LTO=NO`, runs `build-pkg.sh` with
+   `SIGNING=0`, and uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the
+   dSYM bundles as workflow artifacts.
+
+The `LLVM_LTO=NO` needs a word. The Projucer switches full link-time
+optimisation on for every Release configuration, and neither `.jucer` file
+turns it off, so a Release build links each of the three plugin formats
+twice over, once per architecture, through a monolithic LTO link that is
+slow and hungry for memory. On GitHub's three-core macOS runners the first
+two workflow runs spent more than six hours inside the Wilsonic build step
+and were cancelled by the job limit, so the workflow passes `LLVM_LTO=NO`
+on the `xcodebuild` command line, where it wins over the project setting,
+and the job has a four-hour timeout so a stuck build fails instead of
+waiting out the limit. A Release build made in Xcode on my own machine
+still uses LTO, so the CI binary is an ordinary `-O3` build rather than an
+LTO one. I would like to try `LLVM_LTO=YES_THIN` once I know how long the
+plain build takes.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
 in Phase 5. Nothing in the workflow reads a secret yet.
