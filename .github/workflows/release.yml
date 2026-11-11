@@ -1,0 +1,145 @@
+name: release
+run-name: release ${{ inputs.version || github.ref_name }}
+# The release pipeline from plans/release-pipeline.md. Phase 2: only the
+# prepare and mac jobs, unsigned. The windows and release jobs, signing and
+# notarization come in later phases. No secrets are referenced here yet.
+#
+# Runs on a v* tag push and by hand. A manual run never publishes anything in
+# this phase: the .pkg and the dSYMs stay attached to the workflow run as
+# artifacts for 90 days.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Expected version. Must equal VERSION.txt when set; it is a guard, not an override.'
+        required: false
+        type: string
+      publish:
+        description: 'Create a draft GitHub release (reserved for the release job, Phase 5; ignored today)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  JUCE_TAG: 9.0.1
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is_prerelease: ${{ steps.version.outputs.is_prerelease }}
+      mac_asset: ${{ steps.version.outputs.mac_asset }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check version consistency
+        run: scripts/check-version.sh
+      - name: Check tag matches VERSION.txt
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: scripts/check-version.sh --tag "${GITHUB_REF_NAME}"
+      - name: Check requested version matches VERSION.txt
+        if: github.event_name == 'workflow_dispatch' && inputs.version != ''
+        run: scripts/check-version.sh --tag "v${{ inputs.version }}"
+      - name: Resolve version
+        id: version
+        run: |
+          version="$(tr -d '[:space:]' < VERSION.txt)"
+          case "$version" in
+            *-*) is_prerelease=true ;;
+            *)   is_prerelease=false ;;
+          esac
+          # Unsigned until Phase 3 adds the Apple secrets.
+          mac_asset="Wilsonic_Mac_v${version}-unsigned.pkg"
+          {
+            echo "version=$version"
+            echo "is_prerelease=$is_prerelease"
+            echo "mac_asset=$mac_asset"
+          } >> "$GITHUB_OUTPUT"
+          echo "version $version, prerelease $is_prerelease, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
+
+  mac:
+    needs: prepare
+    runs-on: macos-15
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test the packaging script
+        run: release/mac/test-build-pkg.sh
+
+      # Same recipe as plugin.yml: clone JUCE at the pinned tag, build the
+      # Projucer, resave both projects, build both with xcodebuild. The clone
+      # must come before the cache restore, because git refuses to clone into
+      # the non-empty folder the cache would leave behind.
+      - name: Clone JUCE ${{ env.JUCE_TAG }}
+        run: git clone --depth=1 -b "$JUCE_TAG" https://github.com/juce-framework/JUCE.git ~/JUCE
+
+      - name: Restore the Projucer build
+        id: projucer
+        uses: actions/cache@v4
+        with:
+          path: ~/JUCE/extras/Projucer/Builds/MacOSX/build
+          key: projucer-macos-15-juce-${{ env.JUCE_TAG }}
+
+      - name: Build the Projucer
+        if: steps.projucer.outputs.cache-hit != 'true'
+        run: |
+          cd ~/JUCE/extras/Projucer/Builds/MacOSX
+          xcodebuild -project Projucer.xcodeproj
+
+      - name: Resave the projects
+        run: |
+          PROJUCER=~/JUCE/extras/Projucer/Builds/MacOSX/build/Debug/Projucer.app/Contents/MacOS/Projucer
+          "$PROJUCER" --resave Wilsonic.jucer
+          "$PROJUCER" --resave WilsonicController.jucer
+
+      - name: Build Wilsonic (Release, ad-hoc signed)
+        run: |
+          cd Builds/MacOSX
+          xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' \
+            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
+
+      - name: Build WilsonicController (Release, ad-hoc signed)
+        run: |
+          cd Builds/MacOSX-WilsonicController
+          xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' \
+            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
+
+      - name: Build the installer (unsigned)
+        env:
+          SIGNING: '0'
+        run: release/mac/build-pkg.sh --out release/out
+
+      - name: Collect dSYMs
+        run: |
+          mkdir -p release/dsyms
+          for d in Builds/MacOSX/build/Release Builds/MacOSX-WilsonicController/build/Release; do
+            for s in "$d"/*.dSYM; do
+              if [ -d "$s" ]; then ditto "$s" "release/dsyms/$(basename "$s")"; fi
+            done
+          done
+          ls -la release/dsyms
+
+      - name: Upload the installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wilsonic_Mac_v${{ env.VERSION }}-unsigned
+          path: release/out/${{ needs.prepare.outputs.mac_asset }}
+          if-no-files-found: error
+
+      - name: Upload dSYMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wilsonic_Mac_v${{ env.VERSION }}-dSYMs
+          path: release/dsyms
+          if-no-files-found: warn
