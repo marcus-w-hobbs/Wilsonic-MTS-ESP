@@ -2,14 +2,27 @@ name: release
 run-name: release ${{ inputs.version || github.ref_name }}
 # The release pipeline from plans/release-pipeline.md. Phase 2: only the
 # prepare and mac jobs, unsigned. The windows and release jobs, signing and
-# notarization come in later phases. No secrets are referenced here yet.
+# notarization come in later phases.
 #
-# Runs on a v* tag push and by hand. A manual run never publishes anything in
-# this phase: the .pkg and the dSYMs stay attached to the workflow run as
-# artifacts for 90 days.
+# Runs on a v* tag push, by hand, and on pull requests that touch the
+# release tooling. A manual run never publishes anything in this phase: the
+# .pkg and the dSYMs stay attached to the workflow run as artifacts for 90
+# days.
+#
+# The pull_request trigger is a permanent unsigned dry run of prepare and
+# mac, so a change to release/ or to this file is exercised on a real runner
+# before it merges. It is safe because that path signs nothing and reads no
+# secrets: prepare forces SIGNING=0 on pull_request and the artifact keeps
+# its -unsigned suffix. Phase 3 adds signing and notarization only for tag
+# push and workflow_dispatch, never for pull_request, where secrets are not
+# available to forks anyway.
 on:
   push:
     tags: ['v*']
+  pull_request:
+    paths:
+      - 'release/**'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
     inputs:
       version:
@@ -38,33 +51,53 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       is_prerelease: ${{ steps.version.outputs.is_prerelease }}
+      dry_run: ${{ steps.version.outputs.dry_run }}
+      signing: ${{ steps.version.outputs.signing }}
       mac_asset: ${{ steps.version.outputs.mac_asset }}
     steps:
       - uses: actions/checkout@v4
       - name: Check version consistency
         run: scripts/check-version.sh
       - name: Check tag matches VERSION.txt
-        if: startsWith(github.ref, 'refs/tags/v')
+        # Only a real tag push has a tag to compare; a pull_request dry run
+        # and a manual run skip this.
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: scripts/check-version.sh --tag "${GITHUB_REF_NAME}"
       - name: Check requested version matches VERSION.txt
         if: github.event_name == 'workflow_dispatch' && inputs.version != ''
         run: scripts/check-version.sh --tag "v${{ inputs.version }}"
       - name: Resolve version
         id: version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           version="$(tr -d '[:space:]' < VERSION.txt)"
           case "$version" in
             *-*) is_prerelease=true ;;
             *)   is_prerelease=false ;;
           esac
-          # Unsigned until Phase 3 adds the Apple secrets.
-          mac_asset="Wilsonic_Mac_v${version}-unsigned.pkg"
+          # A pull_request run is a dry run: never signed, never published.
+          # Phase 3 will set signing=1 for tag push and workflow_dispatch
+          # when the Apple secrets exist; until then every run is unsigned.
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            dry_run=true
+          else
+            dry_run=false
+          fi
+          signing=0
+          if [ "$signing" = "1" ]; then
+            mac_asset="Wilsonic_Mac_v${version}.pkg"
+          else
+            mac_asset="Wilsonic_Mac_v${version}-unsigned.pkg"
+          fi
           {
             echo "version=$version"
             echo "is_prerelease=$is_prerelease"
+            echo "dry_run=$dry_run"
+            echo "signing=$signing"
             echo "mac_asset=$mac_asset"
           } >> "$GITHUB_OUTPUT"
-          echo "version $version, prerelease $is_prerelease, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
+          echo "version $version, prerelease $is_prerelease, dry run $dry_run, signing $signing, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
 
   mac:
     needs: prepare
@@ -115,10 +148,14 @@ jobs:
           xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' \
             -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
 
-      - name: Build the installer (unsigned)
+      - name: Build the installer
+        # SIGNING comes from prepare, which is 0 on pull_request without
+        # exception. build-pkg.sh names the output -unsigned.pkg when 0.
         env:
-          SIGNING: '0'
-        run: release/mac/build-pkg.sh --out release/out
+          SIGNING: ${{ needs.prepare.outputs.signing }}
+        run: |
+          release/mac/build-pkg.sh --out release/out
+          test -f "release/out/${{ needs.prepare.outputs.mac_asset }}"
 
       - name: Collect dSYMs
         run: |
@@ -133,7 +170,7 @@ jobs:
       - name: Upload the installer
         uses: actions/upload-artifact@v4
         with:
-          name: Wilsonic_Mac_v${{ env.VERSION }}-unsigned
+          name: ${{ needs.prepare.outputs.signing == '1' && format('Wilsonic_Mac_v{0}', env.VERSION) || format('Wilsonic_Mac_v{0}-unsigned', env.VERSION) }}
           path: release/out/${{ needs.prepare.outputs.mac_asset }}
           if-no-files-found: error
 

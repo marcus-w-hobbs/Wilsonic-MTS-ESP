@@ -129,6 +129,13 @@ hid the stapled ticket from Gatekeeper on first open. See open question 1.
 `release.yml` runs on `push: tags: ['v*']` and on `workflow_dispatch` with
 inputs `version` (string) and `publish` (boolean, default false). Four jobs.
 
+It also runs on `pull_request` for changes under `release/` or to the
+workflow file itself, as a dry run: `prepare` and `mac` only, `SIGNING=0`
+forced, the artifact named `-unsigned`, no tag check, no secrets read and
+nothing published. That way a change to the packaging is exercised on a
+real macOS runner before it merges. The `windows` and `release` jobs do not
+run on `pull_request`.
+
 ### prepare (ubuntu)
 
 1. Check out. Run `scripts/check-version.sh` and `scripts/check-release-docs.sh`.
@@ -201,7 +208,8 @@ inputs `version` (string) and `publish` (boolean, default false). Four jobs.
 | `VERCEL_DEPLOY_HOOK_URL` | already defined for the docs hook |
 
 Secrets are never available to pull requests from forks, and `release.yml`
-does not run on `pull_request` at all.
+runs on `pull_request` only as an unsigned dry run of `prepare` and `mac`,
+with no secrets.
 
 ## Test gate
 

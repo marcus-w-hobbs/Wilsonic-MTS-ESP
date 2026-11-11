@@ -91,8 +91,12 @@ twenty-minute JUCE build.
 
 ## What the workflow does so far
 
-`.github/workflows/release.yml` runs on a `v*` tag push and by hand from the
-Actions tab with two inputs, `version` and `publish`. Two jobs exist today:
+`.github/workflows/release.yml` runs on a `v*` tag push, by hand from the
+Actions tab with two inputs, `version` and `publish`, and on pull requests
+that touch `release/` or the workflow file. The pull request run is a dry
+run: unsigned, no tag check, no secrets, nothing published, and it stays
+that way when Phase 3 adds signing for tags and manual runs. Two jobs exist
+today:
 
 1. `prepare` on Ubuntu runs `scripts/check-version.sh`. On a tag push it also
    requires the tag to equal `v$(cat VERSION.txt)`, and on a manual run with
