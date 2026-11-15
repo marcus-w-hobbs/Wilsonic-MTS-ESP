@@ -266,8 +266,15 @@ jobs:
       # YES on tag push and workflow_dispatch, NO on the pull_request dry run.
       # build-project.sh turns NO into no /Zi and no .pdb.
       DEBUG_SYMBOLS: ${{ needs.prepare.outputs.debug_symbols }}
-      # The Projucer turns whole program optimisation on for every Release
-      # configuration. NO builds without it; build-project.sh has the detail.
+      # The Projucer turns whole program optimisation (/GL and /LTCG) on for
+      # every Release configuration, and neither .jucer overrides it. On this
+      # runner that build does not finish at all: in run 43761715303 the
+      # WilsonicController shared-code library, compiled with /GL, came to
+      # more than 4 GB and the librarian stopped with "LNK1248: image size
+      # exceeds maximum allowable size" after seven minutes. NO makes it an
+      # ordinary /O2 build, which took 10 min 37 s for Wilsonic in the same
+      # run. build-project.sh passes the switch and then checks the compiler
+      # command lines in the log, so it cannot silently stop working.
       LTO: 'NO'
     steps:
       - uses: actions/checkout@v4
@@ -317,12 +324,7 @@ jobs:
       - name: Build Wilsonic (Release, x64)
         run: release/windows/build-project.sh Builds/VisualStudio2022/Wilsonic.sln
 
-      # MEASUREMENT, this run only: WilsonicController is built with the
-      # Projucer's whole program optimisation left on, so one run times the
-      # same code with and without it. The next commit removes this env.
       - name: Build WilsonicController (Release, x64)
-        env:
-          LTO: 'YES'
         run: release/windows/build-project.sh Builds/VisualStudio2022-WilsonicController/WilsonicController.sln
 
       - name: Upload the build logs
