@@ -255,9 +255,10 @@ jobs:
   windows:
     needs: prepare
     runs-on: windows-2022
-    # The job took 26 min 19 s with debug symbols (run 43763913790) and
-    # 31 min 43 s as a dry run (run 43763872675); two builds of about eleven
-    # to thirteen minutes each are nearly all of it. Ninety minutes lets a
+    # The job took 26 min 19 s and 31 min 14 s with debug symbols (runs
+    # 43763913790 and 43767579628) and 31 min 43 s as a dry run (run
+    # 43763872675); two builds of eleven to fourteen minutes each are nearly
+    # all of it. Ninety minutes lets a
     # slow runner finish and still fails a stuck build early.
     timeout-minutes: 90
     defaults:

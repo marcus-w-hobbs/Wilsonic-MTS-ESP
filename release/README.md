@@ -18,7 +18,7 @@ phases.
 | `windows/build-project.sh` | Builds one generated solution in Release for x64 with `msbuild`, with link-time optimisation and debug symbols switched by `LTO` and `DEBUG_SYMBOLS`. |
 | `windows/ci-build.targets` | The MSBuild file behind those two switches. `build-project.sh` copies it beside the solution as `Directory.Build.targets`. |
 | `windows/build-installer.sh` | Checks libMTS against `PIN`, checks the products are x64, and runs Inno Setup's `ISCC.exe` on `wilsonic.iss`. |
-| `windows/smoke-install.ps1` | Installs an installer silently, checks what landed, and uninstalls. For the CI runner or a VM. |
+| `windows/smoke-install.ps1` | Installs an installer silently, checks what landed, and uninstalls. With `-UpgradeFrom` it installs an older installer first. For the CI runner or a VM. |
 | `windows/test-windows-scripts.sh` | Test for the scripts above. It fakes `msbuild`, `ISCC.exe` and the build products, so it runs on a Mac. |
 | `mts-esp/` | ODDSound's libMTS 1.03 as vendored: the universal `Mac/libMTS.dylib`, both Windows `LIBMTS.dll`, `MTS-ESP.conf`, their 0BSD `LICENSE`, and `PIN`. |
 | `mts-esp/PIN` | The ODDSound commit, the libMTS version from their changelog, and the sha256 of each binary. `build-pkg.sh` refuses to package if a file does not match. |
@@ -138,7 +138,9 @@ The VST3s are still installed as single `.vst3` files, although the Projucer
 now builds each one as a bundle folder; I take the module out of the bundle
 so the upgrade replaces the old file where it is. Uninstalling Wilsonic now
 leaves `LIBMTS.dll` and `MTS-ESP.conf` behind, because every other MTS-ESP
-plugin on the machine uses them, and v0.43 removed them. And the installer
+plugin on the machine uses them, and v0.43 removed them; that takes both
+the `uninsneveruninstall` flag and `UninstallLogMode=overwrite`, because an
+upgrade would otherwise keep the v0.43 uninstall log, which lists them. And the installer
 accepts Windows 11 on ARM, which runs x64 hosts under emulation.
 
 ### Building on Windows by hand
@@ -205,7 +207,8 @@ Phase 3 adds signing for tags and manual runs. Three jobs exist today:
    cache keyed on the JUCE tag or builds it on a miss, resaves both `.jucer`
    files, builds both solutions with `build-project.sh` and `LTO=NO`, runs
    `build-installer.sh` with `SIGNING=0`, installs the result silently with
-   `smoke-install.ps1`, and uploads `Wilsonic_Win64_v<version>-unsigned.exe`.
+   `smoke-install.ps1`, once fresh and once as an upgrade over the published
+   v0.43 installer, and uploads `Wilsonic_Win64_v<version>-unsigned.exe`.
    Tag and manual runs also upload the `.pdb` files. The `msbuild` logs are
    uploaded on every run, pass or fail.
 
@@ -270,19 +273,23 @@ and the librarian stopped with `LNK1248`. So on Windows `LTO=NO` is what
 lets the build link at all, and I suspect a Release build from Visual Studio
 on my laptop fails the same way today, which I have not checked. What surprised me in
 the other direction is that debug symbols cost almost nothing here. The two
-builds took about eleven minutes each with them and between ten and a half
-and thirteen and a half without, so the runner I happen to get matters more
-than the symbols do. The Projucer takes two and a half to three minutes to
-build on a cache miss and one second to restore on a hit. The job has a 90
+builds took between eleven and fourteen and a half minutes each with them
+and between ten and a half and thirteen and a half without, so the runner I
+happen to get matters more than the symbols do. The Projucer takes two and a half to three minutes to
+build on a cache miss and a second or two to restore on a hit. The job has a 90
 minute timeout.
 
 The silent install at the end of the Windows job is worth knowing the limits
 of. It proves that the installer runs, that the six files land where the
 table above says, that an existing `MTS-ESP.conf` survives and a missing one
-is written, and that an uninstall leaves the shared MTS-ESP files. It runs
-on Windows Server with no audio host, so it does not tell me that the VST3
-loads in Live or that an upgrade over a real v0.43 install is clean. I
-still have to do that by hand on a Windows machine.
+is written, and that an uninstall leaves the shared MTS-ESP files. The
+second pass downloads the v0.43 installer from this repo's v0.43-beta
+release, installs it, installs the new one over it, and checks that Windows
+then lists Wilsonic once, that the older `LIBMTS.dll` was replaced by the
+pinned one, and that an uninstall still leaves the MTS-ESP files. All of
+that runs on Windows Server with no audio host, so it does not tell me that
+the VST3 loads in Live or that a tuning reaches a client. I still have to do
+that by hand on a Windows machine.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
 in Phase 5. Nothing in the workflow reads a secret yet.

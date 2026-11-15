@@ -140,7 +140,8 @@ asked. Because a switch that silently does nothing is what cost the Mac job
 its first two runs, the script then reads the `msbuild` log and fails if
 `/GL` or `/Zi` is still on a compiler command line, or if a `.pdb` exists
 when none should. Runs 43761715303 and 43763872675 passed that check with
-both switches off, and run 43763913790 with debug symbols on. Revisit if
+both switches off, and runs 43763913790 and 43767579628 with debug symbols
+on. Revisit if
 the `.jucer` files ever carry these settings themselves.
 
 ### 2026-11-15: dry runs build without debug symbols on Windows too, and it saves almost nothing there
@@ -151,11 +152,15 @@ uploads them as `Wilsonic_Win64_v<version>-PDBs`, the Windows counterpart of
 the dSYM artifact. A `pull_request` dry run passes `DEBUG_SYMBOLS=NO` and
 uploads none, the same rule as on the Mac. I expected a saving like the
 Mac's and did not get one. With symbols, run 43763913790 built Wilsonic in
-11 min 07 s and WilsonicController in 10 min 57 s, and uploading 331 MB of
-zipped `.pdb` files took 25 seconds. Without symbols, the builds took 10 min
-37 s in run 43761715303 and 13 min 32 s each in run 43763872675. The
-difference between two runners is larger than the difference the symbols
-make. I kept the rule so that the two platforms behave the same way and a
+11 min 07 s and WilsonicController in 10 min 57 s, run 43767579628 took 14
+min 26 s and 14 min 27 s, and uploading 331 MB of zipped `.pdb` files took
+25 to 30 seconds. Without symbols, the builds took 10 min 37 s in run
+43761715303 and 13 min 32 s each in run 43763872675. The difference between
+two runners is larger than the difference the symbols make. (GitHub shows
+runs 43763913790 and 43767579628 as cancelled. They are manual runs on the
+branch, and I cancelled each one after its Windows job had finished green,
+to stop a four-hour Mac job that had nothing new to tell me. For
+43763913790 the numbers are from its first attempt.) I kept the rule so that the two platforms behave the same way and a
 dry run uploads only installers. Revisit if having two paths ever hides a
 bug in the `.pdb` upload; building symbols on every run would cost about
 half a minute per project.
@@ -165,18 +170,18 @@ half a minute per project.
 Open question 4 asked what to do if building the Projucer on the Windows
 runner took more than about ten minutes. It takes two and a half to three:
 2 min 32 s in run 43761715303, 2 min 27 s in run 43763913790 and 3 min 04 s
-in run 43763872675, all on a cache miss. On a hit, the second attempt of run
-43763913790 restored the 4.4 MB `Projucer.exe` in one second and skipped the
-build. The cache key is the runner image and the JUCE tag, the same shape as
+in run 43763872675, all on a cache miss. On a hit, run 43767579628 restored
+the 4.4 MB `Projucer.exe` in two seconds and skipped the build. The cache key is the runner image and the JUCE tag, the same shape as
 the Mac's. So I do not commit the generated `Builds/` folders and I do not
 publish a prebuilt Projucer. Revisit if a JUCE upgrade pushes the Projucer
 build past ten minutes.
 
 ### 2026-11-15: the Windows job gets a 90 minute timeout
 
-The whole job took 26 min 19 s in run 43763913790, with debug symbols and
-the `.pdb` upload, and 31 min 43 s in run 43763872675, the dry run. Ninety
-minutes is about three times the slower one, so a slow runner still
+The whole job took 26 min 19 s in run 43763913790 and 31 min 14 s in run
+43767579628, both with debug symbols and the `.pdb` upload, and 31 min 43 s
+in run 43763872675, the dry run. Ninety minutes is about three times the
+slowest, so a slow runner still
 finishes and a stuck build fails long before GitHub's six-hour limit.
 Revisit if a run comes within twenty minutes of the timeout.
 
@@ -192,7 +197,11 @@ that `windows_installer_64.iss` used. An upgrade then replaces the old file
 where it is. Installing the bundle instead would leave the v0.43 file in
 place next to it, and a host could then find Wilsonic twice. The smoke test in
 runs 43763913790 and 43763872675 confirmed the six install paths and that
-the uninstall entry sits under that AppId with the right version. Revisit if
+the uninstall entry sits under that AppId with the right version. Run
+43767579628 went further and installed the published v0.43 installer on the
+runner, then the new one over it: v0.43 wrote the same four files to the
+same paths under the same AppId, and after the upgrade Windows had one
+Wilsonic entry, showing the new version. Revisit if
 a host refuses the single-file form or I want `moduleinfo.json` installed;
 the move to the bundle then needs an `[InstallDelete]` entry for the old
 file.
@@ -207,7 +216,17 @@ would break the other plugins. Both MTS-ESP files now carry
 `Uninstallable=no`, which amounts to the same thing. Installing still
 overwrites `LIBMTS.dll` with the pinned build and writes `MTS-ESP.conf`
 only when there is none, as before, and the smoke test checks all three
-behaviours on the runner. Revisit if I want uninstall to remove everything
+behaviours on the runner. The flag was not enough on its own, and I only
+learned that from a review of this pull request. v0.43 recorded both files
+in its uninstall log, and Inno Setup appends to an existing log on an
+upgrade, so someone who upgraded from v0.43 and later uninstalled would
+still have lost `LIBMTS.dll`. `wilsonic.iss` therefore sets
+`UninstallLogMode=overwrite`, which starts a fresh log. Inno Setup's
+documentation advises against that mode because files an older version
+installed and the new one does not would be left behind, and that does not
+apply here because the file list is the v0.43 file list. Run 43767579628
+checked it on the runner: v0.43 installed, the new installer over it, an
+uninstall, and both MTS-ESP files still there. Revisit if I want uninstall to remove everything
 Wilsonic installed, or when open question 3, downgrade protection for
 libMTS, is settled for both platforms.
 
@@ -242,12 +261,16 @@ files byte-exact, because Git for Windows would otherwise check them out
 with CRLF and `MTS-ESP.conf` would stop matching `PIN`. Inno Setup is the
 copy on the `windows-2022` image, version 6.7.1 in run 43763913790, and it
 is not pinned. And after building the installer the job runs it silently on
-the runner with `smoke-install.ps1`, checks what landed and uninstalls. That
-is a Windows Server image with no audio host, so it tells me the installer
-works and nothing about whether the plugin loads in a DAW. Revisit the
+the runner with `smoke-install.ps1`, checks what landed and uninstalls,
+first as a fresh install and then as an upgrade over the v0.43 installer,
+which it downloads from this repo's own v0.43-beta release and checks
+against a sha256 in the workflow. That is a Windows Server image with no
+audio host, so it tells me the installer works and nothing about whether
+the plugin loads in a DAW. Revisit the
 first if the image drops Git Bash, the second if a later image drops Inno
 Setup or a new version changes the result, in which case the job should
-install a pinned version itself.
+install a pinned version itself, and the third after the first release from
+this pipeline, when the upgrade test should start from that release.
 
 ## Facts that shape the design
 
@@ -421,7 +444,8 @@ same ones the test runs on a Mac.
    script uses paths relative to the repo root and takes its version from the
    `/D` define.
 7. `release/windows/smoke-install.ps1`: install the result silently on the
-   runner, check the six files, the MTS-ESP.conf rule and the uninstall.
+   runner, check the six files, the MTS-ESP.conf rule and the uninstall,
+   then do it again as an upgrade over the published v0.43 installer.
 8. Upload the `.exe` as an artifact, `Wilsonic_Win64_v<version>-unsigned`,
    and on tag and manual runs the `.pdb` files as a second one.
 
@@ -563,10 +587,11 @@ Phases 1, 2, and 4 can start before Phase 0 completes. Phase 3 and 5 need it.
 
 Phase 4 was built on 2026-11-15 in pull request #88: `release/windows/` and
 the `windows` job, which produces `Wilsonic_Win64_v0.44.0-unsigned.exe` on
-the `windows-2022` runner and installs it there silently as a smoke test.
-Its verify step is still open. Nobody has installed the `.exe` on a real
-Windows machine yet, and that test is mine to do on claw or in a VM,
-including an upgrade over a v0.43 install and a VST3 scan in a host.
+the `windows-2022` runner and installs it there silently as a smoke test,
+fresh and as an upgrade over v0.43. Its verify step is still open. Nobody
+has installed the `.exe` on a real Windows machine yet, and that test is
+mine to do on claw or in a VM, including a VST3 scan in a host and a tuning
+sent to a client over MTS-ESP.
 
 ## Open questions
 
@@ -583,7 +608,7 @@ including an upgrade over a v0.43 install and a VST3 scan in a host.
    even with caching, commit the generated `Builds/` for the two exporters
    instead, or publish a prebuilt Projucer as a release asset of this repo.
    Answered on 2026-11-15: it takes two and a half to three minutes on a
-   cache miss and one second on a hit, so neither fallback is needed. The
+   cache miss and a second or two on a hit, so neither fallback is needed. The
    run numbers are in the decision log.
 5. Should `auval` run on the CI runner as a smoke test? It needs the
    component installed in `~/Library/Audio/Plug-Ins/Components`, which the
