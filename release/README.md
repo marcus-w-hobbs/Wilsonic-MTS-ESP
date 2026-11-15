@@ -95,9 +95,9 @@ twenty-minute JUCE build.
 `.github/workflows/release.yml` runs on a `v*` tag push, by hand from the
 Actions tab with two inputs, `version` and `publish`, and on pull requests
 that touch `release/` or the workflow file. The pull request run is a dry
-run: unsigned, no tag check, no secrets, nothing published, and it stays
-that way when Phase 3 adds signing for tags and manual runs. Two jobs exist
-today:
+run: unsigned, no tag check, no secrets, nothing published, built without
+debug symbols so it uploads no dSYMs, and it stays that way when Phase 3
+adds signing for tags and manual runs. Two jobs exist today:
 
 1. `prepare` on Ubuntu runs `scripts/check-version.sh`. On a tag push it also
    requires the tag to equal `v$(cat VERSION.txt)`, and on a manual run with
@@ -110,7 +110,8 @@ today:
    miss, resaves both `.jucer` files, builds both projects in Release with
    `CODE_SIGN_IDENTITY="-"` and `LLVM_LTO=NO`, runs `build-pkg.sh` with
    `SIGNING=0`, and uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the
-   dSYM bundles as workflow artifacts.
+   dSYM bundles as workflow artifacts. On a pull request it also passes
+   `GCC_GENERATE_DEBUGGING_SYMBOLS=NO` and skips the two dSYM steps.
 
 The `LLVM_LTO=NO` needs a word. The Projucer switches full link-time
 optimisation on for every Release configuration, and neither `.jucer` file
@@ -132,6 +133,18 @@ dSYM for the VST3, a single step that ran for an hour on the three-core
 runner. The job has a timeout of five and a half hours so a stuck build
 still fails before GitHub's limit, and I would like to try
 `LLVM_LTO=YES_THIN` next and see what it costs.
+
+That hour is why a pull request dry run builds without debug symbols. A dry
+run only has to prove that the pipeline still packages, so it skips
+`dsymutil` and the dSYM upload. I expected that to halve the job, and it
+did better: without `-g` the compiles themselves dropped to 30 and 29
+minutes, and the first dry run took 1 h 02 min in all. Tag and
+manual runs keep the debug symbols and upload the dSYMs. The one cost is
+that the two dSYM steps are exercised only by those runs, so a change to
+them needs `gh workflow run release.yml --ref <branch>` rather than a pull
+request to test it. The reasoning behind these choices, with the run
+numbers, is in the decision log in
+[plans/release-pipeline.md](../plans/release-pipeline.md).
 
 The dSYMs are also why the job moves them into `release/dsyms` instead of
 copying them, and deletes Xcode's `DerivedData` before uploading. The
