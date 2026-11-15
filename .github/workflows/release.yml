@@ -16,7 +16,9 @@ run-name: release ${{ inputs.version || github.ref_name }}
 # its -unsigned suffix. A dry run also builds without debug symbols and
 # uploads no dSYMs: dsymutil on the universal binaries cost 65 and 47
 # minutes of the 3 h 39 min job in run 43054238610, and a dry run only has
-# to prove the pipeline, so it is roughly half the price of a real build. Phase 3 adds signing and notarization only for tag
+# to prove the pipeline. Without -g the compiles are faster too, so the dry
+# run took 1 h 02 min in run 43669865878, about a quarter of a real build.
+# Phase 3 adds signing and notarization only for tag
 # push and workflow_dispatch, never for pull_request, where secrets are not
 # available to forks anyway.
 on:
@@ -84,7 +86,7 @@ jobs:
           # Phase 3 will set signing=1 for tag push and workflow_dispatch
           # when the Apple secrets exist; until then every run is unsigned.
           # A dry run also skips debug symbols, so no dSYMs are generated or
-          # uploaded and the mac job takes about half as long.
+          # uploaded and the mac job takes about a quarter of the time.
           if [ "$EVENT_NAME" = "pull_request" ]; then
             dry_run=true
             debug_symbols=NO

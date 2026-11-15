@@ -136,7 +136,9 @@ still fails before GitHub's limit, and I would like to try
 
 That hour is why a pull request dry run builds without debug symbols. A dry
 run only has to prove that the pipeline still packages, so it skips
-`dsymutil` and the dSYM upload and should take about half as long. Tag and
+`dsymutil` and the dSYM upload. I expected that to halve the job, and it
+did better: without `-g` the compiles themselves dropped to 30 and 29
+minutes, and the first dry run took 1 h 02 min in all. Tag and
 manual runs keep the debug symbols and upload the dSYMs. The one cost is
 that the two dSYM steps are exercised only by those runs, so a change to
 them needs `gh workflow run release.yml --ref <branch>` rather than a pull

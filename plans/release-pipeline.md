@@ -99,7 +99,10 @@ the pipeline still packages, so on `pull_request` the builds pass
 and manual runs keep their debug symbols and dSYMs. The cost is that the
 dSYM steps are exercised only by those runs, so a change to them needs
 `gh workflow run release.yml --ref <branch>` rather than a pull request to
-test. Options I have not taken yet, roughly by payoff: build the two
+test. I predicted the dry run would take half the time; the first one, run
+43669865878, took 1 h 02 min, with the compiles down to 30 and 29 minutes
+because `-g` costs compile time as well as the `dsymutil` pass. Options I
+have not taken yet, roughly by payoff: build the two
 projects in parallel jobs and package in a third, throttle the three
 `dsymutil` processes so they stop swapping, or move to a six-core runner if
 one is free for a public repository.
