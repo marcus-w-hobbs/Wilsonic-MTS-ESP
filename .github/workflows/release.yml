@@ -102,6 +102,12 @@ jobs:
   mac:
     needs: prepare
     runs-on: macos-15
+    # A universal Release build of both projects took 3 h 44 min on the hosted
+    # runner (run 43010618605: Wilsonic 106 min, WilsonicController 116 min,
+    # most of each inside dsymutil). Give it five and a half hours so a slow
+    # runner still finishes, but a stuck build fails before GitHub's six-hour
+    # job limit kills it without logs.
+    timeout-minutes: 330
     env:
       VERSION: ${{ needs.prepare.outputs.version }}
     steps:
@@ -136,17 +142,45 @@ jobs:
           "$PROJUCER" --resave Wilsonic.jucer
           "$PROJUCER" --resave WilsonicController.jucer
 
+      # The Release configurations of both .jucer files set vst3BinaryLocation
+      # and auBinaryLocation, so the exported Xcode projects end with an
+      # "Install Target" phase that copies each plugin into
+      # /Library/Audio/Plug-Ins. The runner user cannot write there and the
+      # build fails with "ditto: Permission denied". The folders are empty on
+      # a fresh runner, so hand them to the runner user before building.
+      - name: Make the system plug-in folders writable
+        run: |
+          sudo mkdir -p /Library/Audio/Plug-Ins/Components /Library/Audio/Plug-Ins/VST3
+          sudo chown -R "$(id -un)" /Library/Audio/Plug-Ins
+
+      # The Projucer turns full link-time optimisation on for every Release
+      # configuration (LLVM_LTO=YES is its default for non-debug builds, and
+      # neither .jucer overrides it). On GitHub's 3-core macOS runners that is
+      # six monolithic LTO links per project (three formats times two
+      # architectures), and the Wilsonic build alone ran past the 6-hour job
+      # limit in runs 42952880906 and 42958231779. LLVM_LTO=NO on the command
+      # line wins over the project setting and makes it an ordinary -O3 link.
+      # Xcode builds on a developer Mac still use LTO. Revisit with YES_THIN or
+      # a larger runner once this plain build has a known duration.
+      #
+      # The generic destination matters too. Without it a scheme build picks
+      # "My Mac" as its destination, which sets ONLY_ACTIVE_ARCH=YES and
+      # produces arm64-only bundles (run 43001616208 did exactly that). The
+      # generic macOS destination honours the project's ARCHS, arm64 and
+      # x86_64, so the plugins are universal like libMTS.dylib.
       - name: Build Wilsonic (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX
           xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' \
-            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
+            -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
 
       - name: Build WilsonicController (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX-WilsonicController
           xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' \
-            -configuration Release -sdk macosx15.5 CODE_SIGN_IDENTITY="-"
+            -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
 
       - name: Build the installer
         # SIGNING comes from prepare, which is 0 on pull_request without
@@ -157,15 +191,22 @@ jobs:
           release/mac/build-pkg.sh --out release/out
           test -f "release/out/${{ needs.prepare.outputs.mac_asset }}"
 
+      # The universal dSYMs are a few gigabytes and the runner disk is nearly
+      # full by now, so move them instead of copying (run 43010618605 died
+      # here with "No space left on device" on a ditto copy), then delete the
+      # object files in DerivedData so upload-artifact has room for its zip.
       - name: Collect dSYMs
         run: |
+          df -h /
           mkdir -p release/dsyms
           for d in Builds/MacOSX/build/Release Builds/MacOSX-WilsonicController/build/Release; do
             for s in "$d"/*.dSYM; do
-              if [ -d "$s" ]; then ditto "$s" "release/dsyms/$(basename "$s")"; fi
+              if [ -d "$s" ]; then mv "$s" "release/dsyms/$(basename "$s")"; fi
             done
           done
-          ls -la release/dsyms
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          du -sh release/dsyms/*
+          df -h /
 
       - name: Upload the installer
         uses: actions/upload-artifact@v4
