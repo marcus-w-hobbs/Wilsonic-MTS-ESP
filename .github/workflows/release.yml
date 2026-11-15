@@ -13,7 +13,10 @@ run-name: release ${{ inputs.version || github.ref_name }}
 # mac, so a change to release/ or to this file is exercised on a real runner
 # before it merges. It is safe because that path signs nothing and reads no
 # secrets: prepare forces SIGNING=0 on pull_request and the artifact keeps
-# its -unsigned suffix. Phase 3 adds signing and notarization only for tag
+# its -unsigned suffix. A dry run also builds without debug symbols and
+# uploads no dSYMs: dsymutil on the universal binaries cost 65 and 47
+# minutes of the 3 h 39 min job in run 43054238610, and a dry run only has
+# to prove the pipeline, so it is roughly half the price of a real build. Phase 3 adds signing and notarization only for tag
 # push and workflow_dispatch, never for pull_request, where secrets are not
 # available to forks anyway.
 on:
@@ -53,6 +56,7 @@ jobs:
       is_prerelease: ${{ steps.version.outputs.is_prerelease }}
       dry_run: ${{ steps.version.outputs.dry_run }}
       signing: ${{ steps.version.outputs.signing }}
+      debug_symbols: ${{ steps.version.outputs.debug_symbols }}
       mac_asset: ${{ steps.version.outputs.mac_asset }}
     steps:
       - uses: actions/checkout@v4
@@ -79,10 +83,14 @@ jobs:
           # A pull_request run is a dry run: never signed, never published.
           # Phase 3 will set signing=1 for tag push and workflow_dispatch
           # when the Apple secrets exist; until then every run is unsigned.
+          # A dry run also skips debug symbols, so no dSYMs are generated or
+          # uploaded and the mac job takes about half as long.
           if [ "$EVENT_NAME" = "pull_request" ]; then
             dry_run=true
+            debug_symbols=NO
           else
             dry_run=false
+            debug_symbols=YES
           fi
           signing=0
           if [ "$signing" = "1" ]; then
@@ -95,9 +103,10 @@ jobs:
             echo "is_prerelease=$is_prerelease"
             echo "dry_run=$dry_run"
             echo "signing=$signing"
+            echo "debug_symbols=$debug_symbols"
             echo "mac_asset=$mac_asset"
           } >> "$GITHUB_OUTPUT"
-          echo "version $version, prerelease $is_prerelease, dry run $dry_run, signing $signing, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
+          echo "version $version, prerelease $is_prerelease, dry run $dry_run, signing $signing, debug symbols $debug_symbols, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
 
   mac:
     needs: prepare
@@ -110,6 +119,10 @@ jobs:
     timeout-minutes: 330
     env:
       VERSION: ${{ needs.prepare.outputs.version }}
+      # YES on tag push and workflow_dispatch, NO on the pull_request dry run.
+      # NO drops -g from every compile and skips dsymutil, so no dSYM exists
+      # to collect; the two dSYM steps below are skipped on the same flag.
+      DEBUG_SYMBOLS: ${{ needs.prepare.outputs.debug_symbols }}
     steps:
       - uses: actions/checkout@v4
 
@@ -173,14 +186,14 @@ jobs:
           cd Builds/MacOSX
           xcodebuild -project Wilsonic.xcodeproj -scheme 'Wilsonic - All' \
             -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
-            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO GCC_GENERATE_DEBUGGING_SYMBOLS="$DEBUG_SYMBOLS"
 
       - name: Build WilsonicController (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX-WilsonicController
           xcodebuild -project WilsonicController.xcodeproj -scheme 'WilsonicController - All' \
             -configuration Release -sdk macosx15.5 -destination 'generic/platform=macOS' \
-            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO
+            CODE_SIGN_IDENTITY="-" LLVM_LTO=NO GCC_GENERATE_DEBUGGING_SYMBOLS="$DEBUG_SYMBOLS"
 
       - name: Build the installer
         # SIGNING comes from prepare, which is 0 on pull_request without
@@ -196,6 +209,7 @@ jobs:
       # here with "No space left on device" on a ditto copy), then delete the
       # object files in DerivedData so upload-artifact has room for its zip.
       - name: Collect dSYMs
+        if: needs.prepare.outputs.debug_symbols == 'YES'
         run: |
           df -h /
           mkdir -p release/dsyms
@@ -216,6 +230,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload dSYMs
+        if: needs.prepare.outputs.debug_symbols == 'YES'
         uses: actions/upload-artifact@v4
         with:
           name: Wilsonic_Mac_v${{ env.VERSION }}-dSYMs
