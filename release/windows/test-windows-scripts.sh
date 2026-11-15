@@ -92,6 +92,9 @@ expect_grep "installs the 64-bit LIBMTS.dll to Common Files\\MTS-ESP" 'Win\\64bi
 expect_no_grep "does not install the 32-bit LIBMTS.dll" '32bit' "$ISS"
 expect_grep "installs MTS-ESP.conf only if absent" 'MTS-ESP.conf".*{commoncf}\\MTS-ESP.*onlyifdoesntexist' "$ISS"
 expect_grep "64-bit install mode" '^ArchitecturesInstallIn64BitMode=' "$ISS"
+expect_grep "replaces the uninstall log of an older install" '^UninstallLogMode=overwrite$' "$ISS"
+expect_grep "LIBMTS.dll is never uninstalled" 'LIBMTS.dll".*uninsneveruninstall' "$ISS"
+expect_grep "MTS-ESP.conf is never uninstalled" 'MTS-ESP.conf".*uninsneveruninstall' "$ISS"
 
 # ---- build-project.sh with a fake msbuild --------------------------------------
 # The fake records its arguments, finds the file-logger path the script asked
@@ -154,11 +157,14 @@ expect_rc "fails when /GL is still on the compile line" 1 "$LOG" env MSBUILD="$F
 expect_grep "says /GL was found" '/GL' "$LOG"
 SLN="$(new_sln)"
 expect_rc "fails when /Zi is still on the compile line" 1 "$LOG" env MSBUILD="$FAKE_MSBUILD" LTO=NO DEBUG_SYMBOLS=NO FAKE_MSBUILD_MODE=zi "$PROJECT" "$SLN"
+expect_grep "says debug information was found" 'still compiled with debug information' "$LOG"
 SLN="$(new_sln)"
 expect_rc "fails when a .pdb was written" 1 "$LOG" env MSBUILD="$FAKE_MSBUILD" LTO=NO DEBUG_SYMBOLS=NO FAKE_MSBUILD_MODE=pdb "$PROJECT" "$SLN"
+expect_grep "says the build wrote a .pdb" 'the build wrote' "$LOG"
 expect_grep "names the .pdb" 'Wilsonic.pdb' "$LOG"
 SLN="$(new_sln)"
 expect_rc "fails when the log has no compile line to check" 1 "$LOG" env MSBUILD="$FAKE_MSBUILD" LTO=NO DEBUG_SYMBOLS=NO FAKE_MSBUILD_MODE=nocl "$PROJECT" "$SLN"
+expect_grep "says there was nothing to check" 'no compiler command line' "$LOG"
 
 echo "build-project.sh failure cases"
 SLN="$(new_sln)"
@@ -227,8 +233,17 @@ expect_grep "passes the WilsonicController build folder" '^/DControllerBuild=' "
 expect_grep "passes the MTS-ESP folder" '^/DMtsEspDir=' "$FAKE_ISCC_ARGS"
 expect_no_grep "does not ask for signing" '^/DSigned$' "$FAKE_ISCC_ARGS"
 expect_grep "compiles wilsonic.iss" 'wilsonic.iss$' "$FAKE_ISCC_ARGS"
-expect_grep "checked that the products are x64" 'x64' "$LOG"
+expect_grep "checked that the products are x64" 'LIBMTS.dll are x64' "$LOG"
 expect_grep "checked libMTS against PIN" 'matches PIN' "$LOG"
+
+echo "build-installer.sh with relative build folders, run from another folder"
+# ISCC resolves a relative path against the repo root, not the caller's
+# folder, so the script has to hand it the absolute folders it checked.
+expect_rc "exit status 0" 0 "$LOG" env ISCC="$FAKE_ISCC" SIGNING=0 sh -c 'cd "$1" && shift && "$@"' sh "$P" \
+    "$INSTALLER" --version "$TEST_VERSION" --wilsonic-build w --controller-build c --out out-rel
+expect_grep "the Wilsonic build folder reaches ISCC absolute" '^/DWilsonicBuild=\(/\|[A-Za-z]:\)' "$FAKE_ISCC_ARGS"
+expect_grep "the WilsonicController build folder reaches ISCC absolute" '^/DControllerBuild=\(/\|[A-Za-z]:\)' "$FAKE_ISCC_ARGS"
+expect_file "the installer lands in the caller's relative output folder" "$P/out-rel/Wilsonic_Win64_v${TEST_VERSION}-unsigned.exe"
 
 echo "build-installer.sh signing switch"
 expect_rc "SIGNING=1 without SIGNTOOL_COMMAND fails" 1 "$LOG" env ISCC="$FAKE_ISCC" SIGNING=1 "$INSTALLER" --version "$TEST_VERSION" \

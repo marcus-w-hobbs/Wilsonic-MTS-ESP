@@ -5,6 +5,11 @@
 # and a missing one is written, then uninstalls and checks that the shared
 # MTS-ESP files stay behind. It needs an elevated prompt.
 #
+# With -UpgradeFrom it installs an older installer first, the v0.43 one for
+# example, so that the install under test is an upgrade: there must be one
+# Wilsonic entry under Apps afterwards, the older LIBMTS.dll must be replaced,
+# and the uninstall must still leave the MTS-ESP files.
+#
 # It is meant for a throwaway machine: the CI runner or a VM. It ends by
 # uninstalling Wilsonic, and on a machine with no MTS-ESP.conf it writes one
 # of its own first, so do not run it on a machine whose Wilsonic install you
@@ -12,9 +17,11 @@
 #
 # Usage (PowerShell):
 #   release\windows\smoke-install.ps1 -Installer release\out\Wilsonic_Win64_v0.45.0-beta-unsigned.exe -Version 0.45.0-beta
+#   release\windows\smoke-install.ps1 -Installer ... -Version ... -UpgradeFrom WilsonicInstaller64_0_43b.exe
 param(
     [Parameter(Mandatory = $true)][string]$Installer,
     [string]$Version = '',
+    [string]$UpgradeFrom = '',
     [string]$MtsEspDir = (Join-Path $PSScriptRoot '..\mts-esp')
 )
 $ErrorActionPreference = 'Stop'
@@ -57,6 +64,23 @@ if (-not (Test-Path -LiteralPath $conf)) {
 }
 $confBefore = Sha $conf
 
+if ($UpgradeFrom) {
+    $UpgradeFrom = (Resolve-Path -LiteralPath $UpgradeFrom).Path
+    Write-Host "older install first: $UpgradeFrom"
+    $rc = Run-Silently $UpgradeFrom (Join-Path $logDir 'wilsonic-install-0.log')
+    Check "older installer exit code 0 (got $rc)" ($rc -eq 0)
+    Check "older install left an uninstall entry under the same AppId" (Test-Path -LiteralPath $uninstallKey)
+    if (Test-Path -LiteralPath $uninstallKey) {
+        Write-Host "  older install shows version $((Get-ItemProperty -LiteralPath $uninstallKey).DisplayVersion)"
+    }
+    foreach ($f in $installed) { Check "older install wrote $f" (Test-Path -LiteralPath $f) }
+    Check "the existing MTS-ESP.conf survived the older install" ((Sha $conf) -eq $confBefore)
+    if (Test-Path -LiteralPath $dll) {
+        $same = (Sha $dll) -eq (Sha (Join-Path $MtsEspDir 'Win\64bit\LIBMTS.dll'))
+        Write-Host "  older install's LIBMTS.dll is $(if ($same) { 'the same as' } else { 'different from' }) the pinned build"
+    }
+}
+
 Write-Host "first install, with an MTS-ESP.conf already present"
 $log1 = Join-Path $logDir 'wilsonic-install-1.log'
 $rc = Run-Silently $Installer $log1
@@ -73,6 +97,9 @@ if ($Version -and (Test-Path -LiteralPath $uninstallKey)) {
     $shown = (Get-ItemProperty -LiteralPath $uninstallKey).DisplayVersion
     Check "uninstall entry shows version $Version (got $shown)" ($shown -eq $Version)
 }
+$entries = @(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction SilentlyContinue |
+    Where-Object { $_.DisplayName -like 'Wilsonic*' })
+Check "one Wilsonic entry under Apps (found $($entries.Count))" ($entries.Count -eq 1)
 
 if ($planted) {
     Write-Host "second install, with no MTS-ESP.conf"

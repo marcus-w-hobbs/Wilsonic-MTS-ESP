@@ -67,6 +67,11 @@ VersionInfoVersion={#VersionCore}
 VersionInfoTextVersion={#Version}
 DefaultDirName={autopf}\{#MyAppPublisher}\{#MyAppName}
 DisableProgramGroupPage=yes
+; v0.43 recorded LIBMTS.dll and MTS-ESP.conf in its uninstall log. Inno Setup
+; appends to an existing log by default, so after an upgrade the uninstaller
+; would still delete both, whatever the flags below say. Start a fresh log.
+; Nothing is orphaned, because this file list is the v0.43 file list.
+UninstallLogMode=overwrite
 SourceDir=..\..
 OutputDir={#OutputDir}
 OutputBaseFilename={#InstallerName}

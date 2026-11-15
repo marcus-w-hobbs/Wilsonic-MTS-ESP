@@ -386,6 +386,26 @@ jobs:
         shell: pwsh
         run: release/windows/smoke-install.ps1 -Installer "release/out/${{ needs.prepare.outputs.win_asset }}" -Version $env:VERSION
 
+      # The same again as an upgrade: install the last release made with the
+      # old installer, then this one over it. One entry under Apps, the older
+      # LIBMTS.dll replaced by the pinned one, and an uninstall that still
+      # leaves the shared MTS-ESP files, which is what UninstallLogMode in
+      # wilsonic.iss is for. The old installer is this repo's own public
+      # release asset, fetched without a token and checked against its
+      # sha256. After the first release from this pipeline, point both lines
+      # at that release instead.
+      - name: Smoke-test an upgrade over v0.43
+        shell: pwsh
+        env:
+          UPGRADE_FROM_URL: https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/releases/download/v0.43-beta/WilsonicInstaller64_0_43b.exe
+          UPGRADE_FROM_SHA256: 8467f49edc5d35dde92f28e4e919480aaf51005bc4b00182626907b52cb9828a
+        run: |
+          $old = Join-Path $env:RUNNER_TEMP 'WilsonicInstaller64_0_43b.exe'
+          Invoke-WebRequest -Uri $env:UPGRADE_FROM_URL -OutFile $old
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $old).Hash.ToLower()
+          if ($hash -ne $env:UPGRADE_FROM_SHA256) { throw "the v0.43 installer has sha256 $hash, expected $env:UPGRADE_FROM_SHA256" }
+          release/windows/smoke-install.ps1 -Installer "release/out/${{ needs.prepare.outputs.win_asset }}" -Version $env:VERSION -UpgradeFrom $old
+
       - name: Upload the installer
         uses: actions/upload-artifact@v4
         with:

@@ -62,6 +62,16 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# ISCC resolves a relative path against the repo root, not the caller's
+# folder, so make the three input folders absolute here. One that does not
+# exist is left as given; the checks below report it.
+abs_dir() {
+    if [ -d "$1" ]; then (cd "$1" && pwd); else printf '%s\n' "$1"; fi
+}
+WILSONIC_BUILD="$(abs_dir "$WILSONIC_BUILD")"
+CONTROLLER_BUILD="$(abs_dir "$CONTROLLER_BUILD")"
+MTS_ESP_DIR="$(abs_dir "$MTS_ESP_DIR")"
+
 # ---- version ---------------------------------------------------------------
 if [ -z "$VERSION" ]; then
     [ -f "$ROOT/VERSION.txt" ] || die "VERSION.txt not found and no --version given"
