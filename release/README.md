@@ -184,8 +184,8 @@ script itself gets tested on the Windows runner before the long build.
 Actions tab with two inputs, `version` and `publish`, and on pull requests
 that touch `release/` or the workflow file. The pull request run is a dry
 run: unsigned, no tag check, no secrets, nothing published, built without
-debug symbols so it uploads no dSYMs, and it stays that way when Phase 3
-adds signing for tags and manual runs. Two jobs exist today:
+debug symbols so it uploads no dSYMs or PDBs, and it stays that way when
+Phase 3 adds signing for tags and manual runs. Three jobs exist today:
 
 1. `prepare` on Ubuntu runs `scripts/check-version.sh`. On a tag push it also
    requires the tag to equal `v$(cat VERSION.txt)`, and on a manual run with
@@ -200,6 +200,14 @@ adds signing for tags and manual runs. Two jobs exist today:
    `SIGNING=0`, and uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the
    dSYM bundles as workflow artifacts. On a pull request it also passes
    `GCC_GENERATE_DEBUGGING_SYMBOLS=NO` and skips the two dSYM steps.
+3. `windows` on `windows-2022` first runs `check-exporter.sh` and the script
+   test, then clones JUCE 9.0.1 to `C:\JUCE`, restores `Projucer.exe` from a
+   cache keyed on the JUCE tag or builds it on a miss, resaves both `.jucer`
+   files, builds both solutions with `build-project.sh` and `LTO=NO`, runs
+   `build-installer.sh` with `SIGNING=0`, installs the result silently with
+   `smoke-install.ps1`, and uploads `Wilsonic_Win64_v<version>-unsigned.exe`.
+   Tag and manual runs also upload the `.pdb` files. The `msbuild` logs are
+   uploaded on every run, pass or fail.
 
 The `LLVM_LTO=NO` needs a word. The Projucer switches full link-time
 optimisation on for every Release configuration, and neither `.jucer` file
@@ -252,6 +260,29 @@ through the build produced arm64-only plugins inside an installer that
 claims to support Intel Macs. The generic destination honours the project's
 two architectures, and `build-pkg.sh` now refuses any product that is not
 universal so this cannot slip through again.
+
+The Windows job is much quicker than the Mac one, about half an hour. The
+first run built Wilsonic without whole program optimisation in 10 minutes 37
+seconds and WilsonicController with it, because I wanted to see the
+difference before choosing. What I saw was that the build with it does not
+link: the object files for the shared-code library came to more than 4 GB
+and the librarian stopped with `LNK1248`. So on Windows `LTO=NO` is what
+lets the build link at all, and I suspect a Release build from Visual Studio
+on my laptop fails the same way today, which I have not checked. What surprised me in
+the other direction is that debug symbols cost almost nothing here. The two
+builds took about eleven minutes each with them and between ten and a half
+and thirteen and a half without, so the runner I happen to get matters more
+than the symbols do. The Projucer takes two and a half to three minutes to
+build on a cache miss and one second to restore on a hit. The job has a 90
+minute timeout.
+
+The silent install at the end of the Windows job is worth knowing the limits
+of. It proves that the installer runs, that the six files land where the
+table above says, that an existing `MTS-ESP.conf` survives and a missing one
+is written, and that an uninstall leaves the shared MTS-ESP files. It runs
+on Windows Server with no audio host, so it does not tell me that the VST3
+loads in Live or that an upgrade over a real v0.43 install is clean. I
+still have to do that by hand on a Windows machine.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
 in Phase 5. Nothing in the workflow reads a secret yet.

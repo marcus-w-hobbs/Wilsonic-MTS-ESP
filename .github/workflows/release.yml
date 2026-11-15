@@ -255,8 +255,11 @@ jobs:
   windows:
     needs: prepare
     runs-on: windows-2022
-    # Bring-up value. The real number goes here once the job has been timed.
-    timeout-minutes: 120
+    # The job took 26 min 19 s with debug symbols (run 43763913790) and
+    # 31 min 43 s as a dry run (run 43763872675); two builds of about eleven
+    # to thirteen minutes each are nearly all of it. Ninety minutes lets a
+    # slow runner finish and still fails a stuck build early.
+    timeout-minutes: 90
     defaults:
       run:
         # Git Bash, so the same scripts run here and under the test on a Mac.
@@ -264,7 +267,9 @@ jobs:
     env:
       VERSION: ${{ needs.prepare.outputs.version }}
       # YES on tag push and workflow_dispatch, NO on the pull_request dry run.
-      # build-project.sh turns NO into no /Zi and no .pdb.
+      # build-project.sh turns NO into no /Zi and no .pdb. Unlike on the Mac
+      # this saves almost no time (about half a minute per project); it is
+      # here so both platforms follow one rule.
       DEBUG_SYMBOLS: ${{ needs.prepare.outputs.debug_symbols }}
       # The Projucer turns whole program optimisation (/GL and /LTCG) on for
       # every Release configuration, and neither .jucer overrides it. On this
