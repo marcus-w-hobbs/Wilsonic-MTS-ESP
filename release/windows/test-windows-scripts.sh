@@ -105,6 +105,8 @@ for a in "$@"; do
     case "$a" in -flp:*) log="$(printf '%s' "$a" | sed 's/^-flp:logfile=\([^;]*\).*/\1/')" ;; esac
 done
 [ -n "$log" ] || exit 9
+# build-project.sh hands msbuild Windows paths where cygpath exists.
+if command -v cygpath >/dev/null 2>&1; then sln="$(cygpath -u "$sln")"; log="$(cygpath -u "$log")"; fi
 out="$(dirname "$sln")/x64/Release/VST3"
 mkdir -p "$out"
 case "${FAKE_MSBUILD_MODE:-ok}" in
