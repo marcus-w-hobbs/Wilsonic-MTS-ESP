@@ -34,6 +34,76 @@ No build step runs on M1, M2, or claw. M1 is for testing only.
 | 16 | libMTS on macOS | Bundle the pinned version. Add a workflow that proposes updates. |
 | 17 | ODDSound license | 0BSD. Redistribution is permitted. A LICENSE copy ships next to the binaries. |
 
+## Decision log
+
+The table above is what I decided before building. This log is what I
+decided while building, in the order it happened, with the evidence and
+with what would make me revisit each one. It is the record to come back to.
+The layers below it are: this file for the why, `release/README.md` for how
+it works today, the comments in `.github/workflows/release.yml` for the
+line-by-line why, and the pull requests (#83, #84, #85 and onward) for the
+history of each change. Run numbers are GitHub Actions run ids in this repo.
+
+### 2026-11-11: CI Release builds run without link-time optimisation
+
+The Projucer writes `LLVM_LTO = YES` into every Release configuration and
+neither `.jucer` turns it off. On the three-core, 7 GB `macos-15` runner that
+meant six monolithic LTO links per project, and the first two runs of the
+workflow (42952880906 and 42958231779) were cancelled at the six-hour job
+limit while still inside the Wilsonic build. I pass `LLVM_LTO=NO` on the
+`xcodebuild` command line, which overrides the project, so the `.jucer`
+files and local Xcode builds keep LTO. The CI binary is therefore an
+ordinary `-O3` build. Revisit if `LLVM_LTO=YES_THIN` turns out to be
+affordable, or if we ever measure that LTO changes the plugin's audio
+performance enough to matter.
+
+### 2026-11-11: build universal with the generic destination, and refuse anything else
+
+Run 43001616208 was the first to finish, and its package held arm64-only
+plugins inside an installer that declares `x86_64,arm64`. A scheme build
+without a `-destination` lets Xcode pick "My Mac", which sets
+`ONLY_ACTIVE_ARCH=YES`. Both builds now pass
+`-destination 'generic/platform=macOS'`, and `build-pkg.sh` runs `lipo` on
+all six products and refuses any that is not `arm64 x86_64`, so this cannot
+slip through again. Revisit when Intel support is dropped, together with
+`hostArchitectures` in `distribution.xml`.
+
+### 2026-11-11: hand the system plug-in folders to the runner user
+
+Both `.jucer` Release configurations set `vst3BinaryLocation` and
+`auBinaryLocation`, so the exported projects end with an install phase that
+copies into `/Library/Audio/Plug-Ins`, and run 42997408825 failed there with
+`ditto: Permission denied`. The alternative was to edit both `.jucer` files,
+which are a plugin-lane choke point. I chose a `sudo mkdir` and `chown` step
+on the runner instead, because it touches nothing the plugin lane owns.
+Revisit if the `.jucer` install locations change for another reason.
+
+### 2026-11-14: move the dSYMs, free DerivedData, allow five and a half hours
+
+Run 43010618605 was the first universal build. It took 3 h 44 min, so the
+four-hour timeout I had added was too tight, and it died in the dSYM step
+with `No space left on device`: each universal dSYM is 1.9 GB and a `ditto`
+copy doubled them on a nearly full disk. The step now moves them and deletes
+`~/Library/Developer/Xcode/DerivedData` before the upload, and the job
+timeout is 330 minutes, still under the six-hour limit that discards the
+logs. Run 43054238610 confirmed it: green in 3 h 39 min, with the disk going
+from 8.5 GB free to 25 GB.
+
+### 2026-11-14: pull-request dry runs build without debug symbols
+
+Of the 3 h 39 min, compiling both architectures took 48 and 53 minutes per
+project and `dsymutil` took 65 and 47, with three 1.9 GB dSYMs per project
+being written at once on a 7 GB machine. A dry run only has to prove that
+the pipeline still packages, so on `pull_request` the builds pass
+`GCC_GENERATE_DEBUGGING_SYMBOLS=NO` and the two dSYM steps are skipped. Tag
+and manual runs keep their debug symbols and dSYMs. The cost is that the
+dSYM steps are exercised only by those runs, so a change to them needs
+`gh workflow run release.yml --ref <branch>` rather than a pull request to
+test. Options I have not taken yet, roughly by payoff: build the two
+projects in parallel jobs and package in a third, throttle the three
+`dsymutil` processes so they stop swapping, or move to a six-core runner if
+one is free for a public repository.
+
 ## Facts that shape the design
 
 - This repo is public, so GitHub-hosted runners cost nothing, macOS included.
@@ -170,7 +240,8 @@ run on `pull_request`.
    - `productsign` with Developer ID Installer when signing is on
 6. `xcrun notarytool submit --wait` with the App Store Connect API key, then
    `xcrun stapler staple`. On failure, print `notarytool log` and fail.
-7. Upload the `.pkg` and the `.dSYM` folders as artifacts.
+7. Upload the `.pkg` and the `.dSYM` folders as artifacts. A `pull_request`
+   dry run builds without debug symbols and uploads only the `.pkg`.
 
 ### windows (windows-2022)
 
