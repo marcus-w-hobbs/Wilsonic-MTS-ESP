@@ -2,8 +2,8 @@
 
 This folder holds what turns a built Wilsonic into an installer. The design
 and the phases it is built in are in [plans/release-pipeline.md](../plans/release-pipeline.md).
-As of Phase 2 the macOS packaging works unsigned, locally and in CI. Signing,
-notarization, the Windows installer and the GitHub release itself are later
+As of Phase 4 the macOS package and the Windows installer are both built
+unsigned in CI. Signing, notarization and the GitHub release itself are later
 phases.
 
 ## What is here
@@ -13,6 +13,13 @@ phases.
 | `mac/build-pkg.sh` | Builds the macOS installer from already-built products with `pkgbuild` and `productbuild`. |
 | `mac/distribution.xml` | The product definition: title, `hostArchitectures="x86_64,arm64"`, minimum macOS, one choice per component. |
 | `mac/test-build-pkg.sh` | Test for the two files above. It fakes the six product bundles, so it needs neither Xcode nor a certificate. |
+| `windows/wilsonic.iss` | The Inno Setup script for the 64-bit Windows installer. Paths are relative to the repo root and the version comes from `/DVersion=`. |
+| `windows/check-exporter.sh` | Checks that both `.jucer` files have a Visual Studio 2022 exporter with a Release configuration, and says which one does not. |
+| `windows/build-project.sh` | Builds one generated solution in Release for x64 with `msbuild`, with link-time optimisation and debug symbols switched by `LTO` and `DEBUG_SYMBOLS`. |
+| `windows/ci-build.targets` | The MSBuild file behind those two switches. `build-project.sh` copies it beside the solution as `Directory.Build.targets`. |
+| `windows/build-installer.sh` | Checks libMTS against `PIN`, checks the products are x64, and runs Inno Setup's `ISCC.exe` on `wilsonic.iss`. |
+| `windows/smoke-install.ps1` | Installs an installer silently, checks what landed, and uninstalls. With `-UpgradeFrom` it installs an older installer first. For the CI runner or a VM. |
+| `windows/test-windows-scripts.sh` | Test for the scripts above. It fakes `msbuild`, `ISCC.exe` and the build products, so it runs on a Mac. |
 | `mts-esp/` | ODDSound's libMTS 1.03 as vendored: the universal `Mac/libMTS.dylib`, both Windows `LIBMTS.dll`, `MTS-ESP.conf`, their 0BSD `LICENSE`, and `PIN`. |
 | `mts-esp/PIN` | The ODDSound commit, the libMTS version from their changelog, and the sha256 of each binary. `build-pkg.sh` refuses to package if a file does not match. |
 
@@ -90,14 +97,97 @@ This takes a few seconds and runs on any Mac. The CI `mac` job runs it too,
 before the real build, so a broken script fails fast instead of after a
 twenty-minute JUCE build.
 
+## The Windows installer
+
+The Windows installer is an Inno Setup script, `windows/wilsonic.iss`, that I
+ported from the v0.43 script in the old installer repo. That one pinned
+version 0.43 and read everything from OneDrive paths on my Windows laptop.
+The new one takes its version from `/DVersion=` and reads everything from
+paths relative to the repo root, so it compiles on any machine that has the
+two Release builds:
+
+```
+ISCC.exe /DVersion=0.45.0-beta release\windows\wilsonic.iss
+```
+
+It writes `release\out\Wilsonic_Win64_v<version>-unsigned.exe`. In practice
+I run `release/windows/build-installer.sh` from Git Bash instead, because it
+checks things first: that `release/mts-esp` matches `PIN`, and that the four
+products and `LIBMTS.dll` are x64 PE files. That second check is the Windows
+cousin of the universal-binary check in `build-pkg.sh`.
+
+The installer contains what v0.43 contained and puts it where v0.43 put it:
+
+| File | Installed to |
+|------|--------------|
+| `Wilsonic.exe` | `C:\Program Files\Perfect Buzz Music\Wilsonic\Wilsonic\` |
+| `WilsonicController.exe` | `C:\Program Files\Perfect Buzz Music\Wilsonic\WilsonicController\` |
+| `Wilsonic.vst3` | `C:\Program Files\Common Files\VST3\Perfect Buzz Music\Wilsonic\` |
+| `WilsonicController.vst3` | `C:\Program Files\Common Files\VST3\Perfect Buzz Music\WilsonicController\` |
+| `LIBMTS.dll` (64-bit) | `C:\Program Files\Common Files\MTS-ESP\` |
+| `MTS-ESP.conf` | `C:\Program Files\Common Files\MTS-ESP\`, only if there is none |
+
+It also keeps the v0.43 AppId, `{78427BB9-1C86-41AB-BC1F-53E7203BDCDD}`. Inno
+Setup uses the AppId to recognise an earlier install, so the new installer
+upgrades v0.43 in place and Windows shows one Wilsonic entry under Apps. The
+32-bit `LIBMTS.dll` is vendored but not installed, because I do not ship a
+32-bit Wilsonic.
+
+Three things differ from v0.43, and each is in the decision log in the plan.
+The VST3s are still installed as single `.vst3` files, although the Projucer
+now builds each one as a bundle folder; I take the module out of the bundle
+so the upgrade replaces the old file where it is. Uninstalling Wilsonic now
+leaves `LIBMTS.dll` and `MTS-ESP.conf` behind, because every other MTS-ESP
+plugin on the machine uses them, and v0.43 removed them; that takes both
+the `uninsneveruninstall` flag and `UninstallLogMode=overwrite`, because an
+upgrade would otherwise keep the v0.43 uninstall log, which lists them. And the installer
+accepts Windows 11 on ARM, which runs x64 hosts under emulation.
+
+### Building on Windows by hand
+
+With Visual Studio 2022, the Projucer and Inno Setup 6 installed, from Git
+Bash at the repo root, after resaving both `.jucer` files:
+
+```bash
+release/windows/build-project.sh Builds/VisualStudio2022/Wilsonic.sln
+release/windows/build-project.sh Builds/VisualStudio2022-WilsonicController/WilsonicController.sln
+release/windows/build-installer.sh
+```
+
+`build-project.sh` needs `msbuild.exe` on `PATH`, which a Developer Command
+Prompt provides, or its path in `MSBUILD`. `LTO=YES` keeps the Projucer's
+whole program optimisation and `DEBUG_SYMBOLS=NO` drops the `.pdb` files.
+After the build it reads the `msbuild` log and fails if a switch it was asked
+for did not reach the compiler, because a switch that silently does nothing
+is what cost the macOS job its first two runs.
+
+### Signing
+
+There is no Windows code signing yet. `SIGNING=1` with a sign command in
+`SIGNTOOL_COMMAND` makes `build-installer.sh` hand that command to Inno
+Setup, which then signs the four products, the uninstaller and the installer
+and drops the `-unsigned` suffix. I have tested that the script passes the
+right arguments, and nobody has run it with a real certificate. An unsigned
+installer brings up the SmartScreen warning; More info, then Run anyway.
+
+### Testing the scripts
+
+```bash
+release/windows/test-windows-scripts.sh
+```
+
+This runs on a Mac in a second or two. On a machine that has `ISCC.exe` it
+also compiles `wilsonic.iss` for real from fake products, which is how the
+script itself gets tested on the Windows runner before the long build.
+
 ## What the workflow does so far
 
 `.github/workflows/release.yml` runs on a `v*` tag push, by hand from the
 Actions tab with two inputs, `version` and `publish`, and on pull requests
 that touch `release/` or the workflow file. The pull request run is a dry
 run: unsigned, no tag check, no secrets, nothing published, built without
-debug symbols so it uploads no dSYMs, and it stays that way when Phase 3
-adds signing for tags and manual runs. Two jobs exist today:
+debug symbols so it uploads no dSYMs or PDBs, and it stays that way when
+Phase 3 adds signing for tags and manual runs. Three jobs exist today:
 
 1. `prepare` on Ubuntu runs `scripts/check-version.sh`. On a tag push it also
    requires the tag to equal `v$(cat VERSION.txt)`, and on a manual run with
@@ -112,6 +202,15 @@ adds signing for tags and manual runs. Two jobs exist today:
    `SIGNING=0`, and uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the
    dSYM bundles as workflow artifacts. On a pull request it also passes
    `GCC_GENERATE_DEBUGGING_SYMBOLS=NO` and skips the two dSYM steps.
+3. `windows` on `windows-2022` first runs `check-exporter.sh` and the script
+   test, then clones JUCE 9.0.1 to `C:\JUCE`, restores `Projucer.exe` from a
+   cache keyed on the JUCE tag or builds it on a miss, resaves both `.jucer`
+   files, builds both solutions with `build-project.sh` and `LTO=NO`, runs
+   `build-installer.sh` with `SIGNING=0`, installs the result silently with
+   `smoke-install.ps1`, once fresh and once as an upgrade over the published
+   v0.43 installer, and uploads `Wilsonic_Win64_v<version>-unsigned.exe`.
+   Tag and manual runs also upload the `.pdb` files. The `msbuild` logs are
+   uploaded on every run, pass or fail.
 
 The `LLVM_LTO=NO` needs a word. The Projucer switches full link-time
 optimisation on for every Release configuration, and neither `.jucer` file
@@ -164,6 +263,33 @@ through the build produced arm64-only plugins inside an installer that
 claims to support Intel Macs. The generic destination honours the project's
 two architectures, and `build-pkg.sh` now refuses any product that is not
 universal so this cannot slip through again.
+
+The Windows job is much quicker than the Mac one, about half an hour. The
+first run built Wilsonic without whole program optimisation in 10 minutes 37
+seconds and WilsonicController with it, because I wanted to see the
+difference before choosing. What I saw was that the build with it does not
+link: the object files for the shared-code library came to more than 4 GB
+and the librarian stopped with `LNK1248`. So on Windows `LTO=NO` is what
+lets the build link at all, and I suspect a Release build from Visual Studio
+on my laptop fails the same way today, which I have not checked. What surprised me in
+the other direction is that debug symbols cost almost nothing here. The two
+builds took between eleven and fourteen and a half minutes each with them
+and between ten and a half and thirteen and a half without, so the runner I
+happen to get matters more than the symbols do. The Projucer takes two and a half to three minutes to
+build on a cache miss and a second or two to restore on a hit. The job has a 90
+minute timeout.
+
+The silent install at the end of the Windows job is worth knowing the limits
+of. It proves that the installer runs, that the six files land where the
+table above says, that an existing `MTS-ESP.conf` survives and a missing one
+is written, and that an uninstall leaves the shared MTS-ESP files. The
+second pass downloads the v0.43 installer from this repo's v0.43-beta
+release, installs it, installs the new one over it, and checks that Windows
+then lists Wilsonic once, that the older `LIBMTS.dll` was replaced by the
+pinned one, and that an uninstall still leaves the MTS-ESP files. All of
+that runs on Windows Server with no audio host, so it does not tell me that
+the VST3 loads in Live or that a tuning reaches a client. I still have to do
+that by hand on a Windows machine.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
 in Phase 5. Nothing in the workflow reads a secret yet.

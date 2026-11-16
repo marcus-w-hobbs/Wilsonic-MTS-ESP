@@ -1,0 +1,7 @@
+# The Windows release job runs these under Git Bash, and Git for Windows
+# checks text files out with CRLF line endings by default. A shell script
+# with CRLF does not run, and a libMTS file with CRLF no longer matches the
+# sha256 in release/mts-esp/PIN. Keep both exactly as committed.
+release/**/*.sh text eol=lf
+scripts/*.sh    text eol=lf
+release/mts-esp/** -text

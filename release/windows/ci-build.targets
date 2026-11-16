@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Build switches for the Windows release job. build-project.sh copies this
+  file beside the generated solution as Directory.Build.targets, which MSBuild
+  imports at the end of every project in that folder, after the settings the
+  Projucer wrote. The .jucer files are not touched.
+
+  The Projucer writes its compile and link settings as item metadata
+  (ItemDefinitionGroup), and a /p: property on the msbuild command line cannot
+  reach item metadata. A later ItemDefinitionGroup can, so the two switches
+  live here and build-project.sh turns them on with a property each.
+
+  WilsonicLTO=NO           no whole program optimisation (/GL) and no
+                           link-time code generation (/LTCG). The Projucer
+                           turns both on for every Release configuration.
+  WilsonicDebugSymbols=NO  no /Zi and no .pdb files. The Projucer's Visual
+                           Studio exporter generates debug symbols in Release
+                           by default.
+
+  With neither property set this file changes nothing.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup Condition="'$(WilsonicLTO)' == 'NO'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(WilsonicDebugSymbols)' == 'NO'">
+    <ClCompile>
+      <DebugInformationFormat>None</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

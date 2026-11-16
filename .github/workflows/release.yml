@@ -1,20 +1,21 @@
 name: release
 run-name: release ${{ inputs.version || github.ref_name }}
-# The release pipeline from plans/release-pipeline.md. Phase 2: only the
-# prepare and mac jobs, unsigned. The windows and release jobs, signing and
+# The release pipeline from plans/release-pipeline.md. Phases 2 and 4: the
+# prepare, mac and windows jobs, all unsigned. The release job, signing and
 # notarization come in later phases.
 #
 # Runs on a v* tag push, by hand, and on pull requests that touch the
 # release tooling. A manual run never publishes anything in this phase: the
-# .pkg and the dSYMs stay attached to the workflow run as artifacts for 90
-# days.
+# .pkg, the .exe, the dSYMs and the PDBs stay attached to the workflow run as
+# artifacts for 90 days.
 #
-# The pull_request trigger is a permanent unsigned dry run of prepare and
-# mac, so a change to release/ or to this file is exercised on a real runner
-# before it merges. It is safe because that path signs nothing and reads no
-# secrets: prepare forces SIGNING=0 on pull_request and the artifact keeps
-# its -unsigned suffix. A dry run also builds without debug symbols and
-# uploads no dSYMs: dsymutil on the universal binaries cost 65 and 47
+# The pull_request trigger is a permanent unsigned dry run of prepare, mac
+# and windows, so a change to release/ or to this file is exercised on real
+# runners before it merges. It is safe because that path signs nothing and
+# reads no secrets: prepare forces SIGNING=0 on pull_request and the
+# artifacts keep their -unsigned suffix. A dry run also builds without debug
+# symbols and uploads no dSYMs or PDBs: dsymutil on the universal binaries
+# cost 65 and 47
 # minutes of the 3 h 39 min job in run 43054238610, and a dry run only has
 # to prove the pipeline. Without -g the compiles are faster too, so the dry
 # run took 1 h 02 min in run 43669865878, about a quarter of a real build.
@@ -60,6 +61,8 @@ jobs:
       signing: ${{ steps.version.outputs.signing }}
       debug_symbols: ${{ steps.version.outputs.debug_symbols }}
       mac_asset: ${{ steps.version.outputs.mac_asset }}
+      win_signing: ${{ steps.version.outputs.win_signing }}
+      win_asset: ${{ steps.version.outputs.win_asset }}
     steps:
       - uses: actions/checkout@v4
       - name: Check version consistency
@@ -100,6 +103,14 @@ jobs:
           else
             mac_asset="Wilsonic_Mac_v${version}-unsigned.pkg"
           fi
+          # Windows code signing is off for now (decision 4 in the plan), on
+          # every kind of run, so the installer always carries -unsigned.
+          win_signing=0
+          if [ "$win_signing" = "1" ]; then
+            win_asset="Wilsonic_Win64_v${version}.exe"
+          else
+            win_asset="Wilsonic_Win64_v${version}-unsigned.exe"
+          fi
           {
             echo "version=$version"
             echo "is_prerelease=$is_prerelease"
@@ -107,8 +118,10 @@ jobs:
             echo "signing=$signing"
             echo "debug_symbols=$debug_symbols"
             echo "mac_asset=$mac_asset"
+            echo "win_signing=$win_signing"
+            echo "win_asset=$win_asset"
           } >> "$GITHUB_OUTPUT"
-          echo "version $version, prerelease $is_prerelease, dry run $dry_run, signing $signing, debug symbols $debug_symbols, mac asset $mac_asset, publish ${{ inputs.publish || false }}"
+          echo "version $version, prerelease $is_prerelease, dry run $dry_run, signing $signing, debug symbols $debug_symbols, mac asset $mac_asset, windows signing $win_signing, windows asset $win_asset, publish ${{ inputs.publish || false }}"
 
   mac:
     needs: prepare
@@ -237,4 +250,174 @@ jobs:
         with:
           name: Wilsonic_Mac_v${{ env.VERSION }}-dSYMs
           path: release/dsyms
+          if-no-files-found: warn
+
+  windows:
+    needs: prepare
+    runs-on: windows-2022
+    # The job took 26 min 19 s and 31 min 14 s with debug symbols (runs
+    # 43763913790 and 43767579628) and 31 min 43 s as a dry run (run
+    # 43763872675); two builds of eleven to fourteen minutes each are nearly
+    # all of it. Ninety minutes lets a
+    # slow runner finish and still fails a stuck build early.
+    timeout-minutes: 90
+    defaults:
+      run:
+        # Git Bash, so the same scripts run here and under the test on a Mac.
+        shell: bash
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+      # YES on tag push and workflow_dispatch, NO on the pull_request dry run.
+      # build-project.sh turns NO into no /Zi and no .pdb. Unlike on the Mac
+      # this saves almost no time (about half a minute per project); it is
+      # here so both platforms follow one rule.
+      DEBUG_SYMBOLS: ${{ needs.prepare.outputs.debug_symbols }}
+      # The Projucer turns whole program optimisation (/GL and /LTCG) on for
+      # every Release configuration, and neither .jucer overrides it. On this
+      # runner that build does not finish at all: in run 43761715303 the
+      # WilsonicController shared-code library, compiled with /GL, came to
+      # more than 4 GB and the librarian stopped with "LNK1248: image size
+      # exceeds maximum allowable size" after seven minutes. NO makes it an
+      # ordinary /O2 build, which took 10 min 37 s for Wilsonic in the same
+      # run. build-project.sh passes the switch and then checks the compiler
+      # command lines in the log, so it cannot silently stop working.
+      LTO: 'NO'
+    steps:
+      - uses: actions/checkout@v4
+
+      # First, because nothing below can work without it: both .jucer files
+      # need a Visual Studio 2022 exporter with a Release configuration. If
+      # one is missing the step says which, and the fix is a plugin-lane
+      # change to a .jucer, not something this job does.
+      - name: Check both projects have a Visual Studio 2022 exporter
+        run: release/windows/check-exporter.sh
+
+      - name: Test the Windows release scripts
+        run: release/windows/test-windows-scripts.sh
+
+      - name: Put msbuild on PATH
+        uses: microsoft/setup-msbuild@v2
+
+      # Every module in both .jucer files uses the Projucer's global module
+      # path, and on Windows that defaults to C:\JUCE\modules, so the clone
+      # goes to C:\JUCE. As in the mac job, the clone comes before the cache
+      # restore, because git refuses to clone into a non-empty folder.
+      - name: Clone JUCE ${{ env.JUCE_TAG }}
+        run: git clone --depth=1 -b "$JUCE_TAG" https://github.com/juce-framework/JUCE.git /c/JUCE
+
+      - name: Restore the Projucer build
+        id: projucer
+        uses: actions/cache@v4
+        with:
+          path: C:\JUCE\extras\Projucer\Builds\VisualStudio2022\x64\Release\App\Projucer.exe
+          key: projucer-windows-2022-juce-${{ env.JUCE_TAG }}
+
+      - name: Build the Projucer
+        if: steps.projucer.outputs.cache-hit != 'true'
+        run: |
+          msbuild.exe 'C:\JUCE\extras\Projucer\Builds\VisualStudio2022\Projucer.sln' \
+            -m -nologo -v:minimal -p:Configuration=Release -p:Platform=x64
+
+      - name: Resave the projects
+        run: |
+          PROJUCER='/c/JUCE/extras/Projucer/Builds/VisualStudio2022/x64/Release/App/Projucer.exe'
+          "$PROJUCER" --resave Wilsonic.jucer
+          "$PROJUCER" --resave WilsonicController.jucer
+          # The Projucer is a GUI program, so do not trust its exit status alone.
+          test -f Builds/VisualStudio2022/Wilsonic.sln
+          test -f Builds/VisualStudio2022-WilsonicController/WilsonicController.sln
+
+      - name: Build Wilsonic (Release, x64)
+        run: release/windows/build-project.sh Builds/VisualStudio2022/Wilsonic.sln
+
+      - name: Build WilsonicController (Release, x64)
+        run: release/windows/build-project.sh Builds/VisualStudio2022-WilsonicController/WilsonicController.sln
+
+      - name: Upload the build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wilsonic_Win64_v${{ env.VERSION }}-build-logs
+          path: Builds/VisualStudio2022*/msbuild-*.log
+          if-no-files-found: ignore
+
+      # Windows code signing is off (decision 4 in plans/release-pipeline.md),
+      # and this step is where it goes when that changes. It does not run
+      # while prepare outputs win_signing=0, and it reads no secret: the env
+      # block that would read them is commented out. To turn signing on, add
+      # the two secrets, uncomment the env block, and make prepare output
+      # win_signing=1 for tag and manual runs only, never for pull_request.
+      # build-installer.sh then passes SIGNTOOL_COMMAND to Inno Setup, which
+      # signs the four products, the uninstaller and the installer itself.
+      # Nobody has run this with a real certificate. New certificates live on
+      # hardware or in a cloud service rather than in a .pfx, so the likely
+      # real version replaces the body below with Azure Trusted Signing's
+      # signtool arguments and keeps the SIGNTOOL_COMMAND line.
+      - name: Set up code signing (disabled)
+        if: needs.prepare.outputs.win_signing == '1'
+        shell: pwsh
+        # env:
+        #   WINDOWS_SIGNING_CERT_PFX: ${{ secrets.WINDOWS_SIGNING_CERT_PFX }}            # base64 of the .pfx
+        #   WINDOWS_SIGNING_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+        run: |
+          $pfx = Join-Path $env:RUNNER_TEMP 'signing.pfx'
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_SIGNING_CERT_PFX))
+          $password = ConvertTo-SecureString $env:WINDOWS_SIGNING_CERT_PASSWORD -AsPlainText -Force
+          $cert = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
+          Remove-Item $pfx
+          $signtool = (Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Sort-Object FullName | Select-Object -Last 1).FullName
+          # Inno Setup's sign tool syntax: $q is a quote, $f the quoted file name.
+          "SIGNTOOL_COMMAND=`$q$signtool`$q sign /sha1 $($cert.Thumbprint) /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 `$f" >> $env:GITHUB_ENV
+
+      - name: Build the installer
+        # SIGNING comes from prepare, which is 0 today on every kind of run.
+        # build-installer.sh names the output -unsigned.exe when 0.
+        env:
+          SIGNING: ${{ needs.prepare.outputs.win_signing }}
+        run: |
+          release/windows/build-installer.sh --out release/out
+          test -f "release/out/${{ needs.prepare.outputs.win_asset }}"
+
+      # Install it on the runner, silently, and look at what it did: the six
+      # files, an existing MTS-ESP.conf left alone, a missing one written,
+      # and the shared MTS-ESP files still there after an uninstall. This is
+      # a Windows Server image with no audio host, so it says nothing about
+      # whether the plugin works in a DAW.
+      - name: Smoke-test the installer
+        shell: pwsh
+        run: release/windows/smoke-install.ps1 -Installer "release/out/${{ needs.prepare.outputs.win_asset }}" -Version $env:VERSION
+
+      # The same again as an upgrade: install the last release made with the
+      # old installer, then this one over it. One entry under Apps, the older
+      # LIBMTS.dll replaced by the pinned one, and an uninstall that still
+      # leaves the shared MTS-ESP files, which is what UninstallLogMode in
+      # wilsonic.iss is for. The old installer is this repo's own public
+      # release asset, fetched without a token and checked against its
+      # sha256. After the first release from this pipeline, point both lines
+      # at that release instead.
+      - name: Smoke-test an upgrade over v0.43
+        shell: pwsh
+        env:
+          UPGRADE_FROM_URL: https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP/releases/download/v0.43-beta/WilsonicInstaller64_0_43b.exe
+          UPGRADE_FROM_SHA256: 8467f49edc5d35dde92f28e4e919480aaf51005bc4b00182626907b52cb9828a
+        run: |
+          $old = Join-Path $env:RUNNER_TEMP 'WilsonicInstaller64_0_43b.exe'
+          Invoke-WebRequest -Uri $env:UPGRADE_FROM_URL -OutFile $old
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $old).Hash.ToLower()
+          if ($hash -ne $env:UPGRADE_FROM_SHA256) { throw "the v0.43 installer has sha256 $hash, expected $env:UPGRADE_FROM_SHA256" }
+          release/windows/smoke-install.ps1 -Installer "release/out/${{ needs.prepare.outputs.win_asset }}" -Version $env:VERSION -UpgradeFrom $old
+
+      - name: Upload the installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.prepare.outputs.win_signing == '1' && format('Wilsonic_Win64_v{0}', env.VERSION) || format('Wilsonic_Win64_v{0}-unsigned', env.VERSION) }}
+          path: release/out/${{ needs.prepare.outputs.win_asset }}
+          if-no-files-found: error
+
+      - name: Upload PDBs
+        if: needs.prepare.outputs.debug_symbols == 'YES'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wilsonic_Win64_v${{ env.VERSION }}-PDBs
+          path: Builds/VisualStudio2022*/x64/Release/**/*.pdb
           if-no-files-found: warn
