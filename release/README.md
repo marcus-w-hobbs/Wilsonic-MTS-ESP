@@ -14,7 +14,7 @@ a dry run. The GitHub release itself is a later phase.
 | `mac/build-pkg.sh` | Builds the macOS installer from already-built products with `pkgbuild` and `productbuild`. |
 | `mac/distribution.xml` | The product definition: title, `hostArchitectures="x86_64,arm64"`, minimum macOS, one choice per component. |
 | `mac/test-build-pkg.sh` | Test for the two files above. It fakes the six product bundles, so it needs neither Xcode nor a certificate. |
-| `mac/signing-keychain.sh` | `setup` turns the six Apple secrets into a temporary keychain and a notary key file, and checks that every one of them works. `unlock` unlocks the keychain again. `teardown` deletes all of it. |
+| `mac/signing-keychain.sh` | `setup` turns the six Apple secrets into a temporary keychain and a notary key file, and checks that every one of them works. `check` does the same and then deletes everything again. `teardown` deletes all of it. |
 | `mac/notarize.sh` | Submits a signed package to Apple with `notarytool`, waits, prints Apple's log, and staples the ticket. |
 | `mac/verify-pkg.sh` | Checks a finished package with `pkgutil`, `spctl`, `stapler` and `codesign`, and fails on any miss. |
 | `mac/test-signing.sh` | Test for the three scripts above and for `build-pkg.sh` with `SIGNING=1`. It fakes `security`, `productsign`, `spctl` and `xcrun`, and signs ad hoc, so it needs no certificate and no Apple account. |
@@ -134,7 +134,7 @@ I never run these two by hand for a release, because the workflow does, but
 
 A signed run needs six repository secrets, and
 [the plan](../plans/release-pipeline.md) lists them under "Secrets".
-`signing-keychain.sh setup` reads them from the environment at the start of
+`signing-keychain.sh check` reads them from the environment at the start of
 the `mac` job. If one is missing the job stops there and names it, and it
 never goes on to build an unsigned package. If they are all present the
 script tries each one out: it imports the two `.p12` files into a temporary
@@ -146,6 +146,14 @@ only start once all six are known to work. It also prints the day each
 certificate expires and puts a warning on the run when one has fewer than
 45 days left. The certificates last about a year, and the plan's "Recurring
 maintenance" section has the renewal steps.
+
+`check` then deletes the keychain and the decoded key again. I had it keep
+them at first, and a review of this work pointed out what that meant: JUCE,
+the Projucer and `xcodebuild` would all have run for hours on a machine with
+an unlocked signing keychain and the notary key on disk. So the job makes
+the keychain a second time, with `signing-keychain.sh setup`, only when the
+build has finished and the next step is the one that signs. That costs a
+second or two.
 
 None of these scripts prints a secret, and the ones that handle them switch
 shell tracing off. The keychain and the decoded key are deleted by a step
@@ -265,13 +273,13 @@ manual run sign and notarize the macOS package. Three jobs exist today:
    rename the build. It outputs the version, whether it is a pre-release, and
    the asset name.
 2. `mac` on `macos-15` runs the packaging and signing tests, and on a tag
-   or manual run sets up the signing keychain and checks the Apple secrets.
+   or manual run tries out the Apple secrets with `signing-keychain.sh check`.
    Then it clones JUCE 9.0.1, restores the Projucer build from a cache keyed
    on the JUCE tag or builds it on a miss, resaves both `.jucer` files, and
    builds both projects in Release with `CODE_SIGN_IDENTITY="-"` and
-   `LLVM_LTO=NO`. On a tag or manual run `build-pkg.sh` runs with
-   `SIGNING=1`, `notarize.sh` and `verify-pkg.sh` follow, the keychain is
-   deleted, and the job uploads `Wilsonic_Mac_v<version>.pkg` and the dSYM
+   `LLVM_LTO=NO`. On a tag or manual run `signing-keychain.sh setup` makes
+   the keychain, `build-pkg.sh` runs with `SIGNING=1`, `notarize.sh` and
+   `verify-pkg.sh` follow, the keychain is deleted, and the job uploads `Wilsonic_Mac_v<version>.pkg` and the dSYM
    bundles as workflow artifacts. On a pull request `build-pkg.sh` runs with
    `SIGNING=0`, the builds pass `GCC_GENERATE_DEBUGGING_SYMBOLS=NO`, the
    signing and dSYM steps are skipped, and the one artifact is
@@ -366,8 +374,9 @@ the VST3 loads in Live or that a tuning reaches a client. I still have to do
 that by hand on a Windows machine.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
-in Phase 5. The only steps that read a secret are the signing setup and the
-notarization in the `mac` job, and both are skipped on a pull request.
+in Phase 5. The only steps that read a secret are the secrets check, the signing
+setup and the notarization in the `mac` job, and all three are skipped on a
+pull request.
 
 To try it by hand:
 

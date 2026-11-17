@@ -305,9 +305,9 @@ request dry run is still there for anyone who wants an unsigned package.
 Revisit if I ever need an unsigned build from a branch that has no pull
 request.
 
-### 2026-11-16: the secrets are tried out before the build starts
+### 2026-11-16: the secrets are tried out before the build starts, and the keychain exists only while signing
 
-`release/mac/signing-keychain.sh setup` runs right after the script tests,
+`release/mac/signing-keychain.sh check` runs right after the script tests,
 before JUCE is cloned. It makes a temporary keychain, imports both `.p12`
 files, checks that both identities are valid, signs a scratch file with each
 of them with a secure timestamp, and asks App Store Connect for the
@@ -317,20 +317,32 @@ between this step and the real signing takes about three and a half hours,
 so I wanted a wrong `.p12` password or a wrong issuer ID to cost one minute
 and to say which secret it was. The same step prints the day each
 certificate expires and puts a warning on the run when one has fewer than 45
-days left. The keychain has no lock timer, the signing step unlocks it again
-anyway, and a step marked `if: always()` deletes the keychain and the
-decoded key whether the job passed or failed. No script that touches a
-secret prints one or runs with tracing on, and `test-signing.sh` checks that
-by planting recognisable fake secrets and searching every log for them.
-I tried the whole signed path once before the first
-full build, as run 43986494367 on a throwaway branch where stub bundles
-stood in for the JUCE build, and the mac job took 70 seconds, notarization
-included. All six secrets worked the first time, which I had not expected.
-That stub package was notarized under my team and never uploaded, and the
-branch is deleted. Revisit if the probe signing ever fails for a reason that
-has nothing to do with the secrets, such as Apple's timestamp server being
-down, because then it would block a release that might have gone through
-three hours later.
+days left.
+
+Then it deletes the keychain and the decoded key again. My first version
+kept them for the signing step, and a code review of the branch pointed out
+that this left an unlocked signing keychain and the notary key on the runner
+for the whole build, beside a JUCE clone, a Projucer restored from a cache
+and everything `xcodebuild` runs. So the job now runs
+`signing-keychain.sh setup` a second time once the build has finished, just
+before `build-pkg.sh`, and a step marked `if: always()` deletes the keychain
+and the key after the verify step whether the job passed or failed. Making
+the keychain twice costs a second or two. No script that touches a secret
+prints one or runs with tracing on, and `test-signing.sh` checks that by
+planting recognisable fake secrets and searching every log for them.
+
+I tried the whole signed path once before the first full build, as run
+43986494367 on a throwaway branch where stub bundles stood in for the JUCE
+build, and the mac job took 70 seconds, notarization included. All six
+secrets worked the first time, which I had not expected. That stub package
+was notarized under my team and never uploaded, and the branch is deleted.
+A second short run, 43988075748, tried the check-then-setup order with stub
+bundles and without submitting anything to Apple, and confirmed that the
+signing folder and the keychain are gone between the two steps and again at
+the end. Revisit if the probe signing ever fails for a reason that has
+nothing to do with the secrets, such as Apple's timestamp server being down,
+because then it would block a release that might have gone through three
+hours later. Open question 8 is about who can reach these secrets at all.
 
 ### 2026-11-16: the Developer ID signature goes on after the build, in build-pkg.sh
 
@@ -432,7 +444,7 @@ release/
   mac/
     build-pkg.sh                 # pkgbuild x7, productbuild, and with SIGNING=1 codesign x6 and productsign
     distribution.xml             # title, hostArchitectures, choices, pkg-refs
-    signing-keychain.sh          # the temporary keychain from the Apple secrets; checks every secret before the build
+    signing-keychain.sh          # the temporary keychain from the Apple secrets: check before the build, setup before signing, teardown after
     notarize.sh                  # notarytool submit --wait, Apple's log, stapler staple
     verify-pkg.sh                # pkgutil, spctl, stapler and codesign checks on the finished package
     test-build-pkg.sh            # test for the packaging, from fake bundles
@@ -518,19 +530,21 @@ job does not run on `pull_request`.
 1. Restore a cached Projucer 9.0.1 build. Build it on a cache miss. Cache key
    is the JUCE tag.
 2. `Projucer --resave` both `.jucer` files.
-3. On a tag push or a manual run, `release/mac/signing-keychain.sh setup`:
+3. On a tag push or a manual run, `release/mac/signing-keychain.sh check`:
    create a temporary keychain, import the Developer ID Application and
-   Developer ID Installer `.p12` files, and check that all six secrets work
-   before the build starts. A missing secret fails the run. A pull request
-   dry run skips this, reads no secrets, and names its asset
-   `...-unsigned.pkg`.
+   Developer ID Installer `.p12` files, check that all six secrets work
+   before the build starts, and delete the keychain again. A missing secret
+   fails the run. A pull request dry run skips this, reads no secrets, and
+   names its asset `...-unsigned.pkg`.
 4. `xcodebuild` Release for `Wilsonic - All` and `WilsonicController - All`
    with `CODE_SIGN_IDENTITY="-"`, on every kind of run, and `LLVM_LTO=NO` on
    the command line, because the Projucer's Release default of full LTO ran
    the Wilsonic build past the six-hour job limit on the hosted runners.
    Outputs land in `Builds/MacOSX/build/Release` and
    `Builds/MacOSX-WilsonicController/build/Release`.
-5. `release/mac/build-pkg.sh`:
+5. On a tag push or a manual run, `release/mac/signing-keychain.sh setup`
+   makes the keychain again, now that the build is over. Then
+   `release/mac/build-pkg.sh`:
    - stage each product into its own root
      (`/Applications`, `/Library/Audio/Plug-Ins/Components`,
      `/Library/Audio/Plug-Ins/VST3`, `/Library/Application Support/MTS-ESP`)
@@ -821,6 +835,21 @@ sent to a client over MTS-ESP.
    is to add the entitlement to `hardenedRuntimeOptions` in both `.jucer`
    files, which is a plugin-lane change, and the release signing would pick
    it up without any change here.
+8. Should the six Apple secrets move into a GitHub Environment? They are
+   repository secrets today, so the `if:` conditions in `release.yml` keep
+   an honest pull request away from them and nothing more. Anyone who can
+   push a branch to this repo could edit the workflow in that branch and
+   read them, and so could a manual run on any branch or a `v*` tag on any
+   commit. Pull requests from forks cannot. An environment, say `release`,
+   that only `main` and `v*` tags may deploy to, with `environment: release`
+   on the `mac` job, would close that. The cost is that a manual run on a
+   branch could then no longer sign, and that is exactly how Phase 3 was
+   tested before it merged. A required reviewer on the environment would
+   keep branch runs possible with my approval. Today I am the only person
+   with write access, so this is mine to decide and it changes repository
+   settings, which is why it is a question here. The same review suggested
+   pinning the JUCE clone and the GitHub actions to commit hashes in place
+   of tags.
 
 ## Assumptions
 
