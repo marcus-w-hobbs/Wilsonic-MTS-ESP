@@ -219,7 +219,10 @@ entitlements_of() { # bundle
     local bundle="$1" out
     out="$WORK/entitlements/$(basename "$bundle").plist"
     mkdir -p "$WORK/entitlements"
-    codesign -d --entitlements - --xml "$bundle" > "$out" 2>/dev/null || true
+    # A bundle with no entitlements gives an empty file and status 0. A
+    # failure here would otherwise sign the bundle with none and lose them.
+    codesign -d --entitlements - --xml "$bundle" > "$out" 2>/dev/null \
+        || die "could not read the entitlements of $bundle; it should arrive signed, at least ad hoc"
     [ -s "$out" ] || return 0
     if /usr/libexec/PlistBuddy -c 'Delete :com.apple.security.get-task-allow' "$out" >/dev/null 2>&1; then
         log "$(basename "$bundle"): dropped the get-task-allow entitlement, which Apple does not notarize" >&2

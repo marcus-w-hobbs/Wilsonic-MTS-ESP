@@ -43,7 +43,7 @@ good() { echo "verify-pkg.sh: ok   $*"; }
 run() {
     local rc=0
     echo "\$ $*"
-    "$@" > "$WORK/out" 2>&1 || rc=$?
+    "$@" > "$WORK/out" 2>&1 </dev/null || rc=$?
     sed 's/^/  /' "$WORK/out"
     return "$rc"
 }
@@ -53,7 +53,7 @@ said() { grep -qF -- "$1" "$WORK/out"; }
 if run pkgutil --check-signature "$PKG"; then
     if said "$DEVELOPER_ID_INSTALLER"; then good "package signed by $DEVELOPER_ID_INSTALLER"
     else miss "package is not signed by \"$DEVELOPER_ID_INSTALLER\""; fi
-    if said "trusted timestamp"; then good "package signature has a trusted timestamp"
+    if said "Signed with a trusted timestamp"; then good "package signature has a trusted timestamp"
     else miss "package signature has no trusted timestamp"; fi
 else
     miss "pkgutil --check-signature failed"
@@ -89,7 +89,7 @@ while IFS= read -r bundle; do
     else miss "$name has no secure timestamp"; fi
     if grep -q 'flags=.*runtime' "$WORK/out"; then good "$name has the hardened runtime"
     else miss "$name does not have the hardened runtime"; fi
-    codesign -d --entitlements - --xml "$bundle" > "$WORK/entitlements" 2>/dev/null || true
+    codesign -d --entitlements - --xml "$bundle" > "$WORK/entitlements" 2>/dev/null </dev/null || true
     if grep -q 'get-task-allow' "$WORK/entitlements"; then miss "$name carries the get-task-allow entitlement"
     else good "$name has no get-task-allow entitlement"; fi
 done <<EOF

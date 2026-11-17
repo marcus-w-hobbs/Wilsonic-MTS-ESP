@@ -3,12 +3,17 @@
 # every Apple secret works before the long build starts.
 #
 # Usage:
+#   release/mac/signing-keychain.sh check      # try out the six secrets, then delete everything again
 #   release/mac/signing-keychain.sh setup      # the six secrets -> a keychain and a notary key file
-#   release/mac/signing-keychain.sh unlock     # unlock that keychain again before signing
 #   release/mac/signing-keychain.sh teardown   # delete the keychain and every decoded file
 #
-# setup reads six secrets from the environment and fails, naming the secret,
-# as soon as one is missing or does not work:
+# The workflow runs check before the long build and setup just before the
+# signing step, so the keychain and the decoded key exist only while the
+# steps that sign and notarize are running, and never while JUCE, the
+# Projucer and xcodebuild run.
+#
+# check and setup read six secrets from the environment and fail, naming the
+# secret, as soon as one is missing or does not work:
 #   APPLE_DEV_ID_APP_P12        base64 of the Developer ID Application .p12
 #   APPLE_DEV_ID_INSTALLER_P12  base64 of the Developer ID Installer .p12
 #   APPLE_P12_PASSWORD          the password both .p12 files were exported with
@@ -19,14 +24,14 @@
 #   DEVELOPER_ID_APP            "Developer ID Application: ... (TEAMID)"
 #   DEVELOPER_ID_INSTALLER      "Developer ID Installer: ... (TEAMID)"
 #
-# It then signs a scratch file with each identity and asks App Store Connect
+# Both then sign a scratch file with each identity and ask App Store Connect
 # for the notarization history, so a wrong password, an expired certificate or
 # a wrong issuer ID stops the job in its first minute and not after the build.
 # Nothing is submitted to Apple here.
 #
 # Everything lives in SIGNING_DIR (default $RUNNER_TEMP/wilsonic-signing).
 # setup writes SIGNING_KEYCHAIN and NOTARY_KEY_FILE to $GITHUB_ENV for the
-# later steps. It refuses to run on a pull_request event.
+# later steps. check and setup refuse to run on a pull_request event.
 #
 # This script never prints a secret, and tracing is switched off below so a
 # caller's `bash -x` cannot print one either.
@@ -38,7 +43,6 @@ log() { echo "signing-keychain.sh: $*"; }
 
 SIGNING_DIR="${SIGNING_DIR:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}/wilsonic-signing}"
 KEYCHAIN="$SIGNING_DIR/wilsonic-signing.keychain-db"
-KEYCHAIN_PASSWORD_FILE="$SIGNING_DIR/keychain-password"
 NOTARY_KEY="$SIGNING_DIR/notary-key.p8"
 SECRET_NAMES="APPLE_DEV_ID_APP_P12 APPLE_DEV_ID_INSTALLER_P12 APPLE_P12_PASSWORD APPLE_API_KEY_ID APPLE_API_ISSUER_ID APPLE_API_KEY_P8"
 # Warn when a certificate has less than this many days left.
@@ -91,7 +95,7 @@ report_expiry() { # identity-name
     fi
 }
 
-setup() {
+make_keychain() {
     if [ "${GITHUB_EVENT_NAME:-}" = "pull_request" ]; then
         die "refusing to set up signing on a pull_request run. Pull request dry runs are unsigned and read no secrets."
     fi
@@ -107,6 +111,10 @@ setup() {
     [ -n "${DEVELOPER_ID_INSTALLER:-}" ] || die "DEVELOPER_ID_INSTALLER is not set (a 'Developer ID Installer: ...' identity name)"
 
     umask 077
+    # A keychain left by an earlier setup comes off the search list first.
+    if [ -e "$KEYCHAIN" ]; then
+        security delete-keychain "$KEYCHAIN" >/dev/null 2>&1 || true
+    fi
     rm -rf "$SIGNING_DIR"
     mkdir -p "$SIGNING_DIR"
     chmod 700 "$SIGNING_DIR"
@@ -123,11 +131,9 @@ setup() {
     # ---- keychain ----
     local password
     password="$(openssl rand -hex 24)"
-    printf '%s' "$password" > "$KEYCHAIN_PASSWORD_FILE"
-    chmod 600 "$KEYCHAIN_PASSWORD_FILE"
     security create-keychain -p "$password" "$KEYCHAIN"
-    # No -t and no -u: the keychain never locks on a timer. The build between
-    # this step and the signing step takes hours.
+    # No -t and no -u: the keychain never locks on a timer, so it cannot lock
+    # itself between this step and the signing step.
     security set-keychain-settings "$KEYCHAIN"
     security unlock-keychain -p "$password" "$KEYCHAIN"
     import_p12 APPLE_DEV_ID_APP_P12 "$SIGNING_DIR/developer-id-application.p12"
@@ -136,12 +142,16 @@ setup() {
     # nobody can answer on a runner.
     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$password" "$KEYCHAIN" >/dev/null
     # Keep whatever is on the user search list and put this keychain first.
-    local existing=() line
+    local existing=() line search_list
+    search_list="$(security list-keychains -d user)" \
+        || die "could not read the keychain search list"
     while IFS= read -r line; do
         line="${line#"${line%%[![:space:]]*}"}"
         line="${line#\"}"; line="${line%\"}"
         [ -z "$line" ] || existing+=("$line")
-    done < <(security list-keychains -d user)
+    done <<EOF
+$search_list
+EOF
     security list-keychains -d user -s "$KEYCHAIN" ${existing[@]+"${existing[@]}"}
     log "created $KEYCHAIN"
 
@@ -160,7 +170,7 @@ setup() {
     echo "Wilsonic signing probe" > "$probe/root/file"
     if ! codesign --force --timestamp --keychain "$KEYCHAIN" --sign "$DEVELOPER_ID_APP" "$probe/file" > "$probe/codesign.log" 2>&1; then
         sed 's/^/  /' "$probe/codesign.log" >&2
-        die "codesign could not sign a scratch file with \"$DEVELOPER_ID_APP\". The certificate imported, so check that the .p12 in APPLE_DEV_ID_APP_P12 was exported together with its private key."
+        die "codesign could not sign a scratch file with \"$DEVELOPER_ID_APP\", the identity from APPLE_DEV_ID_APP_P12. The certificate imported and is valid, so the message above is the clue: errSecInternalComponent usually means the keychain is locked or codesign may not use the key (the partition list), and a timestamp error means Apple's timestamp server could not be reached. If neither fits, check that the .p12 was exported together with its private key."
     fi
     log "codesign signed a scratch file with a secure timestamp"
     pkgbuild --quiet --root "$probe/root" --identifier com.marcussatellite.wilsonic-signing-probe \
@@ -168,7 +178,7 @@ setup() {
     if ! productsign --timestamp --keychain "$KEYCHAIN" --sign "$DEVELOPER_ID_INSTALLER" \
             "$probe/probe.pkg" "$probe/probe-signed.pkg" > "$probe/productsign.log" 2>&1; then
         sed 's/^/  /' "$probe/productsign.log" >&2
-        die "productsign could not sign a scratch package with \"$DEVELOPER_ID_INSTALLER\". The certificate imported, so check that the .p12 in APPLE_DEV_ID_INSTALLER_P12 was exported together with its private key."
+        die "productsign could not sign a scratch package with \"$DEVELOPER_ID_INSTALLER\", the identity from APPLE_DEV_ID_INSTALLER_P12. The certificate imported and is valid, so the message above is the clue: a locked keychain, a key productsign may not use, or Apple's timestamp server being out of reach. If none of those fits, check that the .p12 was exported together with its private key."
     fi
     log "productsign signed a scratch package with a secure timestamp"
     rm -rf "$probe"
@@ -181,7 +191,10 @@ setup() {
     fi
     rm -f "$SIGNING_DIR/notarytool.log" "$SIGNING_DIR/import.log"
     log "App Store Connect accepted the API key"
+}
 
+setup() {
+    make_keychain
     if [ -n "${GITHUB_ENV:-}" ]; then
         {
             echo "SIGNING_KEYCHAIN=$KEYCHAIN"
@@ -191,10 +204,11 @@ setup() {
     log "ready: SIGNING_KEYCHAIN=$KEYCHAIN NOTARY_KEY_FILE=$NOTARY_KEY"
 }
 
-unlock() {
-    [ -f "$KEYCHAIN_PASSWORD_FILE" ] || die "$KEYCHAIN_PASSWORD_FILE not found; run setup first"
-    security unlock-keychain -p "$(cat "$KEYCHAIN_PASSWORD_FILE")" "$KEYCHAIN"
-    log "unlocked $KEYCHAIN"
+# The same checks as setup, with nothing left behind whether they pass or fail.
+check() {
+    trap teardown EXIT
+    make_keychain
+    log "all six secrets work"
 }
 
 teardown() {
@@ -209,8 +223,8 @@ teardown() {
 }
 
 case "${1:-}" in
+    check)    check ;;
     setup)    setup ;;
-    unlock)   unlock ;;
     teardown) teardown ;;
-    *) die "usage: signing-keychain.sh setup|unlock|teardown" ;;
+    *) die "usage: signing-keychain.sh check|setup|teardown" ;;
 esac

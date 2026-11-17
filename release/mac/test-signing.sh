@@ -54,12 +54,15 @@ FAKE
 # with the identity replaced by "-" (ad hoc) and without --timestamp and
 # --keychain, which ad hoc signing cannot use. A display call goes to the real
 # tool and then, when FAKE_AUTHORITY is set, adds the lines a Developer ID
-# signature would show. Everything else is the real tool.
+# signature would show, except for libMTS.dylib, whose real signature has to
+# speak for itself. FAKE_ENTITLEMENTS replaces what an entitlements query
+# prints. Everything else is the real tool.
 cat > "$FAKES/codesign" <<'FAKE'
 #!/bin/bash
 echo "codesign $*" >> "$FAKE_LOG"
 REAL=/usr/bin/codesign
-args=(); sign=0; display=0; skip=""
+args=(); sign=0; display=0; entitlements=0; skip=""
+last="${@: -1}"
 for a in "$@"; do
     if [ "$skip" = identity ]; then args+=("-"); skip=""; continue; fi
     if [ "$skip" = drop ]; then skip=""; continue; fi
@@ -68,6 +71,7 @@ for a in "$@"; do
         --timestamp) ;;
         --keychain) skip=drop ;;
         -d|-dv|-dvv|-dvvv|--display) display=1; args+=("$a") ;;
+        --entitlements) entitlements=1; args+=("$a") ;;
         *) args+=("$a") ;;
     esac
 done
@@ -78,9 +82,14 @@ if [ "$sign" = 1 ]; then
     fi
     exec "$REAL" "${args[@]}"
 fi
+if [ "$display" = 1 ] && [ "$entitlements" = 1 ] && [ -n "${FAKE_ENTITLEMENTS:-}" ]; then
+    printf '%s\n' "$FAKE_ENTITLEMENTS"
+    exit 0
+fi
 if [ "$display" = 1 ]; then
     rc=0
     "$REAL" "$@" || rc=$?
+    case "$last" in *libMTS.dylib) exit "$rc" ;; esac
     if [ -n "${FAKE_AUTHORITY:-}" ]; then
         {
             echo "Authority=$FAKE_AUTHORITY"
@@ -254,12 +263,6 @@ expect_grep "reports when the certificate expires" "expires" "$SANDBOX/setup.log
 expect_no_grep "no expiry warning for a certificate with a year left" "::warning" "$SANDBOX/setup.log"
 expect_no_secret "prints no secret value" "$SANDBOX/setup.log"
 
-echo "signing-keychain.sh unlock"
-rc=0
-SIGNING_DIR="$SIGNING_DIR" with_fakes "$KEYCHAIN_SH" unlock > "$SANDBOX/unlock.log" 2>&1 || rc=$?
-expect_zero "exit status 0" "$rc" "$SANDBOX/unlock.log"
-expect_eq "unlocked at setup and again on request" "$(calls "security unlock-keychain .*$KEYCHAIN")" "2"
-
 echo "signing-keychain.sh teardown"
 rc=0
 SIGNING_DIR="$SIGNING_DIR" with_fakes "$KEYCHAIN_SH" teardown > "$SANDBOX/teardown.log" 2>&1 || rc=$?
@@ -269,6 +272,38 @@ expect_no_file "signing folder gone, notary key with it" "$SIGNING_DIR"
 rc=0
 SIGNING_DIR="$SIGNING_DIR" with_fakes "$KEYCHAIN_SH" teardown > "$SANDBOX/teardown2.log" 2>&1 || rc=$?
 expect_zero "a second teardown is harmless" "$rc" "$SANDBOX/teardown2.log"
+
+echo "signing-keychain.sh check tries the secrets out and leaves nothing behind"
+fresh check
+run_keychain "$SANDBOX/check.log" check
+expect_zero "exit status 0" "$rc" "$SANDBOX/check.log"
+CHECK_KEYCHAIN="$SIGNING_DIR/wilsonic-signing.keychain-db"
+expect_eq "created a keychain" "$(calls "security create-keychain .*$CHECK_KEYCHAIN")" "1"
+expect_eq "imported two .p12 files" "$(calls 'security import .* -f pkcs12')" "2"
+expect_eq "probe-signed with the application identity" "$(calls "codesign .*--sign $APP_ID")" "1"
+expect_eq "probe-signed a package with the installer identity" "$(calls "productsign .*--sign $INSTALLER_ID")" "1"
+expect_eq "checked the API key against App Store Connect" "$(calls 'xcrun notarytool history')" "1"
+expect_eq "deleted the keychain again" "$(calls "security delete-keychain $CHECK_KEYCHAIN")" "1"
+expect_no_file "signing folder gone, notary key with it" "$SIGNING_DIR"
+expect_no_grep "exports nothing to later steps" "SIGNING_KEYCHAIN\|NOTARY_KEY_FILE" "$SANDBOX/github-env"
+expect_no_secret "prints no secret value" "$SANDBOX/check.log"
+
+echo "signing-keychain.sh check leaves nothing behind when a secret is wrong"
+fresh checkfail
+run_keychain "$SANDBOX/checkfail.log" check FAKE_HISTORY_RC=1
+expect_nonzero "non-zero exit" "$rc" "$SANDBOX/checkfail.log"
+expect_grep "names the key id secret" "APPLE_API_KEY_ID" "$SANDBOX/checkfail.log"
+expect_eq "deleted the keychain all the same" "$(calls "security delete-keychain $SIGNING_DIR/wilsonic-signing.keychain-db")" "1"
+expect_no_file "signing folder gone" "$SIGNING_DIR"
+
+echo "signing-keychain.sh setup twice in a row starts clean"
+fresh twice
+run_keychain "$SANDBOX/twice1.log" setup
+run_keychain "$SANDBOX/twice2.log" setup
+expect_zero "second setup exit status 0" "$rc" "$SANDBOX/twice2.log"
+expect_eq "took the first keychain off the search list before making the second" \
+    "$(calls "security delete-keychain $SIGNING_DIR/wilsonic-signing.keychain-db")" "1"
+SIGNING_DIR="$SIGNING_DIR" with_fakes "$KEYCHAIN_SH" teardown > /dev/null 2>&1 || true
 
 echo "signing-keychain.sh setup warns when a certificate is close to expiry"
 fresh soon
@@ -304,7 +339,8 @@ fresh probe
 run_keychain "$SANDBOX/probe.log" setup FAKE_CODESIGN_FAIL=1
 expect_nonzero "non-zero exit" "$rc" "$SANDBOX/probe.log"
 expect_grep "names the application .p12 secret" "APPLE_DEV_ID_APP_P12" "$SANDBOX/probe.log"
-expect_grep "shows what codesign said" "errSecInternalComponent" "$SANDBOX/probe.log"
+expect_grep "shows what codesign said" "  codesign: errSecInternalComponent" "$SANDBOX/probe.log"
+expect_grep "mentions the locked keychain as a cause" "keychain is locked" "$SANDBOX/probe.log"
 
 echo "signing-keychain.sh setup names the secret when the .p8 is not a key"
 fresh p8
@@ -339,8 +375,18 @@ cat > "$SANDBOX/build.entitlements" <<'PLIST'
 <key>com.apple.security.get-task-allow</key><true/>
 </dict></plist>
 PLIST
-/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$WBUILD/Wilsonic.app" 2>/dev/null
-/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$CBUILD/WilsonicController.app" 2>/dev/null
+# Unsigned copies, for the verify-pkg.sh test at the end.
+UNSIGNED_W="$SANDBOX/unsigned/wilsonic"
+UNSIGNED_C="$SANDBOX/unsigned/controller"
+mkdir -p "$SANDBOX/unsigned"
+ditto "$WBUILD" "$UNSIGNED_W"
+ditto "$CBUILD" "$UNSIGNED_C"
+for b in "$WBUILD"/Wilsonic.app "$CBUILD"/WilsonicController.app; do
+    /usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$b" 2>/dev/null
+done
+for b in "$WBUILD"/Wilsonic.component "$WBUILD"/Wilsonic.vst3 "$CBUILD"/WilsonicController.component "$CBUILD"/WilsonicController.vst3; do
+    /usr/bin/codesign --force --options runtime --sign - "$b" 2>/dev/null
+done
 
 echo "build-pkg.sh with SIGNING=1 signs the six products and the package"
 : > "$FAKE_LOG"
@@ -400,6 +446,19 @@ expect_nonzero "non-zero exit" "$rc" "$SANDBOX/adhoc.log"
 expect_grep "names libMTS.dylib" "libMTS.dylib" "$SANDBOX/adhoc.log"
 expect_grep "says what is missing" "Developer ID" "$SANDBOX/adhoc.log"
 expect_no_file "wrote no package" "$SANDBOX/out-adhoc/Wilsonic_Mac_v${TEST_VERSION}.pkg"
+
+echo "build-pkg.sh with SIGNING=1 refuses a bundle whose entitlements it cannot read"
+NOSIG_W="$SANDBOX/nosig/wilsonic"
+mkdir -p "$SANDBOX/nosig"
+ditto "$WBUILD" "$NOSIG_W"
+/usr/bin/codesign --remove-signature "$NOSIG_W/Wilsonic.vst3"
+rc=0
+SIGNING=1 DEVELOPER_ID_APP="$APP_ID" DEVELOPER_ID_INSTALLER="$INSTALLER_ID" \
+    with_fakes "$BUILD" --version "$TEST_VERSION" --wilsonic-build "$NOSIG_W" --controller-build "$CBUILD" \
+    --out "$SANDBOX/out-nosig" > "$SANDBOX/nosig.log" 2>&1 || rc=$?
+expect_nonzero "non-zero exit" "$rc" "$SANDBOX/nosig.log"
+expect_grep "names the bundle" "entitlements of .*Wilsonic.vst3" "$SANDBOX/nosig.log"
+expect_no_file "wrote no package" "$SANDBOX/out-nosig/Wilsonic_Mac_v${TEST_VERSION}.pkg"
 
 echo "build-pkg.sh with SIGNING=1 stops when codesign fails"
 rc=0
@@ -504,37 +563,81 @@ expect_grep "shows the spctl verdict" "source=Notarized Developer ID" "$SANDBOX/
 expect_grep "shows the pkgutil verdict" "trusted by the Apple notary service" "$SANDBOX/verify.log"
 expect_grep "says that everything passed" "all checks passed" "$SANDBOX/verify.log"
 
+# Each case must fail for its own reason: exactly one MISS, and the right one.
+expect_only_miss() { # desc logfile miss-text
+    expect_nonzero "$1" "$rc" "$2"
+    expect_grep "$1: says so" "MISS $3" "$2"
+    expect_eq "$1: nothing else missed" "$(grep -c 'MISS ' "$2" || true)" "1"
+}
+
 echo "verify-pkg.sh fails on each miss"
 run_verify "$SANDBOX/v-pkgutil.log" FAKE_PKGUTIL_RC=1 "FAKE_PKGUTIL_OUTPUT=Status: no signature"
-expect_nonzero "pkgutil finds no signature" "$rc" "$SANDBOX/v-pkgutil.log"
+expect_only_miss "pkgutil finds no signature" "$SANDBOX/v-pkgutil.log" "pkgutil --check-signature failed"
 run_verify "$SANDBOX/v-installer.log" "FAKE_PKGUTIL_OUTPUT=   Status: signed by a developer certificate issued by Apple for distribution
+   Signed with a trusted timestamp on: 2026-11-16 20:00:00 +0000
     1. Developer ID Installer: Someone Else (OTHERTEAM1)"
-expect_nonzero "package signed by another installer identity" "$rc" "$SANDBOX/v-installer.log"
+expect_only_miss "package signed by another installer identity" "$SANDBOX/v-installer.log" "package is not signed by"
+run_verify "$SANDBOX/v-pkg-timestamp.log" "FAKE_PKGUTIL_OUTPUT=   Status: signed by a developer certificate issued by Apple for distribution
+   Signed with an untrusted timestamp on: 2026-11-16 20:00:00 +0000
+    1. $INSTALLER_ID"
+expect_only_miss "package without a trusted timestamp" "$SANDBOX/v-pkg-timestamp.log" "package signature has no trusted timestamp"
 run_verify "$SANDBOX/v-spctl-rc.log" FAKE_SPCTL_RC=3 "FAKE_SPCTL_OUTPUT=$PKG: rejected
 source=Unnotarized Developer ID"
-expect_nonzero "spctl rejects" "$rc" "$SANDBOX/v-spctl-rc.log"
+expect_only_miss "spctl rejects" "$SANDBOX/v-spctl-rc.log" "Gatekeeper (spctl -t install) does not accept"
 expect_grep "shows what spctl said" "Unnotarized" "$SANDBOX/v-spctl-rc.log"
 run_verify "$SANDBOX/v-spctl-src.log" "FAKE_SPCTL_OUTPUT=$PKG: accepted
 override=security disabled"
-expect_nonzero "spctl accepts without saying Notarized Developer ID" "$rc" "$SANDBOX/v-spctl-src.log"
+expect_only_miss "spctl accepts without saying Notarized Developer ID" "$SANDBOX/v-spctl-src.log" "spctl accepted the package without saying"
 run_verify "$SANDBOX/v-staple.log" FAKE_VALIDATE_RC=65
-expect_nonzero "stapler validate fails" "$rc" "$SANDBOX/v-staple.log"
+expect_only_miss "stapler validate fails" "$SANDBOX/v-staple.log" "xcrun stapler validate failed"
+
 run_verify "$SANDBOX/v-authority.log" "FAKE_AUTHORITY=Developer ID Application: Someone Else (OTHERTEAM1)"
-expect_nonzero "a bundle signed by another identity" "$rc" "$SANDBOX/v-authority.log"
-expect_grep "names the identity it wanted" "$APP_ID" "$SANDBOX/v-authority.log"
+expect_nonzero "bundles signed by another identity" "$rc" "$SANDBOX/v-authority.log"
+expect_eq "six misses, one per bundle, all about the identity" \
+    "$(grep -c "MISS .* is not signed by \"$APP_ID\"" "$SANDBOX/v-authority.log" || true)" "6"
+expect_eq "and no other miss" "$(grep -c 'MISS ' "$SANDBOX/v-authority.log" || true)" "6"
+
 run_verify "$SANDBOX/v-adhoc.log" FAKE_AUTHORITY=
 expect_nonzero "bundles with only an ad hoc signature" "$rc" "$SANDBOX/v-adhoc.log"
+expect_eq "six misses about the identity" "$(grep -c 'MISS .* is not signed by' "$SANDBOX/v-adhoc.log" || true)" "6"
+expect_eq "six misses about the timestamp" "$(grep -c 'MISS .* has no secure timestamp' "$SANDBOX/v-adhoc.log" || true)" "6"
+expect_eq "and no other miss" "$(grep -c 'MISS ' "$SANDBOX/v-adhoc.log" || true)" "12"
 
-echo "verify-pkg.sh fails on a package with an unsigned bundle inside"
+run_verify "$SANDBOX/v-taskallow.log" 'FAKE_ENTITLEMENTS=<plist><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>'
+expect_nonzero "bundles that carry get-task-allow" "$rc" "$SANDBOX/v-taskallow.log"
+expect_eq "six misses about get-task-allow" "$(grep -c 'MISS .* carries the get-task-allow entitlement' "$SANDBOX/v-taskallow.log" || true)" "6"
+expect_eq "and no other miss" "$(grep -c 'MISS ' "$SANDBOX/v-taskallow.log" || true)" "6"
+
+PKG_SIGNED="$PKG"
+
+echo "verify-pkg.sh fails on a package whose libMTS.dylib is not the pinned, signed build"
 rc=0
 SIGNING=0 "$BUILD" --version "$TEST_VERSION" --wilsonic-build "$WBUILD" --controller-build "$CBUILD" \
+    --mts-esp "$ADHOC_MTS" --out "$SANDBOX/out-unpinned" > "$SANDBOX/unpinned-build.log" 2>&1 || rc=$?
+expect_zero "built a package around an ad hoc libMTS.dylib" "$rc" "$SANDBOX/unpinned-build.log"
+PKG="$SANDBOX/out-unpinned/Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg"
+# The bundles in it are the ad hoc ones Xcode would leave, which the fake
+# vouches for; the fake does not vouch for libMTS.dylib.
+run_verify "$SANDBOX/v-unpinned.log" 'FAKE_ENTITLEMENTS=<plist><dict/></plist>'
+expect_nonzero "non-zero exit" "$rc" "$SANDBOX/v-unpinned.log"
+expect_grep "misses the Developer ID signature" "MISS libMTS.dylib has no Developer ID signature" "$SANDBOX/v-unpinned.log"
+expect_grep "misses the PIN" "MISS libMTS.dylib sha256" "$SANDBOX/v-unpinned.log"
+expect_eq "and no other miss" "$(grep -c 'MISS ' "$SANDBOX/v-unpinned.log" || true)" "2"
+
+echo "verify-pkg.sh fails on a package with unsigned bundles inside"
+rc=0
+SIGNING=0 "$BUILD" --version "$TEST_VERSION" --wilsonic-build "$UNSIGNED_W" --controller-build "$UNSIGNED_C" \
     --out "$SANDBOX/out-unsigned" > "$SANDBOX/unsigned-build.log" 2>&1 || rc=$?
-# The .component and .vst3 stubs carry only the linker's ad hoc signature of
-# the executable, with no sealed bundle, so a strict verify must refuse them.
-PKG_SIGNED="$PKG"
+expect_zero "built an unsigned package" "$rc" "$SANDBOX/unsigned-build.log"
+# These stubs carry only the linker's ad hoc signature of the executable,
+# with no sealed bundle and no hardened runtime.
 PKG="$SANDBOX/out-unsigned/Wilsonic_Mac_v${TEST_VERSION}-unsigned.pkg"
 run_verify "$SANDBOX/v-unsigned.log"
 expect_nonzero "non-zero exit" "$rc" "$SANDBOX/v-unsigned.log"
+expect_eq "six bundles fail the deep, strict verify" \
+    "$(grep -c 'MISS .*codesign --verify --deep --strict failed' "$SANDBOX/v-unsigned.log" || true)" "6"
+expect_eq "six bundles lack the hardened runtime" \
+    "$(grep -c 'MISS .* does not have the hardened runtime' "$SANDBOX/v-unsigned.log" || true)" "6"
 PKG="$PKG_SIGNED"
 
 finish
