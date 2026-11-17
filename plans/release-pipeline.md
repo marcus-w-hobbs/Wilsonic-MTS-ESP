@@ -272,6 +272,129 @@ Setup or a new version changes the result, in which case the job should
 install a pinned version itself, and the third after the first release from
 this pipeline, when the upgrade test should start from that release.
 
+### 2026-11-16: new Developer ID certificates and an API key for notarization (Phase 0)
+
+Decision 2 in the table says the state of the Apple account was unknown. I
+checked it. The Developer ID Application and Developer ID Installer
+certificates that signed v0.43 both expired on 2026-10-04, so on 2026-11-16
+I created new ones on my M1 music laptop, which is the only Mac that holds
+their private keys. Both expire on 2027-12-16, so renewing them is a yearly
+task, and it is written down under "Recurring maintenance" below. Each
+certificate needed its own certificate signing request, because Apple
+rejects a request file that has already been used. I created additional
+certificates and revoked nothing, because revoking a Developer ID
+certificate breaks the installed copies of software already signed with it.
+Notarization uses an App Store Connect Team API key named "Wilsonic
+Notarization" with the Developer role. Its key ID and issuer ID are in the
+repository secrets and nowhere in this repo, which is public. I set the six
+`APPLE_*` secrets the same day. Revisit before 2027-12-16, and if the API
+key is ever revoked.
+
+### 2026-11-16: a tag or manual run is always signed, and a missing secret fails it
+
+The mac section of this plan used to say that when the signing secrets do
+not exist the job should build ad hoc, skip notarization and name the asset
+`-unsigned`, so that manual test builds kept working while the Apple account
+was unsorted. The account is sorted, so I took that fallback out. `prepare`
+turns signing on for every tag push and every manual run and off for every
+pull request, and nothing else decides it. A signed run that is missing a
+secret stops in the first minute of the mac job and names the secret. The
+failure I most want to avoid is a release that goes out unsigned without
+anyone noticing, and a run that fell back would have looked green. The pull
+request dry run is still there for anyone who wants an unsigned package.
+Revisit if I ever need an unsigned build from a branch that has no pull
+request.
+
+### 2026-11-16: the secrets are tried out before the build starts
+
+`release/mac/signing-keychain.sh setup` runs right after the script tests,
+before JUCE is cloned. It makes a temporary keychain, imports both `.p12`
+files, checks that both identities are valid, signs a scratch file with each
+of them with a secure timestamp, and asks App Store Connect for the
+notarization history with the API key. It submits nothing to Apple. When I
+wrote it the six secret values had never been used, and the build that sits
+between this step and the real signing takes about three and a half hours,
+so I wanted a wrong `.p12` password or a wrong issuer ID to cost one minute
+and to say which secret it was. The same step prints the day each
+certificate expires and puts a warning on the run when one has fewer than 45
+days left. The keychain has no lock timer, the signing step unlocks it again
+anyway, and a step marked `if: always()` deletes the keychain and the
+decoded key whether the job passed or failed. No script that touches a
+secret prints one or runs with tracing on, and `test-signing.sh` checks that
+by planting recognisable fake secrets and searching every log for them.
+I tried the whole signed path once before the first
+full build, as run 43986494367 on a throwaway branch where stub bundles
+stood in for the JUCE build, and the mac job took 70 seconds, notarization
+included. All six secrets worked the first time, which I had not expected.
+That stub package was notarized under my team and never uploaded, and the
+branch is deleted. Revisit if the probe signing ever fails for a reason that
+has nothing to do with the secrets, such as Apple's timestamp server being
+down, because then it would block a release that might have gone through
+three hours later.
+
+### 2026-11-16: the Developer ID signature goes on after the build, in build-pkg.sh
+
+Step 4 of the mac job in this plan had `xcodebuild` sign with the Developer
+ID identity. I left the build signed ad hoc on every kind of run and put the
+real signing in `build-pkg.sh`, which already had a `SIGNING=1` path from
+Phase 2. A dry run then builds exactly what a release builds, Xcode never
+needs the keychain, and the signing lives in a script that
+`release/mac/test-signing.sh` exercises on my Mac. Signing a bundle a second
+time replaces its signature and its entitlements with it, so the script
+first reads the entitlements Xcode gave each bundle and hands them back to
+`codesign`. Today that is one entitlement on each standalone app,
+`com.apple.security.cs.allow-dyld-environment-variables`, which comes from
+`hardenedRuntimeOptions` in the `.jucer` files, and none on the plugins. I
+read that off the package from run 43770766926 before writing the script.
+The script drops `com.apple.security.get-task-allow` if it ever finds it,
+because Xcode can add it to a build and Apple refuses to notarize it. One
+consequence is that the `release/mac/entitlements.plist` this plan once
+listed does not exist. The `.jucer` files remain the one place where
+entitlements are declared, and a change there reaches the release without
+any change here. Every bundle is signed with the hardened runtime and a
+secure timestamp, and `productsign` signs the package with a timestamp too.
+Revisit if a bundle ever gains nested code such as a helper or a framework.
+The deep verify that follows each signing call will fail when that happens,
+and the script will then have to sign from the inside out.
+
+### 2026-11-16: libMTS.dylib ships with ODDSound's own signature
+
+I expected to have to sign `libMTS.dylib` myself, because Apple notarizes a
+package only when every binary inside it carries a Developer ID signature
+and a secure timestamp. ODDSound already takes care of that. The pinned
+build is signed by `Developer ID Application: David Gamble (ZTMS6M322L)`
+with a timestamp of 2025-08-26. So the package installs their bytes
+unchanged. The file still matches `PIN`, it still carries the signature of
+the people who built it, and every other MTS-ESP plugin on the machine loads
+the same file it would get from ODDSound's own installer. With `SIGNING=1`,
+`build-pkg.sh` checks that signature before it builds anything and stops if
+it is missing, and `verify-pkg.sh` compares the packaged copy with `PIN`.
+Apple's notary service accepted the package that way in run 43986494367, and
+its log lists both slices of `libMTS.dylib` in the ticket. Revisit if a future libMTS arrives unsigned or Apple starts
+refusing it. Signing it with my identity would be the fallback, and the
+`PIN` comparison in the tests would then need rethinking. Looking at this
+turned up something else, which is open question 7.
+
+### 2026-11-16: four checks on the finished package, and the upload depends on them
+
+After stapling, `release/mac/verify-pkg.sh` runs
+`pkgutil --check-signature`, `spctl -a -vv -t install`,
+`xcrun stapler validate`, and `codesign --verify --deep --strict` on each of
+the six bundles inside the package, and it also checks that each bundle
+names my Developer ID Application identity, has a secure timestamp and the
+hardened runtime, and carries no `get-task-allow`. One miss fails the job,
+and the upload step comes after it, so a package that failed a check never
+becomes an artifact. For `spctl` the script insists on the words
+`source=Notarized Developer ID`, because on a machine where Gatekeeper is
+switched off `spctl` accepts everything and that acceptance would prove
+nothing. When Apple rejects a submission, `notarize.sh` prints Apple's log
+for it and fails; it prints the log for an accepted one as well, because an
+accepted submission can still carry warnings. Run 43986494367 passed every check on the stub package, with `spctl`
+answering `accepted`, `source=Notarized Developer ID`. What the job
+cannot tell me is whether the package installs and the plugins load on a
+real Mac. That is still the test gate, and I have not done it yet for a
+signed package.
+
 ## Facts that shape the design
 
 - This repo is public, so GitHub-hosted runners cost nothing, macOS included.
@@ -307,9 +430,14 @@ VERSION.txt                      # 0.45.0-beta (not "VERSION": that name shadows
 release/
   README.md                      # how to cut a release, one page
   mac/
-    build-pkg.sh                 # pkgbuild x7, productbuild, optional sign + notarize
+    build-pkg.sh                 # pkgbuild x7, productbuild, and with SIGNING=1 codesign x6 and productsign
     distribution.xml             # title, hostArchitectures, choices, pkg-refs
-    entitlements.plist           # hardened runtime entitlements for the standalone
+    signing-keychain.sh          # the temporary keychain from the Apple secrets; checks every secret before the build
+    notarize.sh                  # notarytool submit --wait, Apple's log, stapler staple
+    verify-pkg.sh                # pkgutil, spctl, stapler and codesign checks on the finished package
+    test-build-pkg.sh            # test for the packaging, from fake bundles
+    test-signing.sh              # test for the four signing scripts, with security, productsign, spctl and xcrun faked
+    test-lib.sh                  # what the two tests share
   windows/
     wilsonic.iss                 # Inno Setup, paths relative to repo root, version from /DVersion
     check-exporter.sh            # both .jucer files have a VS2022 exporter with a Release configuration
@@ -390,21 +518,26 @@ job does not run on `pull_request`.
 1. Restore a cached Projucer 9.0.1 build. Build it on a cache miss. Cache key
    is the JUCE tag.
 2. `Projucer --resave` both `.jucer` files.
-3. If signing secrets exist, create a temporary keychain and import the
-   Developer ID Application and Developer ID Installer `.p12` files. If they
-   do not exist, build ad-hoc, skip notarization, and name the asset
-   `...-unsigned.pkg`. This keeps manual test builds working before the
-   Apple account is sorted.
+3. On a tag push or a manual run, `release/mac/signing-keychain.sh setup`:
+   create a temporary keychain, import the Developer ID Application and
+   Developer ID Installer `.p12` files, and check that all six secrets work
+   before the build starts. A missing secret fails the run. A pull request
+   dry run skips this, reads no secrets, and names its asset
+   `...-unsigned.pkg`.
 4. `xcodebuild` Release for `Wilsonic - All` and `WilsonicController - All`
-   with `CODE_SIGN_IDENTITY="Developer ID Application: Perfect Buzz Music (LXFXL9GS49)"`,
-   hardened runtime on, timestamp on, and `LLVM_LTO=NO` on the command line,
-   because the Projucer's Release default of full LTO ran the Wilsonic build
-   past the six-hour job limit on the hosted runners. Outputs land in
-   `Builds/MacOSX/build/Release` and `Builds/MacOSX-WilsonicController/build/Release`.
+   with `CODE_SIGN_IDENTITY="-"`, on every kind of run, and `LLVM_LTO=NO` on
+   the command line, because the Projucer's Release default of full LTO ran
+   the Wilsonic build past the six-hour job limit on the hosted runners.
+   Outputs land in `Builds/MacOSX/build/Release` and
+   `Builds/MacOSX-WilsonicController/build/Release`.
 5. `release/mac/build-pkg.sh`:
    - stage each product into its own root
      (`/Applications`, `/Library/Audio/Plug-Ins/Components`,
      `/Library/Audio/Plug-Ins/VST3`, `/Library/Application Support/MTS-ESP`)
+   - when signing is on, `codesign` each of the six bundles with
+     `Developer ID Application: Perfect Buzz Music (LXFXL9GS49)`, the
+     hardened runtime, a secure timestamp and the entitlements the build
+     gave it
    - `pkgbuild` one component package per product with the same identifiers
      v0.43 used, for example `com.marcussatellite.Wilsonic-MTS-ESP.vst3`,
      so upgrades over v0.43 replace cleanly
@@ -412,9 +545,14 @@ job does not run on `pull_request`.
      `.pkg`, with `hostArchitectures="x86_64,arm64"` set in the XML rather
      than patched in afterwards
    - `productsign` with Developer ID Installer when signing is on
-6. `xcrun notarytool submit --wait` with the App Store Connect API key, then
-   `xcrun stapler staple`. On failure, print `notarytool log` and fail.
-7. Upload the `.pkg` and the `.dSYM` folders as artifacts. A `pull_request`
+6. `release/mac/notarize.sh`: `xcrun notarytool submit --wait` with the App
+   Store Connect API key, then `xcrun stapler staple`. It prints
+   `notarytool log` for the submission and fails on anything but Accepted.
+7. `release/mac/verify-pkg.sh`: `pkgutil --check-signature`,
+   `spctl -a -vv -t install`, `xcrun stapler validate`, and
+   `codesign --verify --deep --strict` on each bundle. Then, always, delete
+   the keychain and the decoded key.
+8. Upload the `.pkg` and the `.dSYM` folders as artifacts. A `pull_request`
    dry run builds without debug symbols and uploads only the `.pkg`.
 
 ### windows (windows-2022)
@@ -548,7 +686,11 @@ Design:
 1. On developer.apple.com, confirm team LXFXL9GS49 is active. Find or create
    a Developer ID Application and a Developer ID Installer certificate. Export
    each with its private key as `.p12` from Keychain Access on the Mac that
-   holds the key. If no Mac holds the key, revoke and create new ones.
+   holds the key. If no Mac holds the key, or the certificate has expired,
+   create an additional certificate with a new certificate signing request,
+   one request per certificate. Never revoke a Developer ID certificate to
+   make room for a new one, because revoking it breaks the installed copies
+   of software already signed with it.
 2. On App Store Connect, Users and Access, Integrations, create a Team key
    with the Developer role. Download the `.p8` once.
 3. Add the six Apple secrets to this repo. Delete the local `.p12` and `.p8`
@@ -556,6 +698,36 @@ Design:
 4. Confirm `VERCEL_DEPLOY_HOOK_URL` exists.
 5. Run the workflow by hand once with `publish: false` to confirm signing and
    notarization pass.
+
+All five were done by 2026-11-16. The decision log has the details.
+
+## Recurring maintenance
+
+What has to happen on a calendar, whether or not there is a release.
+
+- **Every year, before 2027-12-16 the first time: renew the two Developer ID
+  certificates.** Both the Application and the Installer certificate expire
+  on 2027-12-16. On the Mac that will hold the new private keys, which today
+  is my M1, make a new certificate signing request in Keychain Access for
+  each certificate, because Apple rejects a request file that was already
+  used. On developer.apple.com create an additional Developer ID Application
+  and an additional Developer ID Installer certificate from those requests.
+  Do not revoke the old ones. Export each new certificate with its private
+  key as a `.p12`, set `APPLE_DEV_ID_APP_P12` and
+  `APPLE_DEV_ID_INSTALLER_P12` to `base64 -i <file>` of each, set
+  `APPLE_P12_PASSWORD` if the password changed, and delete the `.p12` files.
+  Then run the workflow by hand, `gh workflow run release.yml`, and check
+  that the mac job passes. The setup step of that job prints the expiry date
+  of both certificates on every signed run and raises a warning on the run
+  once either has fewer than 45 days left, so a release in the last weeks
+  will remind me. If the name on the certificates ever changes, the two
+  identity names in the `env` block of the `mac` job change with it.
+- **The App Store Connect API key** has no expiry date. It needs replacing
+  only if it is revoked or leaks: create a new Team key with the Developer
+  role and set `APPLE_API_KEY_ID`, `APPLE_API_ISSUER_ID` and
+  `APPLE_API_KEY_P8` again.
+- **libMTS** is checked weekly by `mts-esp-bump.yml` once Phase 8 exists.
+  Until then I look at ODDSound's repository before each release.
 
 ## Migration from the installer repo
 
@@ -570,22 +742,38 @@ Design:
 
 ## Phases
 
-| Phase | Deliverable | Verify by |
-|-------|-------------|-----------|
-| 0 | Apple secrets in place | `security find-identity` inside a manual workflow run lists both Developer ID certs |
-| 1 | `VERSION.txt`, `set-version.sh`, `check-version.sh`, CI check on PRs | A PR that edits `version.h` by hand fails CI |
-| 2 | `release/mac/*`, `mac` job, manual run unsigned | `.pkg` artifact installs on M2 with `SIGNING=0` semantics |
-| 3 | `mac` job signed and notarized | `spctl --assess --type install` passes on the downloaded `.pkg` |
-| 4 | `release/windows/*`, `windows` job | `.exe` artifact installs on claw or a Windows VM |
-| 5 | `release` job, draft pre-release, generated notes | Tag `v0.45.0-beta` produces a draft with two assets and a notes body |
-| 6 | Website reads releases, hook on publish | Publishing the draft changes the download buttons within a few minutes |
-| 7 | Docs check and manual updates | `check-release-docs.sh` passes on main |
-| 8 | `mts-esp-bump.yml` | Manual run against a fake older `PIN` opens a PR |
-| 9 | Installer repo archived | Repo shows Archived on GitHub |
+| Phase | Deliverable | Verify by | Status |
+|-------|-------------|-----------|--------|
+| 0 | Apple secrets in place | `security find-identity` inside a manual workflow run lists both Developer ID certs | Complete, 2026-11-16 |
+| 1 | `VERSION.txt`, `set-version.sh`, `check-version.sh`, CI check on PRs | A PR that edits `version.h` by hand fails CI | Merged, #83 |
+| 2 | `release/mac/*`, `mac` job, manual run unsigned | `.pkg` artifact installs on M2 with `SIGNING=0` semantics | Merged, #84, #85 and #86 |
+| 3 | `mac` job signed and notarized | `spctl --assess --type install` passes on the downloaded `.pkg` | Built 2026-11-16. Not yet installed on a real Mac |
+| 4 | `release/windows/*`, `windows` job | `.exe` artifact installs on claw or a Windows VM | Merged 2026-11-16, #88. Not yet installed on a real Windows machine |
+| 5 | `release` job, draft pre-release, generated notes | Tag `v0.45.0-beta` produces a draft with two assets and a notes body | |
+| 6 | Website reads releases, hook on publish | Publishing the draft changes the download buttons within a few minutes | |
+| 7 | Docs check and manual updates | `check-release-docs.sh` passes on main | |
+| 8 | `mts-esp-bump.yml` | Manual run against a fake older `PIN` opens a PR | |
+| 9 | Installer repo archived | Repo shows Archived on GitHub | |
 
 Phases 1, 2, and 4 can start before Phase 0 completes. Phase 3 and 5 need it.
 
-Phase 4 was built on 2026-11-15 in pull request #88: `release/windows/` and
+Phase 0 was finished on 2026-11-16. I created the two Developer ID
+certificates and the App Store Connect API key and set the six `APPLE_*`
+secrets, and the decision log entry of that date has the details. Its verify
+step is the first thing the signed mac job does. In run
+43986494367 `security find-identity` listed both identities as valid, each
+key signed a scratch file with a secure timestamp, and App Store Connect
+accepted the API key.
+
+Phase 3 was built on 2026-11-16: on a tag push or a manual run the `mac` job
+signs the six bundles and the package, notarizes the package with Apple,
+staples the ticket and checks the result with `pkgutil`, `spctl`, `stapler`
+and `codesign`. Run 43986494367 did all of that on stub bundles. Its verify step is open in one respect.
+`spctl` passed on the runner, and nobody has yet downloaded the signed
+`.pkg` and installed it on a real Mac. That test is mine to do on the M1.
+
+Phase 4 was built on 2026-11-15 in pull request #88, which merged on
+2026-11-16: `release/windows/` and
 the `windows` job, which produces `Wilsonic_Win64_v0.44.0-unsigned.exe` on
 the `windows-2022` runner and installs it there silently as a smoke test,
 fresh and as an upgrade over v0.43. Its verify step is still open. Nobody
@@ -615,6 +803,24 @@ sent to a client over MTS-ESP.
    runner allows. It catches a broken AU before Marcus downloads anything.
 6. Which GitHub labels group the release notes? A first cut:
    `feature`, `fix`, `research`, `docs`, `chore`.
+7. Can the standalone apps load libMTS at all? Both are signed with the
+   hardened runtime, and their only entitlement is
+   `com.apple.security.cs.allow-dyld-environment-variables`. Under the
+   hardened runtime macOS refuses to load a library signed by a different
+   team unless the app has
+   `com.apple.security.cs.disable-library-validation`, and `libMTS.dylib` is
+   signed by ODDSound's team. I tried it on 2026-11-16 with a ten-line
+   program that calls `dlopen` on the installed `libMTS.dylib`: it loads
+   normally, fails with "mapping process and mapped file (non-platform) have
+   different Team IDs" once the program is signed with the hardened runtime,
+   and loads again with that entitlement added. The v0.43 standalone has the
+   same signature shape, so if this is a problem it is an old one. I have
+   not run the Wilsonic standalone itself to see whether it registers as the
+   MTS-ESP master. The plugins inside a host are a different case, because
+   the host process does the loading. If the standalone is affected, the fix
+   is to add the entitlement to `hardenedRuntimeOptions` in both `.jucer`
+   files, which is a plugin-lane change, and the release signing would pick
+   it up without any change here.
 
 ## Assumptions
 

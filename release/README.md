@@ -2,9 +2,10 @@
 
 This folder holds what turns a built Wilsonic into an installer. The design
 and the phases it is built in are in [plans/release-pipeline.md](../plans/release-pipeline.md).
-As of Phase 4 the macOS package and the Windows installer are both built
-unsigned in CI. Signing, notarization and the GitHub release itself are later
-phases.
+As of Phase 3 a tag push or a manual run builds the macOS package signed
+with my Developer ID certificates, notarized by Apple and stapled. The
+Windows installer is built unsigned. A pull request builds both unsigned as
+a dry run. The GitHub release itself is a later phase.
 
 ## What is here
 
@@ -13,6 +14,11 @@ phases.
 | `mac/build-pkg.sh` | Builds the macOS installer from already-built products with `pkgbuild` and `productbuild`. |
 | `mac/distribution.xml` | The product definition: title, `hostArchitectures="x86_64,arm64"`, minimum macOS, one choice per component. |
 | `mac/test-build-pkg.sh` | Test for the two files above. It fakes the six product bundles, so it needs neither Xcode nor a certificate. |
+| `mac/signing-keychain.sh` | `setup` turns the six Apple secrets into a temporary keychain and a notary key file, and checks that every one of them works. `unlock` unlocks the keychain again. `teardown` deletes all of it. |
+| `mac/notarize.sh` | Submits a signed package to Apple with `notarytool`, waits, prints Apple's log, and staples the ticket. |
+| `mac/verify-pkg.sh` | Checks a finished package with `pkgutil`, `spctl`, `stapler` and `codesign`, and fails on any miss. |
+| `mac/test-signing.sh` | Test for the three scripts above and for `build-pkg.sh` with `SIGNING=1`. It fakes `security`, `productsign`, `spctl` and `xcrun`, and signs ad hoc, so it needs no certificate and no Apple account. |
+| `mac/test-lib.sh` | The assertions and fake bundles the two tests share. |
 | `windows/wilsonic.iss` | The Inno Setup script for the 64-bit Windows installer. Paths are relative to the repo root and the version comes from `/DVersion=`. |
 | `windows/check-exporter.sh` | Checks that both `.jucer` files have a Visual Studio 2022 exporter with a Release configuration, and says which one does not. |
 | `windows/build-project.sh` | Builds one generated solution in Release for x64 with `msbuild`, with link-time optimisation and debug symbols switched by `LTO` and `DEBUG_SYMBOLS`. |
@@ -73,9 +79,10 @@ and the file name carry the full string. The minimum macOS in
 ### Signing
 
 `SIGNING=0` is the default and does nothing. With `SIGNING=1`, the script
-codesigns each product with the hardened runtime and a secure timestamp
-using the identity in `DEVELOPER_ID_APP`, then signs the product with the
-identity in `DEVELOPER_ID_INSTALLER` and drops the `-unsigned` suffix:
+signs each of the six bundles with the hardened runtime and a secure
+timestamp using the identity in `DEVELOPER_ID_APP`, then signs the package
+with the identity in `DEVELOPER_ID_INSTALLER` and drops the `-unsigned`
+suffix:
 
 ```bash
 SIGNING=1 \
@@ -84,18 +91,80 @@ DEVELOPER_ID_INSTALLER="Developer ID Installer: Perfect Buzz Music (LXFXL9GS49)"
 release/mac/build-pkg.sh
 ```
 
-Notarization and stapling are not in the script yet. That is Phase 3, and
-it needs the Apple secrets that do not exist yet.
+That works on a Mac whose keychain holds both identities, which today is
+only my M1. When `SIGNING_KEYCHAIN` is set, both tools look in that keychain
+and nowhere else, and that is how CI runs it.
 
-### Testing the script
+Two details are worth knowing. The bundles come out of Xcode signed ad hoc,
+and signing a bundle again replaces its entitlements along with its
+signature, so the script reads the entitlements each bundle was built with
+and passes them back to `codesign`. Today that is
+`com.apple.security.cs.allow-dyld-environment-variables` on the two
+standalone apps, from `hardenedRuntimeOptions` in the `.jucer` files, and
+nothing on the plugins. It drops `get-task-allow` if it finds it, because
+Apple will not notarize a binary that has it. And `libMTS.dylib` is not
+signed again. ODDSound ships it signed with their own Developer ID and a
+timestamp, which is what Apple asks of every binary in a notarized package,
+so the installer carries their file byte for byte and the script only checks
+that the signature is there.
+
+### Notarizing and verifying
+
+```bash
+NOTARY_KEY_FILE=/path/to/AuthKey.p8 APPLE_API_KEY_ID=... APPLE_API_ISSUER_ID=... \
+release/mac/notarize.sh release/out/Wilsonic_Mac_v<version>.pkg
+
+DEVELOPER_ID_APP="Developer ID Application: Perfect Buzz Music (LXFXL9GS49)" \
+DEVELOPER_ID_INSTALLER="Developer ID Installer: Perfect Buzz Music (LXFXL9GS49)" \
+release/mac/verify-pkg.sh release/out/Wilsonic_Mac_v<version>.pkg
+```
+
+`notarize.sh` submits the package with an App Store Connect API key and
+waits for Apple. It prints Apple's log for the submission whether the answer
+is yes or no, fails on anything but Accepted, and then staples the ticket to
+the package so that it installs on a Mac with no network. `verify-pkg.sh`
+runs `pkgutil --check-signature`, `spctl -a -vv -t install` and
+`xcrun stapler validate` on the package, then expands it and runs
+`codesign --verify --deep --strict` on each bundle inside. It runs every
+check, prints what each tool said, and exits non-zero if any of them missed.
+I never run these two by hand for a release, because the workflow does, but
+`verify-pkg.sh` is also a quick way to look at a package I downloaded.
+
+### The Apple secrets
+
+A signed run needs six repository secrets, and
+[the plan](../plans/release-pipeline.md) lists them under "Secrets".
+`signing-keychain.sh setup` reads them from the environment at the start of
+the `mac` job. If one is missing the job stops there and names it, and it
+never goes on to build an unsigned package. If they are all present the
+script tries each one out: it imports the two `.p12` files into a temporary
+keychain, checks that both identities are valid, signs a scratch file with
+each, and asks App Store Connect for the notarization history. A wrong
+password or an expired certificate therefore fails in the first minute and
+says which secret to look at, and the three and a half hours of building
+only start once all six are known to work. It also prints the day each
+certificate expires and puts a warning on the run when one has fewer than
+45 days left. The certificates last about a year, and the plan's "Recurring
+maintenance" section has the renewal steps.
+
+None of these scripts prints a secret, and the ones that handle them switch
+shell tracing off. The keychain and the decoded key are deleted by a step
+that runs whether the job passed or failed.
+
+### Testing the scripts
 
 ```bash
 release/mac/test-build-pkg.sh
+release/mac/test-signing.sh
 ```
 
-This takes a few seconds and runs on any Mac. The CI `mac` job runs it too,
-before the real build, so a broken script fails fast instead of after a
-twenty-minute JUCE build.
+Each takes a few seconds and runs on any Mac. The CI `mac` job runs both
+before the real build, so a broken script fails fast instead of after a long
+JUCE build. `test-signing.sh` puts fake `security`, `productsign`, `spctl`
+and `xcrun` commands first on `PATH`, so it never touches a real keychain or
+talks to Apple, and it wraps `codesign` so that the signing calls really
+happen, ad hoc. It also plants recognisable fake secrets and searches every
+log for them. `KEEP_SANDBOX=1` leaves its logs behind for a look.
 
 ## The Windows installer
 
@@ -185,9 +254,9 @@ script itself gets tested on the Windows runner before the long build.
 `.github/workflows/release.yml` runs on a `v*` tag push, by hand from the
 Actions tab with two inputs, `version` and `publish`, and on pull requests
 that touch `release/` or the workflow file. The pull request run is a dry
-run: unsigned, no tag check, no secrets, nothing published, built without
-debug symbols so it uploads no dSYMs or PDBs, and it stays that way when
-Phase 3 adds signing for tags and manual runs. Three jobs exist today:
+run: unsigned, no tag check, no secrets, nothing published, and built
+without debug symbols so it uploads no dSYMs or PDBs. A tag push and a
+manual run sign and notarize the macOS package. Three jobs exist today:
 
 1. `prepare` on Ubuntu runs `scripts/check-version.sh`. On a tag push it also
    requires the tag to equal `v$(cat VERSION.txt)`, and on a manual run with
@@ -195,13 +264,18 @@ Phase 3 adds signing for tags and manual runs. Three jobs exist today:
    the input is a guard against building the wrong thing rather than a way to
    rename the build. It outputs the version, whether it is a pre-release, and
    the asset name.
-2. `mac` on `macos-15` runs the packaging test, clones JUCE 9.0.1, restores
-   the Projucer build from a cache keyed on the JUCE tag or builds it on a
-   miss, resaves both `.jucer` files, builds both projects in Release with
-   `CODE_SIGN_IDENTITY="-"` and `LLVM_LTO=NO`, runs `build-pkg.sh` with
-   `SIGNING=0`, and uploads `Wilsonic_Mac_v<version>-unsigned.pkg` and the
-   dSYM bundles as workflow artifacts. On a pull request it also passes
-   `GCC_GENERATE_DEBUGGING_SYMBOLS=NO` and skips the two dSYM steps.
+2. `mac` on `macos-15` runs the packaging and signing tests, and on a tag
+   or manual run sets up the signing keychain and checks the Apple secrets.
+   Then it clones JUCE 9.0.1, restores the Projucer build from a cache keyed
+   on the JUCE tag or builds it on a miss, resaves both `.jucer` files, and
+   builds both projects in Release with `CODE_SIGN_IDENTITY="-"` and
+   `LLVM_LTO=NO`. On a tag or manual run `build-pkg.sh` runs with
+   `SIGNING=1`, `notarize.sh` and `verify-pkg.sh` follow, the keychain is
+   deleted, and the job uploads `Wilsonic_Mac_v<version>.pkg` and the dSYM
+   bundles as workflow artifacts. On a pull request `build-pkg.sh` runs with
+   `SIGNING=0`, the builds pass `GCC_GENERATE_DEBUGGING_SYMBOLS=NO`, the
+   signing and dSYM steps are skipped, and the one artifact is
+   `Wilsonic_Mac_v<version>-unsigned.pkg`.
 3. `windows` on `windows-2022` first runs `check-exporter.sh` and the script
    test, then clones JUCE 9.0.1 to `C:\JUCE`, restores `Projucer.exe` from a
    cache keyed on the JUCE tag or builds it on a miss, resaves both `.jucer`
@@ -292,7 +366,8 @@ the VST3 loads in Live or that a tuning reaches a client. I still have to do
 that by hand on a Windows machine.
 
 The `publish` input is accepted and ignored. It belongs to the `release` job
-in Phase 5. Nothing in the workflow reads a secret yet.
+in Phase 5. The only steps that read a secret are the signing setup and the
+notarization in the `mac` job, and both are skipped on a pull request.
 
 To try it by hand:
 
@@ -301,9 +376,11 @@ gh workflow run release.yml --ref <branch>
 ```
 
 Then download the artifact from the run page, or with
-`gh run download <run-id>`. An unsigned package shows a Gatekeeper warning
-on install; right-click, Open, or allow it in System Settings, Privacy &
-Security. That is expected until Phase 3.
+`gh run download <run-id>`. A manual run signs and notarizes, so its
+`Wilsonic_Mac_v<version>.pkg` opens in Installer without a Gatekeeper
+warning. The `-unsigned` package from a pull request dry run does show the
+warning; right-click, Open, or allow it in System Settings, Privacy &
+Security.
 
 ## Updating libMTS
 
