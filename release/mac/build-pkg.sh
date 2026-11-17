@@ -16,13 +16,27 @@
 #
 # Environment:
 #   SIGNING=0 (default)  no codesign, no productsign; output ends in -unsigned.pkg
-#   SIGNING=1            codesign each product with the hardened runtime and a
-#                        timestamp using DEVELOPER_ID_APP, then productsign the
-#                        product with DEVELOPER_ID_INSTALLER. Both must be set.
-#                        Notarization is not done here (Phase 3).
+#   SIGNING=1            codesign each of the six bundles with the hardened
+#                        runtime and a secure timestamp using DEVELOPER_ID_APP,
+#                        then productsign the product with
+#                        DEVELOPER_ID_INSTALLER. Both must be set. When
+#                        SIGNING_KEYCHAIN is set, both tools look for the
+#                        identity in that keychain only.
+#
+# The bundles arrive signed ad hoc by Xcode. Signing them again here replaces
+# that signature, so the entitlements Xcode gave each bundle are read first
+# and passed back to codesign, minus get-task-allow, which Apple refuses to
+# notarize. libMTS.dylib is not signed again: ODDSound ships it signed with
+# their own Developer ID and a timestamp, the package installs those exact
+# bytes, and with SIGNING=1 the script checks that signature and stops if it
+# is not there.
+#
+# Notarization is a separate step, release/mac/notarize.sh, and
+# release/mac/verify-pkg.sh checks the finished package.
 #
 # Runs on bash 3.2 (macOS) with only pkgbuild, productbuild, ditto, lipo,
-# shasum and PlistBuddy, all part of macOS or the Xcode command line tools.
+# shasum, PlistBuddy and, when signing, codesign and productsign, all part of
+# macOS or the Xcode command line tools.
 set -euo pipefail
 
 SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -78,6 +92,12 @@ case "$SIGNING" in
         ;;
     *) die "SIGNING must be 0 or 1 (got '$SIGNING')" ;;
 esac
+# With a keychain named, codesign and productsign search only that keychain,
+# so a second identity of the same name somewhere else cannot be picked.
+KEYCHAIN_ARGS=()
+if [ -n "${SIGNING_KEYCHAIN:-}" ]; then
+    KEYCHAIN_ARGS=(--keychain "$SIGNING_KEYCHAIN")
+fi
 
 # ---- the seven components --------------------------------------------------
 # name | source folder | package identifier | install location
@@ -142,6 +162,22 @@ archs="$(archs_of "$MTS_ESP_DIR/Mac/libMTS.dylib")"
 [ "$archs" = "arm64 x86_64" ] || die "libMTS.dylib is '$archs', expected a universal arm64 x86_64 binary"
 log "libMTS $(sed -n 's/^libmts_version=//p' "$PIN") matches PIN ($archs)"
 
+# A notarized package may only contain code signed with a Developer ID and a
+# secure timestamp. ODDSound signs libMTS.dylib that way themselves, and the
+# package ships their bytes untouched so the file still matches PIN and still
+# carries their signature. Check that before building anything.
+if [ "$SIGNING" = "1" ]; then
+    codesign --verify --strict "$MTS_ESP_DIR/Mac/libMTS.dylib" \
+        || die "the signature on $MTS_ESP_DIR/Mac/libMTS.dylib does not verify"
+    libmts_signature="$(codesign -dvv "$MTS_ESP_DIR/Mac/libMTS.dylib" 2>&1 || true)"
+    libmts_authority="$(printf '%s\n' "$libmts_signature" | sed -n 's/^Authority=\(Developer ID Application: .*\)$/\1/p' | head -1)"
+    libmts_timestamp="$(printf '%s\n' "$libmts_signature" | sed -n 's/^Timestamp=//p' | head -1)"
+    if [ -z "$libmts_authority" ] || [ -z "$libmts_timestamp" ]; then
+        die "libMTS.dylib is not signed with a Developer ID and a secure timestamp, so Apple would refuse to notarize the package. Re-vendor it from ODDSound, or decide to sign it here."
+    fi
+    log "libMTS.dylib is signed by $libmts_authority, timestamp $libmts_timestamp"
+fi
+
 # The minimum OS in distribution.xml must be the deployment target the plugin
 # was built for, or the installer will accept machines the plugin cannot run on.
 if [ -f "$ROOT/Wilsonic.jucer" ]; then
@@ -176,11 +212,44 @@ pin_bundles() { # component.plist
     [ "$i" -gt 0 ] || die "pkgbuild --analyze found no bundle in $(dirname "$plist")"
 }
 
+# The entitlements a bundle was built with, as a plist file codesign can take
+# back, without get-task-allow. Prints the file's path, or nothing when the
+# bundle has no entitlements left to keep.
+entitlements_of() { # bundle
+    local bundle="$1" out
+    out="$WORK/entitlements/$(basename "$bundle").plist"
+    mkdir -p "$WORK/entitlements"
+    # A bundle with no entitlements gives an empty file and status 0. A
+    # failure here would otherwise sign the bundle with none and lose them.
+    codesign -d --entitlements - --xml "$bundle" > "$out" 2>/dev/null \
+        || die "could not read the entitlements of $bundle; it should arrive signed, at least ad hoc"
+    [ -s "$out" ] || return 0
+    if /usr/libexec/PlistBuddy -c 'Delete :com.apple.security.get-task-allow' "$out" >/dev/null 2>&1; then
+        log "$(basename "$bundle"): dropped the get-task-allow entitlement, which Apple does not notarize" >&2
+    fi
+    # Nothing but an empty dictionary left: sign without entitlements.
+    if [ "$(/usr/libexec/PlistBuddy -c 'Print' "$out" 2>/dev/null | grep -c ' = ')" -eq 0 ]; then
+        return 0
+    fi
+    echo "$out"
+}
+
 sign_product() { # bundle path
     [ "$SIGNING" = "1" ] || return 0
-    log "codesign $(basename "$1")"
-    codesign --force --options runtime --timestamp --sign "$DEVELOPER_ID_APP" "$1"
-    codesign --verify --strict "$1"
+    local bundle="$1" entitlements
+    local args=(--force --options runtime --timestamp)
+    args+=(${KEYCHAIN_ARGS[@]+"${KEYCHAIN_ARGS[@]}"})
+    entitlements="$(entitlements_of "$bundle")"
+    if [ -n "$entitlements" ]; then
+        args+=(--entitlements "$entitlements")
+        log "codesign $(basename "$bundle") with the entitlements it was built with: $(/usr/libexec/PlistBuddy -c 'Print' "$entitlements" | grep ' = ' | sed 's/^ *//' | tr '\n' ' ')"
+    else
+        log "codesign $(basename "$bundle")"
+    fi
+    codesign "${args[@]}" --sign "$DEVELOPER_ID_APP" "$bundle"
+    # --deep here only verifies: it fails if a bundle ever gains nested code
+    # that the single signing call above did not cover.
+    codesign --verify --deep --strict "$bundle"
 }
 
 build_component() { # name src identifier location
@@ -222,8 +291,12 @@ productbuild --quiet --distribution "$WORK/distribution.xml" \
 if [ "$SIGNING" = "1" ]; then
     PKG="$OUT_DIR/Wilsonic_Mac_v$VERSION.pkg"
     rm -f "$PKG"
-    productsign --sign "$DEVELOPER_ID_INSTALLER" "$WORK/product.pkg" "$PKG"
-    pkgutil --check-signature "$PKG"
+    # Sign into the work area and move the result into place, so a failed
+    # productsign leaves nothing in the output folder.
+    productsign --timestamp ${KEYCHAIN_ARGS[@]+"${KEYCHAIN_ARGS[@]}"} --sign "$DEVELOPER_ID_INSTALLER" \
+        "$WORK/product.pkg" "$WORK/product-signed.pkg"
+    pkgutil --check-signature "$WORK/product-signed.pkg"
+    mv "$WORK/product-signed.pkg" "$PKG"
 else
     PKG="$OUT_DIR/Wilsonic_Mac_v$VERSION-unsigned.pkg"
     rm -f "$PKG"
