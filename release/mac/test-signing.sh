@@ -18,7 +18,8 @@ VERIFY="$SELF_DIR/verify-pkg.sh"
 . "$SELF_DIR/test-lib.sh"
 
 SANDBOX="$(mktemp -d -t wilsonic-signing-test)"
-trap 'rm -rf "$SANDBOX"' EXIT
+# KEEP_SANDBOX=1 leaves the logs behind for a look after a failure.
+if [ -n "${KEEP_SANDBOX:-}" ]; then echo "sandbox: $SANDBOX"; else trap 'rm -rf "$SANDBOX"' EXIT; fi
 FAKES="$SANDBOX/fakes"
 mkdir -p "$FAKES"
 export FAKE_LOG="$SANDBOX/calls.log"
@@ -338,8 +339,8 @@ cat > "$SANDBOX/build.entitlements" <<'PLIST'
 <key>com.apple.security.get-task-allow</key><true/>
 </dict></plist>
 PLIST
-/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$WBUILD/Wilsonic.app"
-/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$CBUILD/WilsonicController.app"
+/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$WBUILD/Wilsonic.app" 2>/dev/null
+/usr/bin/codesign --force --options runtime --entitlements "$SANDBOX/build.entitlements" --sign - "$CBUILD/WilsonicController.app" 2>/dev/null
 
 echo "build-pkg.sh with SIGNING=1 signs the six products and the package"
 : > "$FAKE_LOG"

@@ -1,27 +1,31 @@
 name: release
 run-name: release ${{ inputs.version || github.ref_name }}
-# The release pipeline from plans/release-pipeline.md. Phases 2 and 4: the
-# prepare, mac and windows jobs, all unsigned. The release job, signing and
-# notarization come in later phases.
+# The release pipeline from plans/release-pipeline.md. Phases 2, 3 and 4: the
+# prepare, mac and windows jobs. The release job comes in Phase 5.
 #
 # Runs on a v* tag push, by hand, and on pull requests that touch the
 # release tooling. A manual run never publishes anything in this phase: the
 # .pkg, the .exe, the dSYMs and the PDBs stay attached to the workflow run as
 # artifacts for 90 days.
 #
+# A tag push and a manual run sign the macOS package with the Developer ID
+# certificates, notarize it with Apple and staple the ticket (Phase 3). Six
+# APPLE_* secrets feed that, and a run that is missing one fails in the first
+# minute of the mac job with the name of the secret. It never falls back to
+# an unsigned package. The Windows installer is unsigned on every kind of run.
+#
 # The pull_request trigger is a permanent unsigned dry run of prepare, mac
 # and windows, so a change to release/ or to this file is exercised on real
 # runners before it merges. It is safe because that path signs nothing and
-# reads no secrets: prepare forces SIGNING=0 on pull_request and the
-# artifacts keep their -unsigned suffix. A dry run also builds without debug
-# symbols and uploads no dSYMs or PDBs: dsymutil on the universal binaries
-# cost 65 and 47
-# minutes of the 3 h 39 min job in run 43054238610, and a dry run only has
-# to prove the pipeline. Without -g the compiles are faster too, so the dry
-# run took 1 h 02 min in run 43669865878, about a quarter of a real build.
-# Phase 3 adds signing and notarization only for tag
-# push and workflow_dispatch, never for pull_request, where secrets are not
-# available to forks anyway.
+# reads no secrets: prepare forces signing=0 on pull_request, every step that
+# names a secret is skipped on that output, signing-keychain.sh refuses a
+# pull_request event on its own account, and the artifacts keep their
+# -unsigned suffix. Secrets are not available to pull requests from forks in
+# any case. A dry run also builds without debug symbols and uploads no dSYMs
+# or PDBs: dsymutil on the universal binaries cost 65 and 47 minutes of the
+# 3 h 39 min job in run 43054238610, and a dry run only has to prove the
+# pipeline. Without -g the compiles are faster too, so the dry run took
+# 1 h 02 min in run 43669865878, about a quarter of a real build.
 on:
   push:
     tags: ['v*']
@@ -86,18 +90,21 @@ jobs:
             *)   is_prerelease=false ;;
           esac
           # A pull_request run is a dry run: never signed, never published.
-          # Phase 3 will set signing=1 for tag push and workflow_dispatch
-          # when the Apple secrets exist; until then every run is unsigned.
-          # A dry run also skips debug symbols, so no dSYMs are generated or
-          # uploaded and the mac job takes about a quarter of the time.
+          # A tag push and a manual run are always signed and notarized on
+          # the Mac; there is no unsigned variant of those, so a missing
+          # secret fails the mac job and does not quietly produce an
+          # unsigned package. A dry run also skips debug symbols, so no
+          # dSYMs are generated or uploaded and the mac job takes about a
+          # quarter of the time.
           if [ "$EVENT_NAME" = "pull_request" ]; then
             dry_run=true
             debug_symbols=NO
+            signing=0
           else
             dry_run=false
             debug_symbols=YES
+            signing=1
           fi
-          signing=0
           if [ "$signing" = "1" ]; then
             mac_asset="Wilsonic_Mac_v${version}.pkg"
           else
@@ -138,11 +145,39 @@ jobs:
       # NO drops -g from every compile and skips dsymutil, so no dSYM exists
       # to collect; the two dSYM steps below are skipped on the same flag.
       DEBUG_SYMBOLS: ${{ needs.prepare.outputs.debug_symbols }}
+      # 1 on tag push and workflow_dispatch, 0 on the pull_request dry run.
+      # build-pkg.sh signs and drops the -unsigned suffix when it is 1.
+      SIGNING: ${{ needs.prepare.outputs.signing }}
+      # The two identities are the names on the certificates, which every
+      # signed binary shows to anyone who asks, so they are not secrets.
+      DEVELOPER_ID_APP: 'Developer ID Application: Perfect Buzz Music (LXFXL9GS49)'
+      DEVELOPER_ID_INSTALLER: 'Developer ID Installer: Perfect Buzz Music (LXFXL9GS49)'
     steps:
       - uses: actions/checkout@v4
 
-      - name: Test the packaging script
-        run: release/mac/test-build-pkg.sh
+      - name: Test the packaging and signing scripts
+        run: |
+          release/mac/test-build-pkg.sh
+          release/mac/test-signing.sh
+
+      # Signed runs only. This comes before the build on purpose: it makes
+      # the temporary keychain, imports both .p12 files, signs a scratch file
+      # with each identity and asks App Store Connect for the notarization
+      # history, so a missing secret, a wrong .p12 password, an expired
+      # certificate or a wrong issuer ID stops the job here, with the name of
+      # the secret, and not three and a half hours later. The script prints
+      # no secret and has tracing off. It leaves SIGNING_KEYCHAIN and
+      # NOTARY_KEY_FILE in the environment for the steps below.
+      - name: Set up signing and check the Apple secrets
+        if: github.event_name != 'pull_request' && needs.prepare.outputs.signing == '1'
+        env:
+          APPLE_DEV_ID_APP_P12: ${{ secrets.APPLE_DEV_ID_APP_P12 }}
+          APPLE_DEV_ID_INSTALLER_P12: ${{ secrets.APPLE_DEV_ID_INSTALLER_P12 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+        run: release/mac/signing-keychain.sh setup
 
       # Same recipe as plugin.yml: clone JUCE at the pinned tag, build the
       # Projucer, resave both projects, build both with xcodebuild. The clone
@@ -196,6 +231,11 @@ jobs:
       # produces arm64-only bundles (run 43001616208 did exactly that). The
       # generic macOS destination honours the project's ARCHS, arm64 and
       # x86_64, so the plugins are universal like libMTS.dylib.
+      #
+      # The build is signed ad hoc on every kind of run, signed runs
+      # included. build-pkg.sh puts the Developer ID signature on afterwards,
+      # so Xcode never needs the keychain and a dry run builds exactly what
+      # a release builds.
       - name: Build Wilsonic (Release, ad-hoc signed)
         run: |
           cd Builds/MacOSX
@@ -213,11 +253,37 @@ jobs:
       - name: Build the installer
         # SIGNING comes from prepare, which is 0 on pull_request without
         # exception. build-pkg.sh names the output -unsigned.pkg when 0.
-        env:
-          SIGNING: ${{ needs.prepare.outputs.signing }}
+        # When 1 it signs the six bundles with the hardened runtime and a
+        # secure timestamp, then signs the package, from the keychain the
+        # setup step made. The keychain is unlocked again first because
+        # hours have passed since that step.
         run: |
+          if [ "$SIGNING" = "1" ]; then release/mac/signing-keychain.sh unlock; fi
           release/mac/build-pkg.sh --out release/out
           test -f "release/out/${{ needs.prepare.outputs.mac_asset }}"
+
+      # Submit to Apple and wait, print Apple's log for the submission
+      # whatever the verdict, fail on anything but Accepted, then staple the
+      # ticket to the package so it installs on a Mac that is offline.
+      - name: Notarize and staple the installer
+        if: github.event_name != 'pull_request' && needs.prepare.outputs.signing == '1'
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+        run: release/mac/notarize.sh "release/out/${{ needs.prepare.outputs.mac_asset }}"
+
+      # pkgutil --check-signature, spctl -a -vv -t install, stapler validate,
+      # and codesign --verify --deep --strict on each bundle inside. One miss
+      # fails the job, and the upload below then never happens.
+      - name: Verify the signed installer
+        if: needs.prepare.outputs.signing == '1'
+        run: release/mac/verify-pkg.sh "release/out/${{ needs.prepare.outputs.mac_asset }}"
+
+      # Always, pass or fail: the keychain and the decoded .p8 do not outlive
+      # the steps that need them.
+      - name: Delete the signing keychain and the decoded keys
+        if: always() && needs.prepare.outputs.signing == '1'
+        run: release/mac/signing-keychain.sh teardown
 
       # The universal dSYMs are a few gigabytes and the runner disk is nearly
       # full by now, so move them instead of copying (run 43010618605 died
