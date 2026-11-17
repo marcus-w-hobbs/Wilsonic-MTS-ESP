@@ -761,7 +761,7 @@ What has to happen on a calendar, whether or not there is a release.
 | 0 | Apple secrets in place | `security find-identity` inside a manual workflow run lists both Developer ID certs | Complete, 2026-11-16 |
 | 1 | `VERSION.txt`, `set-version.sh`, `check-version.sh`, CI check on PRs | A PR that edits `version.h` by hand fails CI | Merged, #83 |
 | 2 | `release/mac/*`, `mac` job, manual run unsigned | `.pkg` artifact installs on M2 with `SIGNING=0` semantics | Merged, #84, #85 and #86 |
-| 3 | `mac` job signed and notarized | `spctl --assess --type install` passes on the downloaded `.pkg` | Built 2026-11-16. Not yet installed on a real Mac |
+| 3 | `mac` job signed and notarized | `spctl --assess --type install` passes on the downloaded `.pkg` | Merged 2026-11-16, #89. Run 43988398507 produced the signed package. Not yet installed on a real Mac |
 | 4 | `release/windows/*`, `windows` job | `.exe` artifact installs on claw or a Windows VM | Merged 2026-11-16, #88. Not yet installed on a real Windows machine |
 | 5 | `release` job, draft pre-release, generated notes | Tag `v0.45.0-beta` produces a draft with two assets and a notes body | |
 | 6 | Website reads releases, hook on publish | Publishing the draft changes the download buttons within a few minutes | |
@@ -782,9 +782,34 @@ accepted the API key.
 Phase 3 was built on 2026-11-16: on a tag push or a manual run the `mac` job
 signs the six bundles and the package, notarizes the package with Apple,
 staples the ticket and checks the result with `pkgutil`, `spctl`, `stapler`
-and `codesign`. Run 43986494367 did all of that on stub bundles. Its verify step is open in one respect.
-`spctl` passed on the runner, and nobody has yet downloaded the signed
-`.pkg` and installed it on a real Mac. That test is mine to do on the M1.
+and `codesign`. Run 43986494367 did all of that on stub bundles, and pull
+request #89 merged the same day.
+
+The first run on the real build was 43988398507, a manual run on the last
+commit of the branch. It was still building when I merged, and it finished
+green about an hour and twenty minutes later. The `mac` job took 3
+hours 25 minutes with debug symbols. The two builds took 94 and 105 minutes
+of that, and everything Phase 3 added took about two minutes: 3 seconds to
+try the secrets out before the build, 3 seconds to make the keychain again
+after it, 21 seconds to sign the six bundles and build and sign the package,
+73 seconds for Apple to notarize it and for the staple, and 19 seconds to
+verify. Apple accepted the package with no issues, and
+`spctl -a -vv -t install` answered `accepted` and
+`source=Notarized Developer ID` on the runner. The same commit's pull
+request dry run, 43988377347, stayed unsigned and skipped every step that
+reads a secret.
+
+The verify step of this phase asks for `spctl` to pass on the downloaded
+`.pkg`, so the Claude Code session that built the phase downloaded the
+artifact to my M2, on macOS 26.5.1, and checked it there without installing
+it. `spctl` gave the same answer,
+`xcrun stapler validate` passed, and `pkgutil --check-signature` printed
+"Notarization: trusted by the Apple notary service", a line that the
+macOS 15 runner does not print even for a stapled package. One part is
+still open. Nobody has installed the signed `.pkg` on a real Mac yet, so
+nothing is known about how the installer behaves on macOS 14, whether the
+plug-ins load in a host, or whether the standalone apps can load ODDSound's
+library, which is open question 7. That test is mine to do on the M1.
 
 Phase 4 was built on 2026-11-15 in pull request #88, which merged on
 2026-11-16: `release/windows/` and
