@@ -210,6 +210,8 @@ ol.sources li { overflow-wrap: anywhere; }
       <div class="prov" data-e="Lattice log 2026-10-17:none" data-s="tree94"></div></div>
     <div class="claim"><p>I expected the golden generators to explain why Erv's favourite generators sound so harmonic, and the measurement disappointed me. His generators do sit within a fraction of a cent of golden ones, but golden numbers are so dense that a random generator does too. Against a fair comparison I never found more than 6 of his 17 in the closest tenth, where chance gives 1.7, and the silver family fits them as well as the golden one. My reading today is that the zigzag is about melody, meaning how the scales nest, and that harmony comes from a separate condition. I think Erv chose the golden number inside a range that already sounded good to him, and that last sentence is a guess.</p>
       <div class="prov" data-e="GOLD-002:G-034,GOLD-003:G-038"></div></div>
+    <div class="claim"><p>My favourite generators so far come from Erv's papers on choosing a moment of symmetry for its proportional and subcontrary triads. As fractions of the octave they are 0.292787, 0.436386, 0.415227, 0.328173 and 0.238186. I made music with them on my first album, From On High, which came out in 1998 under the name Marcus Satellite, and all five ship as presets in Wilsonic. They are also in the Start from menu below, so you can walk each one down the tree and hear its scales. When I solved for them I found that four are the limit of a short recurrence, and you can try those in question 2. The generator 0.436386 comes from H[n] = H[n−3] + 2·H[n−4], 0.328173 comes from H[n] = H[n−1] + H[n−7], 0.415227 comes from H[n] = 4·H[n−8] + 8·H[n−9], and 0.238186 is the octave complement of the generator of H[n] = H[n−1] + 2·H[n−3]. I have not matched 0.292787 to a recurrence yet.</p>
+      <div class="prov" data-m="My recollection" data-s="proptri,album,repo"></div></div>
   </div>
   <div class="tool">
     <h3>Try it: walk the tree, read the horogram</h3>
@@ -535,6 +537,7 @@ const S = {
   wiki_hexany: { c: 'Wikipedia, Hexany', f: 'Wikipedia, "Hexany".', u: WP + 'Hexany' },
   mtsesp: { c: 'ODDSound, MTS-ESP', f: 'ODDSound, MTS-ESP, a library for microtuning support in audio plugins.', u: 'https://github.com/ODDSound/MTS-ESP' },
   repo: { c: 'Wilsonic MTS-ESP source', f: 'Marcus Hobbs, Wilsonic MTS-ESP, source code and research, MIT licence.', u: REPO },
+  album: { c: 'Marcus Satellite, From On High (1998)', f: 'Marcus Satellite (Marcus Hobbs), "From On High", album, 1998, 12 songs.', u: 'https://open.spotify.com/album/15ZzE7ftQ4AdbNRoKVSdp8' },
   blog1: { c: 'Hobbs 2026, The Tunings That Ring', f: 'Marcus Hobbs, "The Tunings That Ring", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-001.md' },
   blog2: { c: 'Hobbs 2026, The Machine Keeps Deriving Wilson', f: 'Marcus Hobbs, "The Machine Keeps Deriving Wilson", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-002.md' },
   gates: { c: 'Research ledger', f: 'Marcus Hobbs, research gate ledger for the early findings on this page.', u: REPO + '/blob/main/experiments/GATES.md' }
@@ -670,7 +673,11 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
     { label: 'H[n] = H[n−1] + H[n−3] (meta-pelog)', a: 1, i: 1, b: 1, j: 3, seeds: '1 1 1', w: 9 },
     { label: 'H[n] = H[n−2] + H[n−3] (meta-slendro)', a: 1, i: 2, b: 1, j: 3, seeds: '1 1 1', w: 5 },
     { label: 'H[n] = 2·H[n−3] + 2·H[n−4] (meta-meantone)', a: 2, i: 3, b: 2, j: 4, seeds: '1 1 1 1', w: 7, n: 8 },
-    { label: 'H[n] = H[n−1] + 4·H[n−4], seeded with a chain of 7/4', a: 1, i: 1, b: 4, j: 4, seeds: '192 336 588 1029', w: 5 }
+    { label: 'H[n] = H[n−1] + 4·H[n−4], seeded with a chain of 7/4', a: 1, i: 1, b: 4, j: 4, seeds: '192 336 588 1029', w: 5 },
+    { label: 'H[n] = H[n−3] + 2·H[n−4] (my favourite 0.436386)', a: 1, i: 3, b: 2, j: 4, seeds: '1 1 1 1', w: 7, n: 8 },
+    { label: 'H[n] = H[n−1] + H[n−7] (my favourite 0.328173)', a: 1, i: 1, b: 1, j: 7, seeds: '1 1 1 1 1 1 1', w: 7, n: 8 },
+    { label: 'H[n] = 4·H[n−8] + 8·H[n−9] (my favourite 0.415227)', a: 4, i: 8, b: 8, j: 9, seeds: '1 1 1 1 1 1 1 1 1', w: 7, n: 12 },
+    { label: 'H[n] = H[n−1] + 2·H[n−3] (0.761814, the complement of my favourite 0.238186)', a: 1, i: 1, b: 2, j: 3, seeds: '1 1 1', w: 7, n: 4 }
   ];
   const st = { r: 0, w: 7, n: 0 }; let H = [], G = 1, sizes = [];
   RECS.forEach((x, i) => $('t2rec').append(el('option', { value: i }, x.label)));
@@ -720,7 +727,10 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
   const PRE = [
     ['Pure fifth 3/2 (701.96¢)', { g: Math.log2(1.5) }], ['Zigzag from 1/2: 0.381966, the golden section of the octave', { turns: '', first: 'L' }],
     ['Erv\'s 0.418935 (502.72¢), 16 July 1997', { g: 0.418934662571 }], ['Meta-meantone fifth (695.63¢)', { g: 0.5796920314 }],
-    ['12-tone fifth 7/12', { g: 7 / 12 }], ['Silver, √2 − 1 (497.06¢)', { g: Math.SQRT2 - 1 }]
+    ['12-tone fifth 7/12', { g: 7 / 12 }], ['Silver, √2 − 1 (497.06¢)', { g: Math.SQRT2 - 1 }],
+    ['My favourite: 0.292787 (351.35¢)', { g: 0.292787482510 }], ['My favourite: 0.436386 (523.66¢)', { g: 0.436385705396 }],
+    ['My favourite: 0.415227 (498.27¢)', { g: 0.415226813655 }], ['My favourite: 0.328173 (393.81¢)', { g: 0.328173397034 }],
+    ['My favourite: 0.238186 (285.82¢)', { g: 0.238186456899 }]
   ];
   const st = { g: Math.log2(1.5), size: 7, label: '' }; let sizes = [];
   PRE.forEach((x, i) => $('t3pre').append(el('option', { value: i }, x[0])));
@@ -765,7 +775,7 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
 
 /* ---------- Q7: growth ---------- */
 (function () {
-  const PRE = [['Golden section, 0.618034 (741.64¢)', PHI - 1], ['Pure fifth, 0.584963 (701.96¢)', Math.log2(1.5)], ['Erv\'s 0.418935 (502.72¢)', 0.418934662571], ['12-tone fifth, 7/12 (700¢)', 7 / 12], ['A fraction near nothing special, 0.2900', 0.29]];
+  const PRE = [['Golden section, 0.618034 (741.64¢)', PHI - 1], ['Pure fifth, 0.584963 (701.96¢)', Math.log2(1.5)], ['Erv\'s 0.418935 (502.72¢)', 0.418934662571], ['12-tone fifth, 7/12 (700¢)', 7 / 12], ['A fraction near nothing special, 0.2900', 0.29], ['My favourite: 0.292787 (351.35¢)', 0.292787482510], ['My favourite: 0.436386 (523.66¢)', 0.436385705396], ['My favourite: 0.415227 (498.27¢)', 0.415226813655], ['My favourite: 0.328173 (393.81¢)', 0.328173397034], ['My favourite: 0.238186 (285.82¢)', 0.238186456899]];
   const st = { g: PRE[0][1], n: 8 }; let timer = null;
   PRE.forEach((x, i) => $('t7pre').append(el('option', { value: i }, x[0])));
   function draw() {
