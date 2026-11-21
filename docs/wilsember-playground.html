@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one column of fifteen question stations in Stephen's order, each an answer then an instrument (controls | preview); graph-paper ground like Erv's notebook pages. Same token family as the other Wilsonic playgrounds: melody teal, harmony amber, recollection violet. */
+/* Layout: one column of fifteen question stations in Stephen Weigel's order, each an answer then an instrument (controls | preview); graph-paper ground like Erv's notebook pages. Same token family as the other Wilsonic playgrounds: melody teal, harmony amber, recollection violet. */
 :root {
   --bg: #f2f3ef;
   --paper: #fbfbf8;
@@ -96,7 +96,8 @@ button.small { padding: 3px 8px; font-size: 12.5px; font-family: var(--font-mono
 .stat .v { font-family: var(--font-mono); font-size: 14.5px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .stat.mel { border-top-color: var(--accent); } .stat.harm { border-top-color: var(--harm); } .stat.nob { border-top-color: var(--noble); }
 .note { font-size: 13.5px; color: var(--muted); max-width: 70ch; }
-.owe { color: var(--noble); font-style: italic; }
+.claim p a { overflow-wrap: anywhere; }
+.claim ul { margin: 0; padding-left: 22px; display: grid; gap: 3px; max-width: 72ch; }
 .scroll { overflow-x: auto; }
 svg { display: block; max-width: 100%; height: auto; }
 svg text { font-family: var(--font-mono); fill: var(--fg); }
@@ -123,12 +124,12 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen · draft</div>
   <h1>Fifteen questions about Erv Wilson, with things to play</h1>
   <div class="lede">
-    <p>Stephen, you sent fifteen questions for the Wilsember episode and I could not be on the call, so I built you this page. Each question has a short answer from me, and where the idea is something you can see or hear I put a small instrument under it so you can try it yourself. I worked beside Erv from 1995 to 2005, turning his drawings into software while he drew the next one, and for the last year I have been going back through his papers with a computer.</p>
+    <p>Stephen Weigel, you sent fifteen questions for the Wilsember episode and I could not be on the call, so I built you this page. Each question has a short answer from me, and where the idea is something you can see or hear I put a small instrument under it so you can try it yourself. I worked beside Erv from 1995 to 2005, turning his drawings into software while he drew the next one, and for the last year I have been going back through his papers with a computer.</p>
     <p>You have to connect ideas to sources when you take them to your listeners, so every claim on this page carries one of three labels, and the full list of sources is at the bottom.</p>
   </div>
   <div class="legend">
     <div><span class="prov"><span class="tag src">Published</span></span>Someone else can look this up. The label links to the paper, book or page.</div>
-    <div><span class="prov"><span class="tag mem">My recollection</span></span>This comes from my memory of working with Erv, or it is my own view. Where I have not written my memories down yet, the page says so.</div>
+    <div><span class="prov"><span class="tag mem">My recollection</span></span>This comes from my memory of working with Erv, or it is my own view.</div>
     <div><span class="prov"><span class="tag early">Early, unpublished</span></span>New work from my research this year, with the experiment name and where it stands in my ledger. Nobody outside has reviewed it, so please treat it as a lead to follow.</div>
   </div>
   <p class="note">The sound only starts when you press a play button. All of the arithmetic runs on this page, so anything you see drawn here you can check by changing the numbers.</p>
@@ -263,10 +264,9 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="answer">
     <div class="claim"><p>I am the wrong person to speak for Ivor Darreg, and I would rather hear you, Billy and Praveen on this one. The word is Darreg's, and the published accounts of what he meant by it are better than my paraphrase would be.</p>
       <div class="prov" data-s="wiki_xen,glasier"></div></div>
-    <div class="claim"><p>What I can offer is what I saw from Erv's side of the desk. The papers I worked from are almost all structures, drawings of scales and keyboards and lattices, and very few of them argue for a sound or a style. He handed musicians a structure and wanted to hear what they did with it.</p>
+    <div class="claim"><p>Erv mentioned Ivor Darreg many times. Kraig Grady and Stephen James Taylor had the context for those references and I did not, because I came into the circle as a young man of 25, so I can't tell you how their ideas differed. We all used the word xenharmonic, and Erv was a contributor to Xenharmonikon. We all struggled to find a word that covered the ideas we were making, whether that was microtonality or xenharmonic or music theory, and I think it is still unresolved.</p>
+      <p>What I can tell you is that Erv was the least ideological person I know. He kept a handwritten note to himself that read “Mr. Spock: Nothing in the universe is unnatural.” He included everything, even 12-tone equal temperament, which actually triggered me at first, and later I accepted it when I understood how inclusive his thinking was.</p>
       <div class="prov" data-m="My recollection"></div></div>
-    <!-- TO WRITE: How Erv talked about Darreg and about the word xenharmonic, if he did. Anything he said about equal temperaments against just structures. One concrete memory is better than a general statement. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
   </div>
 </section>
 
@@ -293,8 +293,8 @@ ol.sources li { overflow-wrap: anywhere; }
       <div class="prov" data-s="grady_hex,wiki_hexany"></div></div>
     <div class="claim"><p>Where I would be careful is the step after that. Sharing the arithmetic of a plant does not by itself make a scale sound good, and my own measurements so far say that the growing pattern and the harmony come from two separate conditions.</p>
       <div class="prov" data-e="GOLD-002:G-034"></div></div>
-    <!-- TO WRITE: Did Erv himself use the words crystal, plant or growth for his scales? What he said, and when. This is also the place for anything about his own plants. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>Erv would not stop talking about plants, and to a lesser degree about crystals. He was a farmer and an expert on farming, and as a mathematician he was an expert on crystals, which is where much of the work on combination product sets and lattices comes from. These ideas were absolutely fundamental to how he pictured microtonality, so for him the comparison was a working model and he used it every day.</p>
+      <div class="prov" data-m="My recollection"></div></div>
   </div>
   <div class="tool">
     <h3>Try it: grow a scale and a seed head with the same number</h3>
@@ -335,12 +335,14 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 9 of 15</div>
   <h2>How does Wilson's influence show up in other musicians' work? What kind of correspondences did he keep and maintain?</h2>
   <div class="answer">
-    <div class="claim"><p>The published record names the people, and I would send your listeners there first. Wikipedia's article on Erv lists Harry Partch, Warren Burt, Jim French, Kraig Grady, Jose Hales-Garcia, Catherine Lamb, Terumi Narushima, Paul Rapoport, Emil Richards, Greg Schiemer, Stephen James Taylor and Daniel James Wolf, and it lists me under my old stage name. Kraig's own introduction names Gary David, Daniel Wolf and Chuck Jonkey as important students and mentions Stephen Taylor's documentary The Sonic Sky.</p>
-      <div class="prov" data-s="wiki_wilson,gradyintro"></div></div>
+    <div class="claim"><p>The published record names the people, and I would send your listeners there first. Wikipedia's article on Erv lists Harry Partch, Warren Burt, Jim French, Kraig Grady, Jose Hales-Garcia, Catherine Lamb, Terumi Narushima, Paul Rapoport, Emil Richards, Greg Schiemer, Stephen James Taylor and Daniel James Wolf, and it lists me under my old stage name. Kraig's own introduction names Gary David, Daniel Wolf and Chuck Jonkey as important students and mentions the documentary about Erv. Gary David, Stephen James Taylor and I made that film, and it is called Surfing the Sonic Sky.</p>
+      <div class="prov" data-s="wiki_wilson,gradyintro,film"></div></div>
     <div class="claim"><p>The papers themselves are full of correspondence, because many of his sheets were made for a particular person. Among the ones I have worked from this year are a letter to John Chalmers dated 21 August 1965, where he conjectures how the number of melodic step sizes grows with the harmonic limit, a sheet made for Kraig Grady on 15 October 1993 and a letter to Warren Burt dated 1 August 1997, both about recurrent sequences.</p>
       <div class="prov" data-s="wa"></div></div>
-    <!-- TO WRITE: Who you saw him write to and talk with between 1995 and 2005, how he kept those exchanges going (letters, phone, visits, sheets handed over), and whose music you would point to as carrying his influence. Kraig Grady knows this better than anyone and should be credited for whatever comes from him. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>Erv was in good health in those years, so we met every week at Stephen James Taylor's studio. Kraig Grady lived in the US early in that period and came to the sessions until he moved to Australia, and later that circle included Terumi Narushima. Chuck Jonkey lives in LA and came often.</p>
+      <p>Erv would frequently show us letters and diagrams that he had shared with other people, but I didn't always have the context for how he had found them or who he had worked them out with. Keep in mind that I first met him in 1995, and as a tech bro I had very early access to the internet and he had none.</p>
+      <p>I actually met Erv and Stephen James Taylor through the Kyma Capybara sound design workstation. I bought a maxed-out Capybara for $8000 to explore microtonality, and one of the founders told me I needed to run, not walk, to Erv and Stephen James Taylor, who had both bought Capybaras and lived just a few miles from me. Erv never used his. I showed Stephen James Taylor how to use his, and our sessions became real-time Capybara coding sessions of Erv's research from that week. I was essentially a grad student implementing his professor's papers as he wrote them.</p>
+      <div class="prov" data-m="My recollection"></div></div>
   </div>
 </section>
 
@@ -349,10 +351,15 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 10 of 15</div>
   <h2>Did Erv Wilson ever compose? Music making is part of the scale creation process for some people but not for others.</h2>
   <div class="answer">
-    <div class="claim"><p>I want to answer this one from memory and get it right, so I have left it open until I have written it properly. What I can say now is how the work went when I was there: he drew a design, I made it sound, and he listened and changed the drawing. Listening was part of how the scales were made, whatever we decide to call that.</p>
+    <div class="claim"><p>This is a good question for Kraig Grady and Stephen James Taylor, who knew him longer than I did. My recollection is that Erv felt his attention was best spent providing resources for composers, and that he chose that over composing himself. In our circle we had a shared picture of the ways a person can enjoy music, and it went something like this:</p>
+      <ul>
+        <li>I enjoy hearing music performed by others.</li>
+        <li>I enjoy performing music composed by others.</li>
+        <li>I enjoy composing music with resources created by others. For most people that resource is 12-tone equal temperament, which is the big cultural default.</li>
+        <li>I enjoy creating musical and rhythmic resources for composers, performers and audiences.</li>
+      </ul>
+      <p>Erv worked at that last level.</p>
       <div class="prov" data-m="My recollection"></div></div>
-    <!-- TO WRITE: Did he compose, improvise, or play for himself? What instruments were in the room? What he said about composers using his scales. If the answer is that he did not compose, say what he did with sound instead. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
   </div>
 </section>
 
@@ -363,8 +370,9 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="answer">
     <div class="claim"><p>The names I could confirm in print are under question 9. Kraig Grady met Erv in 1975, and Ivor Darreg is reported to have met him in the early 1960s.</p>
       <div class="prov" data-s="wiki_grady,glasier,gradyintro"></div></div>
-    <!-- TO WRITE: The people you personally know met or studied with Erv, with a line on each. Earlier you named Kraig Grady, Gary David and Stephen Taylor as his students. Confirm the names and how each should be described before this goes to Stephen. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>The people I sat in sessions with were Erv's inner circle. Stephen James Taylor hosted us at his studio every week. Kraig Grady came until he moved to Australia, and Terumi Narushima joined that circle later. Chuck Jonkey came often from across LA. John Chalmers, who founded Xenharmonikon, visited when he could. He was in San Diego, so it was harder for him to attend, and as video conferencing improved he joined the meetups more often.</p>
+      <p>Gary David was important to Erv, though he didn't come to our weekly meetings so much. Gary is a psychologist who is really into Silvan Tomkins's affect system, and he is also a great singer. He connected with Erv in the 1960s, way before my time, and learned how to sing hexanies as jazz. After Erv passed, Gary, Stephen James Taylor and I made a documentary about him called “Surfing the Sonic Sky”, and you can watch it at <a href="https://www.youtube.com/watch?v=L3gg5yrmwvs">https://www.youtube.com/watch?v=L3gg5yrmwvs</a>.</p>
+      <div class="prov" data-m="My recollection" data-s="film"></div></div>
   </div>
 </section>
 
@@ -377,8 +385,10 @@ ol.sources li { overflow-wrap: anywhere; }
       <div class="prov" data-s="xh,xhtoc,mos75"></div></div>
     <div class="claim"><p>The ideas keep travelling. Kraig's archive now hosts papers by Praveen Venkataramana that carry Erv's combination product sets and constant structures over to scales that repeat at the tritave, and Kraig's introduction to moments of symmetry links a calculator for them that it credits to Stiltner.</p>
       <div class="prov" data-s="praveen,mosgrady"></div></div>
-    <!-- TO WRITE: What you saw of this from inside: who came to the house, how he reacted to the tuning lists and to people adopting or renaming his ideas, and anything about the Partch connection that you know first hand. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>Erv collaborated with Harry Partch, and he even made a Gral keyboard mapping of Partch's tuning, which is one of the designs inside Wilsonic today. That was before my time.</p>
+      <p>Erv always had a running commentary on his collaboration with the community. In those years I was more plugged into the tech community and less into the music community, because I hated the idea of monetizing music, so I didn't pay as much attention to those matters as I wish I had.</p>
+      <p>My favorite memories are of the sessions themselves. I would implement that week's research in real time and we would hear it for the first time together, and the way Erv laughed when he heard it is one of my greatest joys and one of my best memories.</p>
+      <div class="prov" data-m="My recollection" data-s="repo"></div></div>
   </div>
 </section>
 
@@ -421,8 +431,20 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 14 of 15</div>
   <h2>What kind of music that you have created has been inspired by Erv?</h2>
   <div class="answer">
-    <!-- TO WRITE: Your own music: the pieces, the instruments and apps you made them with, and which of Erv's structures each one uses. Links to recordings if you want Stephen to play any. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>I released these as Marcus Satellite. Eight of them are from my first album, From On High, which came out in 1998, and three of those I made with K Blu: Feel Good, White Bat and Gopi Groove. I, Marcus is from 2006 and Moments of Symmetry is from 2013. Nine of the ten are moments of symmetry, and I've given each generator as a fraction of the octave so you can dial the same number into the scale tree under <a href="#q3">question 3</a> and see the scale. Moments of Symmetry is a tour through many generators.</p>
+      <ul>
+        <li><a href="https://open.spotify.com/track/6sFkQ6BzHkgoL0q9HizjWQ">Khan Abyss</a>: MOS generator 0.415</li>
+        <li><a href="https://open.spotify.com/track/7jQU1iUJe1nZQoSgnVQx7i">Mad God</a>: MOS generator 0.328</li>
+        <li><a href="https://open.spotify.com/track/2QIciDgwqxk9mx6PthPzRm">Feel Good</a>: MOS generator 0.436</li>
+        <li><a href="https://open.spotify.com/track/0JTj72mO787kXyq6ewSPhy">Saturn Returns</a>: MOS generator 0.238</li>
+        <li><a href="https://open.spotify.com/track/6UMt43zH8Rt1HXqXujBSMi">Culture Void</a>: MOS generator 0.238</li>
+        <li><a href="https://open.spotify.com/track/2LT6SX17OawNEhs7ehMVtV">Judge Nothing</a>: MOS generator 0.415</li>
+        <li><a href="https://open.spotify.com/track/47SMTfXhsdmab17peNUvuJ">White Bat</a>: Lambdoma 6</li>
+        <li><a href="https://open.spotify.com/track/4j6wFU4JZ76A4iONsJTH8W">Gopi Groove</a>: MOS generator 0.292</li>
+        <li><a href="https://open.spotify.com/track/23aauIz5ROWfOQcOBkfO66">I, Marcus</a>: MOS generator 0.238</li>
+        <li><a href="https://open.spotify.com/track/0k5wTgHBnRrWBVVAV2laUE">Moments of Symmetry</a>: a tour through many MOS generators</li>
+      </ul>
+      <div class="prov" data-m="My recollection" data-s="album"></div></div>
     <div class="claim"><p>What I can show you is what I am working on now. Most music has a center, a root that feels like home, and a combination product set has none. In the hexany every tone belongs to four triads, and when you move from one triad to a neighbouring one, two voices stay and the third moves to the one tone it shares no factor with. So every chord change is one voice moving by one of three fixed intervals. With the factors 1, 3, 5 and 7 those are 21/20, 15/14 and 48/35. It feels to me like a kaleidoscope where a key feels like a grid, and I want to know what makes one chord pull toward the next when there is no home to go to. I have not answered that yet.</p>
       <div class="prov" data-e="Working notes 2026-11:live" data-m="My view"></div></div>
   </div>
@@ -455,8 +477,10 @@ ol.sources li { overflow-wrap: anywhere; }
       <div class="prov" data-s="wiki_3gap"></div></div>
     <div class="claim"><p>The personal half is on the public record in outline. The biography in the Wilson Archives says that Erv bred corn, and that he is sometimes credited as the first person to suggest blue corn for tortilla chips.</p>
       <div class="prov" data-s="bio"></div></div>
-    <!-- TO WRITE: What you saw of his garden and his plant breeding, and whether he connected it to the scales in his own words. On worldbuilding: whether he imagined cultures, instruments or whole musical worlds for his tunings, and any names he gave them. -->
-    <p class="note owe">I still owe you my own memories on this one, and I will add them to this page.</p>
+    <div class="claim"><p>Erv tied his farming and his corn to scales, one hundred percent. He had bags of corn around his house, because he was breeding corn in his garden and keeping meticulous records of the results, and that is where the name “Wilson's Garden” comes from. He bred different colors of corn, he was into plant DNA, and he was always talking up corn's nutrition. Keep in mind that he was born in Mexico.</p>
+      <p>He was huge into phyllotaxis, although real plants were more of a metaphor for him. He never pointed at a cactus and said it would make a great scale, because he only used his ears to decide what a great scale was. But the structure of the physical plant world shaped how he pictured scales.</p>
+      <div class="prov" data-m="My recollection"></div></div>
+    <p class="note">I have nothing first hand on worldbuilding, so I will leave that half to the others on the call.</p>
   </div>
 </section>
 
@@ -538,6 +562,7 @@ const S = {
   mtsesp: { c: 'ODDSound, MTS-ESP', f: 'ODDSound, MTS-ESP, a library for microtuning support in audio plugins.', u: 'https://github.com/ODDSound/MTS-ESP' },
   repo: { c: 'Wilsonic MTS-ESP source', f: 'Marcus Hobbs, Wilsonic MTS-ESP, source code and research, MIT licence.', u: REPO },
   album: { c: 'Marcus Satellite, From On High (1998)', f: 'Marcus Satellite (Marcus Hobbs), "From On High", album, 1998, 12 songs.', u: 'https://open.spotify.com/album/15ZzE7ftQ4AdbNRoKVSdp8' },
+  film: { c: 'Surfing the Sonic Sky (film)', f: 'Gary David, Stephen James Taylor and Marcus Hobbs, "Surfing the Sonic Sky", documentary about Erv Wilson. YouTube, posted 27 September 2020.', u: 'https://www.youtube.com/watch?v=L3gg5yrmwvs' },
   blog1: { c: 'Hobbs 2026, The Tunings That Ring', f: 'Marcus Hobbs, "The Tunings That Ring", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-001.md' },
   blog2: { c: 'Hobbs 2026, The Machine Keeps Deriving Wilson', f: 'Marcus Hobbs, "The Machine Keeps Deriving Wilson", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-002.md' },
   gates: { c: 'Research ledger', f: 'Marcus Hobbs, research gate ledger for the early findings on this page.', u: REPO + '/blob/main/experiments/GATES.md' }
@@ -728,9 +753,9 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
     ['Pure fifth 3/2 (701.96¢)', { g: Math.log2(1.5) }], ['Zigzag from 1/2: 0.381966, the golden section of the octave', { turns: '', first: 'L' }],
     ['Erv\'s 0.418935 (502.72¢), 16 July 1997', { g: 0.418934662571 }], ['Meta-meantone fifth (695.63¢)', { g: 0.5796920314 }],
     ['12-tone fifth 7/12', { g: 7 / 12 }], ['Silver, √2 − 1 (497.06¢)', { g: Math.SQRT2 - 1 }],
-    ['My favourite: 0.292787 (351.35¢)', { g: 0.292787482510 }], ['My favourite: 0.436386 (523.66¢)', { g: 0.436385705396 }],
-    ['My favourite: 0.415227 (498.27¢)', { g: 0.415226813655 }], ['My favourite: 0.328173 (393.81¢)', { g: 0.328173397034 }],
-    ['My favourite: 0.238186 (285.82¢)', { g: 0.238186456899 }]
+    ['0.292787 (351.35¢): Gopi Groove', { g: 0.292787482510 }], ['0.436386 (523.66¢): Feel Good', { g: 0.436385705396 }],
+    ['0.415227 (498.27¢): Khan Abyss, Judge Nothing', { g: 0.415226813655 }], ['0.328173 (393.81¢): Mad God', { g: 0.328173397034 }],
+    ['0.238186 (285.82¢): Saturn Returns, Culture Void, I, Marcus', { g: 0.238186456899 }]
   ];
   const st = { g: Math.log2(1.5), size: 7, label: '' }; let sizes = [];
   PRE.forEach((x, i) => $('t3pre').append(el('option', { value: i }, x[0])));
