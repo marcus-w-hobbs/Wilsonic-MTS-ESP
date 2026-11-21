@@ -1,0 +1,862 @@
+<title>Wilsember Playground</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of fifteen question stations in Stephen's order, each an answer then an instrument (controls | preview); graph-paper ground like Erv's notebook pages. Same token family as the other Wilsonic playgrounds: melody teal, harmony amber, recollection violet. */
+:root {
+  --bg: #f2f3ef;
+  --paper: #fbfbf8;
+  --grid: rgba(30, 50, 60, 0.07);
+  --fg: #1d2429;
+  --muted: #5c6a72;
+  --line: #cfd6d3;
+  --accent: #0c6f68;
+  --accent-soft: rgba(12,111,104,0.12);
+  --harm: #9a5712;
+  --harm-soft: rgba(178,103,26,0.14);
+  --noble: #6a41a6;
+  --noble-soft: rgba(122,79,181,0.10);
+  --warn: #a8402f;
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+    --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+    --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+    --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+    --noble: #b79be6; --noble-soft: rgba(160,130,220,0.14);
+    --warn: #ef8a78; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --paper: #1c2125; --grid: rgba(180,210,220,0.06);
+  --fg: #e6e9e7; --muted: #9aa7ad; --line: #35403f;
+  --accent: #4fc3b6; --accent-soft: rgba(79,195,182,0.14);
+  --harm: #e0a05a; --harm-soft: rgba(224,160,90,0.16);
+  --noble: #b79be6; --noble-soft: rgba(160,130,220,0.14);
+  --warn: #ef8a78; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--fg); font-family: var(--font-body); font-size: 15.5px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 18px 48px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.08; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(20px, 2.6vw, 25px); line-height: 1.2; margin: 0; text-wrap: balance; }
+h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+header { display: grid; gap: 12px; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { display: grid; gap: 10px; }
+.legend { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.legend > div { display: grid; gap: 4px; align-content: start; font-size: 13.5px; color: var(--muted); min-width: 0; }
+nav { display: flex; flex-wrap: wrap; gap: 4px 6px; font-family: var(--font-mono); font-size: 12.5px; }
+nav a { text-decoration: none; border: 1px solid var(--line); background: var(--paper); border-radius: 3px; padding: 2px 8px; color: var(--fg); }
+nav a:hover, nav a:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+section.station { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px 18px; display: grid; gap: 12px; min-width: 0; }
+.num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+.answer { display: grid; gap: 10px; }
+.claim { display: grid; gap: 5px; }
+.prov { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { font: 500 11.5px/1.5 var(--font-mono); border: 1px solid currentColor; border-radius: 3px; padding: 0 6px; max-width: 100%; overflow-wrap: anywhere; }
+.tag a { color: inherit; }
+.tag.src { color: var(--accent); background: var(--accent-soft); }
+.tag.mem { color: var(--noble); background: var(--noble-soft); }
+.tag.early { color: var(--harm); background: var(--harm-soft); }
+.fill { border: 1.5px dashed var(--noble); background: var(--noble-soft); border-radius: 4px; padding: 9px 12px; font-size: 14px; display: grid; gap: 4px; max-width: 72ch; }
+.fill b { font: 600 11.5px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--noble); }
+.tool { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 10px; }
+.cols { display: grid; grid-template-columns: minmax(230px, 300px) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.controls, .preview { display: grid; gap: 9px; align-content: start; min-width: 0; }
+label.field { display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
+select, input[type=text] { font: 14px var(--font-mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; min-width: 0; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.row { display: flex; gap: 6px; flex-wrap: wrap; }
+button { font: 500 13px var(--font-body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 11px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+button.on { border-color: var(--accent); background: var(--accent-soft); }
+button.small { padding: 3px 8px; font-size: 12.5px; font-family: var(--font-mono); }
+.val { font-family: var(--font-mono); color: var(--fg); font-variant-numeric: tabular-nums; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { border-top: 2px solid var(--line); padding-top: 4px; min-width: 0; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.stat .v { font-family: var(--font-mono); font-size: 14.5px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat.mel { border-top-color: var(--accent); } .stat.harm { border-top-color: var(--harm); } .stat.nob { border-top-color: var(--noble); }
+.note { font-size: 13.5px; color: var(--muted); max-width: 70ch; }
+.scroll { overflow-x: auto; }
+svg { display: block; max-width: 100%; height: auto; }
+svg text { font-family: var(--font-mono); fill: var(--fg); }
+.t-muted { fill: var(--muted); } .f-acc { fill: var(--accent); } .f-harm { fill: var(--harm); } .f-nob { fill: var(--noble); } .f-warn { fill: var(--warn); } .f-fg { fill: var(--fg); } .f-none { fill: none; } .f-paper { fill: var(--paper); }
+.s-line { stroke: var(--line); } .s-acc { stroke: var(--accent); } .s-harm { stroke: var(--harm); } .s-nob { stroke: var(--noble); } .s-fg { stroke: var(--fg); } .s-warn { stroke: var(--warn); } .s-paper { stroke: var(--paper); }
+.dim { opacity: 0.35; }
+.hit { cursor: pointer; }
+canvas { max-width: 100%; height: auto; display: block; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px 8px 0; border-top: 1px solid var(--line); }
+th { font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-top: 0; }
+td:first-child, td:nth-child(2) { font-family: var(--font-display); font-size: 15.5px; min-width: 150px; }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 8px; max-width: 72ch; }
+ol.sources { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 14px; }
+ol.sources li { overflow-wrap: anywhere; }
+.badge { font: 500 12px var(--font-mono); padding: 1px 7px; border-radius: 3px; border: 1px solid var(--line); }
+.badge.mos { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.badge.mid { color: var(--harm); border-color: var(--harm); background: var(--harm-soft); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen · draft</div>
+  <h1>Fifteen questions about Erv Wilson, with things to play</h1>
+  <div class="lede">
+    <p>Stephen, you sent fifteen questions for the Wilsember episode and I could not be on the call, so I built you this page. Each question has a short answer from me, and where the idea is something you can see or hear I put a small instrument under it so you can try it yourself. I worked beside Erv from 1995 to 2005, turning his drawings into software while he drew the next one, and for the last year I have been going back through his papers with a computer.</p>
+    <p>You have to connect ideas to sources when you take them to your listeners, so every claim on this page carries one of three labels, and the full list of sources is at the bottom.</p>
+  </div>
+  <div class="legend">
+    <div><span class="prov"><span class="tag src">Published</span></span>Someone else can look this up. The label links to the paper, book or page.</div>
+    <div><span class="prov"><span class="tag mem">My recollection</span></span>This comes from my memory of working with Erv, or it is my own view. The dashed violet boxes are places I still have to write.</div>
+    <div><span class="prov"><span class="tag early">Early, unpublished</span></span>New work from my research this year, with the experiment name and where it stands in my ledger. Nobody outside has reviewed it, so please treat it as a lead to follow.</div>
+  </div>
+  <p class="note">The sound only starts when you press a play button. All of the arithmetic runs on this page, so anything you see drawn here you can check by changing the numbers.</p>
+  <nav aria-label="Questions" id="nav"></nav>
+</header>
+
+<!-- Q1 -->
+<section class="station" id="q1">
+  <div class="num">Question 1 of 15</div>
+  <h2>What makes Erv Wilson a unique force in the microtonal space?</h2>
+  <div class="answer">
+    <div class="claim"><p>I think it is that he would not choose between melody and harmony. A scale that is good for melody wants a few step sizes and a clear stepwise shape, and a scale that is good for harmony wants chords whose tones reinforce each other, and most systems give you one of those and ask you to live without the other. Erv spent his life looking for structures that give you both at once. He worked by hand and by ear and he recorded what he found as drawings, because that is how he thought.</p>
+      <div class="prov" data-m="My recollection" data-s="blog1,wa"></div></div>
+    <div class="claim"><p>The test he kept coming back to was the triad. Take two notes and put a third note at their arithmetic mean and you have the major kind of triad, the 4:5:6 kind. Both gaps between the notes are then the same number of hertz, so the difference tones land together on one pitch and the chord locks. Put the third note at the harmonic mean and you have the minor kind, 10:12:15, where the three notes share an overtone. Erv called these proportional and subcontrary triads, and in Wilsonic the analysis that counts them in every scale still uses his names.</p>
+      <div class="prov" data-m="My recollection" data-s="proptri,repo"></div></div>
+    <div class="claim"><p>What I did not expect, when I measured it on myself, was how forgiving the ear is. In blind listening last autumn, under the strictest condition I tried, a major third stopped sounding locked for me once it was about 8.43 cents flat or 10.0 cents sharp. That is one listener and one timbre, so I would not build a theory on it yet.</p>
+      <div class="prov" data-e="EAR-ε:G-025"></div></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: the two means of an interval</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t1int">Outer interval<select id="t1int"></select></label>
+        <div class="row" role="group" aria-label="Middle note">
+          <button id="t1p" class="on">Arithmetic mean</button><button id="t1s">Harmonic mean</button>
+        </div>
+        <label class="field" for="t1mis">Mistune the middle note: <span class="val" id="t1misv">0.0¢</span><input type="range" id="t1mis" min="-20" max="20" step="0.5" value="0"></label>
+        <div class="row"><button class="primary" id="t1play">Play the triad</button><button id="t1diff">Play its difference tones</button></div>
+      </div>
+      <div class="preview">
+        <svg id="t1svg" viewBox="0 0 640 150" role="img" aria-label="The three notes and their difference tones on a line of frequency"></svg>
+        <div class="stats" id="t1stats"></div>
+        <p class="note">The line is frequency in hertz, which is where difference tones live. Move the mistuning slider and watch the two small difference tones separate, then listen for the beating.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q2 -->
+<section class="station" id="q2">
+  <div class="num">Question 2 of 15</div>
+  <h2>Do recurrent sequences in his scale-making produce moments of symmetry? Or other types of patterns as well?</h2>
+  <div class="answer">
+    <div class="claim"><p>They do, and the way they get there is the part I find most interesting. Erv read the diagonals of Pascal's triangle, which he called Mt. Meru, as rules for building a sequence where every new number is the sum of two earlier ones. The ratio between neighbouring terms settles toward one number, and that number is a generator. If you stack that generator and stop at one of its natural sizes, you have a moment of symmetry. Fibonacci is the first diagonal, and his meta-pelog, meta-slendro and meta-meantone come from the diagonals after it.</p>
+      <div class="prov" data-s="meru,merugrady"></div></div>
+    <div class="claim"><p>So in the long run the answer is yes. In the early terms, before the ratio has settled, you get a different pattern, and as a musician I find it more useful. Because each new term is the sum of two earlier terms, half of the new term is their arithmetic mean, so the three of them make an exact proportional triad in whole numbers. The start of the sequence gives you harmony and the far end gives you the melodic pattern, and in between the scale slides from one to the other.</p>
+      <div class="prov" data-e="MERU-001:G-028"></div></div>
+    <div class="claim"><p>When I checked this by machine in October the exact-triad rule held for every recurrence whose coefficients are powers of two, which covers the ones Erv wrote down that I tested. A second rule I had registered, about how fast the harmony gives way to the chain, failed on one case in twelve, and I have left it marked as refuted. I have not finished listening to the scales this made.</p>
+      <div class="prov" data-e="MERU-001:G-028"></div></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: watch a recurrence settle</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t2rec">Recurrence<select id="t2rec"></select></label>
+        <label class="field" for="t2seed">Seeds (whole numbers)<input type="text" id="t2seed" inputmode="numeric" autocomplete="off"></label>
+        <label class="field" for="t2w">Notes in the window: <span class="val" id="t2wv"></span><input type="range" id="t2w" min="3" max="24" step="1" value="7"></label>
+        <label class="field" for="t2n">Window starts at term: <span class="val" id="t2nv"></span><input type="range" id="t2n" min="0" max="30" step="1" value="0"></label>
+        <div class="row"><button class="primary" id="t2play">Play the window</button><button id="t2tri">Play the newest triad</button></div>
+      </div>
+      <div class="preview">
+        <svg id="t2svg" viewBox="0 0 640 170" role="img" aria-label="Ratio of neighbouring terms in cents, settling toward the generator"></svg>
+        <div id="t2bar"></div>
+        <div class="stats" id="t2stats"></div>
+        <p class="note">Set the window to one of the generator's own sizes, then slide the start to the right. Early windows have several step sizes and exact triads. Late windows have two step sizes, which is the moment of symmetry.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q3 -->
+<section class="station" id="q3">
+  <div class="num">Question 3 of 15</div>
+  <h2>How can one use the scale tree?</h2>
+  <div class="answer">
+    <div class="claim"><p>I use it as a map of generators. Every fraction on the tree is a generator measured as a fraction of the octave, and its denominator is the number of notes you have when the chain closes. When you walk down the tree toward a generator, the denominators you pass are the sizes at which that generator gives a moment of symmetry, so one path is a list of scales that live inside each other. A path that stops gives an equal temperament. A path that turns left, right, left, right forever settles on what Erv called a golden generator, where the large and small steps approach the same proportion at every size. Mathematicians know the same tree as the Stern-Brocot tree and those endless zigzag numbers as noble numbers.</p>
+      <div class="prov" data-s="tree94,gold,treecomment,wiki_sb"></div></div>
+    <div class="claim"><p>Last October I transcribed the bottom row of Erv's 1994 Scale-Tree sheet, which is 32 decimals, and found that one rule reproduces all 32 to ten places: take each pair of neighbouring fractions a/b and c/d at the fifth row and write (a + φc)/(b + φd). His sheet shows the numbers and leaves the rule for the reader to find.</p>
+      <div class="prov" data-e="Lattice log 2026-10-17:none" data-s="tree94"></div></div>
+    <div class="claim"><p>I expected the golden generators to explain why Erv's favourite generators sound so harmonic, and the measurement disappointed me. His generators do sit within a fraction of a cent of golden ones, but golden numbers are so dense that a random generator does too. Against a fair comparison I never found more than 6 of his 17 in the closest tenth, where chance gives 1.7, and the silver family fits them as well as the golden one. My reading today is that the zigzag is about melody, meaning how the scales nest, and that harmony comes from a separate condition. I think Erv chose the golden number inside a range that already sounded good to him, and that last sentence is a guess.</p>
+      <div class="prov" data-e="GOLD-002:G-034,GOLD-003:G-038"></div></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: walk the tree, read the horogram</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t3pre">Start from<select id="t3pre"></select></label>
+        <label class="field" for="t3g">Any generator: <span class="val" id="t3gv"></span><input type="range" id="t3g" min="0.02" max="0.98" step="0.0005" value="0.585"></label>
+        <div class="row"><button id="t3L" class="small">Turn left</button><button id="t3R" class="small">Turn right</button><button id="t3up" class="small">Back up</button></div>
+        <div class="row"><button id="t3zl" class="small">Zigzag forever, left first</button><button id="t3zr" class="small">Zigzag forever, right first</button></div>
+        <h3>Scale size to hear</h3>
+        <div class="row" id="t3sizes"></div>
+        <div class="row"><button class="primary" id="t3play">Play this scale</button></div>
+      </div>
+      <div class="preview">
+        <div class="scroll"><svg id="t3tree" viewBox="0 0 900 268" style="min-width:820px" role="img" aria-label="Scale tree from 0/1 to 1/1, five rows deep"></svg></div>
+        <p class="val" id="t3path" style="font-size:13px;overflow-wrap:anywhere"></p>
+        <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:start">
+          <svg id="t3horo" viewBox="0 0 340 340" style="max-width:320px" role="img" aria-label="Horogram: one ring per scale size, large steps teal, small steps amber"></svg>
+          <div class="stats" id="t3stats"></div>
+        </div>
+        <p class="note">Each ring is one moment of symmetry of the generator, smallest in the middle. Teal arcs are the large step and amber arcs are the small step. Tap a fraction on the tree to stop there, which gives an equal temperament.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q4 -->
+<section class="station" id="q4">
+  <div class="num">Question 4 of 15</div>
+  <h2>How could we summarize the list of ideas he pioneered?</h2>
+  <div class="answer">
+    <p>Here is the list I would read out, each with the paper to point listeners to. It is my selection, and Kraig Grady's archive holds far more than this.</p>
+    <ul class="plain" id="q4list">
+      <li class="claim"><span><strong>Moments of symmetry.</strong> Stack one generator inside a period and stop where the scale has exactly two step sizes. This is the idea most of the community met first.</span><div class="prov" data-s="mos75,mosgrady"></div></li>
+      <li class="claim"><span><strong>The scale tree and the golden horograms.</strong> A map of every generator and the scales nested inside it, with rings that show each size.</span><div class="prov" data-s="tree94,gold"></div></li>
+      <li class="claim"><span><strong>Combination product sets.</strong> Take a set of harmonic factors, multiply them k at a time, and you get a harmonic structure with no single root: the hexany, the dekanies, the eikosany and larger ones.</span><div class="prov" data-s="dal,hexany,cpscomment"></div></li>
+      <li class="claim"><span><strong>Mapping harmony onto keyboards.</strong> His generalized keyboard layouts, and D'Alessandro, where a 31-note template carries the eikosany and its neighbours.</span><div class="prov" data-s="xh3,dal,kbd,patent"></div></li>
+      <li class="claim"><span><strong>Constant structures.</strong> Scales where every interval always spans the same number of steps, so a keyboard or a notation can be trusted.</span><div class="prov" data-s="mosgrady,gloss,cs"></div></li>
+      <li class="claim"><span><strong>The scales of Mt. Meru.</strong> Recurrent sequences from the diagonals of Pascal's triangle, whose limits are generators such as meta-meantone and meta-slendro.</span><div class="prov" data-s="meru,merugrady"></div></li>
+      <li class="claim"><span><strong>Diamonds, lattices and the work on other people's music.</strong> His lattice drawings, the illustrations he made for Harry Partch's Genesis of a Music, his Marwa permutations and his latticing of raga scales.</span><div class="prov" data-s="diamond,timeline,marwa,wa"></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Q5 -->
+<section class="station" id="q5">
+  <div class="num">Question 5 of 15</div>
+  <h2>How do you think Wilson's ideas of being "xenharmonic" differed from Darreg's?</h2>
+  <div class="answer">
+    <div class="claim"><p>I am the wrong person to speak for Ivor Darreg, and I would rather hear you, Billy and Praveen on this one. The word is Darreg's, and the published accounts of what he meant by it are better than my paraphrase would be.</p>
+      <div class="prov" data-s="wiki_xen,glasier"></div></div>
+    <div class="claim"><p>What I can offer is what I saw from Erv's side of the desk. The papers I worked from are almost all structures, drawings of scales and keyboards and lattices, and very few of them argue for a sound or a style. He handed musicians a structure and wanted to hear what they did with it.</p>
+      <div class="prov" data-m="My recollection"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>How Erv talked about Darreg and about the word xenharmonic, if he did. Anything he said about equal temperaments against just structures. One concrete memory is better than a general statement.</span></div>
+  </div>
+</section>
+
+<!-- Q6 -->
+<section class="station" id="q6">
+  <div class="num">Question 6 of 15</div>
+  <h2>What does it mean to be "Wilsonian"?</h2>
+  <div class="answer">
+    <div class="claim"><p>To me it means you begin with a structure and you ask it for melody and harmony together. It means you draw it, because a drawing lets you see relationships that a list of cents hides. And it means the structure is something you play your way through, moving from one subset to a neighbouring one, where another approach would fix a single scale and stay in it.</p>
+      <div class="prov" data-m="My view"></div></div>
+    <div class="claim"><p>I would add one caution for your listeners. Being Wilsonian does not mean avoiding the regular temperament vocabulary. Most of Erv's objects have exact names in that language, and I have put the translations in <a href="#dictionary">the dictionary below</a> because I wish I had had it in 1995.</p>
+      <div class="prov" data-m="My view"></div></div>
+  </div>
+</section>
+
+<!-- Q7 -->
+<section class="station" id="q7">
+  <div class="num">Question 7 of 15</div>
+  <h2>What does it mean for scale creation to be a living process, like a crystal or plant? Is that based in allegory only?</h2>
+  <div class="answer">
+    <div class="claim"><p>I do not think it is only allegory, and I can show you the part that is literal. A moment of symmetry grows by one rule applied over and over: place the next note a fixed fraction of the octave from the last one. A sunflower head grows by the same rule, with each new seed a fixed fraction of a turn from the last one. Whatever fraction you choose, the notes around the octave never have more than three different gaps between them, and at certain sizes they have exactly two. Those sizes are the moments of symmetry. For a golden generator the proportion between the large and small step settles to the golden ratio at every size, so the scale really is self-similar in the way a plant is.</p>
+      <div class="prov" data-s="wiki_3gap,wiki_phyllo,gold"></div></div>
+    <div class="claim"><p>The crystal side is literal too. A combination product set is a solid: the hexany is an octahedron, with a tone at each corner and a triad on each face, and you can hold a model of it in your hand.</p>
+      <div class="prov" data-s="grady_hex,wiki_hexany"></div></div>
+    <div class="claim"><p>Where I would be careful is the step after that. Sharing the arithmetic of a plant does not by itself make a scale sound good, and my own measurements so far say that the growing pattern and the harmony come from two separate conditions.</p>
+      <div class="prov" data-e="GOLD-002:G-034"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>Did Erv himself use the words crystal, plant or growth for his scales? What he said, and when. This is also the place for anything about his own plants.</span></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: grow a scale and a seed head with the same number</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t7pre">Fraction of the octave per note<select id="t7pre"></select></label>
+        <label class="field" for="t7n">Notes so far: <span class="val" id="t7nv"></span><input type="range" id="t7n" min="1" max="60" step="1" value="8"></label>
+        <div class="row"><button class="primary" id="t7grow">Grow</button><button id="t7play">Play these notes</button></div>
+        <div class="stats" id="t7stats"></div>
+      </div>
+      <div class="preview">
+        <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <svg id="t7ring" viewBox="0 0 300 300" role="img" aria-label="Notes placed around the octave, gaps coloured by size"></svg>
+          <canvas id="t7sun" width="600" height="600" style="width:100%;max-width:300px" role="img" aria-label="Seed head grown with the same fraction of a turn"></canvas>
+        </div>
+        <p class="note">Left is the octave as a circle, with each gap coloured by its size. Right is a seed head where each seed turns by the same fraction. Try the 12-tone fifth and the seed head makes twelve spokes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q8 -->
+<section class="station" id="q8">
+  <div class="num">Question 8 of 15</div>
+  <h2>How can we properly remember Wilson's contributions?</h2>
+  <div class="answer">
+    <div class="claim"><p>By keeping his papers readable and by doing the work of deriving them again. The Wilson Archives at anaphoria.com are the authorized collection of his papers, and that is where anyone should start. Kraig Grady is the person to write to about them, and he and Terumi Narushima keep a glossary there. Terumi also wrote the book-length account of Erv's tuning systems.</p>
+      <div class="prov" data-s="wa,gloss,naru"></div></div>
+    <div class="claim"><p>What I found going back through the papers is that they show his results and leave out how he reached them. So the most useful thing I can do is work out the reasoning, check it against his numbers, and publish the code so that someone else can check me. In two posts last year I described cases where an exhaustive computer search arrived at something Erv had already drawn by hand.</p>
+      <div class="prov" data-m="My view" data-s="blog1,blog2"></div></div>
+    <div class="claim"><p>Wilsonic is my part of the remembering. It is free and open source under the MIT licence, and it sends his scale designs to any synth in a DAW through MTS-ESP, so that people can play these structures and not only read about them. The listening judgments from my research are published too, under CC BY 4.0, so that others can use them or disagree with them.</p>
+      <div class="prov" data-s="repo,mtsesp"></div></div>
+  </div>
+</section>
+
+<!-- Q9 -->
+<section class="station" id="q9">
+  <div class="num">Question 9 of 15</div>
+  <h2>How does Wilson's influence show up in other musicians' work? What kind of correspondences did he keep and maintain?</h2>
+  <div class="answer">
+    <div class="claim"><p>The published record names the people, and I would send your listeners there first. Wikipedia's article on Erv lists Harry Partch, Warren Burt, Jim French, Kraig Grady, Jose Hales-Garcia, Catherine Lamb, Terumi Narushima, Paul Rapoport, Emil Richards, Greg Schiemer, Stephen James Taylor and Daniel James Wolf, and it lists me under my old stage name. Kraig's own introduction names Gary David, Daniel Wolf and Chuck Jonkey as important students and mentions Stephen Taylor's documentary The Sonic Sky.</p>
+      <div class="prov" data-s="wiki_wilson,gradyintro"></div></div>
+    <div class="claim"><p>The papers themselves are full of correspondence, because many of his sheets were made for a particular person. Among the ones I have worked from this year are a letter to John Chalmers dated 21 August 1965, where he conjectures how the number of melodic step sizes grows with the harmonic limit, a sheet made for Kraig Grady on 15 October 1993 and a letter to Warren Burt dated 1 August 1997, both about recurrent sequences.</p>
+      <div class="prov" data-s="wa"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>Who you saw him write to and talk with between 1995 and 2005, how he kept those exchanges going (letters, phone, visits, sheets handed over), and whose music you would point to as carrying his influence. Kraig Grady knows this better than anyone and should be credited for whatever comes from him.</span></div>
+  </div>
+</section>
+
+<!-- Q10 -->
+<section class="station" id="q10">
+  <div class="num">Question 10 of 15</div>
+  <h2>Did Erv Wilson ever compose? Music making is part of the scale creation process for some people but not for others.</h2>
+  <div class="answer">
+    <div class="claim"><p>I want to answer this one from memory and get it right, so I have left it open until I have written it properly. What I can say now is how the work went when I was there: he drew a design, I made it sound, and he listened and changed the drawing. Listening was part of how the scales were made, whatever we decide to call that.</p>
+      <div class="prov" data-m="My recollection"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>Did he compose, improvise, or play for himself? What instruments were in the room? What he said about composers using his scales. If the answer is that he did not compose, say what he did with sound instead.</span></div>
+  </div>
+</section>
+
+<!-- Q11 -->
+<section class="station" id="q11">
+  <div class="num">Question 11 of 15</div>
+  <h2>Which microtonalists that you know got to speak to Erv?</h2>
+  <div class="answer">
+    <div class="claim"><p>The names I could confirm in print are under question 9. Kraig Grady met Erv in 1975, and Ivor Darreg is reported to have met him in the early 1960s.</p>
+      <div class="prov" data-s="wiki_grady,glasier,gradyintro"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>The people you personally know met or studied with Erv, with a line on each. Earlier you named Kraig Grady, Gary David and Stephen Taylor as his students. Confirm the names and how each should be described before this goes to Stephen.</span></div>
+  </div>
+</section>
+
+<!-- Q12 -->
+<section class="station" id="q12">
+  <div class="num">Question 12 of 15</div>
+  <h2>What kinds of interactions did Erv's theories have with the rest of the microtonal community?</h2>
+  <div class="answer">
+    <div class="claim"><p>Much of it went through Xenharmonikon, the journal John Chalmers founded, where several of Erv's papers appeared between 1974 and 1989, and through letters. The 1975 paper on moments of symmetry is itself a letter to Chalmers.</p>
+      <div class="prov" data-s="xh,xhtoc,mos75"></div></div>
+    <div class="claim"><p>The ideas keep travelling. Kraig's archive now hosts papers by Praveen Venkataramana that carry Erv's combination product sets and constant structures over to scales that repeat at the tritave, and Kraig's introduction to moments of symmetry links a calculator for them that it credits to Stiltner.</p>
+      <div class="prov" data-s="praveen,mosgrady"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>What you saw of this from inside: who came to the house, how he reacted to the tuning lists and to people adopting or renaming his ideas, and anything about the Partch connection that you know first hand.</span></div>
+  </div>
+</section>
+
+<!-- Q13 -->
+<section class="station" id="q13">
+  <div class="num">Question 13 of 15</div>
+  <h2>What was the process like for his theories' adoption in the regular temperament theory space, such as horograms used in "A Middle Path" etc.?</h2>
+  <div class="answer">
+    <div class="claim"><p>I was not part of the conversations where that adoption happened, so I can only tell you what it looks like from Erv's side, and you know the other side better than I do. The paper you name is Paul Erlich's, and I would let Paul tell how the horograms got into it.</p>
+      <div class="prov" data-s="erlich"></div></div>
+    <div class="claim"><p>What I can add is that Erv's keyboard templates are vals. In D'Alessandro he laid a 31-note template over just tones from the 1·3·5·7·9·11 family. When I encoded it last year the template came out as the 31-tone patent val exactly, and the seven keys where two just tones land together are the commas in its kernel: 385/384, 2079/2048 and 121/120. Erv had no word like val or kernel. He drew the template and marked the collisions by hand.</p>
+      <div class="prov" data-s="dal,blog1" data-e="BRIDGE-000:G-014"></div></div>
+    <div class="claim"><p>I think the regular temperament vocabulary is the language Erv and I were missing when we worked together. I had the formal training and he had the pictures, and neither of us could translate for the other.</p>
+      <div class="prov" data-m="My recollection"></div></div>
+    <div class="claim"><p>Going the other way, I have been asking which temperaments hold his harmonic structures. The 1·3·5·7 hexany fits inside a 22-note chain of a 193.79 cent generator with every tone within 1.37 cents, using the mapping (16, 2, 5) for 3, 5 and 7, which tempers out 2401/2400 and 3136/3125. No equal temperament below 73 notes does that. At 15 notes the best chain turned out to be a generator Erv had written down himself in July 1997, and in blind listening I preferred his 15-note chain in the harmonic passages even though its triads are 5 to 7 cents off.</p>
+      <div class="prov" data-e="CPSFIT-001:G-029,CPSFIT-002:G-031"></div></div>
+    <div class="claim"><p>One correction I had to make along the way: the claim that the 1·3·5·7·9·11 eikosany is a constant structure did not survive a machine check. Other seed sets do give constant structure eikosanies, and my search found 32 of them.</p>
+      <div class="prov" data-e="LAT-MEL-001:G-007,CS-EIK-001:G-012"></div></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: lay a template over a Wilson structure</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t13set">Just tones<select id="t13set"></select></label>
+        <label class="field" for="t13n">Template size (notes per octave)<select id="t13n"></select></label>
+        <div class="row"><button class="primary" id="t13play">Play just, then tempered</button></div>
+        <div class="stats" id="t13stats"></div>
+      </div>
+      <div class="preview">
+        <svg id="t13svg" viewBox="0 0 340 340" style="max-width:340px" role="img" aria-label="Ring of template degrees with the just tones placed on them"></svg>
+        <div id="t13list" class="note"></div>
+        <p class="note">The template is the patent val: each prime goes to its nearest step. Two tones on one degree are a collision, and the small ratio between them is a comma the template tempers out. With no collisions, every tone has its own key.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q14 -->
+<section class="station" id="q14">
+  <div class="num">Question 14 of 15</div>
+  <h2>What kind of music that you have created has been inspired by Erv?</h2>
+  <div class="answer">
+    <div class="fill"><b>Marcus to write</b><span>Your own music: the pieces, the instruments and apps you made them with, and which of Erv's structures each one uses. Links to recordings if you want Stephen to play any.</span></div>
+    <div class="claim"><p>What I can show you is what I am working on now. Most music has a center, a root that feels like home, and a combination product set has none. In the hexany every tone belongs to four triads, and when you move from one triad to a neighbouring one, two voices stay and the third moves to the one tone it shares no factor with. So every chord change is one voice moving by one of three fixed intervals. With the factors 1, 3, 5 and 7 those are 21/20, 15/14 and 48/35. It feels to me like a kaleidoscope where a key feels like a grid, and I want to know what makes one chord pull toward the next when there is no home to go to. I have not answered that yet.</p>
+      <div class="prov" data-e="Working notes 2026-11:live" data-m="My view"></div></div>
+  </div>
+  <div class="tool">
+    <h3>Try it: turn the hexany</h3>
+    <div class="cols">
+      <div class="controls">
+        <label class="field" for="t14seed">Four factors<select id="t14seed"></select></label>
+        <h3>The eight triads</h3>
+        <div class="row" id="t14tri"></div>
+        <h3>Move one voice</h3>
+        <div class="row" id="t14nb"></div>
+        <div class="row"><button class="primary" id="t14play">Play this triad</button><button id="t14tour">Play a tour of all eight</button></div>
+      </div>
+      <div class="preview">
+        <svg id="t14svg" viewBox="0 0 340 310" style="max-width:380px" role="img" aria-label="Hexany as a hexagon: six tones, opposite tones share no factor, triads are triangles"></svg>
+        <div class="stats" id="t14stats"></div>
+        <p class="note">Tones across from each other share no factor and never sound in the same triad. Erv writes this structure 2)4, two factors at a time out of four. In the notation most mathematicians would use it is CPS(4,2).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Q15 -->
+<section class="station" id="q15">
+  <div class="num">Question 15 of 15</div>
+  <h2>Two interesting connections to explore in his work would be worldbuilding and gardening.</h2>
+  <div class="answer">
+    <div class="claim"><p>The gardening connection has a mathematical half and a personal half. The mathematical half is under <a href="#q7">question 7</a>: the rule that grows a seed head is the rule that grows a moment of symmetry, and you can turn the same dial for both.</p>
+      <div class="prov" data-s="wiki_3gap"></div></div>
+    <div class="claim"><p>The personal half is on the public record in outline. The biography in the Wilson Archives says that Erv bred corn, and that he is sometimes credited as the first person to suggest blue corn for tortilla chips.</p>
+      <div class="prov" data-s="bio"></div></div>
+    <div class="fill"><b>Marcus to write</b><span>What you saw of his garden and his plant breeding, and whether he connected it to the scales in his own words. On worldbuilding: whether he imagined cultures, instruments or whole musical worlds for his tunings, and any names he gave them.</span></div>
+  </div>
+</section>
+
+<!-- Dictionary -->
+<section class="station" id="dictionary">
+  <div class="num">Two-way dictionary</div>
+  <h2>Erv's words and the words your listeners already know</h2>
+  <p>Most of Erv's objects have an exact counterpart in the vocabulary of regular temperament theory and ordinary mathematics. I have tried to say where the two match exactly and where one is stronger than the other. The translations are mine, and the links are to Erv's side of each pair. The Xenharmonic Wiki has pages for most of the right-hand terms, but it turned away the automated check I ran on every link here, so I have left those pages for you to cite, since you know them better than I do.</p>
+  <div class="scroll"><table style="min-width:680px">
+    <thead><tr><th>Erv's term</th><th>Also known as</th><th>How they connect</th></tr></thead>
+    <tbody id="dict"></tbody>
+  </table></div>
+</section>
+
+<!-- Sources -->
+<section class="station" id="sources">
+  <div class="num">Sources</div>
+  <h2>What to cite</h2>
+  <p>Every link here was opened and checked while this page was built. Erv's papers are cited from the public Wilson Archives that Kraig Grady maintains. I read my own copies of the scans in place and none of them are reproduced here.</p>
+  <ol class="sources" id="srclist"></ol>
+  <p class="note">The early findings link to my research ledger, where each experiment has a gate that I mark passed or failed after reviewing it or listening to it. A passed gate means I accepted the result for my own work. It has not been reviewed by anyone else.</p>
+</section>
+</div>
+
+<script>
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+const el = (tag, attrs, text) => { const e = document.createElement(tag); if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const NS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const clear = n => { while (n.firstChild) n.removeChild(n.firstChild); };
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; };
+const cents = r => 1200 * Math.log2(r);
+const fx = (x, n) => x.toFixed(n);
+const PHI = (1 + Math.sqrt(5)) / 2;
+const REPO = 'https://github.com/marcus-w-hobbs/Wilsonic-MTS-ESP';
+
+/* ---------- sources: only entries with a checked url are shown ---------- */
+const W = 'https://www.anaphoria.com/', WP = 'https://en.wikipedia.org/wiki/';
+const S = {
+  wa: { c: 'The Wilson Archives', f: 'The Wilson Archives, the authorized archive of Erv Wilson\'s papers, anaphoria.com.', u: W + 'wilson.html' },
+  mos75: { c: 'Wilson 1975, MOS letter', f: 'Erv Wilson, letter to John Chalmers pertaining to Moments of Symmetry / Tanabe Cycle, 1975. Wilson Archives.', u: W + 'mos.pdf' },
+  tree94: { c: 'Wilson 1994, Scale-Tree', f: 'Erv Wilson, "Scale-Tree (Peirce Sequence)", 1994. Wilson Archives.', u: W + 'sctree.pdf' },
+  gold: { c: 'Wilson, Golden Horograms', f: 'Erv Wilson, "The Golden Horograms of the Scale Tree". Wilson Archives, scale tree section.', u: W + 'hrgm.pdf' },
+  treecomment: { c: 'Archives, Comments on the Scale Tree', f: '"Comments on the Scale Tree", Wilson Archives (in preparation). Relates the scale tree to the Stern-Brocot tree.', u: W + 'scaletreecomment.html' },
+  dal: { c: 'Wilson 1989, D\'Alessandro', f: 'Erv Wilson, "D\'Alessandro, Like a Hurricane", Xenharmonikon 12, Spring 1989. Wilson Archives.', u: W + 'dal.pdf' },
+  hexany: { c: 'Wilson, The Hexany', f: 'Erv Wilson, "The Hexany". Wilson Archives, combination product sets section.', u: W + 'hexany.pdf' },
+  cpscomment: { c: 'Archives, Comments on the CPS', f: '"Comments on the Combination Product Sets of Erv Wilson", Wilson Archives.', u: W + 'cpscomment.html' },
+  grady_hex: { c: 'Grady 1991, Ervin Wilson\'s Hexany', f: 'Kraig Grady, "Ervin Wilson\'s Hexany", 1/1: The Journal of the Just Intonation Network 7(1), 1991.', u: W + 'grady1-1.pdf' },
+  xh3: { c: 'Wilson 1975, Extended Linear Mapping', f: 'Erv Wilson, "On the Development of Intonational Systems by Extended Linear Mapping", Xenharmonikon 3, Spring 1975. Wilson Archives.', u: W + 'xen3b.pdf' },
+  kbd: { c: 'Wilson 1974, Bosanquet', f: 'Erv Wilson, "Bosanquet: A Bridge, A Doorway to Dialog", Xenharmonikon 2, Fall 1974. Wilson Archives.', u: W + 'xen2.pdf' },
+  patent: { c: 'Wilson 1967, keyboard patent', f: 'Ervin M. Wilson, "Musical instrument keyboard", US Patent 3,342,094, granted 19 September 1967.', u: 'https://patents.google.com/patent/US3342094A/en' },
+  cs: { c: 'Wilson, 22-tone constant structures', f: 'Erv Wilson, "Early Lattices of Some 22 Tone Constant Structures". Wilson Archives.', u: W + 'earlylattices22.pdf' },
+  mosgrady: { c: 'Grady 2007, Introduction to MOS', f: 'Kraig Grady, "Introduction to Erv Wilson\'s Moments of Symmetry", 2007, revised 2014. Wilson Archives.', u: W + 'wilsonintroMOS.html' },
+  gloss: { c: 'Narushima and Grady, Glossary', f: 'Terumi Narushima and Kraig Grady, Glossary of the Wilson Archives (in progress).', u: W + 'glossary.html' },
+  meru: { c: 'Wilson 1993, Scales of Mt. Meru', f: 'Erv Wilson, "The Scales of Mt. Meru", 1993. Wilson Archives.', u: W + 'meruone.pdf' },
+  merugrady: { c: 'Archives, Introduction to Mt. Meru', f: '"An Introduction to the Scales of Mt Meru and Other Recurrent Sequence Scales", Wilson Archives.', u: W + 'wilsonintroMERU.html' },
+  proptri: { c: 'Wilson, Proportional Triads', f: 'Erv Wilson, "Proportional Triads". Wilson Archives, Mt. Meru section.', u: W + 'proportionaltriads.pdf' },
+  marwa: { c: 'Wilson 1985, Marwa Permutations', f: 'Erv Wilson, "The Marwa Permutations", 1985, in Xenharmonikon 9, 1986. Wilson Archives.', u: W + 'xen9mar.pdf' },
+  diamond: { c: 'Archives, diamonds and lattices', f: 'Wilson Archives, diamond, lambdoma and co-prime grid papers.', u: W + 'wilsondiamondcoprime.html' },
+  timeline: { c: 'Hales-Garcia, Wilson timeline', f: 'Jose Hales-Garcia (compiler), "The Wilson Archives: An Erv Wilson Timeline".', u: W + 'wilson-timeline.html' },
+  bio: { c: 'Archives, biography', f: '"A Biography of Erv Wilson", Wilson Archives, with a second part by his brother Grant Wilson.', u: W + 'wilsonbio.html' },
+  gradyintro: { c: 'Grady, Introduction and Digressions', f: 'Kraig Grady, "One Person\'s Introduction and Digressions to the Works of Erv Wilson", first written about 2000. Wilson Archives.', u: W + 'wilsonintro.html' },
+  naru: { c: 'Narushima 2018', f: 'Terumi Narushima, Microtonality and the Tuning Systems of Erv Wilson, Routledge, 2018.', u: 'https://www.routledge.com/Microtonality-and-the-Tuning-Systems-of-Erv-Wilson/Narushima/p/book/9781138857568' },
+  wiki_wilson: { c: 'Wikipedia, Erv Wilson', f: 'Wikipedia, "Erv Wilson".', u: WP + 'Erv_Wilson' },
+  wiki_grady: { c: 'Wikipedia, Kraig Grady', f: 'Wikipedia, "Kraig Grady".', u: WP + 'Kraig_Grady' },
+  praveen: { c: 'Archives, papers of Praveen Venkataramana', f: 'Papers of Praveen Venkataramana, hosted at anaphoria.com.', u: 'https://anaphoria.com/venkataramana.html' },
+  xh: { c: 'Xenharmonikon', f: 'Xenharmonikon, the journal founded by John Chalmers, now edited by Kraig Grady and Terumi Narushima.', u: 'https://www.xenharmonikon.org/about/' },
+  xhtoc: { c: 'Xenharmonikon contents', f: 'J. G. Pusey, Xenharmonikon Tables of Contents.', u: 'http://xh.xentonic.org/tables-of-contents.html' },
+  erlich: { c: 'Erlich, A Middle Path', f: 'Paul Erlich, "A Middle Path Between Just Intonation and the Equal Temperaments, Part 1".', u: 'https://sethares.engr.wisc.edu/paperspdf/Erlich-MiddlePath.pdf' },
+  wiki_xen: { c: 'Wikipedia, Xenharmonic music', f: 'Wikipedia, "Xenharmonic music", which quotes Ivor Darreg on devising the term.', u: WP + 'Xenharmonic_music' },
+  glasier: { c: 'Glasier 1997, Darreg', f: 'Jonathan Glasier, "Ivor Darreg and Xenharmonics", Perfect Sound Forever, October 1997.', u: 'https://www.furious.com/perfect/xenharmonics.html' },
+  wiki_sb: { c: 'Wikipedia, Stern-Brocot tree', f: 'Wikipedia, "Stern-Brocot tree".', u: WP + 'Stern%E2%80%93Brocot_tree' },
+  wiki_3gap: { c: 'Wikipedia, Three-gap theorem', f: 'Wikipedia, "Three-gap theorem", with sections on plant growth and music theory.', u: WP + 'Three-gap_theorem' },
+  wiki_phyllo: { c: 'Wikipedia, Phyllotaxis', f: 'Wikipedia, "Phyllotaxis".', u: WP + 'Phyllotaxis' },
+  wiki_johnson: { c: 'Wikipedia, Johnson graph', f: 'Wikipedia, "Johnson graph".', u: WP + 'Johnson_graph' },
+  wiki_hexany: { c: 'Wikipedia, Hexany', f: 'Wikipedia, "Hexany".', u: WP + 'Hexany' },
+  mtsesp: { c: 'ODDSound, MTS-ESP', f: 'ODDSound, MTS-ESP, a library for microtuning support in audio plugins.', u: 'https://github.com/ODDSound/MTS-ESP' },
+  repo: { c: 'Wilsonic MTS-ESP source', f: 'Marcus Hobbs, Wilsonic MTS-ESP, source code and research, MIT licence.', u: REPO },
+  blog1: { c: 'Hobbs 2026, The Tunings That Ring', f: 'Marcus Hobbs, "The Tunings That Ring", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-001.md' },
+  blog2: { c: 'Hobbs 2026, The Machine Keeps Deriving Wilson', f: 'Marcus Hobbs, "The Machine Keeps Deriving Wilson", research post, 2026.', u: REPO + '/blob/main/docs/research-blog-002.md' },
+  gates: { c: 'Research ledger', f: 'Marcus Hobbs, research gate ledger for the early findings on this page.', u: REPO + '/blob/main/experiments/GATES.md' }
+};
+const GATE = {
+  'G-007': 'accepted with an amendment 2026-07-28', 'G-012': 'accepted 2026-07-29', 'G-014': 'accepted 2026-07-29',
+  'G-025': 'accepted 2026-11-01', 'G-028': 'pending my ear check', 'G-029': 'passed my ear check 2026-10-24',
+  'G-031': 'passed my ear check 2026-10-23', 'G-034': 'pending', 'G-038': 'pending',
+  'none': 'a logged check, no gate', 'live': 'no experiment registered yet, recomputed live below'
+};
+function stat(k, v, cls) { const d = el('div', { class: 'stat ' + (cls || '') }); d.append(el('div', { class: 'k' }, k), el('div', { class: 'v' }, v)); return d; }
+function renderProv() {
+  document.querySelectorAll('.prov[data-s], .prov[data-e], .prov[data-m]').forEach(p => {
+    clear(p);
+    if (p.dataset.m) p.append(el('span', { class: 'tag mem' }, p.dataset.m));
+    (p.dataset.s || '').split(',').filter(k => S[k] && S[k].u).forEach(k => {
+      const t = el('span', { class: 'tag src' }); t.append('Published · ');
+      t.append(el('a', { href: S[k].u, target: '_blank', rel: 'noopener' }, S[k].c)); p.append(t);
+    });
+    (p.dataset.e || '').split(',').filter(Boolean).forEach(x => {
+      const [name, g] = x.split(':'); const t = el('span', { class: 'tag early' });
+      t.append('Early, unpublished · ' + name + ' · ');
+      if (g.startsWith('G-')) { t.append(el('a', { href: REPO + '/blob/main/experiments/GATES.md', target: '_blank', rel: 'noopener' }, 'gate ' + g)); t.append(' ' + GATE[g]); }
+      else t.append(GATE[g]);
+      p.append(t);
+    });
+  });
+  const ol = $('srclist'); clear(ol);
+  Object.keys(S).filter(k => S[k].u).forEach(k => {
+    const li = el('li'); li.append(S[k].f + ' '); li.append(el('a', { href: S[k].u, target: '_blank', rel: 'noopener' }, S[k].u)); ol.append(li);
+  });
+}
+
+/* ---------- nav ---------- */
+(function () {
+  const nav = $('nav');
+  for (let i = 1; i <= 15; i++) nav.append(el('a', { href: '#q' + i, 'aria-label': 'Question ' + i }, String(i)));
+  nav.append(el('a', { href: '#dictionary' }, 'Dictionary'), el('a', { href: '#sources' }, 'Sources'));
+})();
+
+/* ---------- dictionary ---------- */
+const DICT = [
+  ['Moment of symmetry (MOS)', 'MOS scale; the scales of a rank-2 temperament', 'One generator stacked inside a period, stopped where there are two step sizes. Erv\'s generator and period are the two generators of a rank-2 temperament, and each MOS size is one of its scales.', 'mos75,mosgrady'],
+  ['Horogram', 'Nested MOS diagram', 'Concentric rings, one per MOS size of a generator. Paul Erlich used them to present temperaments.', 'gold,gloss,erlich'],
+  ['Scale tree', 'Stern-Brocot tree; mediants; continued fractions', 'The same tree. A path down the tree is the continued fraction of the generator, and the denominators on the path are the MOS sizes.', 'tree94,treecomment,wiki_sb'],
+  ['Golden generator', 'Noble number', 'A generator whose path zigzags forever, so its continued fraction ends in all ones. Large and small steps approach the golden ratio at every size.', 'gold,tree94'],
+  ['Template; keyboard mapping', 'Val', 'A rule that sends each prime to a whole number of steps. Erv drew it as a keyboard. D\'Alessandro\'s 31-note template is the 31-tone patent val.', 'dal,blog1'],
+  ['Constant structure', 'Epimorphic scale (the stronger property)', 'Constant structure: each interval always spans the same number of steps. Epimorphic: one val numbers the notes 0, 1, 2 and so on. Every epimorphic scale is a constant structure.', 'mosgrady,gloss'],
+  ['Combination product set, written k)n', 'CPS(n,k); a Johnson graph J(n,k)', 'Erv writes the eikosany 3)6. I write CPS(6,3), six factors taken three at a time, to match the binomial coefficient. Two tones that differ in one factor are neighbours, which is the Johnson graph.', 'dal,cpscomment,wiki_johnson'],
+  ['Hexany, dekany, eikosany', 'CPS(4,2), CPS(5,2) and CPS(5,3), CPS(6,3)', 'Named for their sizes: 6, 10 and 20 tones.', 'hexany,grady_hex'],
+  ['Euler genus', 'All products of a set of factors; the Boolean lattice', 'Every subset of the factors multiplied out. CPS(n,k) is the layer of products that use exactly k factors.', 'dal'],
+  ['Interference; pigtails', 'Commas in the kernel of the val', 'Where two just tones land on one key, their ratio is a comma that the template tempers out.', 'dal'],
+  ['Proportional and subcontrary triads', 'Otonal and utonal; arithmetic and harmonic division', 'Middle note at the arithmetic mean, like 4:5:6, or at the harmonic mean, like 10:12:15.', 'proptri,repo'],
+  ['Scales of Mt. Meru', 'Linear recurrences; metallic means', 'A recurrence from a diagonal of Pascal\'s triangle. Its dominant root is the generator.', 'meru,merugrady'],
+  ['Generalized keyboard', 'Isomorphic keyboard', 'A two-dimensional layout where one direction is the generator and the other is the period, so every scale has one fingering.', 'kbd,patent,xh3']
+];
+(function () {
+  const tb = $('dict');
+  DICT.forEach(r => { const tr = el('tr'); tr.append(el('td', null, r[0]), el('td', null, r[1])); const td = el('td'); td.className = 'claim'; td.append(el('span', null, r[2])); td.append(el('div', { class: 'prov', 'data-s': r[3], 'data-m': 'My translation' })); tr.append(td); tb.append(tr); });
+})();
+
+/* ---------- audio ---------- */
+let AC = null, master = null;
+function audio() {
+  if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); master = AC.createGain(); master.gain.value = 0.55; const comp = AC.createDynamicsCompressor(); master.connect(comp); comp.connect(AC.destination); }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function note(f, t, d, v, pure) {
+  const c = audio(); if (!c) return;
+  const g = c.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + 0.02); g.gain.setTargetAtTime(v * 0.7, t + 0.06, 0.4); g.gain.setTargetAtTime(0, t + d, 0.07); g.connect(master);
+  (pure ? [[1, 1]] : [[1, 1], [2, 0.3], [3, 0.14], [4, 0.06]]).forEach(([m, a]) => { const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = f * m; const og = c.createGain(); og.gain.value = a; o.connect(og); og.connect(g); o.start(t); o.stop(t + d + 0.6); });
+}
+function chord(fs, d, at, pure) { const c = audio(); if (!c) return; const t = c.currentTime + 0.04 + (at || 0); fs.forEach(f => note(f, t, d || 1.8, 0.11, pure)); }
+function run(fs, step) { const c = audio(); if (!c) return; const t = c.currentTime + 0.04; fs.forEach((f, i) => note(f, t + i * (step || 0.24), (step || 0.24) * 1.1, 0.16)); }
+
+/* ---------- shared scale maths ---------- */
+function chainSteps(g, N) { // sorted positions of k*g mod 1 and the steps between them, in octaves
+  const p = []; for (let k = 0; k < N; k++) p.push(((k * g) % 1 + 1) % 1); p.sort((a, b) => a - b);
+  const st = p.map((x, i) => (i + 1 < N ? p[i + 1] : 1 + p[0]) - x); return { p, st };
+}
+function classes(st, tol) { const cs = []; st.forEach(s => { if (!cs.some(c => Math.abs(c - s) < tol)) cs.push(s); }); return cs.sort((a, b) => b - a); }
+function pathTo(g, max) { let lo = [0, 1], hi = [1, 1]; const out = []; for (let i = 0; i < max; i++) { const m = [lo[0] + hi[0], lo[1] + hi[1]]; const v = m[0] / m[1]; if (Math.abs(g - v) < 1e-12) { out.push({ n: m[0], d: m[1], dir: '' }); break; } if (g < v) { out.push({ n: m[0], d: m[1], dir: 'L' }); hi = m; } else { out.push({ n: m[0], d: m[1], dir: 'R' }); lo = m; } } return out; }
+function mosSizes(g, maxN) { return pathTo(g, 60).map(p => p.d).filter(d => d >= 2 && d <= maxN); } // the denominators on the scale-tree path
+function walk(turns) { let lo = [0, 1], hi = [1, 1], m = [1, 2]; for (const t of turns) { if (t === 'L') hi = m; else lo = m; m = [lo[0] + hi[0], lo[1] + hi[1]]; } return { lo, hi, m }; }
+function nobleFrom(turns, first) { let { lo, hi, m } = walk(turns); let dir = first; for (let i = 0; i < 70; i++) { if (dir === 'L') hi = m; else lo = m; m = [lo[0] + hi[0], lo[1] + hi[1]]; dir = dir === 'L' ? 'R' : 'L'; } return m[0] / m[1]; }
+function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
+  const pt = a => [cx + r * Math.sin(2 * Math.PI * a), cy - r * Math.cos(2 * Math.PI * a)];
+  if (a1 - a0 > 0.9999) return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r}`;
+  const [x0, y0] = pt(a0), [x1, y1] = pt(a1); return `M ${x0} ${y0} A ${r} ${r} 0 ${a1 - a0 > 0.5 ? 1 : 0} 1 ${x1} ${y1}`;
+}
+
+/* ---------- Q1: means ---------- */
+(function () {
+  const INTS = [[3, 2, 'fifth 3/2'], [4, 3, 'fourth 4/3'], [5, 3, 'major sixth 5/3'], [2, 1, 'octave 2/1'], [7, 4, 'harmonic seventh 7/4'], [5, 4, 'major third 5/4']];
+  const st = { i: 0, kind: 'p', mis: 0 }, F0 = 220;
+  INTS.forEach((x, i) => $('t1int').append(el('option', { value: i }, x[2])));
+  function triad() {
+    const [p, q] = INTS[st.i]; let a, m, b, label, extra;
+    if (st.kind === 'p') { a = 2 * q; m = p + q; b = 2 * p; } else { a = q * (p + q); m = 2 * p * q; b = p * (p + q); }
+    const g = gcd(gcd(a, m), b); a /= g; m /= g; b /= g; return { a, m, b };
+  }
+  function draw() {
+    const { a, m, b } = triad(); const fa = F0, fb = F0 * b / a, fm = F0 * m / a * Math.pow(2, st.mis / 1200);
+    const svg = $('t1svg'); clear(svg); const W = 640, x = f => 20 + (f / (fb * 1.06)) * (W - 40);
+    svg.append(sv('line', { x1: 20, y1: 70, x2: W - 20, y2: 70, class: 's-line', 'stroke-width': 1 }));
+    for (let hz = 0; hz <= fb * 1.06; hz += 50) { svg.append(sv('line', { x1: x(hz), y1: 66, x2: x(hz), y2: 74, class: 's-line' })); if (hz % 100 === 0) svg.append(sv('text', { x: x(hz), y: 88, 'text-anchor': 'middle', 'font-size': 10, class: 't-muted' }, hz)); }
+    [[fa, a], [fm, m], [fb, b]].forEach(([f, lab], i) => { svg.append(sv('line', { x1: x(f), y1: 22, x2: x(f), y2: 70, class: 's-acc', 'stroke-width': 3 })); svg.append(sv('text', { x: x(f), y: 15, 'text-anchor': 'middle', 'font-size': 12, class: 'f-acc' }, i === 1 && st.mis ? lab + '*' : lab)); });
+    const d1 = fm - fa, d2 = fb - fm, d3 = fb - fa;
+    [[d1, 'middle − low'], [d2, 'high − middle'], [d3, 'high − low']].forEach(([f, lab], i) => { svg.append(sv('line', { x1: x(f), y1: 70, x2: x(f), y2: 104 + i * 14, class: 's-harm', 'stroke-width': 2 })); svg.append(sv('text', { x: x(f) + 5, y: 108 + i * 14, 'font-size': 10.5, class: 'f-harm' }, lab + ' ' + fx(f, 1) + ' Hz')); });
+    svg.append(sv('text', { x: W - 20, y: 144, 'text-anchor': 'end', 'font-size': 10, class: 't-muted' }, 'hertz, low note at 220'));
+    const s = $('t1stats'); clear(s);
+    s.append(stat('Triad in whole numbers', a + ' : ' + m + ' : ' + b, 'mel'));
+    s.append(stat('Middle note above the low note', fx(cents(m / a) + st.mis, 2) + '¢', 'mel'));
+    s.append(stat('The two small difference tones are', fx(Math.abs(d1 - d2), 2) + ' Hz apart', 'harm'));
+    s.append(stat(st.kind === 'p' ? 'Shared fundamental' : 'Shared overtone', st.kind === 'p' ? fx(F0 / a, 2) + ' Hz (the 1 under ' + a + ')' : 'number ' + (a * m * b / gcd(a, m) / gcd(a * m / gcd(a, m), b)) + ' in their common series', 'harm'));
+    $('t1misv').textContent = (st.mis > 0 ? '+' : '') + fx(st.mis, 1) + '¢';
+    $('t1p').classList.toggle('on', st.kind === 'p'); $('t1s').classList.toggle('on', st.kind === 's');
+    return { fa, fm, fb, d1, d2, d3 };
+  }
+  $('t1int').onchange = e => { st.i = +e.target.value; draw(); };
+  $('t1p').onclick = () => { st.kind = 'p'; draw(); }; $('t1s').onclick = () => { st.kind = 's'; draw(); };
+  $('t1mis').oninput = e => { st.mis = +e.target.value; draw(); };
+  $('t1play').onclick = () => { const f = draw(); chord([f.fa, f.fm, f.fb], 3.2); };
+  $('t1diff').onclick = () => { const f = draw(); chord([f.d1, f.d2, f.d3], 3.2, 0, true); };
+  draw();
+})();
+
+/* ---------- Q2: recurrences ---------- */
+(function () {
+  const RECS = [
+    { label: 'H[n] = H[n−1] + H[n−2] (Fibonacci)', a: 1, i: 1, b: 1, j: 2, seeds: '1 1', w: 7 },
+    { label: 'H[n] = H[n−1] + H[n−3] (meta-pelog)', a: 1, i: 1, b: 1, j: 3, seeds: '1 1 1', w: 9 },
+    { label: 'H[n] = H[n−2] + H[n−3] (meta-slendro)', a: 1, i: 2, b: 1, j: 3, seeds: '1 1 1', w: 5 },
+    { label: 'H[n] = 2·H[n−3] + 2·H[n−4] (meta-meantone)', a: 2, i: 3, b: 2, j: 4, seeds: '1 1 1 1', w: 7, n: 8 },
+    { label: 'H[n] = H[n−1] + 4·H[n−4], seeded with a chain of 7/4', a: 1, i: 1, b: 4, j: 4, seeds: '192 336 588 1029', w: 5 }
+  ];
+  const st = { r: 0, w: 7, n: 0 }; let H = [], G = 1, sizes = [];
+  RECS.forEach((x, i) => $('t2rec').append(el('option', { value: i }, x.label)));
+  function build() {
+    const R = RECS[st.r]; const seeds = ($('t2seed').value.match(/\d+/g) || []).map(Number).filter(x => x > 0);
+    H = []; for (let k = 0; k < R.j; k++) H.push(seeds[k] || 1);
+    for (let n = R.j; n < 60; n++) H.push(R.a * H[n - R.i] + R.b * H[n - R.j]);
+    G = H[59] / H[58]; let lo = 1, hi = 4; for (let k = 0; k < 80; k++) { const x = (lo + hi) / 2; (Math.pow(x, R.j) - R.a * Math.pow(x, R.j - R.i) - R.b > 0) ? hi = x : lo = x; } G = lo;
+    sizes = mosSizes(Math.log2(G) % 1, 40);
+  }
+  function win() { const base = H[st.n]; const pcs = []; for (let k = 0; k < st.w; k++) { const v = Math.log2(H[st.n + k] / base); const pc = ((v % 1) + 1) % 1; if (!pcs.some(x => Math.abs(x - pc) < 1e-6 || Math.abs(Math.abs(x - pc) - 1) < 1e-6)) pcs.push(pc); } return pcs.sort((a, b) => a - b); }
+  function tri() { const R = RECS[st.r], n = st.n + st.w - 1; if (n < R.j) return null; const X = R.a * H[n - R.i], Y = R.b * H[n - R.j]; let a = 2 * Math.min(X, Y), m = X + Y, b = 2 * Math.max(X, Y); const g = gcd(gcd(a, m), b); return [a / g, m / g, b / g]; }
+  function draw() {
+    const R = RECS[st.r]; $('t2wv').textContent = st.w; $('t2nv').textContent = st.n;
+    const gc = cents(G) % 1200; const svg = $('t2svg'); clear(svg); const W = 640, Hh = 170, L = 52, T = 14, B = 26;
+    const pts = []; for (let n = 1; n < 36; n++) pts.push([n, ((cents(H[n] / H[n - 1]) % 1200) + 1200) % 1200]);
+    const ys = pts.map(p => p[1]).concat([gc]); let y0 = Math.min(...ys), y1 = Math.max(...ys); if (y1 - y0 < 40) { y0 -= 20; y1 += 20; }
+    const X = n => L + (n / 36) * (W - L - 12), Y = c => T + (1 - (c - y0) / (y1 - y0)) * (Hh - T - B);
+    svg.append(sv('rect', { x: X(st.n), y: T, width: X(st.n + st.w - 1) - X(st.n) + 2, height: Hh - T - B, class: 'f-acc', opacity: 0.12 }));
+    [y0, gc, y1].forEach(c => { svg.append(sv('line', { x1: L, y1: Y(c), x2: W - 12, y2: Y(c), class: c === gc ? 's-harm' : 's-line', 'stroke-dasharray': c === gc ? '4 3' : '' })); svg.append(sv('text', { x: L - 6, y: Y(c) + 3.5, 'text-anchor': 'end', 'font-size': 10, class: c === gc ? 'f-harm' : 't-muted' }, fx(c, c === gc ? 1 : 0) + '¢')); });
+    svg.append(sv('polyline', { points: pts.map(p => X(p[0]) + ',' + Y(p[1])).join(' '), class: 's-acc f-none', 'stroke-width': 1.5 }));
+    pts.forEach(p => svg.append(sv('circle', { cx: X(p[0]), cy: Y(p[1]), r: 2.4, class: 'f-acc' })));
+    for (let n = 0; n <= 35; n += 5) svg.append(sv('text', { x: X(n), y: Hh - 8, 'text-anchor': 'middle', 'font-size': 10, class: 't-muted' }, n));
+    svg.append(sv('text', { x: W - 12, y: Hh - 8, 'text-anchor': 'end', 'font-size': 10, class: 't-muted' }, 'term n'));
+    const pcs = win(); const steps = pcs.map((x, i) => (i + 1 < pcs.length ? pcs[i + 1] : 1) - x); const cl = classes(steps, 0.5 / 1200);
+    const bar = $('t2bar'); clear(bar); const bs = sv('svg', { viewBox: '0 0 640 26', role: 'img', 'aria-label': 'Steps of the window scale' }); let x = 0; const cols = ['f-acc', 'f-harm', 'f-nob'];
+    steps.forEach(s => { const k = cl.findIndex(c => Math.abs(c - s) < 0.5 / 1200); bs.append(sv('rect', { x: x * 640 + 1, y: 2, width: Math.max(1, s * 640 - 2), height: 22, class: k < 3 ? cols[k] : 'f-warn', opacity: k < 3 ? 0.8 : 0.5 })); x += s; }); bar.append(bs);
+    const s = $('t2stats'); clear(s); const t = tri();
+    s.append(stat('Terms in the window', H.slice(st.n, st.n + st.w).join(', '), ''));
+    s.append(stat('Ratio settles to', fx(gc, 2) + '¢ (' + fx(Math.log2(G) % 1, 6) + ' oct)', 'harm'));
+    s.append(stat('Generator\'s own sizes', sizes.slice(0, 9).join(', '), 'mel'));
+    s.append(stat('This window', pcs.length + (pcs.length === 1 ? ' note, ' : ' notes, ') + cl.length + ' step size' + (cl.length === 1 ? '' : 's'), cl.length <= 2 && pcs.length > 1 ? 'mel' : ''));
+    if (t) s.append(stat('Newest exact triad', t.join(' : '), 'harm'));
+    return { pcs, t };
+  }
+  function pick() { const R = RECS[st.r]; $('t2seed').value = R.seeds; st.w = R.w; st.n = R.n || 0; $('t2w').value = st.w; $('t2n').value = st.n; build(); draw(); }
+  $('t2rec').onchange = e => { st.r = +e.target.value; pick(); };
+  $('t2seed').oninput = () => { build(); draw(); };
+  $('t2w').oninput = e => { st.w = +e.target.value; draw(); }; $('t2n').oninput = e => { st.n = +e.target.value; draw(); };
+  $('t2play').onclick = () => { const { pcs } = draw(); run(pcs.concat([1]).map(p => 220 * Math.pow(2, p))); };
+  $('t2tri').onclick = () => { const { t } = draw(); if (t) chord(t.map(x => 165 * x / t[0]), 2.6); };
+  pick();
+})();
+
+/* ---------- Q3: scale tree and horogram ---------- */
+(function () {
+  const PRE = [
+    ['Pure fifth 3/2 (701.96¢)', { g: Math.log2(1.5) }], ['Zigzag from 1/2: 0.381966, the golden section of the octave', { turns: '', first: 'L' }],
+    ['Erv\'s 0.418935 (502.72¢), 16 July 1997', { g: 0.418934662571 }], ['Meta-meantone fifth (695.63¢)', { g: 0.5796920314 }],
+    ['12-tone fifth 7/12', { g: 7 / 12 }], ['Silver, √2 − 1 (497.06¢)', { g: Math.SQRT2 - 1 }]
+  ];
+  const st = { g: Math.log2(1.5), size: 7, label: '' }; let sizes = [];
+  PRE.forEach((x, i) => $('t3pre').append(el('option', { value: i }, x[0])));
+  const nodes = [];
+  (function build(lo, hi, d, x0, x1, par) { const m = [lo[0] + hi[0], lo[1] + hi[1]]; const nd = { n: m[0], d: m[1], depth: d, x: (x0 + x1) / 2, par, turns: par ? par.turns + par._dir : '' }; nodes.push(nd); if (d < 5) { nd._dir = 'L'; build(lo, m, d + 1, x0, nd.x, nd); nd._dir = 'R'; build(m, hi, d + 1, nd.x, x1, nd); } })([0, 1], [1, 1], 0, 0, 1, null);
+  function setG(g, label) { st.g = Math.min(0.9999, Math.max(0.0001, g)); st.label = label || ''; sizes = mosSizes(st.g, 60).slice(0, 7); if (!sizes.includes(st.size)) st.size = sizes[Math.min(3, sizes.length - 1)] || 2; $('t3g').value = st.g; draw(); }
+  function turnsNow() { return pathTo(st.g, 30).map(p => p.dir).join(''); }
+  function draw() {
+    const path = pathTo(st.g, 14); const on = new Set(path.map(p => p.n + '/' + p.d));
+    const tree = $('t3tree'); clear(tree); const X = x => 14 + x * 872, Y = d => 30 + d * 43;
+    nodes.forEach(nd => { if (nd.par) tree.append(sv('line', { x1: X(nd.par.x), y1: Y(nd.par.depth) + 5, x2: X(nd.x), y2: Y(nd.depth) - 11, class: on.has(nd.n + '/' + nd.d) && on.has(nd.par.n + '/' + nd.par.d) ? 's-acc' : 's-line', 'stroke-width': on.has(nd.n + '/' + nd.d) ? 2 : 1 })); });
+    nodes.forEach(nd => { const k = nd.n + '/' + nd.d, hit = on.has(k); const g = sv('g', { class: 'hit', tabindex: 0, role: 'button', 'aria-label': 'Stop at ' + k });
+      const dy = nd.depth === 5 && Math.floor(nd.x * 32) % 2 ? 13 : 0;
+      g.append(sv('rect', { x: X(nd.x) - 13, y: Y(nd.depth) - 12 + dy, width: 26, height: 16, class: 'f-paper' }));
+      g.append(sv('text', { x: X(nd.x), y: Y(nd.depth) + 2 + dy, 'text-anchor': 'middle', 'font-size': nd.depth === 5 ? 9.5 : 11.5, 'font-weight': hit ? 600 : 400, class: hit ? 'f-acc' : 'f-fg' }, k));
+      const go = () => setG(nd.n / nd.d, k); g.addEventListener('click', go); g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); tree.append(g); });
+    tree.append(sv('text', { x: 14, y: 14, 'font-size': 10, class: 't-muted' }, '0/1')); tree.append(sv('text', { x: 886, y: 14, 'text-anchor': 'end', 'font-size': 10, class: 't-muted' }, '1/1'));
+    $('t3path').textContent = 'Path: ' + path.map(p => p.n + '/' + p.d).join(' → ') + (path.length && path[path.length - 1].dir ? ' → …' : ' (the path stops here)');
+    $('t3gv').textContent = fx(st.g, 6) + ' oct = ' + fx(st.g * 1200, 2) + '¢';
+    const ho = $('t3horo'); clear(ho); const cx = 170, cy = 170;
+    sizes.forEach((N, r) => { const R = 36 + r * 20; const { p, st: steps } = chainSteps(st.g, N); const cl = classes(steps, 1e-9); const grp = sv('g', { class: N === st.size ? '' : 'dim' });
+      steps.forEach((s, i) => grp.append(sv('path', { d: arc(cx, cy, R, p[i], p[i] + s), class: 'f-none ' + (Math.abs(s - cl[0]) < 1e-9 ? 's-acc' : 's-harm'), 'stroke-width': 13 })));
+      p.forEach(a => grp.append(sv('line', { x1: cx + (R - 7.5) * Math.sin(2 * Math.PI * a), y1: cy - (R - 7.5) * Math.cos(2 * Math.PI * a), x2: cx + (R + 7.5) * Math.sin(2 * Math.PI * a), y2: cy - (R + 7.5) * Math.cos(2 * Math.PI * a), class: 's-paper', 'stroke-width': 2 }))); ho.append(grp); });
+    ho.append(sv('text', { x: cx, y: cy + 4, 'text-anchor': 'middle', 'font-size': 12, class: 't-muted' }, sizes.length ? sizes[0] : ''));
+    const sb = $('t3sizes'); clear(sb); sizes.forEach(N => { const b = el('button', { class: 'small' + (N === st.size ? ' on' : '') }, N); b.onclick = () => { st.size = N; draw(); }; sb.append(b); });
+    const s = $('t3stats'); clear(s); const { st: steps } = chainSteps(st.g, st.size); const cl = classes(steps, 1e-9);
+    s.append(stat('Scale sizes, from the path', mosSizes(st.g, 400).slice(0, 10).join(', ') || 'none', 'mel'));
+    if (cl.length === 2) { s.append(stat(st.size + ' notes', steps.filter(x => Math.abs(x - cl[0]) < 1e-9).length + ' large of ' + fx(cl[0] * 1200, 1) + '¢, ' + steps.filter(x => Math.abs(x - cl[1]) < 1e-9).length + ' small of ' + fx(cl[1] * 1200, 1) + '¢', '')); s.append(stat('Large ÷ small', fx(cl[0] / cl[1], 4), 'nob')); s.append(stat('Pattern', steps.map(x => Math.abs(x - cl[0]) < 1e-9 ? 'L' : 's').join(''), '')); }
+    else s.append(stat(st.size + ' notes', 'equal steps of ' + fx(cl[0] * 1200, 2) + '¢', ''));
+  }
+  $('t3pre').onchange = e => { const p = PRE[+e.target.value][1]; if (p.g != null) setG(p.g); else setG(nobleFrom(p.turns, p.first)); };
+  $('t3g').oninput = e => setG(+e.target.value);
+  function cur() { const p = pathTo(st.g, 30); return p.length && !p[p.length - 1].dir ? p.slice(0, -1).map(x => x.dir).join('') : p.slice(0, 5).map(x => x.dir).join('').slice(0, 4); }
+  function nodeTurns() { const p = pathTo(st.g, 30); const exact = p.length && !p[p.length - 1].dir; return exact ? p.slice(0, -1).map(x => x.dir).join('') : p.slice(0, 4).map(x => x.dir).join(''); }
+  $('t3L').onclick = () => { const w = walk(nodeTurns() + 'L').m; setG(w[0] / w[1]); };
+  $('t3R').onclick = () => { const w = walk(nodeTurns() + 'R').m; setG(w[0] / w[1]); };
+  $('t3up').onclick = () => { const t = nodeTurns(); const w = walk(t.slice(0, -1)).m; setG(w[0] / w[1]); };
+  $('t3zl').onclick = () => setG(nobleFrom(nodeTurns(), 'L')); $('t3zr').onclick = () => setG(nobleFrom(nodeTurns(), 'R'));
+  $('t3play').onclick = () => { const { p } = chainSteps(st.g, st.size); run(p.concat([1]).map(x => 220 * Math.pow(2, x)), st.size > 14 ? 0.14 : 0.24); };
+  setG(st.g);
+})();
+
+/* ---------- Q7: growth ---------- */
+(function () {
+  const PRE = [['Golden section, 0.618034 (741.64¢)', PHI - 1], ['Pure fifth, 0.584963 (701.96¢)', Math.log2(1.5)], ['Erv\'s 0.418935 (502.72¢)', 0.418934662571], ['12-tone fifth, 7/12 (700¢)', 7 / 12], ['A fraction near nothing special, 0.2900', 0.29]];
+  const st = { g: PRE[0][1], n: 8 }; let timer = null;
+  PRE.forEach((x, i) => $('t7pre').append(el('option', { value: i }, x[0])));
+  function draw() {
+    $('t7nv').textContent = st.n; const ring = $('t7ring'); clear(ring); const cx = 150, cy = 150, R = 112; const cols = ['s-acc', 's-harm', 's-nob'];
+    const { p, st: steps } = chainSteps(st.g, st.n); const live = steps.filter(s => s > 1e-9); const cl = st.n > 1 ? classes(live, 1e-9) : [1];
+    if (st.n === 1) ring.append(sv('circle', { cx, cy, r: R, class: 'f-none s-line', 'stroke-width': 10 }));
+    else steps.forEach((s, i) => { if (s > 1e-9) ring.append(sv('path', { d: arc(cx, cy, R, p[i], p[i] + s), class: 'f-none ' + cols[Math.min(2, cl.findIndex(c => Math.abs(c - s) < 1e-9))], 'stroke-width': 10 })); });
+    p.forEach(a => ring.append(sv('circle', { cx: cx + R * Math.sin(2 * Math.PI * a), cy: cy - R * Math.cos(2 * Math.PI * a), r: 5, class: 'f-fg' })));
+    const last = (((st.n - 1) * st.g) % 1 + 1) % 1; ring.append(sv('circle', { cx: cx + R * Math.sin(2 * Math.PI * last), cy: cy - R * Math.cos(2 * Math.PI * last), r: 8, class: 'f-none s-fg', 'stroke-width': 1.5 }));
+    ring.append(sv('text', { x: cx, y: cy + 5, 'text-anchor': 'middle', 'font-size': 15 }, st.n + (st.n === 1 ? ' note' : ' notes')));
+    const s = $('t7stats'); clear(s);
+    const closed = st.n > 1 && live.length < steps.length; const isMos = mosSizes(st.g, 60).includes(st.n);
+    s.append(stat('Different gaps', closed ? 'the chain has closed' : String(cl.length), isMos ? 'mel' : 'harm'));
+    s.append(stat('Gap sizes', cl.map(c => fx(c * 1200, 1) + '¢').join(', '), ''));
+    const b = el('div', { class: 'stat' }); b.append(el('div', { class: 'k' }, 'This size is')); const bb = el('span', { class: 'badge ' + (isMos ? 'mos' : 'mid') }, st.n === 1 ? 'one note' : closed ? 'past the end of the chain' : cl.length === 1 ? 'an equal division' : isMos ? 'a moment of symmetry' : 'between moments'); const v = el('div', { class: 'v' }); v.append(bb); b.append(v); s.append(b);
+    const cv = $('t7sun'), c = cv.getContext('2d'), css = getComputedStyle(document.documentElement); c.clearRect(0, 0, 600, 600);
+    for (let k = 0; k < 420; k++) { const a = 2 * Math.PI * k * st.g, r = 13.5 * Math.sqrt(k + 0.5); c.beginPath(); c.arc(300 + r * Math.sin(a), 300 - r * Math.cos(a), k < st.n ? 9 : 5.5, 0, 7); c.fillStyle = css.getPropertyValue(k < st.n ? '--accent' : '--line'); c.fill(); }
+  }
+  $('t7pre').onchange = e => { st.g = PRE[+e.target.value][1]; draw(); };
+  $('t7n').oninput = e => { st.n = +e.target.value; draw(); };
+  $('t7grow').onclick = () => { if (timer) { clearInterval(timer); timer = null; $('t7grow').textContent = 'Grow'; return; } if (st.n >= 60) st.n = 1; $('t7grow').textContent = 'Stop'; timer = setInterval(() => { st.n++; $('t7n').value = st.n; draw(); if (st.n >= 60) { clearInterval(timer); timer = null; $('t7grow').textContent = 'Grow'; } }, 420); };
+  $('t7play').onclick = () => { const { p } = chainSteps(st.g, st.n); run(p.concat([1]).map(x => 220 * Math.pow(2, x)), st.n > 14 ? 0.13 : 0.22); };
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  draw();
+})();
+
+/* ---------- Q13: template (val) over a just structure ---------- */
+(function () {
+  const PR = [3, 5, 7, 11], MON = { 1: [0, 0, 0, 0], 3: [1, 0, 0, 0], 5: [0, 1, 0, 0], 7: [0, 0, 1, 0], 9: [2, 0, 0, 0], 11: [0, 0, 0, 1] };
+  const combos = (arr, k) => k === 0 ? [[]] : arr.length < k ? [] : combos(arr.slice(1), k - 1).map(c => [arr[0]].concat(c)).concat(combos(arr.slice(1), k));
+  const SETS = [
+    ['Hexany 1·3·5·7, Erv\'s 2)4, CPS(4,2): 6 tones', combos([1, 3, 5, 7], 2)],
+    ['Eikosany 1·3·5·7·9·11, Erv\'s 3)6, CPS(6,3): 20 tones', combos([1, 3, 5, 7, 9, 11], 3)],
+    ['Euler genus 3·5·7·9·11: 32 tones', [0, 1, 2, 3, 4, 5].flatMap(k => combos([3, 5, 7, 9, 11], k))]
+  ];
+  const NS_ = [12, 19, 22, 31, 41, 53, 72]; const st = { s: 2, n: 31 };
+  SETS.forEach((x, i) => $('t13set').append(el('option', { value: i }, x[0]))); NS_.forEach(n => $('t13n').append(el('option', { value: n }, n)));
+  $('t13set').value = 2; $('t13n').value = 31;
+  function calc() {
+    const N = st.n, val = PR.map(p => Math.round(N * Math.log2(p)));
+    const tones = SETS[st.s][1].map(fs => { const prod = fs.reduce((a, b) => a * b, 1); const mz = [0, 0, 0, 0]; fs.forEach(f => MON[f].forEach((e, i) => mz[i] += e)); const just = ((Math.log2(prod) % 1) + 1) % 1; const stepsRaw = mz.reduce((a, e, i) => a + e * val[i], 0); const deg = ((stepsRaw % N) + N) % N; let err = (deg / N - just) * 1200; err = ((err + 600) % 1200 + 1200) % 1200 - 600; return { name: fs.length ? fs.join('·') : '1', prod, just, deg, err }; });
+    const by = {}; tones.forEach(t => (by[t.deg] = by[t.deg] || []).push(t)); return { N, val, tones, by };
+  }
+  function comma(a, b) { let n = Math.max(a, b), d = Math.min(a, b); while (n / d > Math.SQRT2) d *= 2; while (n / d < Math.SQRT1_2) n *= 2; if (n < d) [n, d] = [d, n]; const g = gcd(n, d); return [n / g, d / g]; }
+  function draw() {
+    const { N, val, tones, by } = calc(); const svg = $('t13svg'); clear(svg); const cx = 170, cy = 170, R = 104;
+    svg.append(sv('circle', { cx, cy, r: R, class: 'f-none s-line' }));
+    for (let d = 0; d < N; d++) { const a = 2 * Math.PI * d / N; svg.append(sv('line', { x1: cx + (R - 4) * Math.sin(a), y1: cy - (R - 4) * Math.cos(a), x2: cx + (R + 4) * Math.sin(a), y2: cy - (R + 4) * Math.cos(a), class: 's-line' })); if (N <= 31 || d % (N > 53 ? 6 : 4) === 0) svg.append(sv('text', { x: cx + (R - 15) * Math.sin(a), y: cy - (R - 15) * Math.cos(a) + 3, 'text-anchor': 'middle', 'font-size': 8.5, class: 't-muted' }, d)); }
+    let coll = 0; const lines = [];
+    Object.keys(by).forEach(d => { const ts = by[d], a = 2 * Math.PI * d / N; if (ts.length > 1) coll += ts.length - 1; ts.forEach((t, k) => svg.append(sv('circle', { cx: cx + (R + 13 + k * 12) * Math.sin(a), cy: cy - (R + 13 + k * 12) * Math.cos(a), r: 5, class: ts.length > 1 ? 'f-warn' : 'f-acc' }))); if (ts.length > 1) for (let k = 1; k < ts.length; k++) { const c = comma(ts[0].prod, ts[k].prod); lines.push('degree ' + d + ': ' + ts[0].name + ' and ' + ts[k].name + ' differ by ' + c[0] + '/' + c[1] + ' (' + fx(cents(c[0] / c[1]), 2) + '¢)'); } });
+    svg.append(sv('text', { x: cx, y: cy - 4, 'text-anchor': 'middle', 'font-size': 13 }, tones.length + ' tones')); svg.append(sv('text', { x: cx, y: cy + 14, 'text-anchor': 'middle', 'font-size': 13 }, 'on ' + N + ' degrees'));
+    const s = $('t13stats'); clear(s);
+    s.append(stat('Template for 3, 5, 7, 11', '(' + val.join(', ') + ') steps', 'mel'));
+    s.append(stat('Collisions', String(coll), coll ? 'harm' : 'mel'));
+    s.append(stat('Worst tone', fx(Math.max(...tones.map(t => Math.abs(t.err))), 2) + '¢ from just', ''));
+    const l = $('t13list'); clear(l); if (!lines.length) l.append(el('p', null, 'No collisions: every tone has its own degree under this template.')); else { const ul = el('ul', { class: 'plain' }); ul.style.gap = '2px'; lines.forEach(x => ul.append(el('li', { class: 'val' }, x))); l.append(ul); }
+    return tones;
+  }
+  $('t13set').onchange = e => { st.s = +e.target.value; draw(); }; $('t13n').onchange = e => { st.n = +e.target.value; draw(); };
+  $('t13play').onclick = () => { const ts = draw().slice().sort((a, b) => a.just - b.just); const c = audio(); if (!c) return; const step = ts.length > 12 ? 0.13 : 0.22; const t0 = c.currentTime + 0.05; ts.forEach((t, i) => note(220 * Math.pow(2, t.just), t0 + i * step, step, 0.16)); const t1 = t0 + ts.length * step + 0.5; ts.slice().sort((a, b) => a.deg - b.deg).forEach((t, i) => note(220 * Math.pow(2, t.deg / st.n), t1 + i * step, step, 0.16)); };
+  draw();
+})();
+
+/* ---------- Q14: hexany ---------- */
+(function () {
+  const SEEDS = [[1, 3, 5, 7], [1, 3, 7, 9], [3, 5, 7, 11], [1, 5, 7, 11]]; const st = { s: 0, t: 0 }; let tones = [], triads = [], timers = [];
+  SEEDS.forEach((x, i) => $('t14seed').append(el('option', { value: i }, x.join(' · '))));
+  const pc = v => ((Math.log2(v) % 1) + 1) % 1;
+  function build() {
+    const [A, B, C, D] = SEEDS[st.s]; // hexagon order puts opposites three apart
+    tones = [[A, B], [A, C], [A, D], [C, D], [B, D], [B, C]].map(f => ({ f, v: f[0] * f[1], pc: pc(f[0] * f[1]) }));
+    triads = []; const F = [A, B, C, D];
+    F.forEach(x => { triads.push({ kind: 'harmonic', idx: tones.map((t, i) => t.f.includes(x) ? i : -1).filter(i => i >= 0), key: x }); });
+    F.forEach(x => { triads.push({ kind: 'subharmonic', idx: tones.map((t, i) => !t.f.includes(x) ? i : -1).filter(i => i >= 0), key: x }); });
+    triads.forEach(t => { const others = F.filter(y => y !== t.key).sort((a, b) => a - b); t.shape = t.kind === 'harmonic' ? others.join(':') : others.map(y => '1/' + y).join(':'); t.name = t.idx.map(i => tones[i].v).sort((a, b) => a - b).join('-'); });
+  }
+  const freqs = t => t.idx.map(i => 196 * Math.pow(2, tones[i].pc)).sort((a, b) => a - b);
+  const nbrs = k => triads.map((t, j) => ({ j, common: t.idx.filter(i => triads[k].idx.includes(i)) })).filter(x => x.j !== k && x.common.length === 2);
+  function tour() { const seen = [0]; (function go() { if (seen.length === 8) return nbrs(seen[7]).some(x => x.j === 0); for (const x of nbrs(seen[seen.length - 1])) { if (!seen.includes(x.j)) { seen.push(x.j); if (go()) return true; seen.pop(); } } return false; })(); return seen; }
+  function draw() {
+    const svg = $('t14svg'); clear(svg); const cx = 170, cy = 155, R = 112; const P = tones.map((t, i) => [cx + R * Math.sin(Math.PI * i / 3), cy - R * Math.cos(Math.PI * i / 3)]);
+    const T = triads[st.t];
+    svg.append(sv('polygon', { points: T.idx.map(i => P[i].join(',')).join(' '), class: T.kind === 'harmonic' ? 'f-acc' : 'f-harm', opacity: 0.22 }));
+    for (let i = 0; i < 6; i++) for (let j = i + 1; j < 6; j++) if (j - i !== 3) { const on = T.idx.includes(i) && T.idx.includes(j); svg.append(sv('line', { x1: P[i][0], y1: P[i][1], x2: P[j][0], y2: P[j][1], class: on ? (T.kind === 'harmonic' ? 's-acc' : 's-harm') : 's-line', 'stroke-width': on ? 2.5 : 1 })); }
+    tones.forEach((t, i) => { const on = T.idx.includes(i); svg.append(sv('circle', { cx: P[i][0], cy: P[i][1], r: 19, class: on ? (T.kind === 'harmonic' ? 'f-acc' : 'f-harm') : 'f-paper', })); svg.append(sv('circle', { cx: P[i][0], cy: P[i][1], r: 19, class: 'f-none s-line' })); svg.append(sv('text', { x: P[i][0], y: P[i][1] + 4, 'text-anchor': 'middle', 'font-size': 12, class: on ? 'f-paper' : 'f-fg' }, t.f.join('·'))); svg.append(sv('text', { x: cx + (R + 34) * Math.sin(Math.PI * i / 3), y: cy - (R + 34) * Math.cos(Math.PI * i / 3) + 4, 'text-anchor': 'middle', 'font-size': 10, class: 't-muted' }, fx(t.pc * 1200, 0) + '¢')); });
+    const tb = $('t14tri'); clear(tb); triads.forEach((t, k) => { const b = el('button', { class: 'small' + (k === st.t ? ' on' : ''), title: t.kind }, t.name); b.onclick = () => { st.t = k; draw(); chord(freqs(triads[k]), 1.6); }; tb.append(b); });
+    const nb = $('t14nb'); clear(nb); nbrs(st.t).forEach(x => { const from = T.idx.find(i => !x.common.includes(i)), to = triads[x.j].idx.find(i => !x.common.includes(i)); let d = (tones[to].pc - tones[from].pc) * 1200; d = ((d + 600) % 1200 + 1200) % 1200 - 600; const b = el('button', { class: 'small' }, tones[from].v + ' → ' + tones[to].v + ' (' + (d > 0 ? 'up ' : 'down ') + fx(Math.abs(d), 1) + '¢)'); b.onclick = () => { st.t = x.j; draw(); chord(freqs(triads[x.j]), 1.6); }; nb.append(b); });
+    const s = $('t14stats'); clear(s);
+    s.append(stat('This triad', T.name + ', ' + T.kind, T.kind === 'harmonic' ? 'mel' : 'harm'));
+    s.append(stat('Its shape', T.shape, ''));
+    s.append(stat('Neighbours that keep two tones', nbrs(st.t).length + ', all ' + (T.kind === 'harmonic' ? 'subharmonic' : 'harmonic'), ''));
+    s.append(stat('Triads each tone belongs to', String(triads.filter(t => t.idx.includes(0)).length), ''));
+  }
+  $('t14seed').onchange = e => { st.s = +e.target.value; st.t = 0; build(); draw(); };
+  $('t14play').onclick = () => chord(freqs(triads[st.t]), 2.2);
+  $('t14tour').onclick = () => { timers.forEach(clearTimeout); timers = []; const seq = tour().concat([0]); if (!audio()) return; seq.forEach((k, n) => { chord(freqs(triads[k]), 0.95, n * 1.1); timers.push(setTimeout(() => { st.t = k; draw(); }, n * 1100)); }); };
+  build(); draw();
+})();
+
+renderProv();
+})();
+</script>
