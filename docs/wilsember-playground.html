@@ -101,7 +101,7 @@ button.small { padding: 3px 8px; font-size: 12.5px; font-family: var(--font-mono
 .scroll { overflow-x: auto; }
 svg { display: block; max-width: 100%; height: auto; }
 svg text { font-family: var(--font-mono); fill: var(--fg); }
-.t-muted { fill: var(--muted); } .f-acc { fill: var(--accent); } .f-harm { fill: var(--harm); } .f-nob { fill: var(--noble); } .f-warn { fill: var(--warn); } .f-fg { fill: var(--fg); } .f-none { fill: none; } .f-paper { fill: var(--paper); }
+.t-muted { fill: var(--muted); } .f-acc { fill: var(--accent); } .f-harm { fill: var(--harm); } .f-nob { fill: var(--noble); } .f-warn { fill: var(--warn); } .f-fg { fill: var(--fg); } .f-none { fill: none; } .f-paper { fill: var(--paper); } .f-home { fill: var(--accent-soft); }
 .s-line { stroke: var(--line); } .s-acc { stroke: var(--accent); } .s-harm { stroke: var(--harm); } .s-nob { stroke: var(--noble); } .s-fg { stroke: var(--fg); } .s-warn { stroke: var(--warn); } .s-paper { stroke: var(--paper); }
 .dim { opacity: 0.35; }
 .hit { cursor: pointer; }
@@ -121,7 +121,10 @@ ol.sources li { overflow-wrap: anywhere; }
 
 <div class="wrap">
 <header>
-  <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen · draft</div>
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen</div>
+    <button id="themeBtn" class="small" aria-label="Change colour theme">Theme: system</button>
+  </div>
   <h1>Fifteen questions about Erv Wilson, with things to play</h1>
   <div class="lede">
     <p>Stephen Weigel, you sent fifteen questions for the Wilsember episode and I could not be on the call, so I built you this page. Each question has a short answer from me, and where the idea is something you can see or hear I put a small instrument under it so you can try it yourself. I worked beside Erv from 1995 to 2005, turning his drawings into software while he drew the next one, and for the last year I have been going back through his papers with a computer.</p>
@@ -141,7 +144,9 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 1 of 15</div>
   <h2>What makes Erv Wilson a unique force in the microtonal space?</h2>
   <div class="answer">
-    <div class="claim"><p>I think it is that he would not choose between melody and harmony. A scale that is good for melody wants a few step sizes and a clear stepwise shape, and a scale that is good for harmony wants chords whose tones reinforce each other, and most systems give you one of those and ask you to live without the other. Erv spent his life looking for structures that give you both at once. He worked by hand and by ear and he recorded what he found as drawings, because that is how he thought.</p>
+    <div class="claim"><p>I think it starts with how much music he studied. Erv looked closely at historical tunings and at scales from all over the world, and the guide to the Wilson Archives says that many of his methods were sparked by that study. His papers include the 22-tone shruti system of India, raga scales drawn on a lattice, a Turkish 24-tone scale found inside 53 equal divisions, Greek tetrachords, Bosanquet's keyboard, Harry Partch's diamond and the older lambdoma. What he took from each of them was a method for making scales. A just intonation lattice is one such method, a lambdoma is another and a moment of symmetry is another, and he kept extending every one of them. The same guide says he had no system with a set of rules, and that he saw making a scale as a creative act.</p>
+      <div class="prov" data-s="guide,basic,diamond,kbd"></div></div>
+    <div class="claim"><p>Inside all of that, the thread I followed with him is that he would not choose between melody and harmony. A scale that is good for melody wants a few step sizes and a clear stepwise shape, and a scale that is good for harmony wants chords whose tones reinforce each other, and most systems give you one of those and ask you to live without the other. Erv kept looking for structures that give you both at once. He worked by hand and by ear and he recorded what he found as drawings, because that is how he thought.</p>
       <div class="prov" data-m="My recollection" data-s="blog1,wa"></div></div>
     <div class="claim"><p>The test he kept coming back to was the triad. Take two notes and put a third note at their arithmetic mean and you have the major kind of triad, the 4:5:6 kind. Both gaps between the notes are then the same number of hertz, so the difference tones land together on one pitch and the chord locks. Put the third note at the harmonic mean and you have the minor kind, 10:12:15, where the three notes share an overtone. Erv called these proportional and subcontrary triads, and in Wilsonic the analysis that counts them in every scale still uses his names.</p>
       <div class="prov" data-m="My recollection" data-s="proptri,repo"></div></div>
@@ -207,6 +212,13 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="answer">
     <div class="claim"><p>I use it as a map of generators. Every fraction on the tree is a generator measured as a fraction of the octave, and its denominator is the number of notes you have when the chain closes. When you walk down the tree toward a generator, the denominators you pass are the sizes at which that generator gives a moment of symmetry, so one path is a list of scales that live inside each other. A path that stops gives an equal temperament. A path that turns left, right, left, right forever settles on what Erv called a golden generator, where the large and small steps approach the same proportion at every size. Mathematicians know the same tree as the Stern-Brocot tree and those endless zigzag numbers as noble numbers.</p>
       <div class="prov" data-s="tree94,gold,treecomment,wiki_sb"></div></div>
+    <div class="claim"><p>The tree is also where Erv's keyboards come from, and Kraig Grady pointed out to me that an earlier draft of this page left that out. The guide to the Wilson Archives names the keyboard first among his contributions. Bosanquet's generalized keyboard was built on the fifth, and Erv extended the design so that any interval can be the generator. The archive's notes on the keyboard papers say that the Gral Keyboard Guide is where he settled how to map any moment of symmetry to a generalized keyboard, and that Terumi Narushima has written the most detailed account of it.</p>
+      <div class="prov" data-s="guide,kbdcomment,gral,keysch,naru,kbd"></div></div>
+    <div class="claim"><p>Here is how it works in Wilsonic, and you can try it under the horogram below. You make two choices on the same path down the tree. The scale level is the dense one you will hear, say the 53-note level of a fifth near 0.585. The keyboard level is a smaller one above it on the same path, say 12, and its two parents on the tree are 3/5 and 4/7. The layout takes the denominators 5 and 7 as the two directions that make an octave, and the numerators 3 and 4 as the two directions that make a generator. Because 5 and 7 share no factor, every one of the 53 notes gets its own key. What the hand sees is a familiar 5 and 7 pattern running across, with the extra notes stacked above and below as small shifts of the 12.</p>
+      <p>Erv worked on two different mapping problems, putting just intonation on the keyboard and putting moments of symmetry on the keyboard, and this is the second one. Letting you pick the two levels separately, and change either one while you play, is something I added in Wilsonic, and I worked it out from Terumi's book.</p>
+      <div class="prov" data-m="My recollection" data-s="repo,naru"></div></div>
+    <div class="claim"><p>The generator on this page is on a slider as well as in a menu, so you can move it while you watch the keyboard. While the generator stays between the two parents of the keyboard level, every note keeps its key and only the tuning under the keys changes. A hand that has learned the layout can keep playing while the scale changes underneath it. I worked that out from the layout rule, and it is exact arithmetic that you can check with the slider.</p>
+      <div class="prov" data-m="My own working" data-s="repo"></div></div>
     <div class="claim"><p>Last October I transcribed the bottom row of Erv's 1994 Scale-Tree sheet, which is 32 decimals, and found that one rule reproduces all 32 to ten places: take each pair of neighbouring fractions a/b and c/d at the fifth row and write (a + φc)/(b + φd). His sheet shows the numbers and leaves the rule for the reader to find.</p>
       <div class="prov" data-e="Lattice log 2026-10-17:none" data-s="tree94"></div></div>
     <div class="claim"><p>I expected the golden generators to explain why Erv's favourite generators sound so harmonic, and the measurement disappointed me. His generators do sit within a fraction of a cent of golden ones, but golden numbers are so dense that a random generator does too. Against a fair comparison I never found more than 6 of his 17 in the closest tenth, where chance gives 1.7, and the silver family fits them as well as the golden one. My reading today is that the zigzag is about melody, meaning how the scales nest, and that harmony comes from a separate condition. I think Erv chose the golden number inside a range that already sounded good to him, and that last sentence is a guess.</p>
@@ -215,16 +227,19 @@ ol.sources li { overflow-wrap: anywhere; }
       <div class="prov" data-m="My recollection" data-s="proptri,album,repo"></div></div>
   </div>
   <div class="tool">
-    <h3>Try it: walk the tree, read the horogram</h3>
+    <h3>Try it: walk the tree, read the horogram, lay out the keyboard</h3>
     <div class="cols">
       <div class="controls">
         <label class="field" for="t3pre">Start from<select id="t3pre"></select></label>
-        <label class="field" for="t3g">Any generator: <span class="val" id="t3gv"></span><input type="range" id="t3g" min="0.02" max="0.98" step="0.0005" value="0.585"></label>
+        <label class="field" for="t3g">Any generator, slide it: <span class="val" id="t3gv"></span><input type="range" id="t3g" min="0.02" max="0.98" step="0.0005" value="0.585"></label>
         <div class="row"><button id="t3L" class="small">Turn left</button><button id="t3R" class="small">Turn right</button><button id="t3up" class="small">Back up</button></div>
         <div class="row"><button id="t3zl" class="small">Zigzag forever, left first</button><button id="t3zr" class="small">Zigzag forever, right first</button></div>
         <h3>Scale size to hear</h3>
         <div class="row" id="t3sizes"></div>
         <div class="row"><button class="primary" id="t3play">Play this scale</button></div>
+        <h3>Keyboard level for the hand</h3>
+        <div class="row" id="t3kbs"></div>
+        <div class="row"><button id="t3demo" class="small">Show 53 notes of the fifth on a 12 keyboard</button></div>
       </div>
       <div class="preview">
         <div class="scroll"><svg id="t3tree" viewBox="0 0 900 268" style="min-width:820px" role="img" aria-label="Scale tree from 0/1 to 1/1, five rows deep"></svg></div>
@@ -234,6 +249,10 @@ ol.sources li { overflow-wrap: anywhere; }
           <div class="stats" id="t3stats"></div>
         </div>
         <p class="note">Each ring is one moment of symmetry of the generator, smallest in the middle. Teal arcs are the large step and amber arcs are the small step. Tap a fraction on the tree to stop there, which gives an equal temperament.</p>
+        <h3>The keyboard for this scale</h3>
+        <div class="scroll"><svg id="t3kbd" viewBox="0 0 640 200" style="min-width:520px" role="img" aria-label="Generalized keyboard: the notes of the scale laid out on hexagonal keys by the keyboard level"></svg></div>
+        <div class="stats" id="t3kstats"></div>
+        <p class="note">Each hexagon is a key, and you can tap one to hear it. The teal keys are the notes of the keyboard level, and the plain keys are the rest of the scale, stacked in the rows next to them. The numbers count the notes of the scale upward from the starting note, which is the solid key. Now move the Any generator slider slowly. Until the path above changes, every key stays where it is and only its tuning moves.</p>
       </div>
     </div>
   </div>
@@ -244,12 +263,12 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 4 of 15</div>
   <h2>How could we summarize the list of ideas he pioneered?</h2>
   <div class="answer">
-    <p>Here is the list I would read out, each with the paper to point listeners to. It is my selection, and Kraig Grady's archive holds far more than this.</p>
+    <p>Here is the list I would read out, each with the paper to point listeners to. Most of these began with Erv studying an older practice, such as Bosanquet's keyboard, Partch's diamond or the scales of North India, and then extending the method he found in it. It is my selection, and Kraig Grady's archive holds far more than this.</p>
     <ul class="plain" id="q4list">
       <li class="claim"><span><strong>Moments of symmetry.</strong> Stack one generator inside a period and stop where the scale has exactly two step sizes. This is the idea most of the community met first.</span><div class="prov" data-s="mos75,mosgrady"></div></li>
       <li class="claim"><span><strong>The scale tree and the golden horograms.</strong> A map of every generator and the scales nested inside it, with rings that show each size.</span><div class="prov" data-s="tree94,gold"></div></li>
+      <li class="claim"><span><strong>The generalized keyboard.</strong> He extended Bosanquet's keyboard, which was built on the fifth, so that any generator and any moment of symmetry has a layout, and the layouts are read off the scale tree. The guide to the Wilson Archives names this first among his contributions. D'Alessandro goes the other way and lays a 31-note template over the eikosany and its neighbours.</span><div class="prov" data-s="guide,gral,keysch,xh3,dal,kbd,patent"></div></li>
       <li class="claim"><span><strong>Combination product sets.</strong> Take a set of harmonic factors, multiply them k at a time, and you get a harmonic structure with no single root: the hexany, the dekanies, the eikosany and larger ones.</span><div class="prov" data-s="dal,hexany,cpscomment"></div></li>
-      <li class="claim"><span><strong>Mapping harmony onto keyboards.</strong> His generalized keyboard layouts, and D'Alessandro, where a 31-note template carries the eikosany and its neighbours.</span><div class="prov" data-s="xh3,dal,kbd,patent"></div></li>
       <li class="claim"><span><strong>Constant structures.</strong> Scales where every interval always spans the same number of steps, so a keyboard or a notation can be trusted.</span><div class="prov" data-s="mosgrady,gloss,cs"></div></li>
       <li class="claim"><span><strong>The scales of Mt. Meru.</strong> Recurrent sequences from the diagonals of Pascal's triangle, whose limits are generators such as meta-meantone and meta-slendro.</span><div class="prov" data-s="meru,merugrady"></div></li>
       <li class="claim"><span><strong>Diamonds, lattices and the work on other people's music.</strong> His lattice drawings, the illustrations he made for Harry Partch's Genesis of a Music, his Marwa permutations and his latticing of raga scales.</span><div class="prov" data-s="diamond,timeline,marwa,wa"></div></li>
@@ -275,8 +294,8 @@ ol.sources li { overflow-wrap: anywhere; }
   <div class="num">Question 6 of 15</div>
   <h2>What does it mean to be "Wilsonian"?</h2>
   <div class="answer">
-    <div class="claim"><p>To me it means you begin with a structure and you ask it for melody and harmony together. It means you draw it, because a drawing lets you see relationships that a list of cents hides. And it means the structure is something you play your way through, moving from one subset to a neighbouring one, where another approach would fix a single scale and stay in it.</p>
-      <div class="prov" data-m="My view"></div></div>
+    <div class="claim"><p>To me it means you begin with something people have already played, an old tuning or a scale from somewhere in the world, and you look for the method inside it. Then you extend the method and you listen to what it gives you, and what I listen for is melody and harmony together. It means you draw it, because a drawing lets you see relationships that a list of cents hides. And it means the structure is something you play your way through, moving from one subset to a neighbouring one, where another approach would fix a single scale and stay in it.</p>
+      <div class="prov" data-m="My view" data-s="guide"></div></div>
     <div class="claim"><p>I would add one caution for your listeners. Being Wilsonian does not mean avoiding the regular temperament vocabulary. Most of Erv's objects have exact names in that language, and I have put the translations in <a href="#dictionary">the dictionary below</a> because I wish I had had it in 1995.</p>
       <div class="prov" data-m="My view"></div></div>
   </div>
@@ -535,6 +554,11 @@ const S = {
   kbd: { c: 'Wilson 1974, Bosanquet', f: 'Erv Wilson, "Bosanquet: A Bridge, A Doorway to Dialog", Xenharmonikon 2, Fall 1974. Wilson Archives.', u: W + 'xen2.pdf' },
   patent: { c: 'Wilson 1967, keyboard patent', f: 'Ervin M. Wilson, "Musical instrument keyboard", US Patent 3,342,094, granted 19 September 1967.', u: 'https://patents.google.com/patent/US3342094A/en' },
   cs: { c: 'Wilson, 22-tone constant structures', f: 'Erv Wilson, "Early Lattices of Some 22 Tone Constant Structures". Wilson Archives.', u: W + 'earlylattices22.pdf' },
+  gral: { c: 'Wilson, Gral Keyboard Guide', f: 'Erv Wilson, "Gral Keyboard Guide". Wilson Archives, keyboard section.', u: W + 'gralkeyboard.pdf' },
+  keysch: { c: 'Wilson, Keyboard Schemata from the Scale Tree', f: 'Erv Wilson, "Keyboard Schemata from the Scale Tree". Wilson Archives, keyboard section.', u: W + 'key.pdf' },
+  kbdcomment: { c: 'Archives, Comments on the Keyboard Section', f: '"Comments on Erv Wilson\'s Generalized Keyboards", Wilson Archives (in preparation).', u: W + 'keyboardcomment.html' },
+  guide: { c: 'Archives, A Guide to the Wilson Archives', f: '"A Guide to the Wilson Archives", Wilson Archives. An overview of how his theories relate and of his major contributions.', u: W + 'wilsonguide.html' },
+  basic: { c: 'Archives, basic papers', f: 'Wilson Archives, "Some Basic Papers, Microtonal Scales and Instrument Designs", which lists the papers on the 22-tone shruti system of India, raga scales, a Turkish 24-tone scale and the equal divisions.', u: W + 'wilsonbasic.html' },
   mosgrady: { c: 'Grady 2007, Introduction to MOS', f: 'Kraig Grady, "Introduction to Erv Wilson\'s Moments of Symmetry", 2007, revised 2014. Wilson Archives.', u: W + 'wilsonintroMOS.html' },
   gloss: { c: 'Narushima and Grady, Glossary', f: 'Terumi Narushima and Kraig Grady, Glossary of the Wilson Archives (in progress).', u: W + 'glossary.html' },
   meru: { c: 'Wilson 1993, Scales of Mt. Meru', f: 'Erv Wilson, "The Scales of Mt. Meru", 1993. Wilson Archives.', u: W + 'meruone.pdf' },
@@ -596,6 +620,21 @@ function renderProv() {
   });
 }
 
+/* ---------- theme: follows the system until the button picks light or dark ---------- */
+(function () {
+  const root = document.documentElement, btn = $('themeBtn'), ORDER = ['system', 'light', 'dark'], KEY = 'wilsember-theme';
+  const host = root.getAttribute('data-theme'); // a theme the hosting page set before this script ran
+  let mode = 'system';
+  try { const saved = localStorage.getItem(KEY); if (ORDER.includes(saved)) mode = saved; } catch (e) { /* storage can be blocked; the page works without it */ }
+  function apply() {
+    if (mode === 'system') { if (host) root.setAttribute('data-theme', host); else root.removeAttribute('data-theme'); }
+    else root.setAttribute('data-theme', mode);
+    btn.textContent = 'Theme: ' + mode;
+  }
+  btn.onclick = () => { mode = ORDER[(ORDER.indexOf(mode) + 1) % 3]; try { localStorage.setItem(KEY, mode); } catch (e) { /* not saved, still applied */ } apply(); };
+  apply();
+})();
+
 /* ---------- nav ---------- */
 (function () {
   const nav = $('nav');
@@ -617,7 +656,7 @@ const DICT = [
   ['Interference; pigtails', 'Commas in the kernel of the val', 'Where two just tones land on one key, their ratio is a comma that the template tempers out.', 'dal'],
   ['Proportional and subcontrary triads', 'Otonal and utonal; arithmetic and harmonic division', 'Middle note at the arithmetic mean, like 4:5:6, or at the harmonic mean, like 10:12:15.', 'proptri,repo'],
   ['Scales of Mt. Meru', 'Linear recurrences; metallic means', 'A recurrence from a diagonal of Pascal\'s triangle. Its dominant root is the generator.', 'meru,merugrady'],
-  ['Generalized keyboard', 'Isomorphic keyboard', 'A two-dimensional layout where one direction is the generator and the other is the period, so every scale has one fingering.', 'kbd,patent,xh3']
+  ['Generalized keyboard', 'Isomorphic keyboard', 'A two-dimensional layout where one direction is the generator and the other is the period, so every scale has one fingering. The scale tree labels the layouts: the two parents of a fraction on the tree give the two directions.', 'gral,keysch,kbd,patent,xh3']
 ];
 (function () {
   const tb = $('dict');
@@ -757,11 +796,11 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
     ['0.415227 (498.27¢): Khan Abyss, Judge Nothing', { g: 0.415226813655 }], ['0.328173 (393.81¢): Mad God', { g: 0.328173397034 }],
     ['0.238186 (285.82¢): Saturn Returns, Culture Void, I, Marcus', { g: 0.238186456899 }]
   ];
-  const st = { g: Math.log2(1.5), size: 7, label: '' }; let sizes = [];
+  const st = { g: Math.log2(1.5), size: 12, kb: 7, label: '' }; let sizes = []; // opens on the piano: 12 notes on a 7 keyboard
   PRE.forEach((x, i) => $('t3pre').append(el('option', { value: i }, x[0])));
   const nodes = [];
   (function build(lo, hi, d, x0, x1, par) { const m = [lo[0] + hi[0], lo[1] + hi[1]]; const nd = { n: m[0], d: m[1], depth: d, x: (x0 + x1) / 2, par, turns: par ? par.turns + par._dir : '' }; nodes.push(nd); if (d < 5) { nd._dir = 'L'; build(lo, m, d + 1, x0, nd.x, nd); nd._dir = 'R'; build(m, hi, d + 1, nd.x, x1, nd); } })([0, 1], [1, 1], 0, 0, 1, null);
-  function setG(g, label) { st.g = Math.min(0.9999, Math.max(0.0001, g)); st.label = label || ''; sizes = mosSizes(st.g, 60).slice(0, 7); if (!sizes.includes(st.size)) st.size = sizes[Math.min(3, sizes.length - 1)] || 2; $('t3g').value = st.g; draw(); }
+  function setG(g, label) { st.g = Math.min(0.9999, Math.max(0.0001, g)); st.label = label || ''; sizes = mosSizes(st.g, 60).slice(0, 9); if (!sizes.includes(st.size)) st.size = sizes[Math.min(3, sizes.length - 1)] || 2; $('t3g').value = st.g; draw(); }
   function turnsNow() { return pathTo(st.g, 30).map(p => p.dir).join(''); }
   function draw() {
     const path = pathTo(st.g, 14); const on = new Set(path.map(p => p.n + '/' + p.d));
@@ -776,15 +815,55 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
     $('t3path').textContent = 'Path: ' + path.map(p => p.n + '/' + p.d).join(' → ') + (path.length && path[path.length - 1].dir ? ' → …' : ' (the path stops here)');
     $('t3gv').textContent = fx(st.g, 6) + ' oct = ' + fx(st.g * 1200, 2) + '¢';
     const ho = $('t3horo'); clear(ho); const cx = 170, cy = 170;
-    sizes.forEach((N, r) => { const R = 36 + r * 20; const { p, st: steps } = chainSteps(st.g, N); const cl = classes(steps, 1e-9); const grp = sv('g', { class: N === st.size ? '' : 'dim' });
-      steps.forEach((s, i) => grp.append(sv('path', { d: arc(cx, cy, R, p[i], p[i] + s), class: 'f-none ' + (Math.abs(s - cl[0]) < 1e-9 ? 's-acc' : 's-harm'), 'stroke-width': 13 })));
-      p.forEach(a => grp.append(sv('line', { x1: cx + (R - 7.5) * Math.sin(2 * Math.PI * a), y1: cy - (R - 7.5) * Math.cos(2 * Math.PI * a), x2: cx + (R + 7.5) * Math.sin(2 * Math.PI * a), y2: cy - (R + 7.5) * Math.cos(2 * Math.PI * a), class: 's-paper', 'stroke-width': 2 }))); ho.append(grp); });
+    const ringStep = Math.min(20, 124 / Math.max(1, sizes.length - 1)), ringW = ringStep * 0.65;
+    sizes.forEach((N, r) => { const R = 36 + r * ringStep; const { p, st: steps } = chainSteps(st.g, N); const cl = classes(steps, 1e-9); const grp = sv('g', { class: N === st.size ? '' : 'dim' });
+      steps.forEach((s, i) => grp.append(sv('path', { d: arc(cx, cy, R, p[i], p[i] + s), class: 'f-none ' + (Math.abs(s - cl[0]) < 1e-9 ? 's-acc' : 's-harm'), 'stroke-width': ringW })));
+      p.forEach(a => grp.append(sv('line', { x1: cx + (R - ringW / 2 - 1) * Math.sin(2 * Math.PI * a), y1: cy - (R - ringW / 2 - 1) * Math.cos(2 * Math.PI * a), x2: cx + (R + ringW / 2 + 1) * Math.sin(2 * Math.PI * a), y2: cy - (R + ringW / 2 + 1) * Math.cos(2 * Math.PI * a), class: 's-paper', 'stroke-width': N > 30 ? 1 : 2 }))); ho.append(grp); });
     ho.append(sv('text', { x: cx, y: cy + 4, 'text-anchor': 'middle', 'font-size': 12, class: 't-muted' }, sizes.length ? sizes[0] : ''));
     const sb = $('t3sizes'); clear(sb); sizes.forEach(N => { const b = el('button', { class: 'small' + (N === st.size ? ' on' : '') }, N); b.onclick = () => { st.size = N; draw(); }; sb.append(b); });
     const s = $('t3stats'); clear(s); const { st: steps } = chainSteps(st.g, st.size); const cl = classes(steps, 1e-9);
     s.append(stat('Scale sizes, from the path', mosSizes(st.g, 400).slice(0, 10).join(', ') || 'none', 'mel'));
     if (cl.length === 2) { s.append(stat(st.size + ' notes', steps.filter(x => Math.abs(x - cl[0]) < 1e-9).length + ' large of ' + fx(cl[0] * 1200, 1) + '¢, ' + steps.filter(x => Math.abs(x - cl[1]) < 1e-9).length + ' small of ' + fx(cl[1] * 1200, 1) + '¢', '')); s.append(stat('Large ÷ small', fx(cl[0] / cl[1], 4), 'nob')); s.append(stat('Pattern', steps.map(x => Math.abs(x - cl[0]) < 1e-9 ? 'L' : 's').join(''), '')); }
     else s.append(stat(st.size + ' notes', 'equal steps of ' + fx(cl[0] * 1200, 2) + '¢', ''));
+    drawKbd();
+  }
+  // The keyboard node is an ancestor of the scale on its own path. Its two parents on the tree, lo = a/b and hi = c/d, give the layout:
+  // the octave is b keys in one direction and d in the other, and the generator is a and c. This is the rule in Wilsonic's Brun+Tuning.cpp.
+  function parentsOf(g, d) { let lo = [0, 1], hi = [1, 1]; for (let i = 0; i < 90; i++) { const m = [lo[0] + hi[0], lo[1] + hi[1]]; if (m[1] === d) return { lo, hi, m }; if (m[1] > d) return null; if (g < m[0] / m[1]) hi = m; else lo = m; } return null; }
+  function drawKbd() {
+    const kbs = sizes.filter(x => x <= st.size);
+    if (!kbs.includes(st.kb)) st.kb = kbs.filter(x => x <= 12).pop() || kbs[0];
+    const kb = $('t3kbs'); clear(kb); kbs.forEach(M => { const bt = el('button', { class: 'small' + (M === st.kb ? ' on' : '') }, M); bt.onclick = () => { st.kb = M; draw(); }; kb.append(bt); });
+    const svg = $('t3kbd'); clear(svg); const ks = $('t3kstats'); clear(ks);
+    const P = parentsOf(st.g, st.kb); if (!P) return;
+    const [a, b] = P.lo, [c, d] = P.hi, N = st.size, g = st.g;
+    const al = c - d * g, be = b * g - a; // what one key step in each direction is worth, in octaves
+    const raw = (x, y) => [1.5 * (x + y), Math.sqrt(3) / 2 * (x - y)]; // hexagonal grid, columns are x + y
+    const [ox, oy] = raw(b, d), len = Math.hypot(ox, oy), cs = ox / len, sn = oy / len;
+    const rot = (x, y) => { const [X, Y] = raw(x, y); return [X * cs + Y * sn, Y * cs - X * sn]; }; // turn the grid so the octave runs straight across
+    const [gx, gy] = rot(a, c), span = Math.abs(gy) * (N - 1), up = gy < 0 ? -1 : 1; // up: later notes of the chain sit higher on the screen
+    const s = Math.max(5, Math.min(20, 640 / (1.6 * len), 300 / (span + 2)));
+    const H = Math.round((span + 2.2) * s + 6), y0 = 3 + 1.1 * s + span * s, x0 = 1.1 * s;
+    svg.setAttribute('viewBox', '0 0 640 ' + H);
+    const pcs = []; for (let k = 0; k < N; k++) pcs.push([((k * g) % 1 + 1) % 1, k]); pcs.sort((p, q) => p[0] - q[0]); const rank = []; pcs.forEach((p, i) => { rank[p[1]] = i; });
+    const hex = []; for (let i = 0; i < 6; i++) { const t = Math.PI / 3 * i, X = Math.cos(t), Y = Math.sin(t); hex.push([(X * cs + Y * sn) * s * 0.95, -up * (Y * cs - X * sn) * s * 0.95]); }
+    const maxX = Math.min((640 - 2.2 * s) / s, 3 * len); let drawn = 0; // at most three octaves across
+    for (let k = 0; k < N; k++) for (let j = Math.ceil(-k * gx / len - 1e-9); k * gx + j * len <= maxX && drawn < 1200; j++) {
+      const X = x0 + (k * gx + j * len) * s, Y = y0 - up * k * gy * s, pitch = k * g + j, home = k < st.kb;
+      const grp = sv('g', { class: 'hit' });
+      grp.append(sv('polygon', { points: hex.map(h => fx(X + h[0], 1) + ',' + fx(Y + h[1], 1)).join(' '), class: k === 0 ? 'f-acc s-acc' : home ? 'f-home s-acc' : 'f-paper s-line', 'stroke-width': 1 }));
+      if (s >= 10.5) grp.append(sv('text', { x: X, y: Y + s * 0.24, 'text-anchor': 'middle', 'font-size': fx(s * 0.66, 1), class: k === 0 ? 'f-paper' : home ? 'f-acc' : 't-muted' }, rank[k]));
+      grp.append(sv('title', null, 'Note ' + rank[k] + ' of ' + N + ', ' + fx((((k * g) % 1) + 1) % 1 * 1200, 1) + '¢ above the starting note'));
+      grp.addEventListener('click', () => { const ac = audio(); if (ac) note(165 * Math.pow(2, Math.max(-1, Math.min(3.2, pitch))), ac.currentTime + 0.02, 0.7, 0.18); });
+      svg.append(grp); drawn++;
+    }
+    ks.append(stat('Keyboard level', st.kb + ' keys to the octave, at ' + P.m[0] + '/' + P.m[1] + ' on the tree', 'nob'));
+    ks.append(stat('Its two parents', a + '/' + b + ' and ' + c + '/' + d, 'nob'));
+    const dx = up > 0 ? 'up to the right' : 'down to the right', dy = up > 0 ? 'down to the right' : 'up to the right';
+    ks.append(stat('An octave is', b + ' keys ' + dx + ' and ' + d + ' ' + dy, 'mel'));
+    ks.append(stat('A generator is', a + ' ' + dx + ' and ' + c + ' ' + dy, 'mel'));
+    ks.append(stat('One key ' + dx + ' and one ' + dy, fx(al * 1200, 1) + '¢ and ' + fx(be * 1200, 1) + '¢', 'harm'));
+    ks.append(stat('Keys stacked in one column differ by', fx(Math.abs(al - be) * 1200, 1) + '¢', 'harm'));
   }
   $('t3pre').onchange = e => { const p = PRE[+e.target.value][1]; if (p.g != null) setG(p.g); else setG(nobleFrom(p.turns, p.first)); };
   $('t3g').oninput = e => setG(+e.target.value);
@@ -794,6 +873,7 @@ function arc(cx, cy, r, a0, a1) { // angles in turns, 0 at top, clockwise
   $('t3R').onclick = () => { const w = walk(nodeTurns() + 'R').m; setG(w[0] / w[1]); };
   $('t3up').onclick = () => { const t = nodeTurns(); const w = walk(t.slice(0, -1)).m; setG(w[0] / w[1]); };
   $('t3zl').onclick = () => setG(nobleFrom(nodeTurns(), 'L')); $('t3zr').onclick = () => setG(nobleFrom(nodeTurns(), 'R'));
+  $('t3demo').onclick = () => { st.size = 53; st.kb = 12; setG(Math.log2(1.5)); };
   $('t3play').onclick = () => { const { p } = chainSteps(st.g, st.size); run(p.concat([1]).map(x => 220 * Math.pow(2, x)), st.size > 14 ? 0.14 : 0.24); };
   setG(st.g);
 })();
