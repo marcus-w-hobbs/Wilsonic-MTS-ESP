@@ -121,7 +121,10 @@ ol.sources li { overflow-wrap: anywhere; }
 
 <div class="wrap">
 <header>
-  <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen · draft</div>
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div class="kicker">Wilsember 2026 · for Stephen Weigel and Now and Xen</div>
+    <button id="themeBtn" class="small" aria-label="Change colour theme">Theme: system</button>
+  </div>
   <h1>Fifteen questions about Erv Wilson, with things to play</h1>
   <div class="lede">
     <p>Stephen Weigel, you sent fifteen questions for the Wilsember episode and I could not be on the call, so I built you this page. Each question has a short answer from me, and where the idea is something you can see or hear I put a small instrument under it so you can try it yourself. I worked beside Erv from 1995 to 2005, turning his drawings into software while he drew the next one, and for the last year I have been going back through his papers with a computer.</p>
@@ -616,6 +619,21 @@ function renderProv() {
     const li = el('li'); li.append(S[k].f + ' '); li.append(el('a', { href: S[k].u, target: '_blank', rel: 'noopener' }, S[k].u)); ol.append(li);
   });
 }
+
+/* ---------- theme: follows the system until the button picks light or dark ---------- */
+(function () {
+  const root = document.documentElement, btn = $('themeBtn'), ORDER = ['system', 'light', 'dark'], KEY = 'wilsember-theme';
+  const host = root.getAttribute('data-theme'); // a theme the hosting page set before this script ran
+  let mode = 'system';
+  try { const saved = localStorage.getItem(KEY); if (ORDER.includes(saved)) mode = saved; } catch (e) { /* storage can be blocked; the page works without it */ }
+  function apply() {
+    if (mode === 'system') { if (host) root.setAttribute('data-theme', host); else root.removeAttribute('data-theme'); }
+    else root.setAttribute('data-theme', mode);
+    btn.textContent = 'Theme: ' + mode;
+  }
+  btn.onclick = () => { mode = ORDER[(ORDER.indexOf(mode) + 1) % 3]; try { localStorage.setItem(KEY, mode); } catch (e) { /* not saved, still applied */ } apply(); };
+  apply();
+})();
 
 /* ---------- nav ---------- */
 (function () {
